@@ -14,6 +14,9 @@ Maui.Page
 
     signal itemClicked(var app)
 
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+    Kirigami.Theme.inherit: false
+
     headBar.middleContent: Maui.TextField
     {
         Layout.fillWidth: true
@@ -77,7 +80,7 @@ Maui.Page
                 Kirigami.Theme.textColor: "#fafafa"
                 height: 250
                 Layout.fillWidth: true
-                Layout.margins: Maui.Style.space.huge
+                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
 
                 Image
                 {
@@ -168,8 +171,7 @@ Maui.Page
                                 width: Maui.Style.iconSizes.tiny
                                 height: width
                                 radius: width
-
-                                color: "grey"
+                                color: Kirigami.Theme.textColor
                                 opacity: index === _featuredListview.currentIndex ? 1 : 0.5
                             }
                         }
@@ -208,8 +210,9 @@ Maui.Page
                             label3.text: model.score
                             label4.text: i18n("Score")
 
+                            iconVisible: isWide
                             imageSource: model.preview
-                            imageSizeHint:  Maui.Style.iconSizes.enormous
+                            imageSizeHint: width * 0.3
 
                             imageBorder: false
 
@@ -273,7 +276,7 @@ Maui.Page
                 implicitHeight: 160
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 Layout.margins: Maui.Style.space.big
-
+                snapMode: ListView.SnapOneItem
                 orientation: Qt.Horizontal
                 horizontalScrollBarPolicy: ScrollBar.AlwaysOff
                 verticalScrollBarPolicy:  ScrollBar.AlwaysOff
@@ -310,7 +313,7 @@ Maui.Page
                 Layout.margins: Maui.Style.space.medium
                 implicitHeight: leftLabels.implicitHeight
                 label1.text: i18n("Newest")
-                label1.font.pointSize: Maui.Style.fontSizes.enormous * 1.5
+                label1.font.pointSize: Maui.Style.fontSizes.enormous
                 label1.font.bold: true
                 label1.font.weight: Font.Bold
                 label2.font.pointSize: Maui.Style.fontSizes.huge
@@ -324,7 +327,7 @@ Maui.Page
                 orientation: Qt.Horizontal
                 spacing: Maui.Style.space.big
                 horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-
+                snapMode: ListView.SnapOneItem
                 verticalScrollBarPolicy: ScrollBar.AlwaysOff
 
                 model: Maui.BaseModel
@@ -339,7 +342,7 @@ Maui.Page
 
                 delegate: FloatingCardDelegate
                 {
-                    width: 350
+                    width: Math.min(ListView.view.width * 0.9, 350)
                     height: 100
 
                     label1.text: model.name
@@ -348,24 +351,6 @@ Maui.Page
 
                     iconSource: model.smallpic
                     iconSizeHint: Maui.Style.iconSizes.huge
-                    //                    Maui.ListItemTemplate
-                    //                    {
-                    //                        anchors.fill: parent
-
-
-                    //                        label1.font.bold: true
-                    //                        label1.font.weight: Font.Bold
-                    //                        label1.font.pointSize: Maui.Style.fontSizes.enormous
-                    //                        label2.font.pointSize: Maui.Style.fontSizes.big
-                    //                        label3.font.pointSize: Maui.Style.fontSizes.big
-                    //                        label4.font.pointSize: Maui.Style.fontSizes.small
-                    //                        label3.font.bold: true
-                    //                        label3.font.weight: Font.Bold
-                    //                        imageSource: model.smallpic
-                    //                        imageBorder: false
-                    //                        imageSizeHint: Maui.Style.iconSizes.huge
-
-                    //                    }
                 }
             }
 
@@ -381,7 +366,7 @@ Maui.Page
                 Layout.margins: Maui.Style.space.medium
                 implicitHeight: leftLabels.implicitHeight
                 label1.text: i18n("Most Popular")
-                label1.font.pointSize: Maui.Style.fontSizes.enormous * 1.5
+                label1.font.pointSize: Maui.Style.fontSizes.enormous
                 label1.font.bold: true
                 label1.font.weight: Font.Bold
                 label2.font.pointSize: Maui.Style.fontSizes.huge

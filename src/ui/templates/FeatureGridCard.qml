@@ -25,7 +25,7 @@ Maui.ItemDelegate
     {
         id: _cover
         anchors.fill: parent
-        anchors.margins: Maui.Style.space.big * 1.5
+        anchors.margins: isWide ? Maui.Style.space.big * 1.5 : Maui.Style.space.medium
         color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
         radius: Maui.Style.radiusV
 
