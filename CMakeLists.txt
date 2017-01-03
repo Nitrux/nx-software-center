@@ -21,6 +21,8 @@ qt5_add_resources(qml_QRC src/qml.qrc)
 set(SOURCE
         ${SOURCE}
         src/main.cpp
+        src/snapd.cpp
+        src/httputils.cpp
         src/snapsindex.cpp
 )
 
