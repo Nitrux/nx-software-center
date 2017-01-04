@@ -16,9 +16,12 @@ public:
 signals:
 
 public slots:
-    QVariantList list();
+    QVariantList snaps();
+//    bool login(QString username, QString password, QString third);
+    void remove(QString snap);
 
 private:
+    QByteArray localQuery(QByteArray query);
     HTTPUtils httpUtils;
     static SnapD *singleton;
 };

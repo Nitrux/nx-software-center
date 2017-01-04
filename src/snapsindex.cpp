@@ -47,12 +47,17 @@ QVariant SnapsIndex::data(const QModelIndex &index, int role) const
     return item.value(propertyName, QVariant());
 }
 
+void SnapsIndex::remove(QString snap)
+{
+    snapd->remove(snap);
+}
+
 
 void SnapsIndex::refreshCache() {
     QVariantList oldCache = cache;
 
     beginResetModel();
-    cache = snapd->list();
+    cache = snapd->snaps();
 
     rolesCache.clear();
     for (QVariant item : cache) {

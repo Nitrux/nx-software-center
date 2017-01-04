@@ -79,6 +79,7 @@ ApplicationWindow {
             objectName: "homeView"
             Repeater {
                 model: Local {
+                    id: localSnaps
                 }
                 delegate: Item {
                     height: 152
@@ -149,7 +150,10 @@ ApplicationWindow {
                                     text: control.text
                                     font.pointSize: 8
                                 }}
+
+
                             }
+                            onClicked: localSnaps.remove(_name);
                         }
                     }
                 }

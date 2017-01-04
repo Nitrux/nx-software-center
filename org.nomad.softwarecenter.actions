@@ -1,0 +1,10 @@
+[Domain]
+Name=NX Software Center
+Icon=sofware-center
+URL=
+
+[org.nomad.softwarecenter.remove]
+Name=Remove snap
+Description=The Software Center is attempting to remove a snap from your system.
+Policy=auth_admin
+Persistence=session

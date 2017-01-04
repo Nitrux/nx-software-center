@@ -10,12 +10,13 @@ class HTTPUtils
 public:
     explicit HTTPUtils();
 
-    QString buildSimpleJSonGetRequest(QString path);
+    static QString buildSimpleJSonGetRequest(QString path);
+    static QString buildJSonPostRequest(QString path, QJsonDocument data);
 
-    QJsonDocument parseJSonResponse(QByteArray response);
+    static QJsonDocument parseJSonResponse(QByteArray response);
 
 private:
-    QString userAgent;
+    static QString userAgentHeader();
 };
 
 #endif // HTTPUTILS_H
