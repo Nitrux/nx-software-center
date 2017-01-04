@@ -18,6 +18,7 @@ signals:
 
 public slots:
     ActionReply remove(QVariantMap args);
+    ActionReply install(QVariantMap args);
 
 private:
     QByteArray sendRequest(QByteArray request, ActionReply reply);

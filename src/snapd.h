@@ -17,8 +17,10 @@ signals:
 
 public slots:
     QVariantList snaps();
-//    bool login(QString username, QString password, QString third);
-    void remove(QString snap);
+    QVariantList find(QString query);
+
+    Q_INVOKABLE void remove(QString snap);
+    Q_INVOKABLE void install(QString snap);
 
 private:
     QByteArray localQuery(QByteArray query);

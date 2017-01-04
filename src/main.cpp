@@ -6,24 +6,36 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-#include "snapsindex.h"
+#include "localsnaps.h"
+#include "snapstore.h"
 #include "snapd.h"
 
 
 
+static QObject *snaps_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+ {
+     Q_UNUSED(engine)
+     Q_UNUSED(scriptEngine)
+
+     return SnapD::instance();
+ }
+
 int main(int argc, char *argv[])
 {
 
-        QGuiApplication app(argc, argv);
-        QCoreApplication::addLibraryPath("./");
+    QGuiApplication app(argc, argv);
+    QCoreApplication::addLibraryPath("./");
 
-        QQmlApplicationEngine engine;
-        qmlRegisterType<SnapsIndex>("org.nx", 1, 0, "Local");
-        // qmlRegisterType<RadioPlayer>(uri, 1, 0, "Store");
+    QQmlApplicationEngine engine;
 
-        engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    qmlRegisterSingletonType<SnapD>("org.nx.softwarecenter", 1, 0, "Snaps", snaps_singletontype_provider);
+    qmlRegisterType<SnapStore>("org.nx.softwarecenter", 1, 0, "StoreIndex");
+    qmlRegisterType<LocalSnaps>("org.nx.softwarecenter", 1, 0, "LocalIndex");
 
-        return app.exec();
+
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    return app.exec();
 
 }
 

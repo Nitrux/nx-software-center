@@ -9,7 +9,6 @@
 SnapsIndex::SnapsIndex(QObject *parent) : QAbstractListModel(parent)
 {
     snapd = SnapD::instance();
-    refreshCache();
 }
 
 QHash<int, QByteArray> SnapsIndex::roleNames() const
@@ -50,25 +49,4 @@ QVariant SnapsIndex::data(const QModelIndex &index, int role) const
 void SnapsIndex::remove(QString snap)
 {
     snapd->remove(snap);
-}
-
-
-void SnapsIndex::refreshCache() {
-    QVariantList oldCache = cache;
-
-    beginResetModel();
-    cache = snapd->snaps();
-
-    rolesCache.clear();
-    for (QVariant item : cache) {
-        QVariantMap map = item.toMap();
-        rolesCache.append(map.keys());
-    }
-
-    rolesCache = QSet<QString>::fromList(rolesCache).toList();
-    for (QString &roleName : rolesCache) {
-        roleName.replace("-","_");
-        roleName.prepend("_");
-    }
-    endResetModel();
 }

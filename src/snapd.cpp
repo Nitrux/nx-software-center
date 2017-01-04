@@ -47,6 +47,28 @@ QVariantList SnapD::snaps()
     return result;
 }
 
+QVariantList SnapD::find(QString query)
+{
+    QString path = QString("/v2/find?q=%1").arg(query);
+    QString request = httpUtils.buildSimpleJSonGetRequest(path);
+
+    QVariantList result;
+    QByteArray rawResponse = localQuery(request.toLocal8Bit());
+
+
+    QJsonDocument jsonResponse = httpUtils.parseJSonResponse(rawResponse);
+    QJsonObject object = jsonResponse.object();
+    if (object.contains("result")) {
+        QJsonValue resultObject = object.value("result");
+        if (resultObject.isArray()) {
+            QJsonArray resultArray = resultObject.toArray();
+            return resultArray.toVariantList();
+        }
+    }
+
+    return result;
+}
+
 //bool SnapD::login(QString username, QString password, QString third)
 //{
 //    QString path = "/v2/snaps/"+snap;
@@ -78,6 +100,23 @@ void SnapD::remove(QString snap)
     job->start();
 
 
+}
+
+void SnapD::install(QString snap)
+{
+    KAuth::Action installAction("org.nomad.softwarecenter.install");
+    installAction.setHelperId("org.nomad.softwarecenter");
+    installAction.addArgument("snap", snap);
+
+
+    KAuth::ExecuteJob *job = installAction.execute();
+    connect(job, &KAuth::ExecuteJob::result, [=] (KJob *kjob) {
+        auto job = qobject_cast<KAuth::ExecuteJob *>(kjob);
+        qDebug() << job->errorString() << job->error() << job->data() << installAction.status();
+
+
+    });
+    job->start();
 }
 
 QByteArray SnapD::localQuery(QByteArray query)

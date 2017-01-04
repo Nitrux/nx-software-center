@@ -41,6 +41,31 @@ ActionReply SnapdHelper::remove(QVariantMap args)
     return reply;
 }
 
+ActionReply SnapdHelper::install(QVariantMap args)
+{
+    QString snap = args["snap"].toString();
+    qDebug() << "Installing " << snap;
+
+    QString path = "/v2/snaps/"+snap;
+    QJsonDocument jsonRequset = QJsonDocument::fromJson("{\"action\": \"install\"}");
+    QString query = HTTPUtils::buildJSonPostRequest(path, jsonRequset);
+
+    qDebug() << query;
+
+    ActionReply reply;
+    QByteArray rawHttpReply = sendRequest(query.toLocal8Bit(), reply);
+
+    if (!reply.succeeded())
+        return reply;
+
+
+    QVariantMap retdata;
+    retdata["contents"] = HTTPUtils::parseJSonResponse(rawHttpReply);
+
+    reply.setData(retdata);
+    return reply;
+}
+
 QByteArray SnapdHelper::sendRequest(QByteArray request, ActionReply reply)
 {
     QByteArray rawReply;

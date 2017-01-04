@@ -10,6 +10,7 @@ class SnapsIndex : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString textFilter READ textFilter WRITE setTextFilter NOTIFY textFilterChanged)
 
 public:
     SnapsIndex(QObject * parent = 0);
@@ -19,12 +20,32 @@ public:
 
     Q_INVOKABLE void remove(QString snap);
 
-private:
-    void refreshCache();
+    Q_INVOKABLE virtual void refresh() = 0;
+
+    QString textFilter() const
+    {
+        return m_textFilter;
+    }
+
+public slots:
+    void setTextFilter(QString textFilter)
+    {
+        if (m_textFilter == textFilter)
+            return;
+
+        m_textFilter = textFilter;
+        emit textFilterChanged(textFilter);
+    }
+
+signals:
+    void textFilterChanged(QString textFilter);
+
+protected:
     QVariantList cache;
     QStringList rolesCache;
 
     SnapD *snapd;
+    QString m_textFilter;
 };
 
 #endif // SNAPSINDEX_H
