@@ -34,6 +34,8 @@ set(SOURCE
         src/snapd.cpp
         src/httputils.cpp
         src/snapsindex.cpp
+        src/localsnaps.cpp
+        src/snapstore.cpp
 )
 
 set(HELPER_SOURCE

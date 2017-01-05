@@ -8,3 +8,9 @@ Name=Remove snap
 Description=The Software Center is attempting to remove a snap from your system.
 Policy=auth_admin
 Persistence=session
+
+[org.nomad.softwarecenter.install]
+Name=Remove snap
+Description=The Software Center is attempting to install a snap in your system.
+Policy=auth_admin
+Persistence=session
