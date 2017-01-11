@@ -32,6 +32,7 @@ set(SOURCE
         ${SOURCE}
         src/main.cpp
         src/snapd.cpp
+        src/changes.cpp
         src/httputils.cpp
         src/snapsindex.cpp
         src/localsnaps.cpp

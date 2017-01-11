@@ -45,9 +45,7 @@ QJsonDocument HTTPUtils::parseJSonResponse(QByteArray response)
     for (QString line : lines) {
         if (line.startsWith("{"))
             result = line;
-        qDebug() << line;
     }
-
 
     return QJsonDocument::fromJson(result.toLocal8Bit());
 }

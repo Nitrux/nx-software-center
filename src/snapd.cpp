@@ -1,6 +1,6 @@
 #include "snapd.h"
 
-#include <QtWidgets/QDialog>
+#include <QTimer>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -75,34 +75,26 @@ QVariantList SnapD::find(QString query)
 //    QJsonDocument jsonRequset = QJsonDocument::fromJson("{\"action\": \"install\"}");
 //}
 
-void SnapD::remove(QString snap)
+KAuth::ExecuteJob *SnapD::remove(QString snap)
 {
 
     KAuth::Action removeAction("org.nomad.softwarecenter.remove");
     removeAction.setHelperId("org.nomad.softwarecenter");
     removeAction.addArgument("snap", snap);
 
-
     KAuth::ExecuteJob *job = removeAction.execute();
+    connect(job, &KAuth::ExecuteJob::newData, &m_changes, &Changes::updateChanges);
     connect(job, &KAuth::ExecuteJob::result, [=] (KJob *kjob) {
         auto job = qobject_cast<KAuth::ExecuteJob *>(kjob);
-        qDebug() << job->errorString() << job->error() << job->data() << removeAction.status();
-
-//        qDebug() << removeAction.status();
-//        qDebug() << "is valid" << removeAction.isValid() << "has helper" << removeAction.hasHelper() << "Action status" << job->action().status();
-//        if (reply.failed()) {
-//           qDebug() << QString("KAuth returned an error code: %1").arg(reply.errorCode()) << reply.errorDescription();
-//           // QMessageBox::information(this, "Error", QString("KAuth returned an error code: %1").arg(reply.errorCode()));
-//        } else {
-//            qDebug() << reply.data();
-//        }
+        qDebug() << QString("Uninstall snap %1 finished, errors ? ").arg(snap) << job->errorString() << job->error();
+        job->deleteLater();
     });
+
     job->start();
-
-
+    return job;
 }
 
-void SnapD::install(QString snap)
+KAuth::ExecuteJob *SnapD::install(QString snap)
 {
     KAuth::Action installAction("org.nomad.softwarecenter.install");
     installAction.setHelperId("org.nomad.softwarecenter");
@@ -110,13 +102,19 @@ void SnapD::install(QString snap)
 
 
     KAuth::ExecuteJob *job = installAction.execute();
+    connect(job, &KAuth::ExecuteJob::newData, &m_changes, &Changes::updateChanges);
     connect(job, &KAuth::ExecuteJob::result, [=] (KJob *kjob) {
         auto job = qobject_cast<KAuth::ExecuteJob *>(kjob);
         qDebug() << job->errorString() << job->error() << job->data() << installAction.status();
 
-
     });
     job->start();
+    return job;
+}
+
+Changes *SnapD::changesModel()
+{
+    return &m_changes;
 }
 
 QByteArray SnapD::localQuery(QByteArray query)

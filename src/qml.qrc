@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>SnapItemDelegate.qml</file>
+        <file>ChangesView.qml</file>
     </qresource>
 </RCC>

@@ -5,7 +5,6 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.2 as QtControls
 import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 
-import QtWebKit 3.0
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -14,6 +13,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import org.nx.softwarecenter 1.0 as SoftwareCenter
 
+//import Snapd 1.0
 
 
 ApplicationWindow {
@@ -21,6 +21,28 @@ ApplicationWindow {
     width: 600
     height: 400
     title: qsTr("NX Software Center")
+
+
+//    SnapdClient {
+//        id: client
+
+//        Component.onCompleted: {
+
+
+//            var installRequest = client.install("bas", "stable")
+//            print(installRequest)
+
+//            var request = client.list();
+
+//            request.onIsFinishedChanged = function (){ print ("requset.isFinished", requset.isFinished)}
+//            print("request.isFinished",request.isFinished,  "request.snapCount", request.snapCount)
+//            for (var i = 0; i < request["snapCount"]; i++) {
+//                print(request.snap(i))
+//            }
+
+//        }
+//    }
+
 
     ColumnLayout {
         anchors.fill: parent
@@ -36,19 +58,31 @@ ApplicationWindow {
                 iconName: "go-home"
                 checked: content.currentItem
                          && content.currentItem.objectName == "homeView"
-                onClicked: content.pop(homeView)
+                onClicked: {
+                    content.clear()
+                    content.push(homeView)
+                }
             }
             PlasmaComponents.Button {
                 iconName: "application"
             }
             PlasmaComponents.Button {
                 iconName: "favorites"
+                checked: content.currentItem
+                         && content.currentItem.objectName == "changesView"
+                onClicked: {
+                    content.clear()
+                    content.push(changesView)
+                }
             }
             PlasmaComponents.Button {
                 iconName: "edit-download"
                 checked: content.currentItem
                          && content.currentItem.objectName == "workView"
-                onClicked: content.push(workView)
+                onClicked: {
+                    content.clear()
+                    content.push(workView)
+                }
             }
 
             PlasmaComponents.TextField {
@@ -75,11 +109,19 @@ ApplicationWindow {
     }
 
     Component {
+        id: changesView
+        ChangesView {
+            objectName: "changesView"
+        }
+    }
+    Component {
         id: homeView
         Flow {
             padding: 12
             spacing: 24
             objectName: "homeView"
+
+
             Connections {
                 target: searchField
                 onEditingFinished: {

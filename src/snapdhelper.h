@@ -21,7 +21,8 @@ public slots:
     ActionReply install(QVariantMap args);
 
 private:
-    QByteArray sendRequest(QByteArray request, ActionReply reply);
+    void spawnChangeMonitor(QString changeId);
+    static QByteArray sendRequest(QByteArray request);
 };
 
 #endif // SNAPDHELPER_H

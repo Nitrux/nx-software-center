@@ -83,7 +83,8 @@ Item {
                 }
             }
             onClicked: {
-                SoftwareCenter.Snaps.remove(_name)
+                var job = SoftwareCenter.Snaps.remove(_name)
+                print(job)
             }
         }
     }
