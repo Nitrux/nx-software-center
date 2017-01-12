@@ -16,7 +16,12 @@ SnapD *SnapD::singleton = NULL;
 
 SnapD::SnapD(QObject *parent) : QObject(parent)
 {
+    m_changes = new Changes();
+    m_local = new LocalSnaps();
+    m_store = new SnapStore();
+
 }
+
 
 SnapD *SnapD::instance()
 {
@@ -25,6 +30,22 @@ SnapD *SnapD::instance()
 
     return singleton;
 }
+
+Changes *SnapD::changes() const
+{
+    return m_changes;
+}
+
+LocalSnaps *SnapD::local() const
+{
+    return m_local;
+}
+
+SnapStore *SnapD::store() const
+{
+    return m_store;
+}
+
 
 QVariantList SnapD::snaps()
 {
@@ -83,7 +104,7 @@ KAuth::ExecuteJob *SnapD::remove(QString snap)
     removeAction.addArgument("snap", snap);
 
     KAuth::ExecuteJob *job = removeAction.execute();
-    connect(job, &KAuth::ExecuteJob::newData, &m_changes, &Changes::updateChanges);
+    connect(job, &KAuth::ExecuteJob::newData, m_changes, &Changes::updateChanges);
     connect(job, &KAuth::ExecuteJob::result, [=] (KJob *kjob) {
         auto job = qobject_cast<KAuth::ExecuteJob *>(kjob);
         qDebug() << QString("Uninstall snap %1 finished, errors ? ").arg(snap) << job->errorString() << job->error();
@@ -102,7 +123,7 @@ KAuth::ExecuteJob *SnapD::install(QString snap)
 
 
     KAuth::ExecuteJob *job = installAction.execute();
-    connect(job, &KAuth::ExecuteJob::newData, &m_changes, &Changes::updateChanges);
+    connect(job, &KAuth::ExecuteJob::newData, m_changes, &Changes::updateChanges);
     connect(job, &KAuth::ExecuteJob::result, [=] (KJob *kjob) {
         auto job = qobject_cast<KAuth::ExecuteJob *>(kjob);
         qDebug() << job->errorString() << job->error() << job->data() << installAction.status();
@@ -110,11 +131,6 @@ KAuth::ExecuteJob *SnapD::install(QString snap)
     });
     job->start();
     return job;
-}
-
-Changes *SnapD::changesModel()
-{
-    return &m_changes;
 }
 
 QByteArray SnapD::localQuery(QByteArray query)

@@ -35,11 +35,10 @@ int main(int argc, char *argv[])
     engine.addImportPath(QStringLiteral("/usr/lib/qt5/qml/"));
     qDebug() << engine.importPathList();
 
-
     qmlRegisterSingletonType<SnapD>("org.nx.softwarecenter", 1, 0, "Snaps", snaps_singletontype_provider);
-    qmlRegisterType<SnapStore>("org.nx.softwarecenter", 1, 0, "StoreIndex");
-    qmlRegisterType<LocalSnaps>("org.nx.softwarecenter", 1, 0, "LocalIndex");
-    qmlRegisterUncreatableType<Changes> ("org.nx.softwarecenter", 1, 0, "ChangesModel", "Changes Model can only be created from the Snaps controller.");
+    qmlRegisterUncreatableType<SnapStore> ("org.nx.softwarecenter", 1, 0, "Store", "Can't be instantiated.");
+    qmlRegisterUncreatableType<LocalSnaps> ("org.nx.softwarecenter", 1, 0, "Installed", "Can't be instantiated.");
+    qmlRegisterUncreatableType<Changes> ("org.nx.softwarecenter", 1, 0, "Changes", "Can't be instantiated.");
     qmlRegisterUncreatableType<KAuth::ExecuteJob> ("org.nx.softwarecenter", 1, 0, "Job", ".");
 
 

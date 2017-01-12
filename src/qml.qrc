@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>SnapItemDelegate.qml</file>
         <file>ChangesView.qml</file>
+        <file>HomeView.qml</file>
     </qresource>
 </RCC>
