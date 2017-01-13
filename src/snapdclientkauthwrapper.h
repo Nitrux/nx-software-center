@@ -12,6 +12,8 @@ public:
 
     Q_INVOKABLE KAuth::ExecuteJob *disable(const QString &snap);
     Q_INVOKABLE KAuth::ExecuteJob *enable(const QString &snap);
+    Q_INVOKABLE KAuth::ExecuteJob *remove(const QString &snap);
+    Q_INVOKABLE KAuth::ExecuteJob *install(const QString &snap, const QString &channel);
 
 };
 

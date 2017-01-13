@@ -15,12 +15,6 @@ Description=The Software Center is attempting to install a snap in your system.
 Policy=auth_admin
 Persistence=session
 
-[org.nomad.softwarecenter.changes]
-Name=Remove snap
-Description=The Software Center is attempting to check the changes in your system.
-Policy=auth_admin
-Persistence=session
-
 [org.nomad.softwarecenter.disable]
 Name=Disable snap
 Description=The Software Center is attempting to disable a snap in your system.

@@ -26,8 +26,6 @@ public slots:
     ActionReply enable(QVariantMap args);
 
 private:
-    void spawnChangeMonitor(QString changeId);
-    static QByteArray sendRequest(QByteArray request);
     QSnapdClient m_qsnapdClient;
 };
 

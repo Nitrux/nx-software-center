@@ -16,33 +16,25 @@ import Snapd 1.0
 
 ApplicationWindow {
     visible: true
-    width: 640
-    height: 400
+    width: 800
+    height: 600
     title: qsTr("NX Software Center")
 
     SnapdClient {
         id: snapdClient
-    }
 
-    Component.onCompleted: {
-        // Ensure we are connected
-        var connectRequest = snapdClient.connect()
-        connectRequest.runSync()
+        Component.onCompleted: {
+            // Ensure we are connected
+            var connectRequest = snapdClient.connect()
+            connectRequest.runSync()
 
-        // Test code
-        var infoRequest = snapdClient.getSystemInformation()
-        infoRequest.runSync()
-        var info = infoRequest.systemInformation
-        console.log(info.osId + " " + info.osVersion + " " + info.series + " " + info.version)
-
-        var listRequest = snapdClient.list()
-        listRequest.runSync()
-        console.log("Installed:")
-        for (var i = 0; i < listRequest.snapCount; i++) {
-            var snap = listRequest.snap(i)
-            console.log(snap.name, snap.installDate)
+            connected();
         }
+
+        signal connected();
     }
+
+
 
     ColumnLayout {
         anchors.fill: parent
@@ -59,22 +51,33 @@ ApplicationWindow {
                 checked: content.currentItem
                          && content.currentItem.objectName == "homeView"
                 onClicked: {
-                    content.clear()
-                    content.push(homeView)
+                    // content.clear()
+                    content.pop("qrc:/HomeView.qml")
+                    if ( content.currentItem == undefined || content.currentItem.objectName != "homeView")
+                        content.push("qrc:/HomeView.qml")
                 }
             }
             PlasmaComponents.Button {
-                iconName: "application"
-            }
-            PlasmaComponents.Button {
-                iconName: "favorites"
+                iconName: "plasmadiscover"
                 checked: content.currentItem
-                         && content.currentItem.objectName == "changesView"
+                         && content.currentItem.objectName == "storeView"
                 onClicked: {
-                    content.clear()
-                    content.push(changesView)
+                    // content.clear()
+                    content.pop("qrc:/StoreView.qml")
+                    if ( content.currentItem == undefined || content.currentItem.objectName != "storeView")
+                        content.push("qrc:/StoreView.qml")
                 }
+
             }
+//            PlasmaComponents.Button {
+//                iconName: "favorites"
+//                checked: content.currentItem
+//                         && content.currentItem.objectName == "changesView"
+//                onClicked: {
+//                    content.clear()
+//                    content.push(changesView)
+//                }
+//            }
             PlasmaComponents.Button {
                 iconName: "edit-download"
                 checked: content.currentItem
@@ -91,6 +94,16 @@ ApplicationWindow {
                 Layout.leftMargin: 60
                 Layout.rightMargin: 60
                 placeholderText: "Search"
+
+                onEditingFinished: {
+                    if (content.currentItem
+                            && content.currentItem.objectName == "storeView")
+                        return
+
+                    content.pop("qrc:/StoreView.qml")
+                    if ( content.currentItem == undefined || content.currentItem.objectName != "storeView")
+                        content.push("qrc:/StoreView.qml")
+                }
             }
 
             PlasmaComponents.Button {
@@ -104,8 +117,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            initialItem: HomeView {
-            }
+            initialItem: "qrc:/HomeView.qml"
         }
     }
 }

@@ -36,12 +36,6 @@ kauth_install_actions(org.nomad.softwarecenter org.nomad.softwarecenter.actions)
 set(SOURCE
         ${SOURCE}
         src/main.cpp
-        src/snapd.cpp
-        src/changes.cpp
-        src/httputils.cpp
-        src/snapsindex.cpp
-        src/localsnaps.cpp
-        src/snapstore.cpp
         src/snapdclientkauthwrapper.cpp
 )
 
@@ -53,7 +47,7 @@ set(HELPER_SOURCE
 
 add_executable(${PROJECT_NAME} ${SOURCE} ${qml_QRC})
 target_include_directories(${PROJECT_NAME} PUBLIC ${SNAPD_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Quick KF5::Auth)
+target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Quick KF5::Auth ${SNAPD_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 

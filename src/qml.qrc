@@ -4,5 +4,6 @@
         <file>SnapItemDelegate.qml</file>
         <file>ChangesView.qml</file>
         <file>HomeView.qml</file>
+        <file>StoreView.qml</file>
     </qresource>
 </RCC>

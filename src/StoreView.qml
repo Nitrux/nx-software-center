@@ -8,35 +8,70 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.nx.softwarecenter 1.0
 
 Item {
-    id: homeViewRoot
+    id: storeViewRoot
 
-    objectName: "homeView"
+    objectName: "storeView"
     Rectangle {
         color: "lightblue"
         anchors.fill: parent
         opacity: 0.1
     }
 
-    ScrollView {
+    Loader {
+        id: contentLoader
         anchors.fill: parent
 
-        Flickable {
-            contentWidth: snapsList.width
-            contentHeight: snapsList.height
-            anchors.margins: 20
+        sourceComponent: storeSnapsModel.busy || storeSnapsModel.count == 0 ? searchView : snapsView
+    }
 
-            Flow {
+    Component {
+        id: searchView
+        Item {
+            PlasmaComponents.Label {
+                id: messageText
+                anchors.top: busyModelIndicator.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: storeSnapsModel.statusMessage;
+            }
+            PlasmaComponents.BusyIndicator {
+                id: busyModelIndicator
+                visible: storeSnapsModel.busy
                 anchors.centerIn: parent
-                id: snapsList
-                width: homeViewRoot.width - 20
+            }
 
-                Repeater {
-                    model: installedSnapsModel
-                    delegate: snaptElementDelegate
+            PlasmaCore.IconItem {
+                anchors.centerIn: parent
+                width: 64
+                height: 64
+
+                source: "face-uncertain"
+                visible: !busyModelIndicator.visible
+            }
+        }
+    }
+
+    Component {
+        id: snapsView
+        ScrollView {
+            Flickable {
+                contentWidth: snapsList.width
+                contentHeight: snapsList.height + 40
+                anchors.margins: 20
+
+                Flow {
+                    anchors.centerIn: parent
+                    id: snapsList
+                    width: storeViewRoot.width - 20
+
+                    Repeater {
+                        model: storeSnapsModel
+                        delegate: snaptElementDelegate
+                    }
                 }
             }
         }
     }
+
 
     Component {
         id: snaptElementDelegate
@@ -53,80 +88,20 @@ Item {
             }
 
             Action {
-                id: enableSnap
-                iconName: "package-installed-updated"
-                text: "&Enable"
+                id: installSnap
+                iconName: "package-install"
+                text: "&Install"
                 onTriggered: {
                     print(text, model.name)
-                    var request = SnapdRootClient.enable(model.name);
-                    function enableCompleted() {
-                        busy = false;
-                        print(request.errorString)
-                        installedSnapsModel.refresh()
-                    }
-
-                    request.finished.connect(enableCompleted)
-                    request.start()
-                    busy = true
-                }
-            }
-
-            Action {
-                id: disableSnap
-                iconName: "package-broken"
-                text: "&Disable"
-                onTriggered: {
-                    print(text, model.name)
-                    var request = SnapdRootClient.disable(model.name);
-                    function disableCompleted() {
-                        busy = false;
-                        print(request.errorString)
-                        installedSnapsModel.refresh()
-                    }
-                    request.finished.connect(disableCompleted)
-                    request.start()
-                    busy = true
-                }
-            }
-
-            Action {
-                id: removeSnap
-                iconName: "package-remove"
-                text: "&Remove"
-                onTriggered: {
-                    print(text, model.name)
-                    var request = SnapdRootClient.remove(model.name);
-                    function removeCompleted() {
-                        busy = false;
-                        print(request.errorString)
-                        installedSnapsModel.refresh()
-                    }
-                    request.finished.connect(removeCompleted)
-                    request.start()
-                    busy = true
-                }
-            }
-
-            Action {
-                id: refreshSnap
-                iconName: "package-upgrade"
-                text: "Re&fresh"
-                onTriggered: {
-                    print(text, model.name)
-                    var request = snapdClient.refresh(model.name, model.channel)
-
-                    function requestCompleted() {
+                    var request = SnapdRootClient.install(model.name, "stable")
+                    function installCompleted() {
                         busy = false
-
-                        if (request.error !== SnapdRequest.NoError) {
-                            console.log (request.errorString)
-                            return
-                        }
-
-                        installedSnapsModel.refresh()
+                        print(request.errorString)
+                        //storeSnapsModel.refresh()
                     }
-                    request.complete.connect( requestCompleted )
-                    request.runAsync()
+
+                    request.finished.connect(installCompleted)
+                    request.start()
                     busy = true
                 }
             }
@@ -154,7 +129,7 @@ Item {
 
                     PlasmaCore.IconItem {
                         id: snap_status_icon
-                        source: model.status == 4 ? "package-installed-updated" : "package-broken"
+                        source: ""
                         visible: !busy
                     }
 
@@ -177,11 +152,8 @@ Item {
                     id: snap_pkg_name
                     text: name
                     elide: Text.ElideRight
-                    maximumLineCount: 1
-                    wrapMode: Text.WrapAnywhere
                     Layout.topMargin: 14
                     Layout.leftMargin: 12
-                    Layout.maximumWidth: 140
                     font.bold: true
                 }
 
@@ -194,7 +166,7 @@ Item {
                 Text {
                     id: snap_installed_size
                     property string sizeString: {
-                        var value = installedSize
+                        var value = model.downaloadSize
                         var unit = "bytes"
                         if (value > 1024) {
                             value = value / 1024
@@ -213,7 +185,7 @@ Item {
 
                         return "" + Math.round(value, 2) + " " + unit
                     }
-                    text: installedSize ? sizeString : i18n("Unknown size")
+                    text: model.downaloadSize ? sizeString : i18n("Unknown size")
                     Layout.leftMargin: 12
                     Layout.fillHeight: true
                 }
@@ -237,15 +209,7 @@ Item {
                     spacing: 2
 
                     PlasmaComponents.Button {
-                        action: status == 4 ? disableSnap : enableSnap
-                        visible: !busy
-                    }
-                    PlasmaComponents.Button {
-                        action: refreshSnap
-                        visible: !busy
-                    }
-                    PlasmaComponents.Button {
-                        action: removeSnap
+                        action: installSnap
                         visible: !busy
                     }
 
@@ -263,29 +227,51 @@ Item {
         }
     }
 
-
-
     ListModel {
-        id: installedSnapsModel
+        id: storeSnapsModel
+
+        property bool busy: false
+        property string query: ""
+        property string statusMessage: ""
 
         Component.onCompleted: refresh()
 
         function refresh() {
-            installedSnapsModel.clear()
-            var listRequest = snapdClient.list()
-            listRequest.runSync()
+            if (searchField.text !== query)
+                query  = searchField.text
+            else
+                return
 
-//            console.log("Installed:")
-            for (var i = 0; i < listRequest.snapCount; i++) {
-                var snap = listRequest.snap(i)
-//                console.log(snap.name, snap.installDate)
-                installedSnapsModel.append(snap)
+            busy = true
+            statusMessage = i18n("Lonking for snaps like: \"") + query + "\""
+            var request = snapdClient.find(0, query)
+
+            function findCompleted() {
+                storeSnapsModel.clear()
+
+                if (request.snapCount == 0)
+                    statusMessage = i18n("No snaps where found with text \"") +  query + "\" try something else."
+
+                print(request.errorString)
+                if(request.error)
+                    statusMessage = request.errorString
+
+                console.log("Available:")
+                for (var i = 0; i < request.snapCount; i++) {
+                    var snap = request.snap(i)
+                    console.log(snap.name, snap.installDate)
+                    storeSnapsModel.append(snap)
+                }
+                busy = false
             }
+
+            request.complete.connect(findCompleted)
+            request.runAsync()
         }
     }
 
     Connections {
-        target: snapdClient
-        onConnected: installedSnapsModel.refresh()
+        target: searchField
+        onEditingFinished: storeSnapsModel.refresh()
     }
 }
