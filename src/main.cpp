@@ -7,11 +7,12 @@
 #include <QJsonObject>
 
 #include <KAuth/KAuthExecuteJob>
+
+#include "snapdclientkauthwrapper.h"
 #include "localsnaps.h"
 #include "snapstore.h"
 #include "changes.h"
 #include "snapd.h"
-
 
 
 static QObject *snaps_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
@@ -20,6 +21,14 @@ static QObject *snaps_singletontype_provider(QQmlEngine *engine, QJSEngine *scri
      Q_UNUSED(scriptEngine)
 
      return SnapD::instance();
+ }
+
+static QObject *snapdkauthwrapper_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+ {
+     Q_UNUSED(engine)
+     Q_UNUSED(scriptEngine)
+
+     return new SnapdClientKAuthWrapper();
  }
 
 int main(int argc, char *argv[])
@@ -36,6 +45,7 @@ int main(int argc, char *argv[])
     qDebug() << engine.importPathList();
 
     qmlRegisterSingletonType<SnapD>("org.nx.softwarecenter", 1, 0, "Snaps", snaps_singletontype_provider);
+    qmlRegisterSingletonType<SnapD>("org.nx.softwarecenter", 1, 0, "SnapdRootClient", snapdkauthwrapper_singletontype_provider);
     qmlRegisterUncreatableType<SnapStore> ("org.nx.softwarecenter", 1, 0, "Store", "Can't be instantiated.");
     qmlRegisterUncreatableType<LocalSnaps> ("org.nx.softwarecenter", 1, 0, "Installed", "Can't be instantiated.");
     qmlRegisterUncreatableType<Changes> ("org.nx.softwarecenter", 1, 0, "Changes", "Can't be instantiated.");

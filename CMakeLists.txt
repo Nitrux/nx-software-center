@@ -23,6 +23,7 @@ include(FeatureSummary)
 
 find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Network)
 find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth)
+find_package(Snapd REQUIRED)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
@@ -41,6 +42,7 @@ set(SOURCE
         src/snapsindex.cpp
         src/localsnaps.cpp
         src/snapstore.cpp
+        src/snapdclientkauthwrapper.cpp
 )
 
 set(HELPER_SOURCE
@@ -50,14 +52,16 @@ set(HELPER_SOURCE
 
 
 add_executable(${PROJECT_NAME} ${SOURCE} ${qml_QRC})
+target_include_directories(${PROJECT_NAME} PUBLIC ${SNAPD_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Quick KF5::Auth)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 add_executable(${PROJECT_NAME}_helper  ${HELPER_SOURCE})
-target_link_libraries(${PROJECT_NAME}_helper Qt5::Core Qt5::Network KF5::Auth)
+target_include_directories(${PROJECT_NAME}_helper PUBLIC ${SNAPD_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME}_helper Qt5::Core Qt5::Network KF5::Auth ${SNAPD_LIBRARIES})
 
-install(TARGETS ${PROJECT_NAME}_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS ${PROJECT_NAME}_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
 kauth_install_helper_files(${PROJECT_NAME}_helper org.nomad.softwarecenter root)
 
 

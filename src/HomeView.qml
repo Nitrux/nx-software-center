@@ -5,8 +5,16 @@ import QtQuick.Layouts 1.3
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
+import org.nx.softwarecenter 1.0
+import Snapd 1.0
+
 Item {
     id: homeViewRoot
+
+    SnapdClient {
+        id: snapdClient
+    }
+
     Rectangle {
         color: "lightblue"
         anchors.fill: parent
@@ -39,7 +47,7 @@ Item {
         Item {
             width: 192
             height: 192
-            property bool busy: false;
+            property bool busy: false
 
             Rectangle {
                 anchors.fill: parent
@@ -52,35 +60,96 @@ Item {
                 id: enableSnap
                 iconName: "package-installed-updated"
                 text: "&Enable"
-                onTriggered: {print(text); busy = true}
+                onTriggered: {
+                    print(text, model.name)
+                    var request = SnapdRootClient.enable(model.name);
+                    function enableCompleted() {
+                        busy = false;
+                        print(request.errorString)
+                        testSnapsModel.refresh()
+                    }
+
+                    request.finished.connect(enableCompleted)
+                    request.start()
+                    busy = true
+                }
             }
 
             Action {
                 id: disableSnap
                 iconName: "package-broken"
                 text: "&Disable"
-                onTriggered: {print(text); busy = true}
+                onTriggered: {
+                    print(text, model.name)
+                    var request = SnapdRootClient.disable(model.name);
+                    function disableCompleted() {
+                        busy = false;
+                        print(request.errorString)
+                        testSnapsModel.refresh()
+                    }
+                    request.finished.connect(disableCompleted)
+                    request.start()
+                    busy = true
+                }
             }
 
             Action {
                 id: removeSnap
                 iconName: "package-remove"
                 text: "&Remove"
-                onTriggered: {print(text); busy = true}
+                onTriggered: {
+                    print(text, model.name)
+                    Snaps.remove(model.name)
+//                    var request = snapdClient.remoce(model.name)
+
+//                    function requestCompleted() {
+//                        busy = false
+
+//                        if (request.error !== SnapdRequest.NoError) {
+//                            console.log (request.errorString)
+//                            return
+//                        }
+
+//                        testSnapsModel.refresh()
+//                    }
+//                    request.complete.connect( requestCompleted )
+//                    request.runAsync()
+                    busy = true
+                }
             }
 
             Action {
                 id: refreshSnap
                 iconName: "package-upgrade"
                 text: "Re&fresh"
-                onTriggered: {print(text); busy = true}
+                onTriggered: {
+                    print(text, model.name)
+                    var request = snapdClient.refresh(model.name, model.channel)
+
+                    function requestCompleted() {
+                        busy = false
+
+                        if (request.error !== SnapdRequest.NoError) {
+                            console.log (request.errorString)
+                            return
+                        }
+
+                        testSnapsModel.refresh()
+                    }
+                    request.complete.connect( requestCompleted )
+                    request.runAsync()
+                    busy = true
+                }
             }
 
             Action {
                 id: abortSnapAction
                 iconName: "dialog-cancel"
                 text: "&Abort"
-                onTriggered: {print(text); busy = false}
+                onTriggered: {
+                    print(text)
+                    busy = false
+                }
             }
 
             ColumnLayout {
@@ -94,10 +163,9 @@ Item {
                     Layout.topMargin: 10
                     Layout.rightMargin: 12
 
-
                     PlasmaCore.IconItem {
                         id: snap_status_icon
-                        source: snap_enabled ? "package-installed-updated" : "package-broken"
+                        source: model.status == 4 ? "package-installed-updated" : "package-broken"
                         visible: !busy
                     }
 
@@ -113,12 +181,12 @@ Item {
                     Layout.preferredWidth: 64
                     Layout.preferredHeight: 64
                     Layout.alignment: Qt.AlignHCenter
-                    source: icon_url != null ? icon_url : "package-available"
+                    source: model.icon ? model.icon : "package-available"
                 }
 
                 Text {
                     id: snap_pkg_name
-                    text: package_name
+                    text: name
                     Layout.topMargin: 14
                     Layout.leftMargin: 12
                     font.bold: true
@@ -133,7 +201,7 @@ Item {
                 Text {
                     id: snap_installed_size
                     property string sizeString: {
-                        var value = installed_size
+                        var value = installedSize
                         var unit = "bytes"
                         if (value > 1024) {
                             value = value / 1024
@@ -152,7 +220,7 @@ Item {
 
                         return "" + Math.round(value, 2) + " " + unit
                     }
-                    text: installed_size ? sizeString : i18n("Unknown size")
+                    text: installedSize ? sizeString : i18n("Unknown size")
                     Layout.leftMargin: 12
                     Layout.fillHeight: true
                 }
@@ -165,7 +233,6 @@ Item {
                 preventStealing: false
                 propagateComposedEvents: true
                 hoverEnabled: true
-                onClicked: mouse.accepted = falses
 
                 PlasmaComponents.ButtonColumn {
                     id: snapActions
@@ -177,7 +244,7 @@ Item {
                     spacing: 2
 
                     PlasmaComponents.Button {
-                        action: snap_enabled ? disableSnap : enableSnap
+                        action: status == 4 ? disableSnap : enableSnap
                         visible: !busy
                     }
                     PlasmaComponents.Button {
@@ -203,132 +270,31 @@ Item {
         }
     }
 
+
+
     // Sample data for testing/development proposes
     ListModel {
         id: testSnapsModel
 
-        ListElement {
-            //            architecture: ["amd64"]
-            //            binary_filesize: null
-            channel: "stable"
-            confinement: "strict"
-            content: "application"
-            description: "This is a test snap"
-            icon_url: "firefox-esr"
-            last_updated: "2016-06-03T12:01:15.435821Z"
-            origin: "testuser"
-            package_name: "Mozilla Firefox"
-            //            prices: undefined
-            publisher: "TestUser"
-            ratings_average: 0.0
-            revision: 1
-            snap_id: "xxxxxxxxxxxxxxxxxxxxxxxxfoobar25"
-            summary: "This is a test snap"
-            version: "48.0"
-            snap_enabled: true
-            installed_size: 101048576
+        Component.onCompleted: {
+            // Ensure we are connected
+            var connectRequest = snapdClient.connect()
+            connectRequest.runSync()
+
+            testSnapsModel.refresh()
         }
 
-        ListElement {
-            //            architecture: ["amd64"]
-            //            binary_filesize: null
-            channel: "stable"
-            confinement: "strict"
-            content: "application"
-            description: "This is a test snap"
-            icon_url: "clementine"
-            last_updated: "2016-06-03T12:01:15.435821Z"
-            origin: "testuser"
-            package_name: "Clementine"
-            //            prices: undefined
-            publisher: "TestUser"
-            ratings_average: 0.0
-            revision: 1
-            snap_id: "xxxxxxxxxxxxxxxxxxxxxxxxfoobar25"
-            summary: "This is a test snap"
-            version: "2.5"
-            snap_enabled: true
-            installed_size: 200000000003
-        }
-        ListElement {
-            //            architecture: ["amd64"]
-            //            binary_filesize: null
-            channel: "stable"
-            confinement: "strict"
-            content: "application"
-            description: "This is a test snap"
-            //            icon_url: undefined
-            last_updated: "2016-06-03T12:01:15.435821Z"
-            origin: "testuser"
-            package_name: "foobar25"
-            //            prices: undefined
-            publisher: "TestUser"
-            ratings_average: 0.0
-            revision: 1
-            snap_id: "xxxxxxxxxxxxxxxxxxxxxxxxfoobar25"
-            summary: "This is a test snap"
-            version: "2.5"
-        }
-        ListElement {
-            //            architecture: ["amd64"]
-            //            binary_filesize: null
-            channel: "stable"
-            confinement: "strict"
-            content: "application"
-            description: "This is a test snap"
-            //            icon_url: undefined
-            last_updated: "2016-06-03T12:01:15.435821Z"
-            origin: "testuser"
-            package_name: "foobar25"
-            //            prices: undefined
-            publisher: "TestUser"
-            ratings_average: 0.0
-            revision: 1
-            snap_id: "xxxxxxxxxxxxxxxxxxxxxxxxfoobar25"
-            summary: "This is a test snap"
-            version: "2.5"
-            snap_enabled: false
-        }
-        ListElement {
-            //            architecture: ["amd64"]
-            //            binary_filesize: null
-            channel: "stable"
-            confinement: "strict"
-            content: "application"
-            description: "This is a test snap"
-            //            icon_url: undefined
-            last_updated: "2016-06-03T12:01:15.435821Z"
-            origin: "testuser"
-            package_name: "foobar25"
-            //            prices: undefined
-            publisher: "TestUser"
-            ratings_average: 0.0
-            revision: 1
-            snap_id: "xxxxxxxxxxxxxxxxxxxxxxxxfoobar25"
-            summary: "This is a test snap"
-            version: "2.5"
-            snap_enabled: false
-            snap_installed_size: 200003
-        }
-        ListElement {
-            //            architecture: ["amd64"]
-            //            binary_filesize: null
-            channel: "stable"
-            confinement: "strict"
-            content: "application"
-            description: "This is a test snap"
-            //            icon_url: undefined
-            last_updated: "2016-06-03T12:01:15.435821Z"
-            origin: "testuser"
-            package_name: "foobar25"
-            //            prices: undefined
-            publisher: "TestUser"
-            ratings_average: 0.0
-            revision: 1
-            snap_id: "xxxxxxxxxxxxxxxxxxxxxxxxfoobar25"
-            summary: "This is a test snap"
-            version: "2.5"
-            snap_enabled: true
+        function refresh() {
+            testSnapsModel.clear()
+            var listRequest = snapdClient.list()
+            listRequest.runSync()
+
+            console.log("Installed:")
+            for (var i = 0; i < listRequest.snapCount; i++) {
+                var snap = listRequest.snap(i)
+                console.log(snap.name, snap.installDate)
+                testSnapsModel.append(snap)
+            }
         }
     }
 }

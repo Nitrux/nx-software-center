@@ -16,10 +16,6 @@ class SnapD : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(Changes* changes READ changes NOTIFY changesChanged)
-    Q_PROPERTY(SnapStore* store READ store NOTIFY storeChanged)
-    Q_PROPERTY(LocalSnaps* local READ local NOTIFY localChanged)
-
 public:
     explicit SnapD(QObject *parent = 0);
 
@@ -47,11 +43,6 @@ private:
 
 
     static SnapD *singleton;
-
-
-    Changes* m_changes;
-    LocalSnaps* m_local;
-    SnapStore* m_store;
 };
 
 #endif // SNAPD_H

@@ -5,9 +5,9 @@
 #include <QDebug>
 
 Changes::Changes(QObject *parent)
-    : QAbstractListModel(parent), m_roles()
+    : QAbstractListModel(parent)
 {
-    // m_roles << "id"; // ,"kind" ,"ready" ,"ready-time" ,"spawn-time" ,"status" ,"summary" , "tasks"};
+   //  m_roles << "id" << "kind"  << "ready" << "ready-time"  << "spawn-time"  << "status"  << "summary"  <<  "tasks";
 }
 
 QHash<int, QByteArray> Changes::roleNames() const
