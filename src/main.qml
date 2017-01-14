@@ -62,6 +62,9 @@ ApplicationWindow {
                 checked: content.currentItem
                          && content.currentItem.objectName == "storeView"
                 onClicked: {
+                    if (content.currentItem
+                            && content.currentItem.objectName == "storeView")
+                        return
                     // content.clear()
                     content.pop("qrc:/StoreView.qml")
                     if ( content.currentItem == undefined || content.currentItem.objectName != "storeView")
@@ -78,15 +81,15 @@ ApplicationWindow {
 //                    content.push(changesView)
 //                }
 //            }
-            PlasmaComponents.Button {
-                iconName: "edit-download"
-                checked: content.currentItem
-                         && content.currentItem.objectName == "workView"
-                onClicked: {
-                    content.clear()
-                    content.push(workView)
-                }
-            }
+//            PlasmaComponents.Button {
+//                iconName: "edit-download"
+//                checked: content.currentItem
+//                         && content.currentItem.objectName == "workView"
+//                onClicked: {
+//                    content.clear()
+//                    content.push(workView)
+//                }
+//            }
 
             PlasmaComponents.TextField {
                 id: searchField
@@ -94,6 +97,7 @@ ApplicationWindow {
                 Layout.leftMargin: 60
                 Layout.rightMargin: 60
                 placeholderText: "Search"
+                focus: true
 
                 onEditingFinished: {
                     if (content.currentItem

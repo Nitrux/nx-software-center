@@ -31,8 +31,18 @@ Item {
                 id: messageText
                 anchors.top: busyModelIndicator.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: storeSnapsModel.statusMessage;
+                width: 400
+                height: 100
+
+                text: storeSnapsModel.errorMessage == "" ? storeSnapsModel.statusMessage : storeSnapsModel.errorMessage;
+
+                fontSizeMode: Text.Fit
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                minimumPixelSize: 10
+                font.pixelSize: 20
             }
+
             PlasmaComponents.BusyIndicator {
                 id: busyModelIndicator
                 visible: storeSnapsModel.busy
@@ -41,10 +51,11 @@ Item {
 
             PlasmaCore.IconItem {
                 anchors.centerIn: parent
+                anchors.verticalCenterOffset: -20
                 width: 64
                 height: 64
 
-                source: "face-uncertain"
+                source: storeSnapsModel.errorMessage == "" ? "face-laughing" : "face-uncertain"
                 visible: !busyModelIndicator.visible
             }
         }
@@ -232,7 +243,8 @@ Item {
 
         property bool busy: false
         property string query: ""
-        property string statusMessage: ""
+        property string statusMessage: i18n("Type what are you looking for ...")
+        property string errorMessage: ""
 
         Component.onCompleted: refresh()
 
@@ -241,6 +253,7 @@ Item {
                 query  = searchField.text
             else
                 return
+
 
             busy = true
             statusMessage = i18n("Lonking for snaps like: \"") + query + "\""
@@ -254,7 +267,9 @@ Item {
 
                 print(request.errorString)
                 if(request.error)
-                    statusMessage = request.errorString
+                    errorMessage = i18n("There was an error while procesing your request. Please check your internet connection and try again.")
+                else
+                    errorMessage = ""
 
                 console.log("Available:")
                 for (var i = 0; i < request.snapCount; i++) {
