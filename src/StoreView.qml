@@ -123,6 +123,7 @@ Item {
                 text: "&Abort"
                 onTriggered: {
                     print(text)
+                    request.kill()
                     busy = false
                 }
             }

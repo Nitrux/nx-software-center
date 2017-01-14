@@ -24,6 +24,7 @@ public slots:
     ActionReply install(QVariantMap args);
     ActionReply disable(QVariantMap args);
     ActionReply enable(QVariantMap args);
+    ActionReply refresh(QVariantMap args);
 
 private:
     QSnapdClient m_qsnapdClient;

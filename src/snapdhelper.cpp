@@ -82,9 +82,27 @@ ActionReply SnapdHelper::enable(QVariantMap args)
     QString snap = args["snap"].toString();
     ActionReply reply;
 
-    qDebug() << "Ok let's do it!";
-
     auto request = m_qsnapdClient.enable(snap);
+    request->runSync();
+    if (request->error() != QSnapdRequest::NoError) {
+        reply.setErrorCode( ActionReply::BackendError );
+        reply.setErrorDescription(request->errorString());
+    }
+
+    request->deleteLater();
+    return reply;
+}
+
+ActionReply SnapdHelper::refresh(QVariantMap args)
+{
+    HelperSupport::progressStep(QVariantMap());
+
+    QString snap = args["snap"].toString();
+    QString channel = args.value("channel").toString();
+
+    ActionReply reply;
+
+    auto request = m_qsnapdClient.refresh(snap, channel);
     request->runSync();
     if (request->error() != QSnapdRequest::NoError) {
         reply.setErrorCode( ActionReply::BackendError );

@@ -27,3 +27,9 @@ Name=Enable snap
 Description=The Software Center is attempting to enable a snap in your system.
 Policy=auth_admin
 Persistence=session
+
+[org.nomad.softwarecenter.refresh]
+Name=Refresh snap
+Description=The Software Center is attempting to refresh a snap in your system.
+Policy=auth_admin
+Persistence=session

@@ -44,6 +44,7 @@ Item {
             width: 192
             height: 192
             property bool busy: false
+            property var request
 
             Rectangle {
                 anchors.fill: parent
@@ -58,7 +59,7 @@ Item {
                 text: "&Enable"
                 onTriggered: {
                     print(text, model.name)
-                    var request = SnapdRootClient.enable(model.name);
+                    request = SnapdRootClient.enable(model.name);
                     function enableCompleted() {
                         busy = false;
                         print(request.errorString)
@@ -77,7 +78,7 @@ Item {
                 text: "&Disable"
                 onTriggered: {
                     print(text, model.name)
-                    var request = SnapdRootClient.disable(model.name);
+                    request = SnapdRootClient.disable(model.name);
                     function disableCompleted() {
                         busy = false;
                         print(request.errorString)
@@ -95,7 +96,7 @@ Item {
                 text: "&Remove"
                 onTriggered: {
                     print(text, model.name)
-                    var request = SnapdRootClient.remove(model.name);
+                    request = SnapdRootClient.remove(model.name);
                     function removeCompleted() {
                         busy = false;
                         print(request.errorString)
@@ -113,20 +114,16 @@ Item {
                 text: "Re&fresh"
                 onTriggered: {
                     print(text, model.name)
-                    var request = snapdClient.refresh(model.name, model.channel)
+                    request = SnapdRootClient.refresh(model.name, model.channel)
 
                     function requestCompleted() {
-                        busy = false
 
-                        if (request.error !== SnapdRequest.NoError) {
-                            console.log (request.errorString)
-                            return
-                        }
-
+                        busy = false;
+                        print(request.errorString)
                         installedSnapsModel.refresh()
                     }
-                    request.complete.connect( requestCompleted )
-                    request.runAsync()
+                    request.finished.connect( requestCompleted )
+                    request.start()
                     busy = true
                 }
             }
@@ -137,6 +134,7 @@ Item {
                 text: "&Abort"
                 onTriggered: {
                     print(text)
+                    request.kill()
                     busy = false
                 }
             }

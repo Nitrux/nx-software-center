@@ -104,6 +104,9 @@ ApplicationWindow {
                             && content.currentItem.objectName == "storeView")
                         return
 
+                    if (text == "")
+                        return
+
                     content.pop("qrc:/StoreView.qml")
                     if ( content.currentItem == undefined || content.currentItem.objectName != "storeView")
                         content.push("qrc:/StoreView.qml")
