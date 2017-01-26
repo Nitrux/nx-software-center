@@ -5,5 +5,6 @@
         <file>ChangesView.qml</file>
         <file>HomeView.qml</file>
         <file>StoreView.qml</file>
+        <file>SettingsView.qml</file>
     </qresource>
 </RCC>

@@ -37,6 +37,7 @@ set(SOURCE
         ${SOURCE}
         src/main.cpp
         src/snapdclientkauthwrapper.cpp
+        src/snapdsettings.cpp
 )
 
 set(HELPER_SOURCE

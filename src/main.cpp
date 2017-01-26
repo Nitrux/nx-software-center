@@ -10,7 +10,7 @@
 
 #include <Snapd/App>
 #include "snapdclientkauthwrapper.h"
-
+#include "snapdsettings.h"
 
 
 static QObject *snapdkauthwrapper_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
@@ -21,6 +21,13 @@ static QObject *snapdkauthwrapper_singletontype_provider(QQmlEngine *engine, QJS
      return new SnapdClientKAuthWrapper();
  }
 
+static QObject *snapdsetings_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+ {
+     Q_UNUSED(engine)
+     Q_UNUSED(scriptEngine)
+
+     return new SnapdSettings();
+ }
 int main(int argc, char *argv[])
 {
 
@@ -35,6 +42,7 @@ int main(int argc, char *argv[])
     qDebug() << engine.importPathList();
 
     qmlRegisterSingletonType<SnapdClientKAuthWrapper>("org.nx.softwarecenter", 1, 0, "SnapdRootClient", snapdkauthwrapper_singletontype_provider);
+    qmlRegisterSingletonType<SnapdSettings>("org.nx.softwarecenter", 1, 0, "SnapdSettings", snapdsetings_singletontype_provider);
     qmlRegisterUncreatableType<KAuth::ExecuteJob> ("org.nx.softwarecenter", 1, 0, "Job", ".");
     qmlRegisterUncreatableType<QSnapdApp> ("org.nx.softwarecenter", 1, 0, "Job", ".");
 

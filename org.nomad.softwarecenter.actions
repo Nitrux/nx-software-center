@@ -33,3 +33,9 @@ Name=Refresh snap
 Description=The Software Center is attempting to refresh a snap in your system.
 Policy=auth_admin
 Persistence=session
+
+[org.nomad.softwarecenter.applysettings]
+Name=Apply snapd settings
+Description=The Software Center is attempting to set snapd settings.
+Policy=auth_admin
+Persistence=session

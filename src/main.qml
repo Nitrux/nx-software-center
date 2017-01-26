@@ -52,9 +52,9 @@ ApplicationWindow {
                          && content.currentItem.objectName == "homeView"
                 onClicked: {
                     // content.clear()
-                    content.pop("qrc:/HomeView.qml")
-                    if ( content.currentItem == undefined || content.currentItem.objectName != "homeView")
-                        content.push("qrc:/HomeView.qml")
+                    content.pop(content.initialItem)
+//                    if ( content.currentItem == undefined || content.currentItem.objectName != "homeView")
+//                        content.push("qrc:/HomeView.qml")
                 }
             }
             PlasmaComponents.Button {
@@ -107,7 +107,7 @@ ApplicationWindow {
                     if (text == "")
                         return
 
-                    content.pop("qrc:/StoreView.qml")
+                    // content.pop("qrc:/StoreView.qml")
                     if ( content.currentItem == undefined || content.currentItem.objectName != "storeView")
                         content.push("qrc:/StoreView.qml")
                 }
@@ -116,6 +116,18 @@ ApplicationWindow {
             PlasmaComponents.Button {
                 Layout.alignment: Qt.AlignRight
                 iconName: "configure"
+
+                checked: content.currentItem
+                         && content.currentItem.objectName == "settingsView"
+                onClicked: {
+                    if (content.currentItem
+                            && content.currentItem.objectName == "settingsView")
+                        return
+                    // content.clear()
+                    //content.pop("qrc:/SettingsView.qml")
+                    if ( content.currentItem == undefined || content.currentItem.objectName != "settingsView")
+                        content.push(["qrc:/StoreView.qml", "qrc:/SettingsView.qml"])
+                }
             }
         }
 
@@ -126,5 +138,7 @@ ApplicationWindow {
 
             initialItem: "qrc:/HomeView.qml"
         }
+
+
     }
 }

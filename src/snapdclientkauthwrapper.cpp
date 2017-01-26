@@ -88,3 +88,4 @@ KAuth::ExecuteJob *SnapdClientKAuthWrapper::refresh(const QString &snap, const Q
 
     return job;
 }
+

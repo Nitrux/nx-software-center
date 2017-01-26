@@ -15,7 +15,6 @@ public:
     Q_INVOKABLE KAuth::ExecuteJob *remove(const QString &snap);
     Q_INVOKABLE KAuth::ExecuteJob *install(const QString &snap, const QString &channel);
     Q_INVOKABLE KAuth::ExecuteJob *refresh(const QString &snap, const QString &channel);
-
 };
 
 #endif // SNAPDCLIENTKAUTHWRAPPER_H

@@ -1,5 +1,6 @@
 #include "snapdhelper.h"
 
+#include <QSettings>
 #include <QThread>
 #include <QLocalSocket>
 #include <QByteArray>
@@ -37,6 +38,18 @@ ActionReply SnapdHelper::remove(QVariantMap args)
         reply.setErrorDescription(request->errorString());
     }
 
+    // Check for cancel requests
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [timer, request]() {
+        if (HelperSupport::isStopped()) {
+            qDebug() << "Stop request recived";
+            request->cancel();
+            timer->deleteLater();
+        }
+    });
+
+    timer->start(200);
+
     request->deleteLater();
     return reply;
 }
@@ -57,6 +70,17 @@ ActionReply SnapdHelper::install(QVariantMap args)
         reply.setErrorDescription(request->errorString());
     }
 
+    // Check for cancel requests
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [timer, request]() {
+        if (HelperSupport::isStopped()) {
+            qDebug() << "Stop request recived";
+            request->cancel();
+            timer->deleteLater();
+        }
+    });
+    timer->start(200);
+
     request->deleteLater();
     return reply;
 }
@@ -72,6 +96,18 @@ ActionReply SnapdHelper::disable(QVariantMap args)
         reply.setErrorCode( ActionReply::BackendError );
         reply.setErrorDescription(request->errorString());
     }
+
+    // Check for cancel requests
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [timer, request]() {
+        if (HelperSupport::isStopped()) {
+            qDebug() << "Stop request recived";
+            request->cancel();
+            timer->deleteLater();
+        }
+
+    });
+    timer->start(200);
 
     request->deleteLater();
     return reply;
@@ -89,6 +125,18 @@ ActionReply SnapdHelper::enable(QVariantMap args)
         reply.setErrorDescription(request->errorString());
     }
 
+    // Check for cancel requests
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [timer, request]() {
+        if (HelperSupport::isStopped()) {
+            qDebug() << "Stop request recived";
+            request->cancel();
+            timer->deleteLater();
+        }
+    });
+    timer->start(200);
+
+
     request->deleteLater();
     return reply;
 }
@@ -103,13 +151,50 @@ ActionReply SnapdHelper::refresh(QVariantMap args)
     ActionReply reply;
 
     auto request = m_qsnapdClient.refresh(snap, channel);
+
+    // Check for cancel requests
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [timer, request]() {
+        if (HelperSupport::isStopped()) {
+            qDebug() << "Stop request recived";
+            request->cancel();
+            timer->stop();
+        }
+        qDebug() << "tick" << HelperSupport::isStopped();
+
+    });
+    timer->start(200);
     request->runSync();
+    timer->stop();
+
     if (request->error() != QSnapdRequest::NoError) {
         reply.setErrorCode( ActionReply::BackendError );
         reply.setErrorDescription(request->errorString());
     }
 
+    timer->deleteLater();
     request->deleteLater();
+    return reply;
+}
+
+ActionReply SnapdHelper::applysettings(QVariantMap args)
+{
+    HelperSupport::progressStep(QVariantMap());
+
+    QString store = args["store"].toString();
+    QString storeUrl =  args["storeUrl"].toString();
+
+    bool useProxy = args["useProxy"].toBool();
+    QString httpProxy =  args["httpProxy"].toString();
+    QString httpsProxy =  args["httpsProxy"].toString();
+    QString noProxy =  args["noProxy"].toString();
+
+    ActionReply reply;
+
+    QSettings enviroment("/etc/environment");
+    for (QString key: enviroment.allKeys())
+        qDebug() << key << enviroment.value(key);
+
     return reply;
 }
 
