@@ -8,6 +8,9 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QTimer>
+#include <QFile>
+#include <QTextStream>
+#include <QProcess>
 
 #include <KAuthHelperSupport>
 #include <QDebug>
@@ -179,10 +182,9 @@ ActionReply SnapdHelper::refresh(QVariantMap args)
 
 ActionReply SnapdHelper::applysettings(QVariantMap args)
 {
-    HelperSupport::progressStep(QVariantMap());
-
-    QString store = args["store"].toString();
-    QString storeUrl =  args["storeUrl"].toString();
+    //    qDebug() << args;
+    int store = args["store"].toInt();
+    QString storeUrl = args["storeUrl"].toString();
 
     bool useProxy = args["useProxy"].toBool();
     QString httpProxy =  args["httpProxy"].toString();
@@ -191,9 +193,58 @@ ActionReply SnapdHelper::applysettings(QVariantMap args)
 
     ActionReply reply;
 
-    QSettings enviroment("/etc/environment");
-    for (QString key: enviroment.allKeys())
-        qDebug() << key << enviroment.value(key);
+    QFile file("/etc/environment");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        reply.setErrorDescription(file.errorString());
+        return reply;
+    }
+
+    QTextStream in(&file);
+    QString line = in.readLine();
+    QStringList lines;
+    while (!line.isNull()) {
+        if (!line.contains("SNAPPY_FORCE_CPI_URL") &&
+                !line.contains("HTTP_PROXY") &&
+                !line.contains("HTTPS_PROXY") &&
+                !line.contains("NO_PROXY")) {
+            lines.append(line);
+        }
+
+        line = in.readLine();
+    }
+    file.close();
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        reply.setErrorDescription(file.errorString());
+        return reply;
+    }
+
+    QTextStream out(&file);
+
+    if (store == 0)
+        out << "#";
+    out << "SNAPPY_FORCE_CPI_URL=" << storeUrl << endl;
+
+    if (useProxy) {
+        out << "HTTP_PROXY=" << httpProxy << endl;
+        out << "HTTPS_PROXY=" <<  httpsProxy << endl;
+        out << "NO_PROXY=" <<  noProxy << endl;
+    } else {
+        out << "#HTTP_PROXY=" << httpProxy << endl;
+        out << "#HTTPS_PROXY=" <<  httpsProxy << endl;
+        out << "#NO_PROXY=" <<  noProxy << endl;
+    }
+
+    for (QString line : lines)
+        out << line << endl;
+
+    file.close();
+
+    QProcess process;
+    process.start("/bin/bash", QStringList() << "/usr/sbin/service" << "snapd" << "restart");
+    process.waitForFinished();
+
+    qDebug() << process.readAll() ;
 
     return reply;
 }

@@ -2,6 +2,7 @@
 
 
 #include <QDebug>
+#include <QSettings>
 
 SnapdSettings::SnapdSettings()
 {
@@ -94,13 +95,54 @@ void SnapdSettings::setCustomStoreUrl(QString customStoreUrl)
 
 void SnapdSettings::load()
 {
+    QSettings settings("/etc/environment", QSettings::IniFormat);
+    //    qDebug() << settings.
+    for (QString key: settings.allKeys())
+        qDebug() << key << settings.value(key);
 
+    // Set ubuntu as default store
+    m_store = Ubuntu;
+
+    if (settings.contains("SNAPPY_FORCE_CPI_URL")) {
+        m_store = Custom;
+        m_customStoreUrl = settings.value("SNAPPY_FORCE_CPI_URL", "").toString();
+    }
+
+    if (settings.contains("#SNAPPY_FORCE_CPI_URL")) {
+        m_customStoreUrl = settings.value("SNAPPY_FORCE_CPI_URL").toString();
+    }
+
+    m_httpProxy = settings.value("HTTP_PROXY", "").toString();
+    m_httpsProxy = settings.value("HTTPS_PROXY", "").toString();
+    QStringList noProxyList = settings.value("NO_PROXY").toStringList();
+
+    if (m_httpProxy.isEmpty() && m_httpsProxy.isEmpty())
+        m_useProxy = false;
+
+    if (m_httpProxy.isEmpty())
+        m_httpProxy = settings.value("#HTTP_PROXY", "").toString();
+
+    if (m_httpsProxy.isEmpty())
+        m_httpsProxy = settings.value("#HTTPS_PROXY", "").toString();
+
+    if (noProxyList.isEmpty())
+        noProxyList = settings.value("#NO_PROXY", "").toStringList();
+
+    m_noProxy = noProxyList.join(", ");
+
+    emit storeChanged(m_store);
+    emit customStoreUrlChanged(m_customStoreUrl);
+    emit useProxyChanged(m_useProxy);
+    emit httpProxyChanged(m_httpProxy);
+    emit httpsProxyChanged(m_httpsProxy);
+    emit noProxyChanged(m_noProxy);
 }
 
 KAuth::ExecuteJob *SnapdSettings::apply()
 {
     KAuth::Action action("org.nomad.softwarecenter.applysettings");
     action.setHelperId("org.nomad.softwarecenter");
+
     action.addArgument("store", m_store);
     action.addArgument("storeUrl", m_customStoreUrl);
 
@@ -108,7 +150,6 @@ KAuth::ExecuteJob *SnapdSettings::apply()
     action.addArgument("httpProxy", m_httpProxy);
     action.addArgument("httpsProxy", m_httpsProxy);
     action.addArgument("noProxy", m_noProxy);
-
 
 
     KAuth::ExecuteJob *job = action.execute();

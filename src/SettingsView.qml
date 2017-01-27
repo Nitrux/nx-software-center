@@ -31,7 +31,8 @@ Item {
                     text: i18n("Ubuntu Store")
                     exclusiveGroup: storeGroup
                     checked: SnapdSettings.store == SnapdSettings.Ubuntu
-                    onCheckedChanged: if (checked) SnapdSettings.store = SnapdSettings.Ubuntu
+                    onCheckedChanged: if (checked)
+                                          SnapdSettings.store = SnapdSettings.Ubuntu
                 }
 
                 PlasmaComponents.RadioButton {
@@ -39,7 +40,8 @@ Item {
                     text: i18n("Custom Store")
                     exclusiveGroup: storeGroup
                     checked: SnapdSettings.store == SnapdSettings.Custom
-                    onCheckedChanged: if (checked) SnapdSettings.store = SnapdSettings.Custom
+                    onCheckedChanged: if (checked)
+                                          SnapdSettings.store = SnapdSettings.Custom
                 }
                 PlasmaComponents.TextField {
                     Layout.leftMargin: 40
@@ -49,8 +51,7 @@ Item {
                     placeholderText: "http://mynapstore.com"
                     text: SnapdSettings.customStoreUrl
 
-                    onEditingFinished: SnapdSettings.customStoreUrl = text
-
+                    onTextChanged: SnapdSettings.customStoreUrl = text
                 }
             }
         }
@@ -61,11 +62,7 @@ Item {
 
             checked: SnapdSettings.useProxy
 
-            Binding {
-                target: SnapdSettings
-                property: "useProxy"
-                value: parent.checked
-            }
+            onCheckedChanged: SnapdSettings.useProxy = checked
         }
 
         GroupBox {
@@ -79,11 +76,7 @@ Item {
                     Layout.preferredWidth: 200
                     text: SnapdSettings.httpProxy
 
-                    Binding {
-                        target: SnapdSettings
-                        property: "httpProxy"
-                        value: parent.text
-                    }
+                    onTextChanged: SnapdSettings.httpProxy = text
                 }
 
                 PlasmaComponents.Label {
@@ -94,11 +87,7 @@ Item {
                     Layout.preferredWidth: 200
                     text: SnapdSettings.httpsProxy
 
-                    Binding {
-                        target: SnapdSettings
-                        property: "httpsProxy"
-                        value: parent.text
-                    }
+                    onTextChanged: SnapdSettings.httpsProxy = text
                 }
 
                 PlasmaComponents.Label {
@@ -109,18 +98,33 @@ Item {
                     Layout.preferredWidth: 200
                     text: SnapdSettings.noProxy
 
-                    Binding {
-                        target: SnapdSettings
-                        property: "noProxy"
-                        value: parent.text
-                    }
+                    onTextChanged: SnapdSettings.noProxy = text
                 }
-
             }
         }
-    PlasmaComponents.Button {
-        text: i18n("Apply")
-        onClicked: SnapdSettings.apply()
+        PlasmaComponents.Button {
+            text: i18n("Apply")
+            enabled: !applySettingsBusyIndicator.visible
+            onClicked: {
+                applySettingsBusyIndicator.visible = true
+                var request = SnapdSettings.apply()
+                function applySettingsCompleted() {
+                    applySettingsBusyIndicator.visible = false
+                    print(request.errorString)
+                    //storeSnapsModel.refresh()
+                }
+
+                request.finished.connect(applySettingsCompleted)
+                request.start()
+            }
+
+        }
+
     }
+
+    PlasmaComponents.BusyIndicator {
+        id: applySettingsBusyIndicator
+        anchors.centerIn: parent
+        visible: false
     }
 }
