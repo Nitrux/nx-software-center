@@ -159,42 +159,20 @@ Item {
         }
     }
 
-    ListModel {
+    SnapsModel {
         id: installedSnapsModel
-        property var selectedItems
+        fetchSnapsFunc: function () {
+            var request = snapdClient.list()
+            request.runSync()
 
-        Component.onCompleted: {
-            selectedItems = {
-
+            var list = []
+            //            snapList.sort(function (a, b) { return a < b})
+            for (var i = 0; i < request.snapCount; i++) {
+                var snap = request.snap(i)
+                list.push(snap)
             }
-            refresh()
-        }
-        function refresh() {
-            selectedItems = {
 
-            }
-            installedSnapsModel.clear()
-            var listRequest = snapdClient.list()
-            listRequest.runSync()
-
-            //            console.log("Installed:")
-            for (var i = 0; i < listRequest.snapCount; i++) {
-                var snap = listRequest.snap(i)
-                //                console.log(snap.name, snap.installDate)
-                installedSnapsModel.append(snap)
-            }
-        }
-
-        function getByName(name) {
-            for (var i = 0; i < count; i++ ) {
-                var snap = get(i)
-                if (snap.name == name)
-                    return snap
-            }
-        }
-
-        function getSelectedItems() {
-            return Object.keys(selectedItems)
+            return list;
         }
     }
 
@@ -204,12 +182,14 @@ Item {
     }
 
     Component.onCompleted: {
-        var actions = [
-                    DisableSnapAction.prepare(SnapdRootClient, installedSnapsModel),
-                    EnableSnapAction.prepare(SnapdRootClient, installedSnapsModel),
-                    RefreshSnapAction.prepare(SnapdRootClient, installedSnapsModel),
-                    RemoveSnapAction.prepare(SnapdRootClient, installedSnapsModel)
-                ]
+        var actions = [DisableSnapAction.prepare(
+                           SnapdRootClient,
+                           installedSnapsModel), EnableSnapAction.prepare(
+                           SnapdRootClient,
+                           installedSnapsModel), RefreshSnapAction.prepare(
+                           SnapdRootClient,
+                           installedSnapsModel), RemoveSnapAction.prepare(
+                           SnapdRootClient, installedSnapsModel)]
         statusArea.updateContext("documentinfo",
                                  i18n("Available actions"), actions)
     }

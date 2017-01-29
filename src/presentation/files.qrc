@@ -7,6 +7,7 @@
         <file>SnapItemDelegate.qml</file>
         <file>StatusArea.qml</file>
         <file>StoreView.qml</file>
+        <file>SnapsModel.qml</file>
     </qresource>
     <qresource prefix="/actions">
         <file>DisableSnapAction.js</file>
