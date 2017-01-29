@@ -16,4 +16,7 @@
         <file>RefreshSnapAction.js</file>
         <file>RemoveSnapAction.js</file>
     </qresource>
+    <qresource prefix="/scripts">
+        <file>Utils.js</file>
+    </qresource>
 </RCC>

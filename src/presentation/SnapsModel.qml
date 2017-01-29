@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.3
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
+import "qrc:/scripts/Utils.js" as UtilsJs
+
 import org.nx.softwarecenter 1.0
 
 ListModel {
@@ -19,29 +21,55 @@ ListModel {
         refresh()
     }
     function refresh() {
-        selectedItems = {
-
-        }
-
-        snapsModel.clear()
         var list = fetchSnapsFunc()
 
-        list.sort(function (a, b) {
+        function compareSnaps(a, b) {
             return a.name.localeCompare(b.name)
-        })
+        }
+
+        list.sort(compareSnaps)
+
+        for (var i = count - 1; i >= 0; i--) {
+            var snap = get(i)
+            var idx = UtilsJs.binaryIndexOf(snap, compareSnaps, function () {
+                return list.length
+            }, function (i) {
+                return list[i]
+            })
+
+            if (idx == -1) {
+                delete selectedItems[snap.name]
+                remove(i)
+            }
+        }
+
         for (var i = 0; i < list.length; i++) {
             var snap = list[i]
-            snapsModel.append(snap)
+
+            var oldIdx = _indexOf(snap.name)
+            if (oldIdx == -1)
+                insert(i, snap)
+            else {
+                if (oldIdx != i)
+                    move(oldIdx, i, 1)
+                set(i, snap)
+            }
         }
     }
 
+    function _indexOf(name) {
+        return UtilsJs.binaryIndexOf(name, function (a, b) {
+            return a.name.localeCompare(b)
+        }, function () {
+            return count
+        }, function (i) {
+            return get(i)
+        })
+    }
+
     function getByName(name) {
-        // TODO: make a binary search here
-        for (var i = 0; i < count; i++) {
-            var snap = get(i)
-            if (snap.name == name)
-                return snap
-        }
+        var idx = _indexOf(name)
+        return snapsModel.get(idx)
     }
 
     function getSelectedItems() {
