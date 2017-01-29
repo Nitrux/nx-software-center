@@ -28,7 +28,7 @@ find_package(Snapd REQUIRED)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 # add the qml.qrc file
-qt5_add_resources(qml_QRC src/qml.qrc)
+qt5_add_resources(qml_QRC src/presentation/files.qrc)
 
 kauth_install_actions(org.nomad.softwarecenter org.nomad.softwarecenter.actions)
 
@@ -41,8 +41,7 @@ set(SOURCE
 )
 
 set(HELPER_SOURCE
-        src/snapdhelper.cpp
-        src/httputils.cpp
+        src/helper/snapdhelper.cpp
 )
 
 

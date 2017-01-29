@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ChangesView.qml</file>
+        <file>HomeView.qml</file>
+        <file>main.qml</file>
+        <file>SettingsView.qml</file>
+        <file>SnapItemDelegate.qml</file>
+        <file>StatusArea.qml</file>
+        <file>StoreView.qml</file>
+    </qresource>
+    <qresource prefix="/actions">
+        <file>DisableSnapAction.js</file>
+        <file>ActionUtils.js</file>
+        <file>EnableSnapAction.js</file>
+        <file>RefreshSnapAction.js</file>
+        <file>RemoveSnapAction.js</file>
+    </qresource>
+</RCC>

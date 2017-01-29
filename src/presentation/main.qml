@@ -28,13 +28,11 @@ ApplicationWindow {
             var connectRequest = snapdClient.connect()
             connectRequest.runSync()
 
-            connected();
+            connected()
         }
 
-        signal connected();
+        signal connected
     }
-
-
 
     ColumnLayout {
         anchors.fill: parent
@@ -53,8 +51,8 @@ ApplicationWindow {
                 onClicked: {
                     // content.clear()
                     content.pop(content.initialItem)
-//                    if ( content.currentItem == undefined || content.currentItem.objectName != "homeView")
-//                        content.push("qrc:/HomeView.qml")
+                    //                    if ( content.currentItem == undefined || content.currentItem.objectName != "homeView")
+                    //                        content.push("qrc:/HomeView.qml")
                 }
             }
             PlasmaComponents.Button {
@@ -67,30 +65,30 @@ ApplicationWindow {
                         return
                     // content.clear()
                     content.pop("qrc:/StoreView.qml")
-                    if ( content.currentItem == undefined || content.currentItem.objectName != "storeView")
+                    if (content.currentItem == undefined
+                            || content.currentItem.objectName != "storeView")
                         content.push("qrc:/StoreView.qml")
                 }
-
             }
-//            PlasmaComponents.Button {
-//                iconName: "favorites"
-//                checked: content.currentItem
-//                         && content.currentItem.objectName == "changesView"
-//                onClicked: {
-//                    content.clear()
-//                    content.push(changesView)
-//                }
-//            }
-//            PlasmaComponents.Button {
-//                iconName: "edit-download"
-//                checked: content.currentItem
-//                         && content.currentItem.objectName == "workView"
-//                onClicked: {
-//                    content.clear()
-//                    content.push(workView)
-//                }
-//            }
 
+            //            PlasmaComponents.Button {
+            //                iconName: "favorites"
+            //                checked: content.currentItem
+            //                         && content.currentItem.objectName == "changesView"
+            //                onClicked: {
+            //                    content.clear()
+            //                    content.push(changesView)
+            //                }
+            //            }
+            //            PlasmaComponents.Button {
+            //                iconName: "edit-download"
+            //                checked: content.currentItem
+            //                         && content.currentItem.objectName == "workView"
+            //                onClicked: {
+            //                    content.clear()
+            //                    content.push(workView)
+            //                }
+            //            }
             PlasmaComponents.TextField {
                 id: searchField
                 Layout.fillWidth: true
@@ -108,7 +106,8 @@ ApplicationWindow {
                         return
 
                     // content.pop("qrc:/StoreView.qml")
-                    if ( content.currentItem == undefined || content.currentItem.objectName != "storeView")
+                    if (content.currentItem == undefined
+                            || content.currentItem.objectName != "storeView")
                         content.push("qrc:/StoreView.qml")
                 }
             }
@@ -125,7 +124,8 @@ ApplicationWindow {
                         return
                     // content.clear()
                     //content.pop("qrc:/SettingsView.qml")
-                    if ( content.currentItem == undefined || content.currentItem.objectName != "settingsView")
+                    if (content.currentItem == undefined
+                            || content.currentItem.objectName != "settingsView")
                         content.push(["qrc:/StoreView.qml", "qrc:/SettingsView.qml"])
                 }
             }
@@ -135,10 +135,17 @@ ApplicationWindow {
             id: content
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.preferredHeight: 400
 
             initialItem: "qrc:/HomeView.qml"
         }
 
+        StatusArea {
+            id: statusArea
+            Layout.preferredHeight: 38
+            Layout.fillWidth: true
+            Layout.bottomMargin: 4
+        }
 
     }
 }
