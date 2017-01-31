@@ -7,11 +7,18 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import org.nx.softwarecenter 1.0
 
+import "qrc:/actions/ApplySettingsAction.js" as ApplySettingsAction
+
 Item {
     id: settingsViewRoot
     objectName: "settingsView"
 
-    Component.onCompleted: SnapdSettings.load()
+    Component.onCompleted: {
+        SnapdSettings.load()
+
+        var actions = [ApplySettingsAction.prepare(SnapdSettings)]
+        statusArea.updateContext("documentinfo", i18n("Available actions"), actions)
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -102,29 +109,5 @@ Item {
                 }
             }
         }
-        PlasmaComponents.Button {
-            text: i18n("Apply")
-            enabled: !applySettingsBusyIndicator.visible
-            onClicked: {
-                applySettingsBusyIndicator.visible = true
-                var request = SnapdSettings.apply()
-                function applySettingsCompleted() {
-                    applySettingsBusyIndicator.visible = false
-                    print(request.errorString)
-                    //storeSnapsModel.refresh()
-                }
-
-                request.finished.connect(applySettingsCompleted)
-                request.start()
-            }
-
-        }
-
-    }
-
-    PlasmaComponents.BusyIndicator {
-        id: applySettingsBusyIndicator
-        anchors.centerIn: parent
-        visible: false
     }
 }
