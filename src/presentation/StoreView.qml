@@ -7,6 +7,9 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import org.nx.softwarecenter 1.0
 
+import "qrc:/scripts/Utils.js" as Utils
+import "qrc:/actions/InstallSnapAction.js" as InstallSnapAction
+
 Item {
     id: storeViewRoot
 
@@ -21,7 +24,8 @@ Item {
         id: contentLoader
         anchors.fill: parent
 
-        sourceComponent: storeSnapsModel.busy || storeSnapsModel.count == 0 ? searchView : snapsView
+        sourceComponent: storeSnapsModel.busy
+                         || storeSnapsModel.count == 0 ? searchView : snapsView
     }
 
     Component {
@@ -34,7 +38,8 @@ Item {
                 width: 400
                 height: 100
 
-                text: storeSnapsModel.errorMessage == "" ? storeSnapsModel.statusMessage : storeSnapsModel.errorMessage;
+                text: storeSnapsModel.errorMessage
+                      == "" ? storeSnapsModel.statusMessage : storeSnapsModel.errorMessage
 
                 fontSizeMode: Text.Fit
                 horizontalAlignment: Text.AlignHCenter
@@ -55,7 +60,7 @@ Item {
                 width: 64
                 height: 64
 
-                source: storeSnapsModel.errorMessage == "" ? "face-laughing" : "face-uncertain"
+                source: storeSnapsModel.statusMessageIcon
                 visible: !busyModelIndicator.visible
             }
         }
@@ -83,49 +88,18 @@ Item {
         }
     }
 
-
     Component {
         id: snaptElementDelegate
         Item {
             width: 192
             height: 192
-            property bool busy: false
+            property bool selected: false
 
             Rectangle {
                 anchors.fill: parent
                 anchors.margins: 6
-                color: "silver"
+                color: selected ? "lightblue" : "silver"
                 opacity: 0.4
-            }
-
-            Action {
-                id: installSnap
-                iconName: "package-install"
-                text: "&Install"
-                onTriggered: {
-                    print(text, model.name)
-                    var request = SnapdRootClient.install(model.name, "stable")
-                    function installCompleted() {
-                        busy = false
-                        print(request.errorString)
-                        //storeSnapsModel.refresh()
-                    }
-
-                    request.finished.connect(installCompleted)
-                    request.start()
-                    busy = true
-                }
-            }
-
-            Action {
-                id: abortSnapAction
-                iconName: "dialog-cancel"
-                text: "&Abort"
-                onTriggered: {
-                    print(text)
-                    request.kill()
-                    busy = false
-                }
             }
 
             ColumnLayout {
@@ -143,12 +117,6 @@ Item {
                         id: snap_status_icon
                         source: ""
                         visible: !busy
-                    }
-
-                    PlasmaComponents.BusyIndicator {
-                        id: busyIndicator
-                        visible: busy
-                        // anchors.fill: snap_status_icon
                     }
                 }
 
@@ -177,27 +145,10 @@ Item {
                 }
                 Text {
                     id: snap_installed_size
-                    property string sizeString: {
-                        var value = model.downaloadSize
-                        var unit = "bytes"
-                        if (value > 1024) {
-                            value = value / 1024
-                            unit = "KiB"
-                        }
-
-                        if (value > 1024) {
-                            value = value / 1024
-                            unit = "MiB"
-                        }
-
-                        if (value > 1024) {
-                            value = value / 1024
-                            unit = "GiB"
-                        }
-
-                        return "" + Math.round(value, 2) + " " + unit
-                    }
-                    text: model.downaloadSize ? sizeString : i18n("Unknown size")
+                    property string sizeString: Utils.formatSize(
+                                                    model.downaloadSize)
+                    text: model.downaloadSize ? sizeString : i18n(
+                                                    "Unknown size")
                     Layout.leftMargin: 12
                     Layout.fillHeight: true
                 }
@@ -211,83 +162,70 @@ Item {
                 propagateComposedEvents: true
                 hoverEnabled: true
 
-                PlasmaComponents.ButtonColumn {
-                    id: snapActions
-                    opacity: snapElementArea.containsMouse ? 1 : 0
-                    exclusive: false
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                    anchors.margins: 6
-                    spacing: 2
-
-                    PlasmaComponents.Button {
-                        action: installSnap
-                        visible: !busy
-                    }
-
-                    PlasmaComponents.Button {
-                        action: abortSnapAction
-                        visible: busy
-                    }
-
-                    Behavior on opacity {
-                        PropertyAnimation {
-                        }
-                    }
+                onClicked: {
+                    selected = !selected
+                    if (selected)
+                        storeSnapsModel.selectedItems[name] = "true"
+                    else
+                        delete storeSnapsModel.selectedItems[name]
                 }
             }
         }
     }
 
-    ListModel {
+    SnapsModel {
         id: storeSnapsModel
 
         property bool busy: false
         property string query: ""
         property string statusMessage: i18n("Type what are you looking for ...")
         property string errorMessage: ""
+        property string statusMessageIcon: "face-laughing"
 
         Component.onCompleted: refresh()
 
-        function refresh() {
-            if (searchField.text !== query)
-                query  = searchField.text
-            else
-                return
-
+        fetchSnapsFunc: function () {
+            query = searchField.text
 
             busy = true
             statusMessage = i18n("Lonking for snaps like: \"") + query + "\""
             var request = snapdClient.find(0, query)
+            request.runSync()
 
-            function findCompleted() {
-                storeSnapsModel.clear()
-
-                if (request.snapCount == 0)
-                    statusMessage = i18n("No snaps where found with text \"") +  query + "\" try something else."
-
-                print(request.errorString)
-                if(request.error)
-                    errorMessage = i18n("There was an error while procesing your request. Please check your internet connection and try again.")
-                else
-                    errorMessage = ""
-
-                console.log("Available:")
-                for (var i = 0; i < request.snapCount; i++) {
-                    var snap = request.snap(i)
-                    console.log(snap.name, snap.installDate)
-                    storeSnapsModel.append(snap)
-                }
-                busy = false
+            busy = false
+            if (request.snapCount == 0) {
+                statusMessage = i18n(
+                            "No snaps where found with text \"") + query + "\" try something else."
+                statusMessageIcon = "face-sad"
+            }
+            if (request.error) {
+                errorMessage = i18n(
+                            "There was an error while procesing your request. Please check your internet connection and try again.")
+                statusMessageIcon = "face-uncertain"
+            } else {
+                errorMessage = ""
+            }
+            var list = []
+            //            snapList.sort(function (a, b) { return a < b})
+            for (var i = 0; i < request.snapCount; i++) {
+                var snap = request.snap(i)
+                list.push(snap)
             }
 
-            request.complete.connect(findCompleted)
-            request.runAsync()
+            return list
         }
     }
 
     Connections {
         target: searchField
         onEditingFinished: storeSnapsModel.refresh()
+    }
+
+    Component.onCompleted: {
+
+        var actions = [InstallSnapAction.prepare(SnapdRootClient,
+                                                 storeSnapsModel)]
+        statusArea.updateContext("documentinfo",
+                                 i18n("Available actions"), actions)
     }
 }
