@@ -20,20 +20,6 @@ ApplicationWindow {
     height: 600
     title: qsTr("NX Software Center")
 
-    SnapdClient {
-        id: snapdClient
-
-        Component.onCompleted: {
-            // Ensure we are connected
-            var connectRequest = snapdClient.connect()
-            connectRequest.runSync()
-
-            connected()
-        }
-
-        signal connected
-    }
-
     ColumnLayout {
         anchors.fill: parent
         RowLayout {

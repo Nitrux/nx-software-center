@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.3
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
+import Snapd 1.0
+
 import org.nx.softwarecenter 1.0
 
 import "qrc:/scripts/Utils.js" as Utils
@@ -12,6 +14,10 @@ import "qrc:/actions/InstallSnapAction.js" as InstallSnapAction
 
 Item {
     id: storeViewRoot
+
+    SnapdClient {
+        id: snapdClient
+    }
 
     objectName: "storeView"
     Rectangle {
@@ -116,7 +122,6 @@ Item {
                     PlasmaCore.IconItem {
                         id: snap_status_icon
                         source: ""
-                        visible: !busy
                     }
                 }
 
@@ -186,6 +191,10 @@ Item {
 
         fetchSnapsFunc: function () {
             query = searchField.text
+
+            // Ensure we are connected
+            var connectRequest = snapdClient.connect()
+            connectRequest.runSync()
 
             busy = true
             statusMessage = i18n("Lonking for snaps like: \"") + query + "\""

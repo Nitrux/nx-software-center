@@ -14,8 +14,14 @@ import "qrc:/actions/RemoveSnapAction.js" as RemoveSnapAction
 
 import "qrc:/scripts/Utils.js" as Utils
 
+import Snapd 1.0
+
 Item {
     id: homeViewRoot
+
+    SnapdClient {
+        id: snapdClient
+    }
 
     objectName: "homeView"
     Rectangle {
@@ -145,6 +151,10 @@ Item {
     SnapsModel {
         id: installedSnapsModel
         fetchSnapsFunc: function () {
+            // Ensure we are connected
+            var connectRequest = snapdClient.connect()
+            connectRequest.runSync()
+
             var request = snapdClient.list()
             request.runSync()
 
@@ -157,11 +167,6 @@ Item {
 
             return list;
         }
-    }
-
-    Connections {
-        target: snapdClient
-        onConnected: installedSnapsModel.refresh()
     }
 
     Component.onCompleted: {
