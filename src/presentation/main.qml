@@ -46,28 +46,21 @@ ApplicationWindow {
             spacing: 8
             PlasmaComponents.Button {
                 iconName: "go-home"
-                checked: content.currentItem
-                         && content.currentItem.objectName == "homeView"
+                checked: content.source == "qrc:/HomeView.qml"
                 onClicked: {
-                    // content.clear()
-                    content.pop(content.initialItem)
-                    //                    if ( content.currentItem == undefined || content.currentItem.objectName != "homeView")
-                    //                        content.push("qrc:/HomeView.qml")
+                    if (checked)
+                        return
+
+                    content.source = "qrc:/HomeView.qml"
                 }
             }
             PlasmaComponents.Button {
                 iconName: "plasmadiscover"
-                checked: content.currentItem
-                         && content.currentItem.objectName == "storeView"
+                checked: content.source == "qrc:/StoreView.qml"
                 onClicked: {
-                    if (content.currentItem
-                            && content.currentItem.objectName == "storeView")
+                    if (checked)
                         return
-                    // content.clear()
-                    content.pop("qrc:/StoreView.qml")
-                    if (content.currentItem == undefined
-                            || content.currentItem.objectName != "storeView")
-                        content.push("qrc:/StoreView.qml")
+                    content.source = "qrc:/StoreView.qml"
                 }
             }
 
@@ -89,6 +82,7 @@ ApplicationWindow {
             //                    content.push(workView)
             //                }
             //            }
+
             PlasmaComponents.TextField {
                 id: searchField
                 Layout.fillWidth: true
@@ -98,17 +92,13 @@ ApplicationWindow {
                 focus: true
 
                 onEditingFinished: {
-                    if (content.currentItem
-                            && content.currentItem.objectName == "storeView")
+                    if (content.source == "qrc:/StoreView.qml")
                         return
 
                     if (text == "")
                         return
 
-                    // content.pop("qrc:/StoreView.qml")
-                    if (content.currentItem == undefined
-                            || content.currentItem.objectName != "storeView")
-                        content.push("qrc:/StoreView.qml")
+                    content.source = "qrc:/StoreView.qml"
                 }
             }
 
@@ -116,36 +106,38 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignRight
                 iconName: "configure"
 
-                checked: content.currentItem
-                         && content.currentItem.objectName == "settingsView"
+                checked: content.source == "qrc:/SettingsView.qml"
                 onClicked: {
-                    if (content.currentItem
-                            && content.currentItem.objectName == "settingsView")
+                    if (checked)
                         return
-                    // content.clear()
-                    //content.pop("qrc:/SettingsView.qml")
-                    if (content.currentItem == undefined
-                            || content.currentItem.objectName != "settingsView")
-                        content.push(["qrc:/StoreView.qml", "qrc:/SettingsView.qml"])
+
+                    content.source = "qrc:/SettingsView.qml"
                 }
             }
         }
 
-        StackView {
+        Loader {
             id: content
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredHeight: 400
 
-            initialItem: "qrc:/HomeView.qml"
+            source : "qrc:/HomeView.qml"
         }
 
+        //        StackView {
+        //            id: content
+        //            Layout.fillWidth: true
+        //            Layout.fillHeight: true
+        //            Layout.preferredHeight: 400
+
+        //            initialItem: "qrc:/HomeView.qml"
+        //        }
         StatusArea {
             id: statusArea
             Layout.preferredHeight: 38
             Layout.fillWidth: true
             Layout.bottomMargin: 4
         }
-
     }
 }
