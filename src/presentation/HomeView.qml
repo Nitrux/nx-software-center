@@ -12,6 +12,8 @@ import "qrc:/actions/EnableSnapAction.js" as EnableSnapAction
 import "qrc:/actions/RefreshSnapAction.js" as RefreshSnapAction
 import "qrc:/actions/RemoveSnapAction.js" as RemoveSnapAction
 
+import "qrc:/scripts/Utils.js" as Utils
+
 Item {
     id: homeViewRoot
 
@@ -114,26 +116,7 @@ Item {
                 }
                 Text {
                     id: snap_installed_size
-                    property string sizeString: {
-                        var value = installedSize
-                        var unit = "bytes"
-                        if (value > 1024) {
-                            value = value / 1024
-                            unit = "KiB"
-                        }
-
-                        if (value > 1024) {
-                            value = value / 1024
-                            unit = "MiB"
-                        }
-
-                        if (value > 1024) {
-                            value = value / 1024
-                            unit = "GiB"
-                        }
-
-                        return "" + Math.round(value, 2) + " " + unit
-                    }
+                    property string sizeString: Utils.formatSize(installedSize)
                     text: installedSize ? sizeString : i18n("Unknown size")
                     Layout.leftMargin: 12
                     Layout.fillHeight: true
