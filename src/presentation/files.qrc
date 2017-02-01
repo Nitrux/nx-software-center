@@ -17,6 +17,7 @@
         <file>RemoveSnapAction.js</file>
         <file>InstallSnapAction.js</file>
         <file>ApplySettingsAction.js</file>
+        <file>SetDefaultSettingsAction.js</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

@@ -39,6 +39,16 @@ QString SnapdSettings::customStoreUrl() const
     return m_customStoreUrl;
 }
 
+int32_t SnapdSettings::httpProxyPort() const
+{
+    return m_httpProxyPort;
+}
+
+int32_t SnapdSettings::httpsProxyPort() const
+{
+    return m_httpsProxyPort;
+}
+
 void SnapdSettings::setUseProxy(bool useProxy)
 {
     if (m_useProxy == useProxy)
@@ -116,8 +126,7 @@ void SnapdSettings::load()
     m_httpsProxy = settings.value("HTTPS_PROXY", "").toString();
     QStringList noProxyList = settings.value("NO_PROXY").toStringList();
 
-    if (m_httpProxy.isEmpty() && m_httpsProxy.isEmpty())
-        m_useProxy = false;
+    m_useProxy = !(m_httpProxy.isEmpty() && m_httpsProxy.isEmpty());
 
     if (m_httpProxy.isEmpty())
         m_httpProxy = settings.value("#HTTP_PROXY", "").toString();
@@ -128,13 +137,33 @@ void SnapdSettings::load()
     if (noProxyList.isEmpty())
         noProxyList = settings.value("#NO_PROXY", "").toStringList();
 
+
+    QStringList httpProxyParts = m_httpProxy.split(":");
+    QStringList httpsProxyParts = m_httpsProxy.split(":");
+
+    bool httpProxyPortSet = false;
+    bool httpsProxyPortSet = false;
+    m_httpProxyPort = httpProxyParts.last().toInt(&httpProxyPortSet);
+    m_httpsProxyPort = httpsProxyParts.last().toInt(&httpsProxyPortSet);
+
+    if (httpProxyPortSet)
+        httpProxyParts.removeLast();
+
+    if (httpsProxyPortSet)
+        httpsProxyParts.removeLast();
+
+    m_httpProxy = httpProxyParts.join(":");
+    m_httpsProxy = httpsProxyParts.join(":");
+
     m_noProxy = noProxyList.join(", ");
 
     emit storeChanged(m_store);
     emit customStoreUrlChanged(m_customStoreUrl);
     emit useProxyChanged(m_useProxy);
     emit httpProxyChanged(m_httpProxy);
+    emit httpProxyPortChanged(m_httpProxyPort);
     emit httpsProxyChanged(m_httpsProxy);
+    emit httpsProxyPortChanged(m_httpsProxyPort);
     emit noProxyChanged(m_noProxy);
 }
 
@@ -148,7 +177,9 @@ KAuth::ExecuteJob *SnapdSettings::apply()
 
     action.addArgument("useProxy", m_useProxy);
     action.addArgument("httpProxy", m_httpProxy);
+    action.addArgument("httpProxyPort", QString::number(m_httpProxyPort));
     action.addArgument("httpsProxy", m_httpsProxy);
+    action.addArgument("httpsProxyPort", QString::number(m_httpsProxyPort));
     action.addArgument("noProxy", m_noProxy);
 
 
@@ -159,4 +190,22 @@ KAuth::ExecuteJob *SnapdSettings::apply()
     });
 
     return job;
+}
+
+void SnapdSettings::setHttpProxyPort(int httpProxyPort)
+{
+    if (m_httpProxyPort == httpProxyPort)
+        return;
+
+    m_httpProxyPort = httpProxyPort;
+    emit httpProxyPortChanged(httpProxyPort);
+}
+
+void SnapdSettings::setHttpsProxyPort(int httpsProxyPort)
+{
+    if (m_httpsProxyPort == httpsProxyPort)
+        return;
+
+    m_httpsProxyPort = httpsProxyPort;
+    emit httpsProxyPortChanged(httpsProxyPort);
 }

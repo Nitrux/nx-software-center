@@ -188,8 +188,16 @@ ActionReply SnapdHelper::applysettings(QVariantMap args)
 
     bool useProxy = args["useProxy"].toBool();
     QString httpProxy =  args["httpProxy"].toString();
+    QString httpProxyPort = args["httpProxyPort"].toString();
     QString httpsProxy =  args["httpsProxy"].toString();
+    QString httpsProxyPort = args["httpsProxyPort"].toString();
     QString noProxy =  args["noProxy"].toString();
+
+    if (!httpProxyPort.isEmpty())
+        httpProxy += ":" + httpProxyPort;
+
+    if (!httpsProxyPort.isEmpty())
+        httpsProxy += ":" + httpsProxyPort;
 
     ActionReply reply;
 
