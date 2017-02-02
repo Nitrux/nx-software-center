@@ -23,7 +23,7 @@ ScrollView {
 
         Flow {
             id: snapsList
-            width: root.width - 40
+            width: root.width - 20
 
             Repeater {
                 id: repeater
