@@ -4,10 +4,11 @@
         <file>HomeView.qml</file>
         <file>main.qml</file>
         <file>SettingsView.qml</file>
-        <file>SnapItemDelegate.qml</file>
         <file>StatusArea.qml</file>
         <file>StoreView.qml</file>
         <file>SnapsModel.qml</file>
+        <file>SnapElementDelegate.qml</file>
+        <file>SnapGrid.qml</file>
     </qresource>
     <qresource prefix="/actions">
         <file>DisableSnapAction.js</file>

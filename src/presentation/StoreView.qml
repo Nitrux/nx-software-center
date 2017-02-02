@@ -20,12 +20,12 @@ Item {
     }
 
     objectName: "storeView"
-    Rectangle {
-        color: "lightblue"
-        anchors.fill: parent
-        opacity: 0.1
-    }
 
+    //    Rectangle {
+    //        color: "lightblue"
+    //        anchors.fill: parent
+    //        opacity: 0.1
+    //    }
     Loader {
         id: contentLoader
         anchors.fill: parent
@@ -74,107 +74,19 @@ Item {
 
     Component {
         id: snapsView
-        ScrollView {
-            Flickable {
-                contentWidth: snapsList.width
-                contentHeight: snapsList.height + 40
-                anchors.margins: 20
-
-                Flow {
-                    anchors.centerIn: parent
-                    id: snapsList
-                    width: storeViewRoot.width - 20
-
-                    Repeater {
-                        model: storeSnapsModel
-                        delegate: snaptElementDelegate
-                    }
-                }
-            }
-        }
-    }
-
-    Component {
-        id: snaptElementDelegate
-        Item {
-            width: 192
-            height: 192
-            property bool selected: false
-
-            Rectangle {
-                anchors.fill: parent
-                anchors.margins: 6
-                color: selected ? "lightblue" : "silver"
-                opacity: 0.4
-            }
-
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: 6
-                spacing: 0
-                Item {
-                    Layout.alignment: Qt.AlignRight
-                    height: snap_status_icon.height
-                    width: snap_status_icon.width
-                    Layout.topMargin: 10
-                    Layout.rightMargin: 12
-
-                    PlasmaCore.IconItem {
-                        id: snap_status_icon
-                        source: ""
-                    }
-                }
-
-                PlasmaCore.IconItem {
-                    id: snap_icon
-                    Layout.preferredWidth: 64
-                    Layout.preferredHeight: 64
-                    Layout.alignment: Qt.AlignHCenter
-                    source: model.icon ? model.icon : "package-available"
-                }
-
-                Text {
-                    id: snap_pkg_name
-                    text: name
-                    elide: Text.ElideRight
-                    Layout.topMargin: 14
-                    Layout.leftMargin: 12
-                    font.bold: true
-                }
-
-                Text {
-                    id: snap_version
-                    text: i18n("Version: ") + version
-                    Layout.leftMargin: 12
-                    font.italic: true
-                }
-                Text {
-                    id: snap_installed_size
-                    property string sizeString: Utils.formatSize(
-                                                    model.downaloadSize)
-                    text: model.downaloadSize ? sizeString : i18n(
-                                                    "Unknown size")
-                    Layout.leftMargin: 12
-                    Layout.fillHeight: true
-                }
-            }
-
-            MouseArea {
-                id: snapElementArea
-                anchors.fill: parent
-
-                preventStealing: false
-                propagateComposedEvents: true
-                hoverEnabled: true
-
-                onClicked: {
-                    selected = !selected
-                    if (selected)
-                        storeSnapsModel.selectedItems[name] = "true"
-                    else
-                        delete storeSnapsModel.selectedItems[name]
-                }
-            }
+        SnapGrid {
+            model: storeSnapsModel
+            delegate: SnapElementDelegate {
+                                snap_name: name
+                                snap_version: version
+                                snap_size: downaloadSize
+                                onSelectedChanged: {
+                                    if (selected)
+                                        storeSnapsModel.selectedItems[name] = "true"
+                                    else
+                                        delete storeSnapsModel.selectedItems[name]
+                                }
+                            }
         }
     }
 
