@@ -11,38 +11,36 @@
 #include <QFile>
 #include <QDebug>
 
-SnapStoreListDepartamentsRequest::SnapStoreListDepartamentsRequest(const QString &storeUrl, QNetworkAccessManager *networkAccessManager, QObject *parent): QObject(parent)
+#include "snapstore.h"
+
+SnapStoreListDepartamentsRequest::SnapStoreListDepartamentsRequest(SnapStore *snapStore):
+    SnapStoreRequest(snapStore)
 {
-    Q_ASSERT(networkAccessManager != NULL);
-    m_url = storeUrl;
-    m_networkAccessManager = networkAccessManager;
 }
 
-void SnapStoreListDepartamentsRequest::start()
+void SnapStoreListDepartamentsRequest::runAsync()
 {
     QNetworkRequest request;
-    QString url = m_url + "/departments";
+    QString url = m_snapStore->storeUrl() + "/departments";
+    m_error = 0;
+    m_errorString = "";
 
 //    request.setSslConfiguration(config);
     request.setRawHeader("Accept", "application/hal+json");
 
     request.setUrl(QUrl(url));
 
-    qDebug() << url;
+    qDebug() << "get" << url;
 
-    QObject::connect(m_networkAccessManager, &QNetworkAccessManager::finished, this, &SnapStoreListDepartamentsRequest::onFinished);
+    QNetworkAccessManager * networkAccessManager = m_snapStore->networkAccessManager();
 
-    QNetworkReply* reply = m_networkAccessManager->get(request);
+    QObject::connect(networkAccessManager, &QNetworkAccessManager::finished, this, &SnapStoreListDepartamentsRequest::onRequestFinished);
 
-    QObject::connect(reply, &QNetworkReply::downloadProgress, [] (qint64 a,qint64 b) {
-        qDebug() <<  "progress" << a << b;
-    }  );
+    QNetworkReply* reply = networkAccessManager->get(request);
 
-    QObject::connect(reply, &QNetworkReply::sslErrors, [] (QList<QSslError> sslErrors)  {
-        qDebug() << sslErrors;
-    } );
-
-    QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &SnapStoreListDepartamentsRequest::onNetworkErrorResponse);
+    QObject::connect(reply, &QNetworkReply::downloadProgress, this, &SnapStoreRequest::onProgress);
+    QObject::connect(reply, &QNetworkReply::sslErrors, this, &SnapStoreRequest::onSslErrors);
+    QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &SnapStoreRequest::onNetworkErrorResponse);
 }
 
 void SnapStoreListDepartamentsRequest::cancel()
@@ -60,15 +58,7 @@ QVariantMap SnapStoreListDepartamentsRequest::departament(int idx) const
     return m_result.at(idx);
 }
 
-void SnapStoreListDepartamentsRequest::onNetworkErrorResponse(QNetworkReply::NetworkError error)
-{
-    qDebug() << "QNetworkReply::NetworkError" << error;
-
-//    m_errorString = error;
-//    emit(errorStringChanged(m_errorString));
-}
-
-void SnapStoreListDepartamentsRequest::onFinished(QNetworkReply *reply)
+void SnapStoreListDepartamentsRequest::onRequestFinished(QNetworkReply *reply)
 {
     QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
 
@@ -89,5 +79,5 @@ void SnapStoreListDepartamentsRequest::onFinished(QNetworkReply *reply)
 
     }
 //    qDebug() << m_result;
-    emit(SnapStoreListDepartamentsRequest::finished());
+    emit(complete());
 }

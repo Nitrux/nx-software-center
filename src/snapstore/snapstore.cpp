@@ -32,13 +32,23 @@ SnapStore::SnapStore(SnapdSettings *settings, QObject *parent): QObject(parent)
 
 SnapStoreListDepartamentsRequest * SnapStore::listDepartments()
 {
-    return new SnapStoreListDepartamentsRequest(m_storeUrl, &m_networkAccessManager, this);
+    return new SnapStoreListDepartamentsRequest(this);
 }
 
 SnapStoreGetDepartamentRequest * SnapStore::getDepartment(const QString &slug)
 {
     SnapStoreGetDepartamentRequest * request = new SnapStoreGetDepartamentRequest(m_storeUrl, slug, &m_networkAccessManager, this);
     return request;
+}
+
+QString SnapStore::storeUrl()
+{
+    return m_storeUrl;
+}
+
+QNetworkAccessManager *SnapStore::networkAccessManager()
+{
+    return &m_networkAccessManager;
 }
 
 

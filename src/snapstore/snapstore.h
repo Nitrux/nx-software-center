@@ -22,6 +22,9 @@ public:
 //    Q_INVOKABLE SnapStoreRequest getSnapDetails();
 
 
+    QString storeUrl();
+    QNetworkAccessManager * networkAccessManager();
+
 protected slots:
     void onNetworkProxyHostChanged(QString host);
     void onNetworkProxyPortChanged(int port);
