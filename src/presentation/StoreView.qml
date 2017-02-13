@@ -88,11 +88,7 @@ Item {
                 Component.onCompleted: {
                     var request = SnapStore.listDepartments()
 
-                    var onGetDepartamentFinished = function () {
-                        print("finished")
-                    }
-
-                    var onListDepartamentsFinished = function () {
+                    request.complete.connect(function () {
                         departamentsModel.clear()
                         print("departamentCount", request.departamentCount())
 
@@ -112,14 +108,12 @@ Item {
                         for (var i = 0; i < departments.length; i++) {
                             departamentsModel.append(departments[i])
                         }
-                    }
+                    })
+
+                    request.runAsync()
+//                    print(request)
 
 
-
-                    request.finished.connect(onListDepartamentsFinished)
-
-                    request.start()
-                    print(request)
                 }
             }
 

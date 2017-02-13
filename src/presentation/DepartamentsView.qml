@@ -126,14 +126,9 @@ Item {
                     }
 
 
-                    boop.dataReady.connect(test)
-                    print(boop.finished)
-                    print(boop.dataReady)
-                    boop.start()
-                }
-
-                function test() {
-                    print("test ")
+                    boop.complete.connect(onFinished)
+                    print(boop.complete)
+                    boop.runAsync()
                 }
             }
             delegate: SnapElementDelegate {

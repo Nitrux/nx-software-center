@@ -14,6 +14,8 @@ class SnapStoreListDepartamentsRequest : public SnapStoreRequest
     Q_OBJECT
 public:
     SnapStoreListDepartamentsRequest(SnapStore * snapStore);
+    ~SnapStoreListDepartamentsRequest();
+
     Q_INVOKABLE virtual void runAsync();
     Q_INVOKABLE virtual void cancel();
 
@@ -21,9 +23,10 @@ public:
     Q_INVOKABLE QVariantMap departament(int idx) const;
 
 
-    void onRequestFinished(QNetworkReply* reply);
+    void onRequestFinished();
 
 private:
+    QNetworkReply* m_reply;
     QList<QVariantMap> m_result;
     QString m_errorString;
 };

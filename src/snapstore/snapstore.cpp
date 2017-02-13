@@ -37,7 +37,7 @@ SnapStoreListDepartamentsRequest * SnapStore::listDepartments()
 
 SnapStoreGetDepartamentRequest * SnapStore::getDepartment(const QString &slug)
 {
-    SnapStoreGetDepartamentRequest * request = new SnapStoreGetDepartamentRequest(m_storeUrl, slug, &m_networkAccessManager, this);
+    SnapStoreGetDepartamentRequest * request = new SnapStoreGetDepartamentRequest(slug, this);
     return request;
 }
 

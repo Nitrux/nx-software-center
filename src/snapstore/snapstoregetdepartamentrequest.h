@@ -8,14 +8,15 @@
 #include "snapstorerequest.h"
 
 
+class SnapStore;
 
-class SnapStoreGetDepartamentRequest : public QObject
+class SnapStoreGetDepartamentRequest : public SnapStoreRequest
 {
     Q_OBJECT
 public:
-    explicit SnapStoreGetDepartamentRequest(const QString &storeUrl, const QString &slug, QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
+    explicit SnapStoreGetDepartamentRequest(const QString &slug, SnapStore * snapStore);
 
-    Q_INVOKABLE virtual void start();
+    Q_INVOKABLE virtual void runAsync();
     Q_INVOKABLE virtual void cancel();
 
     Q_INVOKABLE int highlightsCount();
@@ -23,18 +24,13 @@ public:
 
     Q_INVOKABLE int packagesCount();
     Q_INVOKABLE QVariantMap package(int idx);
-signals:
-    void dataReady();
 
 public slots:
-    void onNetworkErrorResponse(QNetworkReply::NetworkError error);
-    void onFinished(QNetworkReply* reply);
+    void onNetworkRequestFinished();
 
 private:
-    QString m_storeUrl;
     QString m_slug;
-    QNetworkAccessManager *m_networkAccessManager;
-
+    QNetworkReply* m_reply;
     QList<QVariantMap> m_higlights;
     QList<QVariantMap> m_packages;
 };

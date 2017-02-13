@@ -18,6 +18,11 @@ SnapStoreListDepartamentsRequest::SnapStoreListDepartamentsRequest(SnapStore *sn
 {
 }
 
+SnapStoreListDepartamentsRequest::~SnapStoreListDepartamentsRequest()
+{
+    qDebug() << "bye SnapStoreListDepartamentsRequest";
+}
+
 void SnapStoreListDepartamentsRequest::runAsync()
 {
     QNetworkRequest request;
@@ -34,13 +39,14 @@ void SnapStoreListDepartamentsRequest::runAsync()
 
     QNetworkAccessManager * networkAccessManager = m_snapStore->networkAccessManager();
 
-    QObject::connect(networkAccessManager, &QNetworkAccessManager::finished, this, &SnapStoreListDepartamentsRequest::onRequestFinished);
 
-    QNetworkReply* reply = networkAccessManager->get(request);
 
-    QObject::connect(reply, &QNetworkReply::downloadProgress, this, &SnapStoreRequest::onProgress);
-    QObject::connect(reply, &QNetworkReply::sslErrors, this, &SnapStoreRequest::onSslErrors);
-    QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &SnapStoreRequest::onNetworkErrorResponse);
+    m_reply = networkAccessManager->get(request);
+
+    QObject::connect(m_reply, &QNetworkReply::finished, this, &SnapStoreListDepartamentsRequest::onRequestFinished);
+    QObject::connect(m_reply, &QNetworkReply::downloadProgress, this, &SnapStoreRequest::onProgress);
+    QObject::connect(m_reply, &QNetworkReply::sslErrors, this, &SnapStoreRequest::onSslErrors);
+    QObject::connect(m_reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &SnapStoreRequest::onNetworkErrorResponse);
 }
 
 void SnapStoreListDepartamentsRequest::cancel()
@@ -58,9 +64,10 @@ QVariantMap SnapStoreListDepartamentsRequest::departament(int idx) const
     return m_result.at(idx);
 }
 
-void SnapStoreListDepartamentsRequest::onRequestFinished(QNetworkReply *reply)
+void SnapStoreListDepartamentsRequest::onRequestFinished()
 {
-    QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
+    QJsonDocument document = QJsonDocument::fromJson(m_reply->readAll());
+    m_reply->deleteLater();
 
     QJsonObject root = document.object();
     if (root.isEmpty())
