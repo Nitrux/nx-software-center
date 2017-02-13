@@ -6,7 +6,7 @@
 
 SnapdSettings::SnapdSettings()
 {
-
+    m_defaultStoreUrl =  "https://search.apps.ubuntu.com/api/v1";
 }
 
 bool SnapdSettings::useProxy() const
@@ -47,6 +47,11 @@ int32_t SnapdSettings::httpProxyPort() const
 int32_t SnapdSettings::httpsProxyPort() const
 {
     return m_httpsProxyPort;
+}
+
+QString SnapdSettings::defaultStoreUrl() const
+{
+    return m_defaultStoreUrl;
 }
 
 void SnapdSettings::setUseProxy(bool useProxy)
@@ -106,7 +111,7 @@ void SnapdSettings::setCustomStoreUrl(QString customStoreUrl)
 void SnapdSettings::load()
 {
     QSettings settings("/etc/environment", QSettings::IniFormat);
-    //    qDebug() << settings.
+    qDebug() << "Snapd settings";
     for (QString key: settings.allKeys())
         qDebug() << key << settings.value(key);
 

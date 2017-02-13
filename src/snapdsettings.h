@@ -16,6 +16,7 @@ class SnapdSettings : public QObject
 
     Q_PROPERTY(Store store READ store WRITE setStore NOTIFY storeChanged)
     Q_PROPERTY(QString customStoreUrl READ customStoreUrl WRITE setCustomStoreUrl NOTIFY customStoreUrlChanged)
+    Q_PROPERTY(QString defaultStoreUrl READ defaultStoreUrl)
 
 public:
     SnapdSettings();
@@ -33,6 +34,8 @@ public:
     int32_t httpProxyPort() const;
 
     int32_t httpsProxyPort() const;
+
+    QString defaultStoreUrl() const;
 
 public slots:
     void setUseProxy(bool useProxy);
@@ -71,6 +74,7 @@ private:
     QString m_customStoreUrl;
     int m_httpProxyPort;
     int m_httpsProxyPort;
+    QString m_defaultStoreUrl;
 };
 
 #endif // SNAPDSETTINGS_H

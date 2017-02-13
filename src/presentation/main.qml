@@ -51,15 +51,6 @@ ApplicationWindow {
             }
 
             //            PlasmaComponents.Button {
-            //                iconName: "favorites"
-            //                checked: content.currentItem
-            //                         && content.currentItem.objectName == "changesView"
-            //                onClicked: {
-            //                    content.clear()
-            //                    content.push(changesView)
-            //                }
-            //            }
-            //            PlasmaComponents.Button {
             //                iconName: "edit-download"
             //                checked: content.currentItem
             //                         && content.currentItem.objectName == "workView"
@@ -119,6 +110,7 @@ ApplicationWindow {
 
         //            initialItem: "qrc:/HomeView.qml"
         //        }
+
         StatusArea {
             id: statusArea
             Layout.preferredHeight: 38

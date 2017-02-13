@@ -148,5 +148,13 @@ Item {
                                                  storeSnapsModel)]
         statusArea.updateContext("documentinfo",
                                  i18n("Available actions"), actions)
+
+
+//        print("Testing store")
+//        var request = SnapStore.getDepartments()
+//        request.finished.connect(function () {
+//            print("departamentCount", request.departamentCount())
+//        })
+//        request.start()
     }
 }

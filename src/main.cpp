@@ -12,6 +12,12 @@
 #include "snapdclientkauthwrapper.h"
 #include "snapdsettings.h"
 
+#include "snapstore/snapstore.h"
+#include "snapstore/snapstorerequest.h"
+#include "snapstore/snapstorelistdepartamentsrequest.h"
+
+static SnapdSettings * snapdSettings;
+static SnapStore * snapStore;
 
 static QObject *snapdkauthwrapper_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
  {
@@ -26,8 +32,17 @@ static QObject *snapdsetings_singletontype_provider(QQmlEngine *engine, QJSEngin
      Q_UNUSED(engine)
      Q_UNUSED(scriptEngine)
 
-     return new SnapdSettings();
+     return snapdSettings;
  }
+
+static QObject *snapstore_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+ {
+     Q_UNUSED(engine)
+     Q_UNUSED(scriptEngine)
+
+     return snapStore;
+ }
+
 int main(int argc, char *argv[])
 {
 
@@ -41,10 +56,22 @@ int main(int argc, char *argv[])
     engine.addImportPath(QStringLiteral("/usr/lib/qt5/qml/"));
     qDebug() << engine.importPathList();
 
-    qmlRegisterSingletonType<SnapdClientKAuthWrapper>("org.nx.softwarecenter", 1, 0, "SnapdRootClient", snapdkauthwrapper_singletontype_provider);
-    qmlRegisterSingletonType<SnapdSettings>("org.nx.softwarecenter", 1, 0, "SnapdSettings", snapdsetings_singletontype_provider);
-    qmlRegisterUncreatableType<KAuth::ExecuteJob> ("org.nx.softwarecenter", 1, 0, "Job", ".");
-    qmlRegisterUncreatableType<QSnapdApp> ("org.nx.softwarecenter", 1, 0, "Job", ".");
+    snapdSettings = new SnapdSettings();
+    snapdSettings->load();
+
+    snapStore = new SnapStore(snapdSettings);
+
+    const char * uri = "org.nx.softwarecenter";
+
+    qmlRegisterSingletonType<SnapdClientKAuthWrapper>(uri, 1, 0, "SnapdRootClient", snapdkauthwrapper_singletontype_provider);
+    qmlRegisterSingletonType<SnapdSettings>(uri, 1, 0, "SnapdSettings", snapdsetings_singletontype_provider);
+    qmlRegisterUncreatableType<KAuth::ExecuteJob> (uri, 1, 0, "Job", "Can't create");
+    qmlRegisterUncreatableType<QSnapdApp>(uri, 1, 0, "Job", "Can't create");
+
+
+    qmlRegisterSingletonType<SnapStore>(uri, 1, 0, "SnapStore", snapstore_singletontype_provider);
+    qmlRegisterUncreatableType<SnapStoreRequest> (uri, 1, 0,"SnapStoreRequest", "Can't create");
+    qmlRegisterUncreatableType<SnapStoreListDepartamentsRequest>(uri, 1, 0, "SnapStoreListDepartmentsRequest", "Can't create");
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

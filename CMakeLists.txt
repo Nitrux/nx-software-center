@@ -21,7 +21,7 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
 
-find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Network)
+find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Widgets Network)
 find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth)
 find_package(Snapd REQUIRED)
 
@@ -38,6 +38,9 @@ set(SOURCE
         src/main.cpp
         src/snapdclientkauthwrapper.cpp
         src/snapdsettings.cpp
+        src/snapstore/snapstore.cpp
+        src/snapstore/snapstorerequest.cpp
+        src/snapstore/snapstorelistdepartamentsrequest.cpp
 )
 
 set(HELPER_SOURCE
@@ -47,7 +50,7 @@ set(HELPER_SOURCE
 
 add_executable(${PROJECT_NAME} ${SOURCE} ${qml_QRC})
 target_include_directories(${PROJECT_NAME} PUBLIC ${SNAPD_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Quick KF5::Auth ${SNAPD_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Quick KF5::Auth ${SNAPD_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
