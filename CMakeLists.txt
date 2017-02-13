@@ -41,6 +41,7 @@ set(SOURCE
         src/snapstore/snapstore.cpp
         src/snapstore/snapstorerequest.cpp
         src/snapstore/snapstorelistdepartamentsrequest.cpp
+        src/snapstore/snapstoregetdepartamentrequest.cpp
 )
 
 set(HELPER_SOURCE

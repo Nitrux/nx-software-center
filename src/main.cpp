@@ -15,6 +15,7 @@
 #include "snapstore/snapstore.h"
 #include "snapstore/snapstorerequest.h"
 #include "snapstore/snapstorelistdepartamentsrequest.h"
+#include "snapstore/snapstoregetdepartamentrequest.h"
 
 static SnapdSettings * snapdSettings;
 static SnapStore * snapStore;
@@ -70,8 +71,9 @@ int main(int argc, char *argv[])
 
 
     qmlRegisterSingletonType<SnapStore>(uri, 1, 0, "SnapStore", snapstore_singletontype_provider);
-    qmlRegisterUncreatableType<SnapStoreRequest> (uri, 1, 0,"SnapStoreRequest", "Can't create");
+//    qmlRegisterUncreatableType<SnapStoreRequest> (uri, 1, 0,"SnapStoreRequest", "Can't create");
     qmlRegisterUncreatableType<SnapStoreListDepartamentsRequest>(uri, 1, 0, "SnapStoreListDepartmentsRequest", "Can't create");
+    qmlRegisterUncreatableType<SnapStoreGetDepartamentRequest>(uri, 1, 0, "SnapStoreGetDepartamentSnapsRequest", "Can't create");
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

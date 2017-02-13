@@ -11,16 +11,17 @@
 #include <QFile>
 #include <QDebug>
 
-SnapStoreListDepartamentsRequest::SnapStoreListDepartamentsRequest(const QString &storeUrl, QNetworkAccessManager *networkAccessManager): SnapStoreRequest(storeUrl)
+SnapStoreListDepartamentsRequest::SnapStoreListDepartamentsRequest(const QString &storeUrl, QNetworkAccessManager *networkAccessManager, QObject *parent): QObject(parent)
 {
     Q_ASSERT(networkAccessManager != NULL);
+    m_url = storeUrl;
     m_networkAccessManager = networkAccessManager;
 }
 
 void SnapStoreListDepartamentsRequest::start()
 {
     QNetworkRequest request;
-    QString url = storeUrl() + "/departments";
+    QString url = m_url + "/departments";
 
 //    request.setSslConfiguration(config);
     request.setRawHeader("Accept", "application/hal+json");
@@ -63,8 +64,8 @@ void SnapStoreListDepartamentsRequest::onNetworkErrorResponse(QNetworkReply::Net
 {
     qDebug() << "QNetworkReply::NetworkError" << error;
 
-    m_errorString = error;
-    emit(errorStringChanged(m_errorString));
+//    m_errorString = error;
+//    emit(errorStringChanged(m_errorString));
 }
 
 void SnapStoreListDepartamentsRequest::onFinished(QNetworkReply *reply)
@@ -87,6 +88,6 @@ void SnapStoreListDepartamentsRequest::onFinished(QNetworkReply *reply)
         m_result.append(map);
 
     }
-    qDebug() << m_result;
-    emit(finished());
+//    qDebug() << m_result;
+    emit(SnapStoreListDepartamentsRequest::finished());
 }

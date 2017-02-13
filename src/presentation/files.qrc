@@ -9,6 +9,8 @@
         <file>SnapsModel.qml</file>
         <file>SnapElementDelegate.qml</file>
         <file>SnapGrid.qml</file>
+        <file>DepartamentsView.qml</file>
+        <file>SearchView.qml</file>
     </qresource>
     <qresource prefix="/actions">
         <file>DisableSnapAction.js</file>

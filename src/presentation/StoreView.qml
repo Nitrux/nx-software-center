@@ -15,6 +15,8 @@ import "qrc:/actions/InstallSnapAction.js" as InstallSnapAction
 Item {
     id: storeViewRoot
 
+    property bool busy: false
+
     SnapdClient {
         id: snapdClient
     }
@@ -30,12 +32,13 @@ Item {
         id: contentLoader
         anchors.fill: parent
 
-        sourceComponent: storeSnapsModel.busy
-                         || storeSnapsModel.count == 0 ? searchView : snapsView
+        //        sourceComponent:
+        //        sourceComponent: storeSnapsModel.busy
+        //                         || storeSnapsModel.count == 0 ? searchView : snapsView
     }
 
     Component {
-        id: searchView
+        id: statusView
         Item {
             PlasmaComponents.Label {
                 id: messageText
@@ -72,75 +75,53 @@ Item {
         }
     }
 
-    Component {
-        id: snapsView
-        SnapGrid {
-            model: storeSnapsModel
-            delegate: SnapElementDelegate {
-                                snap_name: name
-                                snap_version: version
-                                snap_size: downaloadSize
-                                onSelectedChanged: {
-                                    if (selected)
-                                        storeSnapsModel.selectedItems[name] = "true"
-                                    else
-                                        delete storeSnapsModel.selectedItems[name]
-                                }
-                            }
-        }
+    DepartamentsView {
+        id: departamentsView
+        anchors.fill: parent
+
+        departamentsModel:departamentsModel
     }
 
-    SnapsModel {
-        id: storeSnapsModel
+    ListModel {
+                id: departamentsModel
 
-        property bool busy: false
-        property string query: ""
-        property string statusMessage: i18n("Type what are you looking for ...")
-        property string errorMessage: ""
-        property string statusMessageIcon: "face-laughing"
+                Component.onCompleted: {
+                    var request = SnapStore.listDepartments()
 
-        Component.onCompleted: refresh()
+                    var onGetDepartamentFinished = function () {
+                        print("finished")
+                    }
 
-        fetchSnapsFunc: function () {
-            query = searchField.text
+                    var onListDepartamentsFinished = function () {
+                        departamentsModel.clear()
+                        print("departamentCount", request.departamentCount())
 
-            // Ensure we are connected
-            var connectRequest = snapdClient.connect()
-            connectRequest.runSync()
+                        var departments = []
+                        for (var i = 0; i < request.departamentCount(); i++) {
+                            departments.push(request.departament(i))
+                        }
 
-            busy = true
-            statusMessage = i18n("Lonking for snaps like: \"") + query + "\""
-            var request = snapdClient.find(0, query)
-            request.runSync()
+                        departments.sort(function (a, b) {
+                            if (a.name < b.name)
+                                return -1
+                            if (a.name > b.name)
+                                return 1
+                            return 0
+                        })
 
-            busy = false
-            if (request.snapCount == 0) {
-                statusMessage = i18n(
-                            "No snaps where found with text \"") + query + "\" try something else."
-                statusMessageIcon = "face-sad"
+                        for (var i = 0; i < departments.length; i++) {
+                            departamentsModel.append(departments[i])
+                        }
+                    }
+
+
+
+                    request.finished.connect(onListDepartamentsFinished)
+
+                    request.start()
+                    print(request)
+                }
             }
-            if (request.error) {
-                errorMessage = i18n(
-                            "There was an error while procesing your request. Please check your internet connection and try again.")
-                statusMessageIcon = "face-uncertain"
-            } else {
-                errorMessage = ""
-            }
-            var list = []
-            //            snapList.sort(function (a, b) { return a < b})
-            for (var i = 0; i < request.snapCount; i++) {
-                var snap = request.snap(i)
-                list.push(snap)
-            }
-
-            return list
-        }
-    }
-
-    Connections {
-        target: searchField
-        onEditingFinished: storeSnapsModel.refresh()
-    }
 
     Component.onCompleted: {
 
@@ -148,13 +129,5 @@ Item {
                                                  storeSnapsModel)]
         statusArea.updateContext("documentinfo",
                                  i18n("Available actions"), actions)
-
-
-//        print("Testing store")
-//        var request = SnapStore.getDepartments()
-//        request.finished.connect(function () {
-//            print("departamentCount", request.departamentCount())
-//        })
-//        request.start()
     }
 }

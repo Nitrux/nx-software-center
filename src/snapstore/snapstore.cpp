@@ -9,15 +9,17 @@
 #include <QDebug>
 
 #include "../snapdsettings.h"
-#include "snapstorelistdepartamentsrequest.h"
+
 
 SnapStore::SnapStore(SnapdSettings *settings, QObject *parent): QObject(parent)
 {
     Q_ASSERT_X(settings != NULL, "initialization", "NULL settings object");
 
     m_settings = settings;
-    m_proxy.setType(QNetworkProxy::HttpProxy);
+    connect(m_settings, &SnapdSettings::storeChanged, this, &SnapStore::onStoreChanged);
+    onStoreChanged();
 
+    m_proxy.setType(QNetworkProxy::HttpProxy);
     m_proxy.setHostName(settings->httpProxy());
     m_proxy.setPort(settings->httpProxyPort());
 
@@ -28,15 +30,15 @@ SnapStore::SnapStore(SnapdSettings *settings, QObject *parent): QObject(parent)
     m_networkAccessManager.setProxy(m_proxy);
 }
 
-SnapStoreListDepartamentsRequest * SnapStore::getDepartments()
+SnapStoreListDepartamentsRequest * SnapStore::listDepartments()
 {
-    QString storeUrl;
-    if (m_settings->store() == SnapdSettings::Ubuntu)
-        storeUrl = "https://search.apps.ubuntu.com/api/v1";
-    else
-        storeUrl = m_settings->customStoreUrl();
+    return new SnapStoreListDepartamentsRequest(m_storeUrl, &m_networkAccessManager, this);
+}
 
-    return new SnapStoreListDepartamentsRequest(storeUrl, &m_networkAccessManager);
+SnapStoreGetDepartamentRequest * SnapStore::getDepartment(const QString &slug)
+{
+    SnapStoreGetDepartamentRequest * request = new SnapStoreGetDepartamentRequest(m_storeUrl, slug, &m_networkAccessManager, this);
+    return request;
 }
 
 
@@ -58,4 +60,12 @@ void SnapStore::onNetworkProxyPortChanged(int port)
         m_proxy.setPort(port);
         m_networkAccessManager.setProxy(m_proxy);
     }
+}
+
+void SnapStore::onStoreChanged()
+{
+    if (m_settings->store() == SnapdSettings::Ubuntu)
+        m_storeUrl = "https://search.apps.ubuntu.com/api/v1";
+    else
+        m_storeUrl = m_settings->customStoreUrl();
 }

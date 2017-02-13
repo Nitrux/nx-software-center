@@ -7,6 +7,7 @@
 #include <QObject>
 
 #include "snapstorelistdepartamentsrequest.h"
+#include "snapstoregetdepartamentrequest.h"
 
 class SnapdSettings;
 
@@ -16,16 +17,18 @@ class SnapStore : public QObject
 public:
     SnapStore(SnapdSettings *settings, QObject * parent = NULL);
 
-    Q_INVOKABLE SnapStoreListDepartamentsRequest *getDepartments();
-//    Q_INVOKABLE void getDepartmentSnaps(QString department);
+    Q_INVOKABLE SnapStoreListDepartamentsRequest *listDepartments();
+    Q_INVOKABLE SnapStoreGetDepartamentRequest *getDepartment(const QString &slug);
 //    Q_INVOKABLE SnapStoreRequest getSnapDetails();
 
 
 protected slots:
     void onNetworkProxyHostChanged(QString host);
     void onNetworkProxyPortChanged(int port);
+    void onStoreChanged();
 
 private:
+    QString m_storeUrl;
     SnapdSettings * m_settings;
     QNetworkProxy m_proxy;
     QNetworkAccessManager m_networkAccessManager;
