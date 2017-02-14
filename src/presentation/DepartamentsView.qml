@@ -157,11 +157,8 @@ Item {
                         statusArea.updateContext("documentinfo",
                                                  i18n("Available actions"),
                                                  actions)
-                    } else {
-                        statusArea.updateContext(
-                                    "documentinfo",
-                                    i18n("Select snaps to install"), [])
-                    }
+                    } else
+                        statusArea.clearContext()
                 }
                 Component.onCompleted: {
 

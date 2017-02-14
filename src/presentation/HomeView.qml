@@ -39,6 +39,8 @@ Item {
                     installedSnapsModel.selectedItems[name] = "true"
                 else
                     delete installedSnapsModel.selectedItems[name]
+
+                installedSnapsModel.refreshActions()
             }
         }
     }
@@ -62,18 +64,24 @@ Item {
 
             return list
         }
+
+        function refreshActions() {
+            var keys = Object.keys(selectedItems)
+            if (keys.length > 0) {
+                var actions = [DisableSnapAction.prepare(
+                                   SnapdRootClient,
+                                   installedSnapsModel), EnableSnapAction.prepare(
+                                   SnapdRootClient,
+                                   installedSnapsModel), RefreshSnapAction.prepare(
+                                   SnapdRootClient,
+                                   installedSnapsModel), RemoveSnapAction.prepare(
+                                   SnapdRootClient, installedSnapsModel)]
+                statusArea.updateContext("documentinfo",
+                                         i18n("Available actions"), actions)
+            } else
+                statusArea.clearContext()
+        }
     }
 
-    Component.onCompleted: {
-        var actions = [DisableSnapAction.prepare(
-                           SnapdRootClient,
-                           installedSnapsModel), EnableSnapAction.prepare(
-                           SnapdRootClient,
-                           installedSnapsModel), RefreshSnapAction.prepare(
-                           SnapdRootClient,
-                           installedSnapsModel), RemoveSnapAction.prepare(
-                           SnapdRootClient, installedSnapsModel)]
-        statusArea.updateContext("documentinfo",
-                                 i18n("Available actions"), actions)
-    }
+    Component.onCompleted: statusArea.clearContext()
 }

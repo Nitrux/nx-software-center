@@ -113,9 +113,13 @@ ApplicationWindow {
 
         StatusArea {
             id: statusArea
-            Layout.preferredHeight: 38
+            Layout.maximumHeight: statusArea.visible ? 38 : 0
+            Layout.preferredHeight: statusArea.visible ? 38 : 0
             Layout.fillWidth: true
             Layout.bottomMargin: 4
+            Layout.rightMargin: 18
+
+            onVisibleChanged: print(visible)
         }
     }
 }

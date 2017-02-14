@@ -78,19 +78,7 @@ Item {
     DepartamentsView {
         id: departamentsView
         anchors.fill: parent
-
     }
 
-
-
-    Component.onCompleted: {
-        var actions = []
-        statusArea.updateContext("documentinfo",
-                                 i18n("Available actions"), actions)
-
-        //        var actions = [InstallSnapAction.prepare(SnapdRootClient,
-//                                                 storeSnapsModel)]
-//        statusArea.updateContext("documentinfo",
-//                                 i18n("Available actions"), actions)
-    }
+    Component.onCompleted: statusArea.clearContext()
 }

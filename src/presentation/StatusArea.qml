@@ -5,29 +5,44 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
-    property variant contextIcon: "documentinfo"
-    property string contextMessage: "Available actions"
-    property variant contextActions: [{
-            icon: "remove",
-            text: "Sample broken action",
-            action: function (update, success, error) {
-                console.log("Sample broken action triggered")
+    id: root
+    property variant contextIcon;
+    property string contextMessage;
+    property variant contextActions: [];
 
-                error("The actionn is broken :'(")
-            }
-        }, {
-            icon: "games-solve",
-            text: "Sample good action",
-            action: function (update, success, error) {
-                console.log("Sample good action triggered")
-                update("Sample good action running")
-                success("Sample good action finished")
-            }
-        }]
+//** DEBUG **//
+//    property variant contextIcon: "documentinfo"
+//    property string contextMessage: "Available actions"
+//    property variant contextActions: [{
+//            icon: "remove",
+//            text: "Sample broken action",
+//            action: function (update, success, error) {
+//                console.log("Sample broken action triggered")
+
+//                error("The actionn is broken :'(")
+//            }
+//        }, {
+//            icon: "games-solve",
+//            text: "Sample good action",
+//            action: function (update, success, error) {
+//                console.log("Sample good action triggered")
+//                update("Sample good action running")
+//                success("Sample good action finished")
+//            }
+//        }]
 
     property variant dislpayActionsModel
 
     property bool busy: false
+
+    function clearContext() {
+        contextIcon = ""
+        contextMessage = ""
+        contextActions = []
+
+        if (!busy)
+            _updateView("notice", contextIcon, contextMessage, contextActions)
+    }
 
     function updateContext(icon, message, actions) {
         contextIcon = icon
@@ -39,6 +54,11 @@ Item {
     }
 
     function _updateView(urgency, icon, message, actions) {
+        if (message.length == 0 && contextActions.length == 0)
+            root.visible = false
+        else
+            root.visible = true
+
         if (urgency == "error")
             displayBackground.color = "red"
         else
@@ -60,7 +80,8 @@ Item {
             action: function () {
                 console.log("Success notification dismissed")
                 noticeDislpayTimer.stop()
-                 _updateView("notice", contextIcon, contextMessage, contextActions)
+                _updateView("notice", contextIcon, contextMessage,
+                            contextActions)
             }
         }
 
@@ -73,11 +94,11 @@ Item {
         noticeDislpayTimer.start()
     }
 
-
     Timer {
         id: noticeDislpayTimer
         interval: 3000
-        onTriggered: _updateView("notice", contextIcon, contextMessage, contextActions)
+        onTriggered: _updateView("notice", contextIcon, contextMessage,
+                                 contextActions)
     }
 
     Rectangle {
@@ -110,11 +131,14 @@ Item {
                 delegate: PlasmaComponents.Button {
                     iconSource: dislpayActionsModel[index].icon
                     text: dislpayActionsModel[index].text
-                    onClicked: dislpayActionsModel[index].action(_onActionUpdate, _onActionSuccess, _onActionError)
+                    onClicked: dislpayActionsModel[index].action(
+                                   _onActionUpdate, _onActionSuccess,
+                                   _onActionError)
                 }
             }
         }
 
-        Component.onCompleted: _updateView("notice", contextIcon, contextMessage, contextActions)
+        Component.onCompleted: _updateView("notice", contextIcon,
+                                           contextMessage, contextActions)
     }
 }
