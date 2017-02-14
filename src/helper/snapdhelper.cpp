@@ -35,11 +35,6 @@ ActionReply SnapdHelper::remove(QVariantMap args)
     ActionReply reply;
 
     auto request = m_qsnapdClient.remove(snap);
-    request->runSync();
-    if (request->error() != QSnapdRequest::NoError) {
-        reply.setErrorCode( ActionReply::BackendError );
-        reply.setErrorDescription(request->errorString());
-    }
 
     // Check for cancel requests
     QTimer *timer = new QTimer(this);
@@ -52,6 +47,12 @@ ActionReply SnapdHelper::remove(QVariantMap args)
     });
 
     timer->start(200);
+
+    request->runSync();
+    if (request->error() != QSnapdRequest::NoError) {
+        reply.setErrorCode( ActionReply::BackendError );
+        reply.setErrorDescription(request->errorString());
+    }
 
     request->deleteLater();
     return reply;
@@ -67,11 +68,6 @@ ActionReply SnapdHelper::install(QVariantMap args)
     ActionReply reply;
 
     auto request = m_qsnapdClient.install(snap, channel);
-    request->runSync();
-    if (request->error() != QSnapdRequest::NoError) {
-        reply.setErrorCode( ActionReply::BackendError );
-        reply.setErrorDescription(request->errorString());
-    }
 
     // Check for cancel requests
     QTimer *timer = new QTimer(this);
@@ -83,6 +79,12 @@ ActionReply SnapdHelper::install(QVariantMap args)
         }
     });
     timer->start(200);
+
+    request->runSync();
+    if (request->error() != QSnapdRequest::NoError) {
+        reply.setErrorCode( ActionReply::BackendError );
+        reply.setErrorDescription(request->errorString());
+    }
 
     request->deleteLater();
     return reply;
@@ -94,11 +96,6 @@ ActionReply SnapdHelper::disable(QVariantMap args)
     ActionReply reply;
 
     auto request = m_qsnapdClient.disable(snap);
-    request->runSync();
-    if (request->error() != QSnapdRequest::NoError) {
-        reply.setErrorCode( ActionReply::BackendError );
-        reply.setErrorDescription(request->errorString());
-    }
 
     // Check for cancel requests
     QTimer *timer = new QTimer(this);
@@ -111,6 +108,12 @@ ActionReply SnapdHelper::disable(QVariantMap args)
 
     });
     timer->start(200);
+
+    request->runSync();
+    if (request->error() != QSnapdRequest::NoError) {
+        reply.setErrorCode( ActionReply::BackendError );
+        reply.setErrorDescription(request->errorString());
+    }
 
     request->deleteLater();
     return reply;
@@ -122,11 +125,6 @@ ActionReply SnapdHelper::enable(QVariantMap args)
     ActionReply reply;
 
     auto request = m_qsnapdClient.enable(snap);
-    request->runSync();
-    if (request->error() != QSnapdRequest::NoError) {
-        reply.setErrorCode( ActionReply::BackendError );
-        reply.setErrorDescription(request->errorString());
-    }
 
     // Check for cancel requests
     QTimer *timer = new QTimer(this);
@@ -138,6 +136,14 @@ ActionReply SnapdHelper::enable(QVariantMap args)
         }
     });
     timer->start(200);
+
+    request->runSync();
+    if (request->error() != QSnapdRequest::NoError) {
+        reply.setErrorCode( ActionReply::BackendError );
+        reply.setErrorDescription(request->errorString());
+    }
+
+
 
 
     request->deleteLater();
