@@ -41,6 +41,11 @@ SnapStoreGetDepartamentRequest * SnapStore::getDepartment(const QString &slug)
     return request;
 }
 
+SnapStoreSnapDetailsRequest *SnapStore::getSnapDetails(const QString &packageName)
+{
+    return new SnapStoreSnapDetailsRequest(packageName, this);
+}
+
 QString SnapStore::storeUrl()
 {
     return m_storeUrl;

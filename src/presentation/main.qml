@@ -69,13 +69,13 @@ ApplicationWindow {
                 focus: true
 
                 onEditingFinished: {
-                    if (content.source == "qrc:/StoreView.qml")
+                    if (content.source == "qrc:/SearchView.qml")
                         return
 
                     if (text == "")
                         return
 
-                    content.source = "qrc:/StoreView.qml"
+                    content.source = "qrc:/SearchView.qml"
                 }
             }
 

@@ -160,9 +160,6 @@ Item {
                     } else
                         statusArea.clearContext()
                 }
-                Component.onCompleted: {
-
-                }
             }
             delegate: SnapElementDelegate {
                 snap_name: title
@@ -178,4 +175,6 @@ Item {
             }
         }
     }
+
+    Component.onCompleted: statusArea.clearContext()
 }

@@ -13,6 +13,11 @@ import "qrc:/scripts/Utils.js" as Utils
 import "qrc:/actions/InstallSnapAction.js" as InstallSnapAction
 
 Item {
+
+    SnapdClient {
+        id: snapdClient
+    }
+
     SnapsModel {
         id: storeSnapsModel
 
@@ -23,6 +28,18 @@ Item {
         property string statusMessageIcon: "face-laughing"
 
         Component.onCompleted: refresh()
+
+        function refreshActions() {
+            var keys = Object.keys(selectedItems)
+            if (keys.length > 0) {
+                var actions = [InstallSnapAction.prepare(
+                                   SnapdRootClient, storeSnapsModel)]
+                statusArea.updateContext("documentinfo",
+                                         i18n("Available actions"),
+                                         actions)
+            } else
+                statusArea.clearContext()
+        }
 
         fetchSnapsFunc: function () {
             query = searchField.text
@@ -66,6 +83,7 @@ Item {
     }
 
     SnapGrid {
+        anchors.fill: parent
         model: storeSnapsModel
         delegate: SnapElementDelegate {
             snap_name: name
@@ -76,6 +94,8 @@ Item {
                     storeSnapsModel.selectedItems[name] = "true"
                 else
                     delete storeSnapsModel.selectedItems[name]
+
+                storeSnapsModel.refreshActions()
             }
         }
     }

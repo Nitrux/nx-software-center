@@ -8,6 +8,7 @@
 
 #include "snapstorelistdepartamentsrequest.h"
 #include "snapstoregetdepartamentrequest.h"
+#include "snapstoresnapdetailsrequest.h"
 
 class SnapdSettings;
 
@@ -19,7 +20,7 @@ public:
 
     Q_INVOKABLE SnapStoreListDepartamentsRequest *listDepartments();
     Q_INVOKABLE SnapStoreGetDepartamentRequest *getDepartment(const QString &slug);
-//    Q_INVOKABLE SnapStoreRequest getSnapDetails();
+    Q_INVOKABLE SnapStoreSnapDetailsRequest *getSnapDetails(const QString &packageName);
 
 
     QString storeUrl();

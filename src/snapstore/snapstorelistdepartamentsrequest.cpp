@@ -29,7 +29,7 @@ void SnapStoreListDepartamentsRequest::runAsync()
     m_error = 0;
     m_errorString = "";
 
-//    request.setSslConfiguration(config);
+    //    request.setSslConfiguration(config);
     request.setRawHeader("Accept", "application/hal+json");
     request.setRawHeader("X-Ubuntu-Architecture", QSysInfo::currentCpuArchitecture().toLocal8Bit());
 
@@ -70,21 +70,21 @@ void SnapStoreListDepartamentsRequest::onRequestFinished()
     m_reply->deleteLater();
 
     QJsonObject root = document.object();
-    if (root.isEmpty())
-        return;
+    if (!root.isEmpty()) {
+        auto _embedded = root.value("_embedded").toObject();
+        auto departMentsArray = _embedded.value("clickindex:department").toArray();
 
-    auto _embedded = root.value("_embedded").toObject();
-    auto departMentsArray = _embedded.value("clickindex:department").toArray();
+        for (auto department : departMentsArray) {
+            QJsonObject departmentObject = department.toObject();
 
-    for (auto department : departMentsArray) {
-        QJsonObject departmentObject = department.toObject();
+            QVariantMap map;
+            map.insert("slug", departmentObject.value("slug").toString());
+            map.insert("name", departmentObject.value("name").toString());
+            m_result.append(map);
 
-        QVariantMap map;
-        map.insert("slug", departmentObject.value("slug").toString());
-        map.insert("name", departmentObject.value("name").toString());
-        m_result.append(map);
-
+        }
     }
-//    qDebug() << m_result;
+
+    //    qDebug() << m_result;
     emit(complete());
 }
