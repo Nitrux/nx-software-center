@@ -15,7 +15,38 @@ import "qrc:/actions/InstallSnapAction.js" as InstallSnapAction
 Item {
     id: departamentsRoot
 
-    property ListModel departamentsModel;
+    ListModel {
+        id: departamentsModel
+
+        Component.onCompleted: {
+            var request = SnapStore.listDepartments()
+
+            request.complete.connect(function () {
+                departamentsModel.clear()
+                print("departamentCount", request.departamentCount())
+
+                var departments = []
+                for (var i = 0; i < request.departamentCount(); i++) {
+                    departments.push(request.departament(i))
+                }
+
+                departments.sort(function (a, b) {
+                    if (a.name < b.name)
+                        return -1
+                    if (a.name > b.name)
+                        return 1
+                    return 0
+                })
+
+                for (var i = 0; i < departments.length; i++) {
+                    departamentsModel.append(departments[i])
+                }
+            })
+
+            request.runAsync()
+            //                    print(request)
+        }
+    }
 
     property string currentDepartamentSlug: ""
 
@@ -33,7 +64,7 @@ Item {
         Item {
             id: delegateRoot
             width: departamentsRoot.width
-            height: 260
+            height: 280
             property bool expanded: false
             Rectangle {
                 anchors.fill: parent
@@ -57,7 +88,7 @@ Item {
 
                 text: i18n("View")
                 onClicked: {
-                    delegateRoot.expanded = true;
+                    delegateRoot.expanded = true
                     currentDepartamentSlug = model.slug
                     departamentSnapsLoader.sourceComponent = departamentSnaps
                 }
@@ -69,7 +100,7 @@ Item {
                 id: departamentSnapsLoader
                 anchors.fill: parent
                 anchors.margins: 12
-                anchors.topMargin: 32
+                anchors.topMargin: 38
             }
 
             PlasmaComponents.Button {
@@ -81,7 +112,7 @@ Item {
                 visible: delegateRoot.expanded
                 text: i18n("Hide")
                 onClicked: {
-                    delegateRoot.expanded = false;
+                    delegateRoot.expanded = false
                     departamentSnapsLoader.sourceComponent = undefined
                 }
             }
@@ -92,20 +123,48 @@ Item {
         id: departamentSnaps
         ListView {
             orientation: ListView.Horizontal
-            model: ListModel {
+            model: SnapsModel {
                 id: storeSnapsModel
+
+                property var snaps
+                onSelectedItemsChanged: {
+                    refreshActions()
+                }
+
+                fetchSnapsFunc: function () {
+                    var request = SnapStore.getDepartment(
+                                currentDepartamentSlug)
+
+                    request.runSync()
+
+                    var pkgs = []
+                    for (var i = 0; i < request.packagesCount(); i++) {
+                        var pkg = request.package(i)
+                        pkgs.push(pkg)
+//                            storeSnapsModel.append(pkg)
+
+                    }
+
+                    //                        contentLoader.sourceComponent = snapsView
+                    return pkgs
+
+                }
+                function refreshActions() {
+                    var keys = Object.keys(selectedItems)
+                    if (keys.length > 0) {
+                        var actions = [InstallSnapAction.prepare(
+                                           SnapdRootClient, storeSnapsModel)]
+                        statusArea.updateContext("documentinfo",
+                                                 i18n("Available actions"),
+                                                 actions)
+                    } else {
+                        statusArea.updateContext(
+                                    "documentinfo",
+                                    i18n("Select snaps to install"), [])
+                    }
+                }
                 Component.onCompleted: {
-                    var request = SnapStore.getDepartment(currentDepartamentSlug)
 
-                    request.complete.connect(function () {
-                        for (var i = 0; i < request.packagesCount(); i++) {
-                            var pkg = request.package(i)
-                            storeSnapsModel.append(pkg)
-                        }
-
-//                        contentLoader.sourceComponent = snapsView
-                    })
-                    request.runAsync()
                 }
             }
             delegate: SnapElementDelegate {
@@ -113,9 +172,11 @@ Item {
                 snap_version: version
                 onSelectedChanged: {
                     if (selected)
-                        storeSnapsModel.selectedItems[name] = "true"
+                        storeSnapsModel.selectedItems[package_name] = "true"
                     else
-                        delete storeSnapsModel.selectedItems[name]
+                        delete storeSnapsModel.selectedItems[package_name]
+
+                    storeSnapsModel.refreshActions()
                 }
             }
         }

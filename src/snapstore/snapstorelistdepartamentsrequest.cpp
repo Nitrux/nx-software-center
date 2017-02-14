@@ -4,7 +4,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
-
+#include <QSysInfo>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
@@ -20,7 +20,6 @@ SnapStoreListDepartamentsRequest::SnapStoreListDepartamentsRequest(SnapStore *sn
 
 SnapStoreListDepartamentsRequest::~SnapStoreListDepartamentsRequest()
 {
-    qDebug() << "bye SnapStoreListDepartamentsRequest";
 }
 
 void SnapStoreListDepartamentsRequest::runAsync()
@@ -32,6 +31,7 @@ void SnapStoreListDepartamentsRequest::runAsync()
 
 //    request.setSslConfiguration(config);
     request.setRawHeader("Accept", "application/hal+json");
+    request.setRawHeader("X-Ubuntu-Architecture", QSysInfo::currentCpuArchitecture().toLocal8Bit());
 
     request.setUrl(QUrl(url));
 

@@ -17,6 +17,7 @@ public:
     explicit SnapStoreGetDepartamentRequest(const QString &slug, SnapStore * snapStore);
 
     Q_INVOKABLE virtual void runAsync();
+    Q_INVOKABLE virtual void runSync();
     Q_INVOKABLE virtual void cancel();
 
     Q_INVOKABLE int highlightsCount();

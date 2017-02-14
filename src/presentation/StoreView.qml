@@ -79,49 +79,18 @@ Item {
         id: departamentsView
         anchors.fill: parent
 
-        departamentsModel:departamentsModel
     }
 
-    ListModel {
-                id: departamentsModel
 
-                Component.onCompleted: {
-                    var request = SnapStore.listDepartments()
-
-                    request.complete.connect(function () {
-                        departamentsModel.clear()
-                        print("departamentCount", request.departamentCount())
-
-                        var departments = []
-                        for (var i = 0; i < request.departamentCount(); i++) {
-                            departments.push(request.departament(i))
-                        }
-
-                        departments.sort(function (a, b) {
-                            if (a.name < b.name)
-                                return -1
-                            if (a.name > b.name)
-                                return 1
-                            return 0
-                        })
-
-                        for (var i = 0; i < departments.length; i++) {
-                            departamentsModel.append(departments[i])
-                        }
-                    })
-
-                    request.runAsync()
-//                    print(request)
-
-
-                }
-            }
 
     Component.onCompleted: {
-
-        var actions = [InstallSnapAction.prepare(SnapdRootClient,
-                                                 storeSnapsModel)]
+        var actions = []
         statusArea.updateContext("documentinfo",
                                  i18n("Available actions"), actions)
+
+        //        var actions = [InstallSnapAction.prepare(SnapdRootClient,
+//                                                 storeSnapsModel)]
+//        statusArea.updateContext("documentinfo",
+//                                 i18n("Available actions"), actions)
     }
 }
