@@ -43,8 +43,8 @@ Item {
 
             Text {
                 id: sectionTitle
-                x: delegateRoot.width / 2 - width / 2
-                y: delegateRoot.height / 2 - height - 12
+                x: delegateRoot.expanded ? 12 : delegateRoot.width / 2 - width / 2
+                y: delegateRoot.expanded ? 12 : delegateRoot.height / 2 - height - 12
 
                 text: model.name
                 font.pointSize: 14
@@ -57,51 +57,33 @@ Item {
 
                 text: i18n("View")
                 onClicked: {
+                    delegateRoot.expanded = true;
                     currentDepartamentSlug = model.slug
                     departamentSnapsLoader.sourceComponent = departamentSnaps
                 }
+
+                visible: !delegateRoot.expanded
             }
 
             Loader {
                 id: departamentSnapsLoader
                 anchors.fill: parent
+                anchors.margins: 12
+                anchors.topMargin: 32
             }
 
-            Component.onCompleted: {
+            PlasmaComponents.Button {
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 6
+                anchors.right: parent.right
+                anchors.rightMargin: 24
 
-
-                //                            print("completed", model.slug)
-                //                            var request2 = SnapStore.getDepartment(model.slug);
-                //                            var f = function () {
-                //                                print("loading details finished")
-                //                            }
-                //                            request2.finished.connect(f)
-                //                            request2.start()
-                //                            var getDepartmentRequest = SnapStore.getDepartment(model.slug)
-
-                //                            getDepartmentRequest.finished.connect(function () {
-                //                                print("highlight: ", model.slug, getDepartmentRequest.highlightsCount())
-
-                //                                for (var i = 0; i < getDepartmentRequest.highlightsCount(); i++) {
-                //                                    var highlight = getDepartmentRequest.highlight(i)
-                //                                    highlights.push(highlight);
-
-                //                                    print(highlight.name, highlight.description)
-                //                                    var packages = highlight.packages
-
-                //                                    for (var i = 0; i < packages.length; i++) {
-                //                                        print(packages[i].title, packages[i].publisher)
-                //                                    }
-                //                                }
-
-                //                                print("packagesCount", request.packagesCount())
-                //                                for (var i = 0; i < request.packagesCount(); i++) {
-                //                                    var pkg = request.package(i)
-                //                                    print(pkg.title, pkg.publisher)
-                //                                }
-                //                            })
-
-                //                            getDepartmentRequest.start()
+                visible: delegateRoot.expanded
+                text: i18n("Hide")
+                onClicked: {
+                    delegateRoot.expanded = false;
+                    departamentSnapsLoader.sourceComponent = undefined
+                }
             }
         }
     }
@@ -109,32 +91,26 @@ Item {
     Component {
         id: departamentSnaps
         ListView {
-
+            orientation: ListView.Horizontal
             model: ListModel {
+                id: storeSnapsModel
                 Component.onCompleted: {
-                    var boop = SnapStore.getDepartment("universal-accessaccessibility")
+                    var request = SnapStore.getDepartment(currentDepartamentSlug)
 
-                    var onFinished = function () {
-                        print ("hi!");
+                    request.complete.connect(function () {
                         for (var i = 0; i < request.packagesCount(); i++) {
                             var pkg = request.package(i)
-                            storeSnapsModel.push(pkg)
+                            storeSnapsModel.append(pkg)
                         }
 
-                        contentLoader.sourceComponent = snapsView
-                        print("at last !")
-                    }
-
-
-                    boop.complete.connect(onFinished)
-                    print(boop.complete)
-                    boop.runAsync()
+//                        contentLoader.sourceComponent = snapsView
+                    })
+                    request.runAsync()
                 }
             }
             delegate: SnapElementDelegate {
-                snap_name: name
+                snap_name: title
                 snap_version: version
-                snap_size: downaloadSize
                 onSelectedChanged: {
                     if (selected)
                         storeSnapsModel.selectedItems[name] = "true"
