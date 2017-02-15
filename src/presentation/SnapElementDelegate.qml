@@ -33,12 +33,16 @@ FocusScope {
     property bool hovered: snapElementArea.containsMouse
                            || toggleSelectionArea.containsMouse
 
+    signal clicked();
+
     MouseArea {
         id: snapElementArea
         anchors.fill: parent
 
         propagateComposedEvents: true
         hoverEnabled: true
+
+        onClicked: root.clicked();
     }
 
     Rectangle {
