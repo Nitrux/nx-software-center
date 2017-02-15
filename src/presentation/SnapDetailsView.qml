@@ -7,24 +7,24 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import org.nx.softwarecenter 1.0
 
-ApplicationWindow {
+import "parts" as Parts
+
+Item {
     id: root
     width: 800
     height: 600
     property string package_name: "minecraft-nsg"
     property var details
 
-    visible: true
-
     Component.onCompleted: {
         var request = SnapStore.getSnapDetails(package_name)
         request.complete.connect(function () {
 
             details = request.snapDetails()
-//            for (var k in details) {
-//                print(k, details[k])
-//            }
 
+            //            for (var k in details) {
+            //                print(k, details[k])
+            //            }
             contentLoader.sourceComponent = detailsView
         })
 
@@ -44,98 +44,107 @@ ApplicationWindow {
 
     Component {
         id: detailsView
-        GridLayout {
-            columns: 3
+        ColumnLayout {
             Layout.preferredWidth: 600
-            Item {
-                Layout.rowSpan: 5
-                Layout.preferredHeight: 222
-                Layout.preferredWidth: 222
-
-                PlasmaCore.IconItem {
-                    id: snapIcon
-
-                    anchors.fill: parent
-                    anchors.margins: 12
-
-                    visible: details.icon_url === undefined
-                    source: "package-available"
-                }
-
-                Image {
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    visible: details.icon_url !== undefined
-                    source: visible ? details.icon_url : ""
-                }
-            }
-
-            PlasmaComponents.Label {
-                id: snapTitle
-                Layout.topMargin: 16
-                Layout.fillWidth: true
-                text: root.details.title
-                font.pointSize: 18
-            }
-
-            GridLayout {
-                PlasmaComponents.Label {
-                    text: i18n("Developed by")
-                }
-
-                PlasmaComponents.Label {
-                    text: details.publisher
-                }
-            }
-
-            GridLayout {
-                columns: 3
-                Layout.rowSpan: 3
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignTop
-
-                Repeater {
-                    model: details.keywords
-                    delegate: PlasmaComponents.Label {
-                        text: details.keywords[index]
-                    }
-                }
-            }
 
             RowLayout {
-                id: snapStars
-                spacing: 0
+                Item {
+                    Layout.rightMargin: 12
+                    Layout.preferredHeight: 222
+                    Layout.preferredWidth: 222
 
-                Layout.rowSpan: 3
-                Layout.alignment: Qt.AlignTop
+                    Rectangle {
+                        anchors.fill: parent
 
-                Repeater {
-                    model: details.ratings_average
-                    delegate: PlasmaCore.IconItem {
-                        source: "starred-symbolic"
+                        clip: true
+                        radius: 15
+
+                        PlasmaCore.IconItem {
+                            anchors.fill: parent
+                            anchors.margins: 12
+
+                            visible: details.icon_url === undefined
+                            source: "package-available"
+                        }
+
+                        Image {
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            visible: details.icon_url !== undefined
+                            source: visible ? details.icon_url : ""
+                        }
                     }
                 }
 
-                Repeater {
-                    model: 5 - details.ratings_average
-                    delegate: PlasmaCore.IconItem {
+                ColumnLayout {
+                    Layout.rightMargin: 12
+                    Layout.fillWidth: true
+
+                    PlasmaComponents.Label {
+                        id: snapTitle
+                        Layout.topMargin: 16
+                        Layout.minimumWidth: 300
+                        Layout.maximumWidth: 300
+
+                        text: root.details.title
+                        wrapMode: Text.WordWrap
+                        font.pointSize: 18
+                    }
+
+                    GridLayout {
                         Layout.alignment: Qt.AlignTop
-                        source: "non-starred-symbolic"
+                        Layout.fillWidth: true
+
+                        Repeater {
+                            model: details.keywords
+                            delegate: PlasmaComponents.Label {
+                                text: details.keywords[index]
+                            }
+                        }
+                    }
+
+                    Item {
+                        Layout.rightMargin: 12
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                    }
+
+                    RowLayout {
+                        Layout.rightMargin: 12
+                        Layout.bottomMargin: 12
+                        Layout.fillWidth: true
+
+                        PlasmaCore.IconItem {
+                            Layout.preferredHeight: 24
+                            Layout.preferredWidth: 24
+                            source: "license"
+                        }
+
+                        PlasmaComponents.Label {
+                            Layout.fillWidth: true
+                            text: details.license
+                        }
                     }
                 }
-            }
 
-            RowLayout {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignBottom
-                PlasmaCore.IconItem {
-                    Layout.preferredHeight: 24
-                    Layout.preferredWidth: 24
-                    source: "license"
-                }
+                ColumnLayout {
+                    Layout.topMargin: 18
+                    Layout.alignment: Qt.AlignTop
 
-                PlasmaComponents.Label {
-                    text: details.license
+                    PlasmaComponents.Label {
+                        text: i18n("Developed by")
+                    }
+
+                    PlasmaComponents.Label {
+                        text: details.publisher
+                        wrapMode: Text.WordWrap
+                    }
+
+                    Parts.RatingStars {
+                        id: snapStars
+                        Layout.topMargin: 18
+                        rating: details.ratings_average
+                    }
                 }
             }
 

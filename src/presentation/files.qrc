@@ -12,6 +12,7 @@
         <file>DepartamentsView.qml</file>
         <file>SearchView.qml</file>
         <file>SnapDetailsView.qml</file>
+        <file>parts/RatingStars.qml</file>
     </qresource>
     <qresource prefix="/actions">
         <file>DisableSnapAction.js</file>
