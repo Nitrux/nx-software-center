@@ -20,11 +20,11 @@ void SnapStoreSnapDetailsRequest::runAsync()
 
     //    request.setSslConfiguration(config);
     request.setRawHeader("Accept", "application/hal+json");
-    request.setRawHeader("X-Ubuntu-Architecture", QSysInfo::currentCpuArchitecture().toLocal8Bit());
 
     request.setUrl(QUrl(url));
 
     qDebug() << url;
+    qDebug() << request.rawHeaderList();
 
     m_reply= m_snapStore->networkAccessManager()->get(request);
 

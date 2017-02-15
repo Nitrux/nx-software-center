@@ -5,6 +5,7 @@
 #include <QLocalSocket>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QQmlNetworkAccessManagerFactory>
 
 #include <KAuth/KAuthExecuteJob>
 
@@ -22,28 +23,58 @@ static SnapdSettings * snapdSettings;
 static SnapStore * snapStore;
 
 static QObject *snapdkauthwrapper_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
- {
-     Q_UNUSED(engine)
-     Q_UNUSED(scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
 
-     return new SnapdClientKAuthWrapper();
- }
+    return new SnapdClientKAuthWrapper();
+}
 
 static QObject *snapdsetings_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
- {
-     Q_UNUSED(engine)
-     Q_UNUSED(scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
 
-     return snapdSettings;
- }
+    return snapdSettings;
+}
 
 static QObject *snapstore_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
- {
-     Q_UNUSED(engine)
-     Q_UNUSED(scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
 
-     return snapStore;
- }
+    return snapStore;
+}
+
+class MyNetworkAccessManagerFactory : public QQmlNetworkAccessManagerFactory
+{
+public:
+    MyNetworkAccessManagerFactory(SnapdSettings *settings) : QQmlNetworkAccessManagerFactory() {
+        m_settings = settings;
+    }
+    ~MyNetworkAccessManagerFactory() {
+        qDebug() << " y muri'o :'( ";
+
+    }
+
+    virtual QNetworkAccessManager *create(QObject *parent) {
+        QNetworkAccessManager *nam = new QNetworkAccessManager(parent);
+        if (m_settings->useProxy()) {
+            QString proxyHost = m_settings->httpProxy();
+            int32_t proxyPort = m_settings->httpProxyPort();
+
+            qDebug() << "Created QNetworkAccessManager using proxy" << (proxyHost + ":" + QString::number(proxyPort));
+            QNetworkProxy proxy(QNetworkProxy::HttpProxy, proxyHost, proxyPort);
+            nam->setProxy(proxy);
+        }
+
+        return nam;
+    }
+
+private:
+    SnapdSettings * m_settings;
+};
+
 
 int main(int argc, char *argv[])
 {
@@ -53,15 +84,17 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    snapdSettings = new SnapdSettings();
+    snapdSettings->load();
+
+
+    snapStore = new SnapStore(snapdSettings);
+
     // HACK TO LOAD THE PLUGIN FROM ITS CUSTOM INSTALL PATH
     // FIXME: well, fix the glib-snapd-qt plugin install path
     engine.addImportPath(QStringLiteral("/usr/lib/qt5/qml/"));
     qDebug() << engine.importPathList();
 
-    snapdSettings = new SnapdSettings();
-    snapdSettings->load();
-
-    snapStore = new SnapStore(snapdSettings);
 
     const char * uri = "org.nx.softwarecenter";
 
@@ -72,14 +105,15 @@ int main(int argc, char *argv[])
 
 
     qmlRegisterSingletonType<SnapStore>(uri, 1, 0, "SnapStore", snapstore_singletontype_provider);
-//    qmlRegisterUncreatableType<SnapStoreRequest> (uri, 1, 0,"SnapStoreRequest", "Can't create");
+    //    qmlRegisterUncreatableType<SnapStoreRequest> (uri, 1, 0,"SnapStoreRequest", "Can't create");
     qmlRegisterUncreatableType<SnapStoreListDepartamentsRequest>(uri, 1, 0, "SnapStoreListDepartmentsRequest", "Can't create");
     qmlRegisterUncreatableType<SnapStoreGetDepartamentRequest>(uri, 1, 0, "SnapStoreGetDepartamentSnapsRequest", "Can't create");
     qmlRegisterUncreatableType<SnapStoreSnapDetailsRequest>(uri, 1, 0, "SnapStoreSnapDetailsRequest", "Can't create");
 
 
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.setNetworkAccessManagerFactory(new MyNetworkAccessManagerFactory(snapdSettings));
     return app.exec();
 
 }
