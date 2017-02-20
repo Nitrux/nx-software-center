@@ -23,3 +23,4 @@ function callActionSeccuentially(action, targets, onUpdate, onFinished, onError)
 }
 
 var MESSAGE_NO_SNAPS_SELECTED = i18n("No snaps selected.")
+

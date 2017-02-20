@@ -32,6 +32,7 @@ void SnapStoreListDepartamentsRequest::runAsync()
     //    request.setSslConfiguration(config);
     request.setRawHeader("Accept", "application/hal+json");
     request.setRawHeader("X-Ubuntu-Architecture", QSysInfo::currentCpuArchitecture().toLocal8Bit());
+    request.setRawHeader("X-Ubuntu-Frameworks", "ubuntu-sdk-14.10");
 
     request.setUrl(QUrl(url));
 

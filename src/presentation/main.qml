@@ -20,6 +20,10 @@ ApplicationWindow {
     height: 600
     title: qsTr("NX Software Center")
 
+    TextConstants {
+        id: textConstants
+    }
+
     ColumnLayout {
         anchors.fill: parent
         RowLayout {

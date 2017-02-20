@@ -64,6 +64,7 @@ KAuth::ExecuteJob *SnapdClientKAuthWrapper::install(const QString &snap, const Q
     action.addArgument("snap", snap);
     action.addArgument("channel", channel);
 
+    qDebug() << snap << channel;
     KAuth::ExecuteJob *job = action.execute();
     connect(job, &KAuth::ExecuteJob::result, [=] (KJob *kjob) {
         auto job = qobject_cast<KAuth::ExecuteJob *>(kjob);

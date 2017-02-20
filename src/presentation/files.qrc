@@ -13,6 +13,7 @@
         <file>SearchView.qml</file>
         <file>SnapDetailsView.qml</file>
         <file>parts/RatingStars.qml</file>
+        <file>TextConstants.qml</file>
     </qresource>
     <qresource prefix="/actions">
         <file>DisableSnapAction.js</file>
@@ -23,6 +24,7 @@
         <file>InstallSnapAction.js</file>
         <file>ApplySettingsAction.js</file>
         <file>SetDefaultSettingsAction.js</file>
+        <file>ActionFactory.js</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

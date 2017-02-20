@@ -161,6 +161,9 @@ ActionReply SnapdHelper::refresh(QVariantMap args)
 
     auto request = m_qsnapdClient.refresh(snap, channel);
 
+    connect(request, &QSnapdRefreshRequest::progress, this, [] {
+        qDebug() << "progress tick";
+    });
     // Check for cancel requests
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [timer, request]() {
@@ -169,7 +172,7 @@ ActionReply SnapdHelper::refresh(QVariantMap args)
             request->cancel();
             timer->stop();
         }
-        qDebug() << "tick" << HelperSupport::isStopped();
+//        qDebug() << "tick" << HelperSupport::isStopped();
 
     });
     timer->start(200);

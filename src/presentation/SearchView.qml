@@ -82,21 +82,44 @@ Item {
         onEditingFinished: storeSnapsModel.refresh()
     }
 
-    SnapGrid {
-        anchors.fill: parent
-        model: storeSnapsModel
-        delegate: SnapElementDelegate {
-            snap_name: name
-            snap_version: version
-            snap_size: downaloadSize
-            onSelectedChanged: {
-                if (selected)
-                    storeSnapsModel.selectedItems[name] = "true"
-                else
-                    delete storeSnapsModel.selectedItems[name]
+    // TODO: Move position bindings from the component to the Loader.
+    //       Check all uses of 'parent' inside the root element of the component.
+    Component {
+        id: component_SnapGrid
+        SnapGrid {
+            model: storeSnapsModel
+            delegate: SnapElementDelegate {
+                snap_name: name
+                snap_version: version
+                snap_size: downaloadSize
+                onSelectedChanged: {
+                    if (selected)
+                        storeSnapsModel.selectedItems[name] = "true"
+                    else
+                        delete storeSnapsModel.selectedItems[name]
 
-                storeSnapsModel.refreshActions()
+                    storeSnapsModel.refreshActions()
+                }
+                onClicked: {
+                    contentLoader.push({
+                                           item: Qt.resolvedUrl(
+                                                     "SnapDetailsView.qml"),
+                                           properties: {
+                                               package_name: name,
+                                               dismissCallback: function () {
+                                                   contentLoader.pop()
+                                               }
+                                           }
+                                       })
+                }
             }
         }
     }
+
+    StackView {
+        id: contentLoader
+        initialItem: component_SnapGrid
+        anchors.fill: parent
+    }
+
 }

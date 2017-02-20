@@ -12,6 +12,8 @@ import "qrc:/actions/EnableSnapAction.js" as EnableSnapAction
 import "qrc:/actions/RefreshSnapAction.js" as RefreshSnapAction
 import "qrc:/actions/RemoveSnapAction.js" as RemoveSnapAction
 
+import "qrc:/actions/ActionFactory.js" as ActionFactory
+
 import "qrc:/scripts/Utils.js" as Utils
 
 import Snapd 1.0
@@ -25,24 +27,46 @@ Item {
 
     objectName: "homeView"
 
-    SnapGrid {
-        anchors.fill: parent
-        model: installedSnapsModel
-        delegate: SnapElementDelegate {
-            snap_name: name
-            snap_version: version
-            snap_size: installedSize
-            isDisabled: status != 4
+    Component {
+        id: component_SnapGrid
+        SnapGrid {
+            model: installedSnapsModel
+            delegate: SnapElementDelegate {
+                snap_name: name
+                snap_version: version
+                snap_size: installedSize
+                isDisabled: status != 4
 
-            onSelectedChanged: {
-                if (selected)
-                    installedSnapsModel.selectedItems[name] = "true"
-                else
-                    delete installedSnapsModel.selectedItems[name]
+                onSelectedChanged: {
+                    if (selected)
+                        installedSnapsModel.selectedItems[name] = "true"
+                    else
+                        delete installedSnapsModel.selectedItems[name]
 
-                installedSnapsModel.refreshActions()
+                    installedSnapsModel.refreshActions()
+                }
+
+                onClicked: {
+                    contentLoader.push({
+                                           item: Qt.resolvedUrl(
+                                                     "SnapDetailsView.qml"),
+                                           properties: {
+                                               package_name: name,
+                                               dismissCallback: function () {
+                                                    contentLoader.pop()
+                                                   installedSnapsModel.refresh()
+                                                   installedSnapsModel.refreshActions()
+                                               }
+                                           }
+                                       })
+                }
             }
         }
+    }
+    StackView {
+        id: contentLoader
+        anchors.fill: parent
+        initialItem: component_SnapGrid
     }
 
     SnapsModel {

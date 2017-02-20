@@ -28,13 +28,13 @@ Item {
     //        anchors.fill: parent
     //        opacity: 0.1
     //    }
-    Loader {
+    StackView {
         id: contentLoader
         anchors.fill: parent
 
-        //        sourceComponent:
-        //        sourceComponent: storeSnapsModel.busy
-        //                         || storeSnapsModel.count == 0 ? searchView : snapsView
+        initialItem: "qrc:/DepartamentsView.qml"
+
+
     }
 
     Component {
@@ -75,10 +75,10 @@ Item {
         }
     }
 
-    DepartamentsView {
-        id: departamentsView
-        anchors.fill: parent
-    }
+//    DepartamentsView {
+//        id: departamentsView
+//        anchors.fill: parent
+//    }
 
     Component.onCompleted: statusArea.clearContext()
 }

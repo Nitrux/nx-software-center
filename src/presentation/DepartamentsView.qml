@@ -141,13 +141,11 @@ Item {
                     for (var i = 0; i < request.packagesCount(); i++) {
                         var pkg = request.package(i)
                         pkgs.push(pkg)
-//                            storeSnapsModel.append(pkg)
-
+                        //                            storeSnapsModel.append(pkg)
                     }
 
                     //                        contentLoader.sourceComponent = snapsView
                     return pkgs
-
                 }
                 function refreshActions() {
                     var keys = Object.keys(selectedItems)
@@ -171,6 +169,18 @@ Item {
                         delete storeSnapsModel.selectedItems[package_name]
 
                     storeSnapsModel.refreshActions()
+                }
+                onClicked: {
+                    contentLoader.push({
+                                           item: Qt.resolvedUrl(
+                                                     "SnapDetailsView.qml"),
+                                           properties: {
+                                               package_name: name,
+                                               dismissCallback: function () {
+                                                   contentLoader.pop()
+                                               }
+                                           }
+                                       })
                 }
             }
         }
