@@ -223,10 +223,11 @@ Item {
                     }
 
                     GridLayout {
+                        columns: 3
                         Layout.minimumWidth: 300
                         Layout.maximumWidth: 300
-                        Layout.alignment: Qt.AlignTop
 
+                        //                        Layout.alignment: Qt.AlignTop
                         Repeater {
                             model: storeInfo.keywords
                             delegate: PlasmaComponents.Label {
@@ -234,6 +235,7 @@ Item {
                                 Layout.alignment: Qt.AlignLeft
                                 text: storeInfo.keywords[index]
                                 elide: "ElideRight"
+                                Layout.maximumWidth: 100
                             }
                         }
                     }
@@ -283,7 +285,8 @@ Item {
                 }
             }
 
-            Flickable {
+            Image {
+                id: screenshots
                 Layout.columnSpan: 3
                 Layout.margins: 12
                 Layout.fillWidth: true
@@ -292,15 +295,32 @@ Item {
                 clip: true
                 visible: root.storeInfo.screenshot_urls.length > 0
 
-                contentWidth: screenshotsLayout.width
-                contentHeight: screenshotsLayout.height
+                source: root.storeInfo.screenshot_urls[0]
+                fillMode: Image.PreserveAspectFit
 
                 RowLayout {
-                    id: screenshotsLayout
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 12
+
                     Repeater {
-                        model: root.storeInfo.screenshot_urls
-                        delegate: Image {
-                            source: root.storeInfo.screenshot_urls[index]
+                        model: root.storeInfo.screenshot_urls.length
+                        delegate: Rectangle {
+                            height: 15
+                            width: 15
+                            radius: 15
+
+
+                            color: screenshots.source == root.storeInfo.screenshot_urls[index] ? "blue" : "white"
+                            border.color: "black"
+                            border.width: 2
+
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: screenshots.source
+                                           = root.storeInfo.screenshot_urls[index]
+                            }
                         }
                     }
                 }
