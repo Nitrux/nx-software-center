@@ -125,13 +125,26 @@ FocusScope {
             }
         }
 
-        PlasmaCore.IconItem {
+        Item {
             id: snap_icon
             Layout.preferredWidth: 64
             Layout.preferredHeight: 64
             Layout.alignment: Qt.AlignHCenter
-            source: model.icon ? model.icon : "package-available"
+
+            PlasmaCore.IconItem {
+                visible: !model.icon
+                anchors.fill: parent
+                source: "package-available"
+            }
+
+            Image {
+                visible: model.icon !== undefined
+                anchors.fill: parent
+                source: model.icon ? model.icon : ""
+            }
+
         }
+
 
         PlasmaComponents.Label {
             text: snap_name

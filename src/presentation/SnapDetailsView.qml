@@ -72,8 +72,8 @@ Item {
                     textConstants.actionInstallTitle, "package-install",
                     function () {
                         return {
-                            name: localInfo.name,
-                            channel: localInfo.channel
+                            name: storeInfo.package_name,
+                            channel: storeInfo.channel
                         }
                     }, function (target) {
                         var request = SnapdRootClient.install(target.name,

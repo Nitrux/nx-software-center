@@ -178,6 +178,7 @@ Item {
                                                package_name: name,
                                                dismissCallback: function () {
                                                    contentLoader.pop()
+                                                   storeSnapsModel.refreshActions()
                                                }
                                            }
                                        })
