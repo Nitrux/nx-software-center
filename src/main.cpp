@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
     qDebug() << engine.importPathList();
 
 
+
     const char * uri = "org.nx.softwarecenter";
 
     qmlRegisterSingletonType<SnapdClientKAuthWrapper>(uri, 1, 0, "SnapdRootClient", snapdkauthwrapper_singletontype_provider);
@@ -109,7 +110,6 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<SnapStoreListDepartamentsRequest>(uri, 1, 0, "SnapStoreListDepartmentsRequest", "Can't create");
     qmlRegisterUncreatableType<SnapStoreGetDepartamentRequest>(uri, 1, 0, "SnapStoreGetDepartamentSnapsRequest", "Can't create");
     qmlRegisterUncreatableType<SnapStoreSnapDetailsRequest>(uri, 1, 0, "SnapStoreSnapDetailsRequest", "Can't create");
-
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

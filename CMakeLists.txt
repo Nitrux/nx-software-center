@@ -30,6 +30,9 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 # add the qml.qrc file
 qt5_add_resources(qml_QRC src/presentation/files.qrc)
 
+#qt5_add_resources(qml_QRC data/resources.qrc)
+
+
 kauth_install_actions(org.nomad.softwarecenter org.nomad.softwarecenter.actions)
 
 # add source files
@@ -63,4 +66,4 @@ target_link_libraries(${PROJECT_NAME}_helper Qt5::Core Qt5::Network KF5::Auth ${
 install(TARGETS ${PROJECT_NAME}_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
 kauth_install_helper_files(${PROJECT_NAME}_helper org.nomad.softwarecenter root)
 
-
+install(DIRECTORY data/departaments_background/ DESTINATION share/${PROJECT_NAME}/departaments_background FILES_MATCHING PATTERN "*.png")

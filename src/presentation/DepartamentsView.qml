@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -66,27 +68,48 @@ Item {
             width: departamentsRoot.width
             height: 280
             property bool expanded: false
-            Rectangle {
+
+            Image {
                 anchors.fill: parent
-                color: Utils.stringToColor(model.slug)
-                opacity: 0.3
+                source: "file:///usr/share/nx_software_center/departaments_background/"
+                        + model.slug + ".png"
+                fillMode: Image.PreserveAspectCrop
+                opacity: 0.6
             }
 
+
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "black" // Utils.stringToColor(model.slug)
+                            opacity: 0.20
+                        }
             Text {
                 id: sectionTitle
                 x: delegateRoot.expanded ? 12 : delegateRoot.width / 2 - width / 2
                 y: delegateRoot.expanded ? 12 : delegateRoot.height / 2 - height - 12
 
                 text: model.name
-                font.pointSize: 14
+                color: "white"
+                font.pointSize: 24
             }
 
-            PlasmaComponents.Button {
+            DropShadow {
+                anchors.fill: sectionTitle
+                radius: 4
+                samples: 9
+                color: "black"
+                source: sectionTitle
+            }
+
+            Button {
+                height: 40
+                width: 90
                 anchors.top: parent.verticalCenter
                 anchors.topMargin: 12
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 text: i18n("View")
+
                 onClicked: {
                     delegateRoot.expanded = true
                     currentDepartamentSlug = model.slug
@@ -94,6 +117,34 @@ Item {
                 }
 
                 visible: !delegateRoot.expanded
+
+                style: ButtonStyle {
+                    background: Rectangle {
+                        radius: 2
+                        border.width: 1.2
+                        border.color: control.hovered ? "#9ED2ED" : "white"
+                        color: control.pressed ? "#9ED2ED" : "transparent"
+                    }
+                    label: Item {
+                        Label {
+                            id: labelText
+                            anchors.fill: parent
+                            color: "white"
+                            text: control.text
+                            font.pointSize: 12
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        DropShadow {
+                            anchors.fill: labelText
+                            radius: 4
+                            samples: 9
+                            color: "black"
+                            source: labelText
+                        }
+                    }
+                }
             }
 
             Loader {
@@ -103,7 +154,9 @@ Item {
                 anchors.topMargin: 38
             }
 
-            PlasmaComponents.Button {
+            Button {
+                height: 40
+                width: 90
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 6
                 anchors.right: parent.right
@@ -114,6 +167,34 @@ Item {
                 onClicked: {
                     delegateRoot.expanded = false
                     departamentSnapsLoader.sourceComponent = undefined
+                }
+
+                style: ButtonStyle {
+                    background: Rectangle {
+                        radius: 2
+                        border.width: 1.2
+                        border.color: control.hovered ? "#9ED2ED" : "white"
+                        color: control.pressed ? "#9ED2ED" : "transparent"
+                    }
+                    label: Item {
+                        Label {
+                            id: labelText
+                            anchors.fill: parent
+                            color: "white"
+                            text: control.text
+                            font.pointSize: 12
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        DropShadow {
+                            anchors.fill: labelText
+                            radius: 4
+                            samples: 9
+                            color: "black"
+                            source: labelText
+                        }
+                    }
                 }
             }
         }
