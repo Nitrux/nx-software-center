@@ -53,6 +53,7 @@ FocusScope {
         border.width: hovered ? 2 : 1
         color: selected ? "#aae3ff" : "white"
 
+        radius: 2
         PlasmaCore.IconItem {
             visible: hovered
             source: selected ? "emblem-remove" : "emblem-added"
