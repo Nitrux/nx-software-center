@@ -53,6 +53,7 @@ set(HELPER_SOURCE
 )
 
 
+message(NOTICE ${SNAPD_LIBRARIES})
 add_executable(${PROJECT_NAME} ${SOURCE} ${qml_QRC})
 target_include_directories(${PROJECT_NAME} PUBLIC ${SNAPD_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Quick KF5::Auth ${SNAPD_LIBRARIES})

@@ -53,8 +53,6 @@ public:
         m_settings = settings;
     }
     ~MyNetworkAccessManagerFactory() {
-        qDebug() << " y muri'o :'( ";
-
     }
 
     virtual QNetworkAccessManager *create(QObject *parent) {
