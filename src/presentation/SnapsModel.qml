@@ -20,8 +20,11 @@ ListModel {
         }
         refresh()
     }
-    function refresh() {
-        var list = fetchSnapsFunc()
+    function refresh(snaps) {
+        if (snaps == undefined)
+            var list = fetchSnapsFunc()
+        else
+            list = snaps
 
         function compareSnaps(a, b) {
             return a.name.localeCompare(b.name)

@@ -137,8 +137,5 @@ Item {
                 }
             }
         }
-
-        Component.onCompleted: _updateView("notice", contextIcon,
-                                           contextMessage, contextActions)
     }
 }

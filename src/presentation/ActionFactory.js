@@ -97,7 +97,15 @@ function prepareSimpleRequestAction(title, icon, fetchTargetFunc, processTargetF
             }
         }
 
-        // TODO: whatch for updates
+        function onJobNewData(newData) {
+            if (newData.status)
+                update(newData.status)
+        }
+
+
+        if (request.onNewData)
+            request.onNewData.connect(onJobNewData)
+
         request.finished.connect(onRequestFinished)
         request.start()
     }

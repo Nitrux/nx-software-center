@@ -1,5 +1,6 @@
 #include "snapdhelper.h"
 
+#include <QEventLoop>
 #include <QSettings>
 #include <QThread>
 #include <QLocalSocket>
@@ -36,17 +37,18 @@ ActionReply SnapdHelper::remove(QVariantMap args)
 
     auto request = m_qsnapdClient.remove(snap);
 
-    // Check for cancel requests
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [timer, request]() {
-        if (HelperSupport::isStopped()) {
-            qDebug() << "Stop request recived";
-            request->cancel();
-            timer->deleteLater();
+    connect(request, &QSnapdRequest::progress, [this, request] () {
+        QSnapdChange *change = request->change();
+        if (change != NULL) {
+            QString status;
+            status = change->summary();
+            if (!status.isEmpty()) {
+                QVariantMap update;
+                update.insert("status", status);
+                HelperSupport::progressStep(update);
+            }
         }
     });
-
-    timer->start(200);
 
     request->runSync();
     if (request->error() != QSnapdRequest::NoError) {
@@ -60,27 +62,26 @@ ActionReply SnapdHelper::remove(QVariantMap args)
 
 ActionReply SnapdHelper::install(QVariantMap args)
 {
-    HelperSupport::progressStep(QVariantMap());
-
     QString snap = args["snap"].toString();
     QString channel = args.value("channel").toString();
 
     ActionReply reply;
 
     auto request = m_qsnapdClient.install(snap, channel);
-
-    // Check for cancel requests
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [timer, request]() {
-        if (HelperSupport::isStopped()) {
-            qDebug() << "Stop request recived";
-            request->cancel();
-            timer->deleteLater();
+    connect(request, &QSnapdRequest::progress, [this, request] () {
+        QSnapdChange *change = request->change();
+        if (change != NULL) {
+            QString status;
+            status = change->summary();
+            if (!status.isEmpty()) {
+                QVariantMap update;
+                update.insert("status", status);
+                HelperSupport::progressStep(update);
+            }
         }
     });
-    timer->start(200);
-
     request->runSync();
+
     if (request->error() != QSnapdRequest::NoError) {
         reply.setErrorCode( ActionReply::BackendError );
         reply.setErrorDescription(request->errorString());
@@ -96,18 +97,18 @@ ActionReply SnapdHelper::disable(QVariantMap args)
     ActionReply reply;
 
     auto request = m_qsnapdClient.disable(snap);
-
-    // Check for cancel requests
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [timer, request]() {
-        if (HelperSupport::isStopped()) {
-            qDebug() << "Stop request recived";
-            request->cancel();
-            timer->deleteLater();
+    connect(request, &QSnapdRequest::progress, [this, request] () {
+        QSnapdChange *change = request->change();
+        if (change != NULL) {
+            QString status;
+            status = change->summary();
+            if (!status.isEmpty()) {
+                QVariantMap update;
+                update.insert("status", status);
+                HelperSupport::progressStep(update);
+            }
         }
-
     });
-    timer->start(200);
 
     request->runSync();
     if (request->error() != QSnapdRequest::NoError) {
@@ -125,26 +126,24 @@ ActionReply SnapdHelper::enable(QVariantMap args)
     ActionReply reply;
 
     auto request = m_qsnapdClient.enable(snap);
-
-    // Check for cancel requests
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [timer, request]() {
-        if (HelperSupport::isStopped()) {
-            qDebug() << "Stop request recived";
-            request->cancel();
-            timer->deleteLater();
+    connect(request, &QSnapdRequest::progress, [this, request] () {
+        QSnapdChange *change = request->change();
+        if (change != NULL) {
+            QString status;
+            status = change->summary();
+            if (!status.isEmpty()) {
+                QVariantMap update;
+                update.insert("status", status);
+                HelperSupport::progressStep(update);
+            }
         }
     });
-    timer->start(200);
 
     request->runSync();
     if (request->error() != QSnapdRequest::NoError) {
         reply.setErrorCode( ActionReply::BackendError );
         reply.setErrorDescription(request->errorString());
     }
-
-
-
 
     request->deleteLater();
     return reply;
@@ -160,38 +159,31 @@ ActionReply SnapdHelper::refresh(QVariantMap args)
     ActionReply reply;
 
     auto request = m_qsnapdClient.refresh(snap, channel);
-
-    connect(request, &QSnapdRefreshRequest::progress, this, [] {
-        qDebug() << "progress tick";
-    });
-    // Check for cancel requests
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [timer, request]() {
-        if (HelperSupport::isStopped()) {
-            qDebug() << "Stop request recived";
-            request->cancel();
-            timer->stop();
+    connect(request, &QSnapdRequest::progress, [this, request] () {
+        QSnapdChange *change = request->change();
+        if (change != NULL) {
+            QString status;
+            status = change->summary();
+            if (!status.isEmpty()) {
+                QVariantMap update;
+                update.insert("status", status);
+                HelperSupport::progressStep(update);
+            }
         }
-//        qDebug() << "tick" << HelperSupport::isStopped();
-
     });
-    timer->start(200);
+
     request->runSync();
-    timer->stop();
 
     if (request->error() != QSnapdRequest::NoError) {
         reply.setErrorCode( ActionReply::BackendError );
         reply.setErrorDescription(request->errorString());
     }
-
-    timer->deleteLater();
     request->deleteLater();
     return reply;
 }
 
 ActionReply SnapdHelper::applysettings(QVariantMap args)
 {
-    //    qDebug() << args;
     int store = args["store"].toInt();
     QString storeUrl = args["storeUrl"].toString();
 

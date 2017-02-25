@@ -99,8 +99,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterSingletonType<SnapdClientKAuthWrapper>(uri, 1, 0, "SnapdRootClient", snapdkauthwrapper_singletontype_provider);
     qmlRegisterSingletonType<SnapdSettings>(uri, 1, 0, "SnapdSettings", snapdsetings_singletontype_provider);
-    qmlRegisterUncreatableType<KAuth::ExecuteJob> (uri, 1, 0, "Job", "Can't create");
-    qmlRegisterUncreatableType<QSnapdApp>(uri, 1, 0, "Job", "Can't create");
+    qmlRegisterUncreatableType<KAuth::ExecuteJob> (uri, 1, 0, "ExecuteJob", "Can't create");
+    qmlRegisterUncreatableType<QSnapdApp>(uri, 1, 0, "QSnapdApp", "Can't create");
 
 
     qmlRegisterSingletonType<SnapStore>(uri, 1, 0, "SnapStore", snapstore_singletontype_provider);
