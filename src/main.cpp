@@ -85,15 +85,12 @@ int main(int argc, char *argv[])
     snapdSettings = new SnapdSettings();
     snapdSettings->load();
 
-
     snapStore = new SnapStore(snapdSettings);
 
     // HACK TO LOAD THE PLUGIN FROM ITS CUSTOM INSTALL PATH
     // FIXME: well, fix the glib-snapd-qt plugin install path
     engine.addImportPath(QStringLiteral("/usr/lib/qt5/qml/"));
     qDebug() << engine.importPathList();
-
-
 
     const char * uri = "org.nx.softwarecenter";
 
@@ -111,9 +108,10 @@ int main(int argc, char *argv[])
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    engine.setNetworkAccessManagerFactory(new MyNetworkAccessManagerFactory(snapdSettings));
-    return app.exec();
+    if (snapdSettings->useProxy())
+        engine.setNetworkAccessManagerFactory(new MyNetworkAccessManagerFactory(snapdSettings));
 
+    return app.exec();
 }
 
 
