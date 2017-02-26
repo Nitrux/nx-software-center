@@ -17,17 +17,7 @@ SnapStoreGetDepartamentRequest::SnapStoreGetDepartamentRequest(const QString &sl
 
 void SnapStoreGetDepartamentRequest::runAsync()
 {
-    QNetworkRequest request;
-    QString url = m_snapStore->storeUrl() + "/departments/" + m_slug;
-
-    //    request.setSslConfiguration(config);
-    request.setRawHeader("Accept", "application/hal+json");
-
-    request.setUrl(QUrl(url));
-
-    qDebug() << url;
-
-    m_reply= m_snapStore->networkAccessManager()->get(request);
+    m_reply = makeRequest();
 
     QObject::connect(m_reply, &QNetworkReply::finished, this, &SnapStoreGetDepartamentRequest::onNetworkRequestFinished);
     QObject::connect(m_reply, &QNetworkReply::downloadProgress, this, &SnapStoreRequest::onProgress);
@@ -37,17 +27,7 @@ void SnapStoreGetDepartamentRequest::runAsync()
 
 void SnapStoreGetDepartamentRequest::runSync()
 {
-    QNetworkRequest request;
-    QString url = m_snapStore->storeUrl() + "/departments/" + m_slug;
-
-    //    request.setSslConfiguration(config);
-    request.setRawHeader("Accept", "application/hal+json");
-
-    request.setUrl(QUrl(url));
-
-    qDebug() << url;
-
-    m_reply= m_snapStore->networkAccessManager()->get(request);
+    m_reply = makeRequest();
 
     QObject::connect(m_reply, &QNetworkReply::finished, this, &SnapStoreGetDepartamentRequest::onNetworkRequestFinished);
     QObject::connect(m_reply, &QNetworkReply::downloadProgress, this, &SnapStoreRequest::onProgress);
@@ -120,8 +100,30 @@ void SnapStoreGetDepartamentRequest::onNetworkRequestFinished()
     m_packages.clear();
     for (int i = 0; i < packages.count(); i ++) {
         auto jsonObject = packages.at(i).toObject();
-        m_packages.append(jsonObject.toVariantMap());
+        QVariantMap package = jsonObject.toVariantMap();
+
+        // Only add snaps
+        QString packageName = package.value("name").toString();
+        QString packageSnap_id = package.value("snap_id").toString();
+        QString packageContent = package.value("content").toString();
+//        qDebug() << packageName << " " << packageContent << "  " << packageSnap_id;
+        if (packageContent.compare("application") == 0 && !packageSnap_id.isEmpty())
+            m_packages.append(package);
     }
 
     emit(SnapStoreRequest::complete());
+}
+
+QNetworkReply *SnapStoreGetDepartamentRequest::makeRequest()
+{
+    QNetworkRequest request;
+    QString path = m_snapStore->storeUrl() + "/departments/" + m_slug + "?confinement=strict,classic&fields=package_name";
+    QUrl url(path);
+
+    request.setUrl(url);
+    request.setRawHeader("X-Ubuntu-Confinement","strict,classic");
+
+    qDebug() << url << " query " << url.query();
+
+    return m_reply= m_snapStore->networkAccessManager()->get(request);
 }

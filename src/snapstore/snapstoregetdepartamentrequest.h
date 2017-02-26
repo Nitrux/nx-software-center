@@ -30,6 +30,8 @@ public slots:
     void onNetworkRequestFinished();
 
 private:
+    QNetworkReply* makeRequest();
+
     QString m_slug;
     QNetworkReply* m_reply;
     QList<QVariantMap> m_higlights;

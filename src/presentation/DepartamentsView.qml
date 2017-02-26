@@ -256,7 +256,7 @@ Item {
                                            item: Qt.resolvedUrl(
                                                      "SnapDetailsView.qml"),
                                            properties: {
-                                               package_name: name,
+                                               package_name: package_name,
                                                dismissCallback: function () {
                                                    contentLoader.pop()
                                                    storeSnapsModel.refreshActions()
