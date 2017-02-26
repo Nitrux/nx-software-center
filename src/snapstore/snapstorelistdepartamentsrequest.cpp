@@ -29,7 +29,6 @@ void SnapStoreListDepartamentsRequest::runAsync()
     m_error = 0;
     m_errorString = "";
 
-    //    request.setSslConfiguration(config);
     request.setRawHeader("Accept", "application/hal+json");
     request.setRawHeader("X-Ubuntu-Architecture", QSysInfo::currentCpuArchitecture().toLocal8Bit());
     request.setRawHeader("X-Ubuntu-Frameworks", "ubuntu-sdk-14.10");
@@ -39,7 +38,7 @@ void SnapStoreListDepartamentsRequest::runAsync()
     qDebug() << "get" << url;
 
     QNetworkAccessManager * networkAccessManager = m_snapStore->networkAccessManager();
-
+    qDebug() << networkAccessManager << networkAccessManager->proxy();
 
 
     m_reply = networkAccessManager->get(request);

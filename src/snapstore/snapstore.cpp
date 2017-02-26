@@ -9,7 +9,7 @@
 #include <QDebug>
 
 #include "../snapdsettings.h"
-
+#include "customnetworkaccessmanagerfactory.h"
 
 SnapStore::SnapStore(SnapdSettings *settings, QObject *parent): QObject(parent)
 {
@@ -19,15 +19,8 @@ SnapStore::SnapStore(SnapdSettings *settings, QObject *parent): QObject(parent)
     connect(m_settings, &SnapdSettings::storeChanged, this, &SnapStore::onStoreChanged);
     onStoreChanged();
 
-    m_proxy.setType(QNetworkProxy::HttpProxy);
-    m_proxy.setHostName(settings->httpProxy());
-    m_proxy.setPort(settings->httpProxyPort());
-
-    QNetworkProxy::setApplicationProxy(m_proxy);
-
-    QSslConfiguration config(QSslConfiguration::defaultConfiguration());
-
-    m_networkAccessManager.setProxy(m_proxy);
+    m_networkAccessManagerFactory = NULL;
+    m_networkAccessManager = NULL;
 }
 
 SnapStoreListDepartamentsRequest * SnapStore::listDepartments()
@@ -53,28 +46,21 @@ QString SnapStore::storeUrl()
 
 QNetworkAccessManager *SnapStore::networkAccessManager()
 {
-    return &m_networkAccessManager;
+    if (m_networkAccessManager != NULL)
+        return m_networkAccessManager;
+
+    if (m_networkAccessManagerFactory == NULL) {
+        m_networkAccessManager = new QNetworkAccessManager(this);
+    } else {
+        m_networkAccessManager = m_networkAccessManagerFactory->create(this);
+    }
+
+    return m_networkAccessManager;
 }
 
-
-void SnapStore::onNetworkProxyHostChanged(QString host)
+void SnapStore::setNetworkAccessManagerFactory(QQmlNetworkAccessManagerFactory *factory)
 {
-    if (m_settings->useProxy()) {
-        m_networkAccessManager.setProxy(QNetworkProxy::NoProxy);
-    } else {
-        m_proxy.setHostName(host);
-        m_networkAccessManager.setProxy(m_proxy);
-    }
-}
-
-void SnapStore::onNetworkProxyPortChanged(int port)
-{
-    if (m_settings->useProxy()) {
-        m_networkAccessManager.setProxy(QNetworkProxy::NoProxy);
-    } else {
-        m_proxy.setPort(port);
-        m_networkAccessManager.setProxy(m_proxy);
-    }
+    m_networkAccessManagerFactory = factory;
 }
 
 void SnapStore::onStoreChanged()

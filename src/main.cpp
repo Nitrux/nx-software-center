@@ -13,6 +13,7 @@
 #include "snapdclientkauthwrapper.h"
 #include "snapdsettings.h"
 
+#include "snapstore/customnetworkaccessmanagerfactory.h"
 #include "snapstore/snapstore.h"
 #include "snapstore/snapstorerequest.h"
 #include "snapstore/snapstorelistdepartamentsrequest.h"
@@ -46,33 +47,6 @@ static QObject *snapstore_singletontype_provider(QQmlEngine *engine, QJSEngine *
     return snapStore;
 }
 
-class MyNetworkAccessManagerFactory : public QQmlNetworkAccessManagerFactory
-{
-public:
-    MyNetworkAccessManagerFactory(SnapdSettings *settings) : QQmlNetworkAccessManagerFactory() {
-        m_settings = settings;
-    }
-    ~MyNetworkAccessManagerFactory() {
-    }
-
-    virtual QNetworkAccessManager *create(QObject *parent) {
-        QNetworkAccessManager *nam = new QNetworkAccessManager(parent);
-        if (m_settings->useProxy()) {
-            QString proxyHost = m_settings->httpProxy();
-            int32_t proxyPort = m_settings->httpProxyPort();
-
-            qDebug() << "Created QNetworkAccessManager using proxy" << (proxyHost + ":" + QString::number(proxyPort));
-            QNetworkProxy proxy(QNetworkProxy::HttpProxy, proxyHost, proxyPort);
-            nam->setProxy(proxy);
-        }
-
-        return nam;
-    }
-
-private:
-    SnapdSettings * m_settings;
-};
-
 
 int main(int argc, char *argv[])
 {
@@ -82,10 +56,14 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+
     snapdSettings = new SnapdSettings();
     snapdSettings->load();
 
+    CustomNetworkAccessManagerFactory networkAccessManagerFactory(snapdSettings);
+
     snapStore = new SnapStore(snapdSettings);
+    snapStore->setNetworkAccessManagerFactory(&networkAccessManagerFactory);
 
     // HACK TO LOAD THE PLUGIN FROM ITS CUSTOM INSTALL PATH
     // FIXME: well, fix the glib-snapd-qt plugin install path
@@ -108,9 +86,7 @@ int main(int argc, char *argv[])
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    if (snapdSettings->useProxy())
-        engine.setNetworkAccessManagerFactory(new MyNetworkAccessManagerFactory(snapdSettings));
-
+    engine.setNetworkAccessManagerFactory(&networkAccessManagerFactory);
     return app.exec();
 }
 

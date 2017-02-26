@@ -3,7 +3,7 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
-
+#include <QQmlNetworkAccessManagerFactory>
 #include <QObject>
 
 #include "snapstorelistdepartamentsrequest.h"
@@ -25,17 +25,18 @@ public:
 
     QString storeUrl();
     QNetworkAccessManager * networkAccessManager();
+    void setNetworkAccessManagerFactory(QQmlNetworkAccessManagerFactory * factory);
 
 protected slots:
-    void onNetworkProxyHostChanged(QString host);
-    void onNetworkProxyPortChanged(int port);
     void onStoreChanged();
 
 private:
     QString m_storeUrl;
     SnapdSettings * m_settings;
     QNetworkProxy m_proxy;
-    QNetworkAccessManager m_networkAccessManager;
+
+    QQmlNetworkAccessManagerFactory * m_networkAccessManagerFactory;
+    QNetworkAccessManager * m_networkAccessManager;
 };
 
 #endif // SNAPSTORE_H

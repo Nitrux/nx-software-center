@@ -46,6 +46,7 @@ set(SOURCE
         src/snapstore/snapstorelistdepartamentsrequest.cpp
         src/snapstore/snapstoregetdepartamentrequest.cpp
         src/snapstore/snapstoresnapdetailsrequest.cpp
+        src/snapstore/customnetworkaccessmanagerfactory.cpp
 )
 
 set(HELPER_SOURCE
