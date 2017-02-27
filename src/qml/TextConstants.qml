@@ -9,5 +9,8 @@ QtObject {
     readonly property string actionRetryTitle: i18n("R&etry")
     readonly property string actionOkTitle: i18n("&Ok")
     readonly property string actionCancelTitle: i18n("&Cancel")
+    readonly property string unknownError: i18n("Ups! something went wrong.")
+    readonly property string requestCredentialNotice:i18n("Requesting user credentials")
+
 }
 

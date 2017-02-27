@@ -11,6 +11,7 @@ import org.nx.softwarecenter 1.0
 import "qrc:/actions/ActionFactory.js" as ActionFactory
 
 import "parts" as Parts
+import "interactors" as Interactors
 
 Item {
     id: root
@@ -31,28 +32,27 @@ Item {
 
     function updateContext() {
         var actions = []
-        print("package name:", localInfo.name)
-        var enableAction = ActionFactory.prepareSimpleRequestAction(
-                    textConstants.actionEnableTitle,
-                    "package-installed-updated", function () {
-                        return {
-                            name: localInfo.name
-                        }
-                    }, function (target) {
-                        var request = SnapdRootClient.enable(target.name)
-                        return request
-                    }, function () {}, function () {}, refesh)
+        var enableAction = {
+            text: textConstants.actionEnableTitle,
+            icon: "package-installed-updated",
+            action: function () {
+                enableSnapInteractor.targets = [package_name]
+                enableSnapInteractor.finished.connect(updateContext)
 
-        var disableAction = ActionFactory.prepareSimpleRequestAction(
-                    textConstants.actionDisableTitle, "package-broken",
-                    function () {
-                        return {
-                            name: localInfo.name
-                        }
-                    }, function (target) {
-                        var request = SnapdRootClient.disable(target.name)
-                        return request
-                    }, function () {}, function () {}, refesh)
+                enableSnapInteractor.start()
+            }
+        }
+
+        var disableAction = {
+            icon: "package-broken",
+            text: textConstants.actionDisableTitle,
+            action: function () {
+                disableSnapInteractor.targets = [package_name]
+                disableSnapInteractor.finished.connect(updateContext)
+
+                disableSnapInteractor.start()
+            }
+        }
 
         var refreshAction = ActionFactory.prepareSimpleRequestAction(
                     textConstants.actionRefreshTitle, "package-upgrade",
@@ -310,11 +310,10 @@ Item {
                             width: 15
                             radius: 15
 
-
-                            color: screenshots.source == root.storeInfo.screenshot_urls[index] ? "blue" : "white"
+                            color: screenshots.source
+                                   == root.storeInfo.screenshot_urls[index] ? "blue" : "white"
                             border.color: "black"
                             border.width: 2
-
 
                             MouseArea {
                                 anchors.fill: parent

@@ -28,7 +28,7 @@ find_package(Snapd REQUIRED)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 # add the qml.qrc file
-qt5_add_resources(qml_QRC src/presentation/files.qrc)
+qt5_add_resources(qml_QRC src/qml/files.qrc)
 
 #qt5_add_resources(qml_QRC data/resources.qrc)
 

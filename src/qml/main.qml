@@ -14,6 +14,8 @@ import org.nx.softwarecenter 1.0
 
 import Snapd 1.0
 
+import "interactors" as Interactors
+
 ApplicationWindow {
     visible: true
     width: 800
@@ -121,9 +123,17 @@ ApplicationWindow {
             Layout.preferredHeight: statusArea.visible ? 38 : 0
             Layout.fillWidth: true
             Layout.bottomMargin: 4
-            Layout.rightMargin: 18
 
             onVisibleChanged: print(visible)
         }
     }
+
+    Interactors.DisableSnapInteractor {
+        id: disableSnapInteractor
+    }
+
+    Interactors.EnableSnapInteractor {
+        id: enableSnapInteractor
+    }
+
 }

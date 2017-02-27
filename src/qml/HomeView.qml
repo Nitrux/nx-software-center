@@ -91,12 +91,37 @@ Item {
 
         function refreshActions() {
             var keys = Object.keys(selectedItems)
+            var disableAction = {
+                icon: "package-broken",
+                text: textConstants.actionDisableTitle,
+                action: function () {
+                    var targets  = Object.keys(selectedItems)
+
+                    disableSnapInteractor.targets = targets
+                    disableSnapInteractor.finished.connect(installedSnapsModel.refresh)
+                    disableSnapInteractor.targetProcessed.connect(installedSnapsModel.refresh)
+
+                    disableSnapInteractor.start()
+                }
+            }
+
+            var enableAction = {
+                icon: "package-installed-updated",
+                text: textConstants.actionEnableTitle,
+                action: function () {
+                    var targets  = Object.keys(selectedItems)
+
+                    enableSnapInteractor.targets = targets
+                    enableSnapInteractor.finished.connect(installedSnapsModel.refresh)
+                    enableSnapInteractor.targetProcessed.connect(installedSnapsModel.refresh)
+
+                    enableSnapInteractor.start()
+                }
+            }
+
+
             if (keys.length > 0) {
-                var actions = [DisableSnapAction.prepare(
-                                   SnapdRootClient,
-                                   installedSnapsModel), EnableSnapAction.prepare(
-                                   SnapdRootClient,
-                                   installedSnapsModel), RefreshSnapAction.prepare(
+                var actions = [disableAction, enableAction, RefreshSnapAction.prepare(
                                    SnapdRootClient,
                                    installedSnapsModel), RemoveSnapAction.prepare(
                                    SnapdRootClient, installedSnapsModel)]

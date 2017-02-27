@@ -6,42 +6,18 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
     id: root
-    property variant contextIcon;
-    property string contextMessage;
-    property variant contextActions: [];
-
-//** DEBUG **//
-//    property variant contextIcon: "documentinfo"
-//    property string contextMessage: "Available actions"
-//    property variant contextActions: [{
-//            icon: "remove",
-//            text: "Sample broken action",
-//            action: function (update, success, error) {
-//                console.log("Sample broken action triggered")
-
-//                error("The actionn is broken :'(")
-//            }
-//        }, {
-//            icon: "games-solve",
-//            text: "Sample good action",
-//            action: function (update, success, error) {
-//                console.log("Sample good action triggered")
-//                update("Sample good action running")
-//                success("Sample good action finished")
-//            }
-//        }]
+    property variant contextIcon
+    property string contextMessage
+    property variant contextActions: []
 
     property variant dislpayActionsModel
 
-    property bool busy: false
+    property bool locked: false
+    property bool jobRunning: false
+    property var currentJob: undefined
 
     function clearContext() {
-        contextIcon = ""
-        contextMessage = ""
-        contextActions = []
-
-        if (!busy)
-            _updateView("notice", contextIcon, contextMessage, contextActions)
+        updateContext("", "", [])
     }
 
     function updateContext(icon, message, actions) {
@@ -49,7 +25,8 @@ Item {
         contextMessage = message
         contextActions = actions
 
-        if (!busy)
+        print(message, locked)
+        if (!locked)
             _updateView("notice", icon, message, actions)
     }
 
@@ -70,14 +47,54 @@ Item {
     }
 
     function _onActionUpdate(message, actions) {
+        root.jobRunning = true
         _updateView("notice", "documentinfo", message, actions)
     }
 
+    function dissmiss() {
+        jobRunning = false
+        locked = false
+
+        updateContext("", "", [])
+    }
+    function notice(message) {
+        _updateView("notice", "notice", message, [])
+    }
+
+    function noticeError(message) {
+        var dismisAction = {
+            icon: "dialog-ok",
+            text: i18n("Ok"),
+            action: function () {
+                locked = false
+                _updateView("notice", contextIcon, contextMessage,
+                            contextActions)
+            }
+        }
+
+        _updateView("error", "error", message, [dismisAction])
+    }
+    function noticeSuccess(message) {
+        var dismisAction = {
+            icon: "dialog-ok",
+            text: i18n("Ok"),
+            action: function () {
+                locked = false
+                noticeDislpayTimer.stop()
+                _updateView("notice", contextIcon, contextMessage,
+                            contextActions)
+            }
+        }
+
+        noticeDislpayTimer.start()
+        _updateView("notice", "gtk-ok", message, [dismisAction])
+    }
     function _onActionSuccess(message, actions) {
         var dismisAction = {
             icon: "dialog-ok",
             text: i18n("Ok"),
             action: function () {
+                locked = false
                 console.log("Success notification dismissed")
                 noticeDislpayTimer.stop()
                 _updateView("notice", contextIcon, contextMessage,
@@ -85,8 +102,8 @@ Item {
             }
         }
 
-        _updateView("notice", "gtk-ok", message, [dismisAction])
         noticeDislpayTimer.start()
+        _updateView("notice", "gtk-ok", message, [dismisAction])
     }
 
     function _onActionError(message, actions) {
@@ -97,8 +114,10 @@ Item {
     Timer {
         id: noticeDislpayTimer
         interval: 3000
-        onTriggered: _updateView("notice", contextIcon, contextMessage,
-                                 contextActions)
+        onTriggered: {
+            locked = false
+            _updateView("notice", contextIcon, contextMessage, contextActions)
+        }
     }
 
     Rectangle {
@@ -111,9 +130,22 @@ Item {
     RowLayout {
         anchors.fill: parent
 
-        PlasmaCore.IconItem {
-            id: displayIcon
+        Item {
+            Layout.leftMargin: 12
+            Layout.preferredWidth: 24
             Layout.preferredHeight: 24
+
+            PlasmaCore.IconItem {
+                id: displayIcon
+                anchors.fill: parent
+                Layout.preferredHeight: 24
+
+                visible: !root.jobRunning
+            }
+            PlasmaComponents.BusyIndicator {
+                visible: root.jobRunning
+                anchors.fill: parent
+            }
         }
 
         PlasmaComponents.Label {
@@ -123,6 +155,7 @@ Item {
 
         PlasmaComponents.ButtonRow {
             id: displayActions
+            Layout.rightMargin: 18
             exclusive: false
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
@@ -131,9 +164,11 @@ Item {
                 delegate: PlasmaComponents.Button {
                     iconSource: dislpayActionsModel[index].icon
                     text: dislpayActionsModel[index].text
-                    onClicked: dislpayActionsModel[index].action(
-                                   _onActionUpdate, _onActionSuccess,
-                                   _onActionError)
+                    onClicked: {
+                        dislpayActionsModel[index].action(_onActionUpdate,
+                                                          _onActionSuccess,
+                                                          _onActionError)
+                    }
                 }
             }
         }

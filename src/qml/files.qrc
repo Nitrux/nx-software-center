@@ -14,6 +14,9 @@
         <file>SnapDetailsView.qml</file>
         <file>parts/RatingStars.qml</file>
         <file>TextConstants.qml</file>
+        <file>interactors/DisableSnapInteractor.qml</file>
+        <file>interactors/Interactor.qml</file>
+        <file>interactors/EnableSnapInteractor.qml</file>
     </qresource>
     <qresource prefix="/actions">
         <file>DisableSnapAction.js</file>
