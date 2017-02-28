@@ -139,4 +139,8 @@ ApplicationWindow {
     Interactors.RefreshSnapInteractor {
         id: refreshSnapInteractor
     }
+
+    Interactors.RemoveSnapInteractor{
+        id: removeSnapInteractor
+    }
 }

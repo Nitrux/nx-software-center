@@ -37,7 +37,7 @@ Item {
             icon: "package-installed-updated",
             action: function () {
                 enableSnapInteractor.targets = [package_name]
-                enableSnapInteractor.finished.connect(updateContext)
+                enableSnapInteractor.finished.connect(refesh)
 
                 enableSnapInteractor.start()
             }
@@ -48,7 +48,7 @@ Item {
             text: textConstants.actionDisableTitle,
             action: function () {
                 disableSnapInteractor.targets = [package_name]
-                disableSnapInteractor.finished.connect(updateContext)
+                disableSnapInteractor.finished.connect(refesh)
 
                 disableSnapInteractor.start()
             }
@@ -62,7 +62,7 @@ Item {
                                                      name: package_name,
                                                      channel: localInfo.channel
                                                  }]
-                refreshSnapInteractor.finished.connect(updateContext)
+                refreshSnapInteractor.finished.connect(refesh)
 
                 refreshSnapInteractor.start()
             }
@@ -81,18 +81,16 @@ Item {
                         return request
                     }, function () {}, function () {}, refesh)
 
-        var removeAction = ActionFactory.prepareSimpleRequestAction(
-                    textConstants.actionRemoveTitle, "package-remove",
-                    function () {
-                        return {
-                            name: localInfo.name,
-                            channel: localInfo.channel
-                        }
-                    }, function (target) {
-                        var request = SnapdRootClient.remove(target.name,
-                                                             target.channel)
-                        return request
-                    }, function () {}, function () {}, refesh)
+        var removeAction = {
+            icon: "package-remove",
+            text: textConstants.actionRemoveTitle,
+            action: function () {
+                removeSnapInteractor.targets = [package_name]
+                removeSnapInteractor.finished.connect(refesh)
+
+                removeSnapInteractor.start()
+            }
+        }
 
         if (localInfo) {
             if (localInfo.status >= 3) {

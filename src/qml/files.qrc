@@ -18,6 +18,7 @@
         <file>interactors/Interactor.qml</file>
         <file>interactors/EnableSnapInteractor.qml</file>
         <file>interactors/RefreshSnapInteractor.qml</file>
+        <file>interactors/RemoveSnapInteractor.qml</file>
     </qresource>
     <qresource prefix="/actions">
         <file>DisableSnapAction.js</file>

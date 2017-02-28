@@ -130,7 +130,8 @@ Item {
                     var targets_names = Object.keys(selectedItems)
                     var targets = []
                     for (var i in targets_names) {
-                        var model = installedSnapsModel.getByName(targets_names[i])
+                        var model = installedSnapsModel.getByName(
+                                    targets_names[i])
                         targets.push({
                                          name: model.name,
                                          channel: model.channel
@@ -147,9 +148,24 @@ Item {
                 }
             }
 
+            var removeAction = {
+                icon: "package-remove",
+                text: textConstants.actionRemoveTitle,
+                action: function () {
+                    var targets = Object.keys(selectedItems)
+
+                    removeSnapInteractor.targets = targets
+                    removeSnapInteractor.finished.connect(
+                                installedSnapsModel.refresh)
+                    removeSnapInteractor.targetProcessed.connect(
+                                installedSnapsModel.refresh)
+
+                    removeSnapInteractor.start()
+                }
+            }
+
             if (keys.length > 0) {
-                var actions = [disableAction, enableAction, refreshAction, RemoveSnapAction.prepare(
-                                   SnapdRootClient, installedSnapsModel)]
+                var actions = [disableAction, enableAction, refreshAction, removeAction]
                 statusArea.updateContext("documentinfo",
                                          i18n("Available actions"), actions)
             } else
