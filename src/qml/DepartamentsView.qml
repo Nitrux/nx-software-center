@@ -11,8 +11,6 @@ import Snapd 1.0
 
 import org.nx.softwarecenter 1.0
 
-import "qrc:/scripts/Utils.js" as Utils
-import "qrc:/actions/InstallSnapAction.js" as InstallSnapAction
 import "qrc:/scripts/Utils.js" as UtilsJs
 
 Item {

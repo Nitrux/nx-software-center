@@ -23,17 +23,6 @@
         <file>interactors/LoadDefaultSettingsInteractor.qml</file>
         <file>interactors/InstallSnapInteractor.qml</file>
     </qresource>
-    <qresource prefix="/actions">
-        <file>DisableSnapAction.js</file>
-        <file>ActionUtils.js</file>
-        <file>EnableSnapAction.js</file>
-        <file>RefreshSnapAction.js</file>
-        <file>RemoveSnapAction.js</file>
-        <file>InstallSnapAction.js</file>
-        <file>ApplySettingsAction.js</file>
-        <file>SetDefaultSettingsAction.js</file>
-        <file>ActionFactory.js</file>
-    </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>
     </qresource>

@@ -8,11 +8,6 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import org.nx.softwarecenter 1.0
 
-import "qrc:/actions/DisableSnapAction.js" as DisableSnapAction
-import "qrc:/actions/EnableSnapAction.js" as EnableSnapAction
-import "qrc:/actions/RefreshSnapAction.js" as RefreshSnapAction
-import "qrc:/actions/RemoveSnapAction.js" as RemoveSnapAction
-
 import "qrc:/scripts/Utils.js" as Utils
 
 import Snapd 1.0
