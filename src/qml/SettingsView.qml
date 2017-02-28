@@ -7,19 +7,77 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import org.nx.softwarecenter 1.0
 
-import "qrc:/actions/ApplySettingsAction.js" as ApplySettingsAction
-import "qrc:/actions/SetDefaultSettingsAction.js" as SetDefaultSettingsAction
+import "interactors" as Interactors
 
 Item {
     id: settingsViewRoot
     objectName: "settingsView"
+    property bool unappliedChanges: false
+
+    Connections {
+        target: SnapdSettings
+        onUseProxyChanged: onSettingsChanged()
+        onHttpProxyChanged: onSettingsChanged()
+        onHttpProxyPortChanged: onSettingsChanged()
+        onHttpsProxyChanged: onSettingsChanged()
+        onHttpsProxyPortChanged: onSettingsChanged()
+        onNoProxyChanged: onSettingsChanged()
+        onStoreChanged: onSettingsChanged()
+        onCustomStoreUrlChanged: onSettingsChanged()
+        onDefaultStoreUrl: onSettingsChanged()
+    }
+
+    Interactors.ApplySettingsInteractor {
+        id: applySettingsInteractor
+    }
+
+    Interactors.LoadDefaultSettingsInteractor {
+        id: loadDefaultSettingsInteractor
+    }
 
     Component.onCompleted: {
         SnapdSettings.load()
+        unappliedChanges = false
+        setContextActions()
+    }
 
-        var actions = [SetDefaultSettingsAction.prepare(
-                           SnapdSettings), ApplySettingsAction.prepare(
-                           SnapdSettings)]
+    function onSettingsChanged() {
+        if (!unappliedChanges) {
+            unappliedChanges = true
+            setContextActions()
+        }
+    }
+
+    function setContextActions() {
+        var applySettingsAction = {
+            icon: "emblem-ok-symbolic",
+            text: textConstants.actionApplySettingsTitle,
+            action: function () {
+                applySettingsInteractor.settings = SnapdSettings
+                applySettingsInteractor.finished.connect(setContextActions)
+                applySettingsInteractor.failed.connect(setContextActions)
+
+                applySettingsInteractor.start()
+            }
+        }
+
+        var loadDefaultSettingsAction = {
+            icon: "edit-undo-symbolic",
+            text: i18n("Restore Defaults"),
+            action: function () {
+                loadDefaultSettingsInteractor.settings = SnapdSettings
+                loadDefaultSettingsInteractor.finished.connect(
+                            setContextActions)
+                loadDefaultSettingsInteractor.failed.connect(setContextActions)
+
+                loadDefaultSettingsInteractor.start()
+            }
+        }
+
+        var actions = [loadDefaultSettingsAction]
+        if (unappliedChanges)
+            actions.push(applySettingsAction)
+
         statusArea.updateContext("documentinfo",
                                  i18n("Available actions"), actions)
     }

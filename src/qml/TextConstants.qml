@@ -6,6 +6,7 @@ QtObject {
     readonly property string actionEnableTitle: i18n("&Enable")
     readonly property string actionDisableTitle: i18n("&Disable")
     readonly property string actionInstallTitle: i18n("&Install")
+    readonly property string actionApplySettingsTitle: i18n("&Apply")
     readonly property string actionRetryTitle: i18n("R&etry")
     readonly property string actionOkTitle: i18n("&Ok")
     readonly property string actionCancelTitle: i18n("&Cancel")
