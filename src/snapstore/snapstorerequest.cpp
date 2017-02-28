@@ -25,7 +25,7 @@ int SnapStoreRequest::error() const
 
 void SnapStoreRequest::onProgress(qint64 progress, qint64 total)
 {
-    qDebug() <<  "progress: " << progress << " of " << total;
+//    qDebug() <<  "progress: " << progress << " of " << total;
 }
 
 void SnapStoreRequest::onSslErrors(QList<QSslError> sslErrors)
@@ -41,6 +41,6 @@ void SnapStoreRequest::onNetworkErrorResponse(QNetworkReply::NetworkError error)
     qDebug() << "QNetworkReply::NetworkError" << error;
 
     m_error = 1;
-    m_errorString = error;
+    m_errorString = "Network error, please check your internet connection.";
     emit(complete());
 }

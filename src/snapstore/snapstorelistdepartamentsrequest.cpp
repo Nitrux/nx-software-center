@@ -85,6 +85,10 @@ void SnapStoreListDepartamentsRequest::onRequestFinished()
         }
     }
 
+    if (m_result.empty()) {
+        m_error = 2;
+        m_errorString = "";
+    }
     //    qDebug() << m_result;
     emit(complete());
 }
