@@ -56,6 +56,7 @@ ApplicationWindow {
                 }
             }
 
+
             //            PlasmaComponents.Button {
             //                iconName: "edit-download"
             //                checked: content.currentItem
@@ -65,7 +66,6 @@ ApplicationWindow {
             //                    content.push(workView)
             //                }
             //            }
-
             PlasmaComponents.TextField {
                 id: searchField
                 Layout.fillWidth: true
@@ -105,8 +105,9 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.preferredHeight: 400
 
-            source : "qrc:/HomeView.qml"
+            source: "qrc:/HomeView.qml"
         }
+
 
         //        StackView {
         //            id: content
@@ -116,7 +117,6 @@ ApplicationWindow {
 
         //            initialItem: "qrc:/HomeView.qml"
         //        }
-
         StatusArea {
             id: statusArea
             Layout.maximumHeight: statusArea.visible ? 38 : 0
@@ -136,4 +136,7 @@ ApplicationWindow {
         id: enableSnapInteractor
     }
 
+    Interactors.RefreshSnapInteractor {
+        id: refreshSnapInteractor
+    }
 }

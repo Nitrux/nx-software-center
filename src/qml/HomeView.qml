@@ -53,7 +53,7 @@ Item {
                                            properties: {
                                                package_name: name,
                                                dismissCallback: function () {
-                                                    contentLoader.pop()
+                                                   contentLoader.pop()
                                                    installedSnapsModel.refresh()
                                                    installedSnapsModel.refreshActions()
                                                }
@@ -95,11 +95,13 @@ Item {
                 icon: "package-broken",
                 text: textConstants.actionDisableTitle,
                 action: function () {
-                    var targets  = Object.keys(selectedItems)
+                    var targets = Object.keys(selectedItems)
 
                     disableSnapInteractor.targets = targets
-                    disableSnapInteractor.finished.connect(installedSnapsModel.refresh)
-                    disableSnapInteractor.targetProcessed.connect(installedSnapsModel.refresh)
+                    disableSnapInteractor.finished.connect(
+                                installedSnapsModel.refresh)
+                    disableSnapInteractor.targetProcessed.connect(
+                                installedSnapsModel.refresh)
 
                     disableSnapInteractor.start()
                 }
@@ -109,21 +111,44 @@ Item {
                 icon: "package-installed-updated",
                 text: textConstants.actionEnableTitle,
                 action: function () {
-                    var targets  = Object.keys(selectedItems)
+                    var targets = Object.keys(selectedItems)
 
                     enableSnapInteractor.targets = targets
-                    enableSnapInteractor.finished.connect(installedSnapsModel.refresh)
-                    enableSnapInteractor.targetProcessed.connect(installedSnapsModel.refresh)
+                    enableSnapInteractor.finished.connect(
+                                installedSnapsModel.refresh)
+                    enableSnapInteractor.targetProcessed.connect(
+                                installedSnapsModel.refresh)
 
                     enableSnapInteractor.start()
                 }
             }
 
+            var refreshAction = {
+                icon: "package-upgrade",
+                text: textConstants.actionRefreshTitle,
+                action: function () {
+                    var targets_names = Object.keys(selectedItems)
+                    var targets = []
+                    for (var i in targets_names) {
+                        var model = installedSnapsModel.getByName(targets_names[i])
+                        targets.push({
+                                         name: model.name,
+                                         channel: model.channel
+                                     })
+                    }
+
+                    refreshSnapInteractor.targets = targets
+                    refreshSnapInteractor.finished.connect(
+                                installedSnapsModel.refresh)
+                    refreshSnapInteractor.targetProcessed.connect(
+                                installedSnapsModel.refresh)
+
+                    refreshSnapInteractor.start()
+                }
+            }
 
             if (keys.length > 0) {
-                var actions = [disableAction, enableAction, RefreshSnapAction.prepare(
-                                   SnapdRootClient,
-                                   installedSnapsModel), RemoveSnapAction.prepare(
+                var actions = [disableAction, enableAction, refreshAction, RemoveSnapAction.prepare(
                                    SnapdRootClient, installedSnapsModel)]
                 statusArea.updateContext("documentinfo",
                                          i18n("Available actions"), actions)

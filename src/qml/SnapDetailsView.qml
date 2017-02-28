@@ -54,19 +54,19 @@ Item {
             }
         }
 
-        var refreshAction = ActionFactory.prepareSimpleRequestAction(
-                    textConstants.actionRefreshTitle, "package-upgrade",
-                    function () {
-                        return {
-                            name: localInfo.name,
-                            channel: localInfo.channel
-                        }
-                    }, function (target) {
-                        var request = SnapdRootClient.refresh(target.name,
-                                                              target.channel)
+        var refreshAction = {
+            icon: "package-upgrade",
+            text: textConstants.actionRefreshTitle,
+            action: function () {
+                refreshSnapInteractor.targets = [{
+                                                     name: package_name,
+                                                     channel: localInfo.channel
+                                                 }]
+                refreshSnapInteractor.finished.connect(updateContext)
 
-                        return request
-                    }, function () {}, function () {}, refesh)
+                refreshSnapInteractor.start()
+            }
+        }
 
         var installAction = ActionFactory.prepareSimpleRequestAction(
                     textConstants.actionInstallTitle, "package-install",
@@ -104,7 +104,6 @@ Item {
                     actions.push(enableAction)
 
                 if (storeInfo && storeInfo.revision > localInfo.revision) {
-                    print("revisions", storeInfo.revision, localInfo.revision)
                     actions.push(refreshAction)
                 }
             } else

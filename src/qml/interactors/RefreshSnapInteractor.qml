@@ -51,9 +51,9 @@ Interactor {
         if (targets.length === 0) {
             var message = ""
             if (multipleTargets)
-                message = i18n("All snaps where enabled successfully!")
+                message = i18n("All snaps where updated successfully!")
             else
-                message = i18n("Snap enabled successfully!")
+                message = i18n("Snap updated successfully!")
 
             statusArea.noticeSuccess(message)
             finished()
@@ -64,7 +64,7 @@ Interactor {
         // process next target
         var target = targets.pop()
         statusArea.jobRunning = true
-        currentJob = SnapdRootClient.enable(target)
+        currentJob = SnapdRootClient.refresh(target.name, target.channel)
 
         currentJob.newData.connect(function (newData) {
             statusArea.notice(newData.status, [])
