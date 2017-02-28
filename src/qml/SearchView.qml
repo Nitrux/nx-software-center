@@ -32,11 +32,33 @@ Item {
         function refreshActions() {
             var keys = Object.keys(selectedItems)
             if (keys.length > 0) {
-                var actions = [InstallSnapAction.prepare(
-                                   SnapdRootClient, storeSnapsModel)]
+                var installAction = {
+                    icon: "package-install",
+                    text: textConstants.actionInstallTitle,
+                    action: function () {
+                        var targets_names = Object.keys(
+                                    storeSnapsModel.selectedItems)
+                        var targets = []
+                        for (var i in targets_names) {
+                            var model = storeSnapsModel.getByName(
+                                        targets_names[i])
+                            targets.push({
+                                             name: model.name,
+                                             channel: model.channel
+                                         })
+                        }
+
+                        installSnapInteractor.targets = targets
+                        installSnapInteractor.finished.connect(
+                                    refreshActions)
+
+                        installSnapInteractor.start()
+                    }
+                }
+
                 statusArea.updateContext("documentinfo",
-                                         i18n("Available actions"),
-                                         actions)
+                                         textConstants.availableActionsNotice,
+                                         [installAction])
             } else
                 statusArea.clearContext()
         }

@@ -13,6 +13,7 @@ import org.nx.softwarecenter 1.0
 
 import "qrc:/scripts/Utils.js" as Utils
 import "qrc:/actions/InstallSnapAction.js" as InstallSnapAction
+import "qrc:/scripts/Utils.js" as UtilsJs
 
 Item {
     id: departamentsRoot
@@ -25,7 +26,7 @@ Item {
 
             request.complete.connect(function () {
                 departamentsModel.clear()
-                print("departamentCount", request.departamentCount())
+//                print("departamentCount", request.departamentCount())
 
                 var departments = []
                 for (var i = 0; i < request.departamentCount(); i++) {
@@ -77,12 +78,11 @@ Item {
                 opacity: 0.6
             }
 
-
-                        Rectangle {
-                            anchors.fill: parent
-                            color: "black" // Utils.stringToColor(model.slug)
-                            opacity: 0.20
-                        }
+            Rectangle {
+                anchors.fill: parent
+                color: "black" // Utils.stringToColor(model.slug)
+                opacity: 0.20
+            }
             Text {
                 id: sectionTitle
                 x: delegateRoot.expanded ? 12 : delegateRoot.width / 2 - width / 2
@@ -228,13 +228,47 @@ Item {
                     //                        contentLoader.sourceComponent = snapsView
                     return pkgs
                 }
+
+                function _indexOf(name) {
+                    return UtilsJs.binaryIndexOf(name, function (a, b) {
+                        return a.package_name.localeCompare(b)
+                    }, function () {
+                        return count
+                    }, function (i) {
+                        return get(i)
+                    })
+                }
+
                 function refreshActions() {
                     var keys = Object.keys(selectedItems)
                     if (keys.length > 0) {
-                        var actions = [InstallSnapAction.prepare(
-                                           SnapdRootClient, storeSnapsModel)]
+                        var installAction = {
+                            icon: "package-install",
+                            text: textConstants.actionInstallTitle,
+                            action: function () {
+                                var targets_names = Object.keys(
+                                            storeSnapsModel.selectedItems)
+                                var targets = []
+                                for (var i in targets_names) {
+                                    var model = storeSnapsModel.getByName(
+                                                targets_names[i])
+                                    targets.push({
+                                                     name: model.package_name,
+                                                     channel: model.channel
+                                                 })
+                                }
+
+                                installSnapInteractor.targets = targets
+                                installSnapInteractor.finished.connect(
+                                            refreshActions)
+
+                                installSnapInteractor.start()
+                            }
+                        }
+
+                        var actions = [installAction]
                         statusArea.updateContext("documentinfo",
-                                                 i18n("Available actions"),
+                                                 textConstants.availableActionsNotice,
                                                  actions)
                     } else
                         statusArea.clearContext()

@@ -143,4 +143,8 @@ ApplicationWindow {
     Interactors.RemoveSnapInteractor {
         id: removeSnapInteractor
     }
+
+    Interactors.InstallSnapInteractor {
+        id: installSnapInteractor
+    }
 }

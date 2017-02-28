@@ -67,19 +67,19 @@ Item {
                 refreshSnapInteractor.start()
             }
         }
+        var installAction = {
+            icon: "package-install",
+            text: textConstants.actionInstallTitle,
+            action: function () {
+                installSnapInteractor.targets = [{
+                                                     name: package_name,
+                                                     channel: localInfo.channel
+                                                 }]
+                installSnapInteractor.finished.connect(refesh)
 
-        var installAction = ActionFactory.prepareSimpleRequestAction(
-                    textConstants.actionInstallTitle, "package-install",
-                    function () {
-                        return {
-                            name: storeInfo.package_name,
-                            channel: storeInfo.channel
-                        }
-                    }, function (target) {
-                        var request = SnapdRootClient.install(target.name,
-                                                              target.channel)
-                        return request
-                    }, function () {}, function () {}, refesh)
+                installSnapInteractor.start()
+            }
+        }
 
         var removeAction = {
             icon: "package-remove",
