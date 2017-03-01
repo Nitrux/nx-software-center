@@ -28,75 +28,14 @@ ApplicationWindow {
 
     ColumnLayout {
         anchors.fill: parent
-        RowLayout {
-            Layout.leftMargin: 12
-            Layout.rightMargin: 12
-            Layout.topMargin: 6
-            Layout.bottomMargin: 6
+        NavigationPanel {
+            id: navigationPanel
             Layout.fillWidth: true
 
-            spacing: 8
-            PlasmaComponents.Button {
-                iconName: "go-home"
-                checked: content.source == "qrc:/HomeView.qml"
-                onClicked: {
-                    if (checked)
-                        return
-
-                    content.source = "qrc:/HomeView.qml"
-                }
-            }
-            PlasmaComponents.Button {
-                iconName: "plasmadiscover"
-                checked: content.source == "qrc:/StoreView.qml"
-                onClicked: {
-                    if (checked)
-                        return
-                    content.source = "qrc:/StoreView.qml"
-                }
-            }
-
-
-            //            PlasmaComponents.Button {
-            //                iconName: "edit-download"
-            //                checked: content.currentItem
-            //                         && content.currentItem.objectName == "workView"
-            //                onClicked: {
-            //                    content.clear()
-            //                    content.push(workView)
-            //                }
-            //            }
-            PlasmaComponents.TextField {
-                id: searchField
-                Layout.fillWidth: true
-                Layout.leftMargin: 60
-                Layout.rightMargin: 60
-                placeholderText: "Search"
-                focus: true
-
-                onEditingFinished: {
-                    if (content.source == "qrc:/SearchView.qml")
-                        return
-
-                    if (text == "")
-                        return
-
-                    content.source = "qrc:/SearchView.qml"
-                }
-            }
-
-            PlasmaComponents.Button {
-                Layout.alignment: Qt.AlignRight
-                iconName: "configure"
-
-                checked: content.source == "qrc:/SettingsView.qml"
-                onClicked: {
-                    if (checked)
-                        return
-
-                    content.source = "qrc:/SettingsView.qml"
-                }
-            }
+            onGoHome: content.source = "qrc:/HomeView.qml"
+            onGoStore: browseStoreInteractor.displayDepartaments()
+            onGoSettings: content.source = "qrc:/SettingsView.qml"
+            onStoreQueryTyped: content.source = "qrc:/SearchView.qml"
         }
 
         Loader {
@@ -108,15 +47,6 @@ ApplicationWindow {
             source: "qrc:/HomeView.qml"
         }
 
-
-        //        StackView {
-        //            id: content
-        //            Layout.fillWidth: true
-        //            Layout.fillHeight: true
-        //            Layout.preferredHeight: 400
-
-        //            initialItem: "qrc:/HomeView.qml"
-        //        }
         StatusArea {
             id: statusArea
             Layout.maximumHeight: statusArea.visible ? 38 : 0
@@ -146,5 +76,10 @@ ApplicationWindow {
 
     Interactors.InstallSnapInteractor {
         id: installSnapInteractor
+    }
+
+    Interactors.BrowseStoreInteractor {
+        id: browseStoreInteractor
+        contentLoader: content
     }
 }

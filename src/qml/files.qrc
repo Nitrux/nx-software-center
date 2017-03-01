@@ -23,6 +23,9 @@
         <file>interactors/LoadDefaultSettingsInteractor.qml</file>
         <file>interactors/InstallSnapInteractor.qml</file>
         <file>parts/Card.qml</file>
+        <file>NavigationPanel.qml</file>
+        <file>interactors/BrowseStoreInteractor.qml</file>
+        <file>PlaceHolderView.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

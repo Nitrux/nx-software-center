@@ -12,15 +12,27 @@ import org.nx.softwarecenter 1.0
 import "qrc:/scripts/Utils.js" as Utils
 
 Item {
+    property alias message: messageText.text
+    property alias iconName: icon.source
+    property alias showBusyIndicator: busyModelIndicator.visible
+
+    PlasmaComponents.BusyIndicator {
+        id: busyModelIndicator
+//        visible: storeSnapsModel.busy
+        anchors.centerIn: parent
+        anchors.verticalCenterOffset: -60
+    }
+
     PlasmaComponents.Label {
         id: messageText
         anchors.top: busyModelIndicator.bottom
+        anchors.topMargin: 32
         anchors.horizontalCenter: parent.horizontalCenter
         width: 400
         height: 100
         
-        text: storeSnapsModel.errorMessage
-              == "" ? storeSnapsModel.statusMessage : storeSnapsModel.errorMessage
+//        text: storeSnapsModel.errorMessage
+//              == "" ? storeSnapsModel.statusMessage : storeSnapsModel.errorMessage
         
         fontSizeMode: Text.Fit
         horizontalAlignment: Text.AlignHCenter
@@ -29,19 +41,15 @@ Item {
         font.pixelSize: 20
     }
     
-    PlasmaComponents.BusyIndicator {
-        id: busyModelIndicator
-        visible: storeSnapsModel.busy
-        anchors.centerIn: parent
-    }
+
     
     PlasmaCore.IconItem {
+        id: icon
         anchors.centerIn: parent
-        anchors.verticalCenterOffset: -20
+        anchors.verticalCenterOffset: -60
+
         width: 64
         height: 64
-        
-        source: storeSnapsModel.statusMessageIcon
         visible: !busyModelIndicator.visible
     }
 }

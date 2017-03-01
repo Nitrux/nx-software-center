@@ -11,51 +11,17 @@ import Snapd 1.0
 
 import org.nx.softwarecenter 1.0
 
-import "qrc:/scripts/Utils.js" as UtilsJs
 
 Item {
     id: departamentsRoot
-
-    ListModel {
-        id: departamentsModel
-
-        Component.onCompleted: {
-            var request = SnapStore.listDepartments()
-
-            request.complete.connect(function () {
-                departamentsModel.clear()
-//                print("departamentCount", request.departamentCount())
-
-                var departments = []
-                for (var i = 0; i < request.departamentCount(); i++) {
-                    departments.push(request.departament(i))
-                }
-
-                departments.sort(function (a, b) {
-                    if (a.name < b.name)
-                        return -1
-                    if (a.name > b.name)
-                        return 1
-                    return 0
-                })
-
-                for (var i = 0; i < departments.length; i++) {
-                    departamentsModel.append(departments[i])
-                }
-            })
-
-            request.runAsync()
-            //                    print(request)
-        }
-    }
+    property var departamentsListModel
 
     property string currentDepartamentSlug: ""
 
     ScrollView {
         anchors.fill: parent
         ListView {
-
-            model: departamentsModel
+            model: departamentsListModel
             delegate: departamentDelegate
         }
     }

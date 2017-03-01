@@ -20,13 +20,6 @@ Item {
         id: snapdClient
     }
 
-    objectName: "storeView"
-
-    //    Rectangle {
-    //        color: "lightblue"
-    //        anchors.fill: parent
-    //        opacity: 0.1
-    //    }
     StackView {
         id: contentLoader
         anchors.fill: parent
@@ -38,46 +31,9 @@ Item {
 
     Component {
         id: statusView
-        Item {
-            PlasmaComponents.Label {
-                id: messageText
-                anchors.top: busyModelIndicator.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 400
-                height: 100
-
-                text: storeSnapsModel.errorMessage
-                      == "" ? storeSnapsModel.statusMessage : storeSnapsModel.errorMessage
-
-                fontSizeMode: Text.Fit
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: Text.WordWrap
-                minimumPixelSize: 10
-                font.pixelSize: 20
-            }
-
-            PlasmaComponents.BusyIndicator {
-                id: busyModelIndicator
-                visible: storeSnapsModel.busy
-                anchors.centerIn: parent
-            }
-
-            PlasmaCore.IconItem {
-                anchors.centerIn: parent
-                anchors.verticalCenterOffset: -20
-                width: 64
-                height: 64
-
-                source: storeSnapsModel.statusMessageIcon
-                visible: !busyModelIndicator.visible
-            }
+        PlaceHolderView {
         }
     }
-
-//    DepartamentsView {
-//        id: departamentsView
-//        anchors.fill: parent
-//    }
 
     Component.onCompleted: statusArea.clearContext()
 }

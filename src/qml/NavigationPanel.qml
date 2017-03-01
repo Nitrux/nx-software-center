@@ -1,82 +1,84 @@
 import QtQuick 2.7
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.2 as QtControls
-import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
-import QtQuick.Controls.Styles.Plasma 2.0 as Styles
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 
-import org.nx.softwarecenter 1.0
+Item {
+    property alias query: searchField.text
 
-import Snapd 1.0
+    signal goHome
+    signal goStore
+    signal goSettings
+    signal storeQueryTyped(var query)
 
-import "interactors" as Interactors
+    property string currentView: "home"
 
-RowLayout {
-    spacing: 8
-    PlasmaComponents.Button {
-        iconName: "go-home"
-        checked: content.source == "qrc:/HomeView.qml"
-        onClicked: {
-            if (checked)
-                return
-            
-            content.source = "qrc:/HomeView.qml"
+    height: 48
+    RowLayout {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+
+        height: 34
+        spacing: 12
+
+        PlasmaComponents.ToolButton {
+            Layout.leftMargin: 20
+            Layout.fillHeight: true
+
+            iconName: "go-home"
+            checked: currentView == "home"
+            onClicked: {
+                goHome()
+                currentView = "home"
+            }
+        }
+
+        PlasmaComponents.ToolButton {
+            iconName: "plasmadiscover"
+            Layout.fillHeight: true
+            checked: currentView == "store"
+            onClicked: {
+                goStore()
+                currentView = "store"
+            }
+        }
+
+        PlasmaComponents.TextField {
+            id: searchField
+            Layout.fillWidth: true
+            Layout.leftMargin: parent.width / 10
+            Layout.rightMargin: parent.width / 14
+            Layout.minimumWidth: 200
+            Layout.alignment: Qt.AlignHCenter
+            placeholderText: "Search"
+            focus: true
+
+            onEditingFinished: storeQueryTyped(text)
+        }
+
+        PlasmaComponents.ToolButton {
+            Layout.alignment: Qt.AlignRight
+            Layout.rightMargin: 12
+            Layout.fillHeight: true
+            iconName: "configure"
+
+            checked: currentView == "settings"
+            onClicked: {
+                goSettings()
+                currentView = "settings"
+            }
+
         }
     }
-    PlasmaComponents.Button {
-        iconName: "plasmadiscover"
-        checked: content.source == "qrc:/StoreView.qml"
-        onClicked: {
-            if (checked)
-                return
-            content.source = "qrc:/StoreView.qml"
-        }
-    }
-    
-    
-    //            PlasmaComponents.Button {
-    //                iconName: "edit-download"
-    //                checked: content.currentItem
-    //                         && content.currentItem.objectName == "workView"
-    //                onClicked: {
-    //                    content.clear()
-    //                    content.push(workView)
-    //                }
-    //            }
-    PlasmaComponents.TextField {
-        id: searchField
-        Layout.fillWidth: true
-        Layout.leftMargin: 60
-        Layout.rightMargin: 60
-        placeholderText: "Search"
-        focus: true
-        
-        onEditingFinished: {
-            if (content.source == "qrc:/SearchView.qml")
-                return
-            
-            if (text == "")
-                return
-            
-            content.source = "qrc:/SearchView.qml"
-        }
-    }
-    
-    PlasmaComponents.Button {
-        Layout.alignment: Qt.AlignRight
-        iconName: "configure"
-        
-        checked: content.source == "qrc:/SettingsView.qml"
-        onClicked: {
-            if (checked)
-                return
-            
-            content.source = "qrc:/SettingsView.qml"
-        }
+
+    Rectangle {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        height: 1
+        color: "lightgray"
     }
 }
