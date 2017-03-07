@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -10,13 +9,15 @@ import org.nx.softwarecenter 1.0
 
 import "qrc:/scripts/Utils.js" as Utils
 
+import "parts"
 import Snapd 1.0
 
 FocusScope {
     id: root
-    width: 192
-    height: 192
+    width: 160
+    height: 245
 
+    focus: true
     property string snap_name
     property string snap_version
     property int snap_size
@@ -25,10 +26,11 @@ FocusScope {
     property bool isInstalled
 
     property bool selected: false
+    property bool keyboardFocus: false
     property bool hovered: snapElementArea.containsMouse
-                           || toggleSelectionArea.containsMouse
+                           || toggleSelectionArea.containsMouse || keyboardFocus
 
-    signal clicked();
+    signal clicked
 
     MouseArea {
         id: snapElementArea
@@ -37,132 +39,151 @@ FocusScope {
         propagateComposedEvents: true
         hoverEnabled: true
 
-        onClicked: root.clicked();
+        onClicked: root.clicked()
     }
 
-    Rectangle {
+    Card {
         id: background
         anchors.fill: parent
-        anchors.margins: 6
+
         border.color: hovered ? "#3DAEE9" : "#C3C9D6"
         border.width: hovered ? 2 : 1
         color: selected ? "#aae3ff" : "white"
 
-        radius: 2
+    }
+
+    Item {
+        id: snap_icon
+        height: 145
+        width: 145
+        anchors {
+            top: background.top
+            horizontalCenter: parent.horizontalCenter
+            margins: 15
+        }
+
         PlasmaCore.IconItem {
-            visible: hovered
-            source: selected ? "emblem-remove" : "emblem-added"
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.margins: 12
-            opacity: toggleSelectionArea.containsMouse ? 1 : 0.3
+            visible: !model.icon
+            anchors.fill: parent
+            //            source: "package-available"
+            source: "package-x-generic"
+        }
 
-            MouseArea {
-                id: toggleSelectionArea
+        Image {
+            visible: model.icon !== undefined
+            anchors.fill: parent
+            source: model.icon ? model.icon : ""
+        }
+    }
 
-                propagateComposedEvents: true
-                anchors.fill: parent
-                hoverEnabled: true
+    PlasmaCore.IconItem {
+        visible: hovered
+        source: selected ? "emblem-remove" : "emblem-added"
+        anchors.top: background.top
+        anchors.left: background.left
+        anchors.margins: 12
+        opacity: toggleSelectionArea.containsMouse ? 1 : 0.3
+        height: 32
 
-                onClicked: {
-                    selected = !selected
-                }
+        MouseArea {
+            id: toggleSelectionArea
+
+            propagateComposedEvents: true
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onClicked: {
+                selected = !selected
             }
         }
     }
 
-    ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: 6
+    RowLayout {
+        id: emblemsLayout
+
+        anchors.top: background.top
+        anchors.left: background.left
+        anchors.right: background.right
+        anchors.topMargin: 4
+        anchors.rightMargin: 4
+
         spacing: 0
+        height: 24
 
-        RowLayout {
-            id: emblemsLayout
-
-            spacing: 2
-            Layout.alignment: Qt.AlignRight
-
-            Layout.topMargin: 10
-            Layout.rightMargin: 12
-
-            PlasmaCore.IconItem {
-                Layout.preferredHeight: 24
-            }
-
-            PlasmaCore.IconItem {
-                visible: isDisabled
-                Layout.preferredHeight: 24
-                source: "emblem-unavailable"
-
-//                PlasmaCore.ToolTipArea {
-//                    anchors.fill: parent
-//                    mainText: i18n("Snap disabled")
-//                }
-            }
-            PlasmaCore.IconItem {
-                visible: isUpgradeable
-                Layout.preferredHeight: 24
-                source: "emblem-information"
-
-//                PlasmaCore.ToolTipArea {
-//                    anchors.fill: parent
-//                    mainText: i18n("New version available")
-//                }
-            }
-            PlasmaCore.IconItem {
-                visible: isInstalled
-                Layout.preferredHeight: 24
-                source: "emblem-success"
-
-//                PlasmaCore.ToolTipArea {
-//                    anchors.fill: parent
-//                    mainText: i18n("Snap already installed")
-//                }
-            }
+        PlasmaCore.IconItem {
+            Layout.fillWidth: true
         }
-
-        Item {
-            id: snap_icon
-            Layout.preferredWidth: 64
-            Layout.preferredHeight: 64
-            Layout.alignment: Qt.AlignHCenter
-
-            PlasmaCore.IconItem {
-                visible: !model.icon
-                anchors.fill: parent
-                source: "package-available"
-            }
-
-            Image {
-                visible: model.icon !== undefined
-                anchors.fill: parent
-                source: model.icon ? model.icon : ""
-            }
-
+        PlasmaCore.IconItem {
+            visible: isDisabled
+            Layout.preferredHeight: emblemsLayout.height
+            source: "emblem-unavailable"
         }
+        PlasmaCore.IconItem {
+            visible: isUpgradeable
+            Layout.preferredHeight: emblemsLayout.height
+            source: "emblem-information"
+        }
+        PlasmaCore.IconItem {
+            visible: isInstalled
+            Layout.preferredHeight: emblemsLayout.height
+            source: "emblem-success"
+        }
+    }
 
+    ColumnLayout {
+        id: snap_infobox
+        anchors {
+            //            top: snap_icon.bottom
+            bottom: background.bottom
+            left: background.left
+            right: background.right
+            margins: 12
+            rightMargin: 6
+            bottomMargin: 6
+        }
+        clip: true
+        spacing: 0
 
         PlasmaComponents.Label {
             text: snap_name
             elide: Text.ElideRight
             maximumLineCount: 1
-            wrapMode: Text.WrapAnywhere
-            Layout.topMargin: 14
-            Layout.leftMargin: 12
-            Layout.maximumWidth: 140
-            //            font.bold: true
+            font.weight: Font.Medium
+            font.pointSize: 12
         }
 
         PlasmaComponents.Label {
             text: i18n("Version: ") + snap_version
-            Layout.leftMargin: 12
-            font.italic: true
+            font.pointSize: 10
+            //            font.italic: true
+            opacity: 0.7
         }
         PlasmaComponents.Label {
             property string sizeString: Utils.formatSize(snap_size)
             text: snap_size ? sizeString : i18n("Unknown size")
-            Layout.leftMargin: 12
             Layout.fillHeight: true
+            Layout.topMargin: 6
+        }
+    }
+
+    Rectangle {
+        width: snap_infobox.height
+        height: 70
+        anchors.verticalCenter: snap_infobox.verticalCenter
+        anchors.right: snap_infobox.right
+
+        //        anchors.rightMargin: height * -1 + 5
+        rotation: 90
+        //        color: "blue"
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0
+                color: background.color
+            }
+            GradientStop {
+                position: 1.0
+                color: "transparent"
+            }
         }
     }
 }

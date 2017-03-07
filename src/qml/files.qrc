@@ -22,6 +22,7 @@
         <file>interactors/ApplySettingsInteractor.qml</file>
         <file>interactors/LoadDefaultSettingsInteractor.qml</file>
         <file>interactors/InstallSnapInteractor.qml</file>
+        <file>parts/Card.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>
