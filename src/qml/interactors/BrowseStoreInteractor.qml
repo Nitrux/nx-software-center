@@ -9,6 +9,7 @@ QtObject {
     property var departamentsListModel: ListModel {
     }
 
+
     //    property var snapdClient: SnapdClient {
     //        id: snapdClient
 

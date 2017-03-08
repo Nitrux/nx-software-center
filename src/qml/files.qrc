@@ -26,6 +26,7 @@
         <file>NavigationPanel.qml</file>
         <file>interactors/BrowseStoreInteractor.qml</file>
         <file>PlaceHolderView.qml</file>
+        <file>interactors/ListSnapsInDepartamentInteractor.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>
