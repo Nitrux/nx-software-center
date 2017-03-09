@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.7
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
@@ -10,7 +10,10 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import Snapd 1.0
 
 import org.nx.softwarecenter 1.0
+import "qrc:/scripts/Utils.js" as UtilsJs
 
+import "parts"
+import "interactors" as Interactors
 
 Item {
     id: departamentsRoot
@@ -18,179 +21,202 @@ Item {
 
     property string currentDepartamentSlug: ""
 
-    ScrollView {
-        anchors.fill: parent
-        ListView {
-            model: departamentsListModel
-            delegate: departamentDelegate
+    ListView {
+        id: departamentsListView
+        anchors {
+            top: parent.top
+            left: parent.left
+            leftMargin: 12
+            right: parent.right
+            rightMargin: 6
         }
-    }
+        height: 200
 
-    Component {
-        id: departamentDelegate
-        Item {
-            id: delegateRoot
-            width: departamentsRoot.width
-            height: 280
-            property bool expanded: false
+        focus: true
+        property int viewIndex: 0
+        function moveViewportForward() {
+            flick(width * -2, 0)
+        }
+        function moveViewportBackward() {
+            flick(width * 2, 0)
+        }
 
+        //        keyNavigationEnabled: true
+        //        snapMode: ListView.SnapToItem
+        spacing: 12
+        orientation: ListView.Horizontal
+        highlightFollowsCurrentItem: true
+        highlight: Item {
+        }
+        model: departamentsListModel
+        delegate: Card {
+            width: 160
+            height: 200
+            clip: true
+
+            color: index == departamentsListView.currentIndex ? "#aae3ff" : "white"
             Image {
-                anchors.fill: parent
+                width: 160
+                height: 160
                 source: "file:///usr/share/nx_software_center/departaments_background/"
                         + model.slug + ".png"
                 fillMode: Image.PreserveAspectCrop
-                opacity: 0.6
+                opacity: index == departamentsListView.currentIndex ? 1 : 0.7
             }
 
-            Rectangle {
-                anchors.fill: parent
-                color: "black" // Utils.stringToColor(model.slug)
-                opacity: 0.20
-            }
             Text {
-                id: sectionTitle
-                x: delegateRoot.expanded ? 12 : delegateRoot.width / 2 - width / 2
-                y: delegateRoot.expanded ? 12 : delegateRoot.height / 2 - height - 12
-
-                text: model.name
-                color: "white"
-                font.pointSize: 24
-            }
-
-            DropShadow {
-                anchors.fill: sectionTitle
-                radius: 4
-                samples: 9
-                color: "black"
-                source: sectionTitle
-            }
-
-            Button {
-                height: 40
-                width: 90
-                anchors.top: parent.verticalCenter
-                anchors.topMargin: 12
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                text: i18n("View")
-
-                onClicked: {
-                    delegateRoot.expanded = true
-                    currentDepartamentSlug = model.slug
-                    departamentSnapsLoader.sourceComponent = departamentSnaps
-                }
-
-                visible: !delegateRoot.expanded
-
-                style: ButtonStyle {
-                    background: Rectangle {
-                        radius: 2
-                        border.width: 1.2
-                        border.color: control.hovered ? "#9ED2ED" : "white"
-                        color: control.pressed ? "#9ED2ED" : "transparent"
-                    }
-                    label: Item {
-                        Label {
-                            id: labelText
-                            anchors.fill: parent
-                            color: "white"
-                            text: control.text
-                            font.pointSize: 12
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
-                        DropShadow {
-                            anchors.fill: labelText
-                            radius: 4
-                            samples: 9
-                            color: "black"
-                            source: labelText
-                        }
-                    }
-                }
-            }
-
-            Loader {
-                id: departamentSnapsLoader
-                anchors.fill: parent
-                anchors.margins: 12
-                anchors.topMargin: 38
-            }
-
-            Button {
-                height: 40
-                width: 90
+                anchors.left: parent.left
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 6
-                anchors.right: parent.right
-                anchors.rightMargin: 24
+                anchors.margins: 12
+                text: model.name
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: departamentsListView.currentIndex = index
+            }
+        }
+    }
 
-                visible: delegateRoot.expanded
-                text: i18n("Hide")
-                onClicked: {
-                    delegateRoot.expanded = false
-                    departamentSnapsLoader.sourceComponent = undefined
+    Item {
+        anchors.left: departamentsListView.left
+        anchors.verticalCenter: departamentsListView.verticalCenter
+        //        anchors.horizontalCenterOffset: 2
+        height: 50
+        width: height
+
+        Rectangle {
+            anchors.fill: parent
+            radius: height
+            color: "white"
+            opacity: 0.7
+        }
+
+        PlasmaCore.IconItem {
+            anchors.centerIn: parent
+            source: "arrow-left"
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: departamentsListView.moveViewportBackward()
+        }
+    }
+
+    Item {
+        anchors.right: departamentsListView.right
+        anchors.verticalCenter: departamentsListView.verticalCenter
+        //        anchors.horizontalCenterOffset: 2
+        height: 50
+        width: height
+
+        Rectangle {
+            anchors.fill: parent
+            radius: height
+            color: "white"
+            opacity: 0.7
+        }
+
+        PlasmaCore.IconItem {
+            anchors.centerIn: parent
+            source: "arrow-right"
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: departamentsListView.moveViewportForward()
+        }
+    }
+
+
+    Interactors.ListSnapsInDepartamentInteractor {
+        departament: departamentsListModel && departamentsListView.currentIndex >= 0 ? departamentsListModel.get(departamentsListView.currentIndex).slug : ""
+        onDepartamentChanged: {
+            print(departament)
+            fetchSnaps()
+        }
+        onLoading: {
+            snapsListLoader.source = "qrc:/PlaceHolderView.qml"
+            var placeHolder = snapsListLoader.item
+            if (placeHolder !== undefined) {
+                placeHolder.message = i18n("Loading snaps")
+                placeHolder.showBusyIndicator = true
+            }
+        }
+        onFinished: {
+            if (snaps.length == 0) {
+                snapsListLoader.source = "qrc:/PlaceHolderView.qml"
+                var placeHolder = snapsListLoader.item
+                if (placeHolder !== undefined) {
+
+                    placeHolder.message = textConstants.noSnapsFound
+                    placeHolder.iconName = "face-sad"
+                    placeHolder.showBusyIndicator = false
                 }
-
-                style: ButtonStyle {
-                    background: Rectangle {
-                        radius: 2
-                        border.width: 1.2
-                        border.color: control.hovered ? "#9ED2ED" : "white"
-                        color: control.pressed ? "#9ED2ED" : "transparent"
-                    }
-                    label: Item {
-                        Label {
-                            id: labelText
-                            anchors.fill: parent
-                            color: "white"
-                            text: control.text
-                            font.pointSize: 12
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
-                        DropShadow {
-                            anchors.fill: labelText
-                            radius: 4
-                            samples: 9
-                            color: "black"
-                            source: labelText
-                        }
-                    }
+            } else {
+                snapsListLoader.sourceComponent = departamentSnaps
+                var snapsGrid = snapsListLoader.item
+                if (snapsGrid !== undefined) {
+                    snapsGrid.model.clear()
+                    for (var i in snaps)
+                        snapsGrid.model.append(snaps[i])
                 }
+            }
+        }
+        onError: {
+            snapsListLoader.source = "qrc:/PlaceHolderView.qml"
+            var placeHolder = contentLoader.item
+            if (placeHolder !== undefined) {
+                var message = listDepartamentSnapsRequest.errorString
+                if (message == "")
+                    message = textConstants.unknownError
+
+                placeHolder.message = message
+                placeHolder.iconName = "face-uncertain"
+                placeHolder.showBusyIndicator = false
+            }
+        }
+    }
+
+    Loader {
+        id: snapsListLoader
+        anchors {
+            top: split.top
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+    }
+
+    Rectangle {
+        id: split
+        anchors.top: departamentsListView.bottom
+        anchors.topMargin: 12
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 6
+
+//        color: "lightgray"
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0
+                color: "#AFAFB1"
+            }
+            GradientStop {
+                position: 1.0
+                color: "transparent"
             }
         }
     }
 
     Component {
         id: departamentSnaps
-        ListView {
-            orientation: ListView.Horizontal
+        SnapGrid {
             model: SnapsModel {
                 id: storeSnapsModel
 
                 property var snaps
                 onSelectedItemsChanged: {
                     refreshActions()
-                }
-
-                fetchSnapsFunc: function () {
-                    var request = SnapStore.getDepartment(
-                                currentDepartamentSlug)
-
-                    request.runSync()
-
-                    var pkgs = []
-                    for (var i = 0; i < request.packagesCount(); i++) {
-                        var pkg = request.package(i)
-                        pkgs.push(pkg)
-                        //                            storeSnapsModel.append(pkg)
-                    }
-
-                    //                        contentLoader.sourceComponent = snapsView
-                    return pkgs
                 }
 
                 function _indexOf(name) {
@@ -231,9 +257,10 @@ Item {
                         }
 
                         var actions = [installAction]
-                        statusArea.updateContext("documentinfo",
-                                                 textConstants.availableActionsNotice,
-                                                 actions)
+                        statusArea.updateContext(
+                                    "documentinfo",
+                                    textConstants.availableActionsNotice,
+                                    actions)
                     } else
                         statusArea.clearContext()
                 }
@@ -241,6 +268,7 @@ Item {
             delegate: SnapElementDelegate {
                 snap_name: title
                 snap_version: version
+                snap_size: download_size
                 onSelectedChanged: {
                     if (selected)
                         storeSnapsModel.selectedItems[package_name] = "true"

@@ -6,7 +6,7 @@ QtObject {
     property string departament: undefined
 
     property var listDepartamentSnapsRequest: undefined
-    property var departamentsSnaps: []
+    property var snaps: []
 
     signal loading
     signal finished
@@ -19,18 +19,14 @@ QtObject {
             return
         }
 
-        if (snapsModel.count <= 0) {
-            listDepartamentSnapsRequest = SnapStore.getDepartment(
-                        currentDepartamentSlug)
+        listDepartamentSnapsRequest = SnapStore.getDepartment(departament)
 
-            listDepartamentSnapsRequest.runAsync()
+        listDepartamentSnapsRequest.runAsync()
 
-            listDepartamentSnapsRequest.complete.connect(
-                        onListDepartamentSnapsRequestComplete)
+        listDepartamentSnapsRequest.complete.connect(
+                    onListDepartamentSnapsRequestComplete)
 
-            loading()
-        } else
-            finished()
+        loading()
     }
 
     function onListDepartamentSnapsRequestComplete() {
@@ -44,6 +40,7 @@ QtObject {
                 pkgs.push(pkg)
             }
 
+            snaps = pkgs
             finished()
         }
     }
