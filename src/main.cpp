@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 
 #include <QDebug>
+#include <QtQml>
+#include <QQmlEngine>
 #include <QLocalSocket>
 #include <QJsonDocument>
 #include <QJsonObject>
