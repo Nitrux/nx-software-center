@@ -5,6 +5,10 @@ import org.nx.softwarecenter 1.0
 QtObject {
     property var contentLoader
 
+    signal loading()
+    signal complete()
+    signal error(string message)
+
     property var listDepartamentsRequest: undefined
     property var departamentsListModel: ListModel {
     }
@@ -19,7 +23,7 @@ QtObject {
     //    }
     property var departaments: []
     function displayDepartaments() {
-        showLoadingMessage()
+        loading()
 
         if (departamentsListModel.count == 0) {
             listDepartamentsRequest = SnapStore.listDepartments()
@@ -28,38 +32,7 @@ QtObject {
                         onListDepartamentsRequestComplete)
             listDepartamentsRequest.runAsync()
         } else
-            showDepartamentsView()
-    }
-
-    function showLoadingMessage() {
-        contentLoader.source = "qrc:/PlaceHolderView.qml"
-        var placeHolder = contentLoader.item
-        if (placeHolder !== undefined) {
-            placeHolder.showBusyIndicator = true
-            placeHolder.message = i18n("Listing departaments, please wait ...")
-        }
-    }
-
-    function showErrorMessage() {
-        contentLoader.source = "qrc:/PlaceHolderView.qml"
-        var placeHolder = contentLoader.item
-        if (placeHolder !== undefined) {
-            var message = listDepartamentsRequest.errorString
-            if (message == "")
-                message = textConstants.unknownError
-
-            placeHolder.message = message
-            placeHolder.iconName = "face-sad"
-            placeHolder.showBusyIndicator = false
-        }
-    }
-
-    function showDepartamentsView() {
-        contentLoader.source = "qrc:/DepartamentsView.qml"
-        var departamentsView = contentLoader.item
-        if (departamentsView !== undefined) {
-            departamentsView.departamentsListModel = departamentsListModel
-        }
+            complete()
     }
 
     function onListDepartamentsRequestComplete() {
@@ -83,9 +56,10 @@ QtObject {
                 departamentsListModel.append(departments[i])
             }
 
-            showDepartamentsView()
+            complete()
         } else {
-            showErrorMessage()
+            var message = listDepartamentsRequest.errorString
+            error(message)
         }
     }
 }

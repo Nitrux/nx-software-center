@@ -5,28 +5,40 @@ import QtQuick.Layouts 1.3
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-import Snapd 1.0
-import org.nx.softwarecenter 1.0
-
 import "parts" as Parts
 import "interactors" as Interactors
 
 Item {
     id: root
-    width: 800
-    height: 600
 
-    SnapdClient {
-        id: snapdClient
+    objectName: "snapDetailsView"
+    signal refresh
+    signal dismiss
+
+    property var snapLocalInfo: undefined
+    property var snapStoreInfo: undefined
+    onSnapLocalInfoChanged: {
+        for (var k in snapLocalInfo) {
+            print("snapLocalInfo: ",k, snapLocalInfo[k])
+        }
+    }
+    onSnapStoreInfoChanged: {
+        for (var k in snapStoreInfo) {
+            print("snapStoreInfo:",k, snapStoreInfo[k])
+        }
     }
 
-    property var dismissCallback: function () {
-        print("Dissmiss requested")
-    }
+    property string name: snapStoreInfo ? snapStoreInfo.title : snapLocalInfo.name
+    property string description: snapStoreInfo ? snapStoreInfo.description : snapLocalInfo.description
+    property var keywords: snapStoreInfo ? snapStoreInfo.keywords : []
+    property string license: snapStoreInfo ? snapStoreInfo.license : ""
+    property string publisher: snapStoreInfo ? snapStoreInfo.publisher : ""
+    property var ratings_average: snapStoreInfo ? snapStoreInfo.ratings_average : -1
+    property var screenshot_urls: snapStoreInfo ? snapStoreInfo.screenshot_urls : []
 
-    property string package_name: "minecraft-nsg"
-    property var storeInfo
-    property var localInfo
+    property var icon: snapStoreInfo ? snapStoreInfo.icon_url : undefined
+
+    property var snapInfo
 
     function updateContext() {
         var actions = []
@@ -35,7 +47,7 @@ Item {
             icon: "package-installed-updated",
             action: function () {
                 enableSnapInteractor.targets = [package_name]
-                enableSnapInteractor.finished.connect(refesh)
+                enableSnapInteractor.finished.connect(refresh)
 
                 enableSnapInteractor.start()
             }
@@ -46,7 +58,7 @@ Item {
             text: textConstants.actionDisableTitle,
             action: function () {
                 disableSnapInteractor.targets = [package_name]
-                disableSnapInteractor.finished.connect(refesh)
+                disableSnapInteractor.finished.connect(refresh)
 
                 disableSnapInteractor.start()
             }
@@ -60,7 +72,7 @@ Item {
                                                      name: package_name,
                                                      channel: localInfo.channel
                                                  }]
-                refreshSnapInteractor.finished.connect(refesh)
+                refreshSnapInteractor.finished.connect(refresh)
 
                 refreshSnapInteractor.start()
             }
@@ -73,7 +85,7 @@ Item {
                                                      name: package_name,
                                                      channel: localInfo.channel
                                                  }]
-                installSnapInteractor.finished.connect(refesh)
+                installSnapInteractor.finished.connect(refresh)
 
                 installSnapInteractor.start()
             }
@@ -84,7 +96,7 @@ Item {
             text: textConstants.actionRemoveTitle,
             action: function () {
                 removeSnapInteractor.targets = [package_name]
-                removeSnapInteractor.finished.connect(refesh)
+                removeSnapInteractor.finished.connect(refresh)
 
                 removeSnapInteractor.start()
             }
@@ -109,9 +121,7 @@ Item {
         var returnAction = {
             icon: "draw-arrow-back",
             text: i18n("Return"),
-            action: function () {
-                dismissCallback()
-            }
+            action: dismiss()
         }
 
         actions.push(returnAction)
@@ -119,226 +129,180 @@ Item {
                                  i18n("Available actions"), actions)
     }
 
-    function fetchStoreInfo() {
-        var storeRequest = SnapStore.getSnapDetails(package_name)
-        storeRequest.complete.connect(function () {
-
-            storeInfo = storeRequest.snapDetails()
-
-            contentLoader.sourceComponent = detailsView
-            updateContext()
-        })
-
-        storeRequest.runAsync()
-    }
-
-    function fetchLocalInfo() {
-        // Ensure we are connected
-        var connectRequest = snapdClient.connect()
-        connectRequest.runSync()
-
-        var localRequest = snapdClient.listOne(package_name)
-
-        localRequest.complete.connect(function () {
-            localInfo = localRequest.snap()
-
-            contentLoader.sourceComponent = detailsView
-            updateContext()
-        })
-
-        localRequest.runAsync()
-    }
-
-    function refesh() {
-        fetchLocalInfo()
-        fetchStoreInfo()
-    }
-    Component.onCompleted: refesh()
-
     ScrollView {
         anchors.fill: parent
         anchors.margins: 18
-        Loader {
-            id: contentLoader
 
-            anchors.margins: 12
-            sourceComponent: statusView
-        }
-    }
+        Parts.Card {
+            color: "#FCFCFC"
+            width: 750
+            height: snapdDetailsLayout.height
+            x: 6
+            y: 6
 
-    Component {
-        id: detailsView
-        ColumnLayout {
-            Layout.preferredWidth: 600
+            ColumnLayout {
+                id: snapdDetailsLayout
+                width: parent.width
+                implicitWidth: parent.width
 
-            RowLayout {
-                Item {
-                    Layout.rightMargin: 12
-                    Layout.preferredHeight: 222
-                    Layout.preferredWidth: 222
-
-                    Rectangle {
-                        anchors.fill: parent
-
-                        clip: true
-                        radius: 15
-
-                        PlasmaCore.IconItem {
-                            anchors.fill: parent
-                            anchors.margins: 12
-
-                            visible: (storeInfo === undefined)
-                                     || (storeInfo.icon_url === undefined)
-                            source: "package-available"
-                        }
-
-                        Image {
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            visible: storeInfo.icon_url !== undefined
-                            source: visible
-                                    && storeInfo.icon_url ? storeInfo.icon_url : ""
-                        }
-                    }
-                }
-
-                ColumnLayout {
-                    Layout.rightMargin: 12
+                RowLayout {
                     Layout.fillWidth: true
+                    Item {
+                        Layout.rightMargin: 12
+                        Layout.preferredHeight: 222
+                        Layout.preferredWidth: 222
 
-                    PlasmaComponents.Label {
-                        id: snapTitle
-                        Layout.topMargin: 16
-                        Layout.minimumWidth: 300
-                        Layout.maximumWidth: 300
+                        Rectangle {
+                            anchors.fill: parent
 
-                        text: storeInfo ? storeInfo.title : localInfo.name
-                        wrapMode: Text.WordWrap
-                        font.pointSize: 18
-                    }
+                            clip: true
+                            radius: 15
 
-                    GridLayout {
-                        columns: 3
-                        Layout.minimumWidth: 300
-                        Layout.maximumWidth: 300
+                            PlasmaCore.IconItem {
+                                anchors.fill: parent
+                                anchors.margins: 12
 
-                        //                        Layout.alignment: Qt.AlignTop
-                        Repeater {
-                            model: storeInfo.keywords
-                            delegate: PlasmaComponents.Label {
-                                Layout.fillWidth: false
-                                Layout.alignment: Qt.AlignLeft
-                                text: storeInfo.keywords[index]
-                                elide: "ElideRight"
-                                Layout.maximumWidth: 100
+                                visible: (storeInfo === undefined)
+                                         || (storeInfo.icon_url === undefined)
+                                source: "package-available"
+                            }
+
+                            Image {
+                                anchors.fill: parent
+                                anchors.margins: 12
+                                visible: icon_url !== undefined
+                                source: icon_urls
                             }
                         }
                     }
 
-                    Item {
+                    ColumnLayout {
                         Layout.rightMargin: 12
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
+
+                        PlasmaComponents.Label {
+                            id: snapTitle
+                            Layout.topMargin: 16
+                            Layout.fillWidth: true
+
+                            text: name
+                            wrapMode: Text.WordWrap
+                            font.pointSize: 18
+                        }
+
+                        Flow {
+    //                        columns: 3
+                            Layout.fillWidth: true
+
+                            //                        Layout.alignment: Qt.AlignTop
+                            Repeater {
+                                model: keywords
+                                delegate: PlasmaComponents.Label {
+    //                                Layout.fillWidth: false
+    //                                Layout.alignment: Qt.AlignLeft
+                                    text: keywords[index]
+                                    elide: "ElideRight"
+    //                                Layout.maximumWidth: 100
+                                }
+                            }
+                        }
+
+                        Item {
+                            Layout.rightMargin: 12
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+
+                        RowLayout {
+                            Layout.rightMargin: 12
+                            Layout.bottomMargin: 12
+                            Layout.fillWidth: true
+
+                            visible: license != ""
+
+                            PlasmaCore.IconItem {
+                                Layout.preferredHeight: 24
+                                Layout.preferredWidth: 24
+                                source: "license"
+                            }
+
+                            PlasmaComponents.Label {
+                                Layout.fillWidth: true
+                                text: license
+                            }
+                        }
                     }
 
-                    RowLayout {
-                        Layout.rightMargin: 12
-                        Layout.bottomMargin: 12
-                        Layout.fillWidth: true
+                    ColumnLayout {
+                        Layout.topMargin: 18
+                        Layout.alignment: Qt.AlignTop
 
-                        PlasmaCore.IconItem {
-                            Layout.preferredHeight: 24
-                            Layout.preferredWidth: 24
-                            source: "license"
+                        visible: publisher != ""
+                        PlasmaComponents.Label {
+                            text: i18n("Developed by")
                         }
 
                         PlasmaComponents.Label {
-                            Layout.fillWidth: true
-                            text: storeInfo.license
+                            text: publisher
+                            wrapMode: Text.WordWrap
+                        }
+
+                        Parts.RatingStars {
+                            id: snapStars
+                            Layout.topMargin: 18
+                            rating: ratings_average
+                            visible: ratings_average >= 0
                         }
                     }
                 }
 
-                ColumnLayout {
-                    Layout.topMargin: 18
-                    Layout.alignment: Qt.AlignTop
+                Image {
+                    id: screenshots
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 500
 
-                    PlasmaComponents.Label {
-                        text: i18n("Developed by")
-                    }
+                    clip: true
+                    visible: screenshot_urls.length > 0
 
-                    PlasmaComponents.Label {
-                        text: storeInfo.publisher
-                        wrapMode: Text.WordWrap
-                    }
+                    source: screenshot_urls[0]
+                    fillMode: Image.PreserveAspectFit
 
-                    Parts.RatingStars {
-                        id: snapStars
-                        Layout.topMargin: 18
-                        rating: storeInfo.ratings_average
-                    }
-                }
-            }
+                    RowLayout {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 12
 
-            Image {
-                id: screenshots
-                Layout.columnSpan: 3
-                Layout.margins: 12
-                Layout.fillWidth: true
-                Layout.preferredHeight: 500
+                        Repeater {
+                            model: screenshot_urls.length
+                            delegate: Rectangle {
+                                height: 15
+                                width: 15
+                                radius: 15
 
-                clip: true
-                visible: root.storeInfo.screenshot_urls.length > 0
+                                color: screenshots.source
+                                       == screenshot_urls[index] ? "blue" : "white"
+                                border.color: "black"
+                                border.width: 2
 
-                source: root.storeInfo.screenshot_urls[0]
-                fillMode: Image.PreserveAspectFit
-
-                RowLayout {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 12
-
-                    Repeater {
-                        model: root.storeInfo.screenshot_urls.length
-                        delegate: Rectangle {
-                            height: 15
-                            width: 15
-                            radius: 15
-
-                            color: screenshots.source
-                                   == root.storeInfo.screenshot_urls[index] ? "blue" : "white"
-                            border.color: "black"
-                            border.width: 2
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: screenshots.source
-                                           = root.storeInfo.screenshot_urls[index]
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: screenshots.source
+                                               = screenshot_urls[index]
+                                }
                             }
                         }
                     }
                 }
+
+                PlasmaComponents.Label {
+                    id: snapDetails
+                    text: description
+                    wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                }
             }
 
-            PlasmaComponents.Label {
-                id: snapDetails
-                Layout.preferredWidth: 600
-                Layout.maximumWidth: 600
-                Layout.columnSpan: 3
-                Layout.margins: 24
-                text: root.storeInfo.description
-
-                wrapMode: Text.Wrap
-            }
         }
-    }
 
-    Component {
-        id: statusView
-        Item {
-            PlasmaComponents.BusyIndicator {
-                anchors.centerIn: parent
-            }
-        }
     }
 }

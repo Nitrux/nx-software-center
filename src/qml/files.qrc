@@ -27,6 +27,7 @@
         <file>interactors/BrowseStoreInteractor.qml</file>
         <file>PlaceHolderView.qml</file>
         <file>interactors/ListSnapsInDepartamentInteractor.qml</file>
+        <file>interactors/GetSnapDetailsInteractor.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

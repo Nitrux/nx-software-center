@@ -39,20 +39,21 @@ Item {
                     installedSnapsModel.refreshActions()
                 }
 
-                onClicked: {
-                    contentLoader.push({
-                                           item: Qt.resolvedUrl(
-                                                     "SnapDetailsView.qml"),
-                                           properties: {
-                                               package_name: name,
-                                               dismissCallback: function () {
-                                                   contentLoader.pop()
-                                                   installedSnapsModel.refresh()
-                                                   installedSnapsModel.refreshActions()
-                                               }
-                                           }
-                                       })
-                }
+                onClicked: main.showSnapDetails(name)
+//                onClicked: {
+//                    contentLoader.push({
+//                                           item: Qt.resolvedUrl(
+//                                                     "SnapDetailsView.qml"),
+//                                           properties: {
+//                                               package_name: name,
+//                                               dismissCallback: function () {
+//                                                   contentLoader.pop()
+//                                                   installedSnapsModel.refresh()
+//                                                   installedSnapsModel.refreshActions()
+//                                               }
+//                                           }
+//                                       })
+//                }
             }
         }
     }
