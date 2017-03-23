@@ -9,6 +9,7 @@ import org.nx.softwarecenter 1.0
 
 import "qrc:/scripts/Utils.js" as Utils
 
+import "parts" as Parts
 import Snapd 1.0
 
 Item {
@@ -63,7 +64,7 @@ Item {
         initialItem: component_SnapGrid
     }
 
-    SnapsModel {
+    Parts.SnapsModel {
         id: installedSnapsModel
         fetchSnapsFunc: function () {
             // Ensure we are connected

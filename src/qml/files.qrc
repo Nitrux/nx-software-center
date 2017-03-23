@@ -1,18 +1,18 @@
 <RCC>
     <qresource prefix="/">
-        <file>ChangesView.qml</file>
-        <file>HomeView.qml</file>
         <file>main.qml</file>
+        <file>HomeView.qml</file>
+        <file>ChangesView.qml</file>
         <file>SettingsView.qml</file>
         <file>StatusArea.qml</file>
         <file>StoreView.qml</file>
-        <file>SnapsModel.qml</file>
-        <file>SnapElementDelegate.qml</file>
-        <file>SnapGrid.qml</file>
         <file>DepartamentsView.qml</file>
         <file>SearchView.qml</file>
         <file>SnapDetailsView.qml</file>
-        <file>parts/RatingStars.qml</file>
+        <file>NavigationPanel.qml</file>
+        <file>PlaceHolderView.qml</file>
+        <file>SnapElementDelegate.qml</file>
+        <file>SnapGrid.qml</file>
         <file>TextConstants.qml</file>
         <file>interactors/DisableSnapInteractor.qml</file>
         <file>interactors/Interactor.qml</file>
@@ -22,12 +22,12 @@
         <file>interactors/ApplySettingsInteractor.qml</file>
         <file>interactors/LoadDefaultSettingsInteractor.qml</file>
         <file>interactors/InstallSnapInteractor.qml</file>
-        <file>parts/Card.qml</file>
-        <file>NavigationPanel.qml</file>
         <file>interactors/BrowseStoreInteractor.qml</file>
-        <file>PlaceHolderView.qml</file>
         <file>interactors/ListSnapsInDepartamentInteractor.qml</file>
         <file>interactors/GetSnapDetailsInteractor.qml</file>
+        <file>parts/RatingStars.qml</file>
+        <file>parts/Card.qml</file>
+        <file>parts/SnapsModel.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

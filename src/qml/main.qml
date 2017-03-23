@@ -95,7 +95,7 @@ ApplicationWindow {
         onError: showError(message)
 
         onComplete: {
-            content.replace("qrc:/PlaceHolderView.qml", StackView.Immediate)
+            content.replace("qrc:/DepartamentsView.qml", StackView.Immediate)
             var departamentsView = content.currentItem
             if (departamentsView !== undefined) {
                 departamentsView.departamentsListModel = departamentsListModel
