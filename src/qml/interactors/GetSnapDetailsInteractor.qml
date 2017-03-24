@@ -10,8 +10,29 @@ QtObject {
     signal localPackageInfoAvailable
     signal storePackageInfoAvailable
 
-    property var localPackageInfo: undefined
-    property var storePackageInfo: undefined
+    signal error
+
+    property QtObject details: QtObject {
+        property string package_name: ""
+        property string channel: ""
+        property string local_revision: ""
+        property string store_revision: ""
+        property string local_version: ""
+        property string store_version: ""
+        property int status: 0
+
+        property string name: ""
+        property string description: ""
+        property var keywords: undefined
+        property string license: ""
+        property string publisher: ""
+        property int ratings_average: -1
+        property var screenshot_urls: []
+        property var installed_size: undefined
+        property var download_size: undefined
+        property string icon: ""
+        property var iconByteArray: undefined
+    }
 
     property var snapdClient: SnapdClient {
     }
@@ -25,7 +46,21 @@ QtObject {
             var storeRequest = SnapStore.getSnapDetails(snap_name)
             storeRequest.complete.connect(function () {
                 if (storeRequest.error == 0) {
-                    storePackageInfo = storeRequest.snapDetails()
+                    var data = storeRequest.snapDetails()
+
+                    details.package_name = data.package_name
+                    details.channel = data.channel
+                    details.store_revision = data.revision
+
+                    details.name = data.title
+                    details.description = data.description
+                    details.keywords = data.keywords
+                    details.licence = data.license
+                    details.publisher = data.publisher
+                    details.ratings_average = data.ratings_average
+                    details.screenshot_urls = data.screenshot_urls
+                    details.icon = data.icon_url
+
                     storePackageInfoAvailable()
                 } else {
                     error()
@@ -43,11 +78,42 @@ QtObject {
             var localRequest = snapdClient.listOne(snap_name)
 
             localRequest.complete.connect(function () {
-                localPackageInfo = localRequest.snap()
+                var data = localRequest.snap()
+
+                details.package_name = data.name
+                details.channel = data.channel
+                details.local_revision = data.revision
+                details.local_version = data.version
+                details.status = data.status
+
+                details.name = data.name
+                details.description = data.description
+                details.installed_size = data.installedSize
+                details.publisher = data.developer
+
                 localPackageInfoAvailable()
             })
 
             localRequest.runAsync()
+        }
+
+        function getIcon() {
+            // Ensure we are connected
+            var connectRequest = snapdClient.connect()
+            connectRequest.runSync()
+
+            var request = snapdClient.getIcon(snap_name)
+
+            request.complete.connect(function () {
+                console.warn("SnapClient.getIcon is buggy and will by disabled by the moment")
+//                var icon = request.icon()
+
+//                if (icon) {
+//                    details.iconByteArray = icon.data()
+//                    print(details.iconByteArray )
+//                }
+            })
+            request.runAsync()
         }
     }
 
@@ -55,6 +121,7 @@ QtObject {
         p.snap_name = snap_name
         p.getLocalInfo()
         p.getStoreInfo()
+        p.getIcon()
     }
 
     function refreshInfo() {

@@ -28,6 +28,7 @@
         <file>parts/RatingStars.qml</file>
         <file>parts/Card.qml</file>
         <file>parts/SnapsModel.qml</file>
+        <file>parts/HorizontalListView.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

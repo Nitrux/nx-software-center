@@ -15,6 +15,7 @@ Item {
     property alias message: messageText.text
     property alias iconName: icon.source
     property alias showBusyIndicator: busyModelIndicator.visible
+    objectName: "placeHolderView"
 
     PlasmaComponents.BusyIndicator {
         id: busyModelIndicator

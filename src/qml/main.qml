@@ -23,6 +23,11 @@ ApplicationWindow {
     title: qsTr("NX Software Center")
     id: main
 
+    Rectangle {
+        id: background
+        anchors.fill: parent
+        color: "#EEEEEE"
+    }
     TextConstants {
         id: textConstants
     }
@@ -83,15 +88,7 @@ ApplicationWindow {
         id: browseStoreInteractor
         contentLoader: content
 
-        onLoading: {
-            content.replace("qrc:/PlaceHolderView.qml", StackView.Immediate)
-            var placeHolder = content.currentItem
-            if (placeHolder !== undefined) {
-                placeHolder.showBusyIndicator = true
-                placeHolder.message = i18n("Listing departaments, please wait ...")
-            }
-        }
-
+        onLoading: showLoadingScreen(i18n("Listing departaments, please wait ..."))
         onError: showError(message)
 
         onComplete: {
@@ -107,33 +104,26 @@ ApplicationWindow {
         id: showSnapDetailsInteractor
 
         function goBack() {
-            print("going back not supported yet")
+            content.pop(StackView.Immediate)
+            statusArea.clearContext()
         }
-        onLoadingLocalPackageInfo: showLoadingView()
-        onLoadingStorePackageInfo: showLoadingView()
+        onLoadingLocalPackageInfo: showLoadingScreen( i18n("Fetching snap info, please wait ..."))
+        onLoadingStorePackageInfo: showLoadingScreen( i18n("Fetching snap info, please wait ..."))
 
         onLocalPackageInfoAvailable: showDetailsView()
         onStorePackageInfoAvailable: showDetailsView()
 
-        function showLoadingView() {
-            print(content.currentItem)
-
-            content.push("qrc:/PlaceHolderView.qml")
-            var placeHolder = content.currentItem
-            if (placeHolder !== undefined) {
-                placeHolder.showBusyIndicator = true
-                placeHolder.message = i18n(
-                            "Fetching snap info, please wait ...")
-            }
-        }
 
         function showDetailsView() {
-            if (content.currentItem.objectName != "snapDetailsView")
-                content.replace("qrc:/SnapDetailsView.qml", StackView.Immediate)
+            if (content.currentItem.objectName != "snapDetailsView") {
+                if (content.currentItem.objectName == "placeHolderView")
+                    content.replace("qrc:/SnapDetailsView.qml", {"snap": showSnapDetailsInteractor.details}, StackView.Immediate)
+                else
+                    content.push("qrc:/SnapDetailsView.qml", {"snap": showSnapDetailsInteractor.details}, StackView.Immediate)
+            }
             var detailsView = content.currentItem
             if (detailsView !== undefined) {
-                detailsView.snapLocalInfo = localPackageInfo
-                detailsView.snapStoreInfo = storePackageInfo
+//                detailsView.snap = showSnapDetailsInteractor.details
                 detailsView.updateContext()
                 detailsView.refresh.connect(refreshInfo)
                 detailsView.dismiss.connect(goBack)
@@ -151,6 +141,15 @@ ApplicationWindow {
 
     function showSettings() {
         content.replace("qrc:/SettingsView.qml", StackView.Immediate)
+    }
+
+    function showLoadingScreen(message) {
+        content.replace("qrc:/PlaceHolderView.qml", StackView.Immediate)
+        var placeHolder = content.currentItem
+        if (placeHolder !== undefined) {
+            placeHolder.showBusyIndicator = true
+            placeHolder.message = message
+        }
     }
 
     function showError(message) {
