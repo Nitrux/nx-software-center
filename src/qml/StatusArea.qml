@@ -25,7 +25,7 @@ Item {
         contextMessage = message
         contextActions = actions
 
-        print(message, locked)
+//        print(message, locked)
         if (!locked)
             _updateView("notice", icon, message, actions)
     }
