@@ -38,7 +38,7 @@ ApplicationWindow {
             id: navigationPanel
             Layout.fillWidth: true
 
-            onGoHome: showHome()
+            onGoHome: main.goHome()
             onGoStore: browseStoreInteractor.displayDepartaments()
             onGoSettings: showSettings()
             onStoreQueryTyped: content.source = "qrc:/SearchView.qml"
@@ -49,8 +49,6 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredHeight: 400
-
-            initialItem: "qrc:/HomeView.qml"
         }
 
         StatusArea {
@@ -64,6 +62,8 @@ ApplicationWindow {
         }
     }
 
+
+    // App Interactors
     Interactors.DisableSnapInteractor {
         id: disableSnapInteractor
     }
@@ -83,6 +83,8 @@ ApplicationWindow {
     Interactors.InstallSnapInteractor {
         id: installSnapInteractor
     }
+
+
 
     Interactors.BrowseStoreInteractor {
         id: browseStoreInteractor
@@ -105,7 +107,7 @@ ApplicationWindow {
 
         function goBack() {
             content.pop(StackView.Immediate)
-            statusArea.clearContext()
+            content.currentItem.refresh()
         }
         onLoadingLocalPackageInfo: showLoadingScreen( i18n("Fetching snap info, please wait ..."))
         onLoadingStorePackageInfo: showLoadingScreen( i18n("Fetching snap info, please wait ..."))
@@ -135,7 +137,7 @@ ApplicationWindow {
         showSnapDetailsInteractor.getInfo(snap_name)
     }
 
-    function showHome() {
+    function goHome() {
         content.replace("qrc:/HomeView.qml", StackView.Immediate)
     }
 
@@ -165,4 +167,5 @@ ApplicationWindow {
         }
     }
 
+    Component.onCompleted: main.goHome()
 }

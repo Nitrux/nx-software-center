@@ -10,16 +10,47 @@ import org.nx.softwarecenter 1.0
 import "qrc:/scripts/Utils.js" as Utils
 
 import "parts" as Parts
+import "interactors" as Interactors
 import Snapd 1.0
 
-Item {
-    id: homeViewRoot
+Parts.View {
+    id: viewRoot
+    objectName: "homeView"
 
     SnapdClient {
         id: snapdClient
     }
 
-    objectName: "homeView"
+    Interactors.ListInstalledSnapsInteractor {
+        id: listInstalledSnapsInteractor
+
+        snapdClient: snapdClient
+        onLoading: {
+            if (snaps.length == 0) {
+                viewRoot.showLoadingScreen(
+                            i18n("Listing installed snaps, please wait"))
+            }
+        }
+        onComplete: {
+            installedSnapsModel.refresh(snaps)
+            if (viewRoot.sourceCompnent !== component_SnapGrid)
+                viewRoot.sourceComponent = component_SnapGrid
+
+            viewRoot.refreshActions()
+        }
+        onError: showError(
+                     i18n("Unable to fetch system snaps, plaease by sure "
+                          + "that the snapd service is available and running"))
+    }
+
+    signal refresh
+    onRefresh: {
+        listInstalledSnapsInteractor.listInstalledSnaps()
+    }
+
+    Parts.SnapsModel {
+        id: installedSnapsModel
+    }
 
     Component {
         id: component_SnapGrid
@@ -37,136 +68,92 @@ Item {
                     else
                         delete installedSnapsModel.selectedItems[name]
 
-                    installedSnapsModel.refreshActions()
+                    viewRoot.refreshActions()
                 }
 
                 onClicked: main.showSnapDetails(name)
-//                onClicked: {
-//                    contentLoader.push({
-//                                           item: Qt.resolvedUrl(
-//                                                     "SnapDetailsView.qml"),
-//                                           properties: {
-//                                               package_name: name,
-//                                               dismissCallback: function () {
-//                                                   contentLoader.pop()
-//                                                   installedSnapsModel.refresh()
-//                                                   installedSnapsModel.refreshActions()
-//                                               }
-//                                           }
-//                                       })
-//                }
             }
         }
     }
-    StackView {
-        id: contentLoader
-        anchors.fill: parent
-        initialItem: component_SnapGrid
+
+    Component.onCompleted: {
+        statusArea.clearContext()
+        listInstalledSnapsInteractor.listInstalledSnaps()
     }
 
-    Parts.SnapsModel {
-        id: installedSnapsModel
-        fetchSnapsFunc: function () {
-            // Ensure we are connected
-            var connectRequest = snapdClient.connect()
-            connectRequest.runSync()
+    function refreshActions() {
 
-            var request = snapdClient.list()
-            request.runSync()
+        var disableAction = {
+            icon: "package-broken",
+            text: textConstants.actionDisableTitle,
+            action: function () {
+                var targets = installedSnapsModel.getSelectedItems()
 
-            var list = []
-            //            snapList.sort(function (a, b) { return a < b})
-            for (var i = 0; i < request.snapCount; i++) {
-                var snap = request.snap(i)
-                list.push(snap)
+                disableSnapInteractor.targets = targets
+                disableSnapInteractor.finished.connect(viewRoot.refresh)
+                disableSnapInteractor.targetProcessed.connect(viewRoot.refresh)
+
+                disableSnapInteractor.start()
             }
-
-            return list
         }
 
-        function refreshActions() {
-            var keys = Object.keys(selectedItems)
-            var disableAction = {
-                icon: "package-broken",
-                text: textConstants.actionDisableTitle,
-                action: function () {
-                    var targets = Object.keys(selectedItems)
+        var enableAction = {
+            icon: "package-installed-updated",
+            text: textConstants.actionEnableTitle,
+            action: function () {
+                var targets = Object.keys(installedSnapsModel.selectedItems)
 
-                    disableSnapInteractor.targets = targets
-                    disableSnapInteractor.finished.connect(
-                                installedSnapsModel.refresh)
-                    disableSnapInteractor.targetProcessed.connect(
-                                installedSnapsModel.refresh)
+                enableSnapInteractor.targets = targets
+                enableSnapInteractor.finished.connect(viewRoot.refresh)
+                enableSnapInteractor.targetProcessed.connect(viewRoot.refresh)
 
-                    disableSnapInteractor.start()
-                }
+                enableSnapInteractor.start()
             }
-
-            var enableAction = {
-                icon: "package-installed-updated",
-                text: textConstants.actionEnableTitle,
-                action: function () {
-                    var targets = Object.keys(selectedItems)
-
-                    enableSnapInteractor.targets = targets
-                    enableSnapInteractor.finished.connect(
-                                installedSnapsModel.refresh)
-                    enableSnapInteractor.targetProcessed.connect(
-                                installedSnapsModel.refresh)
-
-                    enableSnapInteractor.start()
-                }
-            }
-
-            var refreshAction = {
-                icon: "package-upgrade",
-                text: textConstants.actionRefreshTitle,
-                action: function () {
-                    var targets_names = Object.keys(selectedItems)
-                    var targets = []
-                    for (var i in targets_names) {
-                        var model = installedSnapsModel.getByName(
-                                    targets_names[i])
-                        targets.push({
-                                         name: model.name,
-                                         channel: model.channel
-                                     })
-                    }
-
-                    refreshSnapInteractor.targets = targets
-                    refreshSnapInteractor.finished.connect(
-                                installedSnapsModel.refresh)
-                    refreshSnapInteractor.targetProcessed.connect(
-                                installedSnapsModel.refresh)
-
-                    refreshSnapInteractor.start()
-                }
-            }
-
-            var removeAction = {
-                icon: "package-remove",
-                text: textConstants.actionRemoveTitle,
-                action: function () {
-                    var targets = Object.keys(selectedItems)
-
-                    removeSnapInteractor.targets = targets
-                    removeSnapInteractor.finished.connect(
-                                installedSnapsModel.refresh)
-                    removeSnapInteractor.targetProcessed.connect(
-                                installedSnapsModel.refresh)
-
-                    removeSnapInteractor.start()
-                }
-            }
-
-            if (keys.length > 0) {
-                var actions = [disableAction, enableAction, refreshAction, removeAction]
-                statusArea.updateContext("documentinfo",
-                                         i18n("Available actions"), actions)
-            } else
-                statusArea.clearContext()
         }
+
+        var refreshAction = {
+            icon: "package-upgrade",
+            text: textConstants.actionRefreshTitle,
+            action: function () {
+                var targets_names = Object.keys(
+                            installedSnapsModel.selectedItems)
+                var targets = []
+                for (var i in targets_names) {
+                    var model = installedSnapsModel.getByName(targets_names[i])
+                    targets.push({
+                                     name: model.name,
+                                     channel: model.channel
+                                 })
+                }
+
+                refreshSnapInteractor.targets = targets
+                refreshSnapInteractor.finished.connect(viewRoot.refresh)
+                refreshSnapInteractor.targetProcessed.connect(viewRoot.refresh)
+
+                refreshSnapInteractor.start()
+            }
+        }
+
+        var removeAction = {
+            icon: "package-remove",
+            text: textConstants.actionRemoveTitle,
+            action: function () {
+                var targets = Object.keys(selectedItems)
+
+                removeSnapInteractor.targets = targets
+                removeSnapInteractor.finished.connect(viewRoot.refresh)
+                removeSnapInteractor.targetProcessed.connect(viewRoot.refresh)
+
+                removeSnapInteractor.start()
+            }
+        }
+
+        var keys = installedSnapsModel.getSelectedItems()
+        if (keys.length > 0) {
+            var actions = [disableAction, enableAction, refreshAction, removeAction]
+            statusArea.updateContext("documentinfo",
+                                     i18n("Available actions"), actions)
+        } else
+            statusArea.clearContext()
     }
-
-    Component.onCompleted: statusArea.clearContext()
 }

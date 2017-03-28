@@ -23,12 +23,14 @@
         <file>interactors/LoadDefaultSettingsInteractor.qml</file>
         <file>interactors/InstallSnapInteractor.qml</file>
         <file>interactors/BrowseStoreInteractor.qml</file>
+        <file>interactors/ListInstalledSnapsInteractor.qml</file>
         <file>interactors/ListSnapsInDepartamentInteractor.qml</file>
         <file>interactors/GetSnapDetailsInteractor.qml</file>
         <file>parts/RatingStars.qml</file>
         <file>parts/Card.qml</file>
         <file>parts/SnapsModel.qml</file>
         <file>parts/HorizontalListView.qml</file>
+        <file>parts/View.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

@@ -15,16 +15,13 @@ ListModel {
     property var fetchSnapsFunc
 
     Component.onCompleted: {
-        selectedItems = {
-
-        }
-        refresh()
+        selectedItems = {}
     }
     function refresh(snaps) {
-        if (snaps == undefined)
-            var list = fetchSnapsFunc()
-        else
-            list = snaps
+        if (snaps === undefined)
+            return;
+
+        var list = snaps
 
         function compareSnaps(a, b) {
             return a.name.localeCompare(b.name)
