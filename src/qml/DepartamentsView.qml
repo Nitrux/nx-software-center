@@ -270,6 +270,8 @@ Item {
                 snap_version: version
                 snap_size: download_size
                 onSelectedChanged: {
+                    for (var k in model)
+                        print(k, model[k])
                     if (selected)
                         storeSnapsModel.selectedItems[package_name] = "true"
                     else
@@ -277,19 +279,7 @@ Item {
 
                     storeSnapsModel.refreshActions()
                 }
-                onClicked: {
-                    contentLoader.push({
-                                           item: Qt.resolvedUrl(
-                                                     "SnapDetailsView.qml"),
-                                           properties: {
-                                               package_name: package_name,
-                                               dismissCallback: function () {
-                                                   contentLoader.pop()
-                                                   storeSnapsModel.refreshActions()
-                                               }
-                                           }
-                                       })
-                }
+                onClicked: main.showSnapDetails(package_name);
             }
         }
     }

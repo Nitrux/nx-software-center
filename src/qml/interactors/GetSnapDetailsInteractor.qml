@@ -55,7 +55,7 @@ QtObject {
                     details.name = data.title
                     details.description = data.description
                     details.keywords = data.keywords
-                    details.licence = data.license
+                    details.license = data.license
                     details.publisher = data.publisher
                     details.ratings_average = data.ratings_average
                     details.screenshot_urls = data.screenshot_urls

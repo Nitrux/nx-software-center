@@ -117,7 +117,7 @@ void SnapStoreGetDepartamentRequest::onNetworkRequestFinished()
 QNetworkReply *SnapStoreGetDepartamentRequest::makeRequest()
 {
     QNetworkRequest request;
-    QString path = m_snapStore->storeUrl() + "/departments/" + m_slug + "?confinement=strict,classic&fields=package_name";
+    QString path = m_snapStore->storeUrl() + "/departments/" + m_slug + "";
     QUrl url(path);
 
     request.setUrl(url);
