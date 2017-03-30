@@ -43,8 +43,7 @@ Parts.View {
                           + "that the snapd service is available and running"))
     }
 
-    signal refresh
-    onRefresh: {
+    function refreshContent () {
         listInstalledSnapsInteractor.listInstalledSnaps()
     }
 
