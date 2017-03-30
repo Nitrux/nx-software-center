@@ -37,7 +37,7 @@ Item {
     }
 
     function showError(message) {
-        contentLoader.source = "qrc:/PlaceHolderView.qml"
+        loader.source = "qrc:/PlaceHolderView.qml"
         var placeHolder = loader.item
         if (placeHolder !== undefined) {
             if (message == "")
