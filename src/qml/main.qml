@@ -41,7 +41,7 @@ ApplicationWindow {
             onGoHome: main.goHome()
             onGoStore: browseStoreInteractor.displayDepartaments()
             onGoSettings: showSettings()
-            onStoreQueryTyped: content.source = "qrc:/SearchView.qml"
+            onStoreQueryTyped: main.showSearchView(query)
         }
 
         StackView {
@@ -139,6 +139,12 @@ ApplicationWindow {
 
     function goHome() {
         content.replace("qrc:/HomeView.qml", StackView.Immediate)
+    }
+
+    function showSearchView(query) {
+        content.replace("qrc:/SearchView.qml", StackView.Immediate)
+
+        content.currentItem.query(query)
     }
 
     function showSettings() {

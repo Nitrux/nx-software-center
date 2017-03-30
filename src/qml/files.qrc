@@ -5,7 +5,6 @@
         <file>ChangesView.qml</file>
         <file>SettingsView.qml</file>
         <file>StatusArea.qml</file>
-        <file>StoreView.qml</file>
         <file>DepartamentsView.qml</file>
         <file>SearchView.qml</file>
         <file>SnapDetailsView.qml</file>
@@ -31,6 +30,7 @@
         <file>parts/SnapsModel.qml</file>
         <file>parts/HorizontalListView.qml</file>
         <file>parts/View.qml</file>
+        <file>interactors/StoreSearchInteractor.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

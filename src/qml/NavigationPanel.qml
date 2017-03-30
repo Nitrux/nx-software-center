@@ -55,7 +55,8 @@ Item {
             placeholderText: "Search"
             focus: true
 
-            onEditingFinished: storeQueryTyped(text)
+            Keys.onEnterPressed: storeQueryTyped(text)
+            Keys.onReturnPressed: storeQueryTyped(text)
         }
 
         PlasmaComponents.ToolButton {

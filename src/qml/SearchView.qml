@@ -11,13 +11,33 @@ import org.nx.softwarecenter 1.0
 
 import "qrc:/scripts/Utils.js" as Utils
 
-Item {
+import "parts" as Parts
+import "interactors" as Interactors
+
+Parts.View {
+    id: viewRoot
 
     SnapdClient {
         id: snapdClient
     }
 
-    SnapsModel {
+    Interactors.StoreSearchInteractor {
+        id: storeSearchInteractor
+        snapdClient: snapdClient
+
+        onLoading: viewRoot.showLoadingScreen(i18n("Lonking for snaps like: \"") + storeSearchInteractor.query + "\"")
+        onComplete: {
+            storeSnapsModel.refresh(storeSearchInteractor.snaps)
+            viewRoot.sourceComponent = component_SnapGrid
+        }
+        onError: showError(message)
+    }
+
+    function query( text ) {
+        storeSearchInteractor.search(text);
+    }
+
+    Parts.SnapsModel {
         id: storeSnapsModel
 
         property bool busy: false
@@ -103,8 +123,6 @@ Item {
         onEditingFinished: storeSnapsModel.refresh()
     }
 
-    // TODO: Move position bindings from the component to the Loader.
-    //       Check all uses of 'parent' inside the root element of the component.
     Component {
         id: component_SnapGrid
         SnapGrid {
@@ -121,27 +139,9 @@ Item {
 
                     storeSnapsModel.refreshActions()
                 }
-                onClicked: {
-                    contentLoader.push({
-                                           item: Qt.resolvedUrl(
-                                                     "SnapDetailsView.qml"),
-                                           properties: {
-                                               package_name: name,
-                                               dismissCallback: function () {
-                                                   contentLoader.pop()
-                                                   storeSnapsModel.refreshActions()
-                                               }
-                                           }
-                                       })
-                }
+
+                onClicked: main.showSnapDetails(name)
             }
         }
     }
-
-    StackView {
-        id: contentLoader
-        initialItem: component_SnapGrid
-        anchors.fill: parent
-    }
-
 }
