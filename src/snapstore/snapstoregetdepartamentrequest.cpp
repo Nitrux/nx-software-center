@@ -106,9 +106,10 @@ void SnapStoreGetDepartamentRequest::onNetworkRequestFinished()
         QString packageName = package.value("name").toString();
         QString packageSnap_id = package.value("snap_id").toString();
         QString packageContent = package.value("content").toString();
-//        qDebug() << packageName << " " << packageContent << "  " << packageSnap_id;
-        if (packageContent.compare("application") == 0 && !packageSnap_id.isEmpty())
+        if (packageContent.compare("application") == 0 && !packageSnap_id.isEmpty()) {
+//            qDebug() << package.value("name") << "\n" << package << "\n\n";
             m_packages.append(package);
+        }
     }
 
     emit(SnapStoreRequest::complete());
