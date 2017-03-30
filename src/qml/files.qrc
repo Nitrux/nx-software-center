@@ -21,17 +21,18 @@
         <file>interactors/ApplySettingsInteractor.qml</file>
         <file>interactors/LoadDefaultSettingsInteractor.qml</file>
         <file>interactors/InstallSnapInteractor.qml</file>
-        <file>interactors/BrowseStoreInteractor.qml</file>
+        <file>interactors/ListDepartamentsInteractor.qml</file>
         <file>interactors/ListInstalledSnapsInteractor.qml</file>
         <file>interactors/ListSnapsInDepartamentInteractor.qml</file>
         <file>interactors/GetSnapDetailsInteractor.qml</file>
+        <file>interactors/StoreSearchInteractor.qml</file>
         <file>parts/RatingStars.qml</file>
         <file>parts/Card.qml</file>
         <file>parts/SnapsModel.qml</file>
         <file>parts/HorizontalListView.qml</file>
         <file>parts/View.qml</file>
-        <file>interactors/StoreSearchInteractor.qml</file>
         <file>parts/SnapIcon.qml</file>
+        <file>DepartamentSnapsView.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

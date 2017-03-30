@@ -3,26 +3,16 @@ import QtQuick 2.5
 import org.nx.softwarecenter 1.0
 
 QtObject {
-    property var contentLoader
-
-    signal loading()
-    signal complete()
+    signal loading
+    signal complete
     signal error(string message)
 
+    property var departaments: []
     property var listDepartamentsRequest: undefined
     property var departamentsListModel: ListModel {
     }
 
-
-    //    property var snapdClient: SnapdClient {
-    //        id: snapdClient
-
-    //        Component.onCompleted: {
-    //            var request = connect();
-    //        }
-    //    }
-    property var departaments: []
-    function displayDepartaments() {
+    function run() {
         loading()
 
         if (departamentsListModel.count == 0) {
@@ -36,14 +26,14 @@ QtObject {
     }
 
     function onListDepartamentsRequestComplete() {
-        var departments = []
+        departaments = []
         if (listDepartamentsRequest.error == 0) {
             for (var i = 0; i < listDepartamentsRequest.departamentCount(
                      ); i++) {
-                departments.push(listDepartamentsRequest.departament(i))
+                departaments.push(listDepartamentsRequest.departament(i))
             }
 
-            departments.sort(function (a, b) {
+            departaments.sort(function (a, b) {
                 if (a.name < b.name)
                     return -1
                 if (a.name > b.name)
@@ -52,8 +42,8 @@ QtObject {
             })
 
             departamentsListModel.clear()
-            for (var i = 0; i < departments.length; i++) {
-                departamentsListModel.append(departments[i])
+            for (var i = 0; i < departaments.length; i++) {
+                departamentsListModel.append(departaments[i])
             }
 
             complete()

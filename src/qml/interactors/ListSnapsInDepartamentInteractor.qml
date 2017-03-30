@@ -4,44 +4,52 @@ import org.nx.softwarecenter 1.0
 
 QtObject {
     property string departament: undefined
-
-    property var listDepartamentSnapsRequest: undefined
     property var snaps: []
 
     signal loading
     signal finished
     signal error(var message)
 
-    function fetchSnaps() {
-        if (departament === undefined) {
-            console.error(
-                        "Undefined snaps departament for ListSnapsInDepartamentInteractor")
-            return
-        }
+    property var p: QtObject {
+        property var request: undefined
 
-        listDepartamentSnapsRequest = SnapStore.getDepartment(departament)
-
-        listDepartamentSnapsRequest.runAsync()
-
-        listDepartamentSnapsRequest.complete.connect(
-                    onListDepartamentSnapsRequestComplete)
-
-        loading()
-    }
-
-    function onListDepartamentSnapsRequestComplete() {
-        if (listDepartamentSnapsRequest.error != 0)
-            error(listDepartamentSnapsRequest.errorString)
-        else {
-            var pkgs = []
-            for (var i = 0; i < listDepartamentSnapsRequest.packagesCount(
-                     ); i++) {
-                var pkg = listDepartamentSnapsRequest.package(i)
-                pkgs.push(pkg)
+        function fetchSnaps() {
+            if (departament === undefined) {
+                console.error("Undefined departament at ListSnapsInDepartamentInteractor")
+                return
             }
 
-            snaps = pkgs
-            finished()
+            loading()
+            if (request) {
+                request.cancel()
+                request.complete.disconnect(onRequestComplete)
+            }
+
+            request = SnapStore.getDepartment(departament)
+            request.complete.connect(onRequestComplete)
+
+            request.runAsync()
         }
+
+        function onRequestComplete() {
+            if (request.error != 0)
+                error(request.errorString)
+            else {
+                var pkgs = []
+                for (var i = 0; i < request.packagesCount(); i++) {
+                    var pkg = request.package(i)
+                    pkgs.push(pkg)
+                }
+
+                snaps = pkgs
+                finished()
+            }
+
+            request = undefined
+        }
+    }
+
+    function run() {
+        p.fetchSnaps()
     }
 }
