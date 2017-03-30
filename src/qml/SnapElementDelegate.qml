@@ -50,7 +50,6 @@ FocusScope {
         border.color: hovered ? "#3DAEE9" : "#C3C9D6"
         border.width: hovered ? 2 : 1
         color: selected ? "#aae3ff" : "white"
-
     }
 
     Parts.SnapIcon {
@@ -149,6 +148,7 @@ FocusScope {
         }
         PlasmaComponents.Label {
             property string sizeString: Utils.formatSize(snap_size)
+            visible: snap_size > 0
             text: snap_size ? sizeString : i18n("Unknown size")
             Layout.fillHeight: true
             Layout.topMargin: 6
@@ -157,20 +157,20 @@ FocusScope {
 
     Rectangle {
         width: snap_infobox.height
-        height: 70
-        anchors.verticalCenter: snap_infobox.verticalCenter
-        anchors.right: snap_infobox.right
+        height: snap_infobox.width
+        anchors.top: snap_infobox.top
+        anchors.left: snap_infobox.right
 
-        //        anchors.rightMargin: height * -1 + 5
+        transformOrigin: Item.TopLeft
         rotation: 90
-        //        color: "blue"
+
         gradient: Gradient {
             GradientStop {
                 position: 0.0
                 color: background.color
             }
             GradientStop {
-                position: 1.0
+                position: 0.3
                 color: "transparent"
             }
         }

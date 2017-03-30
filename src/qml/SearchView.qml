@@ -130,7 +130,7 @@ Parts.View {
             delegate: SnapElementDelegate {
                 snap_name: name
                 snap_version: version
-                snap_size: downaloadSize
+                snap_size: model.downloadSize !== undefined ? downloadSize : -1
                 snap_icon: icon
                 onSelectedChanged: {
                     if (selected)

@@ -270,14 +270,12 @@ Item {
             delegate: SnapElementDelegate {
                 snap_name: title
                 snap_version: version
-                snap_size: downloadSize
+                snap_size: model.downloadSize !== undefined ? downloadSize : -1
                 // HACK: for some reason the icon_url property is not accesible at the model
                 snap_icon: listSnapsInDepartamentInteractor.snaps[index]
                            && listSnapsInDepartamentInteractor.snaps[index].icon_url
                            !== undefined ? listSnapsInDepartamentInteractor.snaps[index].icon_url : ""
                 onSelectedChanged: {
-                    for (var k in model)
-                        print(k, model[k])
                     if (selected)
                         storeSnapsModel.selectedItems[package_name] = "true"
                     else
