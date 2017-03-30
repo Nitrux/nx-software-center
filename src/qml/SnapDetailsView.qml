@@ -132,32 +132,13 @@ Item {
                 Layout.maximumHeight: 222
                 Layout.fillWidth: true
 
-                Rectangle {
+                Parts.SnapIcon {
                     Layout.fillHeight: true
                     Layout.fillWidth: false
                     Layout.preferredHeight: 222
                     Layout.preferredWidth: 222
 
-                    color: "#FFFFFF"
-                    clip: true
-                    radius: 15
-
-                    PlasmaCore.IconItem {
-                        id: iconLocalRep
-                        anchors.fill: parent
-                        anchors.margins: 12
-
-                        visible: !iconRemote.visible
-                        source: "package-x-generic"
-                    }
-
-                    Image {
-                        id: iconRemote
-                        anchors.fill: parent
-                        anchors.margins: 12
-                        visible: iconRemote.status == Image.Ready
-                        source: snap.icon
-                    }
+                    source: snap.icon
                 }
 
                 ColumnLayout {

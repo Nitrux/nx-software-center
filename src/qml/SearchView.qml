@@ -131,6 +131,7 @@ Parts.View {
                 snap_name: name
                 snap_version: version
                 snap_size: downaloadSize
+                snap_icon: icon
                 onSelectedChanged: {
                     if (selected)
                         storeSnapsModel.selectedItems[name] = "true"

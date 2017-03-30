@@ -9,7 +9,7 @@ import org.nx.softwarecenter 1.0
 
 import "qrc:/scripts/Utils.js" as Utils
 
-import "parts"
+import "parts" as Parts
 import Snapd 1.0
 
 FocusScope {
@@ -21,6 +21,7 @@ FocusScope {
     property string snap_name
     property string snap_version
     property int snap_size
+    property alias snap_icon: snap_icon.source
     property bool isDisabled
     property bool isUpgradeable
     property bool isInstalled
@@ -42,7 +43,7 @@ FocusScope {
         onClicked: root.clicked()
     }
 
-    Card {
+    Parts.Card {
         id: background
         anchors.fill: parent
 
@@ -52,27 +53,15 @@ FocusScope {
 
     }
 
-    Item {
+    Parts.SnapIcon {
         id: snap_icon
         height: 145
         width: 145
+
         anchors {
             top: background.top
             horizontalCenter: parent.horizontalCenter
             margins: 15
-        }
-
-        PlasmaCore.IconItem {
-            visible: !model.icon
-            anchors.fill: parent
-            //            source: "package-available"
-            source: "package-x-generic"
-        }
-
-        Image {
-            visible: model.icon !== undefined
-            anchors.fill: parent
-            source: model.icon ? model.icon : ""
         }
     }
 

@@ -31,6 +31,7 @@
         <file>parts/HorizontalListView.qml</file>
         <file>parts/View.qml</file>
         <file>interactors/StoreSearchInteractor.qml</file>
+        <file>parts/SnapIcon.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

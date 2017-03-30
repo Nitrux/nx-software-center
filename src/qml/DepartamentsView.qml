@@ -127,9 +127,11 @@ Item {
         }
     }
 
-
     Interactors.ListSnapsInDepartamentInteractor {
-        departament: departamentsListModel && departamentsListView.currentIndex >= 0 ? departamentsListModel.get(departamentsListView.currentIndex).slug : ""
+        id: listSnapsInDepartamentInteractor
+        departament: departamentsListModel && departamentsListView.currentIndex
+                     >= 0 ? departamentsListModel.get(
+                                departamentsListView.currentIndex).slug : ""
         onDepartamentChanged: {
             print(departament)
             fetchSnaps()
@@ -195,7 +197,7 @@ Item {
         anchors.right: parent.right
         height: 6
 
-//        color: "lightgray"
+        //        color: "lightgray"
         gradient: Gradient {
             GradientStop {
                 position: 0.0
@@ -268,7 +270,11 @@ Item {
             delegate: SnapElementDelegate {
                 snap_name: title
                 snap_version: version
-                snap_size: download_size
+                snap_size: downloadSize
+                // HACK: for some reason the icon_url property is not accesible at the model
+                snap_icon: listSnapsInDepartamentInteractor.snaps[index]
+                           && listSnapsInDepartamentInteractor.snaps[index].icon_url
+                           !== undefined ? listSnapsInDepartamentInteractor.snaps[index].icon_url : ""
                 onSelectedChanged: {
                     for (var k in model)
                         print(k, model[k])
@@ -279,7 +285,7 @@ Item {
 
                     storeSnapsModel.refreshActions()
                 }
-                onClicked: main.showSnapDetails(package_name);
+                onClicked: main.showSnapDetails(package_name)
             }
         }
     }
