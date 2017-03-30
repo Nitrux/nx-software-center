@@ -21,6 +21,13 @@ Parts.View {
         id: snapdClient
     }
 
+    function refreshContent() {
+        // No need to refresh departaments, this rarely changes
+        // listDepartamentsInteractor.run()
+
+        storeSnapsModel.refreshActions()
+    }
+
     Interactors.StoreSearchInteractor {
         id: storeSearchInteractor
         snapdClient: snapdClient

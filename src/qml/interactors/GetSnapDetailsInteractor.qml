@@ -59,7 +59,7 @@ QtObject {
                     details.publisher = data.publisher
                     details.ratings_average = data.ratings_average
                     details.screenshot_urls = data.screenshot_urls
-                    details.icon = data.icon_url
+                    details.icon = data.icon_url ? data.icon_url: ""
 
                     storePackageInfoAvailable()
                 } else {
