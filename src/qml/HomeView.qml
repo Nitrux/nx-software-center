@@ -89,8 +89,8 @@ Parts.View {
                 var targets = installedSnapsModel.getSelectedItems()
 
                 disableSnapInteractor.targets = targets
-                disableSnapInteractor.finished.connect(viewRoot.refresh)
-                disableSnapInteractor.targetProcessed.connect(viewRoot.refresh)
+                disableSnapInteractor.finished.connect(viewRoot.refreshContent)
+                disableSnapInteractor.targetProcessed.connect(viewRoot.refreshContent)
 
                 disableSnapInteractor.start()
             }
@@ -103,8 +103,8 @@ Parts.View {
                 var targets = Object.keys(installedSnapsModel.selectedItems)
 
                 enableSnapInteractor.targets = targets
-                enableSnapInteractor.finished.connect(viewRoot.refresh)
-                enableSnapInteractor.targetProcessed.connect(viewRoot.refresh)
+                enableSnapInteractor.finished.connect(viewRoot.refreshContent)
+                enableSnapInteractor.targetProcessed.connect(viewRoot.refreshContent)
 
                 enableSnapInteractor.start()
             }
@@ -126,8 +126,8 @@ Parts.View {
                 }
 
                 refreshSnapInteractor.targets = targets
-                refreshSnapInteractor.finished.connect(viewRoot.refresh)
-                refreshSnapInteractor.targetProcessed.connect(viewRoot.refresh)
+                refreshSnapInteractor.finished.connect(viewRoot.refreshContent)
+                refreshSnapInteractor.targetProcessed.connect(viewRoot.refreshContent)
 
                 refreshSnapInteractor.start()
             }
@@ -140,8 +140,8 @@ Parts.View {
                 var targets = Object.keys(selectedItems)
 
                 removeSnapInteractor.targets = targets
-                removeSnapInteractor.finished.connect(viewRoot.refresh)
-                removeSnapInteractor.targetProcessed.connect(viewRoot.refresh)
+                removeSnapInteractor.finished.connect(viewRoot.refreshContent)
+                removeSnapInteractor.targetProcessed.connect(viewRoot.refreshContent)
 
                 removeSnapInteractor.start()
             }
