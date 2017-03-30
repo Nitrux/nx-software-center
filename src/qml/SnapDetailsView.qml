@@ -113,13 +113,12 @@ Item {
         height: cardContent.height + 12
         anchors.top: parent.top
         anchors.topMargin: 12
-        anchors.left: parent.left
-        anchors.leftMargin: 18
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
 
         ColumnLayout {
             id: cardContent
-            width: 740 // 12 poinst of left margin
+            width: root.width - 60 // 12 poinst of left margin
             height: parent.height - 12
             anchors.top: parent.top
             anchors.topMargin: 6
@@ -131,9 +130,11 @@ Item {
                 spacing: 16
 
                 Layout.maximumHeight: 222
+                Layout.fillWidth: true
 
                 Rectangle {
                     Layout.fillHeight: true
+                    Layout.fillWidth: false
                     Layout.preferredHeight: 222
                     Layout.preferredWidth: 222
 
@@ -161,10 +162,10 @@ Item {
 
                 ColumnLayout {
                     Layout.fillHeight: true
+                    Layout.fillWidth: true
                     Layout.minimumHeight: 222
                     Layout.maximumHeight: 222
-                    Layout.maximumWidth: 300
-                    Layout.minimumWidth: 300
+
                     spacing: 0
 
                     PlasmaComponents.Label {
@@ -220,7 +221,9 @@ Item {
 
                 ColumnLayout {
                     Layout.maximumHeight: 222
+                    Layout.fillWidth: true
                     PlasmaComponents.Label {
+                        Layout.fillWidth: true
                         Layout.topMargin: 24
                         visible: snap.publisher != ""
                         text: i18n("Developed by")
@@ -229,6 +232,7 @@ Item {
                     }
 
                     PlasmaComponents.Label {
+                        Layout.fillWidth: true
                         visible: snap.publisher != ""
                         text: snap.publisher
                         wrapMode: Text.WordWrap
@@ -237,12 +241,14 @@ Item {
                     }
 
                     Item {
+                        Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.preferredHeight: 140
                     }
 
                     Parts.RatingStars {
                         id: snapStars
+                        Layout.fillWidth: true
                         rating: snap.ratings_average
                         visible: snap.ratings_average >= 0
 
