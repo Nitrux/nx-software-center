@@ -33,6 +33,8 @@
         <file>parts/View.qml</file>
         <file>parts/SnapIcon.qml</file>
         <file>DepartamentSnapsView.qml</file>
+        <file>parts/ArrowLeft.qml</file>
+        <file>parts/ArrowRight.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

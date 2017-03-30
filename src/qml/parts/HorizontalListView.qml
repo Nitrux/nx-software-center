@@ -10,7 +10,7 @@ ListView {
     orientation: ListView.Horizontal
 
 
-    Item {
+    ArrowLeft {
         anchors.left: parent.left
         anchors.leftMargin: 12
         anchors.verticalCenter: parent.verticalCenter
@@ -19,27 +19,10 @@ ListView {
 
 //        visible: listView.currentIndex > 0
 
-        Rectangle {
-            anchors.fill: parent
-            radius: height
-            color: lefhtArrowMouseArea.containsMouse ? "#628DCF" : "#EEEEEE"
-            opacity: 0.7
-        }
-
-        PlasmaCore.IconItem {
-            anchors.centerIn: parent
-            source: "arrow-left"
-        }
-
-        MouseArea {
-            id: lefhtArrowMouseArea
-            anchors.fill: parent
-            onClicked: moveViewportBackward()
-            hoverEnabled: true
-        }
+        onClicked: moveViewportBackward()
     }
 
-    Item {
+    ArrowRight {
         anchors.right: parent.right
         anchors.rightMargin: 12
         anchors.verticalCenter: parent.verticalCenter
@@ -49,24 +32,7 @@ ListView {
 
 //        visible: listView.currentIndex < listView.count
 
-        Rectangle {
-            anchors.fill: parent
-            radius: height
-            color: rightArrowMouseArea.containsMouse ? "#628DCF" : "#EEEEEE"
-            opacity: 0.7
-        }
-
-        PlasmaCore.IconItem {
-            anchors.centerIn: parent
-            source: "arrow-right"
-        }
-
-        MouseArea {
-            id: rightArrowMouseArea
-            anchors.fill: parent
-            onClicked: moveViewportForward()
-            hoverEnabled: true
-        }
+        onClicked: moveViewportForward()
     }
 
     function moveViewportForward() {

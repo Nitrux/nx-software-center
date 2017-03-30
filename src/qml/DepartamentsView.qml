@@ -26,7 +26,6 @@ Parts.View {
         // No need to refresh departaments, this rarely changes
         // listDepartamentsInteractor.run()
 
-        //
         p.refreshContent()
     }
 
@@ -44,7 +43,7 @@ Parts.View {
     Component {
         id: component_departamentsList
         Item {
-            ListView {
+            Parts.HorizontalListView {
                 id: departamentsListView
                 anchors {
                     top: parent.top
@@ -57,12 +56,6 @@ Parts.View {
 
                 focus: true
                 property int viewIndex: 0
-                function moveViewportForward() {
-                    flick(width * -2, 0)
-                }
-                function moveViewportBackward() {
-                    flick(width * 2, 0)
-                }
 
                 spacing: 12
                 orientation: ListView.Horizontal
@@ -98,54 +91,6 @@ Parts.View {
                             departamentSnaps.departamentSlug = model.slug
                         }
                     }
-                }
-            }
-
-            Item {
-                anchors.left: departamentsListView.left
-                anchors.verticalCenter: departamentsListView.verticalCenter
-                height: 50
-                width: height
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: height
-                    color: "white"
-                    opacity: 0.7
-                }
-
-                PlasmaCore.IconItem {
-                    anchors.centerIn: parent
-                    source: "arrow-left"
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: departamentsListView.moveViewportBackward()
-                }
-            }
-
-            Item {
-                anchors.right: departamentsListView.right
-                anchors.verticalCenter: departamentsListView.verticalCenter
-                height: 50
-                width: height
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: height
-                    color: "white"
-                    opacity: 0.7
-                }
-
-                PlasmaCore.IconItem {
-                    anchors.centerIn: parent
-                    source: "arrow-right"
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: departamentsListView.moveViewportForward()
                 }
             }
 
