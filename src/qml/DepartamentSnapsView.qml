@@ -66,7 +66,7 @@ Parts.View {
                 departamentSnaps.sourceComponent = component_noSnaps
             } else {
                 departamentSnaps.sourceComponent = component_snapGrid
-                depdocumentinfoartamentSnapsModel.clear()
+                departamentSnapsModel.clear()
                 for (var i in snaps)
                     departamentSnapsModel.append(snaps[i])
             }
