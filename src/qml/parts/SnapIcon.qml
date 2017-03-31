@@ -6,7 +6,7 @@ Rectangle {
     width: 222
     property alias source: iconRemote.source
 
-    color: "#FFFFFF"
+    color: "transparent"
     clip: true
     radius: 15
 

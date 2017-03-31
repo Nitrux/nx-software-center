@@ -115,6 +115,7 @@ Item {
         anchors.topMargin: 12
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: 4
 
         ColumnLayout {
             id: cardContent
@@ -202,7 +203,7 @@ Item {
 
                 ColumnLayout {
                     Layout.maximumHeight: 222
-                    Layout.fillWidth: true
+                    Layout.maximumWidth: 300
                     PlasmaComponents.Label {
                         Layout.fillWidth: true
                         Layout.topMargin: 24

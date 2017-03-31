@@ -36,7 +36,7 @@ Item {
         }
 
         PlasmaComponents.ToolButton {
-            iconName: "plasmadiscover"
+            iconName: "nx-software-center"
             Layout.fillHeight: true
             checked: currentView == "store"
             onClicked: {

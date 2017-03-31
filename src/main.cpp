@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 
 #include <QDebug>
+#include <QIcon>
 #include <QtQml>
 #include <QQmlEngine>
 #include <QLocalSocket>
@@ -56,6 +57,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QCoreApplication::addLibraryPath("./");
 
+    app.setWindowIcon(QIcon::fromTheme("nx-software-center"));
     QQmlApplicationEngine engine;
 
 

@@ -6,48 +6,36 @@ import "interactors" as Interactors
 
 ApplicationWindow {
     visible: true
-    width: 800
-    height: 600
+    width: 900
+    height: 700
     title: qsTr("NX Software Center")
     id: main
 
-    Rectangle {
-        id: background
-        anchors.fill: parent
-        color: "#EEEEEE"
+    color: "#EEEEEE"
+//    visibility: Qt.WindowFullScreen
+
+    header: NavigationPanel {
+        id: navigationPanel
+
+        onGoHome: main.goHome()
+        onGoStore: showDepartamensView()
+        onGoSettings: showSettings()
+        onStoreQueryTyped: main.showSearchView(query)
     }
+
+    footer: StatusArea {
+        id: statusArea
+        height: statusArea.visible ? 42 : 0
+    }
+
+    StackView {
+        id: content
+        anchors.fill: parent
+    }
+
     TextConstants {
         id: textConstants
     }
-
-    ColumnLayout {
-        anchors.fill: parent
-        NavigationPanel {
-            id: navigationPanel
-            Layout.fillWidth: true
-
-            onGoHome: main.goHome()
-            onGoStore: showDepartamensView()
-            onGoSettings: showSettings()
-            onStoreQueryTyped: main.showSearchView(query)
-        }
-
-        StackView {
-            id: content
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredHeight: 400
-        }
-
-        StatusArea {
-            id: statusArea
-            Layout.maximumHeight: statusArea.visible ? 38 : 0
-            Layout.preferredHeight: statusArea.visible ? 38 : 0
-            Layout.fillWidth: true
-            Layout.bottomMargin: 4
-        }
-    }
-
 
     // App Interactors
     Interactors.DisableSnapInteractor {
@@ -77,23 +65,28 @@ ApplicationWindow {
             content.pop(StackView.Immediate)
             content.currentItem.refreshContent()
         }
-        onLoadingLocalPackageInfo: showLoadingScreen( i18n("Fetching snap info, please wait ..."))
-        onLoadingStorePackageInfo: showLoadingScreen( i18n("Fetching snap info, please wait ..."))
+        onLoadingLocalPackageInfo: showLoadingScreen(
+                                       i18n("Fetching snap info, please wait ..."))
+        onLoadingStorePackageInfo: showLoadingScreen(
+                                       i18n("Fetching snap info, please wait ..."))
 
         onLocalPackageInfoAvailable: showDetailsView()
         onStorePackageInfoAvailable: showDetailsView()
 
-
         function showDetailsView() {
             if (content.currentItem.objectName != "snapDetailsView") {
                 if (content.currentItem.objectName == "placeHolderView")
-                    content.replace("qrc:/SnapDetailsView.qml", {"snap": showSnapDetailsInteractor.details}, StackView.Immediate)
+                    content.replace("qrc:/SnapDetailsView.qml", {
+                                        snap: showSnapDetailsInteractor.details
+                                    }, StackView.Immediate)
                 else
-                    content.push("qrc:/SnapDetailsView.qml", {"snap": showSnapDetailsInteractor.details}, StackView.Immediate)
+                    content.push("qrc:/SnapDetailsView.qml", {
+                                     snap: showSnapDetailsInteractor.details
+                                 }, StackView.Immediate)
             }
             var detailsView = content.currentItem
             if (detailsView !== undefined) {
-//                detailsView.snap = showSnapDetailsInteractor.details
+                //                detailsView.snap = showSnapDetailsInteractor.details
                 detailsView.updateContext()
                 detailsView.refresh.connect(refreshInfo)
                 detailsView.dismiss.connect(goBack)
