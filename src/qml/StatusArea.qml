@@ -48,7 +48,7 @@ Item {
 
     function _onActionUpdate(message, actions) {
         root.jobRunning = true
-        _updateView("notice", "documentinfo", message, actions)
+        _updateView("notice", "emblem-info", message, actions)
     }
 
     function dissmiss() {
@@ -72,7 +72,7 @@ Item {
             }
         }
 
-        _updateView("error", "error", message, [dismisAction])
+        _updateView("error", "emblem-error", message, [dismisAction])
     }
     function noticeSuccess(message) {
         var dismisAction = {
@@ -87,7 +87,7 @@ Item {
         }
 
         noticeDislpayTimer.start()
-        _updateView("notice", "gtk-ok", message, [dismisAction])
+        _updateView("notice", "emblem-error", message, [dismisAction])
     }
     function _onActionSuccess(message, actions) {
         var dismisAction = {
@@ -103,7 +103,7 @@ Item {
         }
 
         noticeDislpayTimer.start()
-        _updateView("notice", "gtk-ok", message, [dismisAction])
+        _updateView("notice", "emblem-default", message, [dismisAction])
     }
 
     function _onActionError(message, actions) {
@@ -172,7 +172,7 @@ Item {
             Repeater {
                 model: dislpayActionsModel
                 delegate: PlasmaComponents.Button {
-                    iconSource: dislpayActionsModel[index].icon
+                    // iconSource: dislpayActionsModel[index].icon
                     text: dislpayActionsModel[index].text
                     onClicked: {
                         dislpayActionsModel[index].action(_onActionUpdate,

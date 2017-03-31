@@ -27,7 +27,7 @@ Item {
             Layout.leftMargin: 20
             Layout.fillHeight: true
 
-            iconName: "go-home"
+            iconName: "nx-home"
             checked: currentView == "home"
             onClicked: {
                 goHome()
@@ -63,7 +63,7 @@ Item {
             Layout.alignment: Qt.AlignRight
             Layout.rightMargin: 12
             Layout.fillHeight: true
-            iconName: "configure"
+            iconName: "nx-configure"
 
             checked: currentView == "settings"
             onClicked: {

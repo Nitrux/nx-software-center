@@ -45,7 +45,7 @@ Parts.View {
             }
 
             var actions = [installAction]
-            statusArea.updateContext("documentinfo",
+            statusArea.updateContext("emblem-info",
                                      textConstants.availableActionsNotice,
                                      actions)
         } else
@@ -66,7 +66,7 @@ Parts.View {
                 departamentSnaps.sourceComponent = component_noSnaps
             } else {
                 departamentSnaps.sourceComponent = component_snapGrid
-                departamentSnapsModel.clear()
+                depdocumentinfoartamentSnapsModel.clear()
                 for (var i in snaps)
                     departamentSnapsModel.append(snaps[i])
             }

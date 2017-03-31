@@ -103,7 +103,7 @@ Item {
         }
 
         actions.push(returnAction)
-        statusArea.updateContext("documentinfo",
+        statusArea.updateContext("emblem-info",
                                  i18n("Available actions"), actions)
     }
 

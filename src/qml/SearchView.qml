@@ -82,7 +82,7 @@ Parts.View {
                     }
                 }
 
-                statusArea.updateContext("documentinfo",
+                statusArea.updateContext("emblem-info",
                                          textConstants.availableActionsNotice,
                                          [installAction])
             } else

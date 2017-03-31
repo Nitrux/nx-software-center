@@ -78,7 +78,7 @@ Item {
         if (unappliedChanges)
             actions.push(applySettingsAction)
 
-        statusArea.updateContext("documentinfo",
+        statusArea.updateContext("emblem-info",
                                  i18n("Available actions"), actions)
     }
 

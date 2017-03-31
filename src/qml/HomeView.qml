@@ -150,7 +150,7 @@ Parts.View {
         var keys = installedSnapsModel.getSelectedItems()
         if (keys.length > 0) {
             var actions = [disableAction, enableAction, refreshAction, removeAction]
-            statusArea.updateContext("documentinfo",
+            statusArea.updateContext("emblem-info",
                                      i18n("Available actions"), actions)
         } else
             statusArea.clearContext()

@@ -66,7 +66,7 @@ FocusScope {
 
     PlasmaCore.IconItem {
         visible: hovered
-        source: selected ? "emblem-remove" : "emblem-added"
+        source: selected ? "emblem-select-remove" : "emblem-select-add"
         anchors.top: background.top
         anchors.left: background.left
         anchors.margins: 12
