@@ -15,7 +15,7 @@ Item {
     PlasmaCore.IconItem {
         id: icon
         anchors.centerIn: parent
-        source: "go-previous-symbolic"
+        source: "go-previous"
         opacity: mousearea.containsMouse ? 1 : 0.7
 
         Behavior on opacity { PropertyAnimation{} }

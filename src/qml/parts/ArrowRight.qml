@@ -13,7 +13,7 @@ Item {
     
     PlasmaCore.IconItem {
         anchors.centerIn: parent
-        source: "go-next-symbolic"
+        source: "go-next"
 
         opacity: mousearea.containsMouse ? 1 : 0.7
 
