@@ -2,18 +2,23 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
+
+
 import "interactors" as Interactors
 
 ApplicationWindow {
+
     visible: true
     width: 900
     height: 700
     title: qsTr("NX Software Center")
     id: main
 
-    color: "#EEEEEE"
-//    visibility: Qt.WindowFullScreen
+    color: theme.backgroundColor
 
+    //    visibility: Qt.WindowFullScreen
     header: NavigationPanel {
         id: navigationPanel
 
@@ -28,10 +33,10 @@ ApplicationWindow {
         height: statusArea.visible ? 42 : 0
     }
 
-    StackView {
-        id: content
-        anchors.fill: parent
-    }
+        StackView {
+            id: content
+            anchors.fill: parent
+        }
 
     TextConstants {
         id: textConstants

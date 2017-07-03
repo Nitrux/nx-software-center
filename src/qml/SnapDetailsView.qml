@@ -108,7 +108,7 @@ Item {
     }
 
     Parts.Card {
-        color: "#FFFFFF"
+        color: theme.viewBackgroundColor
         width: cardContent.width + 12
         height: cardContent.height + 12
         anchors.top: parent.top
@@ -125,6 +125,7 @@ Item {
             anchors.topMargin: 6
             anchors.left: parent.left
             anchors.leftMargin: 6
+            anchors.bottomMargin: 12
 
             RowLayout {
                 id: sectionHeader
@@ -242,6 +243,7 @@ Item {
             Flickable {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.bottomMargin: 24
                 clip: true
 
                 contentWidth: width

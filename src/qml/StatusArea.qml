@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-Item {
+PlasmaCore.FrameSvgItem {
     id: root
     property variant contextIcon
     property string contextMessage
@@ -15,6 +15,9 @@ Item {
     property bool locked: false
     property bool jobRunning: false
     property var currentJob: undefined
+
+    imagePath: "opaque/widgets/panel-background"
+    enabledBorders: PlasmaCore.FrameSvgItem.TopBorder
 
     function clearContext() {
         updateContext("", "", [])
@@ -118,15 +121,6 @@ Item {
             locked = false
             _updateView("notice", contextIcon, contextMessage, contextActions)
         }
-    }
-
-    Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-
-        height: 1
-        color: "lightgray"
     }
 
     Rectangle {

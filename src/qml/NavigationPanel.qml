@@ -2,15 +2,20 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 
+import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-Item {
+PlasmaCore.FrameSvgItem {
     property alias query: searchField.text
 
     signal goHome
     signal goStore
     signal goSettings
     signal storeQueryTyped(var query)
+
+    imagePath: "opaque/widgets/panel-background"
+    enabledBorders: PlasmaCore.FrameSvgItem.BottomBorder
+
 
     property string currentView: "home"
 
@@ -72,14 +77,5 @@ Item {
             }
 
         }
-    }
-
-    Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        height: 1
-        color: "lightgray"
     }
 }

@@ -47,9 +47,9 @@ FocusScope {
         id: background
         anchors.fill: parent
 
-        border.color: hovered ? "#3DAEE9" : "#C3C9D6"
+        border.color: hovered ? theme.complementaryHoverColor : theme.complementaryNegativeTextColor
         border.width: hovered ? 2 : 1
-        color: selected ? "#aae3ff" : "white"
+        color: selected ? theme.viewFocusColor : theme.viewBackgroundColor
     }
 
     Parts.SnapIcon {
