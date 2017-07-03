@@ -71,11 +71,19 @@ ActionReply SnapdHelper::install(QVariantMap args)
     connect(request, &QSnapdRequest::progress, [this, request] () {
         QSnapdChange *change = request->change();
         if (change != NULL) {
-            QString status;
-            status = change->summary();
-            if (!status.isEmpty()) {
+            QSnapdTask * task = NULL;
+            for (int i = 0; i < change->taskCount(); i++) {
+                task = change->task(i);
+                if (task->progressDone() != task->progressTotal())
+                    break;
+            }
+
+            if (task) {
                 QVariantMap update;
-                update.insert("status", status);
+                update.insert("sumary", task->summary());
+                update.insert("status", task->kind());
+                update.insert("progressDone", task->progressDone());
+                update.insert("progressTotal", task->progressTotal());
                 HelperSupport::progressStep(update);
             }
         }

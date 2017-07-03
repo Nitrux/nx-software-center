@@ -90,7 +90,7 @@ PlasmaCore.FrameSvgItem {
         }
 
         noticeDislpayTimer.start()
-        _updateView("notice", "emblem-error", message, [dismisAction])
+        _updateView("notice", "emblem-success", message, [dismisAction])
     }
     function _onActionSuccess(message, actions) {
         var dismisAction = {

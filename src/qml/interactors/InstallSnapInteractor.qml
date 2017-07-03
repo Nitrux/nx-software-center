@@ -67,7 +67,14 @@ Interactor {
         currentJob = SnapdRootClient.install(target.name, target.channel)
 
         currentJob.newData.connect(function (newData) {
-            statusArea.notice(newData.status, [])
+            if (newData.status === "download-snap") {
+                var percent = 0;
+                if (newData.progressTotal !== 1)
+                    percent = newData.progressDone / newData.progressTotal * 10000;
+
+                statusArea.notice(i18n("Downloading   ") + Math.round(percent) / 100 + "%", []);
+            } else
+            statusArea.notice(newData.sumary, [])
         })
         currentJob.finished.connect(processTargets)
 
