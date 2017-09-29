@@ -69,3 +69,4 @@ install(TARGETS ${PROJECT_NAME}_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
 kauth_install_helper_files(${PROJECT_NAME}_helper org.nomad.softwarecenter root)
 
 install(DIRECTORY data/departaments_background/ DESTINATION share/${PROJECT_NAME}/departaments_background FILES_MATCHING PATTERN "*.png")
+install(FILES org.nomad.softwarecenter.desktop DESTINATION share/applications)
