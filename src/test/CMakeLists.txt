@@ -1,0 +1,22 @@
+enable_testing()
+
+# Tell CMake to run moc when necessary:
+set(CMAKE_AUTOMOC ON)
+
+# As moc files are generated in the binary dir, tell CMake
+# to always look for includes there:
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+find_package(Qt5 REQUIRED COMPONENTS Test Network)
+find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
+
+
+set(APPIMAGE_TEST_SOURCES
+    appimage_test.cpp
+    ../appimage/appimagedownloadjob.cpp
+    )
+
+add_executable(app_image_tests ${APPIMAGE_TEST_SOURCES})
+add_test(app_image_tests app_image_tests)
+
+target_link_libraries(app_image_tests Qt5::Test Qt5::Network KF5::CoreAddons KF5::KIOCore)

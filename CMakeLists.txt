@@ -22,7 +22,7 @@ include(KDECompilerSettings)
 include(FeatureSummary)
 
 find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Widgets Network)
-find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth)
+find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
 find_package(Snapd REQUIRED)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
@@ -47,6 +47,9 @@ set(SOURCE
         src/snapstore/snapstoregetdepartamentrequest.cpp
         src/snapstore/snapstoresnapdetailsrequest.cpp
         src/snapstore/customnetworkaccessmanagerfactory.cpp
+        src/appimage/appimage.cpp
+        src/appimage/appimagerepository.cpp
+        src/appimage/appimagedownloadjob.cpp
 )
 
 set(HELPER_SOURCE
@@ -57,7 +60,7 @@ set(HELPER_SOURCE
 message(NOTICE ${SNAPD_LIBRARIES})
 add_executable(${PROJECT_NAME} ${SOURCE} ${qml_QRC})
 target_include_directories(${PROJECT_NAME} PUBLIC ${SNAPD_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Quick KF5::Auth ${SNAPD_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Quick KF5::Auth KF5::KIOCore ${SNAPD_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
@@ -70,3 +73,5 @@ kauth_install_helper_files(${PROJECT_NAME}_helper org.nomad.softwarecenter root)
 
 install(DIRECTORY data/departaments_background/ DESTINATION share/${PROJECT_NAME}/departaments_background FILES_MATCHING PATTERN "*.png")
 install(FILES "org.nxos.softwarecenter.desktop" DESTINATION share/applications)
+
+add_subdirectory(src/test)
