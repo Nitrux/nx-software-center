@@ -14,6 +14,7 @@ find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
 set(APPIMAGE_TEST_SOURCES
     appimage_test.cpp
     ../appimage/appimagedownloadjob.cpp
+    ../appimage/appimageuninstalljob.cpp
     )
 
 add_executable(app_image_tests ${APPIMAGE_TEST_SOURCES})

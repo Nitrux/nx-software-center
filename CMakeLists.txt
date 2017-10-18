@@ -1,7 +1,8 @@
 project(nx_software_center)
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0037 OLD)
 
+enable_testing()
 
 # Enbable C++11 support
 set(CMAKE_CXX_STANDARD 14)
@@ -21,7 +22,7 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
 
-find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Widgets Network)
+find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Widgets Network Concurrent)
 find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
 find_package(Snapd REQUIRED)
 
@@ -50,6 +51,8 @@ set(SOURCE
         src/appimage/appimage.cpp
         src/appimage/appimagerepository.cpp
         src/appimage/appimagedownloadjob.cpp
+        src/appimage/appimageinstalljob.cpp
+        src/appimage/appimageuninstalljob.cpp
 )
 
 set(HELPER_SOURCE
@@ -60,7 +63,7 @@ set(HELPER_SOURCE
 message(NOTICE ${SNAPD_LIBRARIES})
 add_executable(${PROJECT_NAME} ${SOURCE} ${qml_QRC})
 target_include_directories(${PROJECT_NAME} PUBLIC ${SNAPD_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Quick KF5::Auth KF5::KIOCore ${SNAPD_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Quick Qt5::Concurrent KF5::Auth KF5::KIOCore ${SNAPD_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 

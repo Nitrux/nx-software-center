@@ -2,6 +2,7 @@
 
 #include <QDataStream>
 #include "../appimage/appimagedownloadjob.h"
+#include "../appimage/appimageuninstalljob.h"
 
 class AppImageTest : public QObject {
     Q_OBJECT
@@ -14,6 +15,17 @@ private slots:
         });
 
         job.exec();
+    }
+
+    void testAppImageUninstall() {
+        AppImageUninstallJob job("subsurface");
+
+        connect(&job, &AppImageUninstallJob::statusChanged, [] (QString status) {
+            qDebug() << status;
+        });
+
+        job.exec();
+
     }
 };
 QTEST_MAIN(AppImageTest)
