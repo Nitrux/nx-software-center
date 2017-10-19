@@ -22,7 +22,7 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
 
-find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Widgets Network Concurrent)
+find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Widgets Network Concurrent Xml XmlPatterns)
 find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
 find_package(Snapd REQUIRED)
 
@@ -50,6 +50,8 @@ set(SOURCE
         src/snapstore/customnetworkaccessmanagerfactory.cpp
         src/appimage/appimage.cpp
         src/appimage/appimagerepository.cpp
+        src/appimage/localappimagesrepository.cpp
+        src/appimage/appimagehubrepository.cpp
         src/appimage/appimagedownloadjob.cpp
         src/appimage/appimageinstalljob.cpp
         src/appimage/appimageuninstalljob.cpp
@@ -63,7 +65,7 @@ set(HELPER_SOURCE
 message(NOTICE ${SNAPD_LIBRARIES})
 add_executable(${PROJECT_NAME} ${SOURCE} ${qml_QRC})
 target_include_directories(${PROJECT_NAME} PUBLIC ${SNAPD_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Quick Qt5::Concurrent KF5::Auth KF5::KIOCore ${SNAPD_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Quick Qt5::Concurrent Qt5::Xml Qt5::XmlPatterns KF5::Auth KF5::KIOCore ${SNAPD_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 

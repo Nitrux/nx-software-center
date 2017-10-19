@@ -6,19 +6,27 @@
 
 class AppImage;
 
+typedef QList<AppImage*> AppImageList;
+
 class AppImageRepository : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(AppImageList items READ items WRITE setItems NOTIFY itemsChanged)
+    QList<AppImage *> m_items;
+
 public:
     explicit AppImageRepository(QObject *parent = nullptr);
 
     Q_INVOKABLE virtual int count() = 0;
-    Q_INVOKABLE virtual QList<AppImage *> list(int offset, int limit) = 0;
-    Q_INVOKABLE virtual QList<AppImage *> search(QString query, int offset, int limit) = 0;
+    Q_INVOKABLE virtual AppImageList search(QString query, int offset, int limit) = 0;
 
+    AppImageList items() const;
 signals:
 
-public slots:
+    void itemsChanged(AppImageList items);
+
+protected slots:
+    void setItems(AppImageList items);
 };
 
 #endif // APPIMAGEREPOSITORY_H
