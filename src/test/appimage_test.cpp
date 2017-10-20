@@ -13,7 +13,7 @@ class AppImageTest : public QObject
 private slots:
     void testAppImageHubRepository()
     {
-        AppImageHubRepository repository;
+        AppImageHubRepository repository("http://localhost:4000/feed.json");
         repository.update();
 
         QSignalSpy spy(&repository, &AppImageHubRepository::itemsChanged);
@@ -32,35 +32,36 @@ private slots:
         if (repository.count() > 0)
         {
             AppImage *image = repository.items().first();
-            repository.findDownloadLinks(image, "x86_64");
 
             QSignalSpy spy(image, &AppImage::linksChanged);
-            spy.wait();
+            spy.wait(10000);
+
+            qDebug() << image->id() << image->links();
         }
     }
-//    void testAppImageDownload()
-//    {
-//        AppImageDownloadJob job("https://github.com/AppImage/AppImageUpdate/releases/download/continuous/AppImageUpdate-x86_64.AppImage");
+    void testAppImageDownload()
+    {
+        AppImageDownloadJob job("https://github.com/AppImage/AppImageUpdate/releases/download/continuous/AppImageUpdate-x86_64.AppImage");
 
-//        connect(&job, &AppImageDownloadJob::statusChanged, [] (QString status)
-//        {
-//            qDebug() << status;
-//        });
+        connect(&job, &AppImageDownloadJob::statusChanged, [] (QString status)
+        {
+            qDebug() << status;
+        });
 
-//        job.exec();
-//    }
+        job.exec();
+    }
 
-//    void testAppImageUninstall()
-//    {
-//        AppImageUninstallJob job("subsurface");
+    void testAppImageUninstall()
+    {
+        AppImageUninstallJob job("subsurface");
 
-//        connect(&job, &AppImageUninstallJob::statusChanged, [] (QString status)
-//        {
-//            qDebug() << status;
-//        });
+        connect(&job, &AppImageUninstallJob::statusChanged, [] (QString status)
+        {
+            qDebug() << status;
+        });
 
-//        job.exec();
-//    }
+        job.exec();
+    }
 };
 QTEST_MAIN(AppImageTest)
 #include "appimage_test.moc"

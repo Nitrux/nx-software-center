@@ -6,17 +6,13 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
-#include <QDomDocument>
-#include <QXmlQuery>
-#include <QXmlStreamReader>
-
-#include <QAbstractMessageHandler>
+#include <QSysInfo>
 
 #include "appimage.h"
 
-AppImageHubRepository::AppImageHubRepository(QObject *parent) : AppImageRepository(parent)
+AppImageHubRepository::AppImageHubRepository(QString url, QObject *parent) : AppImageRepository(parent)
 {
-    m_dataUrl = QUrl("http://localhost:4000/feed.json");
+    m_dataUrl = QUrl(url);
     update();
 }
 
@@ -27,12 +23,18 @@ int AppImageHubRepository::count()
 
 QList<AppImage *> AppImageHubRepository::list(int offset, int limit)
 {
-    return QList<AppImage *>();
+    return m_items.mid(offset, limit);
 }
 
 QList<AppImage *> AppImageHubRepository::search(QString query, int offset, int limit)
 {
-    return QList<AppImage *>();
+    AppImageList selection;
+    for (AppImage *appImage: m_items)
+        if (appImage->id().contains(query)
+                || appImage->description().contains(query)
+                || appImage->categories().contains(query) )
+            selection.append(appImage);
+    return m_items.mid(offset, limit);;
 }
 
 bool AppImageHubRepository::isUpdating() const
@@ -40,14 +42,19 @@ bool AppImageHubRepository::isUpdating() const
     return m_isUpdating;
 }
 
+/**
+ * This is a best effort find download links function it's supposed to work
+ * for github releases but not for other sites.
+ * It works asynchronously when finished the 'download' at the appImage will
+ * be updated.
+ **/
 void AppImageHubRepository::findDownloadLinks(AppImage * appImage, QString arch)
 {
     Q_ASSERT(appImage != nullptr);
 
     if (appImage->links().contains("install"))
     {
-        QUrl url(appImage->links().value("install").toString());
-        qDebug() << url;
+        QString url = appImage->links().value("install").toString();
         auto request = QNetworkRequest(url);
         request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
 
@@ -56,21 +63,47 @@ void AppImageHubRepository::findDownloadLinks(AppImage * appImage, QString arch)
         {
             if (reply->error() == QNetworkReply::NoError)
             {
+                /* QXmlQuery will be the ideal solution but is unmantained,
+                 * letting the code bellow only for future reference */
+                //                QXmlQuery query;
+                //                query.bindVariable("source", reply);
+                //                QString queryString = "doc($source)//a/text()";
+                //                query.setQuery(queryString);
+                //                query.setQuery("a/@href[contains(., \"AppImage\")]");
+                //                QString result;
+                //                if (!query.evaluateTo(&result))
+                //                    qWarning() << "Something went wrong while evaliuanting the xpath";
+                //                qDebug() << result;
 
-                QXmlQuery query;
-                query.bindVariable("source", reply);
-                QString queryString = "doc($source)//a/text()";
-                query.setQuery(queryString);
-//                query.setQuery("a/@href[contains(., \"AppImage\")]");
+                QString rxString = "href=\"([^\"]*%1[^\"]*AppImage)\"";
+                rxString = rxString.arg(arch);
+                QRegExp rx(rxString);
+                QString str = reply->readAll();
+                QStringList list;
+                int pos = 0;
 
-                QString result;
+                while ((pos = rx.indexIn(str, pos)) != -1)
+                {
+                    QString capUrl = rx.cap(1);
+                    if (!capUrl.startsWith("http"))
+                    {
+                        QUrl url = reply->url();
+                        url.setPath(capUrl);
+                        capUrl = url.toString();
+                    }
 
-                if (!query.evaluateTo(&result))
-                    qWarning() << "Something went wrong while evaliuanting the xpath";
+                    list << capUrl ;
+                    pos += rx.matchedLength();
 
+                    rx.capturedTexts();
+                    break;
+                }
 
-                qDebug() << result;
-
+                if (list.count() > 0) {
+                    auto links = appImage->links();
+                    links["download"] = list.first();
+                    appImage->setLinks(links);
+                }
             } else
             {
                 qDebug() << reply->errorString() << ": while resolving download link for " << appImage->id();
@@ -152,6 +185,7 @@ void AppImageHubRepository::handleNetworkReply()
                     appImage->setLinks(links);
 
                     newItems.append(appImage);
+                    findDownloadLinks(appImage, QSysInfo::currentCpuArchitecture());
                 }
 
                 qDebug() << newItems.count() << " appimage items loaded";

@@ -13,11 +13,11 @@ class AppImageHubRepository : public AppImageRepository
     Q_OBJECT
     Q_PROPERTY(bool isUpdating READ isUpdating WRITE setIsUpdating NOTIFY isUpdatingChanged)
 public:
-    explicit AppImageHubRepository(QObject *parent = nullptr);
+    explicit AppImageHubRepository(QString url, QObject *parent = nullptr);
 
     Q_INVOKABLE virtual int count();
-    Q_INVOKABLE virtual QList<AppImage *> list(int offset, int limit);
-    Q_INVOKABLE virtual QList<AppImage *> search(QString query, int offset, int limit);
+    Q_INVOKABLE virtual QList<AppImage *> list(int offset = 0, int limit = -1);
+    Q_INVOKABLE virtual QList<AppImage *> search(QString query, int offset = 0, int limit = -1);
 
     bool isUpdating() const;
     void findDownloadLinks(AppImage *appImage, QString arch);
