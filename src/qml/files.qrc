@@ -35,6 +35,9 @@
         <file>DepartamentSnapsView.qml</file>
         <file>parts/ArrowLeft.qml</file>
         <file>parts/ArrowRight.qml</file>
+        <file>AppImageStoreView.qml</file>
+        <file>GridViewItemDelegate.qml</file>
+        <file>AppDetailsView.qml</file>
     </qresource>
     <qresource prefix="/scripts">
         <file>Utils.js</file>

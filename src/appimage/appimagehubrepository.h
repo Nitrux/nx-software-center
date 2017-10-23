@@ -17,7 +17,10 @@ public:
 
     Q_INVOKABLE virtual int count();
     Q_INVOKABLE virtual QList<AppImage *> list(int offset = 0, int limit = -1);
+    Q_INVOKABLE virtual QVariant listAsVariant(int offset = 0, int limit = -1);
+
     Q_INVOKABLE virtual QList<AppImage *> search(QString query, int offset = 0, int limit = -1);
+    Q_INVOKABLE virtual QVariant searchAsVariant(QString query, int offset = 0, int limit = -1);
 
     bool isUpdating() const;
     void findDownloadLinks(AppImage *appImage, QString arch);

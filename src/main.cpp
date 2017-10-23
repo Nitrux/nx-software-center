@@ -23,6 +23,10 @@
 #include "snapstore/snapstoregetdepartamentrequest.h"
 #include "snapstore/snapstoresnapdetailsrequest.h"
 
+#include "appimage/appimage.h"
+#include "appimage/appimagehubrepository.h"
+
+static AppImageHubRepository * appImageHubRepository = nullptr;
 static SnapdSettings * snapdSettings;
 static SnapStore * snapStore;
 
@@ -51,8 +55,21 @@ static QObject *snapstore_singletontype_provider(QQmlEngine *engine, QJSEngine *
 }
 
 
+static QObject *appimagehub_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    if (appImageHubRepository == nullptr)
+        appImageHubRepository = new AppImageHubRepository("http://localhost:4000/feed.json");
+
+    return appImageHubRepository;
+}
+
+
 int main(int argc, char *argv[])
 {
+    const char * uri = "org.nx.softwarecenter";
 
     QGuiApplication app(argc, argv);
     QCoreApplication::addLibraryPath("./");
@@ -60,6 +77,11 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon::fromTheme("nx-software-center"));
     QQmlApplicationEngine engine;
 
+    // App Images
+    qmlRegisterUncreatableType<AppImage>(uri, 1, 0, "AppImage", "Can't create");
+    qmlRegisterSingletonType<AppImageHubRepository>(uri, 1, 0, "AppImageHubRepository", appimagehub_singletontype_provider);
+
+    // Snaps
 
     snapdSettings = new SnapdSettings();
     snapdSettings->load();
@@ -73,8 +95,6 @@ int main(int argc, char *argv[])
     // FIXME: well, fix the glib-snapd-qt plugin install path
     engine.addImportPath(QStringLiteral("/usr/lib/qt5/qml/"));
     qDebug() << engine.importPathList();
-
-    const char * uri = "org.nx.softwarecenter";
 
     qmlRegisterSingletonType<SnapdClientKAuthWrapper>(uri, 1, 0, "SnapdRootClient", snapdkauthwrapper_singletontype_provider);
     qmlRegisterSingletonType<SnapdSettings>(uri, 1, 0, "SnapdSettings", snapdsetings_singletontype_provider);
@@ -91,6 +111,7 @@ int main(int argc, char *argv[])
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     engine.setNetworkAccessManagerFactory(&networkAccessManagerFactory);
+
     return app.exec();
 }
 

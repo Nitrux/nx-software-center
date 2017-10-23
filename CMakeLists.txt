@@ -55,6 +55,7 @@ set(SOURCE
         src/appimage/appimagedownloadjob.cpp
         src/appimage/appimageinstalljob.cpp
         src/appimage/appimageuninstalljob.cpp
+        src/appimage/appimagestoremodel.cpp
 )
 
 set(HELPER_SOURCE

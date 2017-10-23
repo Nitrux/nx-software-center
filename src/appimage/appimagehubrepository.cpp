@@ -26,6 +26,14 @@ QList<AppImage *> AppImageHubRepository::list(int offset, int limit)
     return m_items.mid(offset, limit);
 }
 
+QVariant AppImageHubRepository::listAsVariant(int offset, int limit)
+{
+    QList<QObject*>  data;
+    for (AppImage * item: m_items.mid(offset, limit))
+        data.append(item);
+    return QVariant::fromValue(data);
+}
+
 QList<AppImage *> AppImageHubRepository::search(QString query, int offset, int limit)
 {
     AppImageList selection;
@@ -35,6 +43,18 @@ QList<AppImage *> AppImageHubRepository::search(QString query, int offset, int l
                 || appImage->categories().contains(query) )
             selection.append(appImage);
     return m_items.mid(offset, limit);;
+}
+
+QVariant AppImageHubRepository::searchAsVariant(QString query, int offset, int limit)
+{
+
+    QList<QObject *> selection;
+    for (AppImage *appImage: m_items)
+        if (appImage->id().contains(query)
+                || appImage->description().contains(query)
+                || appImage->categories().contains(query) )
+            selection.append(appImage);
+    return QVariant::fromValue(m_items.mid(offset, limit));
 }
 
 bool AppImageHubRepository::isUpdating() const
@@ -149,7 +169,7 @@ void AppImageHubRepository::handleNetworkReply()
             if (jsonRoot.contains("items"))
             {
                 QList<AppImage *> newItems;
-                qDebug() << "Loading appimage items";
+//                qDebug() << "Loading appimage items";
                 m_data = jsonRoot.value("items").toArray();
                 for (QJsonValue appImageData: m_data)
                 {
@@ -188,7 +208,7 @@ void AppImageHubRepository::handleNetworkReply()
                     findDownloadLinks(appImage, QSysInfo::currentCpuArchitecture());
                 }
 
-                qDebug() << newItems.count() << " appimage items loaded";
+//                qDebug() << newItems.count() << " appimage items loaded";
 
                 setItems(newItems);
             } else
