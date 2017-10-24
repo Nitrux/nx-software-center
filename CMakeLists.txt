@@ -56,14 +56,20 @@ set(SOURCE
         src/appimage/appimageinstalljob.cpp
         src/appimage/appimageuninstalljob.cpp
         src/appimage/appimagestoremodel.cpp
+        src/entities/app.cpp
+        src/entities/release.cpp
+        src/entities/change.cpp
+        src/entities/repository.cpp
+        src/entities/registry.cpp
 )
+
+
+
 
 set(HELPER_SOURCE
         src/helper/snapdhelper.cpp
 )
 
-
-message(NOTICE ${SNAPD_LIBRARIES})
 add_executable(${PROJECT_NAME} ${SOURCE} ${qml_QRC})
 target_include_directories(${PROJECT_NAME} PUBLIC ${SNAPD_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Quick Qt5::Concurrent KF5::Auth KF5::KIOCore ${SNAPD_LIBRARIES})
