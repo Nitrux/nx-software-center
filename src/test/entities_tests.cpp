@@ -10,6 +10,7 @@
 #include "../entities/system.h"
 
 #include "dummychange.h"
+#include "dummyinstallchange.h"
 #include "dummyrelease.h"
 #include "dummyrepository.h"
 
@@ -42,11 +43,36 @@ private slots:
         QVERIFY(repository->list().size() == 5);
     }
 
+    void testChange()
+    {
+        DummyInstallChange change("tell_c2");
+        int currentProgress, totalProgress;
+        QString statusMessage;
+
+        change.progress(currentProgress, totalProgress, statusMessage);
+        QVERIFY(currentProgress == 0);
+        QVERIFY(totalProgress == 100);
+        QVERIFY(!statusMessage.isEmpty());
+
+        change.execute();
+
+        change.progress(currentProgress, totalProgress, statusMessage);
+        QVERIFY(currentProgress == 50);
+        QVERIFY(totalProgress == 100);
+        QVERIFY(!statusMessage.isEmpty());
+
+        change.finish();
+
+        change.progress(currentProgress, totalProgress, statusMessage);
+        QVERIFY(currentProgress == 100);
+        QVERIFY(totalProgress == 100);
+        QVERIFY(!statusMessage.isEmpty());
+    }
     void testRegistry()
     {
         Registry registry;
 
-        DummyChange change("coll_app_1");
+        DummyInstallChange change("coll_app_1");
 
         registry.registerChange(&change);
         QVERIFY(registry.runningChanges().size() == 0);
@@ -62,42 +88,64 @@ private slots:
     {
         System system;
 
-        DummyRepository repository;
-        Registry registry;
+        DummyRepository *repository = new DummyRepository();
+        Registry *registry = new Registry();
 
         QVERIFY(system.listAppIds().size() == 0);
 
-        system.setRegistry(&registry);
-        system.addRepository(&repository);
+        repository->updateCache();
 
-        QString appId = system.listAppIds().first();
+        system.setRegistry(registry);
+        system.addRepository(repository);
 
-        QVERIFY(system.appDetails(appId)["id"].toString() == appId);
+        QStringList appIds = system.listAppIds();
+        QVERIFY(appIds.size() > 0);
+        if (appIds.size() > 0)
+        {
+            QString appId = system.listAppIds().first();
+            QVERIFY(system.appDetails(appId)["id"].toString() == appId);
 
-        QString lastReleaseID = system.listAppReleaseIds(appId).first();
 
-        QVERIFY(system.releaseDetails(appId, lastReleaseID)["id"] == appId) ;
+            QStringList releaseIDs = system.listAppReleaseIds(appId);
+            QVERIFY(releaseIDs.size() > 0);
+            if (releaseIDs.size() > 0)
+            {
+                QString lastReleaseID = releaseIDs.first();
+                QVERIFY(system.releaseDetails(appId, lastReleaseID)["app_id"] == appId) ;
 
-        QString downloadChangeId = system.downloadRelease(appId, lastReleaseID);
 
-        QVERIFY(registry.getChange(downloadChangeId) != nullptr);
-        QVERIFY(registry.downloadedReleaseIds().contains(lastReleaseID));
+                auto verifyChange = [=](QString changeId)
+                {
+                    Change * change = registry->getChange(changeId);
+                    DummyChange * dummyChange = dynamic_cast<DummyChange*>(change);
+                    QVERIFY(change != nullptr);
+                    QVERIFY(dummyChange != nullptr);
 
-        QString installChangeId = system.installRelease(appId, lastReleaseID);
+                    if (dummyChange)
+                        dummyChange->finish();
+                };
 
-        QVERIFY(registry.getChange(installChangeId) != nullptr);
-        QVERIFY(registry.installedReleaseIds().contains(lastReleaseID));
+                QString downloadChangeId = system.downloadRelease(appId, lastReleaseID);
+                verifyChange(downloadChangeId);
+                QVERIFY(registry->downloadedReleaseIds().contains(lastReleaseID));
 
-        QString uninstallChangeId = system.uninstallRelease(appId, lastReleaseID);
+                QString installChangeId = system.installRelease(appId, lastReleaseID);
+                verifyChange(installChangeId);
+                QVERIFY(registry->installedReleaseIds().contains(lastReleaseID));
 
-        QVERIFY(registry.getChange(uninstallChangeId) != nullptr);
-        QVERIFY(!registry.installedReleaseIds().contains(lastReleaseID));
+                QString uninstallChangeId = system.uninstallRelease(appId, lastReleaseID);
+                verifyChange(uninstallChangeId);
+                QVERIFY(!registry->installedReleaseIds().contains(lastReleaseID));
 
-        QString removeChangeId = system.removeRelease(appId, lastReleaseID);
+                QString removeChangeId = system.removeRelease(appId, lastReleaseID);
+                verifyChange(removeChangeId);
+                QVERIFY(!registry->downloadedReleaseIds().contains(lastReleaseID));
+            }
 
-        QVERIFY(registry.getChange(removeChangeId) != nullptr);
-        QVERIFY(!registry.downloadedReleaseIds().contains(lastReleaseID));
 
+            delete registry;
+            delete repository;
+        }
     }
 };
 QTEST_MAIN(EntitiesTests)

@@ -32,8 +32,12 @@ target_link_libraries(app_image_tests Qt5::Test Qt5::Network KF5::CoreAddons Qt5
 set(ENTITIES_TESTS_SOURCE
     entities_tests.cpp
     dummyrelease.cpp
-    dummychange.cpp
     dummyrepository.cpp
+    dummychange.cpp
+    dummydownloadchange.cpp
+    dummyinstallchange.cpp
+    dummyuninstallchange.cpp
+    dummyremovechange.cpp
     ../entities/app.cpp
     ../entities/release.cpp
     ../entities/change.cpp

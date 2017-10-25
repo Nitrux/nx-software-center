@@ -19,7 +19,7 @@ QList<QString> Registry::installedReleaseIds()
     return m_installedReleaseIds;
 }
 
-Change *Registry::getChange(const QString &changeId)
+Change *Registry::getChange(const QString &changeId) const
 {
     return m_changes.value(changeId, nullptr);
 }

@@ -9,6 +9,7 @@
 #include <QVariant>
 #include <QVariantMap>
 
+class Release;
 class Registry;
 class Repository;
 
@@ -32,7 +33,8 @@ public:
     QString removeRelease(QString appId, QString releaseId);
 
 protected:
-    std::list<Repository *> repositories;
+    Release * findRelease(QString appId, QString releaseId);
+    QList<Repository *> repositories;
     Registry *registry = nullptr;
 };
 

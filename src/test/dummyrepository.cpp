@@ -1,5 +1,6 @@
 #include "dummyrepository.h"
 
+#include "dummyrelease.h"
 #include "../entities/app.h"
 
 DummyRepository::DummyRepository(): Repository()
@@ -16,10 +17,13 @@ void DummyRepository::updateCache()
 {
     apps.clear();
 
-    apps.insert("app_1", new App("app_1"));
-    apps.insert("app_2", new App("app_2"));
-    apps.insert("app_3", new App("app_3"));
-    apps.insert("app_4", new App("app_4"));
-    apps.insert("app_5", new App("app_5"));
+    for (int i = 0; i < 5; i ++)
+    {
+        QString appId = QString("app_%1").arg(i);
+        App * app = new App(appId);
+        app->addRelease(new DummyRelease("r1.0.0", appId));
+        app->addRelease(new DummyRelease("r2.0.0", appId));
 
+        apps.insert(appId, app);
+    }
 }

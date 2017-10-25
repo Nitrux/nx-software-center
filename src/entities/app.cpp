@@ -11,7 +11,10 @@ App::App(QString id)
 
 Release *App::lastRelease()
 {
-    return m_releases.last();
+    if (m_releases.empty())
+        return nullptr;
+    else
+        return m_releases.last();
 }
 
 void App::addRelease(Release *release)

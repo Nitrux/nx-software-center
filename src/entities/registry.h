@@ -15,7 +15,7 @@ public:
     QList<QString> downloadedReleaseIds();
     QList<QString> installedReleaseIds();
 
-    Change* getChange(const QString &changeId);
+    Change* getChange(const QString &changeId) const;
     bool registerChange(Change *change);
     void registerReleaseDownload(QString releaseId);
     void registerReleaseInstall(QString releaseId);

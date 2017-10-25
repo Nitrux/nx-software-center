@@ -9,7 +9,7 @@ public:
     DummyChange(QString target_release_id);
 
     virtual bool execute() override;
-    void finish();
+    virtual void finish() = 0;
 
     virtual void progress(int &current_progress, int &total_progress, QString &message) override;
 };

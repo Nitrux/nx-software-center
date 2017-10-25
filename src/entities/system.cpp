@@ -1,7 +1,9 @@
 #include "system.h"
 
 #include "app.h"
+#include "change.h"
 #include "release.h"
+#include "registry.h"
 #include "repository.h"
 
 #include <QVariant>
@@ -19,7 +21,7 @@ void System::setRegistry(Registry *registry)
 
 void System::addRepository(Repository *repository)
 {
-    this->repositories.push_front(repository);
+    repositories.append(repository);
 }
 
 QList<QString> System::listAppIds()
@@ -88,22 +90,33 @@ QVariantMap System::appDetails(QString appId)
     return details;
 }
 
-QVariantMap System::releaseDetails(QString appId, QString releaseId)
+QList<QString> System::listAppReleaseIds(QString appId)
 {
-    QVariantMap details;
-    Release * release = nullptr;
+    QStringList releaseIds;
 
     for (Repository * repository: repositories)
     {
-        if (repository->contains(appId, releaseId))
+        App * app = repository->getApp(appId);
+        if (app != nullptr)
         {
-            release = repository->getRelease(appId, releaseId);
-            break;
+            for (Release *release: app->releases())
+                releaseIds << release->id;
         }
     }
 
+    return releaseIds;
+}
+
+QVariantMap System::releaseDetails(QString appId, QString releaseId)
+{
+    QVariantMap details;
+    Release * release = findRelease(appId, releaseId);
+
     if (release)
     {
+        details["id"] = release->id;
+        details["app_id"] = release->app_id;
+
         details["name"] = release->name;
         details["description"] = release->description;
         details["icon_link"] = release->icon_link;
@@ -122,4 +135,84 @@ QVariantMap System::releaseDetails(QString appId, QString releaseId)
         details["authors"] = authors;
     }
     return details;
+}
+
+QString System::downloadRelease(QString appId, QString releaseId)
+{
+    Release *release = findRelease(appId, releaseId);
+    if (release)
+    {
+        Change *change = release->download();
+        if (registry != nullptr)
+            registry->registerChange(change);
+
+        change->execute();
+        return change->id;
+    }
+
+    return QString();
+}
+
+QString System::installRelease(QString appId, QString releaseId)
+{
+    Release *release = findRelease(appId, releaseId);
+    if (release)
+    {
+        Change *change = release->install();
+        if (registry != nullptr)
+            registry->registerChange(change);
+
+        change->execute();
+        return change->id;
+    }
+
+    return QString();
+}
+
+QString System::uninstallRelease(QString appId, QString releaseId)
+{
+    Release *release = findRelease(appId, releaseId);
+    if (release)
+    {
+        Change *change = release->uninstall();
+        if (registry != nullptr)
+            registry->registerChange(change);
+
+        change->execute();
+        return change->id;
+    }
+
+    return QString();
+}
+
+QString System::removeRelease(QString appId, QString releaseId)
+{
+    Release *release = findRelease(appId, releaseId);
+    if (release)
+    {
+        Change *change = release->remove();
+        if (registry != nullptr)
+            registry->registerChange(change);
+
+        change->execute();
+        return change->id;
+    }
+
+    return QString();
+}
+
+Release *System::findRelease(QString appId, QString releaseId)
+{
+    Release * release = nullptr;
+
+    for (Repository * repository: repositories)
+    {
+        if (repository->contains(appId, releaseId))
+        {
+            release = repository->getRelease(appId, releaseId);
+            break;
+        }
+    }
+
+    return release;
 }

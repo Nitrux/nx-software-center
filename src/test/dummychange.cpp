@@ -1,6 +1,7 @@
 #include "dummychange.h"
 
 #include <QDebug>
+#include <QTimer>
 
 #include "../entities/registry.h"
 
@@ -17,17 +18,6 @@ bool DummyChange::execute()
     return true;
 }
 
-void DummyChange::finish()
-{
-    logs.push_front("Finished change");
-    if (m_registry != nullptr)
-    {
-        m_registry->registerReleaseDownload(target_release_id);
-        m_registry->registerReleaseInstall(target_release_id);
-
-    }
-    status = FINISHED;
-}
 
 void DummyChange::progress(int &current_progress, int &total_progress, QString &message)
 {
@@ -51,5 +41,4 @@ void DummyChange::progress(int &current_progress, int &total_progress, QString &
         total_progress = 100;
         message = "Complete successfuly ";
     }
-
 }
