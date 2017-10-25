@@ -1,32 +1,32 @@
 #ifndef RELEASE_H
 #define RELEASE_H
 
-#include <list>
-#include <string>
-#include <map>
+#include <QMap>
+#include <QList>
+#include <QString>
 
 class Change;
 
 class Release
 {
 public:
-    Release(std::string id, std::string app_id);
+    Release(QString id, QString app_id);
     virtual ~Release();
 
-    std::string id;
-    std::string app_id;
-    std::string arch;
+    QString id;
+    QString app_id;
+    QString arch;
 
-    std::string name;
-    std::string description;
+    QString name;
+    QString description;
 
-    std::list<std::string> authors;
+    std::list<QString> authors;
 
-    std::string licence;
+    QString licence;
 
-    std::string download_link;
-    std::string icon_link;
-    std::list<std::string> screenshot_links;
+    QString download_link;
+    QString icon_link;
+    QList<QString> screenshot_links;
 
     virtual Change* download() = 0;
     virtual Change* install() = 0;

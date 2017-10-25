@@ -1,12 +1,14 @@
 #ifndef CHANGE_H
 #define CHANGE_H
 
-#include <list>
-#include <string>
+#include <QList>
+#include <QString>
 
+class Registry;
 
 class Change
 {
+public:
     enum Status {
         CREATED = 0,
         RUNNING,
@@ -15,19 +17,25 @@ class Change
         FAILED
     };
 
-public:
-    Change(std::string id, std::string target_release_id);
+    Change(QString id, QString target_release_id);
     virtual ~Change();
 
-    std::string id;
-    std::string target_release_id;
+    QString id;
+    QString target_release_id;
 
     Status status;
-    std::list<std::string> logs;
+    QList<QString> logs;
 
-    virtual std::string description();
+    virtual void progress(int &current_progress, int &total_progress, QString &message) = 0;
+    virtual QString description();
 
     virtual bool execute() = 0;
+
+    void attachRegistry(Registry * registry);
+
+protected:
+    Registry * m_registry = nullptr;
 };
+
 
 #endif // CHANGE_H

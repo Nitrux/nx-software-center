@@ -33,11 +33,13 @@ set(ENTITIES_TESTS_SOURCE
     entities_tests.cpp
     dummyrelease.cpp
     dummychange.cpp
+    dummyrepository.cpp
     ../entities/app.cpp
     ../entities/release.cpp
     ../entities/change.cpp
     ../entities/repository.cpp
     ../entities/registry.cpp
+    ../entities/system.cpp
     )
 
 

@@ -1,6 +1,6 @@
 #include "release.h"
 
-Release::Release(std::string id, std::string app_id)
+Release::Release(QString id, QString app_id)
 {
     this->id = id;
     this->app_id = app_id;

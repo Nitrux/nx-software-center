@@ -6,9 +6,12 @@
 class DummyChange : public Change
 {
 public:
-    DummyChange(std::string id, std::string target_release_id);
+    DummyChange(QString target_release_id);
 
     virtual bool execute() override;
+    void finish();
+
+    virtual void progress(int &current_progress, int &total_progress, QString &message) override;
 };
 
 #endif // DUMMYCHANGE_H

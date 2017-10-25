@@ -6,7 +6,7 @@
 class DummyRelease : public Release
 {
 public:
-    DummyRelease(std::string id, std::string app_id);
+    DummyRelease(QString id, QString app_id);
 
     virtual Change *download() override;
     virtual Change *install() override;

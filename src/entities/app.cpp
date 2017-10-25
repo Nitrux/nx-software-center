@@ -4,23 +4,27 @@
 
 #include "release.h"
 
-App::App(std::string id)
+App::App(QString id)
 {
     this->id = id;
 }
 
 Release *App::lastRelease()
 {
-    return m_releases.back();
+    return m_releases.last();
 }
 
 void App::addRelease(Release *release)
 {
-    auto position = std::lower_bound(m_releases.begin(),m_releases.end(), release);
-    m_releases.insert(position, release);
+    m_releases.insert(release->id, release);
 }
 
-std::list<Release *> App::releases()
+Release *App::getRelease(QString releaseId)
 {
-    return m_releases;
+    return m_releases.value(releaseId, nullptr);
+}
+
+QList<Release *> App::releases()
+{
+    return m_releases.values();
 }

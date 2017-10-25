@@ -2,13 +2,54 @@
 
 #include <QDebug>
 
-DummyChange::DummyChange(std::string id, std::string target_release_id): Change(id, target_release_id)
+#include "../entities/registry.h"
+
+DummyChange::DummyChange(QString target_release_id): Change("dummy_change_" + target_release_id, target_release_id)
 {
 
 }
 
 bool DummyChange::execute()
 {
-    qDebug() << "Executing change";
+    status = RUNNING;
+    logs.push_front("Executing change");
+
     return true;
+}
+
+void DummyChange::finish()
+{
+    logs.push_front("Finished change");
+    if (m_registry != nullptr)
+    {
+        m_registry->registerReleaseDownload(target_release_id);
+        m_registry->registerReleaseInstall(target_release_id);
+
+    }
+    status = FINISHED;
+}
+
+void DummyChange::progress(int &current_progress, int &total_progress, QString &message)
+{
+    if (status == CREATED)
+    {
+        current_progress = 0;
+        total_progress = 100;
+        message = "Just created";
+    }
+
+    if (status == RUNNING)
+    {
+        current_progress = 50;
+        total_progress = 100;
+        message = "Running";
+    }
+
+    if (status == FINISHED)
+    {
+        current_progress = 100;
+        total_progress = 100;
+        message = "Complete successfuly ";
+    }
+
 }

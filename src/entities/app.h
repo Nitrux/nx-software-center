@@ -1,28 +1,29 @@
 #ifndef APP_H
 #define APP_H
 
-#include <map>
-#include <list>
-#include <string>
+#include <QMap>
+#include <QList>
+#include <QString>
 
 class Release;
 
 class App
 {
 public:
-    App(std::string id);
+    App(QString id);
 
-    std::string id;
+    QString id;
 
 
     Release* lastRelease();
     void addRelease(Release* release);
-    std::list<Release*> releases();
+    Release* getRelease(QString releaseId);
+    QList<Release*> releases();
 
-    std::map<std::string, std::string> links;
+    QMap<QString, QString> links;
 
 protected:
-    std::list<Release *> m_releases;
+    QMap<QString, Release *> m_releases;
 };
 
 #endif // APP_H

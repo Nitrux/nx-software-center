@@ -61,6 +61,7 @@ set(SOURCE
         src/entities/change.cpp
         src/entities/repository.cpp
         src/entities/registry.cpp
+        src/entities/system.cpp
 )
 
 
