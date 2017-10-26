@@ -26,6 +26,13 @@
 #include "appimage/appimage.h"
 #include "appimage/appimagehubrepository.h"
 
+#include "entities/system.h"
+#include "entities/registry.h"
+#include "entities/repository.h"
+
+#include "test/dummyrepository.h"
+
+
 static AppImageHubRepository * appImageHubRepository = nullptr;
 static SnapdSettings * snapdSettings;
 static SnapStore * snapStore;
@@ -76,6 +83,11 @@ int main(int argc, char *argv[])
 
     app.setWindowIcon(QIcon::fromTheme("nx-software-center"));
     QQmlApplicationEngine engine;
+
+    // Init base entities
+    System system;
+    DummyRepository dummyRepository;
+    system.addRepository(&dummyRepository);
 
     // App Images
     qmlRegisterUncreatableType<AppImage>(uri, 1, 0, "AppImage", "Can't create");

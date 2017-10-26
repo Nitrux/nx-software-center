@@ -7,7 +7,7 @@
 
 DummyRelease::DummyRelease(QString id, QString app_id):Release(id, app_id)
 {
-
+    name = id + " "  + app_id;
 }
 
 Change *DummyRelease::download()

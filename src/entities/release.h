@@ -24,6 +24,7 @@ public:
 
     QString licence;
 
+    int download_size = 0;
     QString download_link;
     QString icon_link;
     QList<QString> screenshot_links;

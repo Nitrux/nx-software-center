@@ -62,6 +62,18 @@ set(SOURCE
         src/entities/repository.cpp
         src/entities/registry.cpp
         src/entities/system.cpp
+
+        src/interactors/interactor.cpp
+        src/interactors/searchapplicationsinteractor.cpp
+        src/interactors/searchapplicationsinteractorlistener.h
+
+        src/test/dummyrepository.cpp
+        src/test/dummychange.cpp
+        src/test/dummyrelease.cpp
+        src/test/dummydownloadchange.cpp
+        src/test/dummyinstallchange.cpp
+        src/test/dummyuninstallchange.cpp
+        src/test/dummyremovechange.cpp
 )
 
 
