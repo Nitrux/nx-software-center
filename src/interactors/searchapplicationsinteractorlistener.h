@@ -7,7 +7,7 @@ class SearchApplicationsInteractorListener
 {
 public:
     virtual ~SearchApplicationsInteractorListener() {}
-    virtual void handleApplicationsList(const QVariantList applicationsList) = 0;
+    virtual void handleApplicationsList(const QVariantList &applicationsList) = 0;
     virtual void handleNoApplicationsFound() = 0;
 };
 

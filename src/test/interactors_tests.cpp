@@ -22,7 +22,7 @@ class DummySearchApplicationsInteractorListener : public SearchApplicationsInter
 public:
     DummySearchApplicationsInteractorListener() {}
 
-    virtual void handleApplicationsList(const QVariantList applicationsList) {
+    virtual void handleApplicationsList(const QVariantList &applicationsList) {
         m_applicationsList = applicationsList;
         appFound = true;
     }

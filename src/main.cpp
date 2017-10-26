@@ -26,11 +26,9 @@
 #include "appimage/appimage.h"
 #include "appimage/appimagehubrepository.h"
 
-#include "entities/system.h"
-#include "entities/registry.h"
-#include "entities/repository.h"
-
 #include "test/dummyrepository.h"
+
+#include "ui/searchviewcontroller.h"
 
 
 static AppImageHubRepository * appImageHubRepository = nullptr;
@@ -61,7 +59,6 @@ static QObject *snapstore_singletontype_provider(QQmlEngine *engine, QJSEngine *
     return snapStore;
 }
 
-
 static QObject *appimagehub_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
@@ -73,6 +70,20 @@ static QObject *appimagehub_singletontype_provider(QQmlEngine *engine, QJSEngine
     return appImageHubRepository;
 }
 
+SearchViewController *searchviewcontroller = nullptr;
+
+static QObject *searchviewcontroller_singletontype_provider(QQmlEngine *engine, QJSEngine *)
+{
+    if (searchviewcontroller == nullptr)
+    {
+        DummyRepository *dummyRepository = new DummyRepository();
+        dummyRepository->updateCache();
+        QList<Repository*> repositoryList(QList<Repository*> {dummyRepository});
+        searchviewcontroller = new SearchViewController(repositoryList, engine);
+    }
+
+    return dynamic_cast<QObject*>(searchviewcontroller);
+}
 
 int main(int argc, char *argv[])
 {
@@ -84,10 +95,9 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon::fromTheme("nx-software-center"));
     QQmlApplicationEngine engine;
 
-    // Init base entities
-    System system;
-    DummyRepository dummyRepository;
-    system.addRepository(&dummyRepository);
+    // Init view controllers
+    qmlRegisterSingletonType<SearchViewController>(uri, 1, 0, "SearchViewController", searchviewcontroller_singletontype_provider);
+
 
     // App Images
     qmlRegisterUncreatableType<AppImage>(uri, 1, 0, "AppImage", "Can't create");

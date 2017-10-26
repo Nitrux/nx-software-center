@@ -67,6 +67,8 @@ set(SOURCE
         src/interactors/searchapplicationsinteractor.cpp
         src/interactors/searchapplicationsinteractorlistener.h
 
+        src/ui/searchviewcontroller.cpp
+
         src/test/dummyrepository.cpp
         src/test/dummychange.cpp
         src/test/dummyrelease.cpp

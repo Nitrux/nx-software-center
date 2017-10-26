@@ -36,9 +36,9 @@ void SearchApplicationsInteractor::execute()
                     release->name.contains(m_searchString) ||
                     release->description.contains(m_searchString))
             {
-                QVariantHash appData;
+                QVariantMap appData;
                 appData["id"] = app->id;
-                appData["latest_version_id"] = release->id;
+                appData["latest_release_id"] = release->id;
 
                 appData["name"] = release->name;
                 appData["description"] = release->description;
