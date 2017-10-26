@@ -24,7 +24,7 @@ void DummyRepository::updateCache()
         for (int j = 0; j < 3; j ++) {
             QString releaseId = QString("r%1").arg(j);
             Release *release = new DummyRelease(releaseId, appId);
-            release->name = QString("Dummy App %1").arg(i);
+            release->name = appName + QString(" %1").arg(i);
             release->description = "Dummy app";
             release->download_link = "https://github.com/AppImage/AppImageUpdate/releases/download/continuous/AppImageUpdate-x86_64.AppImage";
             app->addRelease(release);

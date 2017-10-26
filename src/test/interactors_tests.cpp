@@ -82,7 +82,7 @@ private slots:
         DummyRepository repository;
         repository.updateCache();
 
-        QString searchString("app_1");
+        QString searchString(repository.appName);
         SearchApplicationsInteractor interactor(searchString,
                                                 QList<Repository *>({&repository}),
                                                 &listener);
@@ -152,8 +152,8 @@ private slots:
         QVERIFY(listener.m_downloadComplete);
         QVERIFY(!listener.m_filePath.isEmpty());
 
-        QFile file(listener.m_filePath);
-        QVERIFY(file.exists());
+        QString registryFilePath = registry.getReleaseFilePath("app_1", "r2");
+        QVERIFY( registryFilePath.compare(listener.m_filePath) == 0);
 
         downloadManager.removeTmpFile();
 

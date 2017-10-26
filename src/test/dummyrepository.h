@@ -11,6 +11,7 @@ public:
     virtual QString id();
 
     virtual void updateCache() override;
+    QString appName = "Dummy App";
 };
 
 #endif // DUMMYREPOSITORY_H

@@ -50,6 +50,10 @@ void DownloadAppImageReleaseInteractor::execute()
     {
         QString file = m_downloadManager->download(release->download_link, m_listener);
         if (!file.isEmpty())
+        {
+            m_registry->registerReleaseDownload(m_appImageId, m_appImageReleaseId, file);
+
             m_listener->downloadComplete(file);
+        }
     }
 }
