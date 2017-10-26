@@ -6,7 +6,7 @@
 class DummyRemoveChange: public DummyChange
 {
 public:
-    DummyRemoveChange(QString target_release_id);
+    DummyRemoveChange(QString appId, QString releaseId);
 
     virtual void finish() override;
 };

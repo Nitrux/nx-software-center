@@ -6,7 +6,7 @@
 class DummyInstallChange: public DummyChange
 {
 public:
-    DummyInstallChange(QString target_release_id);
+    DummyInstallChange(QString appId, QString releaseId);
 
     virtual void finish() override;
 };

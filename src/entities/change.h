@@ -17,11 +17,12 @@ public:
         FAILED
     };
 
-    Change(QString id, QString target_release_id);
+    Change(QString id, QString appId, QString releaseId);
     virtual ~Change();
 
     QString id;
-    QString target_release_id;
+    QString appId;
+    QString releaseId;
 
     Status status;
     QList<QString> logs;

@@ -62,10 +62,14 @@ set(SOURCE
         src/entities/repository.cpp
         src/entities/registry.cpp
         src/entities/system.cpp
+        src/entities/downloadmanager.h
+        src/entities/progresslistener.h
 
         src/interactors/interactor.cpp
         src/interactors/searchapplicationsinteractor.cpp
         src/interactors/searchapplicationsinteractorlistener.h
+        src/interactors/downloadappimagereleaseinteractor.cpp
+        src/interactors/downloadappimagereleaseinteractorlistener.h
 
         src/ui/searchviewcontroller.cpp
 

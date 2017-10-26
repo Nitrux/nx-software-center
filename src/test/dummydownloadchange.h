@@ -6,7 +6,7 @@
 class DummyDownloadChange: public DummyChange
 {
 public:
-    DummyDownloadChange(QString target_release_id);
+    DummyDownloadChange(QString appId, QString releaseId);
 
     virtual void finish() override;
 };

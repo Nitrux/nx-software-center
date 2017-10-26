@@ -5,7 +5,7 @@
 
 #include "../entities/registry.h"
 
-DummyChange::DummyChange(QString target_release_id): Change("dummy_change_" + target_release_id, target_release_id)
+DummyChange::DummyChange(QString appId, QString releaseId): Change("dummy_change", appId, releaseId)
 {
 
 }

@@ -2,7 +2,7 @@
 
 #include "../entities/registry.h"
 
-DummyRemoveChange::DummyRemoveChange(QString target_release_id): DummyChange(target_release_id)
+DummyRemoveChange::DummyRemoveChange(QString appId, QString releaseId): DummyChange(appId, releaseId)
 {
 
 }
@@ -13,8 +13,8 @@ void DummyRemoveChange::finish()
     logs.push_front("Finished change");
     if (m_registry != nullptr)
     {
-        m_registry->registerReleaseUninstall(target_release_id);
-        m_registry->registerReleaseRemove(target_release_id);
+        m_registry->registerReleaseUninstall(appId, releaseId);
+        m_registry->registerReleaseRemove(appId, releaseId);
 
     }
     status = FINISHED;

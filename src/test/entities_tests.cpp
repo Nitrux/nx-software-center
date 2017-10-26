@@ -45,7 +45,7 @@ private slots:
 
     void testChange()
     {
-        DummyInstallChange change("tell_c2");
+        DummyInstallChange change("app", "v0.9");
         int currentProgress, totalProgress;
         QString statusMessage;
 
@@ -72,16 +72,17 @@ private slots:
     {
         Registry registry;
 
-        DummyInstallChange change("coll_app_1");
-
+        DummyInstallChange change("app", "v1");
         registry.registerChange(&change);
+
         QVERIFY(registry.runningChanges().size() == 0);
         change.execute();
         QVERIFY(registry.runningChanges().size() == 1);
         change.finish();
+
         QVERIFY(registry.runningChanges().size() == 0);
-        QVERIFY(registry.installedReleaseIds().size() == 1);
-        QVERIFY(registry.downloadedReleaseIds().size() == 1);
+        QVERIFY(!registry.getReleaseFilePath("app", "v1").isEmpty());
+        QVERIFY(!registry.getReleaseInstalleFilePaths("app", "v1").isEmpty());
     }
 
     void testSystem()
@@ -127,19 +128,19 @@ private slots:
 
                 QString downloadChangeId = system.downloadRelease(appId, lastReleaseID);
                 verifyChange(downloadChangeId);
-                QVERIFY(registry->downloadedReleaseIds().contains(lastReleaseID));
+                QVERIFY(!registry->getReleaseFilePath(appId, lastReleaseID).isEmpty());
 
                 QString installChangeId = system.installRelease(appId, lastReleaseID);
                 verifyChange(installChangeId);
-                QVERIFY(registry->installedReleaseIds().contains(lastReleaseID));
+                QVERIFY(!registry->getReleaseInstalleFilePaths(appId, lastReleaseID).isEmpty());
 
                 QString uninstallChangeId = system.uninstallRelease(appId, lastReleaseID);
                 verifyChange(uninstallChangeId);
-                QVERIFY(!registry->installedReleaseIds().contains(lastReleaseID));
+                QVERIFY(registry->getReleaseInstalleFilePaths(appId, lastReleaseID).isEmpty());
 
                 QString removeChangeId = system.removeRelease(appId, lastReleaseID);
                 verifyChange(removeChangeId);
-                QVERIFY(!registry->downloadedReleaseIds().contains(lastReleaseID));
+                QVERIFY(registry->getReleaseFilePath(appId, lastReleaseID).isEmpty());
             }
 
 

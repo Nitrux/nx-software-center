@@ -1,9 +1,10 @@
 #include "change.h"
 
-Change::Change(QString id, QString target_release_id)
+Change::Change(QString id, QString appId, QString releaseId)
 {
     this->id = id;
-    this->target_release_id = target_release_id;
+    this->appId = appId;
+    this->releaseId = releaseId;
     this->status = CREATED;
 }
 
@@ -14,7 +15,7 @@ Change::~Change()
 
 QString Change::description ()
 {
-    return "Changing release " + target_release_id;
+    return "Changing release " + releaseId;
 }
 
 void Change::attachRegistry(Registry *registry)

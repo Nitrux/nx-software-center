@@ -15,6 +15,7 @@ public:
 
     QString id;
     QString app_id;
+    QString version;
     QString arch;
 
     QString name;
@@ -37,7 +38,7 @@ public:
     bool operator == (const Release& r) const;
     bool operator < (const Release& r) const;
 
-    int Compare (const Release& d) const;
+    int Compare (const Release& r) const;
 };
 
 #endif // RELEASE_H

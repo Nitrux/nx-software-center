@@ -21,8 +21,14 @@ void DummyRepository::updateCache()
     {
         QString appId = QString("app_%1").arg(i);
         App * app = new App(appId);
-        app->addRelease(new DummyRelease("r1.0.0", appId));
-        app->addRelease(new DummyRelease("r2.0.0", appId));
+        for (int j = 0; j < 3; j ++) {
+            QString releaseId = QString("r%1").arg(j);
+            Release *release = new DummyRelease(releaseId, appId);
+            release->name = QString("Dummy App %1").arg(i);
+            release->description = "Dummy app";
+            release->download_link = "https://github.com/AppImage/AppImageUpdate/releases/download/continuous/AppImageUpdate-x86_64.AppImage";
+            app->addRelease(release);
+        }
 
         apps.insert(appId, app);
     }

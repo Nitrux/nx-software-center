@@ -6,7 +6,7 @@
 class DummyChange : public Change
 {
 public:
-    DummyChange(QString target_release_id);
+    DummyChange(QString appId, QString releaseId);
 
     virtual bool execute() override;
     virtual void finish() = 0;

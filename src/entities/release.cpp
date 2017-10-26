@@ -16,9 +16,9 @@ bool Release::operator ==(const Release &r) const {
 }
 
 bool Release::operator <(const Release &r) const {
-    return Compare(r)<0;
+    return version.compare(r.version) < 0;
 }
 
-int Release::Compare(const Release &d) const {
-    return id.compare(d.id);
+int Release::Compare(const Release &r) const {
+    return id.compare(r.id);
 }

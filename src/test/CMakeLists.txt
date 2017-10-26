@@ -65,10 +65,12 @@ set(INTERACTORS_SOURCE
     ../interactors/interactor.cpp
     ../interactors/searchapplicationsinteractor.cpp
     ../interactors/searchapplicationsinteractorlistener.h
+    ../interactors/downloadappimagereleaseinteractor.cpp
     )
 
 set(INTERACTORS_TESTS_SOURCE
     interactors_tests.cpp
+    dummydownloadmanager.cpp
     dummyrelease.cpp
     dummyrepository.cpp
     dummychange.cpp

@@ -9,16 +9,6 @@ Registry::Registry()
 
 }
 
-QList<QString> Registry::downloadedReleaseIds()
-{
-    return m_downloadedReleaseIds;
-}
-
-QList<QString> Registry::installedReleaseIds()
-{
-    return m_installedReleaseIds;
-}
-
 Change *Registry::getChange(const QString &changeId) const
 {
     return m_changes.value(changeId, nullptr);
@@ -36,29 +26,54 @@ bool Registry::registerChange(Change *change)
     }
 }
 
-void Registry::registerReleaseDownload(QString releaseId)
+void Registry::registerReleaseDownload(QString appId, QString releaseId, QString filePath)
 {
+    Q_ASSERT(!appId.isEmpty());
+    Q_ASSERT(!releaseId.isEmpty());
 
-    QList<QString>::iterator iter = std::find(m_downloadedReleaseIds.begin(), m_downloadedReleaseIds.end(), releaseId);
-    if (iter == m_downloadedReleaseIds.end())
-        m_downloadedReleaseIds.push_back(releaseId);
+    QString key = appId+"_"+releaseId;
+    if (!m_downloadedReleaseIds.contains(key))
+        m_downloadedReleaseIds.insert(key, filePath);
 }
 
-void Registry::registerReleaseInstall(QString releaseId)
+void Registry::registerReleaseInstall(QString appId, QString releaseId, QStringList files)
 {
-    QList<QString>::iterator iter = std::find(m_installedReleaseIds.begin(), m_installedReleaseIds.end(), releaseId);
-    if (iter == m_installedReleaseIds.end())
-        m_installedReleaseIds.push_back(releaseId);
+    Q_ASSERT(!appId.isEmpty());
+    Q_ASSERT(!releaseId.isEmpty());
+
+    QString key = appId+"_"+releaseId;
+    if (!m_installedReleaseIds.contains(key))
+        m_installedReleaseIds.insert(key, files);
 }
 
-void Registry::registerReleaseUninstall(QString releaseId)
+void Registry::registerReleaseUninstall(QString appId, QString releaseId)
 {
-    m_installedReleaseIds.removeAll(releaseId);
+    Q_ASSERT(!appId.isEmpty());
+    Q_ASSERT(!releaseId.isEmpty());
+
+    QString key = appId+"_"+releaseId;
+    m_installedReleaseIds.remove(key);
 }
 
-void Registry::registerReleaseRemove(QString releaseId)
+void Registry::registerReleaseRemove(QString appId, QString releaseId)
 {
-    m_downloadedReleaseIds.removeAll(releaseId);
+    Q_ASSERT(!appId.isEmpty());
+    Q_ASSERT(!releaseId.isEmpty());
+
+    QString key = appId+"_"+releaseId;
+    m_downloadedReleaseIds.remove(key);
+}
+
+QString Registry::getReleaseFilePath(QString appId, QString releaseId)
+{
+    QString key = appId+"_"+releaseId;
+    return m_downloadedReleaseIds.value(key, QString());
+}
+
+QStringList Registry::getReleaseInstalleFilePaths(QString appId, QString releaseId)
+{
+    QString key = appId+"_"+releaseId;
+    return m_installedReleaseIds.value(key, QStringList());
 }
 
 QList<Change *> Registry::runningChanges()

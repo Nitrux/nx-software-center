@@ -2,7 +2,7 @@
 
 #include "../entities/registry.h"
 
-DummyDownloadChange::DummyDownloadChange(QString target_release_id): DummyChange(target_release_id)
+DummyDownloadChange::DummyDownloadChange(QString appId, QString releaseId): DummyChange(appId, releaseId)
 {
 
 }
@@ -13,7 +13,7 @@ void DummyDownloadChange::finish()
     logs.push_front("Finished change");
     if (m_registry != nullptr)
     {
-        m_registry->registerReleaseDownload(target_release_id);
+        m_registry->registerReleaseDownload(appId, releaseId, "/no_where");
     }
     status = FINISHED;
 }

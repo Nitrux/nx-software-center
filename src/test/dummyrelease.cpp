@@ -12,24 +12,24 @@ DummyRelease::DummyRelease(QString id, QString app_id):Release(id, app_id)
 
 Change *DummyRelease::download()
 {
-    Change * change = new DummyDownloadChange(this->id);
+    Change * change = new DummyDownloadChange(this->app_id, this->id);
     return change;
 }
 
 Change *DummyRelease::install()
 {
-    Change * change = new DummyInstallChange(this->id);
+    Change * change = new DummyInstallChange(this->app_id, this->id);
     return change;
 }
 
 Change *DummyRelease::uninstall()
 {
-    Change * change = new DummyUninstallChange(this->id);
+    Change * change = new DummyUninstallChange(this->app_id, this->id);
     return change;
 }
 
 Change *DummyRelease::remove()
 {
-    Change * change = new DummyRemoveChange(this->id);
+    Change * change = new DummyRemoveChange(this->app_id, this->id);
     return change;
 }
