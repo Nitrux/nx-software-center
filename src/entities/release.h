@@ -21,7 +21,7 @@ public:
     QString name;
     QString description;
 
-    std::list<QString> authors;
+    QList<QString> authors;
 
     QString licence;
 
