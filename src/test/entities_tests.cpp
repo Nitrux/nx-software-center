@@ -8,6 +8,7 @@
 #include "../entities/repository.h"
 #include "../entities/registry.h"
 #include "../entities/system.h"
+#include "../entities/progresslistener.h"
 
 #include "dummychange.h"
 #include "dummyinstallchange.h"
@@ -148,6 +149,7 @@ private slots:
             delete repository;
         }
     }
+
 };
 QTEST_MAIN(EntitiesTests)
 #include "entities_tests.moc"

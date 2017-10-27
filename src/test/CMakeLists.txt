@@ -88,3 +88,32 @@ set(INTERACTORS_TESTS_SOURCE
 add_executable(interactors_tests ${INTERACTORS_TESTS_SOURCE})
 target_link_libraries(interactors_tests Qt5::Test)
 add_test(interactors_tests interactors_tests)
+
+###
+# TEST GATEWAYS
+###
+
+set(GATEWAYS_SOURCE
+    ../gateways/kf5downloadmanager.cpp
+    )
+
+set(GATEWAYS_TESTS_SOURCE
+    gateways_tests.cpp
+    dummydownloadmanager.cpp
+    dummyrelease.cpp
+    dummyrepository.cpp
+    dummychange.cpp
+    dummydownloadchange.cpp
+    dummyinstallchange.cpp
+    dummyuninstallchange.cpp
+    dummyremovechange.cpp
+
+    ${ENTITIES_SOURCE}
+    ${GATEWAYS_SOURCE}
+    )
+
+
+
+add_executable(gateways_tests ${GATEWAYS_TESTS_SOURCE})
+target_link_libraries(gateways_tests Qt5::Test KF5::KIOCore)
+add_test(gateways_tests gateways_tests)

@@ -1,6 +1,8 @@
 #ifndef DOWNLOADMANAGER_H
 #define DOWNLOADMANAGER_H
 
+#include <QString>
+
 class ProgressListener;
 
 class DownloadManager

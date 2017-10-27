@@ -9,6 +9,9 @@ public:
     virtual ~DownloadAppImageReleaseInteractorListener() {}
 
     virtual void downloadComplete(const QString filePaht) = 0;
+
+ protected:
+    virtual void finished() {}
 };
 
 #endif // DOWNLOADAPPIMAGERELEASEINTERACTORLISTENER_H

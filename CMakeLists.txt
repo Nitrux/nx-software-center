@@ -65,6 +65,8 @@ set(SOURCE
         src/entities/downloadmanager.h
         src/entities/progresslistener.h
 
+        src/gateways/kf5downloadmanager.cpp
+
         src/interactors/interactor.cpp
         src/interactors/searchapplicationsinteractor.cpp
         src/interactors/searchapplicationsinteractorlistener.h
@@ -76,6 +78,7 @@ set(SOURCE
         src/interactors/removeappimagereleaseinteractorlistener.h
 
         src/ui/searchviewcontroller.cpp
+        src/ui/taskscontroller.cpp
 
         src/test/dummyrepository.cpp
         src/test/dummychange.cpp
