@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QSignalSpy>
+#include <QTemporaryFile>
 
 #include "../entities/app.h"
 #include "../entities/change.h"
@@ -14,6 +15,8 @@
 #include "../interactors/searchapplicationsinteractorlistener.h"
 #include "../interactors/downloadappimagereleaseinteractor.h"
 #include "../interactors/downloadappimagereleaseinteractorlistener.h"
+#include "../interactors/removeappimagereleaseinteractor.h"
+#include "../interactors/removeappimagereleaseinteractorlistener.h"
 
 #include "dummychange.h"
 #include "dummyinstallchange.h"
@@ -69,6 +72,27 @@ public:
     bool m_downloadFailed = false;
     bool m_progress_reported = false;
     QString m_filePath;
+    QString m_errorMessage;
+};
+
+class DummyRemoveAppImageReleaseInteractorListener : public RemoveAppImageReleaseInteractorListener
+{
+public:
+    virtual ~DummyRemoveAppImageReleaseInteractorListener() {}
+
+    virtual void error(const QString &errorMessage) {
+        qDebug() << errorMessage;
+        m_errorMessage = errorMessage;
+        m_removeFailed = true;
+    }
+
+    virtual void finished() {
+        m_removeCompleted = true;
+    }
+
+    bool m_removeCompleted = false;
+    bool m_removeFailed = false;
+
     QString m_errorMessage;
 };
 
@@ -200,6 +224,45 @@ private slots:
         QVERIFY(!file.exists());
     }
 
+    void testRemoveAppImageReleaseInteractorMainScenario() {
+        DummyRemoveAppImageReleaseInteractorListener listener;
+
+        QString appId = "testApp";
+        QString releaseId = "testRelease";
+
+        QTemporaryFile tmpFile;
+        tmpFile.open();
+        tmpFile.write("HELLO CRUEL WORLD!");
+        tmpFile.close();
+
+        Q_ASSERT(tmpFile.exists());
+
+        Registry registry;
+        registry.registerReleaseDownload(appId, releaseId, tmpFile.fileName());
+
+        RemoveAppImageReleaseInteractor interactor(appId, releaseId, &registry, &listener);
+        interactor.execute();
+
+        QVERIFY(!tmpFile.exists());
+        QVERIFY(listener.m_removeCompleted);
+        QVERIFY(!listener.m_removeFailed);
+    }
+
+    void testRemoveAppImageReleaseInteractorNotDownloadedScenario() {
+        DummyRemoveAppImageReleaseInteractorListener listener;
+
+        QString appId = "--";
+        QString releaseId = "--";
+
+        Registry registry;
+
+        RemoveAppImageReleaseInteractor interactor(appId, releaseId, &registry, &listener);
+        interactor.execute();
+
+        QVERIFY(listener.m_removeCompleted);
+        QVERIFY(!listener.m_removeFailed);
+        QVERIFY(listener.m_errorMessage.isEmpty());
+    }
 };
 QTEST_MAIN(InteractorsTests)
 #include "interactors_tests.moc"

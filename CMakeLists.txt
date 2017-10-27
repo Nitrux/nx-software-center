@@ -72,6 +72,8 @@ set(SOURCE
         src/interactors/downloadappimagereleaseinteractorlistener.h
         src/interactors/getapplicationinteractor.cpp
         src/interactors/getapplicationinteractorlistener.h
+        src/interactors/removeappimagereleaseinteractor.cpp
+        src/interactors/removeappimagereleaseinteractorlistener.h
 
         src/ui/searchviewcontroller.cpp
 

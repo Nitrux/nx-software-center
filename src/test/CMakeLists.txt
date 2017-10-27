@@ -64,8 +64,8 @@ add_test(entities_tests entities_tests)
 set(INTERACTORS_SOURCE
     ../interactors/interactor.cpp
     ../interactors/searchapplicationsinteractor.cpp
-    ../interactors/searchapplicationsinteractorlistener.h
     ../interactors/downloadappimagereleaseinteractor.cpp
+    ../interactors/removeappimagereleaseinteractor.cpp
     )
 
 set(INTERACTORS_TESTS_SOURCE
