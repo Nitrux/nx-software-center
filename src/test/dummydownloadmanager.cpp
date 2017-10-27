@@ -51,9 +51,8 @@ void DummyDownloadManager::createTmpFile(QString filePath)
     file.close();
 }
 
-void DummyDownloadManager::removeTmpFile()
+void DummyDownloadManager::removeTmpFile(QString filePath)
 {
-    QString filePath = "/tmp/fake_download_file.AppImage";
     QFile file(filePath);
     file.remove();
 }

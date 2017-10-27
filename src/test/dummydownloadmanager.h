@@ -15,7 +15,7 @@ public:
     virtual QString brokenDownload(const QString &url, ProgressListener * listener);
 
     void createTmpFile(QString filePath);
-    void removeTmpFile();
+    void removeTmpFile(QString filePath);
 
     bool m_fail;
 };

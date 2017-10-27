@@ -153,10 +153,9 @@ private slots:
         QVERIFY(!listener.m_filePath.isEmpty());
 
         QString registryFilePath = registry.getReleaseFilePath("app_1", "r2");
-        QVERIFY( registryFilePath.compare(listener.m_filePath) == 0);
+        QVERIFY(registryFilePath.compare(listener.m_filePath) == 0);
 
-        downloadManager.removeTmpFile();
-
+        downloadManager.removeTmpFile(listener.m_filePath);
     }
 
     void testDownloadAppImageReleaseInteractorDownloadErrorScenario()

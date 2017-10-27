@@ -24,6 +24,7 @@ public:
 
     virtual void execute();
 
+    QString storagePath = "$HOME/.local/bin/";
 protected:
     QString m_appImageId;
     QString m_appImageReleaseId;
