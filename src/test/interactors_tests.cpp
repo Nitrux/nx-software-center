@@ -101,13 +101,15 @@ class InteractorsTests : public QObject
     Q_OBJECT
 private slots:
 
-    void testsearchapplicationsinteractorMainScenario() {
+    void testsearchapplicationsinteractorMainScenario() {\
+        Registry registry;
         DummySearchApplicationsInteractorListener listener;
         DummyRepository repository;
         repository.updateCache();
 
         QString searchString(repository.appName);
         SearchApplicationsInteractor interactor(searchString,
+                                                &registry,
                                                 QList<Repository *>({&repository}),
                                                 &listener);
         interactor.execute();
@@ -129,12 +131,13 @@ private slots:
     }
 
     void testsearchapplicationsinteractorEmptySearchScenario() {
-
+        Registry registry;
         DummySearchApplicationsInteractorListener listener;
         DummyRepository repository;
         repository.updateCache();
 
         SearchApplicationsInteractor interactor(QString(),
+                                                &registry,
                                                 QList<Repository *>({&repository}),
                                                 &listener);
         interactor.execute();
@@ -143,13 +146,14 @@ private slots:
     }
 
     void testsearchapplicationsinteractorNoApplicationsMatchingScenario() {
-
+        Registry registry;
         DummySearchApplicationsInteractorListener listener;
         DummyRepository repository;
         repository.updateCache();
 
         QString searchString("not_existent_app");
         SearchApplicationsInteractor interactor(searchString,
+                                                &registry,
                                                 QList<Repository *>({&repository}),
                                                 &listener);
         interactor.execute();

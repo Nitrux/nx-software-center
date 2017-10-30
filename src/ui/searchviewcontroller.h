@@ -11,7 +11,7 @@ class SearchViewController : public QObject, public SearchApplicationsInteractor
 {
     Q_OBJECT
 public:
-    explicit SearchViewController(QList<Repository *> repositories, QObject *parent = nullptr);
+    explicit SearchViewController(Registry *m_registry, QList<Repository *> repositories, QObject *parent = nullptr);
 
 signals:
     void noMatchFound();
@@ -24,6 +24,7 @@ protected:
     virtual void handleApplicationsList(const QVariantList &applicationsList) override;
     virtual void handleNoApplicationsFound() override;
 
+    Registry *m_registry = nullptr;
     SearchApplicationsInteractor * interactor = nullptr;
     QList<Repository *> m_repositories;
     bool busy;

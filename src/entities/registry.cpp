@@ -28,52 +28,42 @@ bool Registry::registerChange(Change *change)
 
 void Registry::registerReleaseDownload(QString appId, QString releaseId, QString filePath)
 {
-    Q_ASSERT(!appId.isEmpty());
-    Q_ASSERT(!releaseId.isEmpty());
-
-    QString key = appId+"_"+releaseId;
+    QString key = storeKey(appId, releaseId);
     if (!m_downloadedReleaseIds.contains(key))
         m_downloadedReleaseIds.insert(key, filePath);
 }
 
 void Registry::registerReleaseInstall(QString appId, QString releaseId, QStringList files)
 {
-    Q_ASSERT(!appId.isEmpty());
-    Q_ASSERT(!releaseId.isEmpty());
-
-    QString key = appId+"_"+releaseId;
+    QString key = storeKey(appId, releaseId);
     if (!m_installedReleaseIds.contains(key))
         m_installedReleaseIds.insert(key, files);
 }
 
 void Registry::registerReleaseUninstall(QString appId, QString releaseId)
 {
-    Q_ASSERT(!appId.isEmpty());
-    Q_ASSERT(!releaseId.isEmpty());
-
-    QString key = appId+"_"+releaseId;
-    m_installedReleaseIds.remove(key);
+    m_installedReleaseIds.remove(storeKey(appId, releaseId));
 }
 
 void Registry::registerReleaseRemove(QString appId, QString releaseId)
 {
-    Q_ASSERT(!appId.isEmpty());
-    Q_ASSERT(!releaseId.isEmpty());
+    m_downloadedReleaseIds.remove(storeKey(appId, releaseId));
+}
 
-    QString key = appId+"_"+releaseId;
-    m_downloadedReleaseIds.remove(key);
+bool Registry::isReleaseDownloaded(QString appId, QString releaseId)
+{
+    QString key = storeKey(appId, releaseId);
+    return m_downloadedReleaseIds.contains(key);
 }
 
 QString Registry::getReleaseFilePath(QString appId, QString releaseId)
 {
-    QString key = appId+"_"+releaseId;
-    return m_downloadedReleaseIds.value(key, QString());
+    return m_downloadedReleaseIds.value(storeKey(appId, releaseId), QString());
 }
 
 QStringList Registry::getReleaseInstalleFilePaths(QString appId, QString releaseId)
 {
-    QString key = appId+"_"+releaseId;
-    return m_installedReleaseIds.value(key, QStringList());
+    return m_installedReleaseIds.value(storeKey(appId, releaseId), QStringList());
 }
 
 QList<Change *> Registry::runningChanges()
@@ -89,4 +79,12 @@ QList<Change *> Registry::runningChanges()
 QList<Change *> Registry::allChanges()
 {
     return m_changes.values();
+}
+
+QString Registry::storeKey(QString appId, QString releaseId)
+{
+    Q_ASSERT(!appId.isEmpty());
+    Q_ASSERT(!releaseId.isEmpty());
+
+    return appId + "_" + releaseId;
 }

@@ -6,14 +6,20 @@
 
 #include "../entities/app.h"
 #include "../entities/release.h"
+#include "../entities/registry.h"
 #include "../entities/repository.h"
 
 #include "searchapplicationsinteractorlistener.h"
 
-SearchApplicationsInteractor::SearchApplicationsInteractor(const QString &searchString, QList<Repository *> repositories, SearchApplicationsInteractorListener *listener)
+SearchApplicationsInteractor::SearchApplicationsInteractor(const QString &searchString, Registry *registry, QList<Repository *> repositories, SearchApplicationsInteractorListener *listener)
 {
     m_searchString = searchString;
+
+    Q_ASSERT(registry != nullptr);
+    m_registry = registry;
+
     m_repositories = repositories;
+
     Q_ASSERT(listener != nullptr);
     m_listener = listener;
 }
@@ -44,6 +50,8 @@ void SearchApplicationsInteractor::execute()
                 appData["description"] = release->description;
                 appData["icon_link"] = release->icon_link;
                 appData["download_size"] = release->download_size;
+
+                appData["downloaded"] = m_registry->isReleaseDownloaded(app->id, release->id);
 
                 appsData.append(appData);
             }

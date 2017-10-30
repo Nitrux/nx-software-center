@@ -23,6 +23,8 @@
 #include "snapstore/snapstoregetdepartamentrequest.h"
 #include "snapstore/snapstoresnapdetailsrequest.h"
 
+#include "entities/registry.h"
+
 #include "gateways/appimagehubrepository.h"
 #include "gateways/kf5downloadmanager.h"
 
@@ -57,6 +59,7 @@ static QObject *snapstore_singletontype_provider(QQmlEngine *engine, QJSEngine *
     return snapStore;
 }
 
+Registry * registry = nullptr;
 SearchViewController *searchviewcontroller = nullptr;
 AppImageHubRepository *repository = nullptr;
 static QObject *searchviewcontroller_singletontype_provider(QQmlEngine *engine, QJSEngine *)
@@ -65,7 +68,7 @@ static QObject *searchviewcontroller_singletontype_provider(QQmlEngine *engine, 
     {
         Q_ASSERT(repository != nullptr);
         QList<Repository*> repositoryList(QList<Repository*> {repository});
-        searchviewcontroller = new SearchViewController(repositoryList, engine);
+        searchviewcontroller = new SearchViewController(registry, repositoryList, engine);
     }
 
     return dynamic_cast<QObject*>(searchviewcontroller);
@@ -82,6 +85,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     // Init view controllers
+    registry = new Registry();
     repository = new AppImageHubRepository("https://appimage.github.io/feed.json");
     repository->updateCache();
 

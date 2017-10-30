@@ -4,6 +4,7 @@
 #include <QList>
 #include "interactor.h"
 
+class Registry;
 class Repository;
 class SearchApplicationsInteractorListener;
 
@@ -15,6 +16,7 @@ class SearchApplicationsInteractor : public Interactor
 {
 public:
     SearchApplicationsInteractor(const QString &searchString,
+                                 Registry *registry,
                                  QList<Repository *> repositories,
                                  SearchApplicationsInteractorListener * listener);
     virtual ~SearchApplicationsInteractor();
@@ -23,6 +25,7 @@ public:
 
 protected:
     QString m_searchString;
+    Registry * m_registry = nullptr;
     QList<Repository *> m_repositories;
     SearchApplicationsInteractorListener * m_listener;
 };

@@ -18,6 +18,7 @@ public:
     void registerReleaseUninstall(QString appId, QString releaseId);
     void registerReleaseRemove(QString appId, QString releaseId);
 
+    bool isReleaseDownloaded(QString appId, QString releaseId);
     QString getReleaseFilePath(QString appId, QString releaseId);
     QStringList getReleaseInstalleFilePaths(QString appId, QString releaseId);
 
@@ -25,6 +26,7 @@ public:
     QList<Change *> allChanges();
 
 protected:
+    QString storeKey(QString appId, QString releaseId);
     QMap<QString, Change *> m_changes;
 
     QMap<QString, QString> m_downloadedReleaseIds;

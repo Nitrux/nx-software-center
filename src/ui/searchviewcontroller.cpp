@@ -2,8 +2,9 @@
 
 #include <QtConcurrent>
 
-SearchViewController::SearchViewController(QList<Repository *> repositories, QObject *parent) : QObject(parent)
+SearchViewController::SearchViewController(Registry *registry, QList<Repository *> repositories, QObject *parent) : QObject(parent)
 {
+    m_registry = registry;
     m_repositories = repositories;
 }
 
@@ -11,7 +12,7 @@ void SearchViewController::search(QString searchString)
 {
     if (interactor == nullptr)
     {
-        interactor = new SearchApplicationsInteractor(searchString, m_repositories, this);
+        interactor = new SearchApplicationsInteractor(searchString, m_registry, m_repositories, this);
         QtConcurrent::run([=]() {
             interactor->execute();
             interactor = nullptr;
