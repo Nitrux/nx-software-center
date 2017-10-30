@@ -96,6 +96,5 @@ void DownloadAppImageReleaseInteractor::execute()
                 file.remove();
             }
         }
-
     }
 }

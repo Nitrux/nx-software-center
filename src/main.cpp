@@ -60,8 +60,11 @@ static QObject *snapstore_singletontype_provider(QQmlEngine *engine, QJSEngine *
 }
 
 Registry * registry = nullptr;
-SearchViewController *searchviewcontroller = nullptr;
 AppImageHubRepository *repository = nullptr;
+KF5DownloadManager *downloadManager = nullptr;
+SearchViewController *searchviewcontroller = nullptr;
+TasksController * tasksController = nullptr;
+
 static QObject *searchviewcontroller_singletontype_provider(QQmlEngine *engine, QJSEngine *)
 {
     if (searchviewcontroller == nullptr)
@@ -72,6 +75,18 @@ static QObject *searchviewcontroller_singletontype_provider(QQmlEngine *engine, 
     }
 
     return dynamic_cast<QObject*>(searchviewcontroller);
+}
+
+static QObject *taskscontroller_singletontype_provider(QQmlEngine *engine, QJSEngine *)
+{
+    if (tasksController == nullptr)
+    {
+        Q_ASSERT(repository != nullptr);
+        QList<Repository*> repositoryList(QList<Repository*> {repository});
+        tasksController = new TasksController(repositoryList, registry, downloadManager, engine);
+    }
+
+    return dynamic_cast<QObject*>(tasksController);
 }
 
 int main(int argc, char *argv[])
@@ -85,11 +100,14 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     // Init view controllers
+    downloadManager = new KF5DownloadManager();
     registry = new Registry();
+
     repository = new AppImageHubRepository("https://appimage.github.io/feed.json");
     repository->updateCache();
 
     qmlRegisterSingletonType<SearchViewController>(uri, 1, 0, "SearchViewController", searchviewcontroller_singletontype_provider);
+    qmlRegisterSingletonType<TasksController>(uri, 1, 0, "TasksController", taskscontroller_singletontype_provider);
 
     // Snaps
 

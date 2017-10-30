@@ -13,88 +13,23 @@ import "scripts/Utils.js" as Utils
 Item {
     id: root
 
-    objectName: "snapDetailsView"
+    objectName: "appImageDetailsView"
     signal refresh
     signal dismiss
 
-    property var snap: QtObject {
-    }
+    property var app;
 
     function updateContext() {
         var actions = []
-        var enableAction = {
+        var getAction = {
             text: textConstants.actionEnableTitle,
             icon: "package-installed-updated",
             action: function () {
-                enableSnapInteractor.targets = [snap.package_name]
-                enableSnapInteractor.finished.connect(refresh)
-
-                enableSnapInteractor.start()
+                console.log("Working on it");
             }
         }
 
-        var disableAction = {
-            icon: "package-broken",
-            text: textConstants.actionDisableTitle,
-            action: function () {
-                disableSnapInteractor.targets = [snap.package_name]
-                disableSnapInteractor.finished.connect(refresh)
-
-                disableSnapInteractor.start()
-            }
-        }
-
-        var refreshAction = {
-            icon: "package-upgrade",
-            text: textConstants.actionRefreshTitle,
-            action: function () {
-                refreshSnapInteractor.targets = [{
-                                                     name: snap.package_name,
-                                                     channel: snap.channel
-                                                 }]
-                refreshSnapInteractor.finished.connect(refresh)
-
-                refreshSnapInteractor.start()
-            }
-        }
-        var installAction = {
-            icon: "package-install",
-            text: textConstants.actionInstallTitle,
-            action: function () {
-                installSnapInteractor.targets = [{
-                                                     name: snap.package_name,
-                                                     channel: snap.channel
-                                                 }]
-                installSnapInteractor.finished.connect(refresh)
-
-                installSnapInteractor.start()
-            }
-        }
-
-        var removeAction = {
-            icon: "package-remove",
-            text: textConstants.actionRemoveTitle,
-            action: function () {
-                removeSnapInteractor.targets = [snap.package_name]
-                removeSnapInteractor.finished.connect(refresh)
-
-                removeSnapInteractor.start()
-            }
-        }
-
-        if (snap.status >= 3) {
-            actions.push(removeAction)
-
-            if (snap.status >= 4)
-                actions.push(disableAction)
-            else
-                actions.push(enableAction)
-
-            if (snap.store_revision > snap.local_revision) {
-                actions.push(refreshAction)
-            }
-        } else
-            actions.push(installAction)
+        actions.push(getAction)
 
         var returnAction = {
             icon: "draw-arrow-back",
@@ -140,7 +75,7 @@ Item {
                     Layout.preferredHeight: 222
                     Layout.preferredWidth: 222
 
-                    source: snap.icon
+                    source: app['icon_link']
                 }
 
                 ColumnLayout {
@@ -157,7 +92,7 @@ Item {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignTop
 
-                        text: Utils.jsUcfirst(snap.name)
+                        text: Utils.jsUcfirst(app['name'])
                         wrapMode: Text.WordWrap
                         font.pointSize: 18
                     }
@@ -170,7 +105,7 @@ Item {
                         opacity: 0.7
 
                         Repeater {
-                            model: snap.keywords
+                            model: app['categories']
                             delegate: PlasmaComponents.Label {
                                 text: snap.keywords[index]
                                 elide: "ElideRight"
@@ -189,15 +124,15 @@ Item {
                             Layout.preferredWidth: 24
                             source: "license"
 
-                            visible: snap.license != ""
+                            visible: app['license'] != ""
                         }
 
                         PlasmaComponents.Label {
                             Layout.alignment: Qt.AlignBottom
                             Layout.fillWidth: true
-                            text: snap.license
+                            text: app['license']
 
-                            visible: snap.license != ""
+                            visible: app['license'] != ""
                         }
                     }
                 }
@@ -208,7 +143,7 @@ Item {
                     PlasmaComponents.Label {
                         Layout.fillWidth: true
                         Layout.topMargin: 24
-                        visible: snap.publisher != ""
+                        visible: app['authors'] != ""
                         text: i18n("Developed by")
 
                         Layout.maximumHeight: 20
@@ -216,8 +151,8 @@ Item {
 
                     PlasmaComponents.Label {
                         Layout.fillWidth: true
-                        visible: snap.publisher != ""
-                        text: snap.publisher
+                        visible: app['authors'] != ""
+                        text: app['authors']
                         wrapMode: Text.WordWrap
 
                         Layout.alignment: Qt.AlignTop
@@ -230,10 +165,10 @@ Item {
                     }
 
                     Parts.RatingStars {
-                        id: snapStars
+                        id: appStars
                         Layout.fillWidth: true
-                        rating: snap.ratings_average
-                        visible: snap.ratings_average >= 0
+                        rating: app['ratings_average']
+                        visible: app['ratings_average'] >= 0
 
                         Layout.bottomMargin: 16
                     }
@@ -248,7 +183,7 @@ Item {
 
                 contentWidth: width
                 contentHeight: sectionCaptures.visible ? sectionCaptures.height
-                                                         + snapDetails.height : snapDetails.height
+                                                         + appDetails.height : appDetails.height
 
                 ScrollBar.vertical: ScrollBar {
                     active: true
@@ -257,13 +192,13 @@ Item {
                 Parts.HorizontalListView {
                     id: sectionCaptures
 
-                    visible: snap.screenshot_urls.length > 0
+                    visible: app['screenshot_links'].length > 0
                     height: 660
                     width: parent.width
                     clip: true
                     delegate: Image {
                         id: name
-                        source: snap.screenshot_urls[index]
+                        source: app['screenshot_links'][index]
                         width: 780
                         height: 580
                         fillMode: Image.PreserveAspectCrop
@@ -276,13 +211,13 @@ Item {
                             visible: parent.status == Image.Loading
                         }
                     }
-                    model: snap.screenshot_urls
+                    model: app['screenshot_links']
                     snapMode: ListView.SnapToItem
                 }
 
                 PlasmaComponents.Label {
 
-                    id: snapDetails
+                    id: appDetails
 
                     anchors.top: sectionCaptures.visible ? sectionCaptures.bottom : parent.top
                     anchors.left: parent.left
@@ -290,7 +225,7 @@ Item {
                     anchors.leftMargin: 6
                     anchors.rightMargin: 12
 
-                    text: snap.description
+                    text: app['description']
                     wrapMode: Text.Wrap
                     font.pointSize: 11
                 }

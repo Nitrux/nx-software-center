@@ -1,6 +1,11 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.3
 
 import org.nx.softwarecenter 1.0
+
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import "parts" as Parts
 
@@ -8,7 +13,7 @@ Parts.View {
     id: appImageStoreViewRoot
 
     function query(text) {
-        SearchViewController.search(text);
+        SearchViewController.search(text)
     }
 
     Component.onCompleted: {
@@ -24,15 +29,68 @@ Parts.View {
         }
     }
 
-    SnapGrid {
-        id: appImageHubListView
+    Parts.Card {
+        id: wipNotice
 
-        anchors.fill: parent
+        height: 70
 
-        delegate: GridViewItemDelegate {
-            name: model.modelData['name']
-            version: model.modelData['latest_release_id']
-            size: model.modelData['download_size']
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 12
+
+        RowLayout {
+            anchors.fill: parent
+            anchors.margins: 12
+
+            PlasmaCore.IconItem {
+                source: "dialog-information"
+                height: 64
+            }
+
+            PlasmaExtras.Heading {
+                Layout.fillWidth: true
+                Layout.leftMargin: 12
+                wrapMode: Text.WordWrap
+
+                level: 4
+
+                text: "AppImages listing in this store is a work in progress held in coordination with the AppImage development team. New updates will be published soon."
+            }
+        }
+
+
+    }
+
+    PlasmaExtras.ScrollArea {
+        anchors.top: wipNotice.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.topMargin: 12
+        anchors.bottomMargin: 6
+        anchors.rightMargin: 6
+
+        ListView {
+            id: appImageHubListView
+
+            clip: true
+
+
+            spacing: 12
+
+            delegate: AppImageListItemDelegate {
+                name: model.modelData['name']
+                description: model.modelData['description']
+
+                //            version: model.modelData['latest_release_id']
+                //            size: model.modelData['download_size']
+                isDownloaded: model.modelData['downloaded']
+
+                onRequestDownload: {
+                    print("Downloading " + model.modelData['download_link']);
+                    TasksController.download(model.modelData['id'], model.modelData['latest_release_id'])
+                }
+            }
         }
     }
 

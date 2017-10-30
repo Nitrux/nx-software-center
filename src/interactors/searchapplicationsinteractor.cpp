@@ -52,6 +52,7 @@ void SearchApplicationsInteractor::execute()
                 appData["download_size"] = release->download_size;
 
                 appData["downloaded"] = m_registry->isReleaseDownloaded(app->id, release->id);
+                appData["download_link"] = release->download_link;
 
                 appsData.append(appData);
             }

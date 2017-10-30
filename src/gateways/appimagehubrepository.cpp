@@ -80,9 +80,8 @@ void AppImageHubRepository::findDownloadLinks(App *app, QString arch)
                 }
 
                 if (list.count() > 0) {
-                    auto links = app->links;
-                    links["download"] = list.first();
-                    app->links = links;
+                    auto release = app->lastRelease();
+                    release->download_link = list.first();
                 }
             } else
             {

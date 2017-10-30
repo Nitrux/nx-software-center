@@ -123,6 +123,20 @@ ApplicationWindow {
 
         content.currentItem.query(query)
     }
+
+    function showAppImageDetails(appImage) {
+        if (content.currentItem.objectName != "appImageDetailsView") {
+            if (content.currentItem.objectName == "placeHolderView")
+                content.replace("qrc:/AppDetailsView.qml",
+                                { app: appImage },
+                                StackView.Immediate)
+            else
+                content.push("qrc:/AppDetailsView.qml",
+                             {app: appImage},
+                             StackView.Immediate)
+        }
+    }
+
     function showSettings() {
         content.replace("qrc:/SettingsView.qml", StackView.Immediate)
     }
