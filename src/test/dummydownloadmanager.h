@@ -11,8 +11,8 @@ public:
     DummyDownloadManager(bool fail = false);
     virtual ~DummyDownloadManager();
 
-    virtual QString download(const QString &url, ProgressListener * listener);
-    virtual QString brokenDownload(const QString &url, ProgressListener * listener);
+    virtual void download(const QString &url, QString destination, ProgressListener * listener) override;
+    virtual void brokenDownload(const QString &url, QString destination, ProgressListener * listener);
 
     void createTmpFile(QString filePath);
     void removeTmpFile(QString filePath);

@@ -12,35 +12,28 @@ DummyDownloadManager::~DummyDownloadManager()
 {
 }
 
-QString DummyDownloadManager::download(const QString &url, ProgressListener *listener)
+void DummyDownloadManager::download(const QString &url, QString destination, ProgressListener *listener)
 {
     if (m_fail)
-        return brokenDownload(url, listener);
+        brokenDownload(url, destination, listener);
 
     Q_ASSERT(listener != nullptr);
 
-    QString filePath = "/tmp/fake_download_file.AppImage";
-    createTmpFile(filePath);
+    createTmpFile(destination);
 
     listener->progress(0, 100, "Starting download");
     listener->progress(50, 100, "Almost there");
     listener->progress(100, 100, "Complete");
-
-    return filePath;
 }
 
-QString DummyDownloadManager::brokenDownload(const QString &, ProgressListener *listener)
+void DummyDownloadManager::brokenDownload(const QString &url, QString destination, ProgressListener *listener)
 {
     Q_ASSERT(listener != nullptr);
-
-    QString filePath = "/tmp/fake_download_file.AppImage";
 
     listener->progress(0, 100, "Starting download");
     listener->progress(50, 100, "Almost there");
 
     listener->error("Something went wrong.");
-
-    return "";
 }
 
 void DummyDownloadManager::createTmpFile(QString filePath)

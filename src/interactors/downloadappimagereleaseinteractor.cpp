@@ -47,7 +47,9 @@ void DownloadAppImageReleaseInteractor::execute()
     {
         // There is a file with the same name but is not registered
         // let's remove it and download it again in order to be sure.
-        targetFile.remove();
+        if (targetFile.exists())
+            targetFile.remove();
+
         m_registry->registerReleaseRemove(m_appImageId, m_appImageReleaseId);
     }
 
@@ -76,25 +78,14 @@ void DownloadAppImageReleaseInteractor::execute()
         QDir destination(storagePath.replace("$HOME", QDir::home().absolutePath()));
         QString targetFilePath = destination.absoluteFilePath(newFileName);
 
-        QString tmpFilePath = m_downloadManager->download(release->download_link, m_listener);
-        if (!tmpFilePath.isEmpty())
+        destination.mkpath(storagePath);
+
+        m_downloadManager->download(release->download_link, targetFilePath, m_listener);
+        QFile file(targetFilePath);
+        if (!file.exists())
         {
-            destination.mkpath(storagePath);
-            QFile file(tmpFilePath);
-
-            QString targetFilePath = destination.absoluteFilePath(newFileName);
-            bool result = file.rename(targetFilePath);
-
-            if (result)
-            {
-                m_registry->registerReleaseDownload(m_appImageId, m_appImageReleaseId, targetFilePath);
-                m_listener->downloadComplete(targetFilePath);
-            } else
-            {
-                m_listener->error(QString("Unable to move the AppImage file to %1").arg(targetFilePath));
-                QFile file(tmpFilePath);
-                file.remove();
-            }
+            m_registry->registerReleaseDownload(m_appImageId, m_appImageReleaseId, targetFilePath);
+            m_listener->downloadComplete(targetFilePath);
         }
     }
 }

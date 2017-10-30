@@ -11,11 +11,10 @@ KF5DownloadManager::KF5DownloadManager()
 
 }
 
-QString KF5DownloadManager::download(const QString &url, ProgressListener *listener)
+void KF5DownloadManager::download(const QString &url, const QString destination, ProgressListener *listener)
 {
-    QTemporaryFile *m_file = new QTemporaryFile;
-    m_file->setAutoRemove(false);
-    m_file->open();
+    QFile *m_file = new QFile(destination);
+    m_file->open(QIODevice::WriteOnly);
     auto job = KIO::get(url);
 
     QObject::connect(job, &KIO::TransferJob::infoMessage, [=] (KJob *job, const QString &plain, const QString &rich)
@@ -40,12 +39,10 @@ QString KF5DownloadManager::download(const QString &url, ProgressListener *liste
 
         m_file->close();
         m_file->deleteLater();
-
-        job->deleteLater();
     });
 
     QString fileName = m_file->fileName();
     job->exec();
 
-    return fileName;
+    delete job;
 }

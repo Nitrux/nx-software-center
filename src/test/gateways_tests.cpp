@@ -51,7 +51,8 @@ private slots:
         KF5DownloadManager downloadManager;
         DummyProgressListener listener;
 
-        QString filePath = downloadManager.download("https://www.google.com", &listener);
+        QString filePath = "/tmp/testDownloader";
+        downloadManager.download("https://www.google.com", filePath, &listener);
         qDebug() << filePath;
         QFile file(filePath);
         QVERIFY(file.exists());

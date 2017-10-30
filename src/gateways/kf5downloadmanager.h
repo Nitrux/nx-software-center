@@ -8,7 +8,7 @@ class KF5DownloadManager : public DownloadManager
 public:
     KF5DownloadManager();
 
-    virtual QString download(const QString &url, ProgressListener * listener);
+    virtual void download(const QString &url, const QString destination, ProgressListener * listener) override;
 };
 
 #endif // KF5DOWNLOADMANAGER_H
