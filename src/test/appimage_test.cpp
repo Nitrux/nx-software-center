@@ -13,10 +13,10 @@ class AppImageTest : public QObject
 private slots:
     void testAppImageHubRepository()
     {
-        AppImageHubRepository repository("http://localhost:4000/feed.json");
+        AppImageHubRepositoryOld repository("http://localhost:4000/feed.json");
         repository.update();
 
-        QSignalSpy spy(&repository, &AppImageHubRepository::itemsChanged);
+        QSignalSpy spy(&repository, &AppImageHubRepositoryOld::itemsChanged);
         spy.wait();
 
 //        for (AppImage * appImage: repository.items())

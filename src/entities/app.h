@@ -19,6 +19,7 @@ public:
     void addRelease(Release* release);
     Release* getRelease(QString releaseId);
     QList<Release*> releases();
+    QList<QString> categories;
 
     QMap<QString, QString> links;
 

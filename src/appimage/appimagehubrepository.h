@@ -8,12 +8,12 @@
 
 #include "appimagerepository.h"
 
-class AppImageHubRepository : public AppImageRepository
+class AppImageHubRepositoryOld : public AppImageRepository
 {
     Q_OBJECT
     Q_PROPERTY(bool isUpdating READ isUpdating WRITE setIsUpdating NOTIFY isUpdatingChanged)
 public:
-    explicit AppImageHubRepository(QString url, QObject *parent = nullptr);
+    explicit AppImageHubRepositoryOld(QString url, QObject *parent = nullptr);
 
     Q_INVOKABLE virtual int count();
     Q_INVOKABLE virtual QList<AppImage *> list(int offset = 0, int limit = -1);

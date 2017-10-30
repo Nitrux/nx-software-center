@@ -23,15 +23,13 @@
 #include "snapstore/snapstoregetdepartamentrequest.h"
 #include "snapstore/snapstoresnapdetailsrequest.h"
 
-#include "appimage/appimage.h"
-#include "appimage/appimagehubrepository.h"
-
-#include "test/dummyrepository.h"
+#include "gateways/appimagehubrepository.h"
+#include "gateways/kf5downloadmanager.h"
 
 #include "ui/searchviewcontroller.h"
+#include "ui/taskscontroller.h"
 
 
-static AppImageHubRepository * appImageHubRepository = nullptr;
 static SnapdSettings * snapdSettings;
 static SnapStore * snapStore;
 
@@ -59,26 +57,14 @@ static QObject *snapstore_singletontype_provider(QQmlEngine *engine, QJSEngine *
     return snapStore;
 }
 
-static QObject *appimagehub_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-
-    if (appImageHubRepository == nullptr)
-        appImageHubRepository = new AppImageHubRepository("http://localhost:4000/feed.json");
-
-    return appImageHubRepository;
-}
-
 SearchViewController *searchviewcontroller = nullptr;
-
+AppImageHubRepository *repository = nullptr;
 static QObject *searchviewcontroller_singletontype_provider(QQmlEngine *engine, QJSEngine *)
 {
     if (searchviewcontroller == nullptr)
     {
-        DummyRepository *dummyRepository = new DummyRepository();
-        dummyRepository->updateCache();
-        QList<Repository*> repositoryList(QList<Repository*> {dummyRepository});
+        Q_ASSERT(repository != nullptr);
+        QList<Repository*> repositoryList(QList<Repository*> {repository});
         searchviewcontroller = new SearchViewController(repositoryList, engine);
     }
 
@@ -96,12 +82,10 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     // Init view controllers
+    repository = new AppImageHubRepository("https://appimage.github.io/feed.json");
+    repository->updateCache();
+
     qmlRegisterSingletonType<SearchViewController>(uri, 1, 0, "SearchViewController", searchviewcontroller_singletontype_provider);
-
-
-    // App Images
-    qmlRegisterUncreatableType<AppImage>(uri, 1, 0, "AppImage", "Can't create");
-    qmlRegisterSingletonType<AppImageHubRepository>(uri, 1, 0, "AppImageHubRepository", appimagehub_singletontype_provider);
 
     // Snaps
 

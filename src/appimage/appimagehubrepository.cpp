@@ -10,23 +10,23 @@
 
 #include "appimage.h"
 
-AppImageHubRepository::AppImageHubRepository(QString url, QObject *parent) : AppImageRepository(parent)
+AppImageHubRepositoryOld::AppImageHubRepositoryOld(QString url, QObject *parent) : AppImageRepository(parent)
 {
     m_dataUrl = QUrl(url);
     update();
 }
 
-int AppImageHubRepository::count()
+int AppImageHubRepositoryOld::count()
 {
     return m_data.count();
 }
 
-QList<AppImage *> AppImageHubRepository::list(int offset, int limit)
+QList<AppImage *> AppImageHubRepositoryOld::list(int offset, int limit)
 {
     return m_items.mid(offset, limit);
 }
 
-QVariant AppImageHubRepository::listAsVariant(int offset, int limit)
+QVariant AppImageHubRepositoryOld::listAsVariant(int offset, int limit)
 {
     QList<QObject*>  data;
     for (AppImage * item: m_items.mid(offset, limit))
@@ -34,7 +34,7 @@ QVariant AppImageHubRepository::listAsVariant(int offset, int limit)
     return QVariant::fromValue(data);
 }
 
-QList<AppImage *> AppImageHubRepository::search(QString query, int offset, int limit)
+QList<AppImage *> AppImageHubRepositoryOld::search(QString query, int offset, int limit)
 {
     AppImageList selection;
     for (AppImage *appImage: m_items)
@@ -45,7 +45,7 @@ QList<AppImage *> AppImageHubRepository::search(QString query, int offset, int l
     return m_items.mid(offset, limit);;
 }
 
-QVariant AppImageHubRepository::searchAsVariant(QString query, int offset, int limit)
+QVariant AppImageHubRepositoryOld::searchAsVariant(QString query, int offset, int limit)
 {
 
     QList<QObject *> selection;
@@ -57,7 +57,7 @@ QVariant AppImageHubRepository::searchAsVariant(QString query, int offset, int l
     return QVariant::fromValue(m_items.mid(offset, limit));
 }
 
-bool AppImageHubRepository::isUpdating() const
+bool AppImageHubRepositoryOld::isUpdating() const
 {
     return m_isUpdating;
 }
@@ -68,7 +68,7 @@ bool AppImageHubRepository::isUpdating() const
  * It works asynchronously when finished the 'download' at the appImage will
  * be updated.
  **/
-void AppImageHubRepository::findDownloadLinks(AppImage * appImage, QString arch)
+void AppImageHubRepositoryOld::findDownloadLinks(AppImage * appImage, QString arch)
 {
     Q_ASSERT(appImage != nullptr);
 
@@ -135,7 +135,7 @@ void AppImageHubRepository::findDownloadLinks(AppImage * appImage, QString arch)
     }
 }
 
-void AppImageHubRepository::update()
+void AppImageHubRepositoryOld::update()
 {
     if (m_isUpdating)
         return;
@@ -144,10 +144,10 @@ void AppImageHubRepository::update()
     auto request = QNetworkRequest(m_dataUrl);
     request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
     m_networkReply = m_networkAccessManager.get(request);
-    connect(m_networkReply, &QNetworkReply::finished, this, &AppImageHubRepository::handleNetworkReply);
+    connect(m_networkReply, &QNetworkReply::finished, this, &AppImageHubRepositoryOld::handleNetworkReply);
 }
 
-void AppImageHubRepository::setIsUpdating(bool isUpdating)
+void AppImageHubRepositoryOld::setIsUpdating(bool isUpdating)
 {
     if (m_isUpdating == isUpdating)
         return;
@@ -156,7 +156,7 @@ void AppImageHubRepository::setIsUpdating(bool isUpdating)
     emit isUpdatingChanged(m_isUpdating);
 }
 
-void AppImageHubRepository::handleNetworkReply()
+void AppImageHubRepositoryOld::handleNetworkReply()
 {
     if (m_networkReply != nullptr)
     {

@@ -86,6 +86,8 @@ private slots:
         QVERIFY(!registry.getReleaseInstalleFilePaths("app", "v1").isEmpty());
     }
 
+    /***
+     * About to be removed
     void testSystem()
     {
         System system;
@@ -148,7 +150,7 @@ private slots:
             delete registry;
             delete repository;
         }
-    }
+    } */
 
 };
 QTEST_MAIN(EntitiesTests)

@@ -8,10 +8,10 @@ class DummyRelease : public Release
 public:
     DummyRelease(QString id, QString app_id);
 
-    virtual Change *download() override;
-    virtual Change *install() override;
-    virtual Change *uninstall() override;
-    virtual Change *remove() override;
+    virtual Change *download();
+    virtual Change *install();
+    virtual Change *uninstall();
+    virtual Change *remove();
 };
 
 #endif // DUMMYRELEASE_H

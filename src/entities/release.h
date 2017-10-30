@@ -30,11 +30,6 @@ public:
     QString icon_link;
     QList<QString> screenshot_links;
 
-    virtual Change* download() = 0;
-    virtual Change* install() = 0;
-    virtual Change* uninstall() = 0;
-    virtual Change* remove() = 0;
-
     bool operator == (const Release& r) const;
     bool operator < (const Release& r) const;
 

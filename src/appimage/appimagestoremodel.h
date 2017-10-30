@@ -16,7 +16,7 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    AppImageHubRepository m_appImageHubRepository;
+    AppImageHubRepositoryOld m_appImageHubRepository;
 private:
 };
 

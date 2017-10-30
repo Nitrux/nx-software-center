@@ -35,7 +35,7 @@ set(ENTITIES_SOURCE
     ../entities/change.cpp
     ../entities/repository.cpp
     ../entities/registry.cpp
-    ../entities/system.cpp
+#    ../entities/system.cpp
     )
 
 set(ENTITIES_TESTS_SOURCE

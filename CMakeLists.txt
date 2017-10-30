@@ -61,11 +61,12 @@ set(SOURCE
         src/entities/change.cpp
         src/entities/repository.cpp
         src/entities/registry.cpp
-        src/entities/system.cpp
+#        src/entities/system.cpp
         src/entities/downloadmanager.h
         src/entities/progresslistener.h
 
         src/gateways/kf5downloadmanager.cpp
+        src/gateways/appimagehubrepository.cpp
 
         src/interactors/interactor.cpp
         src/interactors/searchapplicationsinteractor.cpp
