@@ -1,16 +1,38 @@
 #include "simplefileregistry.h"
 
+#include <QSettings>
+
 SimpleFileRegistry::SimpleFileRegistry(): Registry()
 {
+    QSettings settings;
 
+    settings.beginGroup("AppImages_Downloaded");
+    QStringList keys = settings.allKeys();
+    for (QString key: keys)
+        m_downloadedReleaseIds[key] = settings.value(key).toString();
+    settings.endGroup();
 }
 
-bool SimpleFileRegistry::isReleaseDownloaded(QString appId, QString releaseId)
+void SimpleFileRegistry::registerReleaseDownload(QString appId, QString releaseId, QString filePath)
 {
-    return false;
+    Registry::registerReleaseDownload(appId, releaseId, filePath);
+    save();
 }
 
-QString SimpleFileRegistry::getReleaseFilePath(QString appId, QString releaseId)
+void SimpleFileRegistry::registerReleaseRemove(QString appId, QString releaseId)
 {
-    return "";
+    Registry::registerReleaseRemove(appId, releaseId);
+    save();
+}
+
+void SimpleFileRegistry::save()
+{
+    QSettings settings;
+
+    settings.beginGroup("AppImages_Downloaded");
+    settings.remove("");
+    QStringList keys = m_downloadedReleaseIds.keys();
+    for (QString key: keys)
+        settings.setValue(key, m_downloadedReleaseIds[key]);
+    settings.endGroup();
 }

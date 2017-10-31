@@ -9,6 +9,11 @@ Registry::Registry()
 
 }
 
+Registry::~Registry()
+{
+
+}
+
 Change *Registry::getChange(const QString &changeId) const
 {
     return m_changes.value(changeId, nullptr);

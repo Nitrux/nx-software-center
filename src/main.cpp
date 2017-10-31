@@ -23,7 +23,7 @@
 #include "snapstore/snapstoregetdepartamentrequest.h"
 #include "snapstore/snapstoresnapdetailsrequest.h"
 
-#include "entities/registry.h"
+#include "entities/simplefileregistry.h"
 
 #include "gateways/appimagehubrepository.h"
 #include "gateways/kf5downloadmanager.h"
@@ -97,12 +97,16 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QCoreApplication::addLibraryPath("./");
 
+    QCoreApplication::setOrganizationName("NXOS");
+    QCoreApplication::setOrganizationDomain("nxos.org");
+    QCoreApplication::setApplicationName("nx-software-center");
+
     app.setWindowIcon(QIcon::fromTheme("nx-software-center"));
     QQmlApplicationEngine engine;
 
     // Init view controllers
     downloadManager = new KF5DownloadManager();
-    registry = new Registry();
+    registry = new SimpleFileRegistry();
 
     repository = new AppImageHubRepository("https://appimage.github.io/feed.json");
     repository->updateCache();

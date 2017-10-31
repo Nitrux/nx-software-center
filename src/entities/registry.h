@@ -10,13 +10,14 @@ class Registry
 {
 public:
     Registry();
+    virtual ~Registry();
 
     Change* getChange(const QString &changeId) const;
-    bool registerChange(Change *change);
-    void registerReleaseDownload(QString appId, QString releaseId, QString filePath);
-    void registerReleaseInstall(QString appId, QString releaseId, QStringList files);
-    void registerReleaseUninstall(QString appId, QString releaseId);
-    void registerReleaseRemove(QString appId, QString releaseId);
+    virtual bool registerChange(Change *change);
+    virtual void registerReleaseDownload(QString appId, QString releaseId, QString filePath);
+    virtual void registerReleaseInstall(QString appId, QString releaseId, QStringList files);
+    virtual void registerReleaseUninstall(QString appId, QString releaseId);
+    virtual void registerReleaseRemove(QString appId, QString releaseId);
 
     bool isReleaseDownloaded(QString appId, QString releaseId);
     QString getReleaseFilePath(QString appId, QString releaseId);

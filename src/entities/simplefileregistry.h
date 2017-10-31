@@ -1,6 +1,7 @@
 #ifndef SIMPLEFILEREGISTRY_H
 #define SIMPLEFILEREGISTRY_H
 
+#include <QSettings>
 #include "registry.h"
 
 class SimpleFileRegistry : public Registry
@@ -8,8 +9,12 @@ class SimpleFileRegistry : public Registry
 public:
     SimpleFileRegistry();
 
-    bool isReleaseDownloaded(QString appId, QString releaseId);
-    QString getReleaseFilePath(QString appId, QString releaseId);
+    virtual void registerReleaseDownload(QString appId, QString releaseId, QString filePath) override;
+    virtual void registerReleaseRemove(QString appId, QString releaseId) override;
+
+private:
+    void save();
+
 };
 
 #endif // SIMPLEFILEREGISTRY_H
