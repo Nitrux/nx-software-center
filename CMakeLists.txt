@@ -61,6 +61,7 @@ set(SOURCE
         src/entities/change.cpp
         src/entities/repository.cpp
         src/entities/registry.cpp
+        src/entities/simplefileregistry.cpp
 #        src/entities/system.cpp
         src/entities/downloadmanager.h
         src/entities/progresslistener.h
@@ -79,7 +80,10 @@ set(SOURCE
         src/interactors/removeappimagereleaseinteractorlistener.h
 
         src/ui/searchviewcontroller.cpp
+        src/ui/taskcontroller.cpp
         src/ui/taskscontroller.cpp
+        src/ui/taskdownloadappimagecontroller.cpp
+        src/ui/taskslistmodel.cpp
 
         src/test/dummyrepository.cpp
         src/test/dummychange.cpp

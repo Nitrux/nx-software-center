@@ -1,6 +1,8 @@
 #ifndef TASKSCONTROLLER_H
 #define TASKSCONTROLLER_H
 
+#include <QMap>
+#include <QString>
 #include <QObject>
 
 #include "../interactors/downloadappimagereleaseinteractorlistener.h"
@@ -8,12 +10,10 @@
 
 class Repository;
 class Registry;
-class Interactor;
+class TaskController;
 class DownloadManager;
 
-class TasksController : public QObject,
-        DownloadAppImageReleaseInteractorListener,
-        RemoveAppImageReleaseInteractorListener
+class TasksController : public QObject
 {
     Q_OBJECT
 public:
@@ -22,28 +22,21 @@ public:
                              DownloadManager *downloadManager,
                              QObject *parent = nullptr);
 
-    virtual void progress(const int progress, const int total, const QString statusMessage);
-    virtual void downloadComplete(const QString filePath);
-    virtual void finished();
-    virtual void error(const QString &errorMessage);
 
-signals:
-    void systemBusy();
-    void taskComplete();
-    void taskProgressUpdate(int current, int total, QString message);
-    void taskError(QString message);
-
+    Q_INVOKABLE TaskController* getTask(QString taskId);
 public slots:
-    void download(QString appId, QString releaseId);
-    void remove(QString appId, QString releaseId);
+    QString getTaskId(QString appId, QString releaseId);
+    QString download(QString appId, QString releaseId);
+    QString remove(QString appId, QString releaseId);
 
 protected:
+
     bool m_busy = false;
+    QString m_currentTaskId;
+    QMap<QString, TaskController*> m_tasks;
     QList<Repository *> m_repositories;
     Registry * m_registry;
     DownloadManager *m_downladManager;
-
-    Interactor * m_currentTask = nullptr;
 };
 
 #endif // TASKSCONTROLLER_H

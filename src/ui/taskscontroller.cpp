@@ -1,9 +1,13 @@
 #include "taskscontroller.h"
 
+
 #include <QtConcurrent>
 
 #include "../interactors/downloadappimagereleaseinteractor.h"
 #include "../interactors/removeappimagereleaseinteractor.h"
+
+#include "taskcontroller.h"
+#include "taskdownloadappimagecontroller.h"
 
 TasksController::TasksController(QList<Repository *> repositories, Registry *registry, DownloadManager *downloadManager, QObject *parent) : QObject(parent)
 {
@@ -13,66 +17,47 @@ TasksController::TasksController(QList<Repository *> repositories, Registry *reg
     m_downladManager = downloadManager;
 
     m_repositories = repositories;
-
 }
 
-void TasksController::progress(const int progress, const int total, const QString statusMessage)
+TaskController* TasksController::getTask(QString taskId)
 {
-    emit taskProgressUpdate(progress, total, statusMessage);
+    return m_tasks.value(taskId, nullptr);
 }
 
-void TasksController::downloadComplete(const QString )
+
+QString TasksController::getTaskId(QString appId, QString releaseId)
 {
-    emit taskComplete();
+    QString key = appId+releaseId;
+    return m_tasks.contains(key) ? key : "";
 }
 
-void TasksController::finished()
+QString TasksController::download(QString appId, QString releaseId)
 {
-    emit taskComplete();
+    QString newTaskId = appId + releaseId;
+
+    TaskController *task = new TaskDownloadAppImageController(appId, releaseId,
+                                                              m_repositories,
+                                                              m_downladManager,
+                                                              m_registry,
+                                                              this);
+    m_tasks.insert(newTaskId, task);
+
+    task->run();
+
+    return newTaskId;
 }
 
-void TasksController::error(const QString &errorMessage)
+QString TasksController::remove(QString appId, QString releaseId)
 {
-    emit taskError(errorMessage);
-}
+    QString newTaskId = appId + releaseId;
+//    Interactor *task = new RemoveAppImageReleaseInteractor(appId, releaseId,
+//                                                        m_registry, this);
 
-void TasksController::download(QString appId, QString releaseId)
-{
-    if (m_busy)
-    {
-        emit systemBusy();
-        return;
-    }
+//    m_tasks.insert(newTaskId, task);
+//    QtConcurrent::run([=](){
+//        task->execute();
+//        m_tasks.remove(newTaskId);
+//    });
 
-    m_busy = true;
-    m_currentTask = new DownloadAppImageReleaseInteractor(appId, releaseId,
-                                                          m_repositories,
-                                                          m_downladManager,
-                                                          m_registry,
-                                                          this);
-
-    QtConcurrent::run([=](){
-        m_currentTask->execute();
-        m_currentTask = nullptr;
-        m_busy = false;
-    });
-}
-
-void TasksController::remove(QString appId, QString releaseId)
-{
-    if (m_busy)
-    {
-        emit systemBusy();
-        return;
-    }
-
-    m_busy = true;
-    m_currentTask = new RemoveAppImageReleaseInteractor(appId, releaseId,
-                                                        m_registry, this);
-
-    QtConcurrent::run([=](){
-        m_currentTask->execute();
-        m_currentTask = nullptr;
-        m_busy = false;
-    });
+    return newTaskId;
 }

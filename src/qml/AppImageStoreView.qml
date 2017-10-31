@@ -75,7 +75,6 @@ Parts.View {
 
             clip: true
 
-
             spacing: 12
 
             delegate: AppImageListItemDelegate {
@@ -84,11 +83,14 @@ Parts.View {
 
                 //            version: model.modelData['latest_release_id']
                 //            size: model.modelData['download_size']
-                isDownloaded: model.modelData['downloaded']
+                isDownloaded: true
+
+                taskId: TasksController.getTaskId(model.modelData['id'], model.modelData['latest_release_id'])
 
                 onRequestDownload: {
                     print("Downloading " + model.modelData['download_link']);
-                    TasksController.download(model.modelData['id'], model.modelData['latest_release_id'])
+                    taskId = TasksController.download(model.modelData['id'], model.modelData['latest_release_id'])
+                    task = TasksController.getTask(taskId)
                 }
             }
         }

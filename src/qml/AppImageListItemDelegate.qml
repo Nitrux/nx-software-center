@@ -8,17 +8,48 @@ import org.nx.softwarecenter 1.0
 
 PlasmaComponents.ListItem {
 
-    height: Math.max(38, innerLayout.height);
+    height: Math.max(38, innerLayout.height)
 
-    property string name;
-    property string description;
+    property string name
+    property string description
 
-    property bool isDownloadable;
-    property bool isDownloaded;
+    property bool isDownloadable
+    property bool isDownloaded
 
-    signal requestRun();
-    signal requestRemove();
-    signal requestDownload();
+    property string taskId
+    property int taskProgress: -1
+
+    signal requestRun
+    signal requestRemove
+    signal requestDownload
+
+    property var task
+
+    onTaskChanged: {
+        if (task !== undefined) {
+            progressBar.visible = true
+            task.progressChanged.connect(hangleTaskProgressChanged)
+            task.totalChanged.connect(hangleTaskTotalProgressChanged)
+            task.stateChanged.connect(handleTaskStateChanged)
+        } else
+            progressBar.visible = false
+    }
+
+
+    function hangleTaskProgressChanged() {
+        progressBar.value = task.progress
+    }
+
+    function hangleTaskTotalProgressChanged() {
+        progressBar.maximumValue = task.total
+    }
+
+    function handleTaskStateChanged() {
+        if (task.state !== Task.TASK_RUNNING && task.state !== Task.TASK_CREATED) {
+            taskId = undefined
+            task = undefined
+        }
+    }
 
     Connections {
         target: SearchViewController
@@ -40,7 +71,7 @@ PlasmaComponents.ListItem {
         PlasmaComponents.Label {
             Layout.alignment: Qt.AlignTop
             Layout.preferredWidth: 200
-            Layout.maximumWidth: 200;
+            Layout.maximumWidth: 200
             wrapMode: Text.WordWrap
 
             text: name
@@ -51,32 +82,38 @@ PlasmaComponents.ListItem {
             text: description
 
             wrapMode: Text.WordWrap
-
         }
 
         PlasmaComponents.Button {
-            visible: !isDownloaded
+
             iconName: "emblem-select-add"
             text: i18n("Download")
 
+            visible: !isDownloaded && taskId == ""
             onClicked: requestDownload()
         }
 
         PlasmaComponents.Button {
             iconName: "emblem-select-remove"
-            visible: isDownloaded
             text: i18n("Remove")
 
+            visible: isDownloaded && taskId == ""
             onClicked: requestRemove()
         }
 
         PlasmaComponents.Button {
             iconName: "application-x-executable"
-            visible: isDownloaded
+            visible: isDownloaded && taskId == ""
             text: i18n("Run")
 
             onClicked: requestRun()
         }
-    }
 
+        PlasmaComponents.ProgressBar {
+            id: progressBar
+            Layout.maximumWidth: 120
+
+            visible: false
+        }
+    }
 }

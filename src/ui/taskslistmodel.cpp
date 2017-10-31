@@ -13,6 +13,7 @@ int TasksListModel::rowCount(const QModelIndex &parent) const
         return 0;
 
     // FIXME: Implement me!
+    return  0;
 }
 
 QVariant TasksListModel::data(const QModelIndex &index, int role) const

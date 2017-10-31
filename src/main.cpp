@@ -30,6 +30,7 @@
 
 #include "ui/searchviewcontroller.h"
 #include "ui/taskscontroller.h"
+#include "ui/taskcontroller.h"
 
 
 static SnapdSettings * snapdSettings;
@@ -106,6 +107,8 @@ int main(int argc, char *argv[])
     repository = new AppImageHubRepository("https://appimage.github.io/feed.json");
     repository->updateCache();
 
+    qRegisterMetaType<TaskController::TaskState>("TaskState");
+    qmlRegisterUncreatableType<TaskController>(uri, 1, 0, "Task", "Task can only be created by the TasksController");
     qmlRegisterSingletonType<SearchViewController>(uri, 1, 0, "SearchViewController", searchviewcontroller_singletontype_provider);
     qmlRegisterSingletonType<TasksController>(uri, 1, 0, "TasksController", taskscontroller_singletontype_provider);
 
