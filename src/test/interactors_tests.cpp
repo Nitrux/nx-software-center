@@ -183,6 +183,10 @@ private slots:
         QString registryFilePath = registry.getReleaseFilePath("app_1", "r2");
         QVERIFY(registryFilePath.compare(listener.m_filePath) == 0);
 
+        QFile file(registryFilePath);
+        QVERIFY(file.exists());
+        file.remove();
+
         downloadManager.removeTmpFile(listener.m_filePath);
     }
 

@@ -15,7 +15,7 @@ DummyDownloadManager::~DummyDownloadManager()
 void DummyDownloadManager::download(const QString &url, QString destination, ProgressListener *listener)
 {
     if (m_fail)
-        brokenDownload(url, destination, listener);
+        return brokenDownload(url, destination, listener);
 
     Q_ASSERT(listener != nullptr);
 

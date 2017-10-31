@@ -75,17 +75,18 @@ void DownloadAppImageReleaseInteractor::execute()
                 .arg(release->id)
                 .arg(release->arch);
 
-        QDir destination(storagePath.replace("$HOME", QDir::home().absolutePath()));
+        QDir destination(storagePath.replace("$HOME", QDir::homePath()));
         QString targetFilePath = destination.absoluteFilePath(newFileName);
 
         destination.mkpath(storagePath);
 
         m_downloadManager->download(release->download_link, targetFilePath, m_listener);
         QFile file(targetFilePath);
-        if (!file.exists())
+        if (file.exists())
         {
             m_registry->registerReleaseDownload(m_appImageId, m_appImageReleaseId, targetFilePath);
             m_listener->downloadComplete(targetFilePath);
-        }
+        } else
+            m_listener->error("Unable to download, somethig whent wrong.");
     }
 }
