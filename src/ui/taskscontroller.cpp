@@ -3,11 +3,9 @@
 
 #include <QtConcurrent>
 
-#include "../interactors/downloadappimagereleaseinteractor.h"
-#include "../interactors/removeappimagereleaseinteractor.h"
-
 #include "taskcontroller.h"
 #include "taskdownloadappimagecontroller.h"
+#include "taskremoveappimagereleasecontroller.h"
 
 TasksController::TasksController(QList<Repository *> repositories, Registry *registry, DownloadManager *downloadManager, QObject *parent) : QObject(parent)
 {
@@ -50,14 +48,13 @@ QString TasksController::download(QString appId, QString releaseId)
 QString TasksController::remove(QString appId, QString releaseId)
 {
     QString newTaskId = appId + releaseId;
-//    Interactor *task = new RemoveAppImageReleaseInteractor(appId, releaseId,
-//                                                        m_registry, this);
 
-//    m_tasks.insert(newTaskId, task);
-//    QtConcurrent::run([=](){
-//        task->execute();
-//        m_tasks.remove(newTaskId);
-//    });
+    TaskController *task = new TaskRemoveAppImageReleaseController(appId, releaseId,
+                                                              m_registry,
+                                                              this);
+    m_tasks.insert(newTaskId, task);
+
+    task->run();
 
     return newTaskId;
 }

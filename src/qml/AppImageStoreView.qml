@@ -81,16 +81,29 @@ Parts.View {
                 name: model.modelData['name']
                 description: model.modelData['description']
 
-                //            version: model.modelData['latest_release_id']
-                //            size: model.modelData['download_size']
-//                isDownloaded: true
-
-                taskId: TasksController.getTaskId(model.modelData['id'], model.modelData['latest_release_id'])
-
                 onRequestDownload: {
-                    print("Downloading " + model.modelData['download_link']);
                     taskId = TasksController.download(model.modelData['id'], model.modelData['latest_release_id'])
                     task = TasksController.getTask(taskId)
+                }
+
+                onRequestRemove: {
+                    taskId = TasksController.remove(model.modelData['id'], model.modelData['latest_release_id'])
+                    task = TasksController.getTask(taskId)
+                }
+
+                onRequestRefresh: loadData()
+                Component.onCompleted: loadData()
+                Component.onDestruction: {
+                    taskId = ""
+                    task = null
+                }
+
+                function loadData() {
+//                    taskId = TasksController.getTaskId(model.modelData['id'], model.modelData['latest_release_id'])
+//                    task = TasksController.getTask(taskId)
+
+                    isDownloadable = model.modelData['download_link']
+                    isDownloaded = RegistryController.isReleaseDownloaded(model.modelData['id'], model.modelData['latest_release_id'])
                 }
             }
         }

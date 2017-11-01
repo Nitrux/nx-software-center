@@ -22,32 +22,50 @@ PlasmaComponents.ListItem {
     signal requestRun
     signal requestRemove
     signal requestDownload
+    signal requestRefresh
 
     property var task
 
+    Timer {
+        id: taskRefresher
+        interval: 100; repeat: true
+        onTriggered: requestRefresh()
+    }
+
     onTaskChanged: {
-        if (task !== undefined) {
+        if (task !== null && task !== undefined) {
             progressBar.visible = true
+
             task.progressChanged.connect(hangleTaskProgressChanged)
             task.totalChanged.connect(hangleTaskTotalProgressChanged)
             task.stateChanged.connect(handleTaskStateChanged)
+
+            handleTaskStateChanged()
         } else
             progressBar.visible = false
     }
 
 
     function hangleTaskProgressChanged() {
-        progressBar.value = task.progress
+        if (task !== null &&
+                task !== undefined)
+            progressBar.value = task.progress
     }
 
     function hangleTaskTotalProgressChanged() {
-        progressBar.maximumValue = task.total
+        if (task !== null &&
+                task !== undefined)
+            progressBar.maximumValue = task.total
     }
 
     function handleTaskStateChanged() {
-        if (task.state !== Task.TASK_RUNNING && task.state !== Task.TASK_CREATED) {
-            taskId = undefined
+        if (task !== null &&
+                task !== undefined &&
+                task.state !== Task.TASK_RUNNING &&
+                task.state !== Task.TASK_CREATED) {
+            taskId = ""
             task = undefined
+            requestRefresh()
         }
     }
 
@@ -89,7 +107,7 @@ PlasmaComponents.ListItem {
             iconName: "emblem-select-add"
             text: i18n("Download")
 
-            visible: !isDownloaded && taskId == ""
+            visible: !isDownloaded && taskId == "" && isDownloadable
             onClicked: requestDownload()
         }
 

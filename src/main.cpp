@@ -31,6 +31,7 @@
 #include "ui/searchviewcontroller.h"
 #include "ui/taskscontroller.h"
 #include "ui/taskcontroller.h"
+#include "ui/registrycontroller.h"
 
 
 static SnapdSettings * snapdSettings;
@@ -63,8 +64,10 @@ static QObject *snapstore_singletontype_provider(QQmlEngine *engine, QJSEngine *
 Registry * registry = nullptr;
 AppImageHubRepository *repository = nullptr;
 KF5DownloadManager *downloadManager = nullptr;
+
 SearchViewController *searchviewcontroller = nullptr;
 TasksController * tasksController = nullptr;
+RegistryController * registryController = nullptr;
 
 static QObject *searchviewcontroller_singletontype_provider(QQmlEngine *engine, QJSEngine *)
 {
@@ -88,6 +91,17 @@ static QObject *taskscontroller_singletontype_provider(QQmlEngine *engine, QJSEn
     }
 
     return dynamic_cast<QObject*>(tasksController);
+}
+
+static QObject *registrycontroller_singletontype_provider(QQmlEngine *engine, QJSEngine *)
+{
+    if (registryController == nullptr)
+    {
+        Q_ASSERT(registry != nullptr);
+        registryController = new RegistryController(registry, engine);
+    }
+
+    return dynamic_cast<QObject*>(registryController);
 }
 
 int main(int argc, char *argv[])
@@ -115,6 +129,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<TaskController>(uri, 1, 0, "Task", "Task can only be created by the TasksController");
     qmlRegisterSingletonType<SearchViewController>(uri, 1, 0, "SearchViewController", searchviewcontroller_singletontype_provider);
     qmlRegisterSingletonType<TasksController>(uri, 1, 0, "TasksController", taskscontroller_singletontype_provider);
+    qmlRegisterSingletonType<RegistryController>(uri, 1, 0, "RegistryController", registrycontroller_singletontype_provider);
 
     // Snaps
 

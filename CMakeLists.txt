@@ -84,6 +84,8 @@ set(SOURCE
         src/ui/taskscontroller.cpp
         src/ui/taskdownloadappimagecontroller.cpp
         src/ui/taskslistmodel.cpp
+        src/ui/registrycontroller.cpp
+        src/ui/taskremoveappimagereleasecontroller.cpp
 
         src/test/dummyrepository.cpp
         src/test/dummychange.cpp
