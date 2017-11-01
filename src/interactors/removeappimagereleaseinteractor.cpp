@@ -28,7 +28,7 @@ void RemoveAppImageReleaseInteractor::execute()
             m_listener->error(QString("Unable to remove file: %1").arg(releaseFilePath));
             return;
         }
-        m_registry->registerReleaseUninstall(m_appId, m_releaseId);
+        m_registry->registerReleaseRemove(m_appId, m_releaseId);
     }
 
     m_listener->finished();

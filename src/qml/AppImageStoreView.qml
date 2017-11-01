@@ -83,7 +83,7 @@ Parts.View {
 
                 //            version: model.modelData['latest_release_id']
                 //            size: model.modelData['download_size']
-                isDownloaded: true
+//                isDownloaded: true
 
                 taskId: TasksController.getTaskId(model.modelData['id'], model.modelData['latest_release_id'])
 
