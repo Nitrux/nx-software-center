@@ -78,14 +78,18 @@ set(SOURCE
         src/interactors/getapplicationinteractorlistener.h
         src/interactors/removeappimagereleaseinteractor.cpp
         src/interactors/removeappimagereleaseinteractorlistener.h
+        src/interactors/executeappimagereleaseinteractor.cpp
+        src/interactors/executeappimagereleaseinteractorlistener.h
 
         src/ui/searchviewcontroller.cpp
+        src/ui/registrycontroller.cpp
+
+        src/ui/taskslistmodel.cpp
         src/ui/taskcontroller.cpp
         src/ui/taskscontroller.cpp
         src/ui/taskdownloadappimagecontroller.cpp
-        src/ui/taskslistmodel.cpp
-        src/ui/registrycontroller.cpp
         src/ui/taskremoveappimagereleasecontroller.cpp
+        src/ui/taskexecuteappimagecontroller.cpp
 
         src/test/dummyrepository.cpp
         src/test/dummychange.cpp

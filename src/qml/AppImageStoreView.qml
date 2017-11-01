@@ -91,6 +91,11 @@ Parts.View {
                     task = TasksController.getTask(taskId)
                 }
 
+                onRequestExecute: {
+                    taskId = TasksController.execute(model.modelData['id'], model.modelData['latest_release_id'])
+                    task = TasksController.getTask(taskId)
+                }
+
                 onRequestRefresh: loadData()
                 Component.onCompleted: loadData()
                 Component.onDestruction: {

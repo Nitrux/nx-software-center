@@ -28,6 +28,7 @@ public slots:
     QString getTaskId(QString appId, QString releaseId);
     QString download(QString appId, QString releaseId);
     QString remove(QString appId, QString releaseId);
+    QString execute(QString appId, QString releaseId);
 
 protected:
 

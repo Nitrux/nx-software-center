@@ -19,7 +19,7 @@ PlasmaComponents.ListItem {
     property string taskId
     property int taskProgress: -1
 
-    signal requestRun
+    signal requestExecute
     signal requestRemove
     signal requestDownload
     signal requestRefresh
@@ -124,7 +124,7 @@ PlasmaComponents.ListItem {
             visible: isDownloaded && taskId == ""
             text: i18n("Run")
 
-            onClicked: requestRun()
+            onClicked: requestExecute()
         }
 
         PlasmaComponents.ProgressBar {

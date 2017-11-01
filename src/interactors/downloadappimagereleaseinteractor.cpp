@@ -84,6 +84,7 @@ void DownloadAppImageReleaseInteractor::execute()
         QFile file(targetFilePath);
         if (file.exists())
         {
+            file.setPermissions(QFileDevice::ExeUser | QFileDevice::ReadOwner );
             m_registry->registerReleaseDownload(m_appImageId, m_appImageReleaseId, targetFilePath);
             m_listener->downloadComplete(targetFilePath);
         } else
