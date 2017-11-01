@@ -52,7 +52,7 @@ PlasmaCore.FrameSvgItem {
         }
 
         PlasmaComponents.ToolButton {
-            iconName: "appimagekit_0f06530a5c7bec8714c7cb0327eaa78f_appimaged"
+            iconName: "appimage-store"
             Layout.fillHeight: true
             checked: currentView == "appImageStore"
             onClicked: {

@@ -104,9 +104,6 @@ Parts.View {
                 }
 
                 function loadData() {
-//                    taskId = TasksController.getTaskId(model.modelData['id'], model.modelData['latest_release_id'])
-//                    task = TasksController.getTask(taskId)
-
                     isDownloadable = model.modelData['download_link']
                     isDownloaded = RegistryController.isReleaseDownloaded(model.modelData['id'], model.modelData['latest_release_id'])
                 }

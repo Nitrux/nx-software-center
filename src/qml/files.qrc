@@ -37,7 +37,6 @@
         <file>parts/ArrowRight.qml</file>
         <file>AppImageStoreView.qml</file>
         <file>GridViewItemDelegate.qml</file>
-        <file>AppDetailsView.qml</file>
         <file>AppImageListItemDelegate.qml</file>
     </qresource>
     <qresource prefix="/scripts">
