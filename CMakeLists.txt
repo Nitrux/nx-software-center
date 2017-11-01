@@ -48,14 +48,6 @@ set(SOURCE
         src/snapstore/snapstoregetdepartamentrequest.cpp
         src/snapstore/snapstoresnapdetailsrequest.cpp
         src/snapstore/customnetworkaccessmanagerfactory.cpp
-        src/appimage/appimage.cpp
-        src/appimage/appimagerepository.cpp
-        src/appimage/localappimagesrepository.cpp
-        src/appimage/appimagehubrepository.cpp
-        src/appimage/appimagedownloadjob.cpp
-        src/appimage/appimageinstalljob.cpp
-        src/appimage/appimageuninstalljob.cpp
-        src/appimage/appimagestoremodel.cpp
         src/entities/app.cpp
         src/entities/release.cpp
         src/entities/change.cpp

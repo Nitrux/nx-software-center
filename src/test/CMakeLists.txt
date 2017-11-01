@@ -11,21 +11,6 @@ find_package(Qt5 REQUIRED COMPONENTS Test Network Xml XmlPatterns)
 find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
 
 
-set(APPIMAGE_TEST_SOURCES
-    appimage_test.cpp
-    ../appimage/appimage.cpp
-    ../appimage/appimagedownloadjob.cpp
-    ../appimage/appimageuninstalljob.cpp
-    ../appimage/appimagerepository.cpp
-    ../appimage/appimagehubrepository.cpp
-    )
-
-add_executable(app_image_tests ${APPIMAGE_TEST_SOURCES})
-add_test(app_image_tests app_image_tests)
-
-target_link_libraries(app_image_tests Qt5::Test Qt5::Network KF5::CoreAddons Qt5::Xml Qt5::XmlPatterns KF5::KIOCore)
-
-
 ###
 # TEST ENTITIES
 ###
