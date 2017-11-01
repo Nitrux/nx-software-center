@@ -54,7 +54,6 @@ set(SOURCE
         src/entities/repository.cpp
         src/entities/registry.cpp
         src/entities/simplefileregistry.cpp
-#        src/entities/system.cpp
         src/entities/downloadmanager.h
         src/entities/progresslistener.h
 
@@ -74,7 +73,6 @@ set(SOURCE
         src/ui/searchviewcontroller.cpp
         src/ui/registrycontroller.cpp
 
-        src/ui/taskslistmodel.cpp
         src/ui/taskcontroller.cpp
         src/ui/taskscontroller.cpp
         src/ui/taskdownloadappimagecontroller.cpp
