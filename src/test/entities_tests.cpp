@@ -7,7 +7,6 @@
 #include "../entities/release.h"
 #include "../entities/repository.h"
 #include "../entities/registry.h"
-#include "../entities/system.h"
 #include "../entities/progresslistener.h"
 
 #include "dummychange.h"
@@ -85,73 +84,6 @@ private slots:
         QVERIFY(!registry.getReleaseFilePath("app", "v1").isEmpty());
         QVERIFY(!registry.getReleaseInstalleFilePaths("app", "v1").isEmpty());
     }
-
-    /***
-     * About to be removed
-    void testSystem()
-    {
-        System system;
-
-        DummyRepository *repository = new DummyRepository();
-        Registry *registry = new Registry();
-
-        QVERIFY(system.listAppIds().size() == 0);
-
-        repository->updateCache();
-
-        system.setRegistry(registry);
-        system.addRepository(repository);
-
-        QStringList appIds = system.listAppIds();
-        QVERIFY(appIds.size() > 0);
-        if (appIds.size() > 0)
-        {
-            QString appId = system.listAppIds().first();
-            QVERIFY(system.appDetails(appId)["id"].toString() == appId);
-
-
-            QStringList releaseIDs = system.listAppReleaseIds(appId);
-            QVERIFY(releaseIDs.size() > 0);
-            if (releaseIDs.size() > 0)
-            {
-                QString lastReleaseID = releaseIDs.first();
-                QVERIFY(system.releaseDetails(appId, lastReleaseID)["app_id"] == appId) ;
-
-
-                auto verifyChange = [=](QString changeId)
-                {
-                    Change * change = registry->getChange(changeId);
-                    DummyChange * dummyChange = dynamic_cast<DummyChange*>(change);
-                    QVERIFY(change != nullptr);
-                    QVERIFY(dummyChange != nullptr);
-
-                    if (dummyChange)
-                        dummyChange->finish();
-                };
-
-                QString downloadChangeId = system.downloadRelease(appId, lastReleaseID);
-                verifyChange(downloadChangeId);
-                QVERIFY(!registry->getReleaseFilePath(appId, lastReleaseID).isEmpty());
-
-                QString installChangeId = system.installRelease(appId, lastReleaseID);
-                verifyChange(installChangeId);
-                QVERIFY(!registry->getReleaseInstalleFilePaths(appId, lastReleaseID).isEmpty());
-
-                QString uninstallChangeId = system.uninstallRelease(appId, lastReleaseID);
-                verifyChange(uninstallChangeId);
-                QVERIFY(registry->getReleaseInstalleFilePaths(appId, lastReleaseID).isEmpty());
-
-                QString removeChangeId = system.removeRelease(appId, lastReleaseID);
-                verifyChange(removeChangeId);
-                QVERIFY(registry->getReleaseFilePath(appId, lastReleaseID).isEmpty());
-            }
-
-
-            delete registry;
-            delete repository;
-        }
-    } */
-
 };
 QTEST_MAIN(EntitiesTests)
 #include "entities_tests.moc"

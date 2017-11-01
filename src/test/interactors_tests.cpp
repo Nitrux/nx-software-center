@@ -9,7 +9,6 @@
 #include "../entities/release.h"
 #include "../entities/repository.h"
 #include "../entities/registry.h"
-#include "../entities/system.h"
 
 #include "../interactors/searchapplicationsinteractor.h"
 #include "../interactors/searchapplicationsinteractorlistener.h"

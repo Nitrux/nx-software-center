@@ -7,7 +7,6 @@
 #include "../entities/release.h"
 #include "../entities/repository.h"
 #include "../entities/registry.h"
-#include "../entities/system.h"
 #include "../entities/progresslistener.h"
 
 #include "../gateways/kf5downloadmanager.h"
