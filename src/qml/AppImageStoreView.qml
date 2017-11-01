@@ -12,6 +12,7 @@ import "parts" as Parts
 Parts.View {
     id: appImageStoreViewRoot
 
+    objectName: "appImageStoreView"
     function query(text) {
         SearchViewController.search(text)
     }

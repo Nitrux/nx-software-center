@@ -113,7 +113,8 @@ ApplicationWindow {
     }
 
     function showSearchView(query) {
-        content.replace("qrc:/SearchView.qml", StackView.Immediate)
+        if (content.currentItem.objectName != "appImageStoreView")
+            content.replace("qrc:/SearchView.qml", StackView.Immediate)
 
         content.currentItem.query(query)
     }

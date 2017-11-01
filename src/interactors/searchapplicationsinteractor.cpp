@@ -1,5 +1,7 @@
 #include "searchapplicationsinteractor.h"
 
+#include <QDebug>
+
 #include <QVariant>
 #include <QVariantMap>
 #include <QVariantList>
@@ -39,8 +41,8 @@ void SearchApplicationsInteractor::execute()
         {
             Release *release = app->lastRelease();
             if (m_searchString.isEmpty() ||
-                    release->name.contains(m_searchString) ||
-                    release->description.contains(m_searchString))
+                    release->name.contains(m_searchString, Qt::CaseInsensitive) ||
+                    release->description.contains(m_searchString, Qt::CaseInsensitive))
             {
                 QVariantMap appData;
                 appData["id"] = app->id;
@@ -54,7 +56,14 @@ void SearchApplicationsInteractor::execute()
                 appData["downloaded"] = m_registry->isReleaseDownloaded(app->id, release->id);
                 appData["download_link"] = release->download_link;
 
-                appsData.append(appData);
+                appData["manual_download_link"] = app->links["Install"];
+
+                // Dont list apps without download links
+                if (release->download_link.isEmpty() &&
+                        app->links["Install"].isEmpty())
+                    qDebug() << app->id << " not listed.";
+                else
+                    appsData.append(appData);
             }
         }
     }
