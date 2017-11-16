@@ -1,11 +1,5 @@
 #include "interactor.h"
 
-Interactor::Interactor()
-{
+Interactor::Interactor(QObject *parent) : QObject(parent) {}
 
-}
-
-Interactor::~Interactor()
-{
-
-}
+Interactor::~Interactor() {}
