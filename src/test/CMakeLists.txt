@@ -14,14 +14,6 @@ find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
 ###
 # TEST ENTITIES
 ###
-set(ENTITIES_SOURCE
-    ../entities/app.cpp
-    ../entities/release.cpp
-    ../entities/change.cpp
-    ../entities/repository.cpp
-    ../entities/registry.cpp
-#    ../entities/system.cpp
-    )
 
 set(ENTITIES_TESTS_SOURCE
     entities_tests.cpp
@@ -38,22 +30,23 @@ set(ENTITIES_TESTS_SOURCE
 
 
 
-add_executable(entities_tests ${ENTITIES_TESTS_SOURCE})
-target_link_libraries(entities_tests Qt5::Test)
+add_executable(entities_tests ${ENTITIES_TESTS_SOURCE} $<TARGET_OBJECTS:core>)
+target_compile_options(entities_tests PUBLIC -fexceptions)
+target_link_libraries(entities_tests
+    Qt5::Test
+    Qt5::Qml
+    Qt5::Widgets
+    Qt5::Quick
+    Qt5::Concurrent
+    KF5::Auth
+    KF5::KIOCore
+    ${APPIMAGE_LIBRARIES}
+)
 add_test(entities_tests entities_tests)
 
 ###
 # TEST INTERACTORS
 ###
-
-set(INTERACTORS_SOURCE
-    ../interactors/interactor.cpp
-    ../interactors/searchapplicationsinteractor.cpp
-    ../interactors/downloadappimagereleaseinteractor.cpp
-    ../interactors/removeappimagereleaseinteractor.cpp
-    ../interactors/fetchappimagehubinteractor.cpp
-    )
-
 set(INTERACTORS_TESTS_SOURCE
     interactors_tests.cpp
     dummydownloadmanager.cpp
@@ -65,22 +58,30 @@ set(INTERACTORS_TESTS_SOURCE
     dummyuninstallchange.cpp
     dummyremovechange.cpp
 
+    ${ENTITIES_SOURCE}
+    ${INTERACTORS_SOURCE}
     )
 
+
+
 add_executable(interactors_tests ${INTERACTORS_TESTS_SOURCE} $<TARGET_OBJECTS:core>)
-target_link_libraries(interactors_tests Qt5::Test Qt5::Network)
-target_compile_definitions(interactors_tests
-    PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/"
+target_compile_options(interactors_tests PUBLIC -fexceptions)
+target_link_libraries(interactors_tests
+    Qt5::Test
+    Qt5::Qml
+    Qt5::Widgets
+    Qt5::Quick
+    Qt5::Concurrent
+    KF5::Auth
+    KF5::KIOCore
+    ${APPIMAGE_LIBRARIES}
 )
+
 add_test(interactors_tests interactors_tests)
 
 ###
 # TEST GATEWAYS
 ###
-
-set(GATEWAYS_SOURCE
-    ../gateways/kf5downloadmanager.cpp
-    )
 
 set(GATEWAYS_TESTS_SOURCE
     gateways_tests.cpp
@@ -99,6 +100,16 @@ set(GATEWAYS_TESTS_SOURCE
 
 
 
-add_executable(gateways_tests ${GATEWAYS_TESTS_SOURCE})
-target_link_libraries(gateways_tests Qt5::Test KF5::KIOCore)
+add_executable(gateways_tests ${GATEWAYS_TESTS_SOURCE} $<TARGET_OBJECTS:core>)
+target_compile_options(gateways_tests PUBLIC -fexceptions)
+target_link_libraries(gateways_tests
+    Qt5::Test
+    Qt5::Qml
+    Qt5::Widgets
+    Qt5::Quick
+    Qt5::Concurrent
+    KF5::Auth
+    KF5::KIOCore
+    ${APPIMAGE_LIBRARIES}
+)
 add_test(gateways_tests gateways_tests)

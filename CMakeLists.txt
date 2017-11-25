@@ -24,7 +24,7 @@ include(FeatureSummary)
 
 find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Widgets Network Concurrent)
 find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
-
+find_package(AppImage REQUIRED)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 # add the qml.qrc file
@@ -54,10 +54,11 @@ set (CORE_SOURCE
     src/interactors/executeappimagereleaseinteractor.cpp
     src/interactors/executeappimagereleaseinteractorlistener.h
     src/interactors/fetchappimagehubinteractor.cpp
+    src/interactors/deployappimagereleaseinteractor.cpp
     )
 
 add_library(core OBJECT ${CORE_SOURCE})
-target_compile_options(core PUBLIC -fPIC)
+target_compile_options(core PUBLIC -fPIC -fexceptions)
 target_include_directories(core PRIVATE
     ${Qt5Core_INCLUDE_DIRS}
     ${Qt5Network_INCLUDE_DIRS}
@@ -78,19 +79,11 @@ set(SOURCE
         src/ui/taskremoveappimagereleasecontroller.cpp
         src/ui/taskexecuteappimagecontroller.cpp
         src/ui/taskfetchappscontroller.cpp
-
-        src/test/dummyrepository.cpp
-        src/test/dummychange.cpp
-        src/test/dummyrelease.cpp
-        src/test/dummydownloadchange.cpp
-        src/test/dummyinstallchange.cpp
-        src/test/dummyuninstallchange.cpp
-        src/test/dummyremovechange.cpp
 )
 
 
 add_executable(${PROJECT_NAME} ${SOURCE} ${qml_QRC} $<TARGET_OBJECTS:core>)
-
+target_compile_options(${PROJECT_NAME} PUBLIC -fexceptions)
 target_link_libraries(${PROJECT_NAME}
     Qt5::Qml
     Qt5::Widgets
@@ -98,6 +91,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Concurrent
     KF5::Auth
     KF5::KIOCore
+    ${APPIMAGE_LIBRARIES}
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
@@ -105,4 +99,4 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(DIRECTORY data/departaments_background/ DESTINATION share/${PROJECT_NAME}/departaments_background FILES_MATCHING PATTERN "*.png")
 install(FILES "org.nxos.softwarecenter.desktop" DESTINATION share/applications)
 
-#add_subdirectory(src/test)
+add_subdirectory(src/test)

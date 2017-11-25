@@ -9,8 +9,7 @@ TaskRemoveAppImageReleaseController::TaskRemoveAppImageReleaseController(QString
     Q_ASSERT(registry != nullptr);
     m_interactor = new RemoveAppImageReleaseInteractor(appId,
                                                        releaseId,
-                                                       registry,
-                                                       this);
+                                                       registry);
 
 }
 

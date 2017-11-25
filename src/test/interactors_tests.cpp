@@ -75,27 +75,9 @@ public:
   QString m_errorMessage;
 };
 
-class DummyRemoveAppImageReleaseInteractorListener
-    : public RemoveAppImageReleaseInteractorListener {
-public:
-  virtual ~DummyRemoveAppImageReleaseInteractorListener() {}
-
-  virtual void error(const QString &errorMessage) {
-    qDebug() << errorMessage;
-    m_errorMessage = errorMessage;
-    m_removeFailed = true;
-  }
-
-  virtual void finished() { m_removeCompleted = true; }
-
-  bool m_removeCompleted = false;
-  bool m_removeFailed = false;
-
-  QString m_errorMessage;
-};
-
 class InteractorsTests : public QObject {
   Q_OBJECT
+
 private slots:
 
   void testsearchapplicationsinteractorMainScenario() {
@@ -119,9 +101,6 @@ private slots:
       QVERIFY(!appId.isEmpty());
       QVERIFY(appName.contains(searchString) ||
               appDescription.contains(searchString));
-
-      //            qDebug() << appId << " " << appName << " " <<
-      //            appDescription;
     }
   }
 
@@ -225,8 +204,6 @@ private slots:
   }
 
   void testRemoveAppImageReleaseInteractorMainScenario() {
-    DummyRemoveAppImageReleaseInteractorListener listener;
-
     QString appId = "testApp";
     QString releaseId = "testRelease";
 
@@ -240,37 +217,38 @@ private slots:
     Registry registry;
     registry.registerReleaseDownload(appId, releaseId, tmpFile.fileName());
 
-    RemoveAppImageReleaseInteractor interactor(appId, releaseId, &registry,
-                                               &listener);
-    interactor.execute();
+    RemoveAppImageReleaseInteractor interactor(appId, releaseId, &registry);
 
+    QSignalSpy spy(&interactor, &RemoveAppImageReleaseInteractor::finished);
+    try {
+      interactor.execute();
+    } catch (QException) {
+      QFAIL("Exception throw");
+    }
+
+    QCOMPARE(spy.count(), 1);
     QVERIFY(!tmpFile.exists());
-    QVERIFY(listener.m_removeCompleted);
-    QVERIFY(!listener.m_removeFailed);
   }
 
   void testRemoveAppImageReleaseInteractorNotDownloadedScenario() {
-    DummyRemoveAppImageReleaseInteractorListener listener;
-
     QString appId = "--";
     QString releaseId = "--";
 
     Registry registry;
 
-    RemoveAppImageReleaseInteractor interactor(appId, releaseId, &registry,
-                                               &listener);
-    interactor.execute();
+    RemoveAppImageReleaseInteractor interactor(appId, releaseId, &registry);
+    QSignalSpy spy(&interactor, &RemoveAppImageReleaseInteractor::finished);
+    bool failed = false;
+    try {
+      interactor.execute();
+    } catch (QException) {
+      failed = true;
+    }
 
-    QVERIFY(listener.m_removeCompleted);
-    QVERIFY(!listener.m_removeFailed);
-    QVERIFY(listener.m_errorMessage.isEmpty());
-  }
-
-  void testFetchAppImageHubInteractor() {
-    Repository repo;
-    QString testJsonPath = TEST_DATA_DIR "appimagehubfeed.json";
-    FetchAppImageHubInteractor interactor(testJsonPath, &repo);
+    QVERIFY(failed);
+    QCOMPARE(spy.count(), 0);
   }
 };
+
 QTEST_MAIN(InteractorsTests)
 #include "interactors_tests.moc"
