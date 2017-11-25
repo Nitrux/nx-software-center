@@ -5,16 +5,18 @@ import QtQuick.Layouts 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-
-import "interactors" as Interactors
+import org.nx.softwarecenter 1.0
 
 ApplicationWindow {
+    id: main
+    title: qsTr("NX Software Center")
 
     visible: true
     width: 900
     height: 700
-    title: qsTr("NX Software Center")
-    id: main
+
+    property var refreshCacheTask
+    property var appsCache
 
     color: theme.backgroundColor
 
@@ -23,18 +25,16 @@ ApplicationWindow {
         id: navigationPanel
 
         onGoHome: main.goHome()
-        onGoStore: showDepartamensView()
-        onGoAppImageStore: showAppImageStore()
-        onGoSettings: showSettings()
-        onStoreQueryTyped: main.showSearchView(query)
+        onStoreQueryTyped: main.search(query)
     }
 
     footer: StatusArea {
         id: statusArea
-        height: statusArea.visible ? 42 : 0
+        height: visible ? 42 : 0
+        visible: false
     }
 
-    StackView {
+    Loader {
         id: content
         anchors.fill: parent
     }
@@ -43,108 +43,28 @@ ApplicationWindow {
         id: textConstants
     }
 
-    // App Interactors
-    Interactors.DisableSnapInteractor {
-        id: disableSnapInteractor
+    function goStore() {
+        navigationPanel.currentView = "store"
+        content.source = "qrc:/StoreView.qml"
     }
 
-    Interactors.EnableSnapInteractor {
-        id: enableSnapInteractor
+    function search(query) {
+        goStore()
+        SearchViewController.search(query)
     }
 
-    Interactors.RefreshSnapInteractor {
-        id: refreshSnapInteractor
-    }
-
-    Interactors.RemoveSnapInteractor {
-        id: removeSnapInteractor
-    }
-
-    Interactors.InstallSnapInteractor {
-        id: installSnapInteractor
-    }
-
-    Interactors.GetSnapDetailsInteractor {
-        id: showSnapDetailsInteractor
-
-        function goBack() {
-            content.pop(StackView.Immediate)
-            content.currentItem.refreshContent()
+    Connections {
+        target: SearchViewController
+        onApplications: appsCache = apps
+        onNoMatchFound: {
+            appsCache = undefined
+            main.showNothingFoundSreen()
         }
-        onLoadingLocalPackageInfo: showLoadingScreen(
-                                       i18n("Fetching snap info, please wait ..."))
-        onLoadingStorePackageInfo: showLoadingScreen(
-                                       i18n("Fetching snap info, please wait ..."))
-
-        onLocalPackageInfoAvailable: showDetailsView()
-        onStorePackageInfoAvailable: showDetailsView()
-
-        function showDetailsView() {
-            if (content.currentItem.objectName != "snapDetailsView") {
-                if (content.currentItem.objectName == "placeHolderView")
-                    content.replace("qrc:/SnapDetailsView.qml", {
-                                        snap: showSnapDetailsInteractor.details
-                                    }, StackView.Immediate)
-                else
-                    content.push("qrc:/SnapDetailsView.qml", {
-                                     snap: showSnapDetailsInteractor.details
-                                 }, StackView.Immediate)
-            }
-            var detailsView = content.currentItem
-            if (detailsView !== undefined) {
-                //                detailsView.snap = showSnapDetailsInteractor.details
-                detailsView.updateContext()
-                detailsView.refresh.connect(refreshInfo)
-                detailsView.dismiss.connect(goBack)
-            }
-        }
-    }
-
-    function showSnapDetails(snap_name) {
-        showSnapDetailsInteractor.getInfo(snap_name)
-    }
-
-    function goHome() {
-        content.replace("qrc:/HomeView.qml", StackView.Immediate)
-    }
-
-    function showDepartamensView() {
-        content.replace("qrc:/DepartamentsView.qml", StackView.Immediate)
-    }
-
-    function showSearchView(query) {
-        if (content.currentItem.objectName != "appImageStoreView")
-            content.replace("qrc:/SearchView.qml", StackView.Immediate)
-
-        content.currentItem.query(query)
-    }
-
-    function showAppImageStore() {
-        content.replace("qrc:/AppImageStoreView.qml", StackView.Immediate)
-
-        content.currentItem.query(query)
-    }
-
-    function showAppImageDetails(appImage) {
-        if (content.currentItem.objectName != "appImageDetailsView") {
-            if (content.currentItem.objectName == "placeHolderView")
-                content.replace("qrc:/AppDetailsView.qml",
-                                { app: appImage },
-                                StackView.Immediate)
-            else
-                content.push("qrc:/AppDetailsView.qml",
-                             {app: appImage},
-                             StackView.Immediate)
-        }
-    }
-
-    function showSettings() {
-        content.replace("qrc:/SettingsView.qml", StackView.Immediate)
     }
 
     function showLoadingScreen(message) {
-        content.replace("qrc:/PlaceHolderView.qml", StackView.Immediate)
-        var placeHolder = content.currentItem
+        content.source = "qrc:/PlaceHolderView.qml"
+        var placeHolder = content.item
         if (placeHolder !== undefined) {
             placeHolder.showBusyIndicator = true
             placeHolder.message = message
@@ -152,8 +72,8 @@ ApplicationWindow {
     }
 
     function showError(message) {
-        content.replace("qrc:/PlaceHolderView.qml", StackView.Immediate)
-        var placeHolder = content.currentItem
+        content.source = "qrc:/PlaceHolderView.qml"
+        var placeHolder = content.item
         if (placeHolder !== undefined) {
             if (message == "")
                 message = textConstants.unknownError
@@ -164,5 +84,43 @@ ApplicationWindow {
         }
     }
 
-    Component.onCompleted: main.goHome()
+    function showNothingFoundSreen() {
+        if (main.refreshCacheTask != undefined)
+            return
+
+        content.source = "qrc:/PlaceHolderView.qml"
+        var placeHolder = content.item
+        if (placeHolder !== undefined) {
+            placeHolder.message = textConstants.noApplicationsFound
+            placeHolder.iconName = "dialog-information"
+            placeHolder.showBusyIndicator = false
+        }
+    }
+
+    Component.onCompleted: {
+        refreshCache()
+    }
+
+    function refreshCache() {
+        navigationPanel.disable()
+
+        var taskId = TasksController.fetchApps()
+        main.refreshCacheTask = TasksController.getTask(taskId)
+
+        showLoadingScreen("Loading aplications...")
+        main.refreshCacheTask.stateChanged.connect(handleRefreshCacheFinished)
+    }
+
+    function handleRefreshCacheFinished() {
+        if (main.refreshCacheTask.state !== Task.TASK_RUNNING
+                && main.refreshCacheTask.state !== Task.TASK_CREATED) {
+            goStore()
+            main.refreshCacheTask = undefined
+
+            navigationPanel.enable()
+
+            SearchViewController.search()
+            goStore()
+        }
+    }
 }

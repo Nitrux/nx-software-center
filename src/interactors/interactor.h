@@ -5,12 +5,15 @@
 
 class Interactor : public QObject {
   Q_OBJECT
- public:
+public:
   Interactor(QObject *parent = nullptr);
   virtual ~Interactor();
 
- public slots:
+signals:
+  void complete();
+
+public slots:
   virtual void execute() = 0;
 };
 
-#endif  // INTERACTOR_H
+#endif // INTERACTOR_H

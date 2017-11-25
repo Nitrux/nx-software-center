@@ -1,28 +1,29 @@
 #ifndef REPOSITORY_H
 #define REPOSITORY_H
 
-#include <QMap>
 #include <QList>
+#include <QMap>
 #include <QString>
 
 class App;
 class Release;
 
-class Repository
-{
+class Repository {
 public:
-    Repository();
-    virtual ~Repository();
-    virtual QString id() = 0;
+  Repository();
+  virtual ~Repository();
 
-    virtual void updateCache() = 0;
-    virtual QList<App*> list();
-    virtual bool contains(QString appId);
-    virtual bool contains(QString appId, QString releaseId);
-    virtual App* getApp(QString appId);
-    virtual Release* getRelease(QString appId, QString releaseId);
+  virtual QList<App *> list();
+  virtual bool contains(QString appId);
+  virtual bool contains(QString appId, QString releaseId);
+  virtual App *getApp(QString appId);
+  virtual Release *getRelease(QString appId, QString releaseId);
+
+  virtual void add(App *app);
+  virtual void clear();
+
 protected:
-    QMap<QString, App*> apps;
+  QMap<QString, App *> apps;
 };
 
 #endif // REPOSITORY_H

@@ -13,7 +13,7 @@ QtObject {
     readonly property string unknownError: i18n("Ups! something went wrong.")
     readonly property string requestCredentialNotice: i18n("Requesting user credentials")
     readonly property string availableActionsNotice: i18n("Available actions")
-    readonly property string noSnapsFound: i18n("Sorry, not snaps were found.")
+    readonly property string noApplicationsFound: i18n("Sorry, no applications were found. Please try search something else.")
 
 }
 

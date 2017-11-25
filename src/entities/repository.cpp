@@ -42,6 +42,17 @@ Release *Repository::getRelease(QString appId, QString releaseId)
     return app->getRelease(releaseId);
 }
 
+void Repository::add(App *app)
+{
+    Q_ASSERT(app != nullptr);
+    apps.insert(app->id, app);
+}
+
+void Repository::clear()
+{
+    apps.clear();
+}
+
 QList<App *> Repository::list()
 {
     QList<App *> appList;

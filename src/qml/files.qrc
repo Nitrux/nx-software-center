@@ -1,45 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>HomeView.qml</file>
-        <file>ChangesView.qml</file>
-        <file>SettingsView.qml</file>
         <file>StatusArea.qml</file>
-        <file>DepartamentsView.qml</file>
-        <file>SearchView.qml</file>
-        <file>SnapDetailsView.qml</file>
         <file>NavigationPanel.qml</file>
         <file>PlaceHolderView.qml</file>
-        <file>SnapElementDelegate.qml</file>
-        <file>SnapGrid.qml</file>
         <file>TextConstants.qml</file>
-        <file>interactors/DisableSnapInteractor.qml</file>
-        <file>interactors/Interactor.qml</file>
-        <file>interactors/EnableSnapInteractor.qml</file>
-        <file>interactors/RefreshSnapInteractor.qml</file>
-        <file>interactors/RemoveSnapInteractor.qml</file>
-        <file>interactors/ApplySettingsInteractor.qml</file>
-        <file>interactors/LoadDefaultSettingsInteractor.qml</file>
-        <file>interactors/InstallSnapInteractor.qml</file>
-        <file>interactors/ListDepartamentsInteractor.qml</file>
-        <file>interactors/ListInstalledSnapsInteractor.qml</file>
-        <file>interactors/ListSnapsInDepartamentInteractor.qml</file>
-        <file>interactors/GetSnapDetailsInteractor.qml</file>
-        <file>interactors/StoreSearchInteractor.qml</file>
-        <file>parts/RatingStars.qml</file>
-        <file>parts/Card.qml</file>
-        <file>parts/SnapsModel.qml</file>
-        <file>parts/HorizontalListView.qml</file>
-        <file>parts/View.qml</file>
-        <file>parts/SnapIcon.qml</file>
-        <file>DepartamentSnapsView.qml</file>
-        <file>parts/ArrowLeft.qml</file>
-        <file>parts/ArrowRight.qml</file>
-        <file>AppImageStoreView.qml</file>
-        <file>GridViewItemDelegate.qml</file>
         <file>AppImageListItemDelegate.qml</file>
+        <file>StoreView.qml</file>
+        <file>parts/MessageFrame.qml</file>
     </qresource>
-    <qresource prefix="/scripts">
-        <file>Utils.js</file>
-    </qresource>
+    <qresource prefix="/scripts"/>
 </RCC>

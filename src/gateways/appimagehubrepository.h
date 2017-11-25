@@ -1,32 +1,31 @@
 #ifndef APPIMAGEHUBREPOSITORY_H
 #define APPIMAGEHUBREPOSITORY_H
 
-#include <QUrl>
 #include <QJsonArray>
-#include <QNetworkReply>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QUrl>
 
 #include "../entities/repository.h"
 
 class App;
-class AppImageHubRepository : public Repository
-{
+class AppImageHubRepository : public Repository {
 public:
-    AppImageHubRepository(QString url);
+  AppImageHubRepository(QString url);
 
-    virtual QString id() override;
-    virtual void updateCache() override;
+  virtual QString id();
+  virtual void updateCache();
 
 protected:
-    void handleNetworkReply();
-    void findDownloadLinks(App *app, QString arch);
+  void handleNetworkReply();
+  void findDownloadLinks(App *app, QString arch);
 
-    QUrl m_dataUrl;
-    QJsonArray m_data;
-    QNetworkAccessManager m_networkAccessManager;
+  QUrl m_dataUrl;
+  QJsonArray m_data;
+  QNetworkAccessManager m_networkAccessManager;
 
-    bool m_isUpdating = false;
-    QNetworkReply * m_networkReply = nullptr;
+  bool m_isUpdating = false;
+  QNetworkReply *m_networkReply = nullptr;
 };
 
 #endif // APPIMAGEHUBREPOSITORY_H

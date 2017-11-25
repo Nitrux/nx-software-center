@@ -9,28 +9,12 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import "parts" as Parts
 
-Parts.View {
-    id: appImageStoreViewRoot
+Item {
+    id: storeViewRoot
 
     objectName: "appImageStoreView"
-    function query(text) {
-        SearchViewController.search(text)
-    }
 
-    Component.onCompleted: {
-        print(query())
-        query("")
-    }
-
-    Connections {
-        target: SearchViewController
-        onApplications: appImageHubListView.model = apps
-        onNoMatchFound: {
-            appImageHubListView.model = undefined
-        }
-    }
-
-    Parts.Card {
+    Parts.MessageFrame {
         id: wipNotice
 
         height: 70
@@ -55,11 +39,9 @@ Parts.View {
 
                 level: 4
 
-                text: "AppImages listing in this store is a work in progress held in coordination with the AppImage development team. New updates will be published soon."
+                text: "We are moving totally to AppImages!"
             }
         }
-
-
     }
 
     PlasmaExtras.ScrollArea {
@@ -76,6 +58,7 @@ Parts.View {
 
             clip: true
 
+            model: main.appsCache
             spacing: 12
 
             delegate: AppImageListItemDelegate {
@@ -83,17 +66,23 @@ Parts.View {
                 description: model.modelData['description']
 
                 onRequestDownload: {
-                    taskId = TasksController.download(model.modelData['id'], model.modelData['latest_release_id'])
+                    taskId = TasksController.download(
+                                model.modelData['id'],
+                                model.modelData['latest_release_id'])
                     task = TasksController.getTask(taskId)
                 }
 
                 onRequestRemove: {
-                    taskId = TasksController.remove(model.modelData['id'], model.modelData['latest_release_id'])
+                    taskId = TasksController.remove(
+                                model.modelData['id'],
+                                model.modelData['latest_release_id'])
                     task = TasksController.getTask(taskId)
                 }
 
                 onRequestExecute: {
-                    taskId = TasksController.execute(model.modelData['id'], model.modelData['latest_release_id'])
+                    taskId = TasksController.execute(
+                                model.modelData['id'],
+                                model.modelData['latest_release_id'])
                     task = TasksController.getTask(taskId)
                 }
 
@@ -106,10 +95,11 @@ Parts.View {
 
                 function loadData() {
                     isDownloadable = model.modelData['download_link']
-                    isDownloaded = RegistryController.isReleaseDownloaded(model.modelData['id'], model.modelData['latest_release_id'])
+                    isDownloaded = RegistryController.isReleaseDownloaded(
+                                model.modelData['id'],
+                                model.modelData['latest_release_id'])
                 }
             }
         }
     }
-
 }

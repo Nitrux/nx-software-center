@@ -2,7 +2,6 @@
 Software Center to install and manage Snaps 
 
 ### Depends:
- * (snapd-glib)[https://github.com/nomad-shell/snap-glib-qt]
- * snapd
- * KAuth
+ * KF5
+ * KF5 KIO
  

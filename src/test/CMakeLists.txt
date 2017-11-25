@@ -51,6 +51,7 @@ set(INTERACTORS_SOURCE
     ../interactors/searchapplicationsinteractor.cpp
     ../interactors/downloadappimagereleaseinteractor.cpp
     ../interactors/removeappimagereleaseinteractor.cpp
+    ../interactors/fetchappimagehubinteractor.cpp
     )
 
 set(INTERACTORS_TESTS_SOURCE
@@ -64,14 +65,13 @@ set(INTERACTORS_TESTS_SOURCE
     dummyuninstallchange.cpp
     dummyremovechange.cpp
 
-    ${ENTITIES_SOURCE}
-    ${INTERACTORS_SOURCE}
     )
 
-
-
-add_executable(interactors_tests ${INTERACTORS_TESTS_SOURCE})
-target_link_libraries(interactors_tests Qt5::Test)
+add_executable(interactors_tests ${INTERACTORS_TESTS_SOURCE} $<TARGET_OBJECTS:core>)
+target_link_libraries(interactors_tests Qt5::Test Qt5::Network)
+target_compile_definitions(interactors_tests
+    PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/"
+)
 add_test(interactors_tests interactors_tests)
 
 ###

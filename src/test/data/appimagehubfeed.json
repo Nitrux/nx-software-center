@@ -1,0 +1,1752 @@
+{
+    "version": 1,
+    "home_page_url": "https://appimage.github.io/",
+    "feed_url": "https://appimage.github.io/feed.json",
+    "description": "Crowd-sourced central AppImage directory",
+    "icon": "https://appimage.github.io/apple-touch-icon.png",
+    "favicon": "https://appimage.github.io/favicon.ico",
+    "expired": false,
+    
+"items": [
+    
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+        {
+        "name": "Alduin",
+        "description": "An Atom and RSS feed aggregator",
+        "categories": ["Utility"],
+        "authors" : [{"name":"Xstoudi","url":"https://github.com/Xstoudi"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Xstoudi/alduin"},{"type":"Install","url":"https://github.com/Xstoudi/alduin/releases"}],
+        "screenshots" : ["Alduin/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "AlphaT",
+        "description": "文档翻译工具",
+        "categories": ["Utility"],
+        "authors" : [{"name":"sigoden","url":"https://github.com/sigoden"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"sigoden/alphat"},{"type":"Install","url":"https://github.com/sigoden/alphat/releases"}],
+        "screenshots" : ["AlphaT/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "AppImageUpdate",
+        "description": "Update AppImages from their upstream location",
+        "categories": ["System"],
+        "authors" : [{"name":"AppImage","url":"https://github.com/AppImage"}],
+        "license" : "MIT",
+        "links": [{"type":"GitHub","url":"AppImage/AppImageUpdate"},{"type":"Install","url":"https://github.com/AppImage/AppImageUpdate/releases"}],
+        "screenshots" : ["https://camo.githubusercontent.com/2c9da2c2c2b43de47075b5e8f77f17bcf930f2b5/68747470733a2f2f6c68332e676f6f676c6575736572636f6e74656e742e636f6d2f2d56724139513657774c4f342f566e5863506c62505078492f41414141414141414145672f4370707368345148724b492f773339362d683237362d702f757064617465722e706e67"]
+        },
+        
+    
+        
+        {
+        "name": "AppImageUpdateTest",
+        "description": null,
+        "categories": [null],
+        "authors" : [{"name":"AppImage","url":"https://github.com/AppImage"}],
+        "license" : "MIT",
+        "links": [{"type":"Web","url":"https://appimage.org"},{"type":"GitHub","url":"https://github.com/AppImage/AppImageUpdate"},{"type":"Install","url":"https://github.com/AppImage/AppImageUpdate/releases"},{"type":"Screenshots","url":"AppImageUpdate/screenshot.png"}],
+        "screenshots" : ["AppImageUpdate/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Auryo",
+        "description": "A beautiful soundcloud desktop app",
+        "categories": ["Audio"],
+        "authors" : [{"name":"Superjo149","url":"https://github.com/Superjo149"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Superjo149/auryo"},{"type":"Install","url":"https://github.com/Superjo149/auryo/releases"}],
+        "screenshots" : ["Auryo/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "AzPainter",
+        "description": null,
+        "categories": ["Graphics"],
+        "authors" : [{"name":"Symbian9","url":"https://github.com/Symbian9"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Symbian9/azpainter"},{"type":"Install","url":"https://github.com/Symbian9/azpainter/releases"}],
+        "screenshots" : ["AzPainter/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Bezique",
+        "description": "Plays bezique against the AI",
+        "categories": ["Game"],
+        "authors" : [{"name":"Sriep","url":"https://github.com/Sriep"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Sriep/Bezique"},{"type":"Install","url":"https://github.com/Sriep/Bezique/releases"}],
+        "screenshots" : ["Bezique/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "BitShares",
+        "description": "Advanced wallet interface for the BitShares financial blockchain.",
+        "categories": ["Finance"],
+        "authors" : [{"name":"bitshares","url":"https://github.com/bitshares"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"bitshares/bitshares-ui"},{"type":"Install","url":"https://github.com/bitshares/bitshares-ui/releases"}],
+        "screenshots" : ["BitShares/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Black_Chocobo",
+        "description": null,
+        "categories": ["Application"],
+        "authors" : [{"name":"sithlord48","url":"https://github.com/sithlord48"}],
+        "license" : "GPL-3.0",
+        "links": [{"type":"GitHub","url":"sithlord48/blackchocobo"},{"type":"Install","url":"https://github.com/sithlord48/blackchocobo/releases"}],
+        "screenshots" : ["Black_Chocobo/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Blink1Control2",
+        "description": "Blink1Control2 GUI app for blink(1) devices",
+        "categories": ["Utility"],
+        "authors" : [{"name":"todbot","url":"https://github.com/todbot"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"todbot/Blink1Control2"},{"type":"Install","url":"https://github.com/todbot/Blink1Control2/releases"}],
+        "screenshots" : ["Blink1Control2/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Brackets",
+        "description": "Brackets-Electron",
+        "categories": ["Utility"],
+        "authors" : [{"name":"zaggino","url":"https://github.com/zaggino"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"zaggino/brackets-electron"},{"type":"Install","url":"https://github.com/zaggino/brackets-electron/releases"}],
+        "screenshots" : ["Brackets/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "BytespeicherTrayIcon",
+        "description": "Bytespeicher Status App",
+        "categories": ["Qt"],
+        "authors" : [{"name":"Bytespeicher","url":"https://github.com/Bytespeicher"}],
+        "license" : "GPL-3.0",
+        "links": [{"type":"GitHub","url":"Bytespeicher/BytespeicherTrayIcon"},{"type":"Install","url":"https://github.com/Bytespeicher/BytespeicherTrayIcon/releases"}],
+        "screenshots" : ["BytespeicherTrayIcon/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Calculist",
+        "description": "Desktop version of Calculist.io",
+        "categories": ["Science"],
+        "authors" : [{"name":"calculist","url":"https://github.com/calculist"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"calculist/calculist-desktop"},{"type":"Install","url":"https://github.com/calculist/calculist-desktop/releases"}],
+        "screenshots" : ["Calculist/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Cantata",
+        "description": null,
+        "categories": ["Qt"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : null
+        },
+        
+    
+        
+        {
+        "name": "Cerebral-Debugger",
+        "description": "Cerebral Debugger",
+        "categories": ["Development"],
+        "authors" : [{"name":"cerebral","url":"https://github.com/cerebral"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"cerebral/cerebral-debugger"},{"type":"Install","url":"https://github.com/cerebral/cerebral-debugger/releases"}],
+        "screenshots" : ["Cerebral-Debugger/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Crypter",
+        "description": "An innovative, convenient and secure cross-platform crypto app",
+        "categories": ["Utility"],
+        "authors" : [{"name":"HR","url":"https://github.com/HR"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"HR/Crypter"},{"type":"Install","url":"https://github.com/HR/Crypter/releases"}],
+        "screenshots" : ["Crypter/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "CutePeaks",
+        "description": "A simple sanger trace file viewer",
+        "categories": ["Science"],
+        "authors" : [{"name":"labsquare","url":"https://github.com/labsquare"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"labsquare/CutePeaks"},{"type":"Install","url":"https://github.com/labsquare/CutePeaks/releases"}],
+        "screenshots" : ["CutePeaks/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Cutter",
+        "description": null,
+        "categories": ["Development"],
+        "authors" : [{"name":"radareorg","url":"https://github.com/radareorg"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"radareorg/cutter"},{"type":"Install","url":"https://github.com/radareorg/cutter/releases"}],
+        "screenshots" : ["Cutter/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "DeDop-studio",
+        "description": "DeDop Studio",
+        "categories": ["Science"],
+        "authors" : [{"name":"DeDop","url":"https://github.com/DeDop"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"DeDop/dedop-studio"},{"type":"Install","url":"https://github.com/DeDop/dedop-studio/releases"}],
+        "screenshots" : ["DeDop-studio/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Dragoman",
+        "description": "GUI for polyglot",
+        "categories": ["Development"],
+        "authors" : [{"name":"peteboothroyd","url":"https://github.com/peteboothroyd"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"peteboothroyd/Dragoman"},{"type":"Install","url":"https://github.com/peteboothroyd/Dragoman/releases"}],
+        "screenshots" : ["Dragoman/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Electorrent",
+        "description": "A thin client for your torrenting needs",
+        "categories": ["Network"],
+        "authors" : [{"name":"Tympanix","url":"https://github.com/Tympanix"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Tympanix/Electorrent"},{"type":"Install","url":"https://github.com/Tympanix/Electorrent/releases"}],
+        "screenshots" : ["Electorrent/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Emacs",
+        "description": "Edit text",
+        "categories": ["Development"],
+        "authors" : [{"name":"probonopd","url":"https://github.com/probonopd"}],
+        "license" : "GPL-3.0",
+        "links": [{"type":"GitHub","url":"probonopd/Emacs.AppImage"},{"type":"Install","url":"https://github.com/probonopd/Emacs.AppImage/releases"}],
+        "screenshots" : ["Emacs/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "EnvKey",
+        "description": "EnvKey’s cross-platform native app",
+        "categories": ["Development"],
+        "authors" : [{"name":"envkey","url":"https://github.com/envkey"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"envkey/envkey-ui"},{"type":"Install","url":"https://github.com/envkey/envkey-ui/releases"}],
+        "screenshots" : ["EnvKey/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "EyeStalker",
+        "description": "Image-based eye tracking",
+        "categories": ["Science"],
+        "authors" : [{"name":"tbrouns","url":"https://github.com/tbrouns"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"tbrouns/eyestalker"},{"type":"Install","url":"https://github.com/tbrouns/eyestalker/releases"}],
+        "screenshots" : ["EyeStalker/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "FastQt",
+        "description": "A quality control tool for high throughput genomics sequence data.",
+        "categories": ["Science"],
+        "authors" : [{"name":"labsquare","url":"https://github.com/labsquare"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"labsquare/fastQt"},{"type":"Install","url":"https://github.com/labsquare/fastQt/releases"}],
+        "screenshots" : ["FastQt/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Filmulator",
+        "description": "Streamlined photo editor",
+        "categories": ["Graphics"],
+        "authors" : [{"name":"CarVac","url":"https://github.com/CarVac"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"CarVac/filmulator-gui"},{"type":"Install","url":"https://github.com/CarVac/filmulator-gui/releases"}],
+        "screenshots" : ["Filmulator/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Franz",
+        "description": "Messaging app for WhatsApp, Slack, Telegram, HipChat, Hangouts and many many more.",
+        "categories": ["Network"],
+        "authors" : [{"name":"meetfranz","url":"https://github.com/meetfranz"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"meetfranz/franz"},{"type":"Install","url":"https://github.com/meetfranz/franz/releases"}],
+        "screenshots" : ["Franz/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "GVim",
+        "description": "Edit text files",
+        "categories": ["Utility"],
+        "authors" : [{"name":"vim","url":"https://github.com/vim"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"vim/vim-appimage"},{"type":"Install","url":"https://github.com/vim/vim-appimage/releases"}],
+        "screenshots" : ["GVim/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "GradeStats",
+        "description": "Import from xls spredsheets, store and analyze student grade data",
+        "categories": ["Utility"],
+        "authors" : [{"name":"nikolio","url":"https://github.com/nikolio"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"nikolio/GradeStats"},{"type":"Install","url":"https://github.com/nikolio/GradeStats/releases"}],
+        "screenshots" : ["GradeStats/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Gulden",
+        "description": "The payment system of the future today",
+        "categories": ["Office"],
+        "authors" : [{"name":"Gulden","url":"https://github.com/Gulden"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Gulden/gulden-official"},{"type":"Install","url":"https://github.com/Gulden/gulden-official/releases"}],
+        "screenshots" : ["Gulden/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "ImagePlay",
+        "description": "ImagePlay",
+        "categories": ["Graphics"],
+        "authors" : [{"name":"cpvrlab","url":"https://github.com/cpvrlab"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"cpvrlab/ImagePlay"},{"type":"Install","url":"https://github.com/cpvrlab/ImagePlay/releases"}],
+        "screenshots" : ["ImagePlay/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Imagine",
+        "description": "PNG/JPEG optimization",
+        "categories": ["Graphics"],
+        "authors" : [{"name":"meowtec","url":"https://github.com/meowtec"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"meowtec/Imagine"},{"type":"Install","url":"https://github.com/meowtec/Imagine/releases"}],
+        "screenshots" : ["Imagine/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Kate",
+        "description": null,
+        "categories": ["Qt"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["Kate/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Kdenlive",
+        "description": "Nonlinear video editor for KDE",
+        "categories": ["Qt"],
+        "authors" : null,
+        "license" : "GPL-2.0+",
+        "links": null,
+        "screenshots" : ["https://kdenlive.org/wp-content/data/kdenlive-screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Kdevelop",
+        "description": null,
+        "categories": ["Qt"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["Kdevelop/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "KeePassXC",
+        "description": null,
+        "categories": ["Qt"],
+        "authors" : [{"name":"keepassxreboot","url":"https://github.com/keepassxreboot"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"keepassxreboot/keepassxc"},{"type":"Install","url":"https://github.com/keepassxreboot/keepassxc/releases"}],
+        "screenshots" : ["KeePassXC/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "KevEdit",
+        "description": "ZZT Editor",
+        "categories": ["Game"],
+        "authors" : [{"name":"cknave","url":"https://github.com/cknave"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"cknave/kevedit"},{"type":"Install","url":"https://github.com/cknave/kevedit/releases"}],
+        "screenshots" : ["KevEdit/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Krita",
+        "description": "Digital Painting",
+        "categories": ["Qt"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : null
+        },
+        
+    
+        
+        {
+        "name": "LibreOfficeDev",
+        "description": "The office productivity suite compatible to the open and standardized ODF document format. Supported by The Document Foundation.",
+        "categories": ["Office"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["LibreOfficeDev/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "LibrePCB-Nightly",
+        "description": "Design Schematics and PCBs",
+        "categories": ["Development"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["LibrePCB-Nightly/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "MKVToolNix",
+        "description": "Matroska files creator and tools",
+        "categories": ["AudioVideo"],
+        "authors" : [{"name":"darealshinji","url":"https://github.com/darealshinji"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"darealshinji/mkvtoolnix-AppImage"},{"type":"Install","url":"https://github.com/darealshinji/mkvtoolnix-AppImage/releases"}],
+        "screenshots" : ["MKVToolNix/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Malice",
+        "description": "GUI Programming Tool for iCE40",
+        "categories": ["Development"],
+        "authors" : [{"name":"Cloud-V","url":"https://github.com/Cloud-V"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Cloud-V/Malice"},{"type":"Install","url":"https://github.com/Cloud-V/Malice/releases"}],
+        "screenshots" : ["Malice/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "MazeSolver",
+        "description": "A tool which shows how different algorithms solves mazes.",
+        "categories": ["Education"],
+        "authors" : [{"name":"Arquanite","url":"https://github.com/Arquanite"}],
+        "license" : "LGPL-3.0",
+        "links": [{"type":"GitHub","url":"Arquanite/MazeSolver"},{"type":"Install","url":"https://github.com/Arquanite/MazeSolver/releases"}],
+        "screenshots" : ["MazeSolver/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "MineTime",
+        "description": "Smart scheduling assistant",
+        "categories": ["Office"],
+        "authors" : [{"name":"marcoancona","url":"https://github.com/marcoancona"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"marcoancona/MineTime"},{"type":"Install","url":"https://github.com/marcoancona/MineTime/releases"}],
+        "screenshots" : ["MineTime/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "MrWriter",
+        "description": null,
+        "categories": ["Office"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["MrWriter/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "NCSA_Mosaic",
+        "description": null,
+        "categories": ["Network"],
+        "authors" : [{"name":"AppImage","url":"https://github.com/AppImage"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"AppImage/NCSA-Mosaic-AppImage"},{"type":"Install","url":"https://github.com/AppImage/NCSA-Mosaic-AppImage/releases"}],
+        "screenshots" : ["NCSA_Mosaic/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Neon",
+        "description": "Light wallet for NEO blockchain",
+        "categories": ["Utility"],
+        "authors" : [{"name":"CityOfZion","url":"https://github.com/CityOfZion"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"CityOfZion/neon-wallet"},{"type":"Install","url":"https://github.com/CityOfZion/neon-wallet/releases"}],
+        "screenshots" : ["Neon/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Nextcloud",
+        "description": "Nextcloud desktop synchronization client",
+        "categories": ["Utility"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["Nextcloud/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Nootka",
+        "description": "Application for learning musical score notation",
+        "categories": ["Education"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["Nootka/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Onshape",
+        "description": "Onshape desktop app (web application shell)",
+        "categories": ["Graphics"],
+        "authors" : [{"name":"develar","url":"https://github.com/develar"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"develar/onshape-desktop-shell"},{"type":"Install","url":"https://github.com/develar/onshape-desktop-shell/releases"}],
+        "screenshots" : ["Onshape/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "OpenBlok",
+        "description": "A falling block puzzle game",
+        "categories": ["Game"],
+        "authors" : [{"name":"mmatyas","url":"https://github.com/mmatyas"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"mmatyas/openblok"},{"type":"Install","url":"https://github.com/mmatyas/openblok/releases"}],
+        "screenshots" : ["OpenBlok/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "PacketSender",
+        "description": null,
+        "categories": ["Network"],
+        "authors" : [{"name":"dannagle","url":"https://github.com/dannagle"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"dannagle/PacketSender"},{"type":"Install","url":"https://github.com/dannagle/PacketSender/releases"}],
+        "screenshots" : ["PacketSender/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Padlock",
+        "description": "A minimalist password manager",
+        "categories": ["Utility"],
+        "authors" : [{"name":"MaKleSoft","url":"https://github.com/MaKleSoft"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"MaKleSoft/padlock"},{"type":"Install","url":"https://github.com/MaKleSoft/padlock/releases"}],
+        "screenshots" : ["Padlock/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "PatternPaint",
+        "description": "Making beautiful light shows is as easy as drawing a picture",
+        "categories": ["Development"],
+        "authors" : [{"name":"Blinkinlabs","url":"https://github.com/Blinkinlabs"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Blinkinlabs/PatternPaint"},{"type":"Install","url":"https://github.com/Blinkinlabs/PatternPaint/releases"}],
+        "screenshots" : ["PatternPaint/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Peruse",
+        "description": "A reader application for comic books",
+        "categories": ["Qt"],
+        "authors" : null,
+        "license" : "GPL-2.0+ and GFDL-1.3",
+        "links": null,
+        "screenshots" : ["https://www.kde.org/images/screenshots/okular.png"]
+        },
+        
+    
+        
+        {
+        "name": "Pixsrt",
+        "description": "Pixel sorter",
+        "categories": ["Graphics"],
+        "authors" : [{"name":"thorpelawrence","url":"https://github.com/thorpelawrence"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"thorpelawrence/pixsrt"},{"type":"Install","url":"https://github.com/thorpelawrence/pixsrt/releases"}],
+        "screenshots" : ["Pixsrt/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "PrusaControl",
+        "description": null,
+        "categories": ["Graphics"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["PrusaControl/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "QNapi",
+        "description": "Program for downloading video subtitles",
+        "categories": ["AudioVideo"],
+        "authors" : [{"name":"QNapi","url":"https://github.com/QNapi"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"QNapi/qnapi"},{"type":"Install","url":"https://github.com/QNapi/qnapi/releases"}],
+        "screenshots" : ["QNapi/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "QOwnNotes",
+        "description": "Plain text notepad and todo list manager with markdown support that works together with ownCloud/Nextcloud",
+        "categories": ["Utility"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["QOwnNotes/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Qt_DAB",
+        "description": null,
+        "categories": ["AudioVideo"],
+        "authors" : [{"name":"JvanKatwijk","url":"https://github.com/JvanKatwijk"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"JvanKatwijk/qt-dab"},{"type":"Install","url":"https://github.com/JvanKatwijk/qt-dab/releases"}],
+        "screenshots" : ["Qt_DAB/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "RSS-Guard",
+        "description": "Tiny yet feature rich Qt feed reader",
+        "categories": ["Qt"],
+        "authors" : [{"name":"martinrotter","url":"https://github.com/martinrotter"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"martinrotter/rssguard"},{"type":"Install","url":"https://github.com/martinrotter/rssguard/releases"}],
+        "screenshots" : ["RSS-Guard/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Rambox",
+        "description": "Rambox",
+        "categories": ["Office"],
+        "authors" : [{"name":"saenzramiro","url":"https://github.com/saenzramiro"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"saenzramiro/rambox"},{"type":"Install","url":"https://github.com/saenzramiro/rambox/releases"}],
+        "screenshots" : ["Rambox/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Red_Eclipse-Development",
+        "description": "Play the best first-person shooter in the world! Free and open-source!",
+        "categories": ["Game"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["Red_Eclipse-Development/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "RedmineTimeTracker",
+        "description": "Time Tracking tool for Redmine",
+        "categories": ["Development"],
+        "authors" : [{"name":"ujiro99","url":"https://github.com/ujiro99"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"ujiro99/RedmineTimeTracker"},{"type":"Install","url":"https://github.com/ujiro99/RedmineTimeTracker/releases"}],
+        "screenshots" : ["RedmineTimeTracker/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "ReliefValve",
+        "description": "Helps manage the Steam client application.",
+        "categories": ["Utility"],
+        "authors" : [{"name":"l3laze","url":"https://github.com/l3laze"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"l3laze/ReliefValve"},{"type":"Install","url":"https://github.com/l3laze/ReliefValve/releases"}],
+        "screenshots" : ["ReliefValve/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "RetroShare",
+        "description": "Securely share files with your friends",
+        "categories": ["Application"],
+        "authors" : [{"name":"RetroShare","url":"https://github.com/RetroShare"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"RetroShare/RetroShare"},{"type":"Install","url":"https://github.com/RetroShare/RetroShare/releases"}],
+        "screenshots" : ["RetroShare/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Ricin",
+        "description": "A dead-simple but powerful Tox client.",
+        "categories": ["Network"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["Ricin/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Sabaki",
+        "description": "An elegant Go/Baduk/Weiqi board and SGF editor for a more civilized age.",
+        "categories": ["Game"],
+        "authors" : [{"name":"yishn","url":"https://github.com/yishn"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"yishn/Sabaki"},{"type":"Install","url":"https://github.com/yishn/Sabaki/releases"}],
+        "screenshots" : ["Sabaki/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "ScienceFair",
+        "description": "ScienceFair desktop science reading app for Linux",
+        "categories": ["GNOME"],
+        "authors" : [{"name":"codeforscience","url":"https://github.com/codeforscience"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"codeforscience/sciencefair"},{"type":"Install","url":"https://github.com/codeforscience/sciencefair/releases"}],
+        "screenshots" : ["ScienceFair/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Scribus",
+        "description": "Page Layout and Publication",
+        "categories": ["Qt"],
+        "authors" : null,
+        "license" : "GPL-2.0+",
+        "links": null,
+        "screenshots" : ["https://raw.githubusercontent.com/scribusproject/scribus/master/doc/en/images/Rembrandt2.png"]
+        },
+        
+    
+        
+        {
+        "name": "SerialPlot",
+        "description": "Small and simple software for plotting data from serial port",
+        "categories": ["Development"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["SerialPlot/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Skrifa",
+        "description": "A simple word processor built with web technologies",
+        "categories": ["Office"],
+        "authors" : [{"name":"Skrifa","url":"https://github.com/Skrifa"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Skrifa/Skrifa"},{"type":"Install","url":"https://github.com/Skrifa/Skrifa/releases"}],
+        "screenshots" : ["Skrifa/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Stacer",
+        "description": "Linux System Optimizer and Monitoring",
+        "categories": ["System"],
+        "authors" : [{"name":"oguzhaninan","url":"https://github.com/oguzhaninan"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"oguzhaninan/Stacer"},{"type":"Install","url":"https://github.com/oguzhaninan/Stacer/releases"}],
+        "screenshots" : ["Stacer/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "StopLight",
+        "description": "The kickass API platform.",
+        "categories": ["Development"],
+        "authors" : [{"name":"stoplightio","url":"https://github.com/stoplightio"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"stoplightio/desktop"},{"type":"Install","url":"https://github.com/stoplightio/desktop/releases"}],
+        "screenshots" : ["StopLight/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Subsurface",
+        "description": "manage and display dive computer data",
+        "categories": ["Utility"],
+        "authors" : [{"name":"Subsurface-divelog","url":"https://github.com/Subsurface-divelog"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Subsurface-divelog/subsurface"},{"type":"Install","url":"https://github.com/Subsurface-divelog/subsurface/releases"}],
+        "screenshots" : null
+        },
+        
+    
+        
+        {
+        "name": "SynfigStudio",
+        "description": null,
+        "categories": ["Graphics"],
+        "authors" : [{"name":"synfig","url":"https://github.com/synfig"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"synfig/synfig"},{"type":"Install","url":"https://github.com/synfig/synfig/releases"}],
+        "screenshots" : ["SynfigStudio/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "TagTime-desktop",
+        "description": "Time tracking for space cadets - desktop edition",
+        "categories": ["Utility"],
+        "authors" : [{"name":"mykter","url":"https://github.com/mykter"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"mykter/TagTime-desktop"},{"type":"Install","url":"https://github.com/mykter/TagTime-desktop/releases"}],
+        "screenshots" : ["TagTime-desktop/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "TeXstudio",
+        "description": "LaTeX development environment",
+        "categories": ["Office"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["TeXstudio/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Textilosaurus",
+        "description": "Simple cross-platform text editor based on Qt and QScintilla",
+        "categories": ["Development"],
+        "authors" : null,
+        "license" : "GPL-3.0",
+        "links": null,
+        "screenshots" : null
+        },
+        
+    
+        
+        {
+        "name": "Tiled",
+        "description": "Tile map editor",
+        "categories": ["Graphics"],
+        "authors" : [{"name":"bjorn","url":"https://github.com/bjorn"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"bjorn/tiled"},{"type":"Install","url":"https://github.com/bjorn/tiled/releases"}],
+        "screenshots" : ["Tiled/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Tulip",
+        "description": null,
+        "categories": ["Science"],
+        "authors" : [{"name":"tulip5","url":"https://github.com/tulip5"}],
+        "license" : "LGPL-3.0",
+        "links": [{"type":"GitHub","url":"tulip5/tulip"},{"type":"Install","url":"https://github.com/tulip5/tulip/releases"}],
+        "screenshots" : ["Tulip/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Tumblr_Downloader_GUI",
+        "description": null,
+        "categories": ["AudioVideo"],
+        "authors" : [{"name":"neuro-sys","url":"https://github.com/neuro-sys"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"neuro-sys/tumblr-downloader-client"},{"type":"Install","url":"https://github.com/neuro-sys/tumblr-downloader-client/releases"}],
+        "screenshots" : ["Tumblr_Downloader_GUI/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "VLC",
+        "description": "Read, capture, broadcast your multimedia streams",
+        "categories": ["AudioVideo"],
+        "authors" : [{"name":"darealshinji","url":"https://github.com/darealshinji"}],
+        "license" : "GPL-2.0+",
+        "links": [{"type":"GitHub","url":"darealshinji/vlc-AppImage"},{"type":"Install","url":"https://github.com/darealshinji/vlc-AppImage/releases"}],
+        "screenshots" : null
+        },
+        
+    
+        
+        {
+        "name": "VNote",
+        "description": "Note-taking application for pleasant Markdown",
+        "categories": ["Qt"],
+        "authors" : [{"name":"tamlok","url":"https://github.com/tamlok"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"tamlok/vnote"},{"type":"Install","url":"https://github.com/tamlok/vnote/releases"}],
+        "screenshots" : ["VNote/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Vessel",
+        "description": "A simple wallet for managing your Steem accounts.",
+        "categories": ["Network"],
+        "authors" : [{"name":"aaroncox","url":"https://github.com/aaroncox"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"aaroncox/vessel"},{"type":"Install","url":"https://github.com/aaroncox/vessel/releases"}],
+        "screenshots" : ["Vessel/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "VidCutter",
+        "description": "Simple & fast FFmpeg based video cutter & joiner",
+        "categories": ["Qt"],
+        "authors" : [{"name":"ozmartian","url":"https://github.com/ozmartian"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"ozmartian/vidcutter"},{"type":"Install","url":"https://github.com/ozmartian/vidcutter/releases"}],
+        "screenshots" : null
+        },
+        
+    
+        
+        {
+        "name": "Voltra",
+        "description": "Voltra Co. Music Player",
+        "categories": ["Utility"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["Voltra/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Wire",
+        "description": "Modern communication, full privacy.",
+        "categories": ["Network"],
+        "authors" : [{"name":"wireapp","url":"https://github.com/wireapp"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"wireapp/wire-desktop"},{"type":"Install","url":"https://github.com/wireapp/wire-desktop/releases"}],
+        "screenshots" : null
+        },
+        
+    
+        
+        {
+        "name": "Woke",
+        "description": "A REST client with grand ambitions and limited scope.",
+        "categories": ["Network"],
+        "authors" : [{"name":"tmstieff","url":"https://github.com/tmstieff"}],
+        "license" : "LGPL-3.0",
+        "links": [{"type":"GitHub","url":"tmstieff/Woke"},{"type":"Install","url":"https://github.com/tmstieff/Woke/releases"}],
+        "screenshots" : ["Woke/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "WorkFlowy",
+        "description": "Make Lists. Not War.",
+        "categories": ["Utility"],
+        "authors" : [{"name":"workflowy","url":"https://github.com/workflowy"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"workflowy/desktop"},{"type":"Install","url":"https://github.com/workflowy/desktop/releases"}],
+        "screenshots" : ["WorkFlowy/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "XChat",
+        "description": "Chat with other people using Internet Relay Chat",
+        "categories": ["Network"],
+        "authors" : [{"name":"probonopd","url":"https://github.com/probonopd"}],
+        "license" : "GPL-2.0",
+        "links": [{"type":"GitHub","url":"probonopd/XChat"},{"type":"Install","url":"https://github.com/probonopd/XChat/releases"}],
+        "screenshots" : ["XChat/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "XnViewMP",
+        "description": "Graphic viewer, browser, converter",
+        "categories": ["Graphics"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["XnViewMP/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "accessimap-lecteur-der",
+        "description": "Accessimap Lecteur DER",
+        "categories": ["Education"],
+        "authors" : [{"name":"makinacorpus","url":"https://github.com/makinacorpus"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"makinacorpus/accessimap-lecteur-der"},{"type":"Install","url":"https://github.com/makinacorpus/accessimap-lecteur-der/releases"}],
+        "screenshots" : ["accessimap-lecteur-der/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "appimagetool",
+        "description": "Tool to generate AppImages from AppDirs",
+        "categories": ["Development"],
+        "authors" : [{"name":"AppImage","url":"https://github.com/AppImage"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"AppImage/AppImageKit"},{"type":"Install","url":"https://github.com/AppImage/AppImageKit/releases"}],
+        "screenshots" : ["appimagetool/screenshot.png"]
+        },
+        
+    
+        
+    
+        
+        {
+        "name": "blubVolley",
+        "description": "blubVolley - a fun volleyball game",
+        "categories": ["Game"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["blubVolley/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "buttercup",
+        "description": "Free and Open Source password vault",
+        "categories": ["Utility"],
+        "authors" : [{"name":"buttercup","url":"https://github.com/buttercup"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"buttercup/buttercup-desktop"},{"type":"Install","url":"https://github.com/buttercup/buttercup-desktop/releases"}],
+        "screenshots" : ["buttercup/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "caprine",
+        "description": null,
+        "categories": ["Chat"],
+        "authors" : [{"name":"sindresorhus","url":"https://github.com/sindresorhus"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"sindresorhus/caprine"},{"type":"Install","url":"https://github.com/sindresorhus/caprine/releases"}],
+        "screenshots" : ["caprine/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "cumulonimbus",
+        "description": "A simple, beautiful podcast app.",
+        "categories": ["Audio"],
+        "authors" : [{"name":"z-------------","url":"https://github.com/z-------------"}],
+        "license" : "Apache-2.0",
+        "links": [{"type":"GitHub","url":"z-------------/cumulonimbus"},{"type":"Install","url":"https://github.com/z-------------/cumulonimbus/releases"}],
+        "screenshots" : ["cumulonimbus/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "devdocs-desktop",
+        "description": "Desktop client for devdocs.io",
+        "categories": ["Development"],
+        "authors" : [{"name":"egoist","url":"https://github.com/egoist"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"egoist/devdocs-desktop"},{"type":"Install","url":"https://github.com/egoist/devdocs-desktop/releases"}],
+        "screenshots" : ["devdocs-desktop/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "dexter_dev_env",
+        "description": "Dexter Development Environment",
+        "categories": ["Development"],
+        "authors" : [{"name":"cfry","url":"https://github.com/cfry"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"cfry/dde"},{"type":"Install","url":"https://github.com/cfry/dde/releases"}],
+        "screenshots" : ["dexter_dev_env/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "draw.io",
+        "description": "draw.io desktop",
+        "categories": ["Graphics"],
+        "authors" : [{"name":"jgraph","url":"https://github.com/jgraph"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"jgraph/drawio-desktop"},{"type":"Install","url":"https://github.com/jgraph/drawio-desktop/releases"}],
+        "screenshots" : ["draw.io/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "embedded-ide",
+        "description": "Makefile based IDE for embedded systems",
+        "categories": ["Development"],
+        "authors" : [{"name":"martinribelotta","url":"https://github.com/martinribelotta"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"martinribelotta/embedded-ide"},{"type":"Install","url":"https://github.com/martinribelotta/embedded-ide/releases"}],
+        "screenshots" : ["embedded-ide/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "erdesigner",
+        "description": "An open-source ER Diagram tool that is available for ALL platforms.",
+        "categories": ["Graphics"],
+        "authors" : [{"name":"felix557700","url":"https://github.com/felix557700"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"felix557700/erdesigner"},{"type":"Install","url":"https://github.com/felix557700/erdesigner/releases"}],
+        "screenshots" : ["erdesigner/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "gLabels",
+        "description": "Create labels, business cards and media covers",
+        "categories": ["Office"],
+        "authors" : [{"name":"jimevins","url":"https://github.com/jimevins"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"jimevins/glabels-qt"},{"type":"Install","url":"https://github.com/jimevins/glabels-qt/releases"}],
+        "screenshots" : ["gLabels/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "gifcurry",
+        "description": "Open source video to GIF maker, written in Haskell, that allows overlaid text.",
+        "categories": ["AudioVideo"],
+        "authors" : [{"name":"lettier","url":"https://github.com/lettier"}],
+        "license" : "BSD-3-Clause",
+        "links": [{"type":"GitHub","url":"lettier/gifcurry"},{"type":"Install","url":"https://github.com/lettier/gifcurry/releases"}],
+        "screenshots" : ["https://i.imgur.com/XLcD7fg.png"]
+        },
+        
+    
+        
+        {
+        "name": "githoard",
+        "description": "Hoard git repositories with ease",
+        "categories": ["Development"],
+        "authors" : [{"name":"jojobyte","url":"https://github.com/jojobyte"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"jojobyte/githoard"},{"type":"Install","url":"https://github.com/jojobyte/githoard/releases"}],
+        "screenshots" : ["githoard/screenshot.png"]
+        },
+        
+    
+        
+    
+        
+        {
+        "name": "hotspot",
+        "description": null,
+        "categories": ["Development"],
+        "authors" : [{"name":"KDAB","url":"https://github.com/KDAB"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"KDAB/hotspot"},{"type":"Install","url":"https://github.com/KDAB/hotspot/releases"}],
+        "screenshots" : ["hotspot/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "hyper",
+        "description": "A terminal built on web technologies",
+        "categories": ["TerminalEmulator"],
+        "authors" : [{"name":"zeit","url":"https://github.com/zeit"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"zeit/hyper"},{"type":"Install","url":"https://github.com/zeit/hyper/releases"}],
+        "screenshots" : ["hyper/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "iota1k",
+        "description": "IOTA based messenging app",
+        "categories": ["Development"],
+        "authors" : [{"name":"xx10t4","url":"https://github.com/xx10t4"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"xx10t4/iota1k"},{"type":"Install","url":"https://github.com/xx10t4/iota1k/releases"}],
+        "screenshots" : ["iota1k/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "ipe",
+        "description": null,
+        "categories": ["Graphics"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["ipe/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "irccloud-desktop",
+        "description": "IRCCloud Desktop Client",
+        "categories": ["Network"],
+        "authors" : [{"name":"irccloud","url":"https://github.com/irccloud"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"irccloud/irccloud-desktop"},{"type":"Install","url":"https://github.com/irccloud/irccloud-desktop/releases"}],
+        "screenshots" : ["irccloud-desktop/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "jag",
+        "description": "Jag - program for telemetry veiwing",
+        "categories": ["Utility"],
+        "authors" : [{"name":"seleznevae","url":"https://github.com/seleznevae"}],
+        "license" : "GPL-3.0",
+        "links": [{"type":"GitHub","url":"seleznevae/jag"},{"type":"Install","url":"https://github.com/seleznevae/jag/releases"}],
+        "screenshots" : ["jag/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "jaxx",
+        "description": "Blockchain Wallet for desktop",
+        "categories": ["Utility"],
+        "authors" : [{"name":"Jaxx-io","url":"https://github.com/Jaxx-io"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Jaxx-io/Jaxx"},{"type":"Install","url":"https://github.com/Jaxx-io/Jaxx/releases"}],
+        "screenshots" : ["jaxx/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "jumpfm",
+        "description": "A file manager that lets you jump",
+        "categories": ["Utility"],
+        "authors" : [{"name":"Gilad-Kutiel-App","url":"https://github.com/Gilad-Kutiel-App"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"Gilad-Kutiel-App/jumpfm"},{"type":"Install","url":"https://github.com/Gilad-Kutiel-App/jumpfm/releases"}],
+        "screenshots" : ["jumpfm/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "langly",
+        "description": "Manage Laravel json language files",
+        "categories": ["Development"],
+        "authors" : [{"name":"christofferok","url":"https://github.com/christofferok"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"christofferok/langly"},{"type":"Install","url":"https://github.com/christofferok/langly/releases"}],
+        "screenshots" : ["langly/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "ldview",
+        "description": "LDraw Model Viewer",
+        "categories": ["Graphics"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["ldview/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "linuxdeployqt",
+        "description": "Bundle an application as an AppDir and/or AppImage",
+        "categories": ["Development"],
+        "authors" : [{"name":"probonopd","url":"https://github.com/probonopd"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"probonopd/linuxdeployqt"},{"type":"Install","url":"https://github.com/probonopd/linuxdeployqt/releases"}],
+        "screenshots" : ["linuxdeployqt/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "lmms",
+        "description": "Music sequencer and synthesizer",
+        "categories": ["Qt"],
+        "authors" : [{"name":"tresf","url":"https://github.com/tresf"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"tresf/lmms"},{"type":"Install","url":"https://github.com/tresf/lmms/releases"}],
+        "screenshots" : ["lmms/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "makoureactor",
+        "description": "Can edit field from Final Fantasy VII (PS & PC)",
+        "categories": ["Game"],
+        "authors" : [{"name":"myst6re","url":"https://github.com/myst6re"}],
+        "license" : "GPL-3.0",
+        "links": [{"type":"GitHub","url":"myst6re/makoureactor"},{"type":"Install","url":"https://github.com/myst6re/makoureactor/releases"}],
+        "screenshots" : ["makoureactor/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "mandelbulber2",
+        "description": "Visit 3D Fractal World",
+        "categories": ["Graphics"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["mandelbulber2/screenshot.png"]
+        },
+        
+    
+        
+    
+        
+        {
+        "name": "marlin-conf",
+        "description": "configuration tool for Marlin project",
+        "categories": ["Development"],
+        "authors" : [{"name":"akaJes","url":"https://github.com/akaJes"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"akaJes/marlin-config"},{"type":"Install","url":"https://github.com/akaJes/marlin-config/releases"}],
+        "screenshots" : ["marlin-conf/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "media_mate",
+        "description": "My SDD HSC Major Project, a full media server/player/downloader/etc - in one",
+        "categories": ["AudioVideo"],
+        "authors" : [{"name":"willyb321","url":"https://github.com/willyb321"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"willyb321/media_mate"},{"type":"Install","url":"https://github.com/willyb321/media_mate/releases"}],
+        "screenshots" : ["media_mate/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "mockoon",
+        "description": "Mock servers in seconds",
+        "categories": ["Development"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["mockoon/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "nheko",
+        "description": "Desktop client for Matrix",
+        "categories": ["Network"],
+        "authors" : [{"name":"mujx","url":"https://github.com/mujx"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"mujx/nheko"},{"type":"Install","url":"https://github.com/mujx/nheko/releases"}],
+        "screenshots" : ["nheko/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "ocsstore",
+        "description": null,
+        "categories": ["Network"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["ocsstore/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "p2p-chat",
+        "description": "a p2p chat app",
+        "categories": ["Network"],
+        "authors" : [{"name":"dgeibi","url":"https://github.com/dgeibi"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"dgeibi/p2p-chat"},{"type":"Install","url":"https://github.com/dgeibi/p2p-chat/releases"}],
+        "screenshots" : ["p2p-chat/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "pb-for-desktop",
+        "description": "Pushbullet Desktop app for macOS, Windows and Linux.",
+        "categories": ["Utility"],
+        "authors" : [{"name":"sidneys","url":"https://github.com/sidneys"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"sidneys/pb-for-desktop"},{"type":"Install","url":"https://github.com/sidneys/pb-for-desktop/releases"}],
+        "screenshots" : ["pb-for-desktop/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "protonmail-desktop",
+        "description": "Unofficial Electron wrapper for ProtonMail",
+        "categories": ["Office"],
+        "authors" : [{"name":"protonmail-desktop","url":"https://github.com/protonmail-desktop"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"protonmail-desktop/application"},{"type":"Install","url":"https://github.com/protonmail-desktop/application/releases"}],
+        "screenshots" : ["protonmail-desktop/screenshot.png"]
+        },
+        
+    
+        
+    
+        
+        {
+        "name": "spm",
+        "description": "spm is a simple commandline package manager that installs/manages AppImages and tar archives.",
+        "categories": ["GTK"],
+        "authors" : [{"name":"simoniz0r","url":"https://github.com/simoniz0r"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"simoniz0r/spm"},{"type":"Install","url":"https://github.com/simoniz0r/spm/releases"}],
+        "screenshots" : ["spm/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "steam-rom-manager",
+        "description": "An app for managing ROMs in Steam",
+        "categories": ["Utility"],
+        "authors" : [{"name":"FrogTheFrog","url":"https://github.com/FrogTheFrog"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"FrogTheFrog/steam-rom-manager"},{"type":"Install","url":"https://github.com/FrogTheFrog/steam-rom-manager/releases"}],
+        "screenshots" : ["steam-rom-manager/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "stretchly",
+        "description": "break time reminder app",
+        "categories": ["Utility"],
+        "authors" : [{"name":"hovancik","url":"https://github.com/hovancik"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"hovancik/stretchly"},{"type":"Install","url":"https://github.com/hovancik/stretchly/releases"}],
+        "screenshots" : ["stretchly/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "superProductivity",
+        "description": "Personal Task Management App to help you with your daily struggle with JIRA etc.",
+        "categories": ["Utility"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["superProductivity/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "tubCloud",
+        "description": "tubCloud desktop synchronization client",
+        "categories": ["Utility"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["tubCloud/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "unified-communications",
+        "description": "Unified Communication from Mundio Mobiles",
+        "categories": ["Office"],
+        "authors" : [{"name":"aricovindanevectone","url":"https://github.com/aricovindanevectone"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"aricovindanevectone/hari"},{"type":"Install","url":"https://github.com/aricovindanevectone/hari/releases"}],
+        "screenshots" : ["unified-communications/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "unoffical-sonos-controller-for-linux",
+        "description": "Unoffical sonos controller for linux.",
+        "categories": ["Audio"],
+        "authors" : [{"name":"pascalopitz","url":"https://github.com/pascalopitz"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"pascalopitz/unoffical-sonos-controller-for-linux"},{"type":"Install","url":"https://github.com/pascalopitz/unoffical-sonos-controller-for-linux/releases"}],
+        "screenshots" : ["unoffical-sonos-controller-for-linux/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "unreel",
+        "description": "Reveal your ideas. With Unreel you can create amazing REVEAL.JS presentations",
+        "categories": ["Office"],
+        "authors" : [{"name":"linux-man","url":"https://github.com/linux-man"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"linux-man/unreel"},{"type":"Install","url":"https://github.com/linux-man/unreel/releases"}],
+        "screenshots" : ["unreel/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "violetbug",
+        "description": "A cross-platform Roku Debugger graphical interface",
+        "categories": ["Development"],
+        "authors" : [{"name":"belltown","url":"https://github.com/belltown"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"belltown/violetbug"},{"type":"Install","url":"https://github.com/belltown/violetbug/releases"}],
+        "screenshots" : ["violetbug/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "weweChat",
+        "description": "Unofficial WeChat client built with React, MobX and Electron.",
+        "categories": ["Chat"],
+        "authors" : [{"name":"trazyn","url":"https://github.com/trazyn"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"trazyn/weweChat"},{"type":"Install","url":"https://github.com/trazyn/weweChat/releases"}],
+        "screenshots" : ["weweChat/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "whiteboard",
+        "description": "Whiteboard - a slide-based activity presentation system",
+        "categories": ["Office"],
+        "authors" : [{"name":"michaelpb","url":"https://github.com/michaelpb"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"michaelpb/whiteboard"},{"type":"Install","url":"https://github.com/michaelpb/whiteboard/releases"}],
+        "screenshots" : ["whiteboard/screenshot.png"]
+        },
+        
+    
+        
+    
+        
+        {
+        "name": "xde",
+        "description": "The Expo Development Environment",
+        "categories": ["Development"],
+        "authors" : [{"name":"expo","url":"https://github.com/expo"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"expo/xde"},{"type":"Install","url":"https://github.com/expo/xde/releases"}],
+        "screenshots" : ["xde/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "xlights",
+        "description": "Lighting control and sequencing",
+        "categories": ["AudioVideo"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["xlights/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "zsync2",
+        "description": null,
+        "categories": ["Network"],
+        "authors" : [{"name":"TheAssassin","url":"https://github.com/TheAssassin"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"TheAssassin/zsync2"},{"type":"Install","url":"https://github.com/TheAssassin/zsync2/releases"}],
+        "screenshots" : ["zsync2/screenshot.png"]
+        }
+        
+    
+    ]
+}

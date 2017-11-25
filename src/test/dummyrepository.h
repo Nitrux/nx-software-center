@@ -3,15 +3,14 @@
 
 #include "../entities/repository.h"
 
-class DummyRepository : public Repository
-{
+class DummyRepository : public Repository {
 public:
-    DummyRepository();
+  DummyRepository();
 
-    virtual QString id();
+  virtual QString id();
 
-    virtual void updateCache() override;
-    QString appName = "Dummy App";
+  virtual void updateCache();
+  QString appName = "Dummy App";
 };
 
 #endif // DUMMYREPOSITORY_H

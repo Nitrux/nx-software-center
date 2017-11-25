@@ -5,11 +5,9 @@ import QtQuick.Layouts 1.3
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-import Snapd 1.0
 
 import org.nx.softwarecenter 1.0
 
-import "qrc:/scripts/Utils.js" as Utils
 
 Item {
     property alias message: messageText.text

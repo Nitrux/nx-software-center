@@ -11,53 +11,52 @@ PlasmaCore.FrameSvgItem {
     signal goHome
     signal goStore
     signal goSettings
-    signal goAppImageStore
     signal storeQueryTyped(var query)
 
     imagePath: "opaque/widgets/panel-background"
     enabledBorders: PlasmaCore.FrameSvgItem.BottomBorder
 
+    function enable() {
+        storeButton.enabled = true
+        searchField.enabled = true
+    }
 
-    property string currentView: "home"
+    function disable() {
+        storeButton.enabled = false
+        searchField.enabled = false
+    }
+
+    property string currentView: "store"
 
     height: 48
     RowLayout {
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.leftMargin: 20
         anchors.verticalCenter: parent.verticalCenter
 
         height: 34
         spacing: 12
 
-        PlasmaComponents.ToolButton {
-            Layout.leftMargin: 20
-            Layout.fillHeight: true
+//        PlasmaComponents.ToolButton {
+//            Layout.fillHeight: true
 
-            iconName: "nx-home"
-            checked: currentView == "home"
-            onClicked: {
-                goHome()
-                currentView = "home"
-            }
-        }
+//            iconName: "nx-home"
+//            checked: currentView == "home"
+//            onClicked: {
+//                goHome()
+//                currentView = "home"
+//            }
+//        }
 
         PlasmaComponents.ToolButton {
+            id: storeButton
             iconName: "nx-software-center"
             Layout.fillHeight: true
             checked: currentView == "store"
             onClicked: {
                 goStore()
                 currentView = "store"
-            }
-        }
-
-        PlasmaComponents.ToolButton {
-            iconName: "appimage-store"
-            Layout.fillHeight: true
-            checked: currentView == "appImageStore"
-            onClicked: {
-                goAppImageStore()
-                currentView = "appImageStore"
             }
         }
 
@@ -75,18 +74,18 @@ PlasmaCore.FrameSvgItem {
             Keys.onReturnPressed: storeQueryTyped(text)
         }
 
-        PlasmaComponents.ToolButton {
-            Layout.alignment: Qt.AlignRight
-            Layout.rightMargin: 12
-            Layout.fillHeight: true
-            iconName: "nx-configure"
+//        PlasmaComponents.ToolButton {
+//            Layout.alignment: Qt.AlignRight
+//            Layout.rightMargin: 12
+//            Layout.fillHeight: true
+//            iconName: "nx-configure"
 
-            checked: currentView == "settings"
-            onClicked: {
-                goSettings()
-                currentView = "settings"
-            }
+//            checked: currentView == "settings"
+//            onClicked: {
+//                goSettings()
+//                currentView = "settings"
+//            }
 
-        }
+//        }
     }
 }
