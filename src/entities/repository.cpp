@@ -1,64 +1,67 @@
 #include "repository.h"
 
-#include "app.h"
-#include "release.h"
+#include <QException>
+#include <QSet>
 
-Repository::Repository()
-{
+#include "application.h"
 
+Repository::Repository(QObject* parent) : QObject(parent) {}
+
+void Repository::add(Application app) {
+  applications.insert(app.getId(), app);
 }
 
-Repository::~Repository()
-{
-
+bool Repository::contains(const QString& id) const {
+  return applications.contains(id);
 }
 
-bool Repository::contains(QString appId)
-{
-    return apps.contains(appId);
+Application Repository::get(const QString& id) const {
+  if (!applications.contains(id))
+    throw ApplicationNotFoundException();
+  else
+    return applications.value(id);
 }
 
-bool Repository::contains(QString appId, QString releaseId)
-{
-    if (apps.contains(appId))
-    {
-        App * app = apps.value(appId);
-        return app->getRelease(releaseId) != nullptr;
-    } else
-        return false;
+int Repository::countAll() const {
+  return applications.count();
 }
 
-App *Repository::getApp(QString appId)
-{
-    return apps.value(appId, nullptr);
+int Repository::countByName() const {
+  QSet<QString> set;
+  for (const Application& a : applications.values())
+    set.insert(a.getName());
+
+  return set.count();
 }
 
-Release *Repository::getRelease(QString appId, QString releaseId)
-{
-    App * app = apps.value(appId);
-    if (app == nullptr)
-        return nullptr;
-
-    return app->getRelease(releaseId);
+QList<Application> Repository::getAll() const {
+  return applications.values();
 }
 
-void Repository::add(App *app)
-{
-    Q_ASSERT(app != nullptr);
-    apps.insert(app->id, app);
-}
+QList<Application> Repository::getAllLatestVersions() const {
+  QMap<QString, Application> latest;
 
-void Repository::clear()
-{
-    apps.clear();
-}
-
-QList<App *> Repository::list()
-{
-    QList<App *> appList;
-    for (auto it = apps.begin(); it != apps.end(); it ++)
-    {
-        appList.append(it.value());
+  for (const Application& a : applications.values()) {
+    if (!latest.contains(a.getName()))
+      latest.insert(a.getName(), a);
+    else {
+      const Application& b = latest.value(a.getName());
+      if (b < a)
+        latest.insert(a.getName(), a);
     }
-    return appList;
+  }
+
+  return latest.values();
+}
+
+QList<Application> Repository::getAllVersions(const QString& id) const {
+  QList<Application> apps;
+
+  for (const Application& a : applications.values()) {
+    if (id.compare(a.getName()) == 0)
+      apps.append(a);
+  }
+
+  qSort(apps);
+  return apps;
 }

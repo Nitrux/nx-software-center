@@ -1,29 +1,31 @@
 #ifndef REPOSITORY_H
 #define REPOSITORY_H
 
-#include <QList>
+#include <QException>
 #include <QMap>
-#include <QString>
+#include <QObject>
 
-class App;
-class Release;
+#include "application.h"
 
-class Repository {
-public:
-  Repository();
-  virtual ~Repository();
+class ApplicationNotFoundException : public QException {};
+class Repository : public QObject {
+  Q_OBJECT
+  QMap<QString, Application> applications;
 
-  virtual QList<App *> list();
-  virtual bool contains(QString appId);
-  virtual bool contains(QString appId, QString releaseId);
-  virtual App *getApp(QString appId);
-  virtual Release *getRelease(QString appId, QString releaseId);
+ public:
+  explicit Repository(QObject* parent = nullptr);
 
-  virtual void add(App *app);
-  virtual void clear();
+  void add(Application app);
+  bool contains(const QString& id) const;
+  Application get(const QString& id) const;
+  int countAll() const;
+  int countByName() const;
 
-protected:
-  QMap<QString, App *> apps;
+  QList<Application> getAll() const;
+  QList<Application> getAllLatestVersions() const;
+  QList<Application> getAllVersions(const QString& id) const;
+
+ private:
 };
 
-#endif // REPOSITORY_H
+#endif  // REPOSITORY_H

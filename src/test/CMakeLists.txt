@@ -7,8 +7,9 @@ set(CMAKE_AUTOMOC ON)
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5 REQUIRED COMPONENTS Test Network Xml XmlPatterns)
-find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
+find_package(Qt5 REQUIRED COMPONENTS Test Qml Quick Gui Widgets Network Concurrent)
+find_package(KF5 REQUIRED COMPONENTS CoreAddons)
+find_package(AppImage REQUIRED)
 
 
 ###
