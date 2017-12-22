@@ -7,25 +7,35 @@
 
 #include "application.h"
 
-class ApplicationNotFoundException : public QException {};
+class ApplicationNotFoundException : public QException {
+};
+
 class Repository : public QObject {
-  Q_OBJECT
-  QMap<QString, Application> applications;
+Q_OBJECT
+    QMap<QString, Application> applications;
 
- public:
-  explicit Repository(QObject* parent = nullptr);
+public:
+    explicit Repository(QObject *parent = nullptr);
 
-  void add(Application app);
-  bool contains(const QString& id) const;
-  Application get(const QString& id) const;
-  int countAll() const;
-  int countByName() const;
+    void add(Application app);
 
-  QList<Application> getAll() const;
-  QList<Application> getAllLatestVersions() const;
-  QList<Application> getAllVersions(const QString& id) const;
+    bool contains(const QString &id) const;
 
- private:
+    Application get(const QString &id) const;
+
+    int countAll() const;
+
+    int countByName() const;
+
+    QList<Application> getAll() const;
+
+    QList<Application> getAllLatestVersions() const;
+
+    Application getLatestVersion(const QString &name) const;
+
+    QList<Application> getAllVersions(const QString &name) const;
+
+private:
 };
 
 #endif  // REPOSITORY_H
