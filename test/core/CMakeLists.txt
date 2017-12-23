@@ -21,3 +21,13 @@ target_link_libraries(test_Repository
 )
 
 add_test(test_Repository test_Repository)
+
+add_executable(test_Source $<TARGET_OBJECTS:core> test_source.cpp)
+target_include_directories(test_Source PRIVATE ${CMAKE_SOURCE_DIR}/src/ )
+
+target_link_libraries(test_Source
+    Qt5::Test
+    Qt5::Core
+    )
+
+add_test(test_Repository test_Repository)

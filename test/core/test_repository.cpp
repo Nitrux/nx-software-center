@@ -2,8 +2,8 @@
 
 #include <QList>
 
-#include "entities/application.h"
-#include "entities/repository.h"
+#include "Application.h"
+#include "Repository.h"
 
 class Test_Repository : public QObject {
 Q_OBJECT
@@ -129,6 +129,59 @@ private slots:
 
         Application expected("app1", "3");
         QCOMPARE(expected, r.getLatestVersion("app1"));
+    }
+
+    void removeAll() {
+        Repository r;
+        QList<Application> apps;
+        apps << Application("app1", "2");
+        apps << Application("app1", "1");
+        apps << Application("app1", "3");
+        apps << Application("app2", "1");
+
+        for (const Application &a : apps)
+            r.add(a);
+
+        r.removeAll();
+        QList<Application> expected;
+        QCOMPARE(expected, r.getAll());
+    }
+
+    void removeAllVersions() {
+        Repository r;
+        QList<Application> apps;
+        apps << Application("app1", "2");
+        apps << Application("app1", "1");
+        apps << Application("app1", "3");
+        Application app2("app2", "1");
+        apps << app2;
+
+        for (const Application &a : apps)
+            r.add(a);
+
+        r.removeAllVersions("app1");
+        QList<Application> expected;
+        expected << app2;
+        QCOMPARE(expected, r.getAll());
+    }
+
+    void remove() {
+        Repository r;
+        QList<Application> apps;
+        apps << Application("app1", "1");
+        apps << Application("app1", "2");
+        apps << Application("app1", "3");
+        Application app2("app2", "1");
+        apps << app2;
+
+        for (const Application &a : apps)
+            r.add(a);
+
+        r.remove(app2.getId());
+
+        QList<Application> expected(apps);
+        expected.removeAll(app2);
+        QCOMPARE(expected, r.getAll());
     }
 };
 

@@ -24,6 +24,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
+include(ExternalProject)
 
 
 add_subdirectory(src)

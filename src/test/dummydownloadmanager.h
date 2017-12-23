@@ -3,7 +3,7 @@
 
 #include <QString>
 
-#include "../entities/downloadmanager.h"
+#include "DownloadManager.h"
 
 class DummyDownloadManager : public DownloadManager
 {

@@ -7,7 +7,7 @@
 #include "../entities/progresslistener.h"
 #include "../entities/registry.h"
 #include "../entities/release.h"
-#include "../entities/repository.h"
+#include "Repository.h"
 
 #include "dummychange.h"
 #include "dummyinstallchange.h"

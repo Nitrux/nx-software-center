@@ -1,7 +1,7 @@
 #include "taskdownloadappimagecontroller.h"
 
 #include "../interactors/downloadappimagereleaseinteractor.h"
-#include "../interactors/interactor.h"
+#include "Interactor.h"
 #include <QtConcurrent>
 
 TaskDownloadAppImageController::TaskDownloadAppImageController(

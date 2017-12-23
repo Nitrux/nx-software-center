@@ -1,7 +1,7 @@
 #ifndef DUMMYREPOSITORY_H
 #define DUMMYREPOSITORY_H
 
-#include "../entities/repository.h"
+#include "Repository.h"
 
 class DummyRepository : public Repository {
 public:

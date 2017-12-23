@@ -1,6 +1,6 @@
 #include <QtTest/QtTest>
 
-#include "entities/application.h"
+#include "Application.h"
 
 class Test_Application : public QObject {
 Q_OBJECT
@@ -10,7 +10,7 @@ private slots:
     void identity() {
         Application a("test", "v0.1");
 
-        QCOMPARE(a.getName(), QString("test"));
+        QCOMPARE(a.getCodeName(), QString("test"));
         QCOMPARE(a.getVersion(), QString("v0.1"));
         QCOMPARE(QString("test-v0.1"), a.getId());
     };
@@ -66,7 +66,7 @@ private slots:
 
     void test_set_get_description() {
         Application a("test", "v0.2");
-        QString description = "Test application description";
+        QString description = "Test Application description";
         a.setDescription(description);
 
         QCOMPARE(description, a.getDescription());

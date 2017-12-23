@@ -5,7 +5,7 @@
 #include <QMap>
 #include <QObject>
 
-#include "application.h"
+#include "Application.h"
 
 class ApplicationNotFoundException : public QException {
 };
@@ -35,6 +35,9 @@ public:
 
     QList<Application> getAllVersions(const QString &name) const;
 
+    void remove(const QString &id);
+    void removeAllVersions(const QString &name);
+    void removeAll();
 private:
 };
 

@@ -62,7 +62,7 @@ Item {
             spacing: 12
 
             delegate: AppImageListItemDelegate {
-                name: model.modelData['name']
+                codeName: model.modelData['codeName']
                 description: model.modelData['description']
 
                 onRequestDownload: {

@@ -1,7 +1,7 @@
 #ifndef REMOVEAPPIMAGERELEASEINTERACTOR_H
 #define REMOVEAPPIMAGERELEASEINTERACTOR_H
 
-#include "interactor.h"
+#include "Interactor.h"
 
 #include <QException>
 #include <QString>

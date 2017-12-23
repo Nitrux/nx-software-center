@@ -6,7 +6,7 @@
 #include <QNetworkReply>
 #include <QUrl>
 
-#include "../entities/repository.h"
+#include "Repository.h"
 
 class App;
 class AppImageHubRepository : public Repository {

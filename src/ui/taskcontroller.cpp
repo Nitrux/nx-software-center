@@ -1,6 +1,6 @@
 #include "taskcontroller.h"
 
-#include "../interactors/interactor.h"
+#include "Interactor.h"
 
 TaskController::TaskController(QObject *parent) : QObject(parent)
 {

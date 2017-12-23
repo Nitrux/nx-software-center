@@ -35,6 +35,10 @@
         
     
         
+    
+        
+    
+        
         {
         "name": "Alduin",
         "description": "An Atom and RSS feed aggregator",
@@ -67,18 +71,6 @@
         "license" : "MIT",
         "links": [{"type":"GitHub","url":"AppImage/AppImageUpdate"},{"type":"Install","url":"https://github.com/AppImage/AppImageUpdate/releases"}],
         "screenshots" : ["https://camo.githubusercontent.com/2c9da2c2c2b43de47075b5e8f77f17bcf930f2b5/68747470733a2f2f6c68332e676f6f676c6575736572636f6e74656e742e636f6d2f2d56724139513657774c4f342f566e5863506c62505078492f41414141414141414145672f4370707368345148724b492f773339362d683237362d702f757064617465722e706e67"]
-        },
-        
-    
-        
-        {
-        "name": "AppImageUpdateTest",
-        "description": null,
-        "categories": [null],
-        "authors" : [{"name":"AppImage","url":"https://github.com/AppImage"}],
-        "license" : "MIT",
-        "links": [{"type":"Web","url":"https://appimage.org"},{"type":"GitHub","url":"https://github.com/AppImage/AppImageUpdate"},{"type":"Install","url":"https://github.com/AppImage/AppImageUpdate/releases"},{"type":"Screenshots","url":"AppImageUpdate/screenshot.png"}],
-        "screenshots" : ["AppImageUpdate/screenshot.png"]
         },
         
     
@@ -216,6 +208,18 @@
     
         
         {
+        "name": "CoCoMusic",
+        "description": "CocoMusic",
+        "categories": ["Utility"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["CoCoMusic/screenshot.png"]
+        },
+        
+    
+        
+        {
         "name": "Crypter",
         "description": "An innovative, convenient and secure cross-platform crypto app",
         "categories": ["Utility"],
@@ -267,9 +271,9 @@
         "name": "Dragoman",
         "description": "GUI for polyglot",
         "categories": ["Development"],
-        "authors" : [{"name":"peteboothroyd","url":"https://github.com/peteboothroyd"}],
-        "license" : null,
-        "links": [{"type":"GitHub","url":"peteboothroyd/Dragoman"},{"type":"Install","url":"https://github.com/peteboothroyd/Dragoman/releases"}],
+        "authors" : [{"name":"improbable-eng","url":"https://github.com/improbable-eng"}],
+        "license" : "Apache-2.0",
+        "links": [{"type":"GitHub","url":"improbable-eng/Dragoman"},{"type":"Install","url":"https://github.com/improbable-eng/Dragoman/releases"}],
         "screenshots" : ["Dragoman/screenshot.png"]
         },
         
@@ -372,6 +376,18 @@
     
         
         {
+        "name": "GitHubDesktop",
+        "description": null,
+        "categories": [null],
+        "authors" : [{"name":"shiftkey","url":"https://github.com/shiftkey"}],
+        "license" : "MIT",
+        "links": [{"type":"GitHub","url":"shiftkey/desktop"},{"type":"Install","url":"https://github.com/shiftkey/desktop/releases"}],
+        "screenshots" : ["GitHubDesktop/screenshot.png"]
+        },
+        
+    
+        
+        {
         "name": "GradeStats",
         "description": "Import from xls spredsheets, store and analyze student grade data",
         "categories": ["Utility"],
@@ -415,6 +431,18 @@
         "license" : null,
         "links": [{"type":"GitHub","url":"meowtec/Imagine"},{"type":"Install","url":"https://github.com/meowtec/Imagine/releases"}],
         "screenshots" : ["Imagine/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "ImapSyncClient",
+        "description": "An electron-vue project",
+        "categories": ["Development"],
+        "authors" : [{"name":"ridaamirini","url":"https://github.com/ridaamirini"}],
+        "license" : "MIT",
+        "links": [{"type":"GitHub","url":"ridaamirini/ImapSyncClient"},{"type":"Install","url":"https://github.com/ridaamirini/ImapSyncClient/releases"}],
+        "screenshots" : ["ImapSyncClient/screenshot.png"]
         },
         
     
@@ -468,6 +496,18 @@
     
         
         {
+        "name": "KettleClient",
+        "description": "Client for Kettle REST service.",
+        "categories": ["Education"],
+        "authors" : [{"name":"Arquanite","url":"https://github.com/Arquanite"}],
+        "license" : "LGPL-3.0",
+        "links": [{"type":"GitHub","url":"Arquanite/KettleClient"},{"type":"Install","url":"https://github.com/Arquanite/KettleClient/releases"}],
+        "screenshots" : ["KettleClient/screenshot.png"]
+        },
+        
+    
+        
+        {
         "name": "KevEdit",
         "description": "ZZT Editor",
         "categories": ["Game"],
@@ -487,6 +527,18 @@
         "license" : null,
         "links": null,
         "screenshots" : null
+        },
+        
+    
+        
+        {
+        "name": "LMMS",
+        "description": "Music sequencer and synthesizer",
+        "categories": ["Qt"],
+        "authors" : [{"name":"LMMS","url":"https://github.com/LMMS"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"LMMS/lmms"},{"type":"Install","url":"https://github.com/LMMS/lmms/releases"}],
+        "screenshots" : ["LMMS/screenshot.png"]
         },
         
     
@@ -636,6 +688,18 @@
     
         
         {
+        "name": "Onyx",
+        "description": "Decentralized messaging application based on PSS",
+        "categories": ["Network"],
+        "authors" : [{"name":"MainframeHQ","url":"https://github.com/MainframeHQ"}],
+        "license" : "MIT",
+        "links": [{"type":"GitHub","url":"MainframeHQ/onyx"},{"type":"Install","url":"https://github.com/MainframeHQ/onyx/releases"}],
+        "screenshots" : ["Onyx/screenshot.png"]
+        },
+        
+    
+        
+        {
         "name": "OpenBlok",
         "description": "A falling block puzzle game",
         "categories": ["Game"],
@@ -667,6 +731,18 @@
         "license" : null,
         "links": [{"type":"GitHub","url":"MaKleSoft/padlock"},{"type":"Install","url":"https://github.com/MaKleSoft/padlock/releases"}],
         "screenshots" : ["Padlock/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Panini",
+        "description": "Perspective views from panoramic images",
+        "categories": ["Graphics"],
+        "authors" : [{"name":"lazarus-pkgs","url":"https://github.com/lazarus-pkgs"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"lazarus-pkgs/panini"},{"type":"Install","url":"https://github.com/lazarus-pkgs/panini/releases"}],
+        "screenshots" : ["Panini/screenshot.png"]
         },
         
     
@@ -720,6 +796,18 @@
     
         
         {
+        "name": "QEMU_PowerPC",
+        "description": "PowerPC emulator",
+        "categories": ["System"],
+        "authors" : [{"name":"probonopd","url":"https://github.com/probonopd"}],
+        "license" : "MIT",
+        "links": [{"type":"GitHub","url":"probonopd/qemu-ppc"},{"type":"Install","url":"https://github.com/probonopd/qemu-ppc/releases"}],
+        "screenshots" : ["QEMU_PowerPC/screenshot.png"]
+        },
+        
+    
+        
+        {
         "name": "QNapi",
         "description": "Program for downloading video subtitles",
         "categories": ["AudioVideo"],
@@ -751,6 +839,18 @@
         "license" : null,
         "links": [{"type":"GitHub","url":"JvanKatwijk/qt-dab"},{"type":"Install","url":"https://github.com/JvanKatwijk/qt-dab/releases"}],
         "screenshots" : ["Qt_DAB/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Quentier",
+        "description": "Note taking app integrated with Evernote",
+        "categories": ["Qt"],
+        "authors" : [{"name":"d1vanov","url":"https://github.com/d1vanov"}],
+        "license" : "GPL-3.0",
+        "links": [{"type":"GitHub","url":"d1vanov/quentier"},{"type":"Install","url":"https://github.com/d1vanov/quentier/releases"}],
+        "screenshots" : ["Quentier/screenshot.png"]
         },
         
     
@@ -799,6 +899,18 @@
         "license" : null,
         "links": [{"type":"GitHub","url":"ujiro99/RedmineTimeTracker"},{"type":"Install","url":"https://github.com/ujiro99/RedmineTimeTracker/releases"}],
         "screenshots" : ["RedmineTimeTracker/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "RefOrg",
+        "description": "Organise technical papers",
+        "categories": ["Qt"],
+        "authors" : null,
+        "license" : null,
+        "links": null,
+        "screenshots" : ["RefOrg/screenshot.png"]
         },
         
     
@@ -895,6 +1007,18 @@
         "license" : null,
         "links": [{"type":"GitHub","url":"Skrifa/Skrifa"},{"type":"Install","url":"https://github.com/Skrifa/Skrifa/releases"}],
         "screenshots" : ["Skrifa/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Spivak",
+        "description": "Portable free Karaoke Player",
+        "categories": ["Qt"],
+        "authors" : [{"name":"gyunaev","url":"https://github.com/gyunaev"}],
+        "license" : "GPL-3.0",
+        "links": [{"type":"GitHub","url":"gyunaev/spivak"},{"type":"Install","url":"https://github.com/gyunaev/spivak/releases"}],
+        "screenshots" : ["Spivak/screenshot.png"]
         },
         
     
@@ -1015,6 +1139,18 @@
         "license" : null,
         "links": [{"type":"GitHub","url":"neuro-sys/tumblr-downloader-client"},{"type":"Install","url":"https://github.com/neuro-sys/tumblr-downloader-client/releases"}],
         "screenshots" : ["Tumblr_Downloader_GUI/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "Turntable",
+        "description": "Simple youtube DJ app made with Electron and Angular4",
+        "categories": ["GNOME"],
+        "authors" : [{"name":"radiium","url":"https://github.com/radiium"}],
+        "license" : null,
+        "links": [{"type":"GitHub","url":"radiium/turntable"},{"type":"Install","url":"https://github.com/radiium/turntable/releases"}],
+        "screenshots" : ["Turntable/screenshot.png"]
         },
         
     
@@ -1274,6 +1410,18 @@
     
         
         {
+        "name": "falcon-sql-client",
+        "description": "Free, open-source SQL client for Windows, Mac and Linux",
+        "categories": ["Database"],
+        "authors" : [{"name":"plotly","url":"https://github.com/plotly"}],
+        "license" : "MIT",
+        "links": [{"type":"GitHub","url":"plotly/falcon-sql-client"},{"type":"Install","url":"https://github.com/plotly/falcon-sql-client/releases"}],
+        "screenshots" : ["falcon-sql-client/screenshot.png"]
+        },
+        
+    
+        
+        {
         "name": "gLabels",
         "description": "Create labels, business cards and media covers",
         "categories": ["Office"],
@@ -1501,6 +1649,18 @@
         "license" : null,
         "links": [{"type":"GitHub","url":"willyb321/media_mate"},{"type":"Install","url":"https://github.com/willyb321/media_mate/releases"}],
         "screenshots" : ["media_mate/screenshot.png"]
+        },
+        
+    
+        
+        {
+        "name": "mki3dgame",
+        "description": null,
+        "categories": ["Game"],
+        "authors" : [{"name":"mki1967","url":"https://github.com/mki1967"}],
+        "license" : "GPL-3.0",
+        "links": [{"type":"GitHub","url":"mki1967/mki3dgame"},{"type":"Install","url":"https://github.com/mki1967/mki3dgame/releases"}],
+        "screenshots" : ["https://raw.githubusercontent.com/mki1967/mki3dgame/master/screen-shot.png"]
         },
         
     

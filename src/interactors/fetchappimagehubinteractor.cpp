@@ -5,7 +5,7 @@
 
 #include "../entities/app.h"
 #include "../entities/release.h"
-#include "../entities/repository.h"
+#include "Repository.h"
 
 FetchAppImageHubInteractor::FetchAppImageHubInteractor(const QString &url,
                                                        Repository *repository,
@@ -116,48 +116,7 @@ void FetchAppImageHubInteractor::findDownloadLinks(App *app, QString arch) {
 
   if (app->links.contains("install")) {
     QString url = app->links.value("install");
-    auto request = QNetworkRequest(url);
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
 
-    requestsActive++;
-    auto reply = networkAccessManager.get(request);
-    QObject::connect(reply, &QNetworkReply::finished, [=]() {
-      if (reply->error() == QNetworkReply::NoError) {
-        QString rxString = "href=\"([^\"]*%1[^\"]*AppImage)\"";
-        rxString = rxString.arg(arch);
-        QRegExp rx(rxString);
-        QString str = reply->readAll();
-        QStringList list;
-        int pos = 0;
-
-        while ((pos = rx.indexIn(str, pos)) != -1) {
-          QString capUrl = rx.cap(1);
-          if (!capUrl.startsWith("http")) {
-            QUrl url = reply->url();
-            url.setPath(capUrl);
-            capUrl = url.toString();
-          }
-
-          list << capUrl;
-          pos += rx.matchedLength();
-
-          rx.capturedTexts();
-          break;
-        }
-
-        if (list.count() > 0) {
-          auto release = app->lastRelease();
-          release->download_link = list.first();
-        }
-      } else {
-        qDebug() << reply->errorString()
-                 << ": while resolving download link for " << app->id;
-      }
-
-      requestsActive--;
-      if (requestsActive == 0)
-        emit complete();
-    });
   } else {
     qDebug() << app->id << " has no install link ";
   }

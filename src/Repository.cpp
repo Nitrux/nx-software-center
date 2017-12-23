@@ -1,9 +1,9 @@
-#include "repository.h"
+#include "Repository.h"
 
 #include <QException>
 #include <QSet>
 
-#include "application.h"
+#include "Application.h"
 
 Repository::Repository(QObject *parent) : QObject(parent) {}
 
@@ -29,7 +29,7 @@ int Repository::countAll() const {
 int Repository::countByName() const {
     QSet<QString> set;
     for (const Application &a : applications.values())
-        set.insert(a.getName());
+        set.insert(a.getCodeName());
 
     return set.count();
 }
@@ -42,12 +42,12 @@ QList<Application> Repository::getAllLatestVersions() const {
     QMap<QString, Application> latest;
 
     for (const Application &a : applications.values()) {
-        if (!latest.contains(a.getName()))
-            latest.insert(a.getName(), a);
+        if (!latest.contains(a.getCodeName()))
+            latest.insert(a.getCodeName(), a);
         else {
-            const Application &b = latest.value(a.getName());
+            const Application &b = latest.value(a.getCodeName());
             if (b < a)
-                latest.insert(a.getName(), a);
+                latest.insert(a.getCodeName(), a);
         }
     }
 
@@ -58,7 +58,7 @@ QList<Application> Repository::getAllVersions(const QString &name) const {
     QList<Application> apps;
 
     for (const Application &a : applications.values()) {
-        if (name.compare(a.getName()) == 0)
+        if (name.compare(a.getCodeName()) == 0)
             apps.append(a);
     }
 
@@ -69,11 +69,26 @@ QList<Application> Repository::getAllVersions(const QString &name) const {
 Application Repository::getLatestVersion(const QString &name) const {
     Application l;
     for (const Application &a : applications.values()) {
-        if (name.compare(a.getName()) == 0 &&
+        if (name.compare(a.getCodeName()) == 0 &&
             l.compare_by_version(a) < 0) {
             l = a;
         }
     }
 
     return l;
+}
+
+void Repository::removeAll() {
+    applications.clear();
+}
+
+void Repository::remove(const QString &id) {
+    applications.remove(id);
+}
+
+void Repository::removeAllVersions(const QString &name) {
+    for (const Application &a : applications.values()) {
+        if (name.compare(a.getCodeName()) == 0)
+            applications.remove(a.getId());
+    }
 }

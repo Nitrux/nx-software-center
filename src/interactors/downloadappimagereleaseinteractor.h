@@ -4,7 +4,7 @@
 #include <QList>
 #include <QString>
 
-#include "interactor.h"
+#include "Interactor.h"
 
 class Registry;
 class Repository;

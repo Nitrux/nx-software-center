@@ -5,7 +5,7 @@
 #include "../entities/app.h"
 #include "../entities/change.h"
 #include "../entities/release.h"
-#include "../entities/repository.h"
+#include "Repository.h"
 #include "../entities/registry.h"
 #include "../entities/progresslistener.h"
 

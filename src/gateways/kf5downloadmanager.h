@@ -1,7 +1,7 @@
 #ifndef KF5DOWNLOADMANAGER_H
 #define KF5DOWNLOADMANAGER_H
 
-#include "../entities/downloadmanager.h"
+#include "DownloadManager.h"
 
 class KF5DownloadManager : public DownloadManager
 {

@@ -10,7 +10,7 @@ PlasmaComponents.ListItem {
 
     height: Math.max(38, innerLayout.height)
 
-    property string name
+    property string codeName
     property string description
 
     property bool isDownloadable
@@ -92,7 +92,7 @@ PlasmaComponents.ListItem {
             Layout.maximumWidth: 200
             wrapMode: Text.WordWrap
 
-            text: name
+            text: codeName
         }
 
         PlasmaComponents.Label {
@@ -120,7 +120,7 @@ PlasmaComponents.ListItem {
         }
 
         PlasmaComponents.Button {
-            iconName: "application-x-executable"
+            iconName: "Application-x-executable"
             visible: isDownloaded && taskId == ""
             text: i18n("Run")
 

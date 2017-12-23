@@ -3,7 +3,7 @@
 
 #include <QString>
 
-#include "interactor.h"
+#include "Interactor.h"
 
 class Registry;
 class ExecuteAppImageReleaseInteractorListener;

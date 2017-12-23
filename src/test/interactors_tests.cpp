@@ -8,7 +8,7 @@
 #include "../entities/change.h"
 #include "../entities/registry.h"
 #include "../entities/release.h"
-#include "../entities/repository.h"
+#include "Repository.h"
 
 #include "../interactors/downloadappimagereleaseinteractor.h"
 #include "../interactors/downloadappimagereleaseinteractorlistener.h"

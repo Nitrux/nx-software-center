@@ -1,14 +1,23 @@
-find_package(Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt5 REQUIRED COMPONENTS Core Network)
 #find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
 #find_package(AppImage REQUIRED)
 
 add_library(core OBJECT
-    entities/application.cpp
-    entities/repository.cpp
-)
+    Application.cpp
+    Repository.cpp
+    Source.cpp
+    Interactor.h
+    DownloadManager.h
+
+    AppImageHubSource.cpp
+    FetchApplicationsInteractor.cpp
+    AppImageInstallLinksRegExParser.cpp
+    SimpleDownloadManager.cpp SimpleDownloadToMemoryJob.cpp SimpleDownloadToMemoryJob.h)
 
 target_compile_options(core PUBLIC -fPIC -fexceptions)
-target_include_directories(core PUBLIC ${Qt5Core_INCLUDE_DIRS})
+target_include_directories(core
+    PUBLIC ${Qt5Core_INCLUDE_DIRS}
+    PUBLIC ${Qt5Network_INCLUDE_DIRS})
 
 ## add the qml.qrc file
 #qt5_add_resources(qml_QRC src/qml/files.qrc)

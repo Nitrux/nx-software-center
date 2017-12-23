@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QUrl>
 
-#include "interactor.h"
+#include "Interactor.h"
 
 class App;
 class Repository;

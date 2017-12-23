@@ -2,7 +2,7 @@
 #define SEARCHAPPLICATIONSINTERACTOR_H
 
 #include <QList>
-#include "interactor.h"
+#include "Interactor.h"
 
 class Registry;
 class Repository;
