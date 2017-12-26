@@ -5,9 +5,10 @@
 #ifndef NOMAD_SOFTWARE_CENTER_SIMPLEDOWNLOADTOMEMORYJOB_H
 #define NOMAD_SOFTWARE_CENTER_SIMPLEDOWNLOADTOMEMORYJOB_H
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
 #include <QNetworkReply>
+
 #include "DownloadManager.h"
 
 class SimpleDownloadToMemoryJob : public DownloadToMemoryJob {

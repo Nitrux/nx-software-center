@@ -6,9 +6,6 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 
-import org.nx.softwarecenter 1.0
-
-
 Item {
     property alias message: messageText.text
     property alias iconName: icon.source

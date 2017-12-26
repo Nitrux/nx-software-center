@@ -184,6 +184,8 @@ void AppImageHubSource::handleParserFinished() {
 
         if (areAllApplicationReleasesParsersFinished())
             reportResults();
+
+        parser->deleteLater();
     }
 }
 
@@ -207,6 +209,8 @@ void AppImageHubSource::handleParserError(const QString &error) {
 
         if (areAllApplicationReleasesParsersFinished())
             reportResults();
+
+        parser->deleteLater();
     }
 }
 

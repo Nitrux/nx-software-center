@@ -66,6 +66,36 @@ QList<Application> Repository::getAllVersions(const QString &name) const {
     return apps;
 }
 
+QList<Application> Repository::filterAll(const QString &query) const
+{
+    QList<Application> results;
+    for (const Application &a: applications) {
+        if (a.getName().contains(query))
+            results.append(a);
+    }
+    return results;
+}
+
+QList<Application> Repository::filterLatestsVersions(const QString &query) const
+{
+    QMap<QString, Application> latest;
+
+    for (const Application &a : applications.values()) {
+        if (a.getName().contains( query, Qt::CaseInsensitive) ||
+                a.getDescription().contains(query, Qt::CaseInsensitive)) {
+            if (!latest.contains(a.getCodeName()))
+                latest.insert(a.getCodeName(), a);
+            else {
+                const Application &b = latest.value(a.getCodeName());
+                if (b < a)
+                    latest.insert(a.getCodeName(), a);
+            }
+        }
+    }
+
+    return latest.values();
+}
+
 Application Repository::getLatestVersion(const QString &name) const {
     Application l;
     for (const Application &a : applications.values()) {

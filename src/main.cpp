@@ -1,99 +1,49 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QNetworkAccessManager>
+#include <QList>
 
-#include <QDebug>
-#include <QIcon>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QLocalSocket>
-#include <QQmlEngine>
-#include <QQmlNetworkAccessManagerFactory>
-#include <QtQml>
+#include "SearchControler.h"
+#include "AppImageHubSource.h"
+#include "SimpleDownloadManager.h"
+#include "FakeDownloadManager.h"
 
-#include <KAuth/KAuthExecuteJob>
+#define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
 
-#include "entities/simplefileregistry.h"
+QList<Source*> sources;
+DownloadManager *downloadManager = nullptr;
+QNetworkAccessManager * networkAccessManager = nullptr;
 
-#include "gateways/appimagehubrepository.h"
-#include "gateways/kf5downloadmanager.h"
 
-#include "ui/registrycontroller.h"
-#include "ui/searchviewcontroller.h"
-#include "ui/taskcontroller.h"
-#include "ui/taskscontroller.h"
+void initSources(QObject *parent) {
+    networkAccessManager = new QNetworkAccessManager(parent);
+    downloadManager = new FakeDownloadManager(parent);
 
-Registry *registry = nullptr;
-Repository *repository = nullptr;
-KF5DownloadManager *downloadManager = nullptr;
-
-SearchViewController *searchviewcontroller = nullptr;
-TasksController *tasksController = nullptr;
-RegistryController *registryController = nullptr;
-
-static QObject *searchviewcontroller_singletontype_provider(QQmlEngine *engine,
-                                                            QJSEngine *) {
-  if (searchviewcontroller == nullptr) {
-    Q_ASSERT(repository != nullptr);
-    QList<Repository *> repositoryList(QList<Repository *>{repository});
-    searchviewcontroller =
-        new SearchViewController(registry, repositoryList, engine);
-  }
-
-  return dynamic_cast<QObject *>(searchviewcontroller);
+    AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);
+    sources.append(s);
 }
 
-static QObject *taskscontroller_singletontype_provider(QQmlEngine *engine,
-                                                       QJSEngine *) {
-  if (tasksController == nullptr) {
-    Q_ASSERT(repository != nullptr);
-    QList<Repository *> repositoryList(QList<Repository *>{repository});
-    tasksController =
-        new TasksController(repositoryList, registry, downloadManager, engine);
-  }
+static QObject * searchControllerSingletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
+     Q_UNUSED(engine)
+     Q_UNUSED(scriptEngine)
 
-  return dynamic_cast<QObject *>(tasksController);
-}
-
-static QObject *registrycontroller_singletontype_provider(QQmlEngine *engine,
-                                                          QJSEngine *) {
-  if (registryController == nullptr) {
-    Q_ASSERT(registry != nullptr);
-    registryController = new RegistryController(registry, engine);
-  }
-
-  return dynamic_cast<QObject *>(registryController);
-}
+     SearchControler *searchControler = new SearchControler();
+     searchControler->setSources(sources);
+     return searchControler;
+ }
 
 int main(int argc, char *argv[]) {
-  const char *uri = "org.nx.softwarecenter";
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
 
-  QGuiApplication app(argc, argv);
-  QCoreApplication::addLibraryPath("./");
+    initSources(nullptr);
+    qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, 1, 0,
+                                              "SearchController",
+                                              searchControllerSingletonProvider);
 
-  QCoreApplication::setOrganizationName("NXOS");
-  QCoreApplication::setOrganizationDomain("nxos.org");
-  QCoreApplication::setApplicationName("nx-software-center");
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
-  app.setWindowIcon(QIcon::fromTheme("nx-software-center"));
-  QQmlApplicationEngine engine;
-
-  // Init view controllers
-  downloadManager = new KF5DownloadManager();
-  registry = new SimpleFileRegistry();
-  repository = new Repository();
-
-  qRegisterMetaType<TaskController::TaskState>("TaskState");
-  qmlRegisterUncreatableType<TaskController>(
-      uri, 1, 0, "Task", "Task can only be created by the TasksController");
-  qmlRegisterSingletonType<SearchViewController>(
-      uri, 1, 0, "SearchViewController",
-      searchviewcontroller_singletontype_provider);
-  qmlRegisterSingletonType<TasksController>(
-      uri, 1, 0, "TasksController", taskscontroller_singletontype_provider);
-  qmlRegisterSingletonType<RegistryController>(
-      uri, 1, 0, "RegistryController",
-      registrycontroller_singletontype_provider);
-
-  engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-  return app.exec();
+    return app.exec();
 }

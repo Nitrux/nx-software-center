@@ -4,16 +4,16 @@ import QtQuick.Layouts 1.3
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-import org.nx.softwarecenter 1.0
+//import org.nx.softwarecenter 1.0
 
 PlasmaComponents.ListItem {
 
     height: Math.max(38, innerLayout.height)
 
-    property string codeName
-    property string description
+    property string codeName : app_name
+    property string description: app_description
 
-    property bool isDownloadable
+    property bool isDownloadable: true
     property bool isDownloaded
 
     property string taskId
@@ -66,14 +66,6 @@ PlasmaComponents.ListItem {
             taskId = ""
             task = undefined
             requestRefresh()
-        }
-    }
-
-    Connections {
-        target: SearchViewController
-        onApplications: appImageHubListView.model = apps
-        onNoMatchFound: {
-            appImageHubListView.model = undefined
         }
     }
 

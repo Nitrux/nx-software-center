@@ -35,6 +35,10 @@ public:
 
     QList<Application> getAllVersions(const QString &name) const;
 
+    QList<Application> filterAll(const QString &query) const;
+
+    QList<Application> filterLatestsVersions(const QString &query) const;
+
     void remove(const QString &id);
     void removeAllVersions(const QString &name);
     void removeAll();

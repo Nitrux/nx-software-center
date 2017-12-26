@@ -5,11 +5,11 @@
 #ifndef NOMAD_SOFTWARE_CENTER_SIMPLEDOWNLOADMANAGER_H
 #define NOMAD_SOFTWARE_CENTER_SIMPLEDOWNLOADMANAGER_H
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
+#include <QNetworkRequest>
 #include "DownloadManager.h"
 
-
+class QNetworkReply;
+class QNetworkAccessManager;
 class SimpleDownloadManager : public DownloadManager {
 Q_OBJECT
     QNetworkAccessManager *networkAccessManager;

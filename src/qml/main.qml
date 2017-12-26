@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-import org.nx.softwarecenter 1.0
+import org.nxos.softwarecenter 1.0
 
 ApplicationWindow {
     id: main
@@ -34,8 +34,8 @@ ApplicationWindow {
         visible: false
     }
 
-    Loader {
-        id: content
+    StackView {
+        id: stackView
         anchors.fill: parent
     }
 
@@ -43,84 +43,129 @@ ApplicationWindow {
         id: textConstants
     }
 
-    function goStore() {
-        navigationPanel.currentView = "store"
-        content.source = "qrc:/StoreView.qml"
-    }
+    Component.onCompleted: loadStoreContents()
 
     function search(query) {
-        goStore()
-        SearchViewController.search(query)
+        SearchController.search(query);
     }
 
-    Connections {
-        target: SearchViewController
-        onApplications: appsCache = apps
-        onNoMatchFound: {
-            appsCache = undefined
-            main.showNothingFoundSreen()
-        }
+    function loadStoreContents() {
+        showBusyMessage("Loading store contents...");
+        SearchController.fetchCompleted.connect(showSearchView);
+        SearchController.fetchError.connect(showFetchErrorMessage);
+        SearchController.fetch()
     }
 
-    function showLoadingScreen(message) {
-        content.source = "qrc:/PlaceHolderView.qml"
-        var placeHolder = content.item
-        if (placeHolder !== undefined) {
-            placeHolder.showBusyIndicator = true
-            placeHolder.message = message
-        }
+    function showSearchView() {
+        print("showSearchView")
+        stackView.replace("qrc:/SearchView.qml")
     }
 
-    function showError(message) {
-        content.source = "qrc:/PlaceHolderView.qml"
-        var placeHolder = content.item
-        if (placeHolder !== undefined) {
-            if (message == "")
-                message = textConstants.unknownError
-
-            placeHolder.message = message
-            placeHolder.iconName = "face-sad"
-            placeHolder.showBusyIndicator = false
-        }
+    function showBusyMessage(message) {
+        stackView.push("qrc:/PlaceHolderView.qml", {
+                           message: message
+                       })
     }
 
-    function showNothingFoundSreen() {
-        if (main.refreshCacheTask != undefined)
-            return
-
-        content.source = "qrc:/PlaceHolderView.qml"
-        var placeHolder = content.item
-        if (placeHolder !== undefined) {
-            placeHolder.message = textConstants.noApplicationsFound
-            placeHolder.iconName = "dialog-information"
-            placeHolder.showBusyIndicator = false
-        }
+    function showFetchErrorMessage() {
+        print("showFetchErrorMessage")
+        stackView.replace("qrc:/PlaceHolderView.qml", {
+                           message: textConstants.unknownError,
+                           iconName: "face-sad",
+                           showBusyIndicator: false
+                       })
     }
 
-    Component.onCompleted: {
-        refreshCache()
-    }
+    //    function goStore() {
+    //        navigationPanel.currentView = "store"
+    //        content.source = "qrc:/StoreView.qml"
+    //    }
 
-    function refreshCache() {
-        navigationPanel.disable()
+    //    function search(query) {
+    //        goStore()
+    //        SearchViewController.search(query)
+    //    }
 
-        var taskId = TasksController.fetchApps()
-        main.refreshCacheTask = TasksController.getTask(taskId)
+    //    Connections {
+    //        target: SearchViewController
+    //        onApplications: appsCache = apps
+    //        onNoMatchFound: {
+    //            appsCache = undefined
+    //            main.showNothingFoundSreen()
+    //        }
+    //    }
+    //    function showLoadingAppsScreen() {
+    //        content.source = "qrc:/PlaceHolderView.qml"
+    //        var placeHolder = content.item
+    //        if (placeHolder !== undefined) {
+    //            placeHolder.showBusyIndicator = true
+    //            placeHolder.message = i18n("Fetching applications lists ...")
+    //        }
+    //    }
 
-        showLoadingScreen("Loading aplications...")
-        main.refreshCacheTask.stateChanged.connect(handleRefreshCacheFinished)
-    }
+    //    function showLoadingScreen(message) {
+    //        content.source = "qrc:/PlaceHolderView.qml"
+    //        var placeHolder = content.item
+    //        if (placeHolder !== undefined) {
+    //            placeHolder.showBusyIndicator = true
+    //            placeHolder.message = message
+    //        }
+    //    }
 
-    function handleRefreshCacheFinished() {
-        if (main.refreshCacheTask.state !== Task.TASK_RUNNING
-                && main.refreshCacheTask.state !== Task.TASK_CREATED) {
-            goStore()
-            main.refreshCacheTask = undefined
+    //    function showError(message) {
+    //        content.source = "qrc:/PlaceHolderView.qml"
+    //        var placeHolder = content.item
+    //        if (placeHolder !== undefined) {
+    //            if (message == "")
+    //                message = textConstants.unknownError
 
-            navigationPanel.enable()
+    //            placeHolder.message = message
+    //            placeHolder.iconName = "face-sad"
+    //            placeHolder.showBusyIndicator = false
+    //        }
+    //    }
 
-            SearchViewController.search()
-            goStore()
-        }
-    }
+    //    function showNothingFoundSreen() {
+    //        if (main.refreshCacheTask != undefined)
+    //            return
+
+    //        content.source = "qrc:/PlaceHolderView.qml"
+    //        var placeHolder = content.item
+    //        if (placeHolder !== undefined) {
+    //            placeHolder.message = textConstants.noApplicationsFound
+    //            placeHolder.iconName = "dialog-information"
+    //            placeHolder.showBusyIndicator = false
+    //        }
+    //    }
+
+    //    Component.onCompleted: {
+    //        refreshCache()
+    //    }
+
+    //    function refreshCache() {
+    //        navigationPanel.disable()
+
+    //        SearchController.fetchingApplications.connect(showLoadingScreen);
+    //        SearchController.fetchCompleted.connect(goStore);
+    //        SearchController.fetchError.connect(goStore);
+
+    //        SearchController.searching.connect(showLoadingAppsScreen);
+    //        SearchController.resultsReady.connect(goStore);
+
+    //        SearchController.fetch()
+    //        SearchController.search("")
+    //    }
+
+    //    function handleRefreshCacheFinished() {
+    //        if (main.refreshCacheTask.state !== Task.TASK_RUNNING
+    //                && main.refreshCacheTask.state !== Task.TASK_CREATED) {
+    //            goStore()
+    //            main.refreshCacheTask = undefined
+
+    //            navigationPanel.enable()
+
+    //            SearchViewController.search()
+    //            goStore()
+    //        }
+    //    }
 }

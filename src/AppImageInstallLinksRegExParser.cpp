@@ -8,8 +8,9 @@
 AppImageInstallLinksRegExParser::AppImageInstallLinksRegExParser(const QString &url,
                                                                  DownloadManager *downloadManager,
                                                                  QObject *parent)
-        : QObject(
-        parent), url(url), downloadManager(downloadManager) {
+        : QObject(parent),
+          url(url),
+          downloadManager(downloadManager) {
 }
 
 void AppImageInstallLinksRegExParser::parse() {

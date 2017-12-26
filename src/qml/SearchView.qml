@@ -10,45 +10,10 @@ import org.nxos.softwarecenter 1.0
 import "parts" as Parts
 
 Item {
-    id: storeViewRoot
-
-    objectName: "appImageStoreView"
-
-    Parts.MessageFrame {
-        id: wipNotice
-
-        height: 70
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: 12
-
-        RowLayout {
-            anchors.fill: parent
-            anchors.margins: 12
-
-            PlasmaCore.IconItem {
-                source: "dialog-information"
-                height: 64
-            }
-
-            PlasmaExtras.Heading {
-                Layout.fillWidth: true
-                Layout.leftMargin: 12
-                wrapMode: Text.WordWrap
-
-                level: 4
-
-                text: "We are moving totally to AppImages!"
-            }
-        }
-    }
+    id: searchViewRoot
 
     PlasmaExtras.ScrollArea {
-        anchors.top: wipNotice.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors.fill: parent
         anchors.topMargin: 12
         anchors.bottomMargin: 6
         anchors.rightMargin: 6
@@ -58,9 +23,11 @@ Item {
 
             clip: true
 
-            model: SearchController.results
+            model: SearchController.model
             spacing: 12
-
+            delegate: AppImageListItemDelegate {
+            }
+/*
             delegate: AppImageListItemDelegate {
                 codeName: model.modelData['codeName']
                 description: model.modelData['description']
@@ -100,6 +67,7 @@ Item {
                                 model.modelData['latest_release_id'])
                 }
             }
+*/
         }
     }
 }

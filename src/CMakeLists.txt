@@ -1,8 +1,7 @@
-find_package(Qt5 REQUIRED COMPONENTS Core Network)
-#find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Qml Network)
 #find_package(AppImage REQUIRED)
 
-add_library(core OBJECT
+set(CORE_SRC
     Application.cpp
     Repository.cpp
     Source.cpp
@@ -12,15 +11,45 @@ add_library(core OBJECT
     AppImageHubSource.cpp
     FetchApplicationsInteractor.cpp
     AppImageInstallLinksRegExParser.cpp
-    SimpleDownloadManager.cpp SimpleDownloadToMemoryJob.cpp SimpleDownloadToMemoryJob.h)
+    SimpleDownloadManager.cpp
+    SimpleDownloadToMemoryJob.cpp
+    SimpleDownloadToMemoryJob.h)
+
+add_library(core OBJECT ${CORE_SRC})
 
 target_compile_options(core PUBLIC -fPIC -fexceptions)
 target_include_directories(core
     PUBLIC ${Qt5Core_INCLUDE_DIRS}
-    PUBLIC ${Qt5Network_INCLUDE_DIRS})
+    PUBLIC ${Qt5Network_INCLUDE_DIRS}
+    PUBLIC ${Qt5Gui_INCLUDE_DIRS}
+    PUBLIC ${Qt5Qml_INCLUDE_DIRS}
+    )
 
+
+######
+# Main
+######
+
+set (UI_SRC
+    ApplicationListModel.cpp
+    SearchControler.cpp)
 ## add the qml.qrc file
-#qt5_add_resources(qml_QRC src/qml/files.qrc)
+qt5_add_resources(qml_QRC qml/files.qrc)
+
+add_executable(nx_software_center
+    main.cpp
+    FakeDownloadManager.cpp
+    ${UI_SRC}
+    ${qml_QRC})
+
+target_sources(nx_software_center
+    PRIVATE $<TARGET_OBJECTS:core>)
+
+target_link_libraries(nx_software_center
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Qml
+    Qt5::Network)
 
 ## add source files
 #set (CORE_SOURCE
