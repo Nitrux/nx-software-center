@@ -26,6 +26,7 @@ Item {
             model: SearchController.model
             spacing: 12
             delegate: AppImageListItemDelegate {
+                isDownloaded: Registry.isDownloaded(app_id)
             }
 /*
             delegate: AppImageListItemDelegate {

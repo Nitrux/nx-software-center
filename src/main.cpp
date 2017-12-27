@@ -6,32 +6,34 @@
 #include "SearchControler.h"
 #include "AppImageHubSource.h"
 #include "SimpleDownloadManager.h"
-#include "FakeDownloadManager.h"
+#include "CachedDownloadManager.h"
+#include "Registry.h"
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
 
-QList<Source*> sources;
+QList<Source *> sources;
 DownloadManager *downloadManager = nullptr;
-QNetworkAccessManager * networkAccessManager = nullptr;
+QNetworkAccessManager *networkAccessManager = nullptr;
 
 
 void initSources(QObject *parent) {
     networkAccessManager = new QNetworkAccessManager(parent);
-    downloadManager = new FakeDownloadManager(parent);
+    downloadManager = new CachedDownloadManager(parent);
 
     AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);
     sources.append(s);
 }
 
-static QObject * searchControllerSingletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
-     Q_UNUSED(engine)
-     Q_UNUSED(scriptEngine)
+static QObject *searchControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    SearchControler *searchControler = new SearchControler();
+    searchControler->setSources(sources);
+    return searchControler;
+}
 
-     SearchControler *searchControler = new SearchControler();
-     searchControler->setSources(sources);
-     return searchControler;
- }
-
+static QObject *registrySingletonProvider(QQmlEngine *, QJSEngine *) {
+    Registry *r = new Registry(nullptr);
+    return r;
+}
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
@@ -40,6 +42,10 @@ int main(int argc, char *argv[]) {
     qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, 1, 0,
                                               "SearchController",
                                               searchControllerSingletonProvider);
+
+    qmlRegisterSingletonType<Registry>(QML_MODULE_NAMESPACE, 1, 0,
+                                              "Registry",
+                                              registrySingletonProvider);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

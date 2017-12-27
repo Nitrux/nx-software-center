@@ -9,13 +9,13 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include "DownloadManager.h"
 
-class FakeDownloadToMemoryJob : public DownloadToMemoryJob {
+class CachedDownloadToMemoryJob : public DownloadToMemoryJob {
 Q_OBJECT
 
     QString url;
     QString file;
 public:
-    FakeDownloadToMemoryJob(const QString &qString, const QString &file, QObject *parent);
+    CachedDownloadToMemoryJob(const QString &qString, const QString &file, QObject *parent);
 
     void execute() override;
 
@@ -23,15 +23,15 @@ private:
     QByteArray readFile(const QString &path) const;
 };
 
-class FakeDownloadManager : public DownloadManager {
+class CachedDownloadManager : public DownloadManager {
 Q_OBJECT
     QNetworkAccessManager networkAccessManager;
     QMap<QString, QString> cache;
 
 public:
-    FakeDownloadManager(QObject *parent = nullptr);
+    CachedDownloadManager(QObject *parent = nullptr);
 
-    virtual ~FakeDownloadManager();
+    virtual ~CachedDownloadManager();
 
     DownloadToFileJob *downloadToFile(const QString &url, const QString &path) override;
 

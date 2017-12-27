@@ -31,7 +31,7 @@ void FetchApplicationsInteractor::handleFetchedApplications(QList<Application> a
     results.append(applications);
     runningTasks--;
     if (isCompleted())
-            emit completed(results, errors);
+        emit completed(results, errors);
 }
 
 void FetchApplicationsInteractor::handleFetchError(const QString &error) {

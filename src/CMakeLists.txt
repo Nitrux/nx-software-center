@@ -13,7 +13,7 @@ set(CORE_SRC
     AppImageInstallLinksRegExParser.cpp
     SimpleDownloadManager.cpp
     SimpleDownloadToMemoryJob.cpp
-    SimpleDownloadToMemoryJob.h)
+    SimpleDownloadToMemoryJob.h Registry.cpp Registry.h SimpleDownloadToFileJob.cpp SimpleDownloadToFileJob.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -38,7 +38,7 @@ qt5_add_resources(qml_QRC qml/files.qrc)
 
 add_executable(nx_software_center
     main.cpp
-    FakeDownloadManager.cpp
+    CachedDownloadManager.cpp
     ${UI_SRC}
     ${qml_QRC})
 

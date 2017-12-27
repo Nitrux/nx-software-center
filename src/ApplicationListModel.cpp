@@ -8,6 +8,7 @@ ApplicationListModel::ApplicationListModel(QObject *parent)
 QHash<int, QByteArray> ApplicationListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
+    roles.insert(Id, "app_id");
     roles.insert(Name, "app_name");
     roles.insert(Description, "app_description");
     return roles;
@@ -32,6 +33,9 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     // FIXME: Implement more
     QVariant ret;
     switch (role) {
+    case Id:
+        ret = a.getId();
+        break;
     case Name:
         ret = a.getName();
         break;

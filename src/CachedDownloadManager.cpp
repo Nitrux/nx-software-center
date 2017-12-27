@@ -2,7 +2,7 @@
 // Created by alexis on 23/12/17.
 //
 
-#include "FakeDownloadManager.h"
+#include "CachedDownloadManager.h"
 
 #include <QDir>
 #include <QFile>
@@ -12,18 +12,18 @@
 
 #include "SimpleDownloadToMemoryJob.h"
 
-DownloadToFileJob *FakeDownloadManager::downloadToFile(const QString &, const QString &) {
+DownloadToFileJob *CachedDownloadManager::downloadToFile(const QString &, const QString &) {
     return nullptr;
 }
 
-void FakeDownloadManager::writeFile(const QString &path, const QByteArray &data) const {
+void CachedDownloadManager::writeFile(const QString &path, const QByteArray &data) const {
     QFile f(path);
     f.open(QIODevice::WriteOnly);
     f.write(data);
     f.close();
 }
 
-DownloadToMemoryJob *FakeDownloadManager::downloadToMemory(const QString &url) {
+DownloadToMemoryJob *CachedDownloadManager::downloadToMemory(const QString &url) {
     DownloadToMemoryJob *job = nullptr;
     QString path = QCryptographicHash::hash(url.toLocal8Bit(), QCryptographicHash::Md5).toHex();
     QString cache_dir = QStandardPaths::standardLocations( QStandardPaths::CacheLocation).first();
@@ -34,7 +34,7 @@ DownloadToMemoryJob *FakeDownloadManager::downloadToMemory(const QString &url) {
 
     QFile f(path);
     if (f.exists())
-        job = new FakeDownloadToMemoryJob(url, path, this);
+        job = new CachedDownloadToMemoryJob(url, path, this);
     else {
         QNetworkRequest request = QNetworkRequest(url);
         request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
@@ -51,13 +51,13 @@ DownloadToMemoryJob *FakeDownloadManager::downloadToMemory(const QString &url) {
 }
 
 
-FakeDownloadManager::FakeDownloadManager(QObject *parent) : DownloadManager(parent) {
+CachedDownloadManager::CachedDownloadManager(QObject *parent) : DownloadManager(parent) {
 }
 
-FakeDownloadManager::~FakeDownloadManager() {
+CachedDownloadManager::~CachedDownloadManager() {
 }
 
-QByteArray FakeDownloadToMemoryJob::readFile(const QString &path) const {
+QByteArray CachedDownloadToMemoryJob::readFile(const QString &path) const {
     QFile f(path);
     f.open(QIODevice::ReadOnly);
     QByteArray data = f.readAll();
@@ -65,12 +65,12 @@ QByteArray FakeDownloadToMemoryJob::readFile(const QString &path) const {
     return data;
 }
 
-FakeDownloadToMemoryJob::FakeDownloadToMemoryJob(const QString &url, const QString &file, QObject *parent)
+CachedDownloadToMemoryJob::CachedDownloadToMemoryJob(const QString &url, const QString &file, QObject *parent)
         : DownloadToMemoryJob(parent),
           url(url), file(file) {
 }
 
-void FakeDownloadToMemoryJob::execute() {
+void CachedDownloadToMemoryJob::execute() {
     data = readFile(file);
 
     emit finished();

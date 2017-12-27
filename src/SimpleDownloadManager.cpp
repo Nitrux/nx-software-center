@@ -1,5 +1,6 @@
 #include "SimpleDownloadManager.h"
 #include "SimpleDownloadToMemoryJob.h"
+#include "SimpleDownloadToFileJob.h"
 
 #include <QUrl>
 #include <QNetworkReply>
@@ -19,9 +20,11 @@ QNetworkRequest SimpleDownloadManager::createFollowRedirectRequest(const QString
     return request;
 }
 
-DownloadToFileJob *SimpleDownloadManager::downloadToFile(const QString &, const QString &) {
-    qWarning() << __FUNCTION__ << " is not implemented yet!";
-    return nullptr;
+DownloadToFileJob *SimpleDownloadManager::downloadToFile(const QString &url, const QString &path) {
+    QNetworkRequest request = createFollowRedirectRequest(url);
+    SimpleDownloadToFileJob *job = new SimpleDownloadToFileJob(request, path, networkAccessManager, this);
+    job->execute();
+    return job;
 }
 
 DownloadToMemoryJob *SimpleDownloadManager::downloadToMemory(const QString &url) {

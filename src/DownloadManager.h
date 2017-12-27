@@ -37,7 +37,7 @@ Q_OBJECT
 protected:
     QString path;
 public:
-    DownloadToFileJob(QObject *parent) : DownloadJob(parent) {};
+    DownloadToFileJob(const QString &path, QObject *parent) : DownloadJob(parent), path(path) {};
 
     const QString &getPath() const { return path; }
 };

@@ -11,7 +11,8 @@ class ApplicationListModel : public QAbstractListModel
     Q_OBJECT
     enum ApplicationListModelRoles
     {
-        Name = Qt::UserRole + 1,
+        Id = Qt::UserRole + 1,
+        Name,
         Description,
     };
 

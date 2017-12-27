@@ -11,7 +11,7 @@
 class QNetworkReply;
 class QNetworkAccessManager;
 class SimpleDownloadManager : public DownloadManager {
-Q_OBJECT
+    Q_OBJECT
     QNetworkAccessManager *networkAccessManager;
     QNetworkReply *networkReply;
 
