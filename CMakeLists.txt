@@ -24,7 +24,7 @@ include(FeatureSummary)
 
 find_package(Qt5 REQUIRED COMPONENTS Qml Quick Gui Widgets Network Concurrent)
 find_package(KF5 REQUIRED COMPONENTS CoreAddons Auth KIO)
-find_package(AppImage REQUIRED)
+find_package(AppImageKit REQUIRED)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 # add the qml.qrc file
@@ -91,7 +91,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Concurrent
     KF5::Auth
     KF5::KIOCore
-    ${APPIMAGE_LIBRARIES}
+    libappimage
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
@@ -99,5 +99,5 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(DIRECTORY data/departaments_background/ DESTINATION share/${PROJECT_NAME}/departaments_background FILES_MATCHING PATTERN "*.png")
 install(FILES "org.nxos.softwarecenter.desktop" DESTINATION share/applications)
 
-enable_testing()
-add_subdirectory(src/test)
+# enable_testing()
+# add_subdirectory(src/test)

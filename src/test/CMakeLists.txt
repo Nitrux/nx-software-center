@@ -74,8 +74,8 @@ target_link_libraries(interactors_tests
     Qt5::Concurrent
     KF5::Auth
     KF5::KIOCore
-    ${APPIMAGE_LIBRARIES}
-)
+    libappimage
+    )
 
 add_test(interactors_tests interactors_tests)
 

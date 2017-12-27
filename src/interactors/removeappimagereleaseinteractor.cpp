@@ -2,7 +2,7 @@
 
 #include <QFile>
 
-#include "appimage/appimage.h"
+#include "appimage/libappimage.h"
 
 #include "../entities/registry.h"
 #include "removeappimagereleaseinteractorlistener.h"

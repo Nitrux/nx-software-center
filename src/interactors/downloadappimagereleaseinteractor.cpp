@@ -4,7 +4,7 @@
 #include <QFile>
 
 #include "downloadappimagereleaseinteractorlistener.h"
-#include <appimage/appimage.h>
+#include <appimage/libappimage.h>
 
 #include "../entities/app.h"
 #include "../entities/downloadmanager.h"
