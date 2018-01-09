@@ -24,7 +24,8 @@ ApplicationWindow {
     header: NavigationPanel {
         id: navigationPanel
 
-        onGoHome: main.goHome()
+        onGoStore: main.showSearchView()
+        onGoTasks: main.showTasksView()
         onStoreQueryTyped: main.search(query)
     }
 
@@ -54,6 +55,11 @@ ApplicationWindow {
         SearchController.fetchCompleted.connect(showSearchView);
         SearchController.fetchError.connect(showFetchErrorMessage);
         SearchController.fetch()
+    }
+
+    function showTasksView() {
+        print("showTasksView")
+        stackView.replace("qrc:/TasksView.qml")
     }
 
     function showSearchView() {

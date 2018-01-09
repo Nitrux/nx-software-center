@@ -26,21 +26,12 @@ void Executor::handleInteractorComplete() {
     if (i != nullptr) {
         const QString id = i->getId();
         tasks.remove(id);
-        descriptions.remove(id);
 
         emit taskCompleted(id);
         i->deleteLater();
     }
 }
 
-QString Executor::getTaskDescription(const QString &id) {
-    return descriptions.value(id, QString());
-}
-
-void Executor::execute(Interactor *i, const QString &description) {
-    descriptions.insert(i->getId(), description);
-    execute(i);
-}
 
 QStringList Executor::getRunningTasks() {
     return tasks.keys();
@@ -50,6 +41,17 @@ void Executor::handleInteractorMetadataChanged(const QVariantMap &data) {
     Interactor* i = dynamic_cast<Interactor*>(sender());
     if (i != nullptr)
         emit taskDataChanged(i->getId(), data);
+}
+
+QVariantMap Executor::getTaskData(const QString &id) {
+    InteractorRunnableWrapper *w = tasks.value(id, nullptr);
+    if (w) {
+        Interactor *i = w->getIntereactor();
+        if (i)
+            return i->getMetadata();
+    }
+
+    return QVariantMap();
 }
 
 Executor::InteractorRunnableWrapper::InteractorRunnableWrapper(Interactor *i) : i(i){

@@ -20,9 +20,7 @@ public:
 
     void execute(Interactor *i);
 
-    void execute(Interactor *i, const QString &description);
-
-    QString getTaskDescription(const QString &id);
+    QVariantMap getTaskData(const QString &id);
 
     QStringList getRunningTasks();
 
@@ -46,11 +44,10 @@ private:
         InteractorRunnableWrapper(Interactor *i);
 
         void run() override;
-
+        Interactor* getIntereactor() { return i; }
     };
 
     QMap<QString, InteractorRunnableWrapper *> tasks;
-    QMap<QString, QString> descriptions;
 };
 
 
