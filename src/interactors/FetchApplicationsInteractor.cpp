@@ -6,8 +6,8 @@
 
 #include <QDebug>
 
-#include "Application.h"
-#include "Source.h"
+#include "entities/Application.h"
+#include "entities/Source.h"
 
 FetchApplicationsInteractor::FetchApplicationsInteractor(QList<Source *> sources, QObject *parent) : Interactor(
         parent) {

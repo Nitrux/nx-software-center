@@ -2,8 +2,8 @@
 
 #include <QList>
 
-#include "Application.h"
-#include "Repository.h"
+#include "entities/Application.h"
+#include "entities/Repository.h"
 
 class Test_Repository : public QObject {
 Q_OBJECT

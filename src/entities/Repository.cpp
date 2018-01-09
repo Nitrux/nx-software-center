@@ -3,7 +3,7 @@
 #include <QException>
 #include <QSet>
 
-#include "Application.h"
+#include "entities/Application.h"
 
 Repository::Repository(QObject *parent) : QObject(parent) {}
 

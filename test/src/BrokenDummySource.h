@@ -7,7 +7,7 @@
 
 #include <QList>
 #include <QStringList>
-#include "Source.h"
+#include "entities/Source.h"
 
 class BrokenDummySource : public Source {
     Q_OBJECT

@@ -2,18 +2,18 @@ find_package(Qt5 REQUIRED COMPONENTS Core Gui Qml Network)
 #find_package(AppImage REQUIRED)
 
 set(CORE_SRC
-    Application.cpp
-    Repository.cpp
-    Source.cpp
-    Interactor.h
-    DownloadManager.h
+    entities/Application.cpp
+    entities/Repository.cpp
+    entities/Source.cpp
+    interactors/Interactor.h
+    gateways/DownloadManager.h
 
     AppImageHubSource.cpp
-    FetchApplicationsInteractor.cpp
+    interactors/FetchApplicationsInteractor.cpp
     AppImageInstallLinksRegExParser.cpp
-    SimpleDownloadManager.cpp
-    SimpleDownloadToMemoryJob.cpp
-    SimpleDownloadToMemoryJob.h Registry.cpp Registry.h SimpleDownloadToFileJob.cpp SimpleDownloadToFileJob.h)
+    gateways/SimpleDownloadManager.cpp
+    gateways/SimpleDownloadToMemoryJob.cpp
+    gateways/SimpleDownloadToMemoryJob.h entities/Registry.cpp entities/Registry.h gateways/SimpleDownloadToFileJob.cpp gateways/SimpleDownloadToFileJob.h entities/Executor.cpp entities/Executor.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -31,14 +31,14 @@ target_include_directories(core
 ######
 
 set (UI_SRC
-    ApplicationListModel.cpp
-    SearchControler.cpp)
+    ui/ApplicationListModel.cpp
+    ui/SearchControler.cpp ui/TasksController.cpp ui/TasksController.h ui/TaskListModel.cpp ui/TaskListModel.h)
 ## add the qml.qrc file
 qt5_add_resources(qml_QRC qml/files.qrc)
 
 add_executable(nx_software_center
     main.cpp
-    CachedDownloadManager.cpp
+    gateways/CachedDownloadManager.cpp
     ${UI_SRC}
     ${qml_QRC})
 

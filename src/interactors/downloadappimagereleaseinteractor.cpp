@@ -7,10 +7,10 @@
 #include <appimage/appimage.h>
 
 #include "../entities/app.h"
-#include "DownloadManager.h"
+#include "gateways/DownloadManager.h"
 #include "../entities/registry.h"
 #include "../entities/release.h"
-#include "Repository.h"
+#include "entities/Repository.h"
 
 DownloadAppImageReleaseInteractor::DownloadAppImageReleaseInteractor(
     QString appImageId, QString appImageReleaseId,

@@ -3,10 +3,10 @@
 
 #include <QDebug>
 #include <QObject>
-#include "Application.h"
-#include "Repository.h"
+#include "entities/Application.h"
+#include "entities/Repository.h"
 #include "ApplicationListModel.h"
-#include "FetchApplicationsInteractor.h"
+#include "interactors/FetchApplicationsInteractor.h"
 
 class SearchControler : public QObject
 {

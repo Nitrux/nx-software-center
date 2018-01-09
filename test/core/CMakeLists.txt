@@ -18,6 +18,7 @@ target_include_directories(test_Repository PRIVATE ${CMAKE_SOURCE_DIR}/src/ )
 target_link_libraries(test_Repository
     Qt5::Test
     Qt5::Core
+    Qt5::Network
 )
 
 add_test(test_Repository test_Repository)

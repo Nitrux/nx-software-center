@@ -7,7 +7,7 @@
 
 #include <QtCore/QMap>
 #include <QtNetwork/QNetworkAccessManager>
-#include "DownloadManager.h"
+#include "gateways/DownloadManager.h"
 
 class CachedDownloadToMemoryJob : public DownloadToMemoryJob {
 Q_OBJECT

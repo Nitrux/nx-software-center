@@ -8,7 +8,7 @@
 #include <QList>
 #include <QString>
 
-#include "Interactor.h"
+#include "interactors/Interactor.h"
 
 class Source;
 

@@ -5,7 +5,7 @@
 
 #include "../entities/app.h"
 #include "../entities/release.h"
-#include "Repository.h"
+#include "entities/Repository.h"
 
 FetchAppImageHubInteractor::FetchAppImageHubInteractor(const QString &url,
                                                        Repository *repository,

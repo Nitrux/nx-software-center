@@ -5,7 +5,7 @@
 #include <QMap>
 #include <QObject>
 
-#include "Application.h"
+#include "entities/Application.h"
 
 class ApplicationNotFoundException : public QException {
 };

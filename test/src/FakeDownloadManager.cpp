@@ -8,7 +8,7 @@
 #include <QSettings>
 #include <QCryptographicHash>
 
-#include "SimpleDownloadToMemoryJob.h"
+#include "gateways/SimpleDownloadToMemoryJob.h"
 
 DownloadToFileJob *FakeDownloadManager::downloadToFile(const QString &, const QString &) {
     return nullptr;

@@ -6,8 +6,8 @@
 #define NOMAD_SOFTWARE_CENTER_DUMMYSOURCE_H
 
 #include <QList>
-#include "Application.h"
-#include "Source.h"
+#include "entities/Application.h"
+#include "entities/Source.h"
 
 class DummySource : public Source {
     Q_OBJECT

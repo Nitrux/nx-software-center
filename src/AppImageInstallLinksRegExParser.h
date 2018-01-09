@@ -8,8 +8,8 @@
 #include <QObject>
 #include <QtCore/QMap>
 #include <QtNetwork/QNetworkAccessManager>
-#include "Application.h"
-#include "DownloadManager.h"
+#include "entities/Application.h"
+#include "gateways/DownloadManager.h"
 
 class AppImageInstallLinksRegExParser : public QObject {
 Q_OBJECT

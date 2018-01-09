@@ -1,6 +1,6 @@
 #include <QtTest/QtTest>
 
-#include "Application.h"
+#include "entities/Application.h"
 
 class Test_Application : public QObject {
 Q_OBJECT

@@ -3,7 +3,7 @@
 #include <QList>
 #include <QSignalSpy>
 
-#include "Application.h"
+#include "entities/Application.h"
 #include "AppImageHubSource.h"
 #include "FakeDownloadManager.h"
 

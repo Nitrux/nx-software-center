@@ -2,7 +2,7 @@
 
 #include <QSignalSpy>
 
-#include "FetchApplicationsInteractor.h"
+#include "interactors/FetchApplicationsInteractor.h"
 #include "DummySource.h"
 #include "BrokenDummySource.h"
 

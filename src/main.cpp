@@ -3,11 +3,11 @@
 #include <QNetworkAccessManager>
 #include <QList>
 
-#include "SearchControler.h"
+#include "ui/SearchControler.h"
 #include "AppImageHubSource.h"
-#include "SimpleDownloadManager.h"
-#include "CachedDownloadManager.h"
-#include "Registry.h"
+#include "gateways/SimpleDownloadManager.h"
+#include "gateways/CachedDownloadManager.h"
+#include "entities/Registry.h"
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
 

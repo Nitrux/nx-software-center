@@ -1,9 +1,10 @@
 #include <gtest/gtest.h>
 
 #include <QList>
-#include "Application.h"
 #include <QMetaType>
 #include <QCoreApplication>
+
+#include "entities/Application.h"
 Q_DECLARE_METATYPE(Application);
 
 int main(int argc, char **argv)

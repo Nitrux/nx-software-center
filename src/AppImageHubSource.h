@@ -11,9 +11,9 @@
 #include <QJsonArray>
 #include <QVariantMap>
 
-#include "Source.h"
-#include "Application.h"
-#include "DownloadManager.h"
+#include "entities/Source.h"
+#include "entities/Application.h"
+#include "gateways/DownloadManager.h"
 
 #define DEFAULT_APPIMAGEHUB_URL "https://appimage.github.io/feed.json"
 

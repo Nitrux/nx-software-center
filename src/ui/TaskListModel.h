@@ -1,0 +1,14 @@
+//
+// Created by alexis on 8/01/18.
+//
+
+#ifndef NOMAD_SOFTWARE_CENTER_TASKLISTMODEL_H
+#define NOMAD_SOFTWARE_CENTER_TASKLISTMODEL_H
+
+
+class TaskListModel {
+
+};
+
+
+#endif //NOMAD_SOFTWARE_CENTER_TASKLISTMODEL_H
