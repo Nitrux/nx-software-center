@@ -1,11 +1,12 @@
 #include "Repository.h"
 
-#include <QException>
+#include <QList>
 #include <QSet>
 
 #include "entities/Application.h"
+#include "interactors/FetchApplicationsInteractor.h"
 
-Repository::Repository(QObject *parent) : QObject(parent) {}
+Repository::Repository(QObject *parent) : QObject(parent), isBeingUpdated(false) {}
 
 void Repository::add(Application app) {
     applications.insert(app.getId(), app);
@@ -66,8 +67,7 @@ QList<Application> Repository::getAllVersions(const QString &name) const {
     return apps;
 }
 
-QList<Application> Repository::filterAll(const QString &query) const
-{
+QList<Application> Repository::filterAll(const QString &query) const {
     QList<Application> results;
     for (const Application &a: applications) {
         if (a.getName().contains(query))
@@ -76,13 +76,12 @@ QList<Application> Repository::filterAll(const QString &query) const
     return results;
 }
 
-QList<Application> Repository::filterLatestsVersions(const QString &query) const
-{
+QList<Application> Repository::filterLatestsVersions(const QString &query) const {
     QMap<QString, Application> latest;
 
     for (const Application &a : applications.values()) {
-        if (a.getName().contains( query, Qt::CaseInsensitive) ||
-                a.getDescription().contains(query, Qt::CaseInsensitive)) {
+        if (a.getName().contains(query, Qt::CaseInsensitive) ||
+            a.getDescription().contains(query, Qt::CaseInsensitive)) {
             if (!latest.contains(a.getCodeName()))
                 latest.insert(a.getCodeName(), a);
             else {
@@ -121,4 +120,41 @@ void Repository::removeAllVersions(const QString &name) {
         if (name.compare(a.getCodeName()) == 0)
             applications.remove(a.getId());
     }
+}
+
+void Repository::setSources(const QList<Source *> &sources) { this->sources = sources; }
+
+void Repository::update() {
+    if (isBeingUpdated)
+        return;
+
+    emit updateStarted();
+
+    isBeingUpdated = true;
+    fetchApplicationsInteractor = new FetchApplicationsInteractor(sources);
+
+    connect(fetchApplicationsInteractor, &FetchApplicationsInteractor::completed, this,
+            &Repository::handleUpdateResults);
+
+    fetchApplicationsInteractor->execute();
+}
+
+void Repository::handleUpdateResults() {
+    isBeingUpdated = false;
+    const QList<Application> &applications = fetchApplicationsInteractor->getResults();
+    const QStringList &errors = fetchApplicationsInteractor->getErrors();
+
+    if (applications.empty() && !errors.empty()) {
+        emit updateError();
+    } else {
+        this->applications.clear();
+        fetchApplicationsInteractor->deleteLater();
+
+        for (const Application &a: fetchApplicationsInteractor->getResults())
+            this->applications.insert(a.getId(), a);
+
+        emit updateComplete();
+    }
+
+    delete fetchApplicationsInteractor;
 }

@@ -3,7 +3,7 @@ message(STATUS "Downloading and building GTest")
 ExternalProject_Add(gtest
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG release-1.8.0
-    UPDATE_COMMAND ""  # make sure CMake won't try to fetch updates unnecessarily and hence rebuild the dependency every time
+    UPDATE_COMMAND ""  # make sure CMake won't try to updateRepository updates unnecessarily and hence rebuild the dependency every time
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -G${CMAKE_GENERATOR} -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> <SOURCE_DIR>/googletest
     )
 

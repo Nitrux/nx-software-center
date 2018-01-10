@@ -23,9 +23,8 @@ Q_OBJECT
 public:
     explicit FetchApplicationsInteractor(QList<Source *> sources, QObject *parent = nullptr);
 
-signals:
-
-    void completed(QList<Application> results, QStringList errors);
+    QList<Application> getResults() const;
+    QStringList getErrors() const;
 
 public slots:
 

@@ -15,6 +15,16 @@ FetchApplicationsInteractor::FetchApplicationsInteractor(QList<Source *> sources
     runningTasks = 0;
 }
 
+QList<Application> FetchApplicationsInteractor::getResults() const
+{
+    return results;
+}
+
+QStringList FetchApplicationsInteractor::getErrors() const
+{
+    return errors;
+}
+
 void FetchApplicationsInteractor::execute() {
     if (runningTasks != 0)
         qWarning() << "Calling execute when the interactor is still bussy.";
@@ -31,7 +41,7 @@ void FetchApplicationsInteractor::handleFetchedApplications(QList<Application> a
     results.append(applications);
     runningTasks--;
     if (isCompleted())
-        emit completed(results, errors);
+        emit completed();
 }
 
 void FetchApplicationsInteractor::handleFetchError(const QString &error) {
@@ -39,7 +49,7 @@ void FetchApplicationsInteractor::handleFetchError(const QString &error) {
     runningTasks--;
 
     if (isCompleted())
-            emit completed(results, errors);
+        emit completed();
 }
 
 bool FetchApplicationsInteractor::isCompleted() {

@@ -15,23 +15,46 @@
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
 
-QList<Source *> sources;
+Repository *repository;
 DownloadManager *downloadManager = nullptr;
 QNetworkAccessManager *networkAccessManager = nullptr;
 Executor *executor = nullptr;
 
 
-void initSources(QObject *parent) {
+void registerQmlModules();
+void initSoftwareCenterModules(QObject *parent);
+
+int main(int argc, char *argv[]) {
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
+
+    initSoftwareCenterModules(nullptr);
+    registerQmlModules();
+
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    if (engine.rootObjects().isEmpty())
+        return -1;
+
+    return app.exec();
+}
+
+void initSoftwareCenterModules(QObject *parent) {
+    executor = new Executor();
+
     networkAccessManager = new QNetworkAccessManager(parent);
     downloadManager = new CachedDownloadManager(parent);
 
+
     AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);
-    sources.append(s);
+
+    repository = new Repository();
+    repository->setSources({s});
 }
 
+
+
 static QObject *searchControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    SearchControler *searchControler = new SearchControler();
-    searchControler->setSources(sources);
+    SearchControler *searchControler = new SearchControler(repository);
     return searchControler;
 }
 
@@ -45,27 +68,16 @@ static QObject *tasksControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return taskControler;
 }
 
-int main(int argc, char *argv[]) {
-    QGuiApplication app(argc, argv);
-    QQmlApplicationEngine engine;
-
-    executor = new Executor();
-    initSources(nullptr);
+void registerQmlModules() {
     qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, 1, 0,
                                               "SearchController",
                                               searchControllerSingletonProvider);
 
     qmlRegisterSingletonType<Registry>(QML_MODULE_NAMESPACE, 1, 0,
-                                              "Registry",
-                                              registrySingletonProvider);
+                                       "Registry",
+                                       registrySingletonProvider);
 
     qmlRegisterSingletonType<Registry>(QML_MODULE_NAMESPACE, 1, 0,
-                                              "TasksController",
-                                              tasksControllerSingletonProvider);
-
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    if (engine.rootObjects().isEmpty())
-        return -1;
-
-    return app.exec();
+                                       "TasksController",
+                                       tasksControllerSingletonProvider);
 }

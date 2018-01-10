@@ -14,30 +14,27 @@ class SearchControler : public QObject
     Q_PROPERTY(ApplicationListModel *model MEMBER model NOTIFY modelChanged);
 
     ApplicationListModel *model;
-    Repository repository;
-    QList<Source*> sources;
-    FetchApplicationsInteractor *i;
+    Repository *repository;
     QString query;
 public:
-    explicit SearchControler(QObject *parent = nullptr);
-    void setSources(const QList<Source*> &sources) {this->sources = sources;}
+    explicit SearchControler(Repository *repository, QObject *parent = nullptr);
 
 signals:
-    void fetchingApplications();
-    void fetchCompleted();
-    void fetchError();
+    void updateRepositoryStarted();
+    void updateRepositoryCompleted();
+    void updateRepositoryError();
 
     void searching();
     void resultsReady();
 
     void modelChanged(ApplicationListModel *model);
 public slots:
-    void fetch();
+    void updateRepository();
 
     void search(const QString &query);
 
 protected slots:
-    void handleFetchApplicationsCompleted(QList<Application> results, QStringList errors);
+    void handleUpdateRepositoryCompleted();
 
 protected:
     void filterApplications();

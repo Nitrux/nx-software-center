@@ -5,7 +5,9 @@
 #include <QMap>
 #include <QObject>
 
+#include "Source.h"
 #include "entities/Application.h"
+#include "interactors/FetchApplicationsInteractor.h"
 
 class ApplicationNotFoundException : public QException {
 };
@@ -13,6 +15,10 @@ class ApplicationNotFoundException : public QException {
 class Repository : public QObject {
 Q_OBJECT
     QMap<QString, Application> applications;
+
+    bool isBeingUpdated;
+    QList<Source*> sources;
+    FetchApplicationsInteractor *fetchApplicationsInteractor;
 
 public:
     explicit Repository(QObject *parent = nullptr);
@@ -40,8 +46,23 @@ public:
     QList<Application> filterLatestsVersions(const QString &query) const;
 
     void remove(const QString &id);
+
     void removeAllVersions(const QString &name);
+
     void removeAll();
+
+    void update();
+
+    void setSources(const QList<Source*> &sources);
+
+signals:
+    void updateStarted();
+    void updateComplete();
+    void updateError();
+
+protected slots:
+    void handleUpdateResults();
+
 private:
 };
 

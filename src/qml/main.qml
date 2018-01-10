@@ -52,9 +52,9 @@ ApplicationWindow {
 
     function loadStoreContents() {
         showBusyMessage("Loading store contents...");
-        SearchController.fetchCompleted.connect(showSearchView);
-        SearchController.fetchError.connect(showFetchErrorMessage);
-        SearchController.fetch()
+        SearchController.updateRepositoryCompleted.connect(showSearchView);
+        SearchController.updateRepositoryError.connect(showFetchErrorMessage);
+        SearchController.updateRepository()
     }
 
     function showTasksView() {
@@ -153,12 +153,12 @@ ApplicationWindow {
 
     //        SearchController.fetchingApplications.connect(showLoadingScreen);
     //        SearchController.fetchCompleted.connect(goStore);
-    //        SearchController.fetchError.connect(goStore);
+    //        SearchController.updateRepositoryError.connect(goStore);
 
     //        SearchController.searching.connect(showLoadingAppsScreen);
     //        SearchController.resultsReady.connect(goStore);
 
-    //        SearchController.fetch()
+    //        SearchController.updateRepository()
     //        SearchController.search("")
     //    }
 
