@@ -9,6 +9,7 @@ class TaskListModel : public QAbstractListModel
     enum ApplicationListModelRoles
     {
         Id = Qt::UserRole + 1,
+        Type,
         Description,
         Status,
         ProgressValue,

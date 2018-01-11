@@ -13,7 +13,7 @@ set(CORE_SRC
     AppImageInstallLinksRegExParser.cpp
     gateways/SimpleDownloadManager.cpp
     gateways/SimpleDownloadToMemoryJob.cpp
-    gateways/SimpleDownloadToMemoryJob.h entities/Registry.cpp entities/Registry.h gateways/SimpleDownloadToFileJob.cpp gateways/SimpleDownloadToFileJob.h entities/Executor.cpp entities/Executor.h)
+    gateways/SimpleDownloadToMemoryJob.h entities/Registry.cpp entities/Registry.h gateways/SimpleDownloadToFileJob.cpp gateways/SimpleDownloadToFileJob.h entities/Executor.cpp entities/Executor.h interactors/InstallAppImageInteractor.cpp interactors/InstallAppImageInteractor.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -32,7 +32,9 @@ target_include_directories(core
 
 set (UI_SRC
     ui/ApplicationListModel.cpp
-    ui/SearchControler.cpp ui/TasksController.cpp ui/TasksController.h ui/TaskListModel.cpp ui/TaskListModel.h)
+    ui/SearchControler.cpp ui/TasksController.cpp ui/TasksController.h ui/TaskListModel.cpp ui/TaskListModel.h
+    ui/InstallController.h
+    ui/InstallController.cpp)
 ## add the qml.qrc file
 qt5_add_resources(qml_QRC qml/files.qrc)
 

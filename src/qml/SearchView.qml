@@ -27,6 +27,7 @@ Item {
             spacing: 12
             delegate: AppImageListItemDelegate {
                 isDownloaded: Registry.isDownloaded(app_id)
+                onRequestInstall: InstallController.install(app_id)
             }
 /*
             delegate: AppImageListItemDelegate {

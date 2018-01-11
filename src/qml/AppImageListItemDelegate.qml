@@ -21,7 +21,7 @@ PlasmaComponents.ListItem {
 
     signal requestExecute
     signal requestRemove
-    signal requestDownload
+    signal requestInstall
     signal requestRefresh
 
     property var task
@@ -100,7 +100,7 @@ PlasmaComponents.ListItem {
             text: i18n("Download")
 
             visible: !isDownloaded && taskId == "" && isDownloadable
-            onClicked: requestDownload()
+            onClicked: requestInstall()
         }
 
         PlasmaComponents.Button {

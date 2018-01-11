@@ -11,9 +11,9 @@ PlasmaComponents.ListItem {
     property string type: task_type
     property string description: task_description
     property string status: task_status
-    property string progress_message: task_progress_message
-    property string progress_value: task_progress_vale
-    property string progress_total: task_progress_vale
+    property var progress_message: task_progress_message
+    property var progress_value: task_progress_value
+    property var progress_total: task_progress_total
 
     RowLayout {
         id: innerLayout
@@ -26,11 +26,25 @@ PlasmaComponents.ListItem {
 
         PlasmaComponents.Label {
             Layout.alignment: Qt.AlignTop
-            Layout.preferredWidth: 200
-            Layout.maximumWidth: 200
+
             wrapMode: Text.WordWrap
 
             text: task_description
+        }
+
+        ColumnLayout {
+            PlasmaComponents.ProgressBar {
+                id: progressBar
+
+                value: progress_value ? progress_value : 0
+                maximumValue: progress_total ? progress_total : 0
+            }
+
+            PlasmaComponents.Label {
+                wrapMode: Text.WordWrap
+
+                text: task_progress_message ? task_progress_message : ""
+            }
         }
     }
 }

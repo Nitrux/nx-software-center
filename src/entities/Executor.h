@@ -10,15 +10,22 @@
 #include <QRunnable>
 #include <QString>
 #include <QStringList>
+#include <QMutex>
 
 class Interactor;
 
 class Executor : public QObject {
 Q_OBJECT
+    QMutex lock;
+
+    class InteractorRunnableWrapper;
+    QMap<QString, Interactor *> interactors;
+    QMap<QString, InteractorRunnableWrapper*> runnables;
+
 public:
     Executor(QObject *parent = 0) : QObject(parent) {}
 
-    void execute(Interactor *i);
+    void execute(Interactor *interactor);
 
     QVariantMap getTaskData(const QString &id);
 
@@ -35,19 +42,8 @@ signals:
 protected slots:
 
     void handleInteractorComplete();
+
     void handleInteractorMetadataChanged(const QVariantMap &data);
-
-private:
-    class InteractorRunnableWrapper : public QRunnable {
-        Interactor *i;
-    public:
-        InteractorRunnableWrapper(Interactor *i);
-
-        void run() override;
-        Interactor* getIntereactor() { return i; }
-    };
-
-    QMap<QString, InteractorRunnableWrapper *> tasks;
 };
 
 

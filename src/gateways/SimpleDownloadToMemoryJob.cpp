@@ -17,9 +17,9 @@ void SimpleDownloadToMemoryJob::handleNetworkReply() {
         return;
     }
 
-    qDebug() << "Reply"
-             << networkReply->header(QNetworkRequest::ContentLengthHeader)
-             << networkReply->header(QNetworkRequest::ContentTypeHeader);
+//    qDebug() << "Reply"
+//             << networkReply->header(QNetworkRequest::ContentLengthHeader)
+//             << networkReply->header(QNetworkRequest::ContentTypeHeader);
 
     if (isAPositiveReply()) {
         data = networkReply->readAll();

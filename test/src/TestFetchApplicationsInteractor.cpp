@@ -59,5 +59,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
         ASSERT_EQ(1, spy.count());
         ASSERT_TRUE(request_results.isEmpty());
         ASSERT_FALSE(request_errors.isEmpty());
+
+        delete i;
     }
 }

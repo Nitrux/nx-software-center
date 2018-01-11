@@ -3,7 +3,7 @@
 //
 
 #include "SimpleDownloadToFileJob.h"
-
+#include <QThread>
 
 SimpleDownloadToFileJob::SimpleDownloadToFileJob(const QNetworkRequest &request,
                                                  const QString path,
@@ -18,15 +18,22 @@ SimpleDownloadToFileJob::SimpleDownloadToFileJob(const QNetworkRequest &request,
 void SimpleDownloadToFileJob::execute() {
     file.open(QIODevice::WriteOnly);
     reply = networkAccessManager->get(request);
+    reply->setReadBufferSize(1024);
+
     QObject::connect(reply, &QNetworkReply::finished, this,
                      &SimpleDownloadToFileJob::handleFinished);
-    QObject::connect(reply, &QNetworkReply::bytesAvailable, this,
-                     &SimpleDownloadToFileJob::handleBytesAvailable);
+    QObject::connect(reply, &QNetworkReply::readyRead, this,
+                     &SimpleDownloadToFileJob::handleReadyRead);
     QObject::connect(reply, &QNetworkReply::downloadProgress, this,
                      &SimpleDownloadToFileJob::handleDownloadProgress);
 }
 
-void SimpleDownloadToFileJob::handleBytesAvailable() {
+void SimpleDownloadToFileJob::executeFromQObjectThread()
+{
+    execute();
+}
+
+void SimpleDownloadToFileJob::handleReadyRead() {
     if (file.isOpen())
         file.write(reply->readAll());
 }
@@ -34,11 +41,12 @@ void SimpleDownloadToFileJob::handleBytesAvailable() {
 void SimpleDownloadToFileJob::handleDownloadProgress(qint64 bytesRead, qint64 totalBytes) {
     if (aborted)
         return;
-
     emit  progress(bytesRead, totalBytes, QString("Downloading: %1").arg(path));
 }
 
 void SimpleDownloadToFileJob::handleFinished() {
+    handleReadyRead();
+
     if (isAPositiveReply()) {
         emit finished();
         file.close();

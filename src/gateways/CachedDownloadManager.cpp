@@ -6,14 +6,31 @@
 
 #include <QDir>
 #include <QFile>
+#include <QThread>
+#include <QCoreApplication>
 #include <QSettings>
 #include <QCryptographicHash>
 #include <QStandardPaths>
+#include <QNetworkRequest>
+#include <QMetaObject>
 
 #include "SimpleDownloadToMemoryJob.h"
+#include "SimpleDownloadToFileJob.h"
 
-DownloadToFileJob *CachedDownloadManager::downloadToFile(const QString &, const QString &) {
-    return nullptr;
+DownloadToFileJob *CachedDownloadManager::downloadToFile(const QString &url, const QString &path) {
+    QNetworkRequest request = createFollowRedirectRequest(url);
+    SimpleDownloadToFileJob *job = new SimpleDownloadToFileJob(request,
+                                                               path, networkAccessManager);
+    qDebug() << QThread::currentThreadId();
+
+    /* HACK NOTE: As the network access manager is created
+     * in the main thread we need to move the job object to
+     * the same thread in order to allow the get function
+     * to properly work */
+    job->moveToThread(networkAccessManager->thread());
+    QMetaObject::invokeMethod(job, "executeFromQObjectThread");
+
+    return job;
 }
 
 void CachedDownloadManager::writeFile(const QString &path, const QByteArray &data) const {
@@ -39,7 +56,7 @@ DownloadToMemoryJob *CachedDownloadManager::downloadToMemory(const QString &url)
         QNetworkRequest request = QNetworkRequest(url);
         request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
 
-        job = new SimpleDownloadToMemoryJob(request, &networkAccessManager, this);
+        job = new SimpleDownloadToMemoryJob(request, networkAccessManager, this);
         connect(job, &DownloadToMemoryJob::finished, [=]() {
             const QByteArray &data = job->getData();
 
@@ -51,7 +68,7 @@ DownloadToMemoryJob *CachedDownloadManager::downloadToMemory(const QString &url)
 }
 
 
-CachedDownloadManager::CachedDownloadManager(QObject *parent) : DownloadManager(parent) {
+CachedDownloadManager::CachedDownloadManager(QNetworkAccessManager *networkAccessManager, QObject *parent) : DownloadManager(parent), networkAccessManager(networkAccessManager) {
 }
 
 CachedDownloadManager::~CachedDownloadManager() {
@@ -76,3 +93,8 @@ void CachedDownloadToMemoryJob::execute() {
     emit finished();
 }
 
+QNetworkRequest CachedDownloadManager::createFollowRedirectRequest(const QString &url) const {
+    QNetworkRequest request = QNetworkRequest(QUrl(url));
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    return request;
+}

@@ -23,12 +23,14 @@ class SimpleDownloadToFileJob : public DownloadToFileJob {
 public:
     SimpleDownloadToFileJob(const QNetworkRequest &request, const QString path,
                               QNetworkAccessManager *networkAccessManager,
-                              QObject *parent);
+                              QObject *parent = nullptr);
 
     void execute() override;
 
 protected slots:
-    void handleBytesAvailable();
+    void executeFromQObjectThread();
+
+    void handleReadyRead();
 
     void handleDownloadProgress(qint64 bytesRead, qint64 totalBytes);
 

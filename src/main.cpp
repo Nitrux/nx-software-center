@@ -11,6 +11,7 @@
 
 #include "ui/SearchControler.h"
 #include "ui/TasksController.h"
+#include "ui/InstallController.h"
 
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
@@ -42,7 +43,7 @@ void initSoftwareCenterModules(QObject *parent) {
     executor = new Executor();
 
     networkAccessManager = new QNetworkAccessManager(parent);
-    downloadManager = new CachedDownloadManager(parent);
+    downloadManager = new CachedDownloadManager(networkAccessManager, parent);
 
 
     AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);
@@ -68,6 +69,11 @@ static QObject *tasksControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return taskControler;
 }
 
+static QObject *installControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    InstallController *installControler = new InstallController(repository, executor, downloadManager);
+    return installControler;
+}
+
 void registerQmlModules() {
     qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, 1, 0,
                                               "SearchController",
@@ -80,4 +86,8 @@ void registerQmlModules() {
     qmlRegisterSingletonType<Registry>(QML_MODULE_NAMESPACE, 1, 0,
                                        "TasksController",
                                        tasksControllerSingletonProvider);
+
+    qmlRegisterSingletonType<Registry>(QML_MODULE_NAMESPACE, 1, 0,
+                                       "InstallController",
+                                       installControllerSingletonProvider);
 }

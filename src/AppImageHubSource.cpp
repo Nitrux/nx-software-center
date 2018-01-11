@@ -221,8 +221,8 @@ void AppImageHubSource::reportResults() {
 }
 
 void AppImageHubSource::disposeParsers() {
-    for (QObject *object: parsers)
-        object->deleteLater();
+//    for (QObject *object: parsers)
+//        object->deleteLater();
     parsers.clear();
     parsersFinished = 0;
 }

@@ -5,15 +5,20 @@
 #include "TasksController.h"
 
 #include "interactors/installappimagereleaseinteractor.h"
+#include <QMutexLocker>
 
 TasksController::TasksController(Executor *executor, QObject *parent)
     : QObject(parent),
-      executor(executor),
-      model(new TaskListModel(this))
+      model(new TaskListModel(this)),
+      executor(executor)
 {
-    connect(executor, &Executor::taskStarted, this, &TasksController::handleTaskStarted);
-    connect(executor, &Executor::taskCompleted, this, &TasksController::handleTaskCompleted);
-    connect(executor, &Executor::taskDataChanged, this, &TasksController::handleTaskDataChanged);
+    connect(executor, &Executor::taskStarted, this, &TasksController::handleTaskStarted, Qt::QueuedConnection);
+    connect(executor, &Executor::taskCompleted, this, &TasksController::handleTaskCompleted, Qt::QueuedConnection);
+    connect(executor, &Executor::taskDataChanged, this, &TasksController::handleTaskDataChanged, Qt::QueuedConnection);
+
+    auto tasks = executor->getRunningTasks();
+    for (const QString &id : tasks)
+        model->addTask(id, executor->getTaskData(id));
 }
 
 void TasksController::assignTaskToApplication(const QString &applicationId, const QString &taskId) {
@@ -25,12 +30,14 @@ QString TasksController::getTaskOnApplication(const QString &applicationId) {
 }
 
 void TasksController::handleTaskStarted(const QString &id) {
+    QMutexLocker locker(&mutex);
     const QVariantMap &d = executor->getTaskData(id);
 
     model->addTask(id, d);
 }
 
 void TasksController::handleTaskCompleted(const QString &id) {
+    QMutexLocker locker(&mutex);
     removeTaskApplicationRelation(id);
 
     model->removeTask(id);
@@ -38,6 +45,7 @@ void TasksController::handleTaskCompleted(const QString &id) {
 
 void TasksController::handleTaskDataChanged(const QString &id, const QVariantMap &data)
 {
+    QMutexLocker locker(&mutex);
     model->updateTask(id, data);
 }
 

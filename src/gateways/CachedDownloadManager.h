@@ -25,11 +25,11 @@ private:
 
 class CachedDownloadManager : public DownloadManager {
 Q_OBJECT
-    QNetworkAccessManager networkAccessManager;
+    QNetworkAccessManager *networkAccessManager;
     QMap<QString, QString> cache;
 
 public:
-    CachedDownloadManager(QObject *parent = nullptr);
+    CachedDownloadManager(QNetworkAccessManager *networkAccessManager, QObject *parent = nullptr);
 
     virtual ~CachedDownloadManager();
 
@@ -37,7 +37,10 @@ public:
 
     DownloadToMemoryJob *downloadToMemory(const QString &url) override;
 
+
 private:
+    QNetworkRequest createFollowRedirectRequest(const QString &url) const;
+
     void writeFile(const QString &path, const QByteArray &data) const;
 
     void writeCacheIndex();

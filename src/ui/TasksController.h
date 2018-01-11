@@ -9,6 +9,7 @@
 
 #include "entities/Executor.h"
 #include "TaskListModel.h"
+#include <QMutex>
 
 class TasksController : public QObject {
 Q_OBJECT
@@ -17,6 +18,7 @@ Q_OBJECT
     TaskListModel *model;
     Executor *executor;
     QMap<QString, QString> applicationsTasks;
+    QMutex mutex;
 public:
     TasksController(Executor *executor, QObject *parent = 0);
 
