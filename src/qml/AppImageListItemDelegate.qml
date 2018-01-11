@@ -24,51 +24,6 @@ PlasmaComponents.ListItem {
     signal requestInstall
     signal requestRefresh
 
-    property var task
-
-    Timer {
-        id: taskRefresher
-        interval: 100; repeat: true
-        onTriggered: requestRefresh()
-    }
-
-    onTaskChanged: {
-        if (task !== null && task !== undefined) {
-            progressBar.visible = true
-
-            task.progressChanged.connect(hangleTaskProgressChanged)
-            task.totalChanged.connect(hangleTaskTotalProgressChanged)
-            task.stateChanged.connect(handleTaskStateChanged)
-
-            handleTaskStateChanged()
-        } else
-            progressBar.visible = false
-    }
-
-
-    function hangleTaskProgressChanged() {
-        if (task !== null &&
-                task !== undefined)
-            progressBar.value = task.progress
-    }
-
-    function hangleTaskTotalProgressChanged() {
-        if (task !== null &&
-                task !== undefined)
-            progressBar.maximumValue = task.total
-    }
-
-    function handleTaskStateChanged() {
-        if (task !== null &&
-                task !== undefined &&
-                task.state !== Task.TASK_RUNNING &&
-                task.state !== Task.TASK_CREATED) {
-            taskId = ""
-            task = undefined
-            requestRefresh()
-        }
-    }
-
     RowLayout {
         id: innerLayout
         anchors.left: parent.left
@@ -117,13 +72,6 @@ PlasmaComponents.ListItem {
             text: i18n("Run")
 
             onClicked: requestExecute()
-        }
-
-        PlasmaComponents.ProgressBar {
-            id: progressBar
-            Layout.maximumWidth: 120
-
-            visible: false
         }
     }
 }

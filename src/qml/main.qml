@@ -9,7 +9,6 @@ import org.nxos.softwarecenter 1.0
 
 ApplicationWindow {
     id: main
-    title: qsTr("NX Software Center")
 
     visible: true
     width: 900
@@ -20,7 +19,6 @@ ApplicationWindow {
 
     color: theme.backgroundColor
 
-    //    visibility: Qt.WindowFullScreen
     header: NavigationPanel {
         id: navigationPanel
 
@@ -38,6 +36,25 @@ ApplicationWindow {
     StackView {
         id: stackView
         anchors.fill: parent
+        initialItem: PlaceHolderView
+
+        function findItemByObjectName(name) {
+            var item = stackView.find(function (item, index) {
+                return item.objectName === name
+            })
+            return item
+        }
+
+        function goTo(name, component) {
+            var itemInstance = findItemByObjectName(name);
+            if (itemInstance) {
+                print("pop " + name);
+                stackView.pop(itemInstance)
+            } else {
+                print("push " + name);
+                stackView.push(component, {objectName: name})
+            }
+        }
     }
 
     TextConstants {
@@ -47,131 +64,39 @@ ApplicationWindow {
     Component.onCompleted: loadStoreContents()
 
     function search(query) {
-        SearchController.search(query);
+        SearchController.search(query)
     }
 
     function loadStoreContents() {
-        showBusyMessage("Loading store contents...");
-        SearchController.updateRepositoryCompleted.connect(showSearchView);
-        SearchController.updateRepositoryError.connect(showFetchErrorMessage);
+        main.title = "Loading contents"
+        showBusyMessage("Loading store contents...")
+        SearchController.updateRepositoryCompleted.connect(showSearchView)
+        SearchController.updateRepositoryError.connect(showUpdateErrorMessage)
         SearchController.updateRepository()
     }
 
     function showTasksView() {
-        print("showTasksView")
-        stackView.replace("qrc:/TasksView.qml")
+        main.title = "Tasks"
+        stackView.goTo("tasksView", "qrc:/TasksView.qml");
     }
 
     function showSearchView() {
-        print("showSearchView")
-        stackView.replace("qrc:/SearchView.qml")
+        main.title = "Explore";
+        stackView.goTo("searchView", "qrc:/SearchView.qml");
     }
 
     function showBusyMessage(message) {
-        stackView.push("qrc:/PlaceHolderView.qml", {
-                           message: message
-                       })
+        stackView.goTo("placeHolderView", "qrc:/PlaceHolderView.qml");
+        var item = stackView.findItemByObjectName("placeHolderView");
+        item.message = message
     }
 
-    function showFetchErrorMessage() {
-        print("showFetchErrorMessage")
-        stackView.replace("qrc:/PlaceHolderView.qml", {
-                           message: textConstants.unknownError,
-                           iconName: "face-sad",
-                           showBusyIndicator: false
-                       })
+    function showUpdateErrorMessage() {
+        stackView.goTo("placeHolderView", placeHolderView);
+        var item = stackView.findItemByObjectName("placeHolderView");
+
+        item.message = textConstants.unknownError
+        item.iconName = "face-sad";
+        item.showBusyIndicator = false;
     }
-
-    //    function goStore() {
-    //        navigationPanel.currentView = "store"
-    //        content.source = "qrc:/StoreView.qml"
-    //    }
-
-    //    function search(query) {
-    //        goStore()
-    //        SearchViewController.search(query)
-    //    }
-
-    //    Connections {
-    //        target: SearchViewController
-    //        onApplications: appsCache = apps
-    //        onNoMatchFound: {
-    //            appsCache = undefined
-    //            main.showNothingFoundSreen()
-    //        }
-    //    }
-    //    function showLoadingAppsScreen() {
-    //        content.source = "qrc:/PlaceHolderView.qml"
-    //        var placeHolder = content.item
-    //        if (placeHolder !== undefined) {
-    //            placeHolder.showBusyIndicator = true
-    //            placeHolder.message = i18n("Fetching applications lists ...")
-    //        }
-    //    }
-
-    //    function showLoadingScreen(message) {
-    //        content.source = "qrc:/PlaceHolderView.qml"
-    //        var placeHolder = content.item
-    //        if (placeHolder !== undefined) {
-    //            placeHolder.showBusyIndicator = true
-    //            placeHolder.message = message
-    //        }
-    //    }
-
-    //    function showError(message) {
-    //        content.source = "qrc:/PlaceHolderView.qml"
-    //        var placeHolder = content.item
-    //        if (placeHolder !== undefined) {
-    //            if (message == "")
-    //                message = textConstants.unknownError
-
-    //            placeHolder.message = message
-    //            placeHolder.iconName = "face-sad"
-    //            placeHolder.showBusyIndicator = false
-    //        }
-    //    }
-
-    //    function showNothingFoundSreen() {
-    //        if (main.refreshCacheTask != undefined)
-    //            return
-
-    //        content.source = "qrc:/PlaceHolderView.qml"
-    //        var placeHolder = content.item
-    //        if (placeHolder !== undefined) {
-    //            placeHolder.message = textConstants.noApplicationsFound
-    //            placeHolder.iconName = "dialog-information"
-    //            placeHolder.showBusyIndicator = false
-    //        }
-    //    }
-
-    //    Component.onCompleted: {
-    //        refreshCache()
-    //    }
-
-    //    function refreshCache() {
-    //        navigationPanel.disable()
-
-    //        SearchController.fetchingApplications.connect(showLoadingScreen);
-    //        SearchController.fetchCompleted.connect(goStore);
-    //        SearchController.updateRepositoryError.connect(goStore);
-
-    //        SearchController.searching.connect(showLoadingAppsScreen);
-    //        SearchController.resultsReady.connect(goStore);
-
-    //        SearchController.updateRepository()
-    //        SearchController.search("")
-    //    }
-
-    //    function handleRefreshCacheFinished() {
-    //        if (main.refreshCacheTask.state !== Task.TASK_RUNNING
-    //                && main.refreshCacheTask.state !== Task.TASK_CREATED) {
-    //            goStore()
-    //            main.refreshCacheTask = undefined
-
-    //            navigationPanel.enable()
-
-    //            SearchViewController.search()
-    //            goStore()
-    //        }
-    //    }
 }

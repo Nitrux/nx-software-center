@@ -29,47 +29,6 @@ Item {
                 isDownloaded: Registry.isDownloaded(app_id)
                 onRequestInstall: InstallController.install(app_id)
             }
-/*
-            delegate: AppImageListItemDelegate {
-                codeName: model.modelData['codeName']
-                description: model.modelData['description']
-
-                onRequestDownload: {
-                    taskId = TasksController.download(
-                                model.modelData['id'],
-                                model.modelData['latest_release_id'])
-                    task = TasksController.getTask(taskId)
-                }
-
-                onRequestRemove: {
-                    taskId = TasksController.remove(
-                                model.modelData['id'],
-                                model.modelData['latest_release_id'])
-                    task = TasksController.getTask(taskId)
-                }
-
-                onRequestExecute: {
-                    taskId = TasksController.execute(
-                                model.modelData['id'],
-                                model.modelData['latest_release_id'])
-                    task = TasksController.getTask(taskId)
-                }
-
-                onRequestRefresh: loadData()
-                Component.onCompleted: loadData()
-                Component.onDestruction: {
-                    taskId = ""
-                    task = null
-                }
-
-                function loadData() {
-                    isDownloadable = model.modelData['download_link']
-                    isDownloaded = RegistryController.isReleaseDownloaded(
-                                model.modelData['id'],
-                                model.modelData['latest_release_id'])
-                }
-            }
-*/
         }
     }
 }

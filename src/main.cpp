@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QNetworkAccessManager>
 #include <QList>
+#include <QIcon>
 
 #include "AppImageHubSource.h"
 #include "gateways/SimpleDownloadManager.h"
@@ -29,6 +30,8 @@ int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
+    app.setWindowIcon(QIcon::fromTheme("nx-software-center"));
+    app.setApplicationDisplayName("Nomad Software Center");
     initSoftwareCenterModules(nullptr);
     registerQmlModules();
 

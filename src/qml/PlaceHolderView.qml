@@ -10,11 +10,9 @@ Item {
     property alias message: messageText.text
     property alias iconName: icon.source
     property alias showBusyIndicator: busyModelIndicator.visible
-    objectName: "placeHolderView"
 
     PlasmaComponents.BusyIndicator {
         id: busyModelIndicator
-//        visible: storeSnapsModel.busy
         anchors.centerIn: parent
         anchors.verticalCenterOffset: -60
     }
@@ -26,9 +24,6 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         width: 400
         height: 100
-        
-//        text: storeSnapsModel.errorMessage
-//              == "" ? storeSnapsModel.statusMessage : storeSnapsModel.errorMessage
         
         fontSizeMode: Text.Fit
         horizontalAlignment: Text.AlignHCenter
