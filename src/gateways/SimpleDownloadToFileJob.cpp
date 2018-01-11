@@ -26,6 +26,8 @@ void SimpleDownloadToFileJob::execute() {
                      &SimpleDownloadToFileJob::handleReadyRead);
     QObject::connect(reply, &QNetworkReply::downloadProgress, this,
                      &SimpleDownloadToFileJob::handleDownloadProgress);
+
+    emit  progress(0, 0, QString("Connecting to: %1").arg(request.url().toString()));
 }
 
 void SimpleDownloadToFileJob::executeFromQObjectThread()
