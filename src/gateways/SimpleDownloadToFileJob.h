@@ -11,6 +11,7 @@
 #include <QFile>
 
 #include "DownloadManager.h"
+#include <QTimer>
 
 class SimpleDownloadToFileJob : public DownloadToFileJob {
     Q_OBJECT
@@ -20,6 +21,13 @@ class SimpleDownloadToFileJob : public DownloadToFileJob {
     QNetworkReply *reply = nullptr;
     QFile file;
     bool aborted;
+
+    float speed;
+    qint64 totalBytes;
+    qint64 bytesRead;
+    qint64 bytesReadLastTick;
+    QTimer *timer;
+
 public:
     SimpleDownloadToFileJob(const QNetworkRequest &request, const QString path,
                               QNetworkAccessManager *networkAccessManager,
@@ -39,6 +47,13 @@ protected slots:
     void disposeNetworkReply();
 
     bool isAPositiveReply() const { return reply->error() == QNetworkReply::NoError; }
+
+    void handleTimerTick();
+
+private:
+    QString size_human(float num) const;
+
+    void reportProgress();
 };
 
 

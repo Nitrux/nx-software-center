@@ -157,4 +157,5 @@ void Repository::handleUpdateResults() {
     }
 
     delete fetchApplicationsInteractor;
+    fetchApplicationsInteractor = nullptr;
 }
