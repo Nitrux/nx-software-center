@@ -14,6 +14,7 @@
 #include "ui/TasksController.h"
 #include "ui/InstallController.h"
 
+#include <QQmlDebuggingEnabler>
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
 
@@ -28,7 +29,9 @@ void initSoftwareCenterModules(QObject *parent);
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
+    QQmlDebuggingEnabler enabler;
     QQmlApplicationEngine engine;
+
 
     app.setWindowIcon(QIcon::fromTheme("nx-software-center"));
     app.setApplicationDisplayName("Nomad Software Center");

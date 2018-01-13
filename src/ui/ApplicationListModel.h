@@ -13,6 +13,7 @@ class ApplicationListModel : public QAbstractListModel
     {
         Id = Qt::UserRole + 1,
         Name,
+        Version,
         Description,
     };
 

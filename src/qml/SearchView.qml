@@ -18,16 +18,24 @@ Item {
         anchors.bottomMargin: 6
         anchors.rightMargin: 6
 
-        ListView {
+        GridView {
             id: appImageHubListView
 
             clip: true
 
             model: SearchController.model
-            spacing: 12
-            delegate: AppImageListItemDelegate {
-                isDownloaded: Registry.isDownloaded(app_id)
-                onRequestInstall: InstallController.install(app_id)
+
+            cellWidth: 200
+            cellHeight: 200
+
+            delegate: ApplicationGridItemDelegate {
+                icon: "package-x-generic"
+                name : app_name
+                version : app_version
+//                size : "90 MiB"
+
+                installed: Registry.isDownloaded(app_id)
+                onRequestGet: InstallController.install(app_id)
             }
         }
     }

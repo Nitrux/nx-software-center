@@ -5,7 +5,7 @@
         <file>NavigationPanel.qml</file>
         <file>PlaceHolderView.qml</file>
         <file>TextConstants.qml</file>
-        <file>AppImageListItemDelegate.qml</file>
+        <file>ApplicationGridItemDelegate.qml</file>
         <file>TaskListItemDelegate.qml</file>
         <file>StoreView.qml</file>
         <file>parts/MessageFrame.qml</file>

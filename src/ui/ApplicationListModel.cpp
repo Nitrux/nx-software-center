@@ -11,6 +11,7 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const
     roles.insert(Id, "app_id");
     roles.insert(Name, "app_name");
     roles.insert(Description, "app_description");
+    roles.insert(Version, "app_version");
     return roles;
 }
 
@@ -35,6 +36,9 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Id:
         ret = a.getId();
+        break;
+    case Version:
+        ret = a.getVersion();
         break;
     case Name:
         ret = a.getName();

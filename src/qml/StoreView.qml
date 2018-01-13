@@ -94,8 +94,8 @@ Item {
                 }
 
                 function loadData() {
-                    isDownloadable = model.modelData['download_link']
-                    isDownloaded = RegistryController.isReleaseDownloaded(
+                    showDownloadButton = model.modelData['download_link']
+                    showRemoveButton = RegistryController.isReleaseDownloaded(
                                 model.modelData['id'],
                                 model.modelData['latest_release_id'])
                 }
