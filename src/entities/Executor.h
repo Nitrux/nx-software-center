@@ -31,6 +31,8 @@ public:
 
     QStringList getRunningTasks();
 
+    void cancel(const QString &id);
+
 signals:
 
     void taskStarted(const QString &id);

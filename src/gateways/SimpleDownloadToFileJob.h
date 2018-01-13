@@ -54,6 +54,7 @@ private:
     QString size_human(float num) const;
 
     void reportProgress();
+    void updateDownloadSpeed();
 };
 
 

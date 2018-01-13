@@ -26,6 +26,10 @@ downloadJob(nullptr) {
     metadata.insert(Interactor::META_KEY_DESCRIPTION, d);
     metadata.insert(Interactor::META_KEY_STATUS, Interactor::STATUS_CREATED);
     metadata.insert(Interactor::META_KEY_TYPE, "install");
+
+    metadata.insert(Interactor::META_KEY_APP_ID, app.getId());
+    metadata.insert(Interactor::META_KEY_APP_NAME, app.getName());
+    metadata.insert(Interactor::META_KEY_APP_AUTHOR, app.getAuthors().join(", "));
 }
 
 void InstallAppImageInteractor::execute() {
@@ -44,6 +48,7 @@ void InstallAppImageInteractor::execute() {
             &InstallAppImageInteractor::handleDownloadJobFinished);
     connect(downloadJob, &DownloadToFileJob::error, this,
             &InstallAppImageInteractor::handleDownloadJobError);
+    connect(this, &InstallAppImageInteractor::isCanceledChanged, this, &InstallAppImageInteractor::handleCanceled);
 }
 
 void InstallAppImageInteractor::setCompletedMetadata() {
@@ -64,6 +69,9 @@ void InstallAppImageInteractor::handleDownloadJobProgress(const int value, const
 
 void InstallAppImageInteractor::handleDownloadJobFinished()
 {
+    downloadJob->deleteLater();
+    downloadJob = nullptr;
+
     QFile f(installationPath);
     if (f.exists()) {
         f.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner);
@@ -79,6 +87,12 @@ void InstallAppImageInteractor::handleDownloadJobError(const QString &error)
 {
     qWarning() << "Download Error: " << app.getDownloadUrl() << " " << error;
     emit completed();
+}
+
+void InstallAppImageInteractor::handleCanceled()
+{
+    if (downloadJob)
+        downloadJob->cancel();
 }
 
 void InstallAppImageInteractor::setRunningMetadata() {

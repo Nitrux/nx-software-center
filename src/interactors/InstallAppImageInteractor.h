@@ -32,6 +32,7 @@ protected slots:
     void handleDownloadJobProgress(const int value, const int total, const QString &message);
     void handleDownloadJobFinished();
     void handleDownloadJobError(const QString &error);
+    void handleCanceled();
 };
 
 

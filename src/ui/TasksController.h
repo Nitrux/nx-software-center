@@ -24,6 +24,7 @@ public:
 
     Q_INVOKABLE void assignTaskToApplication(const QString &applicationId, const QString &taskId);
     Q_INVOKABLE QString getTaskOnApplication(const QString &applicationId);
+    Q_INVOKABLE void cancelTask(const QString &id);
 
 signals:
     void modelChanged(TaskListModel *model);

@@ -29,6 +29,11 @@ QString TasksController::getTaskOnApplication(const QString &applicationId) {
     return applicationsTasks.value(applicationId, QString());
 }
 
+void TasksController::cancelTask(const QString &id)
+{
+    executor->cancel(id);
+}
+
 void TasksController::handleTaskStarted(const QString &id) {
     QMutexLocker locker(&mutex);
     const QVariantMap &d = executor->getTaskData(id);

@@ -36,10 +36,21 @@ class DownloadToFileJob : public DownloadJob {
 Q_OBJECT
 protected:
     QString path;
+    Q_PROPERTY(bool isCanceled MEMBER isCanceled NOTIFY isCanceledChanged)
+    bool isCanceled;
 public:
-    DownloadToFileJob(const QString &path, QObject *parent) : DownloadJob(parent), path(path) {};
+    DownloadToFileJob(const QString &path, QObject *parent) : DownloadJob(parent),
+        path(path), isCanceled(false) {};
 
     const QString &getPath() const { return path; }
+
+    void cancel() {
+        isCanceled = true;
+        emit isCanceledChanged(isCanceled);
+    }
+
+signals:
+    void isCanceledChanged(bool isCanceled);
 };
 
 class DownloadManager : public QObject {

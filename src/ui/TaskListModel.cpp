@@ -1,6 +1,5 @@
 #include "TaskListModel.h"
 
-
 TaskListModel::TaskListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -16,6 +15,10 @@ QHash<int, QByteArray> TaskListModel::roleNames() const
     roles.insert(ProgressValue, "task_progress_value");
     roles.insert(ProgressTotal, "task_progress_total");
     roles.insert(ProgressMessage, "task_progress_message");
+
+    roles.insert(AppId, "task_application_id");
+    roles.insert(AppName, "task_application_name");
+    roles.insert(AppAuthor, "task_application_author");
     return roles;
 }
 
@@ -62,6 +65,15 @@ QVariant TaskListModel::data(const QModelIndex &index, int role) const
         break;
     case ProgressMessage:
         ret = t.value("progress_message");
+        break;
+    case AppId:
+        ret = t.value("task_application_id");
+        break;
+    case AppName:
+        ret = t.value("task_application_name");
+        break;
+    case AppAuthor:
+        ret = t.value("task_application_author");
         break;
     default:
         break;

@@ -64,6 +64,14 @@ QStringList Executor::getRunningTasks() {
     return interactors.keys();
 }
 
+void Executor::cancel(const QString &id)
+{
+    QMutexLocker locker(&lock);
+    Interactor *i = interactors.value(id, nullptr);
+    if (i)
+        i->cancel();
+}
+
 void Executor::handleInteractorMetadataChanged(const QVariantMap &data) {
     QMutexLocker locker(&lock);
     Interactor *i = dynamic_cast<Interactor *>(sender());

@@ -54,10 +54,11 @@ void SimpleDownloadToFileJob::handleDownloadProgress(qint64 bytesRead, qint64 to
 }
 
 void SimpleDownloadToFileJob::reportProgress() {
+
     QString speed = size_human(this->speed);
     QString progressValue = size_human(this->bytesRead);
     QString progressTotal = size_human(this->totalBytes);
-    static const QString messageTemplate = "%1 of %2 where downloaded. Speed %3/s";emit
+    static const QString messageTemplate = "%1 of %2 --- %3/s";
 
     emit progress(this->bytesRead, this->totalBytes, messageTemplate.arg(progressValue, progressTotal, speed));
 }
@@ -96,11 +97,19 @@ QString SimpleDownloadToFileJob::size_human(float num) const {
     return QString().setNum(num, 'f', 2) + " " + unit;
 }
 
-void SimpleDownloadToFileJob::handleTimerTick() {
+void SimpleDownloadToFileJob::updateDownloadSpeed()
+{
     qint64 diff = bytesRead - bytesReadLastTick;
     bytesReadLastTick = bytesRead;
 
     speed = (speed + diff) / 2;
 
     reportProgress();
+}
+
+void SimpleDownloadToFileJob::handleTimerTick() {
+    if (isCanceled) {
+        reply->abort();
+    } else
+        updateDownloadSpeed();
 }

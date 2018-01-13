@@ -23,6 +23,14 @@ Item {
             model: TasksController.model
             spacing: 12
             delegate: TaskListItemDelegate {
+                onRequestCancel: TasksController.cancelTask(task_id)
+                app_icon: "package-x-generic"
+                app_name: task_application_name;
+                app_author: task_application_author;
+
+                progress_value: task_progress_value
+                progress_total: task_progress_total
+                progress_message: task_progress_message
             }
         }
     }

@@ -9,7 +9,11 @@
 class Interactor : public QObject {
 Q_OBJECT
     QString id;
+    bool stoped;
     QReadWriteLock readWriteLock;
+
+    Q_PROPERTY(bool isCanceled MEMBER isCanceled NOTIFY isCanceledChanged)
+    bool isCanceled;
 
 public:
     static constexpr const char* META_KEY_STATUS = "status";
@@ -18,6 +22,10 @@ public:
     static constexpr const char* META_KEY_PROGRESS_VALUE = "progress_value";
     static constexpr const char* META_KEY_PROGRESS_TOTAL = "progress_total";
     static constexpr const char* META_KEY_PROGRESS_MESSAGE = "progress_message";
+
+    static constexpr const char* META_KEY_APP_ID = "task_application_id";
+    static constexpr const char* META_KEY_APP_NAME = "task_application_name";
+    static constexpr const char* META_KEY_APP_AUTHOR = "task_application_author";
 
     static constexpr const char* STATUS_CREATED = "created";
     static constexpr const char* STATUS_RUNNING = "running";
@@ -41,12 +49,18 @@ public:
         return ret;
     }
 
+    void cancel() {
+        isCanceled = true;
+        emit isCanceledChanged(isCanceled);
+    }
+
 
 signals:
     void completed();
 
     void metadataChanged(const QVariantMap &changes);
 
+    void isCanceledChanged(bool isCanceled);
 public slots:
     virtual void execute() = 0;
 
