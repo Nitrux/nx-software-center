@@ -21,44 +21,41 @@ TasksController::TasksController(Executor *executor, QObject *parent)
         model->addTask(id, executor->getTaskData(id));
 }
 
-void TasksController::assignTaskToApplication(const QString &applicationId, const QString &taskId) {
-    applicationsTasks.insert(applicationId, taskId);
-}
-
-QString TasksController::getTaskOnApplication(const QString &applicationId) {
-    return applicationsTasks.value(applicationId, QString());
-}
-
 void TasksController::cancelTask(const QString &id)
 {
     executor->cancel(id);
 }
+
 
 void TasksController::handleTaskStarted(const QString &id) {
     QMutexLocker locker(&mutex);
     const QVariantMap &d = executor->getTaskData(id);
 
     model->addTask(id, d);
+
+    QString appId = d.value("task_application_id").toString();
+    if (!appId.isEmpty()) {
+        affectedApplicationsIds.append(appId);
+        emit affectedApplicationsIdsChanged(affectedApplicationsIds);
+    }
 }
 
 void TasksController::handleTaskCompleted(const QString &id) {
     QMutexLocker locker(&mutex);
-    removeTaskApplicationRelation(id);
 
     model->removeTask(id);
+
+    const QVariantMap d = model->getTask(id);
+
+    QString appId = d.value("task_application_id").toString();
+    if (!appId.isEmpty()) {
+        affectedApplicationsIds.removeOne(appId);
+        emit affectedApplicationsIdsChanged(affectedApplicationsIds);
+    }
 }
 
 void TasksController::handleTaskDataChanged(const QString &id, const QVariantMap &data)
 {
     QMutexLocker locker(&mutex);
     model->updateTask(id, data);
-}
-
-void TasksController::removeTaskApplicationRelation(const QString &id)  {
-    for (const QString &key : applicationsTasks.keys()) {
-        if (id == applicationsTasks.value(key)) {
-            applicationsTasks.remove(key);
-            break;
-        }
-    }
 }

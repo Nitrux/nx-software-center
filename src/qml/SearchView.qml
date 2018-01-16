@@ -34,6 +34,7 @@ Item {
                 version : app_version
 //                size : "90 MiB"
 
+                hasPendingAction: app_id in TasksController.affectedApplicationsIds
                 installed: Registry.isDownloaded(app_id)
                 onRequestGet: InstallController.install(app_id)
             }

@@ -117,3 +117,8 @@ void TaskListModel::removeTask(const QString &id)
 
     endRemoveRows();
 }
+
+QVariantMap TaskListModel::getTask(const QString &id)
+{
+    return tasks.value(id);
+}

@@ -14,20 +14,20 @@
 class TasksController : public QObject {
 Q_OBJECT
 
-    Q_PROPERTY(TaskListModel *model MEMBER model NOTIFY modelChanged);
+    Q_PROPERTY(TaskListModel *model MEMBER model NOTIFY modelChanged)
+    Q_PROPERTY(QStringList affectedApplicationsIds MEMBER affectedApplicationsIds NOTIFY affectedApplicationsIdsChanged)
     TaskListModel *model;
     Executor *executor;
-    QMap<QString, QString> applicationsTasks;
     QMutex mutex;
+    QStringList affectedApplicationsIds;
 public:
     TasksController(Executor *executor, QObject *parent = 0);
 
-    Q_INVOKABLE void assignTaskToApplication(const QString &applicationId, const QString &taskId);
-    Q_INVOKABLE QString getTaskOnApplication(const QString &applicationId);
     Q_INVOKABLE void cancelTask(const QString &id);
 
 signals:
     void modelChanged(TaskListModel *model);
+    void affectedApplicationsIdsChanged(QStringList affectedApplicationsIds);
 
 protected slots:
 

@@ -34,6 +34,7 @@ public:
     void addTask(const QString &id, const QVariantMap &data);
     void updateTask(const QString &id, const QVariantMap &data);
     void removeTask(const QString &id);
+    QVariantMap getTask(const QString &id);
 private:
 };
 
