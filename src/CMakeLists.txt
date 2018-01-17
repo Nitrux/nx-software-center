@@ -13,7 +13,21 @@ set(CORE_SRC
     AppImageInstallLinksRegExParser.cpp
     gateways/SimpleDownloadManager.cpp
     gateways/SimpleDownloadToMemoryJob.cpp
-    gateways/SimpleDownloadToMemoryJob.h entities/Registry.cpp entities/Registry.h gateways/SimpleDownloadToFileJob.cpp gateways/SimpleDownloadToFileJob.h entities/Executor.cpp entities/Executor.h interactors/InstallAppImageInteractor.cpp interactors/InstallAppImageInteractor.h)
+    gateways/SimpleDownloadToMemoryJob.h
+    entities/Registry.cpp
+    entities/Registry.h
+    gateways/SimpleDownloadToFileJob.cpp
+    gateways/SimpleDownloadToFileJob.h
+    entities/Executor.cpp
+    entities/Executor.h
+    interactors/InstallAppImageInteractor.cpp
+    interactors/InstallAppImageInteractor.h
+    gateways/FileDownload.cpp
+    gateways/FileDownload.h
+    gateways/Download.h
+    gateways/Download.cpp
+    gateways/ContentDownload.cpp
+    gateways/ContentDownload.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -30,7 +44,7 @@ target_include_directories(core
 # Main
 ######
 
-set (UI_SRC
+set(UI_SRC
     ui/ApplicationListModel.cpp
     ui/SearchControler.cpp ui/TasksController.cpp ui/TasksController.h ui/TaskListModel.cpp ui/TaskListModel.h
     ui/InstallController.h

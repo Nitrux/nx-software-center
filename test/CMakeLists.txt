@@ -19,7 +19,7 @@ add_executable(tests
     src/TestAppImageInstallLinksRegExParser.cpp
     src/FakeDownloadManager.cpp
     src/FakeDownloadManager.h
-    src/TestExecutor.cpp)
+    src/TestExecutor.cpp src/TestDownload.cpp)
 
 target_include_directories(tests
     PRIVATE ${CMAKE_SOURCE_DIR}/src/
