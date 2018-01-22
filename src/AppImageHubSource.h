@@ -24,7 +24,7 @@ Q_OBJECT
     QString url;
 
     DownloadManager *downloadManager;
-    DownloadToMemoryJob *job = nullptr;
+    ContentDownload *job = nullptr;
     QList<Application> results;
     QList<QVariantMap> appsData;
     QList<AppImageInstallLinksRegExParser *> parsers;

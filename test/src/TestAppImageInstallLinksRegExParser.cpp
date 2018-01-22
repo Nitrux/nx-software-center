@@ -3,7 +3,7 @@
 #include <QSignalSpy>
 
 #include "AppImageInstallLinksRegExParser.h"
-#include "FakeDownloadManager.h"
+#include "gateways/CachedDownloadManager.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {
     class TestAppImageInstallLinksRegExParser : public testing::Test {
@@ -16,9 +16,9 @@ namespace NX_SOFTWARE_CENTER_TESTS {
     };
 
     TEST_F(TestAppImageInstallLinksRegExParser, parseLinks) {
-        FakeDownloadManager downloadManager;
+        QNetworkAccessManager networkAccessManager;
+        CachedDownloadManager downloadManager(&networkAccessManager);
         AppImageInstallLinksRegExParser p("https://github.com/AlduinApp/alduin/releases", &downloadManager);
-
 
         static QStringList req_result;
         static QString req_error;

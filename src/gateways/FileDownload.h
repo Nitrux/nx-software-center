@@ -33,7 +33,9 @@ protected slots:
 
     void handleReadyRead();
 
-    void handleFinished() override;
+    void handleCompleted();
+
+    void handleStopped();
 
 private:
     void downloadAvailableBytes();

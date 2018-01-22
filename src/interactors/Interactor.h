@@ -13,7 +13,9 @@ Q_OBJECT
     QReadWriteLock readWriteLock;
 
     Q_PROPERTY(bool isCanceled MEMBER isCanceled NOTIFY isCanceledChanged)
+protected:
     bool isCanceled;
+    QVariantMap metadata;
 
 public:
     static constexpr const char* META_KEY_STATUS = "status";
@@ -65,7 +67,6 @@ public slots:
     virtual void execute() = 0;
 
 protected:
-    QVariantMap metadata;
     void setMetadata(const QVariantMap &data) {
         readWriteLock.lockForWrite();
         for (const QString &k : data.keys())

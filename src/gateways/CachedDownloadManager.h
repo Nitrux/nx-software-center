@@ -9,20 +9,6 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include "gateways/DownloadManager.h"
 
-class CachedDownloadToMemoryJob : public DownloadToMemoryJob {
-Q_OBJECT
-
-    QString url;
-    QString file;
-public:
-    CachedDownloadToMemoryJob(const QString &qString, const QString &file, QObject *parent);
-
-    void execute() override;
-
-private:
-    QByteArray readFile(const QString &path) const;
-};
-
 class CachedDownloadManager : public DownloadManager {
 Q_OBJECT
     QNetworkAccessManager *networkAccessManager;
@@ -33,19 +19,21 @@ public:
 
     virtual ~CachedDownloadManager();
 
-    DownloadToFileJob *downloadToFile(const QString &url, const QString &path) override;
+    FileDownload *download(const QString &url, const QString &path) override;
 
-    DownloadToMemoryJob *downloadToMemory(const QString &url) override;
+    ContentDownload *download(const QString &url) override;
 
 
 private:
-    QNetworkRequest createFollowRedirectRequest(const QString &url) const;
-
     void writeFile(const QString &path, const QByteArray &data) const;
 
     void writeCacheIndex();
 
     void readCacheIndex();
+
+    QString getCachePath(const QString &url) const;
+
+    QByteArray readFile(const QString &path) const;
 };
 
 

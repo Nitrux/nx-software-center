@@ -4,6 +4,8 @@
 
 #include <QThreadPool>
 #include <QMutexLocker>
+#include <QDebug>
+#include <QCoreApplication>
 
 #include "Executor.h"
 #include "interactors/Interactor.h"

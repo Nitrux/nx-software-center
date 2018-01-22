@@ -92,11 +92,11 @@ ApplicationWindow {
     }
 
     function showUpdateErrorMessage() {
-        stackView.goTo("placeHolderView", placeHolderView);
+        stackView.goTo("placeHolderView", "qrc:/PlaceHolderView.qml");
         var item = stackView.findItemByObjectName("placeHolderView");
 
-        item.message = textConstants.unknownError
-        item.iconName = "face-sad";
+        item.message = textConstants.fetchError
+        item.iconName = "network-wireless-disconnected";
         item.showBusyIndicator = false;
     }
 }

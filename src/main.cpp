@@ -49,7 +49,7 @@ void initSoftwareCenterModules(QObject *parent) {
     executor = new Executor();
 
     networkAccessManager = new QNetworkAccessManager(parent);
-    downloadManager = new CachedDownloadManager(networkAccessManager, parent);
+    downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
 
 
     AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);

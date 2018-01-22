@@ -15,31 +15,33 @@ AppImageInstallLinksRegExParser::AppImageInstallLinksRegExParser(const QString &
 
 void AppImageInstallLinksRegExParser::parse() {
     if (job == nullptr) {
-        job = downloadManager->downloadToMemory(url);
-        QObject::connect(job, &DownloadJob::finished, this,
+        job = downloadManager->download(url);
+        QObject::connect(job, &ContentDownload::completed, this,
                          &AppImageInstallLinksRegExParser::handleDownloadFinished);
 
-        QObject::connect(job, &DownloadJob::error, this,
+        QObject::connect(job, &ContentDownload::stopped, this,
                          &AppImageInstallLinksRegExParser::error);
 
-        job->execute();
+        job->start();
     }
 
 }
 
 void AppImageInstallLinksRegExParser::handleDownloadFinished() {
-    const QByteArray &data = job->getData();
+    if (job) {
+        const QByteArray &data = job->getContent();
 
-    QStringList list = parseAppimageLinks(data);
-    QStringList absoluteLinks = resolveRelativeLinks(list);
+        QStringList list = parseAppimageLinks(data);
+        QStringList absoluteLinks = resolveRelativeLinks(list);
 
-    for (QString link: absoluteLinks)
-            emit newLink(link);
+        for (QString link: absoluteLinks)
+                emit newLink(link);
 
-    emit finished();
+        emit finished();
 
-    job->deleteLater();
-    job = nullptr;
+        job->deleteLater();
+        job = nullptr;
+    }
 }
 
 QStringList AppImageInstallLinksRegExParser::resolveRelativeLinks(const QStringList &list) const {

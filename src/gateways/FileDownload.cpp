@@ -19,8 +19,11 @@ const QString FileDownload::getTarget_path() const {
 void FileDownload::start() {
     FileDownload::file.open(QIODevice::WriteOnly);
 
+    QObject::connect(this, &Download::completed, this, &FileDownload::handleCompleted);
+    QObject::connect(this, &Download::stopped, this, &FileDownload::handleStopped);
+
     Download::start();
-    QObject::connect(reply, &QIODevice::readyRead, this,
+    QObject::connect(reply.data(), &QIODevice::readyRead, this,
                      &FileDownload::handleReadyRead);
 }
 
@@ -33,13 +36,13 @@ void FileDownload::downloadAvailableBytes() {
         file.write(reply->readAll());
 }
 
-void FileDownload::handleFinished() {
+void FileDownload::handleCompleted() {
     downloadAvailableBytes();
 
     FileDownload::file.close();
-    if (!wasCompletedProperly())
-        FileDownload::file.remove();
+}
 
-    Download::handleFinished();
+void FileDownload::handleStopped() {
+    FileDownload::file.remove();
 }
 

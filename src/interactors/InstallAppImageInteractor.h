@@ -13,11 +13,10 @@ class InstallAppImageInteractor : public  Interactor {
     Q_OBJECT
     Application app;
     DownloadManager *downloadManager;
-    DownloadToFileJob *downloadJob;
+    FileDownload *downloadJob;
     QString installationPath;
-    void createInstallationDirIfNotExist();
 
-    void createInstallationPath(QString appFileName);
+    bool isRunning;
 
 public:
     InstallAppImageInteractor(const Application &application, DownloadManager *downloadManager, QObject *parent = nullptr);
@@ -33,6 +32,11 @@ protected slots:
     void handleDownloadJobFinished();
     void handleDownloadJobError(const QString &error);
     void handleCanceled();
+
+private:
+    void createInstallationDirIfNotExist();
+
+    void createInstallationPath(QString appFileName);
 };
 
 

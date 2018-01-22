@@ -69,6 +69,7 @@ PlasmaComponents.ListItem {
             PlasmaComponents.Label {
                 id: labelProgress
                 Layout.alignment: Qt.AlignHCenter
+                Layout.maximumWidth: 300
                 wrapMode: Text.WordWrap
 
                 text: task_progress_message ? task_progress_message : ""

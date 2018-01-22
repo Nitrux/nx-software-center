@@ -12,12 +12,8 @@ set(CORE_SRC
     interactors/FetchApplicationsInteractor.cpp
     AppImageInstallLinksRegExParser.cpp
     gateways/SimpleDownloadManager.cpp
-    gateways/SimpleDownloadToMemoryJob.cpp
-    gateways/SimpleDownloadToMemoryJob.h
     entities/Registry.cpp
     entities/Registry.h
-    gateways/SimpleDownloadToFileJob.cpp
-    gateways/SimpleDownloadToFileJob.h
     entities/Executor.cpp
     entities/Executor.h
     interactors/InstallAppImageInteractor.cpp
@@ -27,7 +23,10 @@ set(CORE_SRC
     gateways/Download.h
     gateways/Download.cpp
     gateways/ContentDownload.cpp
-    gateways/ContentDownload.h)
+    gateways/ContentDownload.h
+    gateways/CachedDownloadManager.h
+    gateways/CachedDownloadManager.cpp
+    )
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -54,7 +53,6 @@ qt5_add_resources(qml_QRC qml/files.qrc)
 
 add_executable(nx_software_center
     main.cpp
-    gateways/CachedDownloadManager.cpp
     ${UI_SRC}
     ${qml_QRC})
 

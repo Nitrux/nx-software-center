@@ -6,15 +6,16 @@
 #include "Download.h"
 
 Download::Download(QString url, QObject *parent) : QObject(parent), source_url(url),
-                                                          progressNotificationsEnabled(false),
-                                                          isStopRequested(false),
-                                                          networkAccessManager(nullptr) {
-
+                                                   running(false),
+                                                   progressNotificationsEnabled(false),
+                                                   isStopRequested(false),
+                                                   networkAccessManager(nullptr),
+                                                   speed(0) {
 }
 
 
 Download::~Download() {
-    reply->deleteLater();
+    reply.clear();
 }
 
 const QString &Download::getSource_url() const {
@@ -30,23 +31,25 @@ void Download::setNetworkAccessManager(QNetworkAccessManager *networkAccessManag
 }
 
 void Download::start() {
-    createNetworkAccessManagerIfNotExist();
+    if (!running) {
+        running = true;
+        createNetworkAccessManagerIfNotExist();
 
-    QNetworkRequest request = createRequest();
+        QNetworkRequest request = createRequest();
 
-    reply = networkAccessManager->get(request);
+        reply = QSharedPointer<QNetworkReply>(networkAccessManager->get(request));
 
-    QObject::connect(reply, &QNetworkReply::finished, this, &Download::handleFinished);
+        QObject::connect(reply.data(), &QNetworkReply::finished, this, &Download::handleFinished);
 
-    if (progressNotificationsEnabled) {
-        QObject::connect(reply, &QNetworkReply::downloadProgress, this, &Download::handleDownloadProgress);
+        if (progressNotificationsEnabled) {
+            QObject::connect(reply.data(), &QNetworkReply::downloadProgress, this, &Download::handleDownloadProgress);
 
-        connect(&timer, &QTimer::timeout, this, &Download::handleTimerTick);
-        timer.start(1000);
+            connect(&timer, &QTimer::timeout, this, &Download::handleTimerTick);
+            timer.start(1000);
 
-        emit  progress(0, 0, QString("Connecting to: %1").arg(request.url().toString()));
+            emit  progress(0, 0, QString("Connecting to: %1").arg(request.url().toString()));
+        }
     }
-
 }
 
 QNetworkRequest Download::createRequest() const {
@@ -74,7 +77,7 @@ void Download::handleDownloadProgress(qint64 bytesRead, qint64 totalBytes) {
     reportProgress();
 }
 
-QString Download::memoryToHumanFriendlyString(float num) {
+QString Download::formatMemoryValue(float num) {
     QStringList list;
     list << "KiB" << "MiB" << "GiB" << "TiB";
 
@@ -105,6 +108,7 @@ void Download::handleTimerTick() {
 }
 
 void Download::handleFinished() {
+    running = false;
     if (wasCompletedProperly())
             emit completed();
     else {
@@ -114,9 +118,9 @@ void Download::handleFinished() {
 }
 
 void Download::reportProgress() {
-    QString speed = memoryToHumanFriendlyString(this->speed);
-    QString progressValue = memoryToHumanFriendlyString(this->bytesRead);
-    QString progressTotal = memoryToHumanFriendlyString(this->totalBytes);
+    QString speed = formatMemoryValue(this->speed);
+    QString progressValue = formatMemoryValue(this->bytesRead);
+    QString progressTotal = formatMemoryValue(this->totalBytes);
     static const QString messageTemplate = "%1 of %2 --- %3/s";
 
     emit progress(this->bytesRead, this->totalBytes, messageTemplate.arg(progressValue, progressTotal, speed));
@@ -131,3 +135,5 @@ void Download::setProgressNotificationsEnabled(bool progressNotificationsEnabled
     Download::progressNotificationsEnabled = progressNotificationsEnabled;
 }
 
+
+bool Download::isRunning() { return running; }

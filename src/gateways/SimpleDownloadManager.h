@@ -19,9 +19,9 @@ public:
     SimpleDownloadManager(QNetworkAccessManager *networkAccessManager,
                           QObject *parent);
 
-    DownloadToFileJob *downloadToFile(const QString &url, const QString &path) override;
+    FileDownload *download(const QString &url, const QString &path) override;
 
-    DownloadToMemoryJob *downloadToMemory(const QString &url) override;
+    ContentDownload *download(const QString &url) override;
 
 protected:
     QNetworkRequest createFollowRedirectRequest(const QString &url) const;

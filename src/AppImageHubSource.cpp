@@ -7,31 +7,33 @@
 
 void AppImageHubSource::fetchAllApplications() {
     if (job == nullptr) {
-        job = downloadManager->downloadToMemory(url);
-        connect(job, &DownloadJob::finished, this,
+        job = downloadManager->download(url);
+        connect(job, &Download::completed, this,
                 &AppImageHubSource::handleDownloadFinished);
-        connect(job, &DownloadJob::error, this,
+        connect(job, &Download::stopped, this,
                 &Source::fetchError);
-        job->execute();
+        job->start();
     }
 }
 
 void AppImageHubSource::handleDownloadFinished() {
-    const QByteArray &data = job->getData();
-    appsData = parseApplicationsDataFromJson(data);
+    if (job != nullptr) {
+        const QByteArray &data = job->getContent();
+        appsData = parseApplicationsDataFromJson(data);
 
-    parsers.clear();
-    parsersFinished = 0;
-    isAwaintingForParsers = false;
-    for (const QVariantMap &appData : appsData)
-        spawnApplicationReleasesParser(appData);
+        parsers.clear();
+        parsersFinished = 0;
+        isAwaintingForParsers = false;
+        for (const QVariantMap &appData : appsData)
+            spawnApplicationReleasesParser(appData);
 
-    isAwaintingForParsers = true;
-    if (areAllApplicationReleasesParsersFinished())
-            emit fetchedAllApplications(results);
+        isAwaintingForParsers = true;
+        if (areAllApplicationReleasesParsersFinished())
+                emit fetchedAllApplications(results);
 
-    job->deleteLater();
-    job = nullptr;
+        job->deleteLater();
+        job = nullptr;
+    }
 }
 
 bool AppImageHubSource::areAllApplicationReleasesParsersFinished() const {

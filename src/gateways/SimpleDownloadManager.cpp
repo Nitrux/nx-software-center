@@ -1,11 +1,4 @@
 #include "SimpleDownloadManager.h"
-#include "SimpleDownloadToMemoryJob.h"
-#include "SimpleDownloadToFileJob.h"
-
-#include <QUrl>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QNetworkAccessManager>
 
 
 SimpleDownloadManager::SimpleDownloadManager(QNetworkAccessManager *networkAccessManager, QObject *parent)
@@ -14,24 +7,14 @@ SimpleDownloadManager::SimpleDownloadManager(QNetworkAccessManager *networkAcces
           networkReply(nullptr) {}
 
 
-QNetworkRequest SimpleDownloadManager::createFollowRedirectRequest(const QString &url) const {
-    QNetworkRequest request = QNetworkRequest(QUrl(url));
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
-    return request;
-}
+FileDownload *SimpleDownloadManager::download(const QString &url, const QString &path) {
+    FileDownload *job = new FileDownload(url, path);
 
-DownloadToFileJob *SimpleDownloadManager::downloadToFile(const QString &url, const QString &path) {
-    QNetworkRequest request = createFollowRedirectRequest(url);
-    SimpleDownloadToFileJob *job = new SimpleDownloadToFileJob(request, path, networkAccessManager, this);
-    job->execute();
     return job;
 }
 
-DownloadToMemoryJob *SimpleDownloadManager::downloadToMemory(const QString &url) {
-    QNetworkRequest request = createFollowRedirectRequest(url);
+ContentDownload *SimpleDownloadManager::download(const QString &url) {
+    ContentDownload *job = new ContentDownload(url);
 
-    SimpleDownloadToMemoryJob *job = new SimpleDownloadToMemoryJob(request, networkAccessManager, this);
-    job->execute();
     return job;
 }
-

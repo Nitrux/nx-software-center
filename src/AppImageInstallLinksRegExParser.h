@@ -15,7 +15,7 @@ class AppImageInstallLinksRegExParser : public QObject {
 Q_OBJECT
     QString url;
     DownloadManager *downloadManager;
-    DownloadToMemoryJob * job = nullptr;
+    ContentDownload * job = nullptr;
 public:
     AppImageInstallLinksRegExParser(const QString &url, DownloadManager *downloadManager,
                                     QObject *parent = nullptr);

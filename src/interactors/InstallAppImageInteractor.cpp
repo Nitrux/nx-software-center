@@ -4,6 +4,7 @@
 
 #include <QDir>
 #include <QThread>
+#include <QCoreApplication>
 #include <QDebug>
 
 #include <entities/Application.h>
@@ -35,20 +36,29 @@ downloadJob(nullptr) {
 void InstallAppImageInteractor::execute() {
     setRunningMetadata();
 
-
     QDir home = QDir::home();
     home.mkdir("bin");
 
-    downloadJob = downloadManager->downloadToFile(app.getDownloadUrl(),
+    downloadJob = downloadManager->download(app.getDownloadUrl(),
                                                   installationPath);
 
-    connect(downloadJob, &DownloadToFileJob::progress, this,
-            &InstallAppImageInteractor::handleDownloadJobProgress);
-    connect(downloadJob, &DownloadToFileJob::finished, this,
-            &InstallAppImageInteractor::handleDownloadJobFinished);
-    connect(downloadJob, &DownloadToFileJob::error, this,
-            &InstallAppImageInteractor::handleDownloadJobError);
-    connect(this, &InstallAppImageInteractor::isCanceledChanged, this, &InstallAppImageInteractor::handleCanceled);
+    connect(downloadJob, &Download::progress,
+            this, &InstallAppImageInteractor::handleDownloadJobProgress);
+    connect(downloadJob, &Download::completed,
+            this, &InstallAppImageInteractor::handleDownloadJobFinished);
+    connect(downloadJob, &Download::stopped,
+            this, &InstallAppImageInteractor::handleDownloadJobError);
+    connect(this, &InstallAppImageInteractor::isCanceledChanged,
+            this, &InstallAppImageInteractor::handleCanceled);
+
+    isRunning = true;
+    downloadJob->setProgressNotificationsEnabled(true);
+    downloadJob->start();
+
+    while (isRunning) {
+        qApp->processEvents();
+        QThread::usleep(2);
+    }
 }
 
 void InstallAppImageInteractor::setCompletedMetadata() {
@@ -81,18 +91,20 @@ void InstallAppImageInteractor::handleDownloadJobFinished()
 
     setCompletedMetadata();
     emit completed();
+    isRunning = false;
 }
 
 void InstallAppImageInteractor::handleDownloadJobError(const QString &error)
 {
     qWarning() << "Download Error: " << app.getDownloadUrl() << " " << error;
     emit completed();
+    isRunning = false;
 }
 
 void InstallAppImageInteractor::handleCanceled()
 {
     if (downloadJob)
-        downloadJob->cancel();
+        downloadJob->stop();
 }
 
 void InstallAppImageInteractor::setRunningMetadata() {

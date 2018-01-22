@@ -8,10 +8,12 @@
 
 #include <QTimer>
 #include <QNetworkReply>
+#include <QSharedPointer>
 
 class Download : public QObject {
 Q_OBJECT
     QString source_url;
+    bool running;
     bool progressNotificationsEnabled;
 
 public:
@@ -30,6 +32,8 @@ public:
     virtual void start();
 
     virtual void stop();
+
+    bool isRunning();
 
 signals:
 
@@ -50,7 +54,7 @@ protected slots:
 protected:
     bool isStopRequested;
     QNetworkAccessManager *networkAccessManager;
-    QNetworkReply *reply;
+    QSharedPointer<QNetworkReply> reply;
 
     QTimer timer;
     float speed;
@@ -58,7 +62,7 @@ protected:
     qint64 bytesRead;
     qint64 bytesReadLastTick;
 
-    static QString memoryToHumanFriendlyString(float num);
+    static QString formatMemoryValue(float num);
 
     void createNetworkAccessManagerIfNotExist();
 
