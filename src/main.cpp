@@ -13,6 +13,7 @@
 #include "ui/SearchControler.h"
 #include "ui/TasksController.h"
 #include "ui/InstallController.h"
+#include "ui/RegistryController.h"
 
 #include <QQmlDebuggingEnabler>
 
@@ -22,6 +23,7 @@ Repository *repository;
 DownloadManager *downloadManager = nullptr;
 QNetworkAccessManager *networkAccessManager = nullptr;
 Executor *executor = nullptr;
+Registry *registry = nullptr;
 
 
 void registerQmlModules();
@@ -48,6 +50,9 @@ int main(int argc, char *argv[]) {
 void initSoftwareCenterModules(QObject *parent) {
     executor = new Executor();
 
+    registry = new Registry();
+    QObject::connect(executor, &Executor::taskCompleted, registry, &Registry::handleTaskCompleted);
+
     networkAccessManager = new QNetworkAccessManager(parent);
     downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
 
@@ -65,11 +70,6 @@ static QObject *searchControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return searchControler;
 }
 
-static QObject *registrySingletonProvider(QQmlEngine *, QJSEngine *) {
-    Registry *r = new Registry(nullptr);
-    return r;
-}
-
 static QObject *tasksControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     TasksController *taskControler = new TasksController(executor);
     return taskControler;
@@ -80,20 +80,26 @@ static QObject *installControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return installControler;
 }
 
+static QObject *registryControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    RegistryController *registryControler = new RegistryController(registry);
+    return registryControler;
+}
+
 void registerQmlModules() {
     qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, 1, 0,
                                               "SearchController",
                                               searchControllerSingletonProvider);
 
-    qmlRegisterSingletonType<Registry>(QML_MODULE_NAMESPACE, 1, 0,
-                                       "Registry",
-                                       registrySingletonProvider);
 
-    qmlRegisterSingletonType<Registry>(QML_MODULE_NAMESPACE, 1, 0,
+    qmlRegisterSingletonType<TasksController>(QML_MODULE_NAMESPACE, 1, 0,
                                        "TasksController",
                                        tasksControllerSingletonProvider);
 
-    qmlRegisterSingletonType<Registry>(QML_MODULE_NAMESPACE, 1, 0,
+    qmlRegisterSingletonType<InstallController>(QML_MODULE_NAMESPACE, 1, 0,
                                        "InstallController",
                                        installControllerSingletonProvider);
+
+    qmlRegisterSingletonType<RegistryController>(QML_MODULE_NAMESPACE, 1, 0,
+                                       "RegistryController",
+                                       registryControllerSingletonProvider);
 }

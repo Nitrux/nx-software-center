@@ -12,28 +12,16 @@ Q_OBJECT
     bool stoped;
     QReadWriteLock readWriteLock;
 
-    Q_PROPERTY(bool isCanceled MEMBER isCanceled NOTIFY isCanceledChanged)
+    Q_PROPERTY(bool isCanceled
+                       MEMBER
+                       isCanceled
+                       NOTIFY
+                       isCanceledChanged)
 protected:
     bool isCanceled;
     QVariantMap metadata;
 
 public:
-    static constexpr const char* META_KEY_STATUS = "status";
-    static constexpr const char* META_KEY_TYPE = "type";
-    static constexpr const char* META_KEY_DESCRIPTION = "description";
-    static constexpr const char* META_KEY_PROGRESS_VALUE = "progress_value";
-    static constexpr const char* META_KEY_PROGRESS_TOTAL = "progress_total";
-    static constexpr const char* META_KEY_PROGRESS_MESSAGE = "progress_message";
-
-    static constexpr const char* META_KEY_APP_ID = "task_application_id";
-    static constexpr const char* META_KEY_APP_NAME = "task_application_name";
-    static constexpr const char* META_KEY_APP_AUTHOR = "task_application_author";
-
-    static constexpr const char* STATUS_CREATED = "created";
-    static constexpr const char* STATUS_RUNNING = "running";
-    static constexpr const char* STATUS_COMPLETED = "completed";
-    static constexpr const char* STATUS_FAILED = "failed";
-
     explicit Interactor(QObject *parent = nullptr) : QObject(parent) { id = QUuid::createUuid().toString(); }
 
     explicit Interactor(const QString &id, QObject *parent = nullptr) : QObject(parent), id(id) {}
@@ -41,6 +29,7 @@ public:
     virtual ~Interactor() {}
 
     QString getId() { return id; }
+
 
     const QVariantMap getMetadata() {
         readWriteLock.lockForRead();
@@ -58,12 +47,15 @@ public:
 
 
 signals:
+
     void completed();
 
     void metadataChanged(const QVariantMap &changes);
 
     void isCanceledChanged(bool isCanceled);
+
 public slots:
+
     virtual void execute() = 0;
 
 protected:

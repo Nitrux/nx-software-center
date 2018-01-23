@@ -1,0 +1,67 @@
+//
+// Created by alexis on 22/01/18.
+//
+
+#ifndef NOMAD_SOFTWARE_CENTER_TESTREGISTRY_H
+#define NOMAD_SOFTWARE_CENTER_TESTREGISTRY_H
+
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+
+#include "entities/Registry.h"
+#include "interactors/TaskMetadata.h"
+#include "entities/RecordMetadata.h"
+
+namespace NX_SOFTWARE_CENTER_TESTS {
+    class TestRegistry : public testing::Test {
+
+    public:
+        static QVariantMap createTaskMetadata(const char *app_id) {
+            QVariantMap task;
+            task.insert(TaskMetadata::KEY_TYPE, TaskMetadata::VALUE_TYPE_INSTALL);
+            task.insert(TaskMetadata::KEY_APP_ID, app_id);
+
+            return task;
+        }
+    };
+
+    TEST_F(TestRegistry, handleSuccessfullInstall) {
+        Registry r;
+
+        QSignalSpy spyRecordsChanged(&r, &Registry::recordsChanged);
+        QSignalSpy spyInstalledApplicationsChanged(&r, &Registry::installedApplicationsChanged);
+
+        const char *test_app_id = "testapp_v1.0";
+
+        QVariantMap task = TestRegistry::createTaskMetadata(test_app_id);
+        task.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_COMPLETED);
+
+        r.handleTaskCompleted("", task);
+
+        GTEST_ASSERT_EQ(1, spyRecordsChanged.count());
+        GTEST_ASSERT_EQ(1, spyInstalledApplicationsChanged.count());
+        ASSERT_TRUE(r.getInstalledApplications().contains(test_app_id));
+        GTEST_ASSERT_EQ(1, r.getRecords().count());
+    }
+
+    TEST_F(TestRegistry, handleFailedInstall) {
+        Registry r;
+
+        QSignalSpy spyRecordsChanged(&r, &Registry::recordsChanged);
+        QSignalSpy spyInstalledApplicationsChanged(&r, &Registry::installedApplicationsChanged);
+
+        const char *test_app_id = "testapp_v1.0";
+
+        QVariantMap task = TestRegistry::createTaskMetadata(test_app_id);
+        task.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_FAILED);
+
+        r.handleTaskCompleted("", task);
+
+        GTEST_ASSERT_EQ(1, spyRecordsChanged.count());
+        GTEST_ASSERT_EQ(0, spyInstalledApplicationsChanged.count());
+        ASSERT_FALSE(r.getInstalledApplications().contains(test_app_id));
+        GTEST_ASSERT_EQ(1, r.getRecords().count());
+    }
+}
+
+#endif //NOMAD_SOFTWARE_CENTER_TESTREGISTRY_H

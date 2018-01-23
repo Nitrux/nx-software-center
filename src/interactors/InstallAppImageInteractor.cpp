@@ -10,27 +10,32 @@
 #include <entities/Application.h>
 #include <gateways/DownloadManager.h>
 #include "InstallAppImageInteractor.h"
-
+#include "TaskMetadata.h"
 
 InstallAppImageInteractor::InstallAppImageInteractor(const Application &application, DownloadManager *downloadManager,
                                                      QObject *parent) : Interactor(parent), app(application),
                                                                         downloadManager(downloadManager),
-downloadJob(nullptr) {
+                                                                        downloadJob(nullptr) {
     QString appFileName = QString("%1-%2_%3.AppImage").arg(app.getCodeName(),
-                                                        app.getVersion(),
+                                                           app.getVersion(),
                                                            app.getArch());
     createInstallationDirIfNotExist();
     createInstallationPath(appFileName);
 
     QString d = QString("Installing %1 %2").arg(app.getName(), app.getVersion());
 
-    metadata.insert(Interactor::META_KEY_DESCRIPTION, d);
-    metadata.insert(Interactor::META_KEY_STATUS, Interactor::STATUS_CREATED);
-    metadata.insert(Interactor::META_KEY_TYPE, "install");
+    metadata.insert(TaskMetadata::KEY_DESCRIPTION, d);
+    metadata.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_CREATED);
 
-    metadata.insert(Interactor::META_KEY_APP_ID, app.getId());
-    metadata.insert(Interactor::META_KEY_APP_NAME, app.getName());
-    metadata.insert(Interactor::META_KEY_APP_AUTHOR, app.getAuthors().join(", "));
+    metadata.insert(TaskMetadata::KEY_APP_ID, app.getId());
+    metadata.insert(TaskMetadata::KEY_APP_CODENAME, app.getCodeName());
+    metadata.insert(TaskMetadata::KEY_APP_VERSION, app.getVersion());
+    metadata.insert(TaskMetadata::KEY_APP_NAME, app.getName());
+    metadata.insert(TaskMetadata::KEY_APP_AUTHOR, app.getAuthors().join(", "));
+
+    metadata.insert(TaskMetadata::KEY_TYPE, TaskMetadata::VALUE_TYPE_INSTALL);
+    metadata.insert(TaskMetadata::KEY_DOWNLOAD_URL, app.getDownloadUrl());
+    metadata.insert(TaskMetadata::KEY_INSTALLATION_PATH, installationPath);
 }
 
 void InstallAppImageInteractor::execute() {
@@ -40,7 +45,7 @@ void InstallAppImageInteractor::execute() {
     home.mkdir("bin");
 
     downloadJob = downloadManager->download(app.getDownloadUrl(),
-                                                  installationPath);
+                                            installationPath);
 
     connect(downloadJob, &Download::progress,
             this, &InstallAppImageInteractor::handleDownloadJobProgress);
@@ -63,22 +68,20 @@ void InstallAppImageInteractor::execute() {
 
 void InstallAppImageInteractor::setCompletedMetadata() {
     QVariantMap statusUpdate;
-    statusUpdate.insert(META_KEY_STATUS, Interactor::STATUS_COMPLETED);
+    statusUpdate.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_COMPLETED);
     setMetadata(statusUpdate);
 }
 
-void InstallAppImageInteractor::handleDownloadJobProgress(const int value, const int total, const QString &message)
-{
+void InstallAppImageInteractor::handleDownloadJobProgress(const int value, const int total, const QString &message) {
     QVariantMap statusUpdate;
-    statusUpdate.insert(META_KEY_PROGRESS_MESSAGE, message);
-    statusUpdate.insert(META_KEY_PROGRESS_VALUE, value);
-    statusUpdate.insert(META_KEY_PROGRESS_TOTAL, total);
+    statusUpdate.insert(TaskMetadata::KEY_PROGRESS_MESSAGE, message);
+    statusUpdate.insert(TaskMetadata::KEY_PROGRESS_VALUE, value);
+    statusUpdate.insert(TaskMetadata::KEY_PROGRESS_TOTAL, total);
 
     setMetadata(statusUpdate);
 }
 
-void InstallAppImageInteractor::handleDownloadJobFinished()
-{
+void InstallAppImageInteractor::handleDownloadJobFinished() {
     downloadJob->deleteLater();
     downloadJob = nullptr;
 
@@ -94,34 +97,30 @@ void InstallAppImageInteractor::handleDownloadJobFinished()
     isRunning = false;
 }
 
-void InstallAppImageInteractor::handleDownloadJobError(const QString &error)
-{
+void InstallAppImageInteractor::handleDownloadJobError(const QString &error) {
     qWarning() << "Download Error: " << app.getDownloadUrl() << " " << error;
     emit completed();
     isRunning = false;
 }
 
-void InstallAppImageInteractor::handleCanceled()
-{
+void InstallAppImageInteractor::handleCanceled() {
     if (downloadJob)
         downloadJob->stop();
 }
 
 void InstallAppImageInteractor::setRunningMetadata() {
     QVariantMap statusUpdate;
-    statusUpdate.insert(META_KEY_STATUS, Interactor::STATUS_RUNNING);
+    statusUpdate.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_RUNNING);
     setMetadata(statusUpdate);
 }
 
-void InstallAppImageInteractor::createInstallationDirIfNotExist()
-{
+void InstallAppImageInteractor::createInstallationDirIfNotExist() {
     QDir dir = QDir::home();
     dir.mkdir("bin");
 }
 
-void InstallAppImageInteractor::createInstallationPath(QString appFileName)
-{
+void InstallAppImageInteractor::createInstallationPath(QString appFileName) {
     QDir dir = QDir::home();
     dir.cd("bin");
-    installationPath =  dir.filePath(appFileName);
+    installationPath = dir.filePath(appFileName);
 }

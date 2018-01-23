@@ -34,10 +34,11 @@ Item {
                 version : app_version
 //                size : "90 MiB"
 
-                hasPendingAction: app_id in TasksController.affectedApplicationsIds
-                installed: Registry.isDownloaded(app_id)
+                hasPendingAction: TasksController.affectedApplicationsIds.indexOf(app_id) > -1
+                installed: RegistryController.installedApplications.indexOf(app_id) > -1
                 onRequestGet: InstallController.install(app_id)
             }
         }
+
     }
 }

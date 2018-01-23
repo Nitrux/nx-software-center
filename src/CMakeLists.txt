@@ -26,7 +26,7 @@ set(CORE_SRC
     gateways/ContentDownload.h
     gateways/CachedDownloadManager.h
     gateways/CachedDownloadManager.cpp
-    )
+    interactors/TaskMetadata.h entities/RecordMetadata.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -47,7 +47,8 @@ set(UI_SRC
     ui/ApplicationListModel.cpp
     ui/SearchControler.cpp ui/TasksController.cpp ui/TasksController.h ui/TaskListModel.cpp ui/TaskListModel.h
     ui/InstallController.h
-    ui/InstallController.cpp)
+    ui/InstallController.cpp
+    ui/RegistryController.cpp)
 ## add the qml.qrc file
 qt5_add_resources(qml_QRC qml/files.qrc)
 

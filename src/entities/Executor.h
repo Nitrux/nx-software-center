@@ -37,7 +37,7 @@ signals:
 
     void taskStarted(const QString &id);
 
-    void taskCompleted(const QString &id);
+    void taskCompleted(const QString &id, const QVariantMap &data);
 
     void taskDataChanged(const QString &id, const QVariantMap &data);
 

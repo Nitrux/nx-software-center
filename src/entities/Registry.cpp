@@ -6,76 +6,63 @@
 
 #include <QDate>
 
-void Registry::registerDownload(const QString &app_id, QStringList files) {
-    QString l = QString("%1: %2 downloaded.").arg(app_id).arg(QDate::currentDate().toString());
-    log.append(l);
-    downloads.insert(app_id, files);
-}
+#include "interactors/TaskMetadata.h"
+#include "RecordMetadata.h"
 
-void Registry::registerRemove(const QString &app_id) {
-    QString l = QString("%1: %2 removed.").arg(app_id).arg(QDate::currentDate().toString());
-    log.append(l);
-    downloads.remove(app_id);
-}
+void registerInstallCompleted(const QVariantMap map);
 
-bool Registry::isDownloaded(const QString &app_id) {
-    return downloads.contains(app_id);
-}
-
-QStringList Registry::getDownloadedFiles(const QString &app_id) {
-    return downloads.value(app_id, QStringList());
-}
-
-void Registry::loadLogs(QSettings &settings)
-{
-    int size = settings.beginReadArray("Logs");
-    for (int i = 0; i < size; i++) {
-        settings.setArrayIndex(i);
-        QString l = settings.value("text").toString();
-        log.append(l);
+void Registry::handleTaskCompleted(const QString /*task_id*/, const QVariantMap resume) {
+    const QString &taskType = resume.value(TaskMetadata::KEY_TYPE, "unknown").toString();
+    const QString &taskStatus = resume.value(TaskMetadata::KEY_STATUS, "unknown").toString();
+    if (taskType == TaskMetadata::VALUE_TYPE_INSTALL) {
+        if (taskStatus == TaskMetadata::VALUE_STATUS_COMPLETED)
+            registerInstallCompleted(resume);
+        else
+            registerInstallFailed(resume);
     }
-    settings.endArray();
 }
 
-void Registry::loadApplicationsDownloaded(QSettings &settings)
-{
-    settings.beginGroup("Applications_Downloaded");
-    QStringList keys = settings.allKeys();
-    for (QString key: keys)
-        downloads[key] = settings.value(key).toStringList();
-    settings.endGroup();
+void Registry::registerInstallCompleted(QVariantMap map) {
+    removeUnneededTaskFields(map);
+
+    map.insert(RecordMetadata::KEY_TIME_STAMP, QDateTime::currentDateTime());
+    map.insert(RecordMetadata::KEY_IS_PERSISTENT, true);
+
+    appendInstallRecord(map);
 }
 
-void Registry::load() {
-    QSettings settings;
-    loadApplicationsDownloaded(settings);
-    loadLogs(settings);
+void Registry::removeUnneededTaskFields(QVariantMap &map) const {
+    map.remove(TaskMetadata::KEY_PROGRESS_MESSAGE);
+    map.remove(TaskMetadata::KEY_PROGRESS_VALUE);
+    map.remove(TaskMetadata::KEY_PROGRESS_TOTAL);
+    map.remove(TaskMetadata::KEY_DESCRIPTION);
 }
 
-void Registry::saveApplicationsDownloaded(QSettings &settings)
-{
-    settings.beginGroup("Applications_Downloaded");
-    settings.remove("");
-    QStringList keys = downloads.keys();
-    for (QString key: keys)
-        settings.setValue(key, downloads[key]);
-    settings.endGroup();
+void Registry::appendInstallRecord(const QVariantMap &map) {
+    const QString app_id = map.value(TaskMetadata::KEY_APP_ID).toString();
+
+    records.append(map);
+    installedApplications.insert(app_id);
+
+    emit installedApplicationsChanged(installedApplications);
+    emit recordsChanged(records);
 }
 
-void Registry::saveLogs(QSettings &settings)
-{
-    settings.beginWriteArray("Logs");
+void Registry::registerInstallFailed(QVariantMap map) {
+    removeUnneededTaskFields(map);
 
-    for (int i = 0; i < log.size(); i ++) {
-        settings.setArrayIndex(i);
-        settings.setValue("text", log.at(i));
-    }
-    settings.endArray();
+    map.insert(RecordMetadata::KEY_TIME_STAMP, QDateTime::currentDateTime());
+    map.insert(RecordMetadata::KEY_IS_PERSISTENT, false);
+
+    appendRecord(map);
 }
 
-void Registry::save()
-{
-    QSettings settings;
-    saveApplicationsDownloaded(settings);
-    saveLogs(settings);
+void Registry::appendRecord(const QVariantMap map) {
+    records.append(map);
+
+    recordsChanged(records);
 }
+
+QSet<QString> Registry::getInstalledApplications() const { return  installedApplications;}
+
+QList<QVariantMap> Registry::getRecords() const { return  records; }

@@ -51,12 +51,14 @@ void Executor::handleInteractorComplete() {
             runnables.remove(id);
 
         Interactor *interactor = interactors.value(id);
+        QVariantMap resume;
         if (interactor != nullptr) {
+            resume = interactor->getMetadata();
             interactors.remove(id);
             interactor->deleteLater();
         }
 
-        emit taskCompleted(id);
+        emit taskCompleted(id, resume);
     }
 }
 

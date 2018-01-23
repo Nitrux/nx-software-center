@@ -8,36 +8,42 @@
 #include <QMap>
 #include <QObject>
 #include <QStringList>
+#include <QVariantMap>
 #include <QSettings>
+#include <QSet>
 
 class Registry : public QObject {
-    Q_OBJECT
+Q_OBJECT
+    QList<QVariantMap> records;
+    QSet<QString> installedApplications;
 
-    QMap<QString, QStringList> downloads;
-    QStringList log;
 public:
-    explicit Registry(QObject *parent) : QObject(parent) {}
+
+    explicit Registry(QObject *parent = nullptr) : QObject(parent) {}
+
+    Q_INVOKABLE QSet<QString> getInstalledApplications() const;
+
+    Q_INVOKABLE QList<QVariantMap> getRecords() const;
 
 public slots:
-    void registerDownload(const QString &app_id, QStringList files);
-    void registerRemove(const QString &app_id);
+    void handleTaskCompleted(const QString task_id, const QVariantMap resume);
 
-    bool isDownloaded(const QString &app_id);
-    QStringList getDownloadedFiles(const QString &app_id);
+signals:
+
+    void installedApplicationsChanged(const QSet<QString> &installedApplications);
+
+    void recordsChanged(const QList<QVariantMap> &records);
 
 private:
-    void load();
+    void registerInstallCompleted(QVariantMap map);
 
-    void save();
+    void registerInstallFailed(QVariantMap map);
 
-    void loadLogs(QSettings &settings);
+    void appendInstallRecord(const QVariantMap &map);
 
-    void loadApplicationsDownloaded(QSettings &settings);
+    void removeUnneededTaskFields(QVariantMap &map) const;
 
-
-    void saveApplicationsDownloaded(QSettings &settings);
-
-    void saveLogs(QSettings &settings);
+    void appendRecord(const QVariantMap map);
 };
 
 
