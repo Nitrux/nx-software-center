@@ -23,7 +23,6 @@ signals:
 public slots:
 
 protected slots:
-    void handleInstalledApplicationsChanged(const QSet<QString> &installedApplications);
     void handleRecordsChanged(const QList<QVariantMap> &records);
 };
 

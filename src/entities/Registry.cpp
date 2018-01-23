@@ -4,19 +4,20 @@
 
 #include "Registry.h"
 
-#include <QDate>
 #include <QDir>
-#include <QFile>
 #include <QStandardPaths>
+#include <QVariantList>
 #include <QJsonArray>
-#include <QJsonValue>
 #include <QJsonObject>
 #include <QJsonDocument>
 
 #include "interactors/TaskMetadata.h"
 #include "RecordMetadata.h"
 
-void registerInstallCompleted(const QVariantMap map);
+static const char *const KEY_APPLICATION_ID = "appId";
+
+static const char *const KEY_APPLICATION_INSTALLED_FILES = "files";
+
 
 void Registry::handleTaskCompleted(const QString /*task_id*/, const QVariantMap resume) {
     const QString &taskType = resume.value(TaskMetadata::KEY_TYPE, "unknown").toString();
@@ -29,6 +30,7 @@ void Registry::handleTaskCompleted(const QString /*task_id*/, const QVariantMap 
     }
 
     saveRecords();
+    saveInstalledApplications();
 }
 
 void Registry::registerInstallCompleted(QVariantMap map) {
@@ -49,11 +51,13 @@ void Registry::removeUnneededTaskFields(QVariantMap &map) const {
 
 void Registry::appendInstallRecord(const QVariantMap &map) {
     const QString app_id = map.value(TaskMetadata::KEY_APP_ID).toString();
+    const QString app_install_path = map.value(TaskMetadata::KEY_INSTALLATION_PATH).toString();
 
     appendRecord(map);
 
-    installedApplications.insert(app_id);
-    emit installedApplicationsChanged(installedApplications);
+    QStringList files = {app_install_path};
+    installedApplications.insert(app_id, files);
+    emit installedApplicationsChanged(installedApplications.keys());
 }
 
 void Registry::registerInstallFailed(QVariantMap map) {
@@ -71,12 +75,10 @@ void Registry::appendRecord(const QVariantMap map) {
     recordsChanged(records);
 }
 
-QByteArray Registry::readTaskJsonFile()
-{
+QByteArray Registry::readJsonFile(const QString &path) {
     QByteArray json;
-    QString records_path = getTaskRecordsJsonPath();
 
-    QFile f(records_path);
+    QFile f(path);
     if (f.open(QIODevice::ReadOnly)) {
         json = f.readAll();
         f.close();
@@ -85,8 +87,7 @@ QByteArray Registry::readTaskJsonFile()
     return json;
 }
 
-QList<QVariantMap> Registry::extractRecordsFromJson(QByteArray json)
-{
+QList<QVariantMap> Registry::extractRecordsFromJson(QByteArray json) {
     QJsonDocument doc = QJsonDocument::fromJson(json);
     QJsonArray recordsJsonArray = doc.array();
     QList<QVariantMap> loadedRecords;
@@ -99,41 +100,14 @@ QList<QVariantMap> Registry::extractRecordsFromJson(QByteArray json)
     return loadedRecords;
 }
 
-QSet<QString> Registry::extractInstalledApplications()
-{
-    QSet<QString> newInstalledApplications;
-    for (const QVariantMap &map: records) {
-        QString task_status = map.value(TaskMetadata::KEY_STATUS).toString();
-        QDateTime record_date = map.value(RecordMetadata::KEY_TIME_STAMP).toDateTime();
-        if (task_status.compare(TaskMetadata::VALUE_STATUS_COMPLETED) == 0
-                && record_date > expirationDate) {
-            // Only completed tasks are relevant
-            QString task_application_id = map.value(TaskMetadata::KEY_APP_ID).toString();
-            QString task_type = map.value(TaskMetadata::KEY_TYPE).toString();
-            if (task_type.compare(TaskMetadata::VALUE_TYPE_INSTALL) == 0)
-                newInstalledApplications.insert(task_application_id);
-
-            if (task_type.compare(TaskMetadata::VALUE_TYPE_REMOVE) == 0)
-                newInstalledApplications.remove(task_application_id);
-        }
-    }
-
-    return newInstalledApplications;
-}
-
-void Registry::loadRecords()
-{
-    QByteArray json = readTaskJsonFile();
-
+void Registry::loadRecords() {
+    QString recordsPath = getTaskRecordsJsonPath();
+    QByteArray json = readJsonFile(recordsPath);
     records = extractRecordsFromJson(json);
-    installedApplications = extractInstalledApplications();
-
-    emit installedApplicationsChanged(installedApplications);
     emit recordsChanged(records);
 }
 
-QByteArray Registry::serializeRecordsToJson()
-{
+QByteArray Registry::serializeRecordsToJson() {
     QVariantList recordsList;
     for (const QVariantMap &map : records) {
         QString task_status = map.value(TaskMetadata::KEY_STATUS).toString();
@@ -150,8 +124,7 @@ QByteArray Registry::serializeRecordsToJson()
     return json;
 }
 
-QString Registry::getTaskRecordsJsonPath()
-{
+QString Registry::getTaskRecordsJsonPath() {
     QString records_path = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first();
     QDir::home().mkpath(records_path);
     records_path = records_path + "/tasks_records.json";
@@ -159,34 +132,96 @@ QString Registry::getTaskRecordsJsonPath()
     return records_path;
 }
 
-void Registry::writeTaskRecordsJson(QByteArray json)
-{
-    QString records_path = getTaskRecordsJsonPath();
-
-    QFile f(records_path);
+void Registry::writeJsonFile(const QByteArray &json, const QString &path) {
+    QFile f(path);
     if (f.open(QIODevice::WriteOnly)) {
         f.write(json);
         f.close();
     }
 }
 
-void Registry::saveRecords()
-{
+void Registry::saveRecords() {
     QByteArray json = serializeRecordsToJson();
 
-    writeTaskRecordsJson(json);
+    QString records_path = getTaskRecordsJsonPath();
+    writeJsonFile(json, records_path);
 }
 
 Registry::Registry(QObject *parent) : QObject(parent) {
     expirationDate = QDateTime::currentDateTime().addMonths(-1);
     loadRecords();
+    loadInstalledApplications();
 }
 
-QSet<QString> Registry::getInstalledApplications() const { return  installedApplications;}
+QStringList Registry::getInstalledApplications() const { return installedApplications.keys(); }
 
-QList<QVariantMap> Registry::getRecords() const { return  records; }
+QList<QVariantMap> Registry::getRecords() const { return records; }
 
-void Registry::setExpirationDate(QDateTime date)
-{
+void Registry::setExpirationDate(QDateTime date) {
     expirationDate = date;
+}
+
+void Registry::clearInstalledApplications() {
+    installedApplications.clear();
+
+    saveInstalledApplications();
+}
+
+void Registry::saveInstalledApplications() {
+    QByteArray json = serializeInstalledApplicationsToJson();
+
+    QString installedApplicationsPath = getInstalledApplicationsPath();
+    writeJsonFile(json, installedApplicationsPath);
+}
+
+QByteArray Registry::serializeInstalledApplicationsToJson() const {
+    QVariantList installedApplicationsList;
+    for (const QString &appId: installedApplications.keys()) {
+        QVariantMap installedApplication;
+        installedApplication.insert(KEY_APPLICATION_ID, appId);
+        installedApplication.insert(KEY_APPLICATION_INSTALLED_FILES, installedApplications.value(appId));
+
+        installedApplicationsList.append(installedApplication);
+    }
+
+    QJsonArray recordsJsonArray = QJsonArray::fromVariantList(installedApplicationsList);
+    QJsonDocument doc(recordsJsonArray);
+
+    QByteArray json = doc.toJson();
+    return json;
+}
+
+QString Registry::getInstalledApplicationsPath() const {
+    QString installedApplicationsPath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first();
+    QDir::home().mkpath(installedApplicationsPath);
+    installedApplicationsPath = installedApplicationsPath + "/installedApplications.json";
+    return installedApplicationsPath;
+}
+
+void Registry::loadInstalledApplications() {
+    const QString installedApplicationsPath = getInstalledApplicationsPath();
+    QByteArray json = readJsonFile(installedApplicationsPath);
+
+    extractInstalledApplications(json);
+}
+
+void Registry::extractInstalledApplications(const QByteArray &json) {
+    QJsonDocument doc = QJsonDocument::fromJson(json);
+    QJsonArray array = doc.array();
+    for (const QJsonValue &value: array) {
+        QJsonObject object = value.toObject();
+        QString appId = object.value(KEY_APPLICATION_ID).toString();
+        QVariant variant = object.value(KEY_APPLICATION_INSTALLED_FILES).toVariant();
+        QStringList installedFiles = variant.toStringList();
+
+        installedApplications.insert(appId, installedFiles);
+    }
+
+    emit installedApplicationsChanged(installedApplications.keys());
+}
+
+void Registry::clearRecords() {
+    records.clear();
+
+    saveRecords();
 }

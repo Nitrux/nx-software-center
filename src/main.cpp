@@ -54,7 +54,7 @@ void initSoftwareCenterModules(QObject *parent) {
     QObject::connect(executor, &Executor::taskCompleted, registry, &Registry::handleTaskCompleted);
 
     networkAccessManager = new QNetworkAccessManager(parent);
-    downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
+    downloadManager = new CachedDownloadManager(networkAccessManager, parent);
 
     AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);
 

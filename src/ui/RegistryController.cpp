@@ -6,7 +6,7 @@ RegistryController::RegistryController(Registry *registry, QObject *parent) :
     model->setRecords(registry->getRecords());
 
     connect(registry, &Registry::installedApplicationsChanged,
-            this, &RegistryController::handleInstalledApplicationsChanged);
+            this, &RegistryController::installedApplicationsChanged);
 
     connect(registry, &Registry::recordsChanged,
             this, &RegistryController::handleRecordsChanged);
@@ -14,13 +14,7 @@ RegistryController::RegistryController(Registry *registry, QObject *parent) :
 
 QStringList RegistryController::getInstalledApplications()
 {
-    return registry->getInstalledApplications().toList();
-}
-
-void RegistryController::handleInstalledApplicationsChanged(const QSet<QString> &installedApplications)
-{
-    QStringList apps = installedApplications.toList();
-    emit installedApplicationsChanged(apps);
+    return registry->getInstalledApplications();
 }
 
 void RegistryController::handleRecordsChanged(const QList<QVariantMap> &records)

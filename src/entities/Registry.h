@@ -15,24 +15,29 @@
 class Registry : public QObject {
 Q_OBJECT
     QList<QVariantMap> records;
-    QSet<QString> installedApplications;
+    QMap<QString, QStringList> installedApplications;
     QDateTime expirationDate;
 
 public:
 
     explicit Registry(QObject *parent = nullptr);
 
-    Q_INVOKABLE QSet<QString> getInstalledApplications() const;
+    Q_INVOKABLE QStringList getInstalledApplications() const;
 
     Q_INVOKABLE QList<QVariantMap> getRecords() const;
 
+    void clearInstalledApplications();
+    void clearRecords();
+
     void setExpirationDate(QDateTime date);
+
 public slots:
+
     void handleTaskCompleted(const QString task_id, const QVariantMap resume);
 
 signals:
 
-    void installedApplicationsChanged(const QSet<QString> &installedApplications);
+    void installedApplicationsChanged(const QStringList &installedApplications);
 
     void recordsChanged(const QList<QVariantMap> &records);
 
@@ -50,12 +55,26 @@ private:
     void loadRecords();
 
     void saveRecords();
+
     QByteArray serializeRecordsToJson();
-    void writeTaskRecordsJson(QByteArray json);
+
+    void writeJsonFile(const QByteArray &json, const QString &path);
+
     QString getTaskRecordsJsonPath();
-    QByteArray readTaskJsonFile();
+
+    QByteArray readJsonFile(const QString &path);
+
     QList<QVariantMap> extractRecordsFromJson(QByteArray json);
-    QSet<QString> extractInstalledApplications();
+
+    void saveInstalledApplications();
+
+    void loadInstalledApplications();
+
+    QString getInstalledApplicationsPath() const;
+
+    QByteArray serializeInstalledApplicationsToJson() const;
+
+    void extractInstalledApplications(const QByteArray &json);
 };
 
 
