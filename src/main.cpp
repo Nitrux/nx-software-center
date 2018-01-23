@@ -56,7 +56,6 @@ void initSoftwareCenterModules(QObject *parent) {
     networkAccessManager = new QNetworkAccessManager(parent);
     downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
 
-
     AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);
 
     repository = new Repository();

@@ -48,7 +48,10 @@ set(UI_SRC
     ui/SearchControler.cpp ui/TasksController.cpp ui/TasksController.h ui/TaskListModel.cpp ui/TaskListModel.h
     ui/InstallController.h
     ui/InstallController.cpp
-    ui/RegistryController.cpp)
+    ui/RegistryController.h
+    ui/RegistryController.cpp
+    ui/RegistryListModel.h
+    ui/RegistryListModel.cpp)
 ## add the qml.qrc file
 qt5_add_resources(qml_QRC qml/files.qrc)
 

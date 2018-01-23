@@ -5,6 +5,7 @@
 #include "Registry.h"
 
 #include <QDate>
+#include <QDebug>
 
 #include "interactors/TaskMetadata.h"
 #include "RecordMetadata.h"
@@ -41,11 +42,10 @@ void Registry::removeUnneededTaskFields(QVariantMap &map) const {
 void Registry::appendInstallRecord(const QVariantMap &map) {
     const QString app_id = map.value(TaskMetadata::KEY_APP_ID).toString();
 
-    records.append(map);
-    installedApplications.insert(app_id);
+    appendRecord(map);
 
+    installedApplications.insert(app_id);
     emit installedApplicationsChanged(installedApplications);
-    emit recordsChanged(records);
 }
 
 void Registry::registerInstallFailed(QVariantMap map) {
@@ -58,7 +58,7 @@ void Registry::registerInstallFailed(QVariantMap map) {
 }
 
 void Registry::appendRecord(const QVariantMap map) {
-    records.append(map);
+    records.push_front(map);
 
     recordsChanged(records);
 }
