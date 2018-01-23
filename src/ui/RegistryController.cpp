@@ -3,6 +3,8 @@
 RegistryController::RegistryController(Registry *registry, QObject *parent) :
     QObject(parent), registry(registry), model(new RegistryListModel(this))
 {
+    model->setRecords(registry->getRecords());
+
     connect(registry, &Registry::installedApplicationsChanged,
             this, &RegistryController::handleInstalledApplicationsChanged);
 

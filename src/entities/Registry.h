@@ -19,7 +19,7 @@ Q_OBJECT
 
 public:
 
-    explicit Registry(QObject *parent = nullptr) : QObject(parent) {}
+    explicit Registry(QObject *parent = nullptr);
 
     Q_INVOKABLE QSet<QString> getInstalledApplications() const;
 
@@ -44,6 +44,16 @@ private:
     void removeUnneededTaskFields(QVariantMap &map) const;
 
     void appendRecord(const QVariantMap map);
+
+    void loadRecords();
+
+    void saveRecords();
+    QByteArray serializeRecordsToJson();
+    void writeTaskRecordsJson(QByteArray json);
+    QString getTaskRecordsJsonPath();
+    QByteArray readTaskJsonFile();
+    QList<QVariantMap> extractRecordsFromJson(QByteArray json);
+    QSet<QString> extractInstalledApplications();
 };
 
 
