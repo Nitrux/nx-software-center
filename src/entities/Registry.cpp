@@ -104,7 +104,9 @@ QSet<QString> Registry::extractInstalledApplications()
     QSet<QString> newInstalledApplications;
     for (const QVariantMap &map: records) {
         QString task_status = map.value(TaskMetadata::KEY_STATUS).toString();
-        if (task_status.compare(TaskMetadata::VALUE_STATUS_COMPLETED) == 0) {
+        QDateTime record_date = map.value(RecordMetadata::KEY_TIME_STAMP).toDateTime();
+        if (task_status.compare(TaskMetadata::VALUE_STATUS_COMPLETED) == 0
+                && record_date > expirationDate) {
             // Only completed tasks are relevant
             QString task_application_id = map.value(TaskMetadata::KEY_APP_ID).toString();
             QString task_type = map.value(TaskMetadata::KEY_TYPE).toString();
@@ -176,9 +178,15 @@ void Registry::saveRecords()
 }
 
 Registry::Registry(QObject *parent) : QObject(parent) {
+    expirationDate = QDateTime::currentDateTime().addMonths(-1);
     loadRecords();
 }
 
 QSet<QString> Registry::getInstalledApplications() const { return  installedApplications;}
 
 QList<QVariantMap> Registry::getRecords() const { return  records; }
+
+void Registry::setExpirationDate(QDateTime date)
+{
+    expirationDate = date;
+}

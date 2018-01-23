@@ -7,15 +7,16 @@
 
 #include <QMap>
 #include <QObject>
-#include <QStringList>
+#include <QString>
 #include <QVariantMap>
-#include <QSettings>
+#include <QDateTime>
 #include <QSet>
 
 class Registry : public QObject {
 Q_OBJECT
     QList<QVariantMap> records;
     QSet<QString> installedApplications;
+    QDateTime expirationDate;
 
 public:
 
@@ -25,6 +26,7 @@ public:
 
     Q_INVOKABLE QList<QVariantMap> getRecords() const;
 
+    void setExpirationDate(QDateTime date);
 public slots:
     void handleTaskCompleted(const QString task_id, const QVariantMap resume);
 
