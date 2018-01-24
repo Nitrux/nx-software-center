@@ -56,8 +56,8 @@ PlasmaCore.FrameSvgItem {
             Layout.fillHeight: true
             checked: currentView == "store"
             onClicked: {
-                goStore()
                 currentView = "store"
+                goStore()
             }
         }
 
@@ -67,8 +67,8 @@ PlasmaCore.FrameSvgItem {
             Layout.fillHeight: true
             checked: currentView == "tasks"
             onClicked: {
-                goTasks()
                 currentView = "tasks"
+                goTasks()
             }
         }
 

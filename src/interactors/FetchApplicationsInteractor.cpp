@@ -38,6 +38,9 @@ void FetchApplicationsInteractor::execute() {
 }
 
 void FetchApplicationsInteractor::handleFetchedApplications(QList<Application> applications) {
+    QObject *source = sender();
+    disconnect(source, nullptr, this, nullptr);
+
     results.append(applications);
     runningTasks--;
     if (isCompleted())
@@ -45,6 +48,9 @@ void FetchApplicationsInteractor::handleFetchedApplications(QList<Application> a
 }
 
 void FetchApplicationsInteractor::handleFetchError(const QString &error) {
+    QObject *source = sender();
+    disconnect(source, nullptr, this, nullptr);
+
     errors.append(error);
     runningTasks--;
 
@@ -53,5 +59,5 @@ void FetchApplicationsInteractor::handleFetchError(const QString &error) {
 }
 
 bool FetchApplicationsInteractor::isCompleted() {
-    return runningTasks == 0;
+    return runningTasks <= 0;
 }

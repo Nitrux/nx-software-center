@@ -8,12 +8,14 @@
 #include "gateways/CachedDownloadManager.h"
 #include "entities/Registry.h"
 #include "entities/Executor.h"
+#include "entities/Updater.h"
 
 #include "ui/SearchControler.h"
 #include "ui/TasksController.h"
 #include "ui/InstallController.h"
 #include "ui/UninstallController.h"
 #include "ui/RegistryController.h"
+#include "ui/UpdaterController.h"
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
 #define QML_MODULE_MAJOR_VERSION 1
@@ -23,6 +25,7 @@ DownloadManager *downloadManager = nullptr;
 QNetworkAccessManager *networkAccessManager = nullptr;
 Executor *executor = nullptr;
 Registry *registry = nullptr;
+Updater *updater = nullptr;
 
 
 void registerQmlModules();
@@ -52,13 +55,12 @@ void initSoftwareCenterModules(QObject *parent) {
     registry = new Registry();
     QObject::connect(executor, &Executor::taskCompleted, registry, &Registry::handleTaskCompleted);
 
+    repository = new Repository();
+
     networkAccessManager = new QNetworkAccessManager(parent);
     downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
-
     AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);
-
-    repository = new Repository();
-    repository->setSources({s});
+    updater = new Updater(repository, {s});
 }
 
 
@@ -88,6 +90,11 @@ static QObject *registryControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return registryControler;
 }
 
+static QObject *updaterControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    UpdaterController *updaterController = new UpdaterController(updater);
+    return updaterController;
+}
+
 void registerQmlModules() {
     qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                               "SearchController",
@@ -109,4 +116,8 @@ void registerQmlModules() {
     qmlRegisterSingletonType<RegistryController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                        "RegistryController",
                                        registryControllerSingletonProvider);
+
+    qmlRegisterSingletonType<UpdaterController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                       "UpdaterController",
+                                       updaterControllerSingletonProvider);
 }

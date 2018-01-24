@@ -2,6 +2,8 @@
 
 #include <QList>
 #include <QSet>
+#include <QReadLocker>
+#include <QWriteLocker>
 
 #include "entities/Application.h"
 #include "interactors/FetchApplicationsInteractor.h"
@@ -9,25 +11,37 @@
 Repository::Repository(QObject *parent) : QObject(parent), isBeingUpdated(false) {}
 
 void Repository::add(Application app) {
+    QWriteLocker lock(&mutex);
+
     applications.insert(app.getId(), app);
+    if (!isBeingUpdated)
+            emit changed();
 }
 
-bool Repository::contains(const QString &id) const {
+bool Repository::contains(const QString &id) {
+    QReadLocker lock(&mutex);
+
     return applications.contains(id);
 }
 
-Application Repository::get(const QString &id) const {
+Application Repository::get(const QString &id) {
+    QReadLocker lock(&mutex);
+
     if (!applications.contains(id))
         throw ApplicationNotFoundException();
     else
         return applications.value(id);
 }
 
-int Repository::countAll() const {
+int Repository::countAll() {
+    QReadLocker lock(&mutex);
+
     return applications.count();
 }
 
-int Repository::countByName() const {
+int Repository::countByName() {
+    QReadLocker lock(&mutex);
+
     QSet<QString> set;
     for (const Application &a : applications.values())
         set.insert(a.getCodeName());
@@ -35,11 +49,15 @@ int Repository::countByName() const {
     return set.count();
 }
 
-QList<Application> Repository::getAll() const {
+QList<Application> Repository::getAll() {
+    QReadLocker lock(&mutex);
+
     return applications.values();
 }
 
-QList<Application> Repository::getAllLatestVersions() const {
+QList<Application> Repository::getAllLatestVersions() {
+    QReadLocker lock(&mutex);
+
     QMap<QString, Application> latest;
 
     for (const Application &a : applications.values()) {
@@ -55,7 +73,9 @@ QList<Application> Repository::getAllLatestVersions() const {
     return latest.values();
 }
 
-QList<Application> Repository::getAllVersions(const QString &name) const {
+QList<Application> Repository::getAllVersions(const QString &name) {
+    QReadLocker lock(&mutex);
+
     QList<Application> apps;
 
     for (const Application &a : applications.values()) {
@@ -67,7 +87,9 @@ QList<Application> Repository::getAllVersions(const QString &name) const {
     return apps;
 }
 
-QList<Application> Repository::filterAll(const QString &query) const {
+QList<Application> Repository::filterAll(const QString &query) {
+    QReadLocker lock(&mutex);
+
     QList<Application> results;
     for (const Application &a: applications) {
         if (a.getName().contains(query))
@@ -76,7 +98,9 @@ QList<Application> Repository::filterAll(const QString &query) const {
     return results;
 }
 
-QList<Application> Repository::filterLatestsVersions(const QString &query) const {
+QList<Application> Repository::filterLatestsVersions(const QString &query) {
+    QReadLocker lock(&mutex);
+
     QMap<QString, Application> latest;
 
     for (const Application &a : applications.values()) {
@@ -95,7 +119,9 @@ QList<Application> Repository::filterLatestsVersions(const QString &query) const
     return latest.values();
 }
 
-Application Repository::getLatestVersion(const QString &name) const {
+Application Repository::getLatestVersion(const QString &name) {
+    QReadLocker lock(&mutex);
+
     Application l;
     for (const Application &a : applications.values()) {
         if (name.compare(a.getCodeName()) == 0 &&
@@ -108,54 +134,46 @@ Application Repository::getLatestVersion(const QString &name) const {
 }
 
 void Repository::removeAll() {
+    QWriteLocker lock(&mutex);
+
     applications.clear();
+    if (!isBeingUpdated)
+            emit changed();
 }
 
 void Repository::remove(const QString &id) {
+    QWriteLocker lock(&mutex);
+
     applications.remove(id);
+
+    if (!isBeingUpdated)
+            emit changed();
 }
 
 void Repository::removeAllVersions(const QString &name) {
+    QWriteLocker lock(&mutex);
+
     for (const Application &a : applications.values()) {
         if (name.compare(a.getCodeName()) == 0)
             applications.remove(a.getId());
     }
+
+    if (!isBeingUpdated)
+            emit changed();
 }
 
-void Repository::setSources(const QList<Source *> &sources) { this->sources = sources; }
+void Repository::setIsBeingUpdated(bool isBeingUpdated) {
+    QWriteLocker lock(&mutex);
 
-void Repository::update() {
-    if (isBeingUpdated)
-        return;
+    if (this->isBeingUpdated && !isBeingUpdated)
+            emit changed();
 
-    emit updateStarted();
-
-    isBeingUpdated = true;
-    fetchApplicationsInteractor = new FetchApplicationsInteractor(sources);
-
-    connect(fetchApplicationsInteractor, &FetchApplicationsInteractor::completed, this,
-            &Repository::handleUpdateResults);
-
-    fetchApplicationsInteractor->execute();
+    this->isBeingUpdated = isBeingUpdated;
+    emit isBeingUpdateChanged(this->isBeingUpdated);
 }
 
-void Repository::handleUpdateResults() {
-    isBeingUpdated = false;
-    const QList<Application> &applications = fetchApplicationsInteractor->getResults();
-    const QStringList &errors = fetchApplicationsInteractor->getErrors();
+bool Repository::getIsBeingUpdated() {
+    QReadLocker lock(&mutex);
 
-    if (applications.empty() && !errors.empty()) {
-        emit updateError();
-    } else {
-        this->applications.clear();
-        fetchApplicationsInteractor->deleteLater();
-
-        for (const Application &a: fetchApplicationsInteractor->getResults())
-            this->applications.insert(a.getId(), a);
-
-        emit updateComplete();
-    }
-
-    delete fetchApplicationsInteractor;
-    fetchApplicationsInteractor = nullptr;
+    return isBeingUpdated;
 }

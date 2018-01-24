@@ -22,7 +22,7 @@ ApplicationWindow {
     header: NavigationPanel {
         id: navigationPanel
 
-        onGoStore: main.showSearchView()
+        onGoStore: main.handleGoStore()
         onGoTasks: main.showTasksView()
         onStoreQueryTyped: main.search(query)
     }
@@ -61,23 +61,41 @@ ApplicationWindow {
         id: textConstants
     }
 
-    Component.onCompleted: loadStoreContents()
-
     function search(query) {
         SearchController.search(query)
-    }
-
-    function loadStoreContents() {
-        main.title = "Loading contents"
-        showBusyMessage("Loading store contents...")
-        SearchController.updateRepositoryCompleted.connect(showSearchView)
-        SearchController.updateRepositoryError.connect(showUpdateErrorMessage)
-        SearchController.updateRepository()
     }
 
     function showTasksView() {
         main.title = "Tasks"
         stackView.goTo("tasksView", "qrc:/TasksView.qml");
+    }
+
+    Connections {
+        target: UpdaterController
+        onIsWorkingChanged: handleUpdaterIsWorkingChanged(isWorking)
+    }
+
+    function handleUpdaterIsWorkingChanged(isWorking) {
+        print("isWorking: " + UpdaterController.isWorking)
+        print("isReady: " + UpdaterController.isReady)
+        if (navigationPanel.currentView == "store") {
+            if (isWorking) {
+                main.title = "Loading contents"
+                showBusyMessage("Loading store contents...")
+            } else {
+                if (UpdaterController.isReady)
+                    showSearchView();
+                else
+                    showUpdateErrorMessage();
+            }
+        }
+    }
+
+    function handleGoStore() {
+        if (UpdaterController.isReady)
+            showSearchView()
+        else
+            UpdaterController.update()
     }
 
     function showSearchView() {
@@ -89,6 +107,8 @@ ApplicationWindow {
         stackView.goTo("placeHolderView", "qrc:/PlaceHolderView.qml");
         var item = stackView.findItemByObjectName("placeHolderView");
         item.message = message
+        item.iconName = "";
+        item.showBusyIndicator = true;
     }
 
     function showUpdateErrorMessage() {
@@ -99,4 +119,6 @@ ApplicationWindow {
         item.iconName = "network-wireless-disconnected";
         item.showBusyIndicator = false;
     }
+
+    Component.onCompleted: handleGoStore()
 }

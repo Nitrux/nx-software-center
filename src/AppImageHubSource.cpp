@@ -2,6 +2,7 @@
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QThread>
 
 #include "AppImageInstallLinksRegExParser.h"
 
@@ -11,7 +12,7 @@ void AppImageHubSource::fetchAllApplications() {
         connect(job, &Download::completed, this,
                 &AppImageHubSource::handleDownloadFinished);
         connect(job, &Download::stopped, this,
-                &Source::fetchError);
+                &AppImageHubSource::handleDownloadStopped);
         job->start();
     }
 }
@@ -34,6 +35,14 @@ void AppImageHubSource::handleDownloadFinished() {
         job->deleteLater();
         job = nullptr;
     }
+}
+
+void AppImageHubSource::handleDownloadStopped()
+{
+    emit fetchError("Unable to fetch: " + url);
+
+    job->deleteLater();
+    job = nullptr;
 }
 
 bool AppImageHubSource::areAllApplicationReleasesParsersFinished() const {

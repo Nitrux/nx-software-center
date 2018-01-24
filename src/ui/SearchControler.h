@@ -20,22 +20,15 @@ public:
     explicit SearchControler(Repository *repository, QObject *parent = nullptr);
 
 signals:
-    void updateRepositoryStarted();
-    void updateRepositoryCompleted();
-    void updateRepositoryError();
-
     void searching();
     void resultsReady();
 
     void modelChanged(ApplicationListModel *model);
 public slots:
-    void updateRepository();
-
     void search(const QString &query);
 
 protected slots:
-    void handleUpdateRepositoryCompleted();
-
+    void handleRepositoryChanged();
 protected:
     void filterApplications();
 };

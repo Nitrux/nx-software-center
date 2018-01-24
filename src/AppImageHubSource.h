@@ -41,6 +41,8 @@ protected slots:
 
     void handleDownloadFinished();
 
+    void handleDownloadStopped();
+
     void handleNewInstallLinkFound(const QString &link);
 
     void handleParserFinished();

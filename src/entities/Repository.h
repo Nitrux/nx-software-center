@@ -4,6 +4,7 @@
 #include <QException>
 #include <QMap>
 #include <QObject>
+#include <QReadWriteLock>
 
 #include "Source.h"
 #include "entities/Application.h"
@@ -17,33 +18,37 @@ Q_OBJECT
     QMap<QString, Application> applications;
 
     bool isBeingUpdated;
-    QList<Source*> sources;
-    FetchApplicationsInteractor *fetchApplicationsInteractor;
+    Q_PROPERTY(bool isBeingUpdated
+                       READ getIsBeingUpdated
+                       WRITE setIsBeingUpdated
+                       NOTIFY
+                       isBeingUpdateChanged)
 
+    QReadWriteLock mutex;
 public:
     explicit Repository(QObject *parent = nullptr);
 
     void add(Application app);
 
-    bool contains(const QString &id) const;
+    bool contains(const QString &id);
 
-    Application get(const QString &id) const;
+    Application get(const QString &id);
 
-    int countAll() const;
+    int countAll();
 
-    int countByName() const;
+    int countByName();
 
-    QList<Application> getAll() const;
+    QList<Application> getAll();
 
-    QList<Application> getAllLatestVersions() const;
+    QList<Application> getAllLatestVersions();
 
-    Application getLatestVersion(const QString &name) const;
+    Application getLatestVersion(const QString &name);
 
-    QList<Application> getAllVersions(const QString &name) const;
+    QList<Application> getAllVersions(const QString &name);
 
-    QList<Application> filterAll(const QString &query) const;
+    QList<Application> filterAll(const QString &query);
 
-    QList<Application> filterLatestsVersions(const QString &query) const;
+    QList<Application> filterLatestsVersions(const QString &query);
 
     void remove(const QString &id);
 
@@ -51,17 +56,15 @@ public:
 
     void removeAll();
 
-    void update();
+    void setIsBeingUpdated(bool isBeingUpdated);
 
-    void setSources(const QList<Source*> &sources);
+    bool getIsBeingUpdated();
 
 signals:
-    void updateStarted();
-    void updateComplete();
-    void updateError();
 
-protected slots:
-    void handleUpdateResults();
+    void isBeingUpdateChanged(const bool &isBeingUpdated);
+
+    void changed();
 
 private:
 };

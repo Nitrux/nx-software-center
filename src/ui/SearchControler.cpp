@@ -5,13 +5,8 @@ SearchControler::SearchControler(Repository *repository, QObject *parent) :
     model(new ApplicationListModel(this)),
     repository(repository)
 {
-    connect(repository, &Repository::updateStarted, this, &SearchControler::updateRepositoryStarted);
-    connect(repository, &Repository::updateComplete, this, &SearchControler::handleUpdateRepositoryCompleted);
-    connect(repository, &Repository::updateError, this, &SearchControler::updateRepositoryError);
-}
-
-void SearchControler::updateRepository() {
-    repository->update();
+    connect(this->repository, &Repository::changed, this, &SearchControler::handleRepositoryChanged);
+    filterApplications();
 }
 
 void SearchControler::search(const QString &query) {
@@ -19,8 +14,8 @@ void SearchControler::search(const QString &query) {
     filterApplications();
 }
 
-void SearchControler::handleUpdateRepositoryCompleted() {
-    emit updateRepositoryCompleted();
+void SearchControler::handleRepositoryChanged()
+{
     filterApplications();
 }
 
