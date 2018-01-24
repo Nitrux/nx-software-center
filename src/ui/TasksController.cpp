@@ -4,7 +4,6 @@
 
 #include "TasksController.h"
 
-#include "interactors/installappimagereleaseinteractor.h"
 #include <QMutexLocker>
 
 TasksController::TasksController(Executor *executor, QObject *parent)
