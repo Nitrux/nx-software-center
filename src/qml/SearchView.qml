@@ -37,6 +37,7 @@ Item {
                 hasPendingAction: TasksController.affectedApplicationsIds.indexOf(app_id) > -1
                 installed: RegistryController.installedApplications.indexOf(app_id) > -1
                 onRequestGet: InstallController.install(app_id)
+                onRequestRemove: UninstallController.uninstall(app_id)
             }
         }
 

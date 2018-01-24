@@ -34,16 +34,36 @@ int RegistryListModel::rowCount(const QModelIndex& parent) const {
 
 QString RegistryListModel::createRecordMessage(const QVariantMap& record) const {
     QString message;
-    if (record.value(TaskMetadata::KEY_TYPE)
+    if (record.value(TaskMetadata::KEY_STATUS)
             .toString()
-            .compare(TaskMetadata::VALUE_TYPE_INSTALL) == 0) {
+            .compare(TaskMetadata::VALUE_STATUS_COMPLETED) == 0) {
 
-        if (record.value(TaskMetadata::KEY_STATUS)
+        if (record.value(TaskMetadata::KEY_TYPE)
                 .toString()
-                .compare(TaskMetadata::VALUE_STATUS_COMPLETED) == 0) {
+                .compare(TaskMetadata::VALUE_TYPE_INSTALL) == 0) {
+
             message = "Application installed successfully.";
-        } else {
+        }
+
+        if (record.value(TaskMetadata::KEY_TYPE)
+                .toString()
+                .compare(TaskMetadata::VALUE_TYPE_REMOVE) == 0) {
+
+            message = "Application removed successfully.";
+        }
+    } else {
+        if (record.value(TaskMetadata::KEY_TYPE)
+                .toString()
+                .compare(TaskMetadata::VALUE_TYPE_INSTALL) == 0) {
+
             message = "Installation failed.";
+        }
+
+        if (record.value(TaskMetadata::KEY_TYPE)
+                .toString()
+                .compare(TaskMetadata::VALUE_TYPE_REMOVE) == 0) {
+
+            message = "Remove failed.";
         }
     }
     return message;

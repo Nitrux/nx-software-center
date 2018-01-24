@@ -20,23 +20,31 @@ static const char *const KEY_APPLICATION_INSTALLED_FILES = "files";
 
 
 void Registry::handleTaskCompleted(const QString /*task_id*/, const QVariantMap resume) {
+    QVariantMap map = resume;
     const QString &taskType = resume.value(TaskMetadata::KEY_TYPE, "unknown").toString();
     const QString &taskStatus = resume.value(TaskMetadata::KEY_STATUS, "unknown").toString();
+    map.insert(RecordMetadata::KEY_TIME_STAMP, QDateTime::currentDateTime());
     if (taskType == TaskMetadata::VALUE_TYPE_INSTALL) {
         if (taskStatus == TaskMetadata::VALUE_STATUS_COMPLETED)
-            registerInstallCompleted(resume);
+            registerInstallCompleted(map);
         else
-            registerInstallFailed(resume);
+            registerInstallFailed(map);
+    }
+
+    if (taskType == TaskMetadata::VALUE_TYPE_REMOVE) {
+        if (taskStatus == TaskMetadata::VALUE_STATUS_COMPLETED)
+            registerUninstallCompleted(map);
+        else
+            registerUninstallFailed(map);
     }
 
     saveRecords();
     saveInstalledApplications();
 }
 
-void Registry::registerInstallCompleted(QVariantMap map) {
+void Registry::registerInstallCompleted(QVariantMap &map) {
     removeUnneededTaskFields(map);
 
-    map.insert(RecordMetadata::KEY_TIME_STAMP, QDateTime::currentDateTime());
     map.insert(RecordMetadata::KEY_IS_PERSISTENT, true);
 
     appendInstallRecord(map);
@@ -60,19 +68,18 @@ void Registry::appendInstallRecord(const QVariantMap &map) {
     emit installedApplicationsChanged(installedApplications.keys());
 }
 
-void Registry::registerInstallFailed(QVariantMap map) {
+void Registry::registerInstallFailed(QVariantMap &map) {
     removeUnneededTaskFields(map);
 
-    map.insert(RecordMetadata::KEY_TIME_STAMP, QDateTime::currentDateTime());
     map.insert(RecordMetadata::KEY_IS_PERSISTENT, false);
 
     appendRecord(map);
 }
 
-void Registry::appendRecord(const QVariantMap map) {
+void Registry::appendRecord(const QVariantMap &map) {
     records.push_front(map);
 
-    recordsChanged(records);
+    emit recordsChanged(records);
 }
 
 QByteArray Registry::readJsonFile(const QString &path) {
@@ -224,4 +231,33 @@ void Registry::clearRecords() {
     records.clear();
 
     saveRecords();
+}
+
+QStringList Registry::getInstalledApplicationFiles(const QString &appId) {
+    return installedApplications.value(appId, QStringList());
+}
+
+void Registry::registerUninstallCompleted(QVariantMap &map) {
+    removeUnneededTaskFields(map);
+
+    map.insert(RecordMetadata::KEY_IS_PERSISTENT, true);
+
+    appendRecord(map);
+
+    removeInstalledApplication(map);
+}
+
+void Registry::removeInstalledApplication(QVariantMap &map) {
+    const QString app_id = map.value(TaskMetadata::KEY_APP_ID).toString();
+    installedApplications.remove(app_id);
+    emit installedApplicationsChanged(installedApplications.keys());
+
+}
+
+void Registry::registerUninstallFailed(QVariantMap &map) {
+    removeUnneededTaskFields(map);
+
+    map.insert(RecordMetadata::KEY_IS_PERSISTENT, false);
+
+    appendRecord(map);
 }

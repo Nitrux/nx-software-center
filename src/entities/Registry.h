@@ -14,6 +14,7 @@
 
 class Registry : public QObject {
 Q_OBJECT
+
     QList<QVariantMap> records;
     QMap<QString, QStringList> installedApplications;
     QDateTime expirationDate;
@@ -22,14 +23,18 @@ public:
 
     explicit Registry(QObject *parent = nullptr);
 
-    Q_INVOKABLE QStringList getInstalledApplications() const;
+    QStringList getInstalledApplications() const;
 
-    Q_INVOKABLE QList<QVariantMap> getRecords() const;
+    QStringList getInstalledApplicationFiles(const QString &appId);
+
+    QList<QVariantMap> getRecords() const;
 
     void clearInstalledApplications();
+
     void clearRecords();
 
     void setExpirationDate(QDateTime date);
+
 
 public slots:
 
@@ -42,15 +47,15 @@ signals:
     void recordsChanged(const QList<QVariantMap> &records);
 
 private:
-    void registerInstallCompleted(QVariantMap map);
+    void registerInstallCompleted(QVariantMap &map);
 
-    void registerInstallFailed(QVariantMap map);
+    void registerInstallFailed(QVariantMap &map);
 
     void appendInstallRecord(const QVariantMap &map);
 
     void removeUnneededTaskFields(QVariantMap &map) const;
 
-    void appendRecord(const QVariantMap map);
+    void appendRecord(const QVariantMap &map);
 
     void loadRecords();
 
@@ -75,6 +80,12 @@ private:
     QByteArray serializeInstalledApplicationsToJson() const;
 
     void extractInstalledApplications(const QByteArray &json);
+
+    void registerUninstallCompleted(QVariantMap &map);
+
+    void removeInstalledApplication(QVariantMap &map);
+
+    void registerUninstallFailed(QVariantMap &map);
 };
 
 

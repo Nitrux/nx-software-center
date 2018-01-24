@@ -1,7 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QNetworkAccessManager>
-#include <QList>
 #include <QIcon>
 
 #include "AppImageHubSource.h"
@@ -13,11 +12,11 @@
 #include "ui/SearchControler.h"
 #include "ui/TasksController.h"
 #include "ui/InstallController.h"
+#include "ui/UninstallController.h"
 #include "ui/RegistryController.h"
 
-#include <QQmlDebuggingEnabler>
-
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
+#define QML_MODULE_MAJOR_VERSION 1
 
 Repository *repository;
 DownloadManager *downloadManager = nullptr;
@@ -54,7 +53,7 @@ void initSoftwareCenterModules(QObject *parent) {
     QObject::connect(executor, &Executor::taskCompleted, registry, &Registry::handleTaskCompleted);
 
     networkAccessManager = new QNetworkAccessManager(parent);
-    downloadManager = new CachedDownloadManager(networkAccessManager, parent);
+    downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
 
     AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);
 
@@ -79,26 +78,35 @@ static QObject *installControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return installControler;
 }
 
+static QObject *uninstallControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    auto *uninstallController = new UninstallController(repository, registry, executor);
+    return uninstallController;
+}
+
 static QObject *registryControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     RegistryController *registryControler = new RegistryController(registry);
     return registryControler;
 }
 
 void registerQmlModules() {
-    qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, 1, 0,
+    qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                               "SearchController",
                                               searchControllerSingletonProvider);
 
 
-    qmlRegisterSingletonType<TasksController>(QML_MODULE_NAMESPACE, 1, 0,
+    qmlRegisterSingletonType<TasksController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                        "TasksController",
                                        tasksControllerSingletonProvider);
 
-    qmlRegisterSingletonType<InstallController>(QML_MODULE_NAMESPACE, 1, 0,
+    qmlRegisterSingletonType<InstallController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                        "InstallController",
                                        installControllerSingletonProvider);
 
-    qmlRegisterSingletonType<RegistryController>(QML_MODULE_NAMESPACE, 1, 0,
+    qmlRegisterSingletonType<InstallController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                                "UninstallController",
+                                                uninstallControllerSingletonProvider);
+
+    qmlRegisterSingletonType<RegistryController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                        "RegistryController",
                                        registryControllerSingletonProvider);
 }
