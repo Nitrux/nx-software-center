@@ -21,3 +21,7 @@ void RegistryController::handleRecordsChanged(const QList<QVariantMap> &records)
 {
     model->setRecords(records);
 }
+
+void RegistryController::clearRecords() {
+    registry->clearRecords();
+}

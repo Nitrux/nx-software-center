@@ -21,6 +21,7 @@ signals:
     void installedApplicationsChanged(const QStringList &installedApplications);
     void modelChanged(RegistryListModel *model);
 public slots:
+    void clearRecords();
 
 protected slots:
     void handleRecordsChanged(const QList<QVariantMap> &records);

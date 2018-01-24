@@ -231,6 +231,7 @@ void Registry::clearRecords() {
     records.clear();
 
     saveRecords();
+    emit recordsChanged(records);
 }
 
 QStringList Registry::getInstalledApplicationFiles(const QString &appId) {

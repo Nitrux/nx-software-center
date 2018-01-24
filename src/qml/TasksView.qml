@@ -47,10 +47,21 @@ Item {
             visible: false
         }
 
-        PlasmaExtras.Heading {
-            text: "History"
+        RowLayout {
             visible: RegistryController.model.rowCount() > 0
+
+            PlasmaExtras.Heading {
+                Layout.fillWidth: true
+                text: "History"
+            }
+
+            PlasmaComponents.Button {
+                Layout.rightMargin: 18
+                iconName: "trash-empty"
+                onClicked: RegistryController.clearRecords();
+            }
         }
+
 
         PlasmaExtras.ScrollArea {
             visible: RegistryController.model.rowCount() > 0
