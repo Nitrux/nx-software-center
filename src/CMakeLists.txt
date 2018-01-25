@@ -33,7 +33,8 @@ set(CORE_SRC
     #    entities/Upgrader.h
     entities/Updater.cpp
     entities/Updater.h
-    )
+    entities/Cache.cpp
+    entities/Cache.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
