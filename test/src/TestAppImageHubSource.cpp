@@ -20,8 +20,8 @@ namespace NX_SOFTWARE_CENTER_TESTS {
 
     TEST_F(TestAppImageHubSource, fetchApplications) {
         QNetworkAccessManager networkAccessManager;
-        FakeDownloadManager *downloadManager = new FakeDownloadManager(&networkAccessManager);
-        AppImageHubSource s(downloadManager);
+        FakeDownloadManager downloadManager(&networkAccessManager);
+        AppImageHubSource s(&downloadManager);
 
         static QList<Application> req_results;
         static QString req_error;
