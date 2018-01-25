@@ -10,6 +10,7 @@
 
 #include "Cache.h"
 #include "Repository.h"
+#include "ApplicationSerializer.h"
 
 const QString Cache::getApplicationsCachePath() {
     QString path = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first();
@@ -41,16 +42,7 @@ void Cache::handleInstalledApplicationsChanged(const QStringList &applicationsId
 
 void Cache::storeApplication(const QString appId) {
     const Application &a = repository->get(appId);
-    QByteArray json;
-    if (!a.getId().isEmpty()) {
-        QJsonObject o;
-        o.insert("id", a.getId());
-        o.insert("codeName", a.getCodeName());
-        o.insert("version", a.getVersion());
-
-        QJsonDocument document(o);
-        json = document.toJson(QJsonDocument::Compact);
-    }
+    QByteArray json = ApplicationSerializer::serialize(a);
 
     QFile f(getApplicationsCachePath() + appId + ".json");
     if (f.open(QIODevice::WriteOnly)) {

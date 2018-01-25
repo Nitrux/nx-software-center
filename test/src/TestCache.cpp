@@ -5,6 +5,7 @@
 #include <QFile>
 
 #include <gtest/gtest.h>
+#include <entities/ApplicationSerializer.h>
 
 #include "entities/Cache.h"
 #include "entities/Repository.h"
@@ -27,7 +28,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
         QString cacheFilePath = cacheDir + a.getId() + ".json";
         QFile f(cacheFilePath);
 
-        QByteArray expected = R"({"codeName":"test","id":"test-1.0","version":"1.0"})";
+        QByteArray expected = ApplicationSerializer::serialize(a);
 
         if (f.open(QIODevice::ReadOnly)) {
             QByteArray data = f.readAll();
