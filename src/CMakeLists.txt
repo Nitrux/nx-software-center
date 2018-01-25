@@ -7,9 +7,9 @@ set(CORE_SRC
     interactors/Interactor.h
     gateways/DownloadManager.h
 
-    AppImageHubSource.cpp
+    gateways/AppImageHubSource.cpp
     interactors/FetchApplicationsInteractor.cpp
-    AppImageInstallLinksRegExParser.cpp
+    gateways/AppImageInstallLinksRegExParser.cpp
     gateways/SimpleDownloadManager.cpp
     entities/Registry.cpp
     entities/Registry.h
@@ -25,6 +25,8 @@ set(CORE_SRC
     gateways/ContentDownload.h
     gateways/CachedDownloadManager.h
     gateways/CachedDownloadManager.cpp
+    gateways/CacheSource.cpp
+    gateways/CacheSource.h
     interactors/TaskMetadata.h
     entities/RecordMetadata.h
     interactors/RemoveAppImageInteractor.cpp
@@ -36,7 +38,8 @@ set(CORE_SRC
     entities/Cache.cpp
     entities/Cache.h
     entities/ApplicationSerializer.cpp
-    entities/ApplicationSerializer.h)
+    entities/ApplicationSerializer.h
+    )
 
 add_library(core OBJECT ${CORE_SRC})
 

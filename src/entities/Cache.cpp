@@ -21,8 +21,16 @@ const QString Cache::getApplicationsCachePath() {
     return path;
 }
 
-Cache::Cache(Repository *repository, QObject *parent) : QObject(parent), repository(repository) {
+Cache::Cache(QObject *parent) : QObject(parent), repository(nullptr) {
+    loadApplicationIdsInCache();
+}
 
+void Cache::loadApplicationIdsInCache() {
+    QDir cacheDir(getApplicationsCachePath());
+    for (const QString &file : cacheDir.entryList({"*.json"})) {
+        QFileInfo fileInfo(cacheDir.absoluteFilePath(file));
+        applicationsInCache.insert(fileInfo.completeBaseName());
+    }
 }
 
 void Cache::handleInstalledApplicationsChanged(const QStringList &applicationsIds) {
@@ -41,17 +49,28 @@ void Cache::handleInstalledApplicationsChanged(const QStringList &applicationsId
 }
 
 void Cache::storeApplication(const QString appId) {
-    const Application &a = repository->get(appId);
-    QByteArray json = ApplicationSerializer::serialize(a);
+    Application a;
+    if (repository)
+        a = repository->get(appId);
 
-    QFile f(getApplicationsCachePath() + appId + ".json");
-    if (f.open(QIODevice::WriteOnly)) {
-        f.write(json);
-        f.close();
+    if (!a.isEmpty()) {
+        QByteArray json = ApplicationSerializer::serialize(a);
+
+        QFile f(getApplicationsCachePath() + appId + ".json");
+        if (f.open(QIODevice::WriteOnly)) {
+            f.write(json);
+            f.close();
+        }
     }
 }
 
 void Cache::removeApplication(const QString appId) {
     QFile f(getApplicationsCachePath() + appId + ".json");
     f.remove();
+}
+
+void Cache::setRepository(Repository *repository) { this->repository = repository; }
+
+QStringList Cache::getApplicationIdsInCache() {
+    return applicationsInCache.toList();
 }

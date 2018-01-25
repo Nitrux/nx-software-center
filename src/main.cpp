@@ -3,12 +3,14 @@
 #include <QNetworkAccessManager>
 #include <QIcon>
 
-#include "AppImageHubSource.h"
+#include "gateways/CacheSource.h"
+#include "gateways/AppImageHubSource.h"
 #include "gateways/SimpleDownloadManager.h"
 #include "gateways/CachedDownloadManager.h"
 #include "entities/Registry.h"
 #include "entities/Executor.h"
 #include "entities/Updater.h"
+#include "entities/Cache.h"
 
 #include "ui/SearchControler.h"
 #include "ui/TasksController.h"
@@ -26,6 +28,7 @@ QNetworkAccessManager *networkAccessManager = nullptr;
 Executor *executor = nullptr;
 Registry *registry = nullptr;
 Updater *updater = nullptr;
+Cache *cache = nullptr;
 
 
 void registerQmlModules();
@@ -59,8 +62,14 @@ void initSoftwareCenterModules(QObject *parent) {
 
     networkAccessManager = new QNetworkAccessManager(parent);
     downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
-    AppImageHubSource *s = new AppImageHubSource(downloadManager, parent);
-    updater = new Updater(repository, {s});
+
+    CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
+    AppImageHubSource *appImageHubSource = new AppImageHubSource(downloadManager, parent);
+    updater = new Updater(repository, {appImageHubSource, cacheSource});
+
+    cache = new Cache;
+    cache->setRepository(repository);
+    QObject::connect(registry, &Registry::installedApplicationsChanged, cache, &Cache::handleInstalledApplicationsChanged);
 }
 
 

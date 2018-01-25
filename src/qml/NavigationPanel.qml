@@ -63,7 +63,7 @@ PlasmaCore.FrameSvgItem {
 
         PlasmaComponents.ToolButton {
             id: tasksButton
-            iconName: "document-download"
+            iconName: "appimage-store"
             Layout.fillHeight: true
             checked: currentView == "tasks"
             onClicked: {

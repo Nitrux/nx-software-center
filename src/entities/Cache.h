@@ -7,14 +7,20 @@
 
 #include <QSet>
 #include <QString>
+#include <QObject>
 
 class Repository;
+
 class Cache : public QObject {
 Q_OBJECT
     Repository *repository;
     QSet<QString> applicationsInCache;
 public:
-    explicit Cache(Repository *repository, QObject *parent = nullptr);
+    explicit Cache(QObject *parent = nullptr);
+
+    void setRepository(Repository *repository);
+
+    QStringList getApplicationIdsInCache();
 
     static const QString getApplicationsCachePath();
 
@@ -22,9 +28,11 @@ public slots:
 
     void handleInstalledApplicationsChanged(const QStringList &applicationsIds);
 
-    void storeApplication(const QString appId);
+    void storeApplication(QString appId);
 
-    void removeApplication(const QString appId);
+    void removeApplication(QString appId);
+
+    void loadApplicationIdsInCache();
 };
 
 

@@ -79,6 +79,8 @@ public:
 
     bool operator<(const Application &a) const;
 
+    bool isEmpty();
+
 private:
     QString generateId(const QString &id, const QString &version) const;
 };

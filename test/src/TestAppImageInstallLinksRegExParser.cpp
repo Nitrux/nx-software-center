@@ -2,7 +2,7 @@
 
 #include <QSignalSpy>
 
-#include "AppImageInstallLinksRegExParser.h"
+#include "gateways/AppImageInstallLinksRegExParser.h"
 #include "gateways/CachedDownloadManager.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {

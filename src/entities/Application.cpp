@@ -144,3 +144,7 @@ const QString &Application::getHomePageUrl() const {
 void Application::setHomePageUrl(const QString &webPortalUrl) {
     Application::homePageUrl = webPortalUrl;
 }
+
+bool Application::isEmpty() {
+    return id.isEmpty();
+}

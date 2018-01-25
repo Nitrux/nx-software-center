@@ -4,7 +4,7 @@
 #include <QSignalSpy>
 
 #include "entities/Application.h"
-#include "AppImageHubSource.h"
+#include "gateways/AppImageHubSource.h"
 #include "FakeDownloadManager.h"
 
 
