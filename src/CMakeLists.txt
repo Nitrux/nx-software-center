@@ -34,7 +34,9 @@ set(CORE_SRC
     entities/Updater.cpp
     entities/Updater.h
     entities/Cache.cpp
-    entities/Cache.h)
+    entities/Cache.h
+    entities/ApplicationSerializer.cpp
+    entities/ApplicationSerializer.h)
 
 add_library(core OBJECT ${CORE_SRC})
 

@@ -22,7 +22,8 @@ add_executable(tests
     src/FakeDownloadManager.h src/FakeDownloadManager.cpp
     src/TestRegistry.cpp
     src/TestUpdater.cpp
-    src/TestCache.cpp)
+    src/TestCache.cpp
+    src/TestApplicationSerializer.cpp)
 
 target_include_directories(tests
     PRIVATE ${CMAKE_SOURCE_DIR}/src/
