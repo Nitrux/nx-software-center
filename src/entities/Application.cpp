@@ -29,6 +29,33 @@ int Application::compare(const Application &a) const {
     int diff = id.compare(a.id);
     if (diff) return diff;
 
+    diff = arch.compare(a.arch);
+    if (diff) return diff;
+
+    diff = name.compare(a.name);
+    if (diff) return diff;
+
+    diff = description.compare(a.description);
+    if (diff) return diff;
+
+    diff = licence.compare(a.licence);
+    if (diff) return diff;
+
+    diff = downloadUrl.compare(a.downloadUrl);
+    if (diff) return diff;
+
+    diff = homePageUrl.compare(a.homePageUrl);
+    if (diff) return diff;
+
+    diff = authors != a.authors;
+    if (diff) return diff;
+
+    diff = categories != a.categories;
+    if (diff) return diff;
+
+    diff = screenshots != a.screenshots;
+    if (diff) return diff;
+
     return 0;
 }
 
@@ -110,10 +137,10 @@ void Application::setDownloadUrl(const QString &downloadUrl) {
     Application::downloadUrl = downloadUrl;
 }
 
-const QString &Application::getWebPortalUrl() const {
-    return webPortalUrl;
+const QString &Application::getHomePageUrl() const {
+    return homePageUrl;
 }
 
-void Application::setWebPortalUrl(const QString &webPortalUrl) {
-    Application::webPortalUrl = webPortalUrl;
+void Application::setHomePageUrl(const QString &webPortalUrl) {
+    Application::homePageUrl = webPortalUrl;
 }

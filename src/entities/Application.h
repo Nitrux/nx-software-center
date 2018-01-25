@@ -18,7 +18,7 @@ class Application {
     QStringList screenshots;
 
     QString downloadUrl;
-    QString webPortalUrl;
+    QString homePageUrl;
 
 public:
     explicit Application();
@@ -63,9 +63,9 @@ public:
 
     void setDownloadUrl(const QString &downloadUrl);
 
-    const QString &getWebPortalUrl() const;
+    const QString &getHomePageUrl() const;
 
-    void setWebPortalUrl(const QString &webPortalUrl);
+    void setHomePageUrl(const QString &webPortalUrl);
 
     int compare(const Application &a) const;
 
