@@ -11,6 +11,7 @@ QtObject {
     readonly property string actionOkTitle: i18n("&Ok")
     readonly property string actionCancelTitle: i18n("&Cancel")
     readonly property string unknownError: i18n("Ups! something went wrong.")
+    readonly property string fetchError: i18n("Unable to fetch applications list, please check your internet connection.")
     readonly property string requestCredentialNotice: i18n("Requesting user credentials")
     readonly property string availableActionsNotice: i18n("Available actions")
     readonly property string noApplicationsFound: i18n("Sorry, no applications were found. Please try search something else.")

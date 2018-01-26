@@ -5,11 +5,10 @@ import QtQuick.Layouts 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-import org.nx.softwarecenter 1.0
+import org.nxos.softwarecenter 1.0
 
 ApplicationWindow {
     id: main
-    title: qsTr("NX Software Center")
 
     visible: true
     width: 900
@@ -20,11 +19,11 @@ ApplicationWindow {
 
     color: theme.backgroundColor
 
-    //    visibility: Qt.WindowFullScreen
     header: NavigationPanel {
         id: navigationPanel
 
-        onGoHome: main.goHome()
+        onGoStore: main.handleGoStore()
+        onGoTasks: main.showTasksView()
         onStoreQueryTyped: main.search(query)
     }
 
@@ -34,93 +33,92 @@ ApplicationWindow {
         visible: false
     }
 
-    Loader {
-        id: content
+    StackView {
+        id: stackView
         anchors.fill: parent
+        initialItem: PlaceHolderView
+
+        function findItemByObjectName(name) {
+            var item = stackView.find(function (item, index) {
+                return item.objectName === name
+            })
+            return item
+        }
+
+        function goTo(name, component) {
+            var itemInstance = findItemByObjectName(name);
+            if (itemInstance) {
+                print("pop " + name);
+                stackView.pop(itemInstance)
+            } else {
+                print("push " + name);
+                stackView.push(component, {objectName: name})
+            }
+        }
     }
 
     TextConstants {
         id: textConstants
     }
 
-    function goStore() {
-        navigationPanel.currentView = "store"
-        content.source = "qrc:/StoreView.qml"
+    function search(query) {
+        SearchController.search(query)
     }
 
-    function search(query) {
-        goStore()
-        SearchViewController.search(query)
+    function showTasksView() {
+        main.title = "Tasks"
+        stackView.goTo("tasksView", "qrc:/TasksView.qml");
     }
 
     Connections {
-        target: SearchViewController
-        onApplications: appsCache = apps
-        onNoMatchFound: {
-            appsCache = undefined
-            main.showNothingFoundSreen()
+        target: UpdaterController
+        onIsWorkingChanged: handleUpdaterIsWorkingChanged(isWorking)
+    }
+
+    function handleUpdaterIsWorkingChanged(isWorking) {
+        print("isWorking: " + UpdaterController.isWorking)
+        print("isReady: " + UpdaterController.isReady)
+        if (navigationPanel.currentView == "store") {
+            if (isWorking) {
+                main.title = "Loading contents"
+                showBusyMessage("Loading store contents...")
+            } else {
+                if (UpdaterController.isReady)
+                    showSearchView();
+                else
+                    showUpdateErrorMessage();
+            }
         }
     }
 
-    function showLoadingScreen(message) {
-        content.source = "qrc:/PlaceHolderView.qml"
-        var placeHolder = content.item
-        if (placeHolder !== undefined) {
-            placeHolder.showBusyIndicator = true
-            placeHolder.message = message
-        }
+    function handleGoStore() {
+        if (UpdaterController.isReady)
+            showSearchView()
+        else
+            UpdaterController.update()
     }
 
-    function showError(message) {
-        content.source = "qrc:/PlaceHolderView.qml"
-        var placeHolder = content.item
-        if (placeHolder !== undefined) {
-            if (message == "")
-                message = textConstants.unknownError
-
-            placeHolder.message = message
-            placeHolder.iconName = "face-sad"
-            placeHolder.showBusyIndicator = false
-        }
+    function showSearchView() {
+        main.title = "Explore";
+        stackView.goTo("searchView", "qrc:/SearchView.qml");
     }
 
-    function showNothingFoundSreen() {
-        if (main.refreshCacheTask != undefined)
-            return
-
-        content.source = "qrc:/PlaceHolderView.qml"
-        var placeHolder = content.item
-        if (placeHolder !== undefined) {
-            placeHolder.message = textConstants.noApplicationsFound
-            placeHolder.iconName = "dialog-information"
-            placeHolder.showBusyIndicator = false
-        }
+    function showBusyMessage(message) {
+        stackView.goTo("placeHolderView", "qrc:/PlaceHolderView.qml");
+        var item = stackView.findItemByObjectName("placeHolderView");
+        item.message = message
+        item.iconName = "";
+        item.showBusyIndicator = true;
     }
 
-    Component.onCompleted: {
-        refreshCache()
+    function showUpdateErrorMessage() {
+        stackView.goTo("placeHolderView", "qrc:/PlaceHolderView.qml");
+        var item = stackView.findItemByObjectName("placeHolderView");
+
+        item.message = textConstants.fetchError
+        item.iconName = "network-wireless-disconnected";
+        item.showBusyIndicator = false;
     }
 
-    function refreshCache() {
-        navigationPanel.disable()
-
-        var taskId = TasksController.fetchApps()
-        main.refreshCacheTask = TasksController.getTask(taskId)
-
-        showLoadingScreen("Loading aplications...")
-        main.refreshCacheTask.stateChanged.connect(handleRefreshCacheFinished)
-    }
-
-    function handleRefreshCacheFinished() {
-        if (main.refreshCacheTask.state !== Task.TASK_RUNNING
-                && main.refreshCacheTask.state !== Task.TASK_CREATED) {
-            goStore()
-            main.refreshCacheTask = undefined
-
-            navigationPanel.enable()
-
-            SearchViewController.search()
-            goStore()
-        }
-    }
+    Component.onCompleted: handleGoStore()
 }

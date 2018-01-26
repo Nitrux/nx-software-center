@@ -10,6 +10,7 @@ PlasmaCore.FrameSvgItem {
 
     signal goHome
     signal goStore
+    signal goTasks
     signal goSettings
     signal storeQueryTyped(var query)
 
@@ -55,8 +56,19 @@ PlasmaCore.FrameSvgItem {
             Layout.fillHeight: true
             checked: currentView == "store"
             onClicked: {
-                goStore()
                 currentView = "store"
+                goStore()
+            }
+        }
+
+        PlasmaComponents.ToolButton {
+            id: tasksButton
+            iconName: "appimage-store"
+            Layout.fillHeight: true
+            checked: currentView == "tasks"
+            onClicked: {
+                currentView = "tasks"
+                goTasks()
             }
         }
 

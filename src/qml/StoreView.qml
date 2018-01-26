@@ -1,11 +1,11 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 
-import org.nx.softwarecenter 1.0
-
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+
+import org.nxos.softwarecenter 1.0
 
 import "parts" as Parts
 
@@ -58,11 +58,11 @@ Item {
 
             clip: true
 
-            model: main.appsCache
+            model: SearchController.results
             spacing: 12
 
             delegate: AppImageListItemDelegate {
-                name: model.modelData['name']
+                codeName: model.modelData['codeName']
                 description: model.modelData['description']
 
                 onRequestDownload: {
@@ -94,8 +94,8 @@ Item {
                 }
 
                 function loadData() {
-                    isDownloadable = model.modelData['download_link']
-                    isDownloaded = RegistryController.isReleaseDownloaded(
+                    showDownloadButton = model.modelData['download_link']
+                    showRemoveButton = RegistryController.isReleaseDownloaded(
                                 model.modelData['id'],
                                 model.modelData['latest_release_id'])
                 }
