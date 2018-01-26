@@ -8,6 +8,7 @@ UpgradesListModel::UpgradesListModel(QObject *parent)
 QHash<int, QByteArray> UpgradesListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
+    roles.insert(CodeName, "app_codename");
     roles.insert(OldId, "old_app_id");
     roles.insert(NewId, "new_app_id");
     roles.insert(NewName, "new_app_name");

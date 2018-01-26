@@ -85,6 +85,7 @@ void UpgraderController::updateApplicationsModel(const UpgradeList &upgradableAp
             const Application &newApp = repository->get(upgrade.second);
 
             QMap<int, QVariant> upgradeData;
+            upgradeData[UpgradesListModel::CodeName] = oldApp.getCodeName();
             upgradeData[UpgradesListModel::OldId] = oldApp.getId();
             upgradeData[UpgradesListModel::NewId] = newApp.getId();
             upgradeData[UpgradesListModel::NewName] = newApp.getName();

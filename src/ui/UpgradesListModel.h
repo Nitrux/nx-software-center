@@ -10,7 +10,8 @@ class UpgradesListModel : public QAbstractListModel
 public:
     enum ApplicationListModelRoles
     {
-        OldId = Qt::UserRole + 1,
+        CodeName = Qt::UserRole + 1,
+        OldId,
         NewId,
         NewName,
         NewDescription,
