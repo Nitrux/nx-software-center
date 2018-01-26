@@ -19,13 +19,12 @@ UpgraderController::UpgraderController(Upgrader *upgrader, Repository *repositor
 
 }
 
-void UpgraderController::upgrade(const QString &appCodeName)
-{
+void UpgraderController::upgrade(const QString &appCodeName) {
     const UpgradeList &upgrades = upgrader->getUpgradableApplications();
     QString oldAppId, newAppId;
     for (const Upgrade &upgrade: upgrades) {
         if (upgrade.first.startsWith(appCodeName) &&
-                upgrade.second.startsWith(appCodeName)) {
+            upgrade.second.startsWith(appCodeName)) {
             oldAppId = upgrade.first;
             newAppId = upgrade.second;
         }
@@ -37,6 +36,34 @@ void UpgraderController::upgrade(const QString &appCodeName)
 }
 
 void UpgraderController::upgrade(const QString &oldAppId, const QString &newAppId) {
+    InstallAppImageInteractor *i = executeInstall(newAppId);
+
+    if (i) {
+        connect(i, &Interactor::completed, [=]() {
+            const QVariantMap metadata = i->getMetadata();
+            if (isTaskCompletedSuccesfully(metadata))
+                executeRemove(oldAppId);
+        });
+    }
+}
+
+bool UpgraderController::isTaskCompletedSuccesfully(const QVariantMap &metadata) const {
+    const QString &result = metadata.value(TaskMetadata::KEY_STATUS).toString();
+    return result.compare(TaskMetadata::VALUE_STATUS_COMPLETED) == 0;
+}
+
+void UpgraderController::executeRemove(const QString &oldAppId) const {
+    try {
+        const Application &a = repository->get(oldAppId);
+        const QStringList &files = registry->getInstalledApplicationFiles(oldAppId);
+        auto *i = new RemoveAppImageInteractor(a, files);
+        executor->execute(i);
+    } catch (ApplicationNotFoundException e) {
+        qCritical() << "Application " << e.getAppId() << " not found in repository.";
+    }
+}
+
+InstallAppImageInteractor *UpgraderController::executeInstall(const QString &newAppId) const {
     InstallAppImageInteractor *i = nullptr;
     try {
         const Application &a = repository->get(newAppId);
@@ -44,26 +71,11 @@ void UpgraderController::upgrade(const QString &oldAppId, const QString &newAppI
         executor->execute(i);
     } catch (ApplicationNotFoundException e) {
         qCritical() << "Application " << e.getAppId() << " not found in repository.";
-        return;
     }
-
-    if (i) {
-        connect(i, &Interactor::completed, [=]() {
-            try {
-                const Application &a = repository->get(oldAppId);
-                const QStringList &files = registry->getInstalledApplicationFiles(oldAppId);
-                auto *i = new RemoveAppImageInteractor(a, files);
-                executor->execute(i);
-            } catch (ApplicationNotFoundException e) {
-                qCritical() << "Application " << e.getAppId() << " not found in repository.";
-                return;
-            }
-        });
-    }
+    return i;
 }
 
-void UpgraderController::updateApplicationsModel(const UpgradeList &upgradableApplications)
-{
+void UpgraderController::updateApplicationsModel(const UpgradeList &upgradableApplications) {
     this->upgradableApplications.clear();
 
     QList<QMap<int, QVariant>> newUpgrades;

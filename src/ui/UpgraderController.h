@@ -13,7 +13,7 @@
 #include <entities/Upgrader.h>
 
 #include "UpgradesListModel.h"
-
+class InstallAppImageInteractor;
 class UpgraderController : public QObject {
 Q_OBJECT
     Upgrader *upgrader;
@@ -44,6 +44,12 @@ protected slots:
 
 private:
     void updateApplicationsModel(const UpgradeList &upgradableApplications);
+
+    InstallAppImageInteractor *executeInstall(const QString &newAppId) const;
+
+    void executeRemove(const QString &oldAppId) const;
+
+    bool isTaskCompletedSuccesfully(const QVariantMap &metadata) const;
 };
 
 
