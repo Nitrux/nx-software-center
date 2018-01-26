@@ -1,8 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import org.nxos.softwarecenter 1.0
@@ -29,19 +27,19 @@ Item {
             cellHeight: 200
 
             delegate: ApplicationGridItemDelegate {
+                id: applicationGridItemDelegate
                 icon: "package-x-generic"
-                name : app_name
-                version : app_version
-//                size : "90 MiB"
+                name: app_name
+                version: app_version
 
                 hasPendingAction: TasksController.affectedApplicationsIds.indexOf(app_id) > -1
                 installed: RegistryController.installedApplications.indexOf(app_id) > -1
                 upgradable: UpgraderController.upgradableApplications.indexOf(app_code_name) > -1
+
                 onRequestGet: InstallController.install(app_id)
                 onRequestRemove: UninstallController.uninstall(app_id)
-                onRequestUpgrade: UpgraderController.upgrade(app_code_name);
+                onRequestUpgrade: UpgraderController.upgrade(app_code_name)
             }
         }
-
     }
 }

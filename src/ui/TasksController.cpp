@@ -3,7 +3,7 @@
 //
 
 #include "TasksController.h"
-
+#include <interactors/TaskMetadata.h>
 #include <QMutexLocker>
 
 TasksController::TasksController(Executor *executor, QObject *parent)
@@ -32,7 +32,7 @@ void TasksController::handleTaskStarted(const QString &id) {
 
     model->addTask(id, d);
 
-    QString appId = d.value("task_application_id").toString();
+    QString appId = d.value(TaskMetadata::KEY_APP_ID).toString();
     if (!appId.isEmpty()) {
         affectedApplicationsIds.append(appId);
         emit affectedApplicationsIdsChanged(affectedApplicationsIds);
@@ -42,11 +42,11 @@ void TasksController::handleTaskStarted(const QString &id) {
 void TasksController::handleTaskCompleted(const QString &id) {
     QMutexLocker locker(&mutex);
 
-    model->removeTask(id);
-
     const QVariantMap d = model->getTask(id);
 
-    QString appId = d.value("task_application_id").toString();
+    model->removeTask(id);
+
+    QString appId = d.value(TaskMetadata::KEY_APP_ID).toString();
     if (!appId.isEmpty()) {
         affectedApplicationsIds.removeOne(appId);
         emit affectedApplicationsIdsChanged(affectedApplicationsIds);

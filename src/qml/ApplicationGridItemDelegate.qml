@@ -87,6 +87,7 @@ Item {
         Component {
             id: getButton
             PlasmaComponents.Button {
+                enabled: !hasPendingAction
                 text: upgradable ? i18n("Upgrade") : i18n("Get")
 
                 onClicked: {
@@ -101,6 +102,7 @@ Item {
         Component {
             id: removeButton
             PlasmaComponents.Button {
+                enabled: !hasPendingAction
                 text: i18n("Remove")
 
                 onClicked: requestRemove()
