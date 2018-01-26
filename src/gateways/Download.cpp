@@ -10,7 +10,7 @@ Download::Download(QString url, QObject *parent) : QObject(parent), source_url(u
                                                    progressNotificationsEnabled(false),
                                                    isStopRequested(false),
                                                    networkAccessManager(nullptr),
-                                                   speed(0) {
+                                                   speed(0), bytesRead(0), bytesReadLastTick(0) {
 }
 
 
@@ -96,7 +96,8 @@ void Download::updateDownloadSpeed() {
     bytesReadLastTick = bytesRead;
 
     speed = (speed + diff) / 2;
-
+    if (speed < 0)
+        speed = 0;
     reportProgress();
 }
 
