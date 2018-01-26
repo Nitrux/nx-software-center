@@ -39,7 +39,11 @@ void initSoftwareCenterModules(QObject *parent);
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
+
+#ifdef QT_DEBUG
     QQmlDebuggingEnabler enabler;
+#endif
+
     QQmlApplicationEngine engine;
 
 
