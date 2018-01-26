@@ -8,6 +8,7 @@ before_install:
   - sudo apt-get update -qq
 
 install:
+  - sudo apt-get install debhelper cmake git qtdeclarative5-dev extra-cmake-modules libqt5xmlpatterns5-dev
   - sudo apt-get -y install qt59base
   - source /opt/qt*/bin/qt*-env.sh
 
