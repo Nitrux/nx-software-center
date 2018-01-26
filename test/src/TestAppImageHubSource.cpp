@@ -36,7 +36,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
 
         s.fetchAllApplications();
 
-        spyRes.wait();
+        spyRes.wait(60000);
 
         ASSERT_EQ(1, spyRes.count());
         ASSERT_EQ(0, spyErr.count());
