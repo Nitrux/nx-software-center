@@ -52,7 +52,7 @@ bool AppImageHubSource::areAllApplicationReleasesParsersFinished() const {
 }
 
 void AppImageHubSource::spawnApplicationReleasesParser(const QVariantMap &appData) {
-    QString link = appData.value("install_link", "").toString();
+    QString link = appData.value("download_link", "").toString();
 
     AppImageInstallLinksRegExParser *parser = new AppImageInstallLinksRegExParser(link, downloadManager, this);
     connect(parser, &AppImageInstallLinksRegExParser::newLink, this, &AppImageHubSource::handleNewInstallLinkFound);
@@ -60,9 +60,10 @@ void AppImageHubSource::spawnApplicationReleasesParser(const QVariantMap &appDat
     connect(parser, &AppImageInstallLinksRegExParser::error, this, &AppImageHubSource::handleParserError);
 
     parsers << parser;
-    if (link.isEmpty() || link == "")
+    if (link.isEmpty() || link == "") {
+        qDebug() << appData.value("code_name").toString() << " has no download link";
         parsersFinished++;
-    else
+    } else
         parser->parse();
 
 }
