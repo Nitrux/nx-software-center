@@ -96,4 +96,5 @@ target_link_libraries(nx_software_center
     Qt5::Qml
     Qt5::Network)
 
-install(FILES "org.nxos.softwarecenter.desktop" DESTINATION share/applications)
+install(TARGETS nx_software_center ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+

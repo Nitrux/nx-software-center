@@ -31,3 +31,5 @@ add_subdirectory(src)
 add_subdirectory(test)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+install(FILES "org.nxos.softwarecenter.desktop" DESTINATION share/applications)
