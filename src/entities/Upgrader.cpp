@@ -12,14 +12,18 @@ UpgradeList Upgrader::getUpgrades() {
 
     if (repository) {
         for (const QString &appId: installedApplications) {
-            const Application &current = repository->get(appId);
-            const Application &latest = repository->getLatestVersion(current.getCodeName());
+            try {
+                const Application &current = repository->get(appId);
+                const Application &latest = repository->getLatestVersion(current.getCodeName());
 
-            if (current < latest && !installedApplications.contains(latest.getId())) {
-                QPair <QString, QString> upgrade;
-                upgrade.first = current.getId();
-                upgrade.second = latest.getId();
-                upgrades.append(upgrade);
+                if (current < latest && !installedApplications.contains(latest.getId())) {
+                    QPair <QString, QString> upgrade;
+                    upgrade.first = current.getId();
+                    upgrade.second = latest.getId();
+                    upgrades.append(upgrade);
+                }
+            } catch (ApplicationNotFoundException e) {
+                qWarning() << e.getAppId() << " wasn't found and is reported as installed";
             }
         }
     } else
