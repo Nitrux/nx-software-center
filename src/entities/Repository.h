@@ -11,6 +11,10 @@
 #include "interactors/FetchApplicationsInteractor.h"
 
 class ApplicationNotFoundException : public QException {
+    QString appId;
+public:
+    ApplicationNotFoundException(const QString appId) : QException(), appId(appId) {}
+    const QString getAppId() { return appId; }
 };
 
 class Repository : public QObject {

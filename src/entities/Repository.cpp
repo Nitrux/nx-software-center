@@ -11,9 +11,11 @@
 Repository::Repository(QObject *parent) : QObject(parent), isBeingUpdated(false) {}
 
 void Repository::add(Application app) {
-    QWriteLocker lock(&mutex);
+    {
+        QWriteLocker lock(&mutex);
+        applications.insert(app.getId(), app);
+    }
 
-    applications.insert(app.getId(), app);
     if (!isBeingUpdated)
             emit changed();
 }
@@ -28,7 +30,7 @@ Application Repository::get(const QString &id) {
     QReadLocker lock(&mutex);
 
     if (!applications.contains(id))
-        throw ApplicationNotFoundException();
+        throw ApplicationNotFoundException(id);
     else
         return applications.value(id);
 }
@@ -134,28 +136,33 @@ Application Repository::getLatestVersion(const QString &name) {
 }
 
 void Repository::removeAll() {
-    QWriteLocker lock(&mutex);
+    {
+        QWriteLocker lock(&mutex);
+        applications.clear();
+    }
 
-    applications.clear();
     if (!isBeingUpdated)
             emit changed();
 }
 
 void Repository::remove(const QString &id) {
-    QWriteLocker lock(&mutex);
-
-    applications.remove(id);
+    {
+        QWriteLocker lock(&mutex);
+        applications.remove(id);
+    }
 
     if (!isBeingUpdated)
             emit changed();
 }
 
 void Repository::removeAllVersions(const QString &name) {
-    QWriteLocker lock(&mutex);
+    {
+        QWriteLocker lock(&mutex);
 
-    for (const Application &a : applications.values()) {
-        if (name.compare(a.getCodeName()) == 0)
-            applications.remove(a.getId());
+        for (const Application &a : applications.values()) {
+            if (name.compare(a.getCodeName()) == 0)
+                applications.remove(a.getId());
+        }
     }
 
     if (!isBeingUpdated)
@@ -163,12 +170,18 @@ void Repository::removeAllVersions(const QString &name) {
 }
 
 void Repository::setIsBeingUpdated(bool isBeingUpdated) {
-    QWriteLocker lock(&mutex);
 
-    if (this->isBeingUpdated && !isBeingUpdated)
+    {
+        QReadLocker lock(&mutex);
+        if (this->isBeingUpdated && !isBeingUpdated)
             emit changed();
+    }
 
-    this->isBeingUpdated = isBeingUpdated;
+    {
+        QWriteLocker lock(&mutex);
+        this->isBeingUpdated = isBeingUpdated;
+    }
+
     emit isBeingUpdateChanged(this->isBeingUpdated);
 }
 

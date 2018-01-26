@@ -9,6 +9,7 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles.insert(Id, "app_id");
+    roles.insert(CodeName, "app_code_name");
     roles.insert(Name, "app_name");
     roles.insert(Description, "app_description");
     roles.insert(Version, "app_version");
@@ -39,6 +40,9 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
         break;
     case Version:
         ret = a.getVersion();
+        break;
+    case CodeName:
+        ret = a.getCodeName();
         break;
     case Name:
         ret = a.getName();

@@ -44,7 +44,27 @@ Item {
         }
         PlasmaExtras.Heading {
             text: "Updates"
-            visible: false
+            visible: UpgraderController.model.rowCount() > 0
+        }
+
+        PlasmaExtras.ScrollArea {
+            visible: UpgraderController.model.rowCount() > 0
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            ListView {
+                id: upgradesListView
+                model: UpgraderController.model
+                delegate: UpgradeListItemDelegate {
+                    icon: "package-x-generic"
+                    name: new_app_name
+                    version: new_app_version
+
+                    changeslog_message: "Newer version available"
+
+                    onRequestUpgrade: UpgraderController.upgrade(old_app_id, new_app_id);
+                }
+            }
         }
 
         RowLayout {
@@ -58,10 +78,9 @@ Item {
             PlasmaComponents.Button {
                 Layout.rightMargin: 18
                 iconName: "trash-empty"
-                onClicked: RegistryController.clearRecords();
+                onClicked: RegistryController.clearRecords()
             }
         }
-
 
         PlasmaExtras.ScrollArea {
             visible: RegistryController.model.rowCount() > 0

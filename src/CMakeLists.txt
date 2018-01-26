@@ -31,8 +31,8 @@ set(CORE_SRC
     entities/RecordMetadata.h
     interactors/RemoveAppImageInteractor.cpp
     interactors/RemoveAppImageInteractor.h
-    #    entities/Upgrader.cpp
-    #    entities/Upgrader.h
+    entities/Upgrader.cpp
+    entities/Upgrader.h
     entities/Updater.cpp
     entities/Updater.h
     entities/Cache.cpp
@@ -57,8 +57,13 @@ target_include_directories(core
 ######
 
 set(UI_SRC
+    ui/ApplicationListModel.h
     ui/ApplicationListModel.cpp
-    ui/SearchControler.cpp ui/TasksController.cpp ui/TasksController.h ui/TaskListModel.cpp ui/TaskListModel.h
+    ui/SearchControler.cpp
+    ui/TasksController.cpp
+    ui/TasksController.h
+    ui/TaskListModel.cpp
+    ui/TaskListModel.h
     ui/InstallController.h
     ui/InstallController.cpp
     ui/RegistryController.h
@@ -69,7 +74,10 @@ set(UI_SRC
     ui/UninstallController.h
     ui/UpdaterController.cpp
     ui/UpdaterController.h
-    )
+    ui/UpgraderController.cpp
+    ui/UpgraderController.h
+    ui/UpgradesListModel.h
+    ui/UpgradesListModel.cpp)
 
 ## add the qml.qrc file
 qt5_add_resources(qml_QRC qml/files.qrc)

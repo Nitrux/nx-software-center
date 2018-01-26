@@ -11,10 +11,12 @@ Item {
     property alias size: labelSize.text
 
     property bool installed: false
+    property bool upgradable: false
     property bool hasPendingAction: false
 
     signal requestRemove
     signal requestGet
+    signal requestUpgrade
 
     height: 200
     width: 200
@@ -61,7 +63,7 @@ Item {
                     Layout.fillWidth: true
                     elide: Text.ElideRight
 
-                    visible: text != "";
+                    visible: text != ""
                 }
 
                 PlasmaComponents.Label {
@@ -69,7 +71,7 @@ Item {
                     Layout.fillWidth: true
                     elide: Text.ElideRight
 
-                    visible: text != "";
+                    visible: text != ""
                 }
             }
 
@@ -78,16 +80,21 @@ Item {
                 Layout.rightMargin: 8
                 Layout.maximumWidth: 72
                 Layout.preferredHeight: 36
-                sourceComponent: installed ?  removeButton : getButton
+                sourceComponent: installed ? removeButton : getButton
             }
         }
 
         Component {
             id: getButton
             PlasmaComponents.Button {
-                text: i18n("Get")
+                text: upgradable ? i18n("Upgrade") : i18n("Get")
 
-                onClicked: requestGet()
+                onClicked: {
+                    if (upgradable)
+                        requestUpgrade()
+                    else
+                        requestGet()
+                }
             }
         }
 

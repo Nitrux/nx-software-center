@@ -12,6 +12,7 @@ class ApplicationListModel : public QAbstractListModel
     enum ApplicationListModelRoles
     {
         Id = Qt::UserRole + 1,
+        CodeName,
         Name,
         Version,
         Description,

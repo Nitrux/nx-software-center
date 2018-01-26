@@ -3,6 +3,8 @@
 #include <QNetworkAccessManager>
 #include <QIcon>
 
+#include <ui/UpgraderController.h>
+
 #include "gateways/CacheSource.h"
 #include "gateways/AppImageHubSource.h"
 #include "gateways/SimpleDownloadManager.h"
@@ -29,6 +31,7 @@ Executor *executor = nullptr;
 Registry *registry = nullptr;
 Updater *updater = nullptr;
 Cache *cache = nullptr;
+Upgrader *upgrader = nullptr;
 
 
 void registerQmlModules();
@@ -70,6 +73,12 @@ void initSoftwareCenterModules(QObject *parent) {
     cache = new Cache;
     cache->setRepository(repository);
     QObject::connect(registry, &Registry::installedApplicationsChanged, cache, &Cache::handleInstalledApplicationsChanged);
+
+    upgrader = new Upgrader();
+    upgrader->setRepository(repository);
+    upgrader->setInstalledApplications(registry->getInstalledApplications());
+    QObject::connect(registry, &Registry::installedApplicationsChanged,
+                     upgrader, &Upgrader::handleInstalledApplicationsChanged);
 }
 
 
@@ -104,6 +113,11 @@ static QObject *updaterControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return updaterController;
 }
 
+static QObject *upgraderControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    UpgraderController *upgraderController = new UpgraderController(upgrader, repository, registry, executor, downloadManager);
+    return upgraderController;
+}
+
 void registerQmlModules() {
     qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                               "SearchController",
@@ -129,4 +143,8 @@ void registerQmlModules() {
     qmlRegisterSingletonType<UpdaterController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                        "UpdaterController",
                                        updaterControllerSingletonProvider);
+
+    qmlRegisterSingletonType<UpgraderController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                       "UpgraderController",
+                                       upgraderControllerSingletonProvider);
 }

@@ -23,7 +23,7 @@ add_executable(tests
     src/TestRegistry.cpp
     src/TestUpdater.cpp
     src/TestCache.cpp
-    src/TestApplicationSerializer.cpp)
+    src/TestApplicationSerializer.cpp src/TestUpgrader.cpp)
 
 target_include_directories(tests
     PRIVATE ${CMAKE_SOURCE_DIR}/src/
