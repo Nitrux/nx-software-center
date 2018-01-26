@@ -6,7 +6,6 @@
 #define NOMAD_SOFTWARE_CENTER_FILEDOWNLOAD_H
 
 #include <QFile>
-#include <QTimer>
 #include <QObject>
 #include <QString>
 #include <QNetworkReply>
