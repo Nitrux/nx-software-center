@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
@@ -16,9 +15,10 @@ Item {
 
         PlasmaExtras.Heading {
             text: "Running Tasks"
-            visible: TasksController.model.rowCount() > 0
+            visible: tasksScrollArea.visible
         }
         PlasmaExtras.ScrollArea {
+            id: tasksScrollArea
             visible: TasksController.model.rowCount() > 0
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -44,10 +44,11 @@ Item {
         }
         PlasmaExtras.Heading {
             text: "Updates"
-            visible: UpgraderController.model.rowCount() > 0
+            visible: upgradesScrollArea.visible
         }
 
         PlasmaExtras.ScrollArea {
+            id: upgradesScrollArea
             visible: UpgraderController.model.rowCount() > 0
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -68,7 +69,7 @@ Item {
         }
 
         RowLayout {
-            visible: RegistryController.model.rowCount() > 0
+            visible: registryScrollArea.visible
 
             PlasmaExtras.Heading {
                 Layout.fillWidth: true
@@ -83,6 +84,7 @@ Item {
         }
 
         PlasmaExtras.ScrollArea {
+            id: registryScrollArea
             visible: RegistryController.model.rowCount() > 0
             Layout.fillWidth: true
             Layout.fillHeight: true
