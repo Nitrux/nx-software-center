@@ -11,7 +11,7 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get -y install --allow-unauthenticated cmake git qt59base qt59declarative
+  - sudo apt-get -y install --allow-unauthenticated cmake git qt59base qt59declarative inkscape
   - source /opt/qt*/bin/qt*-env.sh
   - # Precompiled KF5
   - wget -c "https://github.com/chigraph/precompiled-kf5-linux/releases/download/precompiled/kf5-gcc6-linux64-release.tar.xz"
@@ -30,6 +30,8 @@ script:
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
   - make -j$(nproc)
   - make DESTDIR="appdir" -j$(nproc) install ; find appdir/
+  - wget -c -nv "https://raw.githubusercontent.com/nomad-desktop/luv-icon-theme/master/Luv/apps/64/nx-software-center.svg"
+  - inkscape -z -e appdir/nx-software-center.png -w 256 -h 256 nx-software-center.svg
   - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
