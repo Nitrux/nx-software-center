@@ -3,19 +3,35 @@ compiler: gcc
 sudo: require
 dist: trusty
 
+notifications:
+  email: false
+
 before_install:
   - sudo add-apt-repository ppa:beineri/opt-qt593-trusty -y
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get install debhelper cmake git qtdeclarative5-dev extra-cmake-modules libqt5xmlpatterns5-dev
-  - sudo apt-get -y install qt59base
+  - sudo apt-get -y install --allow-unauthenticated cmake git qt59base qt59declarative inkscape
   - source /opt/qt*/bin/qt*-env.sh
+  - # Precompiled KF5
+  - wget -c "https://github.com/chigraph/precompiled-kf5-linux/releases/download/precompiled/kf5-gcc6-linux64-release.tar.xz"
+  - tar xf kf5-gcc6-linux64-release.tar.xz
+  - sudo cp -Rf root/kf5-release/* /opt/qt*/
+  - # extra-cmake-modules KDE project; https://superuser.com/questions/850029/could-not-find-a-configuration-file-for-package-ecm-that-is-compatible-with-re/912259#912259
+  - git clone git://anongit.kde.org/extra-cmake-modules
+  - cd extra-cmake-modules
+  - mkdir build && cd build
+  - cmake ..
+  - make && sudo make install
+  - cd ../..
+
 
 script:
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
   - make -j$(nproc)
-  - make INSTALL_ROOT=appdir -j$(nproc) install ; find appdir/
+  - make DESTDIR="appdir" -j$(nproc) install ; find appdir/
+  - wget -c -nv "https://raw.githubusercontent.com/nomad-desktop/luv-icon-theme/master/Luv/apps/64/nx-software-center.svg"
+  - inkscape -z -e appdir/nx-software-center.png -w 256 -h 256 nx-software-center.svg
   - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
@@ -25,9 +41,8 @@ script:
 
 after_success:
   - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-  - # curl --upload-file APPNAME*.AppImage https://transfer.sh/APPNAME-git.$(git rev-parse --short HEAD)-x86_64.AppImage
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-  - bash upload.sh APPNAME*.AppImage*
+  - bash upload.sh Software_Center*.AppImage*
 
 branches:
   except:

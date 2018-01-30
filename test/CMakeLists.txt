@@ -27,6 +27,7 @@ add_executable(tests
 
 target_include_directories(tests
     PRIVATE ${CMAKE_SOURCE_DIR}/src/
+    private ${gtest_INCLUDE_DIRS}
     PRIVATE ${Qt5Core_INCLUDE_DIRS}
     PRIVATE ${Qt5Network_INCLUDE_DIRS}
     )
