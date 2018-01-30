@@ -2,7 +2,5 @@
 Software Center to install and manage AppImages 
 
 ### Depends:
- * KF5
- * KF5 KIO
- * LibAppImage
- 
+ * QT5
+ * appimaged (this is a runtime only dependency)
