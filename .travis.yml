@@ -51,6 +51,8 @@ after_success:
     2-3 | sort | uniq
   - if [ -z "$TRAVIS_TAG" ]; then
         export TRAVIS_TAG="continous";
+        git tag -f $TRAVIS_TAG;
+        git push --tags -f $TRAVIS_TAG;
       fi
   - mkdir out
   - mv -v Software_Center*.AppImage* out/
