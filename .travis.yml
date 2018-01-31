@@ -33,21 +33,27 @@ install:
 script:
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
   - make -j$(nproc)
-  - make DESTDIR="appdir" -j$(nproc) install ; find appdir/
+  - make DESTDIR="appdir" -j$(nproc) install
+  - find appdir/
+  - # Create a png icon for the AppImage
   - wget -c -nv "https://raw.githubusercontent.com/nomad-desktop/luv-icon-theme/master/Luv/apps/64/nx-software-center.svg"
   - inkscape -z -e appdir/nx-software-center.png -w 256 -h 256 nx-software-center.svg
+  - # Create the appimage
   - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
   - export VERSION=$(git rev-parse --short HEAD)
   - "./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop
     -qmldir=src/qml -bundle-non-qt-libs -appimage"
+  - find appdir/
 after_success:
   - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f
     2-3 | sort | uniq
   - if [ -z "$TRAVIS_TAG" ]; then
         export TRAVIS_TAG="continous";
       fi
+  - mkdir out
+  - mv -v Software_Center*.AppImage* out/
 
 branches:
   except:
@@ -58,7 +64,7 @@ deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
   file_glob: true
-  file: ./Software_Center*.AppImage*"
+  file: out/*
   on:
     repo: nomad-desktop/nx-software-center
     tags: true
