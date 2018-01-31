@@ -47,6 +47,11 @@ after_success:
         export TRAVIS_TAG="continous";
       fi
 
+branches:
+  except:
+    - # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous)$/
+
 deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
