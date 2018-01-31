@@ -5,6 +5,12 @@ dist: trusty
 
 notifications:
   email: false
+  webhooks:
+    urls:
+        - "https://scalar.vector.im/api/neb/services/hooks/dHJhdmlzLWNpLyU0MGF6dWJpZXRhJTNBbWF0cml4Lm9yZy8lMjFGVUFDclFFZGZhSXpHT2xhSUolM0FtYXRyaXgub3Jn"
+    on_success: change  # always|never|change
+    on_failure: always
+    on_start: never
 
 before_install:
   - sudo add-apt-repository ppa:beineri/opt-qt593-trusty -y
