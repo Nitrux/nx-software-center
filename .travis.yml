@@ -50,7 +50,8 @@ after_success:
 deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
-  file: Software_Center*.AppImage*"
+  file_glob: true
+  file: ./Software_Center*.AppImage*"
   on:
     repo: nomad-desktop/nx-software-center
     tags: true
