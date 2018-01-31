@@ -11,21 +11,19 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get -y install --allow-unauthenticated cmake git qt59base qt59declarative inkscape
+  - sudo apt-get -y install --allow-unauthenticated cmake git qt59base qt59declarative
+    inkscape
   - source /opt/qt*/bin/qt*-env.sh
-  - # Precompiled KF5
+  -
   - wget -c "https://github.com/chigraph/precompiled-kf5-linux/releases/download/precompiled/kf5-gcc6-linux64-release.tar.xz"
   - tar xf kf5-gcc6-linux64-release.tar.xz
   - sudo cp -Rf root/kf5-release/* /opt/qt*/
-  - # extra-cmake-modules KDE project; https://superuser.com/questions/850029/could-not-find-a-configuration-file-for-package-ecm-that-is-compatible-with-re/912259#912259
   - git clone git://anongit.kde.org/extra-cmake-modules
   - cd extra-cmake-modules
   - mkdir build && cd build
   - cmake ..
   - make && sudo make install
   - cd ../..
-
-
 script:
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
   - make -j$(nproc)
@@ -35,16 +33,22 @@ script:
   - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - export VERSION=$(git rev-parse --short HEAD) # linuxdeployqt uses this for naming the file
-  - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -bundle-non-qt-libs
-  - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage
-
+  - export VERSION=$(git rev-parse --short HEAD)
+  - "./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop
+    -bundle-non-qt-libs"
+  - "./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop
+    -qmldir=src/qml"
+  - "./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop
+    -appimage"
 after_success:
-  - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-  - bash upload.sh Software_Center*.AppImage*
+  - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f
+    2-3 | sort | uniq
 
-branches:
-  except:
-    - # Do not build tags that we create when we upload to GitHub Releases
-    - /^(?i:continuous)/
+deploy:
+  provider: releases
+  api_key: "$GITHUB_TOKEN"
+  file: Software_Center*.AppImage*"
+  on:
+    repo: nomad-desktop/nx-software-center
+    tags: true
+    all_branches: true
