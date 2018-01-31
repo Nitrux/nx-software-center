@@ -65,6 +65,8 @@ deploy:
   api_key: "$GITHUB_TOKEN"
   file_glob: true
   file: out/*
+  options:
+    prerelease: [[ $TRAVIS_TAG="continous" ]]
   on:
     repo: nomad-desktop/nx-software-center
     tags: true
