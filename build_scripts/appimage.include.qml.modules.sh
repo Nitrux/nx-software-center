@@ -37,5 +37,5 @@ for qmldir in $qmldirs; do
 done
 
 for dir_to_include in $dirs_to_include; do
-    cp -rv $dir_to_include $2/usr/qml/
+    cp -r $dir_to_include $2/usr/qml/
 done
