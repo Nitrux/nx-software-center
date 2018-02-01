@@ -52,9 +52,9 @@ after_success:
   - export TAG_AS_PRERELEASE=true
   - if [ -z "$TRAVIS_TAG" ]; then
         export TAG_AS_PRERELEASE=true
-        export TRAVIS_TAG="continous";
+        export TRAVIS_TAG="continuous";
         git tag -f $TRAVIS_TAG;
-        git push --tags -f $TRAVIS_TAG;
+        git push --tags origin continuous -f;
       fi
   - mkdir out
   - mv -v Software_Center*.AppImage* out/
