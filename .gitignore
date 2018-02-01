@@ -1,4 +1,5 @@
-*build*/
+build/
+cmake-build*/
 CMakeLists.txt.user
 .idea
 test/data/webCache/*
