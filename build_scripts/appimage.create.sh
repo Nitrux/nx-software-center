@@ -21,7 +21,8 @@ export VERSION=$(git rev-parse --short HEAD)
 ./linuxdeployqt-continuous-x86_64.AppImage \
     appdir/usr/share/applications/*.desktop \
     -qmldir=/usr/lib/x86_64-linux-gnu/qt5/qml \
-    -bundle-non-qt-libs\
+    -bundle-non-qt-libs \
     -appimage
 
+ls -lh
 find appdir/
