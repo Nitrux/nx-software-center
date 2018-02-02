@@ -37,7 +37,7 @@ script:
 after_success:
   - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f
     2-3 | sort | uniq
-  - export TAG_AS_PRERELEASE=true
+  - export TAG_AS_PRERELEASE=false
   - if [ -z "$TRAVIS_TAG" ]; then
         export TAG_AS_PRERELEASE=true
         export TRAVIS_TAG="continuous";
@@ -57,7 +57,7 @@ deploy:
   file_glob: true
   file: out/*
   skip_cleanup: true
-  prerelease: "$TAG_AS_PRERELEASE"
+  prerelease: $TAG_AS_PRERELEASE
   on:
     repo: nomad-desktop/nx-software-center
     tags: true
