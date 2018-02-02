@@ -1,7 +1,7 @@
 language: cpp
 compiler: gcc
 sudo: require
-dist: trusty
+dist: xenial
 
 notifications:
   email: false
@@ -13,22 +13,23 @@ notifications:
     on_start: never
 
 before_install:
-  - sudo add-apt-repository ppa:beineri/opt-qt593-trusty -y
+  - wget -qO - http://archive.neon.kde.org/public.key | sudo apt-key add -
+  - echo "deb http://archive.neon.kde.org/user/ xenial main" | sudo tee /etc/apt/sources.list.d/neon.list
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get -y install --allow-unauthenticated cmake git qt59base qt59declarative
-    inkscape
-  - source /opt/qt*/bin/qt*-env.sh
-  - wget -c "https://github.com/chigraph/precompiled-kf5-linux/releases/download/precompiled/kf5-gcc6-linux64-release.tar.xz"
-  - tar xf kf5-gcc6-linux64-release.tar.xz
-  - sudo cp -Rf root/kf5-release/* /usr/local/
-  - git clone git://anongit.kde.org/extra-cmake-modules
-  - cd extra-cmake-modules
-  - mkdir build && cd build
-  - cmake ..
-  - make && sudo make install
-  - cd ../..
+  - sudo apt-get -y install --allow-unauthenticated inkscape git cmake extra-cmake-modules qtdeclarative5-dev-tools
+    qml-module-qtgraphicaleffects plasma-framework-dev qtbase5-dev qtdeclarative5-dev libqt5xmlpatterns5-dev
+#  - source /opt/qt*/bin/qt*-env.sh
+#  - wget -c "https://github.com/chigraph/precompiled-kf5-linux/releases/download/precompiled/kf5-gcc6-linux64-release.tar.xz"
+#  - tar xf kf5-gcc6-linux64-release.tar.xz
+#  - sudo cp -Rf root/kf5-release/* /usr/local/
+#  - git clone git://anongit.kde.org/extra-cmake-modules
+#  - cd extra-cmake-modules
+#  - mkdir build && cd build
+#  - cmake ..
+#  - make && sudo make install
+#  - cd ../..
 script:
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
   - make -j$(nproc)
