@@ -9,6 +9,11 @@ if [[ $# != 2 ]]; then
     exit 1
 fi
 
+if ! which qmlimportscanner; then
+    echo "qmlimportscanner binary is not reachable."
+    echo "please, check that it's installed and included in search paths."
+    exit 1
+fi
 
 echo "## Looking for qml imports in $1"
 modules=$(qmlimportscanner $1 | grep -oE '"name":.*"(.*)"' | cut -d" " -f 2 | sort | uniq)
