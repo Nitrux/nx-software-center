@@ -38,7 +38,7 @@ void Executor::execute(Interactor *interactor) {
 
     QThreadPool::globalInstance()->start(runnableWrapper);
 
-    emit taskStarted(id);
+    emit taskStarted(id, interactor->getMetadata());
 }
 
 void Executor::handleInteractorComplete() {

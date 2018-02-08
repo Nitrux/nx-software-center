@@ -26,27 +26,24 @@ void TasksController::cancelTask(const QString &id)
 }
 
 
-void TasksController::handleTaskStarted(const QString &id) {
+void TasksController::handleTaskStarted(const QString &id, const QVariantMap &data) {
     QMutexLocker locker(&mutex);
-    const QVariantMap &d = executor->getTaskData(id);
 
-    model->addTask(id, d);
+    model->addTask(id, data);
 
-    QString appId = d.value(TaskMetadata::KEY_APP_ID).toString();
+    QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
     if (!appId.isEmpty()) {
         affectedApplicationsIds.append(appId);
         emit affectedApplicationsIdsChanged(affectedApplicationsIds);
     }
 }
 
-void TasksController::handleTaskCompleted(const QString &id) {
+void TasksController::handleTaskCompleted(const QString &id, const QVariantMap &data) {
     QMutexLocker locker(&mutex);
-
-    const QVariantMap d = model->getTask(id);
 
     model->removeTask(id);
 
-    QString appId = d.value(TaskMetadata::KEY_APP_ID).toString();
+    QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
     if (!appId.isEmpty()) {
         affectedApplicationsIds.removeOne(appId);
         emit affectedApplicationsIdsChanged(affectedApplicationsIds);
