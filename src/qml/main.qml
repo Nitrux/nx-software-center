@@ -7,6 +7,8 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import org.nxos.softwarecenter 1.0
 
+import "parts" as Parts;
+
 ApplicationWindow {
     id: main
 
@@ -54,6 +56,27 @@ ApplicationWindow {
                 print("push " + name);
                 stackView.push(component, {objectName: name})
             }
+        }
+    }
+
+    Parts.MessageFrame {
+        id: messageBox
+
+        anchors.horizontalCenter: header.horizontalCenter
+        anchors.top: header.bottom
+
+        visible: false
+
+        onCloseRequest: NotificationsController.hideNotification()
+
+        Connections {
+            target: NotificationsController
+            onShowNotificationRequest: {
+                messageBox.icon = ["emblem-info", "", "emblem-error"][notficationType]
+                messageBox.text = message
+                messageBox.visible = true
+            }
+            onNotificationExpired: messageBox.visible = false;
         }
     }
 
