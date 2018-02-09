@@ -47,4 +47,6 @@ target_link_libraries(test_core
     pthread # this must be last else it fails at linking
     )
 
+add_dependencies(test_core gtest)
+
 add_test(software_center_core test_core)
