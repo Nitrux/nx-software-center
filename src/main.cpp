@@ -69,7 +69,7 @@ void initSoftwareCenterModules(QObject *parent) {
     repository = new Repository();
 
     networkAccessManager = new QNetworkAccessManager(parent);
-    downloadManager = new CachedDownloadManager(networkAccessManager, parent);
+    downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
 
     CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
     AppImageHubSource *appImageHubSource = new AppImageHubSource(downloadManager, parent);
