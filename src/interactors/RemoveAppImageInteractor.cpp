@@ -48,12 +48,19 @@ void RemoveAppImageInteractor::setRunningMetadata() {
 
 void RemoveAppImageInteractor::setCompletedMetadata() {
     QVariantMap statusUpdate;
+    QString d = QString("Removing %1 %2 completed").arg(application.getCodeName(), application.getVersion());
+    metadata.insert(TaskMetadata::KEY_DESCRIPTION, d);
+
     statusUpdate.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_COMPLETED);
     setMetadata(statusUpdate);
 }
 
 void RemoveAppImageInteractor::setFailedMetadata() {
     QVariantMap statusUpdate;
+
+    QString d = QString("Removing %1 %2 failed").arg(application.getCodeName(), application.getVersion());
+    metadata.insert(TaskMetadata::KEY_DESCRIPTION, d);
+
     statusUpdate.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_FAILED);
     setMetadata(statusUpdate);
 }

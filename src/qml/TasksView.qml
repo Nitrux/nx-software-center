@@ -103,4 +103,9 @@ Item {
             }
         }
     }
+
+    // Togle tasks notifications for this view
+    Component.onCompleted: NotificationsController.tasksNotificationsEnabled = false
+    Component.onDestruction: NotificationsController.tasksNotificationsEnabled = true
+
 }

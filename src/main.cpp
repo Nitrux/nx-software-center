@@ -4,6 +4,7 @@
 #include <QIcon>
 
 #include <ui/UpgraderController.h>
+#include <ui/NotificationsController.h>
 
 #include "gateways/CacheSource.h"
 #include "gateways/AppImageHubSource.h"
@@ -68,7 +69,7 @@ void initSoftwareCenterModules(QObject *parent) {
     repository = new Repository();
 
     networkAccessManager = new QNetworkAccessManager(parent);
-    downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
+    downloadManager = new CachedDownloadManager(networkAccessManager, parent);
 
     CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
     AppImageHubSource *appImageHubSource = new AppImageHubSource(downloadManager, parent);
@@ -122,6 +123,12 @@ static QObject *upgraderControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return upgraderController;
 }
 
+static QObject *notificationsControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    auto *notificationsController = new NotificationsController();
+    notificationsController->setExecutor(executor);
+    return notificationsController;
+}
+
 void registerQmlModules() {
     qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                               "SearchController",
@@ -151,4 +158,8 @@ void registerQmlModules() {
     qmlRegisterSingletonType<UpgraderController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                        "UpgraderController",
                                        upgraderControllerSingletonProvider);
+
+    qmlRegisterSingletonType<NotificationsController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                                 "NotificationsController",
+                                                 notificationsControllerSingletonProvider);
 }

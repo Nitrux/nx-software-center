@@ -31,9 +31,9 @@ signals:
 
 protected slots:
 
-    void handleTaskStarted(const QString &id);
+    void handleTaskStarted(const QString &id, const QVariantMap &data);
 
-    void handleTaskCompleted(const QString &id);
+    void handleTaskCompleted(const QString &id, const QVariantMap &data);
 
     void handleTaskDataChanged(const QString &id, const QVariantMap &data);
 

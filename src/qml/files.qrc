@@ -7,7 +7,6 @@
         <file>TextConstants.qml</file>
         <file>ApplicationGridItemDelegate.qml</file>
         <file>TaskListItemDelegate.qml</file>
-        <file>StoreView.qml</file>
         <file>parts/MessageFrame.qml</file>
         <file>SearchView.qml</file>
         <file>TasksView.qml</file>

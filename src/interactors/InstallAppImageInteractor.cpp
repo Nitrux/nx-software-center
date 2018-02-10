@@ -68,6 +68,10 @@ void InstallAppImageInteractor::execute() {
 
 void InstallAppImageInteractor::setCompletedMetadata() {
     QVariantMap statusUpdate;
+
+    QString d = QString("Installing %1 %2 completed").arg(app.getName(), app.getVersion());
+    metadata.insert(TaskMetadata::KEY_DESCRIPTION, d);
+
     statusUpdate.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_COMPLETED);
     setMetadata(statusUpdate);
 }
@@ -97,8 +101,22 @@ void InstallAppImageInteractor::handleDownloadJobFinished() {
     isRunning = false;
 }
 
+void InstallAppImageInteractor::setFailedMetadata()
+{
+    QVariantMap statusUpdate;
+
+    QString d = QString("Download %1 %2 failed").arg(app.getName(), app.getVersion());
+    metadata.insert(TaskMetadata::KEY_DESCRIPTION, d);
+
+    statusUpdate.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_FAILED);
+    setMetadata(statusUpdate);
+}
+
 void InstallAppImageInteractor::handleDownloadJobError(const QString &error) {
     qWarning() << "Download Error: " << app.getDownloadUrl() << " " << error;
+
+    setFailedMetadata();
+
     emit completed();
     isRunning = false;
 }

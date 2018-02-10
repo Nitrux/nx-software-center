@@ -37,6 +37,7 @@ private:
     void createInstallationDirIfNotExist();
 
     void createInstallationPath(QString appFileName);
+    void setFailedMetadata();
 };
 
 
