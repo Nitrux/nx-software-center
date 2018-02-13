@@ -26,7 +26,6 @@ WRAPPER_PATH=appdir/usr/bin/${WRAPPER_NAME}
 
 # Create file
 mkdir -p appdir/usr/bin/
-
 touch ${WRAPPER_PATH}
 chmod +x ${WRAPPER_PATH}
 
@@ -40,9 +39,11 @@ echo "export XDG_DATA_DIRS=\${XDG_DATA_DIRS}:\${APPDIR}/usr/share/" | tee -a ${W
 
 echo "\${APPDIR}/usr/bin/${RUNNABLE}" | tee -a ${WRAPPER_PATH}
 
-# Replacing .desktop runnable
-# cp ${DESKTOP_FILE} ${DESKTOP_FILE}.old
-sed -i "s/Exec=${RUNNABLE}/Exec=${WRAPPER_NAME}/g" ${DESKTOP_FILE}
+# Write appdir .desktop
+DESKTOP_FILE_TARGET=appdir/`basename ${DESKTOP_FILE}`
+
+cp ${DESKTOP_FILE} ${DESKTOP_FILE_TARGET}
+sed -i "s/Exec=${RUNNABLE}/Exec=${WRAPPER_NAME}/g" ${DESKTOP_FILE_TARGET}
 
 echo "Done"
 echo ""
