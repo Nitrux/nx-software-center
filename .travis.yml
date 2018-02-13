@@ -22,7 +22,7 @@ before_install:
 install:
   - sudo apt-get -y install --allow-unauthenticated inkscape git cmake patchelf extra-cmake-modules qtdeclarative5-dev-tools
     qml-module-qtgraphicaleffects plasma-framework-dev qtbase5-dev qtdeclarative5-dev libqt5xmlpatterns5-dev nomad-plasma-look-and-feel
-    luv-icon-theme
+    luv-icon-theme nomad-desktop-settings
 
 script:
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr

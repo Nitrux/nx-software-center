@@ -13,6 +13,8 @@ source_dir=`dirname $build_scripts_dir`
 
 ./$build_scripts_dir/appimage.include.icon.theme.sh Luv
 
+./$build_scripts_dir/appimage.create.wrapper.sh
+
 ./$build_scripts_dir/appimage.run.patchelf.sh
 
 ./$build_scripts_dir/appimage.run.linuxdeployqt.sh
