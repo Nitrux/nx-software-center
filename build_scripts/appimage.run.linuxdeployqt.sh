@@ -11,7 +11,15 @@ export VERSION=$(git rev-parse --short HEAD)
 LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ./linuxdeployqt-continuous-x86_64.AppImage \
     appdir/usr/share/applications/*.desktop \
     -qmldir=src/qml \
-    -bundle-non-qt-libs \
-    -appimage
+    -bundle-non-qt-libs
+
+pushd appdir
+rm AppRun
+ln -s usr/bin/nx_software_center_wrapper.sh AppRun
+popd
+
+wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+chmod +x appimagetool-x86_64.AppImage
+./appimagetool-x86_64.AppImage appdir
 
 exit $?
