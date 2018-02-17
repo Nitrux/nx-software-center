@@ -69,7 +69,7 @@ void InstallAppImageInteractor::execute() {
 void InstallAppImageInteractor::setCompletedMetadata() {
     QVariantMap statusUpdate;
 
-    QString d = QString("Installing %1 %2 completed").arg(app.getName(), app.getVersion());
+    QString d = QString("Download %1 %2 completed").arg(app.getName(), app.getVersion());
     metadata.insert(TaskMetadata::KEY_DESCRIPTION, d);
 
     statusUpdate.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_COMPLETED);
