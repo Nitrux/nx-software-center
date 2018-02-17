@@ -11,7 +11,7 @@ InstallController::InstallController(Repository *repository, Executor *executor,
 
 void InstallController::install(const QString &application_id)
 {
-    qDebug() << "Installing " << application_id;
+    qDebug() << "Downloading " << application_id;
 
     const Application &a = repository->get(application_id);
     InstallAppImageInteractor *i = new InstallAppImageInteractor(a, downloadManager);
