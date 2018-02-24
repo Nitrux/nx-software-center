@@ -44,47 +44,49 @@ Item {
             Layout.alignment: Qt.AlignCenter
         }
 
-        RowLayout {
-            Layout.alignment: Qt.AlignCenter
-            Layout.maximumWidth: 180
-            Layout.maximumHeight: 90
-            ColumnLayout {
-                Layout.leftMargin: 8
+        GridLayout {
+            columns: 2
+//            flow: GridLayout.TopToBottom
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignBottom
+            Layout.bottomMargin: 18
+            Layout.leftMargin: 12
+            Layout.rightMargin: 8
+
+            Label {
+                id: labelName
                 Layout.fillWidth: true
-                Label {
-                    id: labelName
-                    Layout.fillWidth: true
-                    elide: Text.ElideRight
+                Layout.alignment: Qt.AlignBottom
+                Layout.columnSpan: 2
 
-                    font.bold: true
-                    font.pointSize: 8
-                }
+                elide: Text.ElideRight
 
-                Label {
-                    id: labelVersion
-                    Layout.fillWidth: true
-                    elide: Text.ElideRight
+                font.bold: true
+                font.pointSize: 8
+            }
 
-                    visible: text != ""
-                    font.pointSize: 8
-                }
+            Label {
+                id: labelVersion
+                Layout.fillWidth: true
+                elide: Text.ElideRight
 
-                Label {
-                    id: labelSize
-                    Layout.fillWidth: true
-                    elide: Text.ElideRight
-
-                    visible: text != ""
-                    font.pointSize: 8
-                }
+                font.pointSize: 8
             }
 
             Loader {
                 id: loader
-                Layout.rightMargin: 8
+                Layout.rowSpan: 2
                 Layout.maximumWidth: 72
-                Layout.preferredHeight: 26
+                Layout.preferredHeight: 20
                 sourceComponent: installed ? removeButton : getButton
+            }
+
+            Label {
+                id: labelSize
+                Layout.fillWidth: true
+                elide: Text.ElideRight
+
+                font.pointSize: 8
             }
         }
 
