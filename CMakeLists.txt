@@ -1,5 +1,5 @@
 project(nomad_software_center)
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.3)
 
 cmake_policy(SET CMP0037 NEW)
 cmake_policy(SET CMP0063 NEW)

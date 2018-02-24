@@ -1,8 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.3
 
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
     property alias icon: icon.source
@@ -14,6 +14,7 @@ Item {
     property bool upgradable: false
     property bool hasPendingAction: false
 
+    signal requestRun
     signal requestRemove
     signal requestGet
     signal requestUpgrade
@@ -50,28 +51,31 @@ Item {
             ColumnLayout {
                 Layout.leftMargin: 8
                 Layout.fillWidth: true
-                PlasmaComponents.Label {
+                Label {
                     id: labelName
                     Layout.fillWidth: true
                     elide: Text.ElideRight
 
                     font.bold: true
+                    font.pointSize: 8
                 }
 
-                PlasmaComponents.Label {
+                Label {
                     id: labelVersion
                     Layout.fillWidth: true
                     elide: Text.ElideRight
 
                     visible: text != ""
+                    font.pointSize: 8
                 }
 
-                PlasmaComponents.Label {
+                Label {
                     id: labelSize
                     Layout.fillWidth: true
                     elide: Text.ElideRight
 
                     visible: text != ""
+                    font.pointSize: 8
                 }
             }
 
@@ -79,16 +83,17 @@ Item {
                 id: loader
                 Layout.rightMargin: 8
                 Layout.maximumWidth: 72
-                Layout.preferredHeight: 36
+                Layout.preferredHeight: 26
                 sourceComponent: installed ? removeButton : getButton
             }
         }
 
         Component {
             id: getButton
-            PlasmaComponents.Button {
+            Button {
                 enabled: !hasPendingAction
                 text: upgradable ? i18n("Upgrade") : i18n("Get")
+                font.pointSize: 7
 
                 onClicked: {
                     if (upgradable)
@@ -101,11 +106,46 @@ Item {
 
         Component {
             id: removeButton
-            PlasmaComponents.Button {
-                enabled: !hasPendingAction
-                text: i18n("Remove")
+            RowLayout {
+                spacing: 0
+                Button {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
 
-                onClicked: requestRemove()
+                    enabled: !hasPendingAction
+                    text: i18n("Run")
+
+                    onClicked: requestRun()
+                    font.pointSize: 7
+                }
+                Button {
+                    id: menuButton
+                    Layout.maximumWidth: 20
+                    Layout.fillHeight: true
+                    font.pointSize: 7
+
+                    enabled: !hasPendingAction
+
+                    onClicked: actionsMenu.open()
+
+                    display: AbstractButton.IconOnly
+                    padding: 4
+                    spacing: 0
+
+                    icon.name: "down-arrow"
+                    icon.source: "qrc:/images/down-arrow.png"
+
+                    Menu {
+                        id: actionsMenu
+                        y: menuButton.height
+
+                        MenuItem {
+                            text: i18n("Remove")
+                            onTriggered: requestRemove()
+                            font.pointSize: 8
+                        }
+                    }
+                }
             }
         }
     }

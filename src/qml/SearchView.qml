@@ -39,6 +39,7 @@ Item {
                 onRequestGet: InstallController.install(app_id)
                 onRequestRemove: UninstallController.uninstall(app_id)
                 onRequestUpgrade: UpgraderController.upgrade(app_code_name)
+                onRequestRun: RunController.run(app_id)
             }
         }
     }

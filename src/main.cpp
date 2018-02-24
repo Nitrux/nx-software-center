@@ -21,6 +21,7 @@
 #include "ui/UninstallController.h"
 #include "ui/RegistryController.h"
 #include "ui/UpdaterController.h"
+#include "ui/RunController.h"
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
 #define QML_MODULE_MAJOR_VERSION 1
@@ -129,6 +130,11 @@ static QObject *notificationsControllerSingletonProvider(QQmlEngine *, QJSEngine
     return notificationsController;
 }
 
+static QObject *runControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    auto *runController = new RunController(registry);
+    return runController;
+}
+
 void registerQmlModules() {
     qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                               "SearchController",
@@ -162,4 +168,7 @@ void registerQmlModules() {
     qmlRegisterSingletonType<NotificationsController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                                  "NotificationsController",
                                                  notificationsControllerSingletonProvider);
+
+    qmlRegisterSingletonType<RunController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                            "RunController", runControllerSingletonProvider);
 }
