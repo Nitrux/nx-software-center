@@ -43,7 +43,8 @@ set(CORE_SRC
     entities/Cache.h
     entities/ApplicationSerializer.cpp
     entities/ApplicationSerializer.h
-    )
+    interactors/RunInteractor.cpp
+    interactors/RunInteractor.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -58,8 +59,10 @@ target_include_directories(core
 ###
 # GUI
 ###
+set(CMAKE_AUTORCC ON)
 
 set(GUI_SRC
+    ../res/res.qrc
     ui/ApplicationListModel.h
     ui/ApplicationListModel.cpp
     ui/SearchControler.cpp
@@ -82,7 +85,10 @@ set(GUI_SRC
     ui/UpgradesListModel.h
     ui/UpgradesListModel.cpp
     ui/NotificationsController.cpp
-    ui/NotificationsController.h)
+    ui/NotificationsController.h
+    ui/RunController.cpp
+    ui/RunController.h
+    )
 
 ## add the qml.qrc file
 qt5_add_resources(qml_QRC qml/files.qrc)
