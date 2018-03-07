@@ -78,7 +78,7 @@ int Application::compare_by_version(const Application &a) const {
 }
 
 void Application::setDescription(const QString &description) {
-    this->description = description;
+    Application::description = description;
 }
 
 const QString &Application::getName() const {
@@ -137,6 +137,14 @@ void Application::setDownloadUrl(const QString &downloadUrl) {
     Application::downloadUrl = downloadUrl;
 }
 
+int Application::getDownloadSize() const {
+    return downloadSize;
+}
+
+void Application::setDownloadSize(int downloadSize) {
+    Application::downloadSize = downloadSize;
+}
+
 const QString &Application::getHomePageUrl() const {
     return homePageUrl;
 }
@@ -147,4 +155,12 @@ void Application::setHomePageUrl(const QString &webPortalUrl) {
 
 bool Application::isEmpty() {
     return id.isEmpty();
+}
+
+const QString &Application::getIcon() const {
+    return icon;
+}
+
+void Application::setIcon(const QString &icon) {
+    Application::icon = icon;
 }

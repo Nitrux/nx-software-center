@@ -18,7 +18,9 @@ class Application {
     QStringList screenshots;
 
     QString downloadUrl;
+    int downloadSize;
     QString homePageUrl;
+    QString icon;
 
 public:
     explicit Application();
@@ -63,6 +65,10 @@ public:
 
     void setDownloadUrl(const QString &downloadUrl);
 
+    int getDownloadSize() const;
+
+    void setDownloadSize(int downloadSize);
+
     const QString &getHomePageUrl() const;
 
     void setHomePageUrl(const QString &webPortalUrl);
@@ -80,6 +86,10 @@ public:
     bool operator<(const Application &a) const;
 
     bool isEmpty();
+
+    const QString &getIcon() const;
+
+    void setIcon(const QString &icon);
 
 private:
     QString generateId(const QString &id, const QString &version) const;
