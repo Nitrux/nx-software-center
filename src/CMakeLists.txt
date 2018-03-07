@@ -46,7 +46,7 @@ set(CORE_SRC
     interactors/RunInteractor.cpp
     interactors/RunInteractor.h
     gateways/OCSStoreDataParser.cpp
-    gateways/OCSStoreDataParser.h)
+    gateways/OCSStoreDataParser.h gateways/OCSStoreSource.cpp gateways/OCSStoreSource.h)
 
 add_library(core OBJECT ${CORE_SRC})
 

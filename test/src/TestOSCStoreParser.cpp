@@ -13,10 +13,22 @@
 
 namespace NX_SOFTWARE_CENTER_TESTS {
     class TestOCSStoreDataParser : public testing::Test {
+    public:
+        OCSStoreDataParser parser;
     };
 
+    TEST_F(TestOCSStoreDataParser, failure) {
+        parser.setTarget(QUrl("http://wrong_ocs_url.com"));
+
+        QSignalSpy spy(&parser, &OCSStoreDataParser::error);
+        parser.extractApplications();
+        spy.wait(100);
+
+        ASSERT_EQ(spy.count(), 1);
+    }
+
     TEST_F(TestOCSStoreDataParser, extractApps) {
-        OCSStoreDataParser parser(QUrl(TEST_DATA_DIR"appimagehub.com.data.xml"));
+        parser.setTarget(QUrl(TEST_DATA_DIR"appimagehub.com.data.xml"));
 
 
         QSignalSpy spy(&parser, &OCSStoreDataParser::completed);

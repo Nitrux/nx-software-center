@@ -2,45 +2,50 @@
 // Created by alexis on 3/6/18.
 //
 #include <QDebug>
-#include <QString>
 #include <QtXmlPatterns/QXmlQuery>
 #include <QtXmlPatterns/QXmlResultItems>
 
 #include "OCSStoreDataParser.h"
 
 
-OCSStoreDataParser::OCSStoreDataParser(const QUrl &target, QObject *parent) : QObject(parent), target(target),
-                                                                              itemsPerPage(0), totalItems(0) {}
+OCSStoreDataParser::OCSStoreDataParser(QObject *parent) : QObject(parent), itemsPerPage(0), totalItems(0),
+                                                          failed(false) {
+}
 
 void OCSStoreDataParser::extractApplications() {
     int contentItems = countContentItems();
 
-    totalItems = evaluateQuery("/ocs/meta/totalitems/text()").toInt();
-    itemsPerPage = evaluateQuery("/ocs/meta/itemsperpage/text()").toInt();
+    if (!failed) {
+        totalItems = evaluateQuery("/ocs/meta/totalitems/text()").toInt();
+        itemsPerPage = evaluateQuery("/ocs/meta/itemsperpage/text()").toInt();
 
-    for (int i = 1; i <= contentItems; i++)
-        parseContentTag(i);
+        for (int i = 1; i <= contentItems; i++)
+            parseContentTag(i);
 
-    emit completed();
+        emit completed();
+    }
 }
 
 int OCSStoreDataParser::countContentItems() {
     QString result;
-
-    QXmlQuery query;
-    bool hasFocus = query.setFocus(QUrl(target));
-    if (hasFocus) {
-        query.setQuery("/ocs/data/count(content)");
-        if (query.isValid())
-            query.evaluateTo(&result);
-    } else
-            emit error(QString("Unable to open: %1").arg(target.toString()));
+    query.setQuery("/ocs/data/count(content)");
+    if (query.isValid())
+        query.evaluateTo(&result);
+    else {
+        emit error(QString("Unable to open: %1").arg(target.toString()));
+        failed = true;
+    }
 
     return result.toInt();
 }
 
 void OCSStoreDataParser::parseContentTag(int idx) {
     QString name = getContentStringField(idx, "name");
+    name = name.replace("-", " ").trimmed();
+
+    QString codeName = name;
+    codeName.replace(" ","-").toLower();
+
     QString version = getContentStringField(idx, "version");
 
     QString description = getContentStringField(idx, "description");
@@ -53,7 +58,8 @@ void OCSStoreDataParser::parseContentTag(int idx) {
 
     QStringList screenShots = getScreenShots(idx);
 
-    Application application(name, version);
+    Application application(codeName, version);
+    application.setName(name);
     application.setDescription(description);
     application.setAuthors({autor});
     application.setIcon(icon);
@@ -61,14 +67,12 @@ void OCSStoreDataParser::parseContentTag(int idx) {
     application.setDownloadSize(downloadSizeStr.toInt());
     application.setScreenshots(screenShots);
 
-    if (!application.isEmpty())
+    if (!application.isEmpty() && !application.getDownloadUrl().isEmpty())
         results << application;
 }
 
-QStringList OCSStoreDataParser::getScreenShots(int contentIdx) const {
+QStringList OCSStoreDataParser::getScreenShots(int contentIdx) {
     QString text;
-    QXmlQuery query;
-    query.setFocus(target);
     QString queryStr = "/ocs/data/content[%1]/*[matches(name(), '^previewpic')]/text()";
     query.setQuery(queryStr.arg(contentIdx));
 
@@ -87,11 +91,9 @@ QStringList OCSStoreDataParser::getScreenShots(int contentIdx) const {
     return screenShots;
 }
 
-int OCSStoreDataParser::getAppimageDownloadIdx(int contentIdx) const {
+int OCSStoreDataParser::getAppimageDownloadIdx(int contentIdx) {
     int appimageDownloadIdx;
     QString text;
-    QXmlQuery query;
-    query.setFocus(target);
     QString queryStr = "/ocs/data/content[%1]/*[matches(text(), '.*\\.AppImage') and matches(name(), 'downloadlink.*')]/name()";
     query.setQuery(queryStr.arg(contentIdx));
 
@@ -113,8 +115,6 @@ QString OCSStoreDataParser::getContentStringField(int idx, QString field) {
 
 QString OCSStoreDataParser::evaluateQuery(QString queryString) {
     QString text;
-    QXmlQuery query;
-    query.setFocus(target);
     query.setQuery(queryString);
 
     if (query.isValid())
@@ -134,4 +134,18 @@ int OCSStoreDataParser::getItemsPerPage() const {
 
 int OCSStoreDataParser::getTotalItems() const {
     return totalItems;
+}
+
+const QUrl &OCSStoreDataParser::getTarget() const {
+    return target;
+}
+
+void OCSStoreDataParser::setTarget(const QUrl &target) {
+    OCSStoreDataParser::target = target;
+
+    query.setFocus(QUrl(OCSStoreDataParser::target));
+}
+
+bool OCSStoreDataParser::isFailed() const {
+    return failed;
 }

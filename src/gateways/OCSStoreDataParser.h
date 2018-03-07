@@ -9,8 +9,8 @@
 
 #include <entities/Application.h>
 #include <QtXml/QDomNode>
-#include <QtXmlPatterns/QXmlItem>
-#include <QtXmlPatterns/QXmlResultItems>
+#include <QtXmlPatterns/QXmlQuery>
+
 #include <QtCore/QUrl>
 
 class OCSStoreDataParser : public QObject {
@@ -19,10 +19,10 @@ Q_OBJECT
     int itemsPerPage;
     int totalItems;
     QList<Application> results;
+    bool failed;
+    QXmlQuery query;
 public:
-    OCSStoreDataParser(const QUrl &target, QObject *parent = nullptr);
-
-    void extractApplications();
+    OCSStoreDataParser(QObject *parent = nullptr);
 
     const QList<Application> &getResults() const;
 
@@ -30,11 +30,20 @@ public:
 
     int getTotalItems() const;
 
+    const QUrl &getTarget() const;
+
+    void setTarget(const QUrl &target);
+
+    bool isFailed() const;
+
 signals:
 
     void completed();
 
     void error(const QString &msg);
+
+public slots:
+    void extractApplications();
 
 private:
     int countContentItems();
@@ -46,9 +55,9 @@ private:
     QString evaluateQuery(QString query);
 
 
-    int getAppimageDownloadIdx(int contentIdx) const;
+    int getAppimageDownloadIdx(int contentIdx);
 
-    QStringList getScreenShots(int contentIdx) const;
+    QStringList getScreenShots(int contentIdx);
 };
 
 

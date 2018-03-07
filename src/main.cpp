@@ -5,6 +5,7 @@
 
 #include <ui/UpgraderController.h>
 #include <ui/NotificationsController.h>
+#include <gateways/OCSStoreSource.h>
 
 #include "gateways/CacheSource.h"
 #include "gateways/AppImageHubSource.h"
@@ -74,7 +75,8 @@ void initSoftwareCenterModules(QObject *parent) {
 
     CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
     AppImageHubSource *appImageHubSource = new AppImageHubSource(downloadManager, parent);
-    updater = new Updater(repository, {appImageHubSource, cacheSource});
+    OCSStoreSource *ocsStoreSource = new OCSStoreSource(QUrl("https://www.appimagehub.com/ocs/v1/content/data"), parent);
+    updater = new Updater(repository, {appImageHubSource, ocsStoreSource, cacheSource});
 
     cache = new Cache;
     cache->setRepository(repository);
