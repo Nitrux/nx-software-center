@@ -3,14 +3,14 @@ sudo: required
 services:
   - docker
 
-# notifications:
-#   email: false
-#   webhooks:
-#     urls:
-#         - "https://scalar.vector.im/api/neb/services/hooks/dHJhdmlzLWNpLyU0MGF6dWJpZXRhJTNBbWF0cml4Lm9yZy8lMjFGVUFDclFFZGZhSXpHT2xhSUolM0FtYXRyaXgub3Jn"
-#     on_success: change  # always|never|change
-#     on_failure: always
-#     on_start: never
+notifications:
+  email: false
+  webhooks:
+    urls:
+        - "https://scalar.vector.im/api/neb/services/hooks/dHJhdmlzLWNpLyU0MGF6dWJpZXRhJTNBbWF0cml4Lm9yZy8lMjFGVUFDclFFZGZhSXpHT2xhSUolM0FtYXRyaXgub3Jn"
+    on_success: change  # always|never|change
+    on_failure: always
+    on_start: never
 
 before_install:
   - docker pull nxos/nxos
@@ -24,14 +24,14 @@ branches:
     - # Do not build tags that we create when we upload to GitHub Releases
     - /^(?i:continuous)$/
 
-# deploy:
-#   provider: releases
-#   api_key: "$GITHUB_TOKEN"
-#   file_glob: true
-#   file: out/*
-#   skip_cleanup: true
-#   prerelease: true
-#   on:
-#     repo: nomad-desktop/nx-software-center
-#     tags: true
-#     all_branches: true
+deploy:
+  provider: releases
+  api_key: "$GITHUB_TOKEN"
+  file_glob: true
+  file: out/*
+  skip_cleanup: true
+  prerelease: true
+  on:
+    repo: nomad-desktop/nx-software-center
+    tags: true
+    all_branches: true
