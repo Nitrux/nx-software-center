@@ -9,20 +9,21 @@
 
 #include "entities/Application.h"
 #include "entities/Source.h"
+#include "TaskMetadata.h"
 
 FetchApplicationsInteractor::FetchApplicationsInteractor(QList<Source *> sources, QObject *parent) : Interactor(
-        parent) {
-    this->sources = sources;
-    runningTasks = 0;
+        parent), sources(sources), runningTasks(0) {
+
+    metadata.insert(TaskMetadata::KEY_DESCRIPTION, "Fetching applications");
+    metadata.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_CREATED);
+    metadata.insert(TaskMetadata::KEY_TYPE, TaskMetadata::VALUE_TYPE_UPDATE);
 }
 
-QList<Application> FetchApplicationsInteractor::getResults() const
-{
+QList<Application> FetchApplicationsInteractor::getResults() const {
     return results;
 }
 
-QStringList FetchApplicationsInteractor::getErrors() const
-{
+QStringList FetchApplicationsInteractor::getErrors() const {
     return errors;
 }
 
@@ -44,8 +45,17 @@ void FetchApplicationsInteractor::handleFetchedApplications(const QList<Applicat
 
     results.append(applications);
     runningTasks--;
-    if (isCompleted())
+
+    if (isCompleted()) {
         emit completed();
+        setCompletedMetadata();
+    }
+
+}
+
+void FetchApplicationsInteractor::setCompletedMetadata() {
+    setMetadata({{TaskMetadata::KEY_DESCRIPTION, "Fetch completed"},
+                 {TaskMetadata::KEY_STATUS,      TaskMetadata::VALUE_STATUS_COMPLETED}});
 }
 
 void FetchApplicationsInteractor::handleFetchError(const QString &error) {
@@ -56,7 +66,7 @@ void FetchApplicationsInteractor::handleFetchError(const QString &error) {
     runningTasks--;
 
     if (isCompleted())
-        emit completed();
+            emit completed();
 }
 
 bool FetchApplicationsInteractor::isCompleted() {

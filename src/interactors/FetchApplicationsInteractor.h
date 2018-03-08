@@ -39,6 +39,8 @@ protected slots:
 
 private:
     bool isCompleted();
+
+    void setCompletedMetadata();
 };
 
 

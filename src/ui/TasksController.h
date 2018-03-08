@@ -39,6 +39,14 @@ protected slots:
 
 private:
     void removeTaskApplicationRelation(const QString &id);
+
+    bool shouldBeListed(const QVariantMap &data) const;
+
+    bool isAnApplicationTask(const QVariantMap &data) const;
+
+    void addAffectedApplication(const QVariantMap &data);
+
+    void removeAffectedApplication(const QVariantMap &data);
 };
 
 

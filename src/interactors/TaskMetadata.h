@@ -17,6 +17,7 @@ namespace TaskMetadata {
     static constexpr const char *KEY_TYPE = "type";
     static constexpr const char *VALUE_TYPE_INSTALL = "install";
     static constexpr const char *VALUE_TYPE_REMOVE = "remove";
+    static constexpr const char *VALUE_TYPE_UPDATE = "update";
 
     static constexpr const char *KEY_DESCRIPTION = "description";
 
