@@ -242,7 +242,7 @@ void AppImageHubSource::disposeParsers() {
 AppImageHubSource::AppImageHubSource(DownloadManager *downloadManager,
                                      QObject *parent)
         : Source(parent), downloadManager(downloadManager) {
-    url = "https://appimage.github.io/feed.json";
+    url = APPIMAGEHUB_URL;
 }
 
 AppImageHubSource::AppImageHubSource(const QString &url,
