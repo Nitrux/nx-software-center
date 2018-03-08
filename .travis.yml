@@ -50,5 +50,4 @@ deploy:
   overwrite: true
   on:
     repo: nomad-desktop/nx-software-center
-    tags: true
     all_branches: true
