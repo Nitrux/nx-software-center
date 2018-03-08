@@ -16,6 +16,7 @@ class ApplicationListModel : public QAbstractListModel
         Name,
         Version,
         Description,
+        Icon
     };
 
 public:
