@@ -28,9 +28,9 @@ Item {
 
             delegate: ApplicationGridItemDelegate {
                 id: applicationGridItemDelegate
-                icon: "package-x-generic"
                 name: app_name
                 version: app_version
+                icon: app_icon
 
                 hasPendingAction: TasksController.affectedApplicationsIds.indexOf(app_id) > -1
                 installed: RegistryController.installedApplications.indexOf(app_id) > -1

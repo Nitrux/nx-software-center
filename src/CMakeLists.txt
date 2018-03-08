@@ -64,7 +64,6 @@ target_include_directories(core
 set(CMAKE_AUTORCC ON)
 
 set(GUI_SRC
-    ../res/res.qrc
     ui/ApplicationListModel.h
     ui/ApplicationListModel.cpp
     ui/SearchControler.cpp
@@ -94,6 +93,7 @@ set(GUI_SRC
 
 ## add the qml.qrc file
 qt5_add_resources(qml_QRC qml/files.qrc)
+qt5_add_resources(qml_QRC ../res/res.qrc)
 
 add_library(gui OBJECT ${GUI_SRC} ${qml_QRC})
 

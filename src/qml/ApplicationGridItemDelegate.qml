@@ -5,7 +5,7 @@ import QtQuick.Controls 2.3
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
-    property alias icon: icon.source
+    property alias icon: iconImage.source
     property alias name: labelName.text
     property alias version: labelVersion.text
     property alias size: labelSize.text
@@ -36,17 +36,31 @@ Item {
         width: 180
         anchors.centerIn: parent
 
-        PlasmaCore.IconItem {
-            id: icon
+        Image {
+            id: iconImage
             Layout.maximumWidth: 180
             Layout.preferredHeight: 100
             Layout.maximumHeight: 120
             Layout.alignment: Qt.AlignCenter
+            Layout.margins: 10
+
+            visible: source != "" && status == Image.Ready
+        }
+
+        PlasmaCore.IconItem {
+            id: placeHolderIconImage
+            Layout.maximumWidth: 180
+            Layout.preferredHeight: 100
+            Layout.maximumHeight: 120
+            Layout.alignment: Qt.AlignCenter
+            Layout.margins: 10
+
+            source: "package-x-generic"
+            visible: !iconImage.visible
         }
 
         GridLayout {
             columns: 2
-//            flow: GridLayout.TopToBottom
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignBottom
             Layout.bottomMargin: 18
