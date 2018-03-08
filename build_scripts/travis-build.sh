@@ -12,13 +12,3 @@ apt-get -y install --allow-unauthenticated curl inkscape git cmake patchelf extr
 cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
 make -j$(nproc)
 build_scripts/appimage.create.sh
-find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-
-if [ -z "$TRAVIS_TAG" ]; then
-  export TRAVIS_TAG="continuous";
-  git tag -f $TRAVIS_TAG;
-fi
-
-mkdir out
-mv -v Software_Center*.AppImage* out/
-curl --upload-file out/Software_Center*.AppImage https://transfer.sh/nx_software_center
