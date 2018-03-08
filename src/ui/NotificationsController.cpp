@@ -20,13 +20,17 @@ void NotificationsController::setExecutor(Executor *executor) {
 }
 
 void NotificationsController::handleTaskStarted(const QString &/*id*/, const QVariantMap &data) {
-    if (tasksNotificationsEnabled)
+    if (tasksNotificationsEnabled && shouldBeNotified(data))
         notifyTaskDescription(data);
 }
 
 void NotificationsController::handleTaskCompleted(const QString &/*id*/, const QVariantMap &data) {
-    if (tasksNotificationsEnabled)
+    if (tasksNotificationsEnabled && shouldBeNotified(data))
         notifyTaskDescription(data);
+}
+
+bool NotificationsController::shouldBeNotified(const QVariantMap &data) const {
+    return data.value(TaskMetadata::KEY_TYPE) != TaskMetadata::VALUE_TYPE_UPDATE;
 }
 
 void NotificationsController::resetExpirationTimer()

@@ -45,6 +45,8 @@ protected slots:
     void handleTaskCompleted(const QString &id, const QVariantMap &data);
 
     void notifyTaskDescription(const QVariantMap &data);
+
+    bool shouldBeNotified(const QVariantMap &data) const;
 };
 
 
