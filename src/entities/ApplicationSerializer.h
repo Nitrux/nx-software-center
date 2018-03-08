@@ -21,6 +21,8 @@ public:
 
     static const constexpr char *const APP_NAME = "name";
 
+    static const constexpr char *const APP_ICON = "icon";
+
     static const constexpr char *const APP_DESCRIPTION = "description";
 
     static const constexpr char *const APP_ARCH = "arch";
