@@ -3,11 +3,12 @@
 //
 
 #include <QSignalSpy>
-
+#include <QDebug>
 #include <gtest/gtest.h>
 
 #include "interactors/Interactor.h"
 #include "entities/Executor.h"
+#include <QXmlQuery>
 
 namespace NX_SOFTWARE_CENTER_TESTS {
     class DoNothingInteractor : public  Interactor {
@@ -16,9 +17,18 @@ namespace NX_SOFTWARE_CENTER_TESTS {
     public:
         explicit DoNothingInteractor(QObject *parent = nullptr) : Interactor(parent) {}
 
+        Qt::HANDLE threadHandle;
+
         void execute() override {
             setMetadata(getTestMetadata());
 
+            QXmlQuery query;
+            query.setQuery("doc('https://en.wikipedia.org/wiki/Linux')/html/body/string()");
+
+            QString result;
+            query.evaluateTo(&result);
+
+            threadHandle = QThread::currentThreadId();
             emit completed();
         }
 
@@ -62,6 +72,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
         e.execute(i);
 
         spyCompleted.wait();
+        ASSERT_NE(QThread::currentThreadId(), i->threadHandle);
         ASSERT_EQ(1, spyStarted.count());
         ASSERT_EQ(1, spyCompleted.count());
         ASSERT_EQ(1, spyDataChanged.count());

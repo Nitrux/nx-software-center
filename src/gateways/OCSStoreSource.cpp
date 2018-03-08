@@ -10,8 +10,8 @@ OCSStoreSource::OCSStoreSource(const QUrl &url, QObject *parent)
         : Source(parent), url(url) {
     Q_ASSERT(!url.isEmpty());
 
-    connect(&parser, &OCSStoreDataParser::completed, this, &OCSStoreSource::handleParserCompleted);
-    connect(&parser, &OCSStoreDataParser::error, this, &OCSStoreSource::handleParserError);
+    connect(&parser, &OCSStoreDataParser::completed, this, &OCSStoreSource::handleParserCompleted, Qt::DirectConnection);
+    connect(&parser, &OCSStoreDataParser::error, this, &OCSStoreSource::handleParserError, Qt::DirectConnection);
 }
 
 void OCSStoreSource::fetchAllApplications() {
@@ -35,7 +35,7 @@ QUrlQuery OCSStoreSource::getQuery() const {
 }
 
 void OCSStoreSource::handleParserCompleted() {
-    applications << parser.getResults();
+    applications.append(parser.getResults());
 
     int itemsPerPage = parser.getItemsPerPage();
     int totalItems = parser.getTotalItems();
@@ -52,4 +52,3 @@ void OCSStoreSource::handleParserCompleted() {
 void OCSStoreSource::handleParserError(const QString &msg) {
     emit fetchError(msg);
 }
-

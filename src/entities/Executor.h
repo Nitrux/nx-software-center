@@ -11,6 +11,7 @@
 #include <QString>
 #include <QStringList>
 #include <QMutex>
+#include <QThread>
 
 class Interactor;
 
@@ -18,12 +19,12 @@ class Executor : public QObject {
 Q_OBJECT
     QMutex lock;
 
-    class InteractorRunnableWrapper;
+    QThread workerThread;
     QMap<QString, Interactor *> interactors;
-    QMap<QString, InteractorRunnableWrapper*> runnables;
-
 public:
     Executor(QObject *parent = 0) : QObject(parent) {}
+
+    virtual ~Executor();
 
     void execute(Interactor *interactor);
 
@@ -46,6 +47,8 @@ protected slots:
     void handleInteractorComplete();
 
     void handleInteractorMetadataChanged(const QVariantMap &data);
+
+    void wrapInteractor(Interactor *interactor);
 };
 
 

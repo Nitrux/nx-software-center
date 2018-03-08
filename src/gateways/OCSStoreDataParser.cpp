@@ -9,10 +9,14 @@
 
 
 OCSStoreDataParser::OCSStoreDataParser(QObject *parent) : QObject(parent), itemsPerPage(0), totalItems(0),
-                                                          failed(false) {
+                                                          failed(false), queryInstance(nullptr) {
 }
 
+OCSStoreDataParser::~OCSStoreDataParser() { delete queryInstance; }
+
 void OCSStoreDataParser::extractApplications() {
+    results.clear();
+
     int contentItems = countContentItems();
 
     if (!failed) {
@@ -24,13 +28,19 @@ void OCSStoreDataParser::extractApplications() {
 
         emit completed();
     }
+
+    delete queryInstance;
+    queryInstance = nullptr;
 }
 
 int OCSStoreDataParser::countContentItems() {
     QString result;
-    query.setQuery("/ocs/data/count(content)");
-    if (query.isValid())
-        query.evaluateTo(&result);
+
+    QXmlQuery *query = getQuery();
+
+    query->setQuery("/ocs/data/count(content)");
+    if (query->isValid())
+        query->evaluateTo(&result);
     else {
         emit error(QString("Unable to open: %1").arg(target.toString()));
         failed = true;
@@ -39,24 +49,31 @@ int OCSStoreDataParser::countContentItems() {
     return result.toInt();
 }
 
+QXmlQuery *OCSStoreDataParser::getQuery() {
+    if (!queryInstance) {
+        queryInstance = new QXmlQuery();
+        queryInstance->setFocus(target);
+    }
+    return queryInstance;
+}
+
 void OCSStoreDataParser::parseContentTag(int idx) {
-    QString name = getContentStringField(idx, "name");
-    name = name.replace("-", " ").trimmed();
-
-    QString codeName = name;
-    codeName.replace(" ","-").toLower();
-
-    QString version = getContentStringField(idx, "version");
-
-    QString description = getContentStringField(idx, "description");
-    QString autor = getContentStringField(idx, "personid");
-    QString icon = getContentStringField(idx, "smallpreviewpic1");
+    const QString name = parseContentName(idx);
+    const QString codeName = getCodeName(name);
+    const QString version = getContentStringField(idx, "version");
 
     int appimageDownloadIdx = getAppimageDownloadIdx(idx);
-    QString downloadLink = getContentStringField(idx, QString("downloadlink%1").arg(appimageDownloadIdx));
-    QString downloadSizeStr = getContentStringField(idx, QString("downloadsize%1").arg(appimageDownloadIdx));
+    const QString downloadLink = getContentStringField(idx, QString("downloadlink%1").arg(appimageDownloadIdx));
+    const QString downloadSizeStr = getContentStringField(idx, QString("downloadsize%1").arg(appimageDownloadIdx));
 
-    QStringList screenShots = getScreenShots(idx);
+    if (codeName.isEmpty() || downloadLink.isEmpty())
+        return;
+
+    const QString description = getContentStringField(idx, "description");
+    const QString autor = getContentStringField(idx, "personid");
+    const QString icon = getContentStringField(idx, "smallpreviewpic1");
+
+    const QStringList screenShots = getScreenShots(idx);
 
     Application application(codeName, version);
     application.setName(name);
@@ -67,17 +84,29 @@ void OCSStoreDataParser::parseContentTag(int idx) {
     application.setDownloadSize(downloadSizeStr.toInt());
     application.setScreenshots(screenShots);
 
-    if (!application.isEmpty() && !application.getDownloadUrl().isEmpty())
-        results << application;
+    results << application;
+}
+
+QString OCSStoreDataParser::getCodeName(const QString &name) const {
+    QString codeName = name;
+    codeName.replace(" ","-").toLower();
+    return codeName;
+}
+
+QString OCSStoreDataParser::parseContentName(int idx) {
+    QString name = getContentStringField(idx, "name");
+    name = name.replace("-", " ").trimmed();
+    return name;
 }
 
 QStringList OCSStoreDataParser::getScreenShots(int contentIdx) {
     QString text;
     QString queryStr = "/ocs/data/content[%1]/*[matches(name(), '^previewpic')]/text()";
-    query.setQuery(queryStr.arg(contentIdx));
+    auto query = getQuery();
+    query->setQuery(queryStr.arg(contentIdx));
 
-    if (query.isValid())
-        query.evaluateTo(&text);
+    if (query->isValid())
+        query->evaluateTo(&text);
     else
         qWarning() << "Invalid name query.";
 
@@ -95,10 +124,11 @@ int OCSStoreDataParser::getAppimageDownloadIdx(int contentIdx) {
     int appimageDownloadIdx;
     QString text;
     QString queryStr = "/ocs/data/content[%1]/*[matches(text(), '.*\\.AppImage') and matches(name(), 'downloadlink.*')]/name()";
-    query.setQuery(queryStr.arg(contentIdx));
+    auto query = getQuery();
+    query->setQuery(queryStr.arg(contentIdx));
 
-    if (query.isValid())
-        query.evaluateTo(&text);
+    if (query->isValid())
+        query->evaluateTo(&text);
     else
         qWarning() << "Invalid name query.";
 
@@ -115,10 +145,11 @@ QString OCSStoreDataParser::getContentStringField(int idx, QString field) {
 
 QString OCSStoreDataParser::evaluateQuery(QString queryString) {
     QString text;
-    query.setQuery(queryString);
+    auto query = getQuery();
+    query->setQuery(queryString);
 
-    if (query.isValid())
-        query.evaluateTo(&text);
+    if (query->isValid())
+        query->evaluateTo(&text);
     else
         qWarning() << "Invalid name query.";
     return text.trimmed();
@@ -143,7 +174,8 @@ const QUrl &OCSStoreDataParser::getTarget() const {
 void OCSStoreDataParser::setTarget(const QUrl &target) {
     OCSStoreDataParser::target = target;
 
-    query.setFocus(QUrl(OCSStoreDataParser::target));
+    delete queryInstance;
+    queryInstance = nullptr;
 }
 
 bool OCSStoreDataParser::isFailed() const {

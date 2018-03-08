@@ -32,7 +32,7 @@ public slots:
 
 protected slots:
 
-    void handleFetchedApplications(QList<Application> applications);
+    void handleFetchedApplications(const QList<Application> applications);
 
     void handleFetchError(const QString &error);
 

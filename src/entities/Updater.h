@@ -10,6 +10,7 @@
 
 #include "Source.h"
 #include "Repository.h"
+#include "Executor.h"
 
 class FetchApplicationsInteractor;
 class Updater : public QObject {
@@ -23,10 +24,13 @@ Q_OBJECT
     QStringList sourceErrors;
 
     FetchApplicationsInteractor *fetchApplicationsInteractor;
+    Executor *executor;
     Q_PROPERTY(bool isWorking MEMBER isWorking NOTIFY isWorkingChanged)
     Q_PROPERTY(bool isReady MEMBER isReady NOTIFY isReadyChanged)
 public:
     Updater(Repository *repository, const QList<Source *> &sources, QObject *parent = nullptr);
+
+    void setExecutor(Executor *executor);
 
     bool isUpdateRequired();
 

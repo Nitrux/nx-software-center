@@ -10,8 +10,8 @@
 #include <entities/Application.h>
 #include <QtXml/QDomNode>
 #include <QtXmlPatterns/QXmlQuery>
-
 #include <QtCore/QUrl>
+#include <QNetworkAccessManager>
 
 class OCSStoreDataParser : public QObject {
 Q_OBJECT
@@ -20,9 +20,10 @@ Q_OBJECT
     int totalItems;
     QList<Application> results;
     bool failed;
-    QXmlQuery query;
+    QXmlQuery *queryInstance;
 public:
     OCSStoreDataParser(QObject *parent = nullptr);
+    ~OCSStoreDataParser();
 
     const QList<Application> &getResults() const;
 
@@ -58,6 +59,12 @@ private:
     int getAppimageDownloadIdx(int contentIdx);
 
     QStringList getScreenShots(int contentIdx);
+
+    QXmlQuery *getQuery();
+
+    QString parseContentName(int idx);
+
+    QString getCodeName(const QString &name) const;
 };
 
 
