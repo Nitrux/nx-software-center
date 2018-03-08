@@ -5,6 +5,7 @@
 #include "FetchApplicationsInteractor.h"
 
 #include <QDebug>
+#include <QtCore/QThread>
 
 #include "entities/Application.h"
 #include "entities/Source.h"
@@ -29,15 +30,15 @@ void FetchApplicationsInteractor::execute() {
     if (runningTasks != 0)
         qWarning() << "Calling execute when the interactor is still bussy.";
 
+    runningTasks = sources.size();
     for (Source *source : sources) {
-        runningTasks++;
         connect(source, &Source::fetchedAllApplications, this, &FetchApplicationsInteractor::handleFetchedApplications);
         connect(source, &Source::fetchError, this, &FetchApplicationsInteractor::handleFetchError);
         source->fetchAllApplications();
     }
 }
 
-void FetchApplicationsInteractor::handleFetchedApplications(QList<Application> applications) {
+void FetchApplicationsInteractor::handleFetchedApplications(const QList<Application> applications) {
     QObject *source = sender();
     disconnect(source, nullptr, this, nullptr);
 

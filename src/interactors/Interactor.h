@@ -17,14 +17,15 @@ Q_OBJECT
                        isCanceled
                        NOTIFY
                        isCanceledChanged)
+    bool autoDelete;
 protected:
     bool isCanceled;
     QVariantMap metadata;
 
 public:
-    explicit Interactor(QObject *parent = nullptr) : QObject(parent) { id = QUuid::createUuid().toString(); }
+    explicit Interactor(QObject *parent = nullptr) : QObject(parent), autoDelete(true) { id = QUuid::createUuid().toString(); }
 
-    explicit Interactor(const QString &id, QObject *parent = nullptr) : QObject(parent), id(id) {}
+    explicit Interactor(const QString &id, QObject *parent = nullptr) : QObject(parent), id(id), autoDelete(true) {}
 
     virtual ~Interactor() {}
 
@@ -43,6 +44,14 @@ public:
     void cancel() {
         isCanceled = true;
         emit isCanceledChanged(isCanceled);
+    }
+
+    bool isAutoDelete() const {
+        return autoDelete;
+    }
+
+    void setAutoDelete(bool autoDelete) {
+        Interactor::autoDelete = autoDelete;
     }
 
 

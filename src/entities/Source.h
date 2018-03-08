@@ -17,7 +17,7 @@ public:
 
 signals:
 
-    void fetchedAllApplications(QList<Application> applications);
+    void fetchedAllApplications(const QList<Application> applications);
 
     void fetchError(const QString &details);
 

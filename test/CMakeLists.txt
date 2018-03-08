@@ -8,7 +8,7 @@ include(cmake/fetch_gtest.cmake)
 
 #add_subdirectory(core)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Network Test)
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Network Test Xml XmlPatterns)
 
 add_executable(test_core
     $<TARGET_OBJECTS:core>
@@ -24,13 +24,15 @@ add_executable(test_core
     src/TestUpdater.cpp
     src/TestCache.cpp
     src/TestApplicationSerializer.cpp
-    src/TestUpgrader.cpp)
+    src/TestUpgrader.cpp src/TestOSCStoreParser.cpp)
 
 target_include_directories(test_core
     PRIVATE ${CMAKE_SOURCE_DIR}/src/
     private ${gtest_INCLUDE_DIRS}
     PRIVATE ${Qt5Core_INCLUDE_DIRS}
     PRIVATE ${Qt5Network_INCLUDE_DIRS}
+    PUBLIC ${Qt5Xml_INCLUDE_DIRS}
+    PUBLIC ${Qt5XmlPatterns_INCLUDE_DIRS}
     )
 
 target_compile_definitions(test_core
@@ -42,6 +44,8 @@ target_link_libraries(test_core
     Qt5::Gui
     Qt5::Network
     Qt5::Test
+    Qt5::Xml
+    Qt5::XmlPatterns
 
     ${gtest_LIBRARIES}
     pthread # this must be last else it fails at linking

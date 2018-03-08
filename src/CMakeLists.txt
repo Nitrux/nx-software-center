@@ -1,4 +1,4 @@
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Qml Network)
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Qml Network Xml XmlPatterns)
 
 ###
 # Core
@@ -44,7 +44,9 @@ set(CORE_SRC
     entities/ApplicationSerializer.cpp
     entities/ApplicationSerializer.h
     interactors/RunInteractor.cpp
-    interactors/RunInteractor.h)
+    interactors/RunInteractor.h
+    gateways/OCSStoreDataParser.cpp
+    gateways/OCSStoreDataParser.h gateways/OCSStoreSource.cpp gateways/OCSStoreSource.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -100,6 +102,8 @@ target_include_directories(gui
     PUBLIC ${Qt5Core_INCLUDE_DIRS}
     PUBLIC ${Qt5Gui_INCLUDE_DIRS}
     PUBLIC ${Qt5Qml_INCLUDE_DIRS}
+    PUBLIC ${Qt5Xml_INCLUDE_DIRS}
+    PUBLIC ${Qt5XmlPatterns_INCLUDE_DIRS}
     )
 
 
@@ -116,7 +120,9 @@ target_link_libraries(nx_software_center
     Qt5::Core
     Qt5::Gui
     Qt5::Qml
-    Qt5::Network)
+    Qt5::Network
+    Qt5::Xml
+    Qt5::XmlPatterns)
 
 install(TARGETS nx_software_center ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

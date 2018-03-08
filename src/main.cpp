@@ -5,6 +5,7 @@
 
 #include <ui/UpgraderController.h>
 #include <ui/NotificationsController.h>
+#include <gateways/OCSStoreSource.h>
 
 #include "gateways/CacheSource.h"
 #include "gateways/AppImageHubSource.h"
@@ -39,6 +40,11 @@ Upgrader *upgrader = nullptr;
 void registerQmlModules();
 void initSoftwareCenterModules(QObject *parent);
 
+Q_DECLARE_METATYPE(Application)
+Q_DECLARE_METATYPE(QList<Application>)
+Q_DECLARE_METATYPE(UpgradeList)
+void registerMetatypes();
+
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
 
@@ -53,12 +59,19 @@ int main(int argc, char *argv[]) {
     app.setApplicationDisplayName("Nomad Software Center");
     initSoftwareCenterModules(nullptr);
     registerQmlModules();
+    registerMetatypes();
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 
     return app.exec();
+}
+
+void registerMetatypes() {
+    qRegisterMetaType<Application>("Application");
+    qRegisterMetaType<QList<Application>>("ApplicationList");
+    qRegisterMetaType<UpgradeList>("UpgradeList");
 }
 
 void initSoftwareCenterModules(QObject *parent) {
@@ -74,7 +87,10 @@ void initSoftwareCenterModules(QObject *parent) {
 
     CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
     AppImageHubSource *appImageHubSource = new AppImageHubSource(downloadManager, parent);
-    updater = new Updater(repository, {appImageHubSource, cacheSource});
+    OCSStoreSource *ocsStoreSource = new OCSStoreSource(QUrl("https://www.appimagehub.com/ocs/v1/content/data"), parent);
+
+    updater = new Updater(repository, {appImageHubSource, ocsStoreSource, cacheSource});
+    updater->setExecutor(executor);
 
     cache = new Cache;
     cache->setRepository(repository);

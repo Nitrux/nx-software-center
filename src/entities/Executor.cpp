@@ -10,35 +10,23 @@
 #include "Executor.h"
 #include "interactors/Interactor.h"
 
-class Executor::InteractorRunnableWrapper : public QRunnable {
-    Interactor *interactor;
-public:
-    InteractorRunnableWrapper(Interactor *interactor) : interactor(interactor) {}
-
-    virtual ~InteractorRunnableWrapper() {}
-
-    void run() override {
-        interactor->execute();
-    }
-};
-
 
 void Executor::execute(Interactor *interactor) {
     QMutexLocker locker(&lock);
-    const QString id = interactor->getId();
-    InteractorRunnableWrapper *runnableWrapper = new InteractorRunnableWrapper(interactor);
-    runnableWrapper->setAutoDelete(true);
+    wrapInteractor(interactor);
 
-    interactors.insert(id, interactor);
-    runnables.insert(id, runnableWrapper);
+    workerThread.start();
+    QMetaObject::invokeMethod(interactor, &Interactor::execute, Qt::QueuedConnection);
 
+    emit taskStarted(interactor->getId(), interactor->getMetadata());
+}
+
+void Executor::wrapInteractor(Interactor *interactor) {
+    interactors.insert(interactor->getId(), interactor);
 
     connect(interactor, &Interactor::completed, this, &Executor::handleInteractorComplete);
     connect(interactor, &Interactor::metadataChanged, this, &Executor::handleInteractorMetadataChanged);
-
-    QThreadPool::globalInstance()->start(runnableWrapper);
-
-    emit taskStarted(id, interactor->getMetadata());
+    interactor->moveToThread(&workerThread);
 }
 
 void Executor::handleInteractorComplete() {
@@ -47,16 +35,12 @@ void Executor::handleInteractorComplete() {
     if (i != nullptr) {
         const QString id = i->getId();
 
-        if (runnables.contains(id))
-            runnables.remove(id);
-
-        Interactor *interactor = interactors.value(id);
         QVariantMap resume;
-        if (interactor != nullptr) {
-            resume = interactor->getMetadata();
-            interactors.remove(id);
-            interactor->deleteLater();
-        }
+        resume = i->getMetadata();
+        interactors.remove(id);
+
+        if (i->isAutoDelete())
+            i->deleteLater();
 
         emit taskCompleted(id, resume);
     }
@@ -68,8 +52,7 @@ QStringList Executor::getRunningTasks() {
     return interactors.keys();
 }
 
-void Executor::cancel(const QString &id)
-{
+void Executor::cancel(const QString &id) {
     QMutexLocker locker(&lock);
     Interactor *i = interactors.value(id, nullptr);
     if (i)
@@ -90,6 +73,11 @@ QVariantMap Executor::getTaskData(const QString &id) {
         return QVariantMap();
     else
         return i->getMetadata();
+}
+
+Executor::~Executor() {
+    workerThread.quit();
+    workerThread.wait();
 }
 
 
