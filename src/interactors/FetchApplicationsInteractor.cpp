@@ -12,7 +12,7 @@
 #include "TaskMetadata.h"
 
 FetchApplicationsInteractor::FetchApplicationsInteractor(QList<Source *> sources, QObject *parent) : Interactor(
-        parent), sources(sources), runningTasks(0) {
+        parent), runningTasks(0), sources(sources) {
 
     metadata.insert(TaskMetadata::KEY_DESCRIPTION, "Fetching applications");
     metadata.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_CREATED);
