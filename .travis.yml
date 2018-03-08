@@ -1,7 +1,7 @@
-language: cpp
-compiler: gcc
-sudo: require
-dist: xenial
+sudo: required
+
+services:
+  - docker
 
 notifications:
   email: false
@@ -13,32 +13,22 @@ notifications:
     on_start: never
 
 before_install:
-  - wget -qO - http://archive.neon.kde.org/public.key | sudo apt-key add -
-  - echo "deb http://archive.neon.kde.org/user/ xenial main" | sudo tee /etc/apt/sources.list.d/neon.list
-  - wget -qO - http://repo.nxos.org/public.key | sudo apt-key add -
-  - echo "deb http://repo.nxos.org nxos main" | sudo tee /etc/apt/sources.list.d/nxos.list
-  - sudo apt-get update -qq
-
-install:
-  - sudo apt-get -y install --allow-unauthenticated inkscape git cmake patchelf extra-cmake-modules qtdeclarative5-dev-tools
-    qml-module-qtgraphicaleffects plasma-framework-dev qtbase5-dev qtdeclarative5-dev libqt5xmlpatterns5-dev nomad-plasma-look-and-feel
-    luv-icon-theme nomad-desktop-settings
+  - docker pull nxos/nxos
 
 script:
-  - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
-  - make -j$(nproc)
-  - build_scripts/appimage.create.sh
+  - docker run --rm -v $(pwd)/:/build/ -w /build/ nxos/nxos bash build_scripts/travis-build.sh
 
 after_success:
-  - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f
-    2-3 | sort | uniq
+  - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - if [ -z "$TRAVIS_TAG" ]; then
-        export TRAVIS_TAG="continuous";
-        git tag -f $TRAVIS_TAG;
-      fi
+      export TRAVIS_TAG="continuous";
+      git tag -f $TRAVIS_TAG;
+    fi
   - mkdir out
   - mv -v Software_Center*.AppImage* out/
-  - curl --upload-file out/Software_Center*.AppImage https://transfer.sh/nx_software_center
+  - echo "========  UPLOADING TO TRANSFER.SH  ========"
+  - curl --upload-file out/Software_Center*.AppImage https://transfer.sh/
+
 
 branches:
   except:
