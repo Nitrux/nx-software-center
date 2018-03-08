@@ -35,6 +35,11 @@ branches:
     - # Do not build tags that we create when we upload to GitHub Releases
     - /^(?i:continuous)$/
 
+before_deploy:
+  - git config --local user.name "Travis CI"
+  - git config --local user.email "none@nitrux.org"
+  - git tag "continuous" -f
+
 deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
@@ -42,6 +47,7 @@ deploy:
   file: out/*
   skip_cleanup: true
   prerelease: true
+  overwrite: true
   on:
     repo: nomad-desktop/nx-software-center
     tags: true
