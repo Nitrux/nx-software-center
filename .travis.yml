@@ -26,6 +26,7 @@ after_install:
     fi
   - mkdir out
   - mv -v Software_Center*.AppImage* out/
+  - echo "========  UPLOADING TO TRANSFER.SH  ========"
   - curl --upload-file out/Software_Center*.AppImage https://transfer.sh/
 
 
