@@ -18,7 +18,7 @@ before_install:
 script:
   - docker run --rm -v $(pwd)/:/build/ -w /build/ nxos/nxos bash build_scripts/travis-build.sh
 
-after_install:
+after_success:
   - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - if [ -z "$TRAVIS_TAG" ]; then
       export TRAVIS_TAG="continuous";
