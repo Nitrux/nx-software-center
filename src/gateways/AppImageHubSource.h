@@ -15,7 +15,7 @@
 #include "entities/Application.h"
 #include "gateways/DownloadManager.h"
 
-#define DEFAULT_APPIMAGEHUB_URL "https://appimage.github.io/feed.json"
+static const QString APPIMAGEHUB_URL = "https://appimage.github.io/feed.json";
 
 class AppImageInstallLinksRegExParser;
 
