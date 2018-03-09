@@ -8,7 +8,7 @@ include(cmake/fetch_gtest.cmake)
 
 #add_subdirectory(core)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Network Test Xml XmlPatterns)
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Network Test XmlPatterns)
 
 add_executable(test_core
     $<TARGET_OBJECTS:core>
@@ -31,7 +31,6 @@ target_include_directories(test_core
     private ${gtest_INCLUDE_DIRS}
     PRIVATE ${Qt5Core_INCLUDE_DIRS}
     PRIVATE ${Qt5Network_INCLUDE_DIRS}
-    PUBLIC ${Qt5Xml_INCLUDE_DIRS}
     PUBLIC ${Qt5XmlPatterns_INCLUDE_DIRS}
     )
 
@@ -44,7 +43,6 @@ target_link_libraries(test_core
     Qt5::Gui
     Qt5::Network
     Qt5::Test
-    Qt5::Xml
     Qt5::XmlPatterns
 
     ${gtest_LIBRARIES}
