@@ -1,8 +1,8 @@
 #include "Application.h"
 
-Application::Application() {}
+Application::Application(): downloadSize(0) {}
 
-Application::Application(const QString &codeName, const QString &version) {
+Application::Application(const QString &codeName, const QString &version): downloadSize(0) {
     this->codeName = codeName;
     this->version = version;
 
