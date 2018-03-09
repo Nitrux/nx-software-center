@@ -21,11 +21,15 @@ public:
 
     static const constexpr char *const APP_NAME = "name";
 
+    static const constexpr char *const APP_ICON = "icon";
+
     static const constexpr char *const APP_DESCRIPTION = "description";
 
     static const constexpr char *const APP_ARCH = "arch";
 
     static const constexpr char *const APP_DOWNLOAD_URL = "downloadUrl";
+
+    static const constexpr char *const APP_DOWNLOAD_SIZE = "downloadSize";
 
     static const constexpr char *const APP_LICENCE = "licence";
 

@@ -23,6 +23,7 @@
 #include "ui/RegistryController.h"
 #include "ui/UpdaterController.h"
 #include "ui/RunController.h"
+#include "ui/ApplicationViewController.h"
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
 #define QML_MODULE_MAJOR_VERSION 1
@@ -89,7 +90,7 @@ void initSoftwareCenterModules(QObject *parent) {
     AppImageHubSource *appImageHubSource = new AppImageHubSource(downloadManager, parent);
     OCSStoreSource *ocsStoreSource = new OCSStoreSource(QUrl("https://www.appimagehub.com/ocs/v1/content/data"), parent);
 
-    updater = new Updater(repository, {appImageHubSource, ocsStoreSource, cacheSource});
+    updater = new Updater(repository, {cacheSource, appImageHubSource, ocsStoreSource});
     updater->setExecutor(executor);
 
     cache = new Cache;
@@ -147,8 +148,16 @@ static QObject *notificationsControllerSingletonProvider(QQmlEngine *, QJSEngine
 }
 
 static QObject *runControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    auto *runController = new RunController(registry);
+    auto runController = new RunController(registry);
     return runController;
+}
+
+static QObject *applicationViewControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    auto applicationViewController = new ApplicationViewController();
+    applicationViewController->setRepository(repository);
+    applicationViewController->setRegistry(registry);
+    applicationViewController->setExecutor(executor);
+    return applicationViewController;
 }
 
 void registerQmlModules() {
@@ -187,4 +196,7 @@ void registerQmlModules() {
 
     qmlRegisterSingletonType<RunController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                             "RunController", runControllerSingletonProvider);
+
+    qmlRegisterSingletonType<RunController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                            "ApplicationViewController", applicationViewControllerSingletonProvider);
 }

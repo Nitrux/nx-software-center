@@ -15,9 +15,11 @@ QByteArray ApplicationSerializer::serialize(Application application) {
     object.insert(APP_VERSION, application.getVersion());
     object.insert(APP_CODE_NAME, application.getCodeName());
     object.insert(APP_NAME, application.getName());
+    object.insert(APP_ICON, application.getIcon());
     object.insert(APP_DESCRIPTION, application.getDescription());
     object.insert(APP_ARCH, application.getArch());
     object.insert(APP_DOWNLOAD_URL, application.getDownloadUrl());
+    object.insert(APP_DOWNLOAD_SIZE, application.getDownloadSize());
     object.insert(APP_LICENCE, application.getLicence());
     object.insert(APP_HOME_PAGE, application.getHomePageUrl());
 
@@ -39,7 +41,9 @@ Application ApplicationSerializer::deserialize(QByteArray json) {
 
     Application application(codeName, version);
     application.setArch(object.value(APP_ARCH).toString());
+    application.setIcon(object.value(APP_ICON).toString());
     application.setDownloadUrl(object.value(APP_DOWNLOAD_URL).toString());
+    application.setDownloadSize(object.value(APP_DOWNLOAD_SIZE).toInt());
     application.setLicence(object.value(APP_LICENCE).toString());
     application.setName(object.value(APP_NAME).toString());
     application.setDescription(object.value(APP_DESCRIPTION).toString());
