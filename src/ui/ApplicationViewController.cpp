@@ -49,6 +49,16 @@ bool ApplicationViewController::isInstalled()
     return false;
 }
 
+bool ApplicationViewController::hasScreenShots()
+{
+    const QStringList scrennshots = application.getScreenshots();
+    for (const QString &candidate: scrennshots)
+        if (candidate.section('/', -1) != application.getIcon().section('/', -1))
+            return true;
+
+    return false;
+}
+
 QString ApplicationViewController::getApplicationIcon()
 {
     return application.getIcon();
@@ -85,6 +95,11 @@ QString ApplicationViewController::getApplicationDownloadSize()
 QString ApplicationViewController::getApplicationDescription()
 {
     return application.getDescription();
+}
+
+QStringList ApplicationViewController::getApplicationScreenShots()
+{
+    return application.getScreenshots();
 }
 
 QString ApplicationViewController::getApplicationWebsite()

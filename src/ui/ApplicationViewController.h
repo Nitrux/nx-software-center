@@ -19,6 +19,7 @@ class ApplicationViewController : public QObject
     Q_PROPERTY(QString backgroundImage READ getBackgroundImage NOTIFY applicationChanged)
     Q_PROPERTY(bool isAppInstalled READ isInstalled NOTIFY applicationChanged)
     Q_PROPERTY(bool hasPendingTasks MEMBER hasPendingTasks NOTIFY hasPendingTasksChanged)
+    Q_PROPERTY(bool hasScreenShots READ hasScreenShots NOTIFY applicationChanged)
 
     Q_PROPERTY(QString appId READ getApplicationId NOTIFY applicationChanged)
     Q_PROPERTY(QString appIcon READ getApplicationIcon NOTIFY applicationChanged)
@@ -28,6 +29,7 @@ class ApplicationViewController : public QObject
     Q_PROPERTY(QString appDownloadSize READ getApplicationDownloadSize NOTIFY applicationChanged)
     Q_PROPERTY(QString appWebsite READ getApplicationWebsite NOTIFY applicationChanged)
     Q_PROPERTY(QString appDescription READ getApplicationDescription NOTIFY applicationChanged)
+    Q_PROPERTY(QStringList appScreenShots READ getApplicationScreenShots NOTIFY applicationChanged)
 public:
     explicit ApplicationViewController(QObject *parent = nullptr);
 
@@ -37,6 +39,7 @@ public:
 
     QString getBackgroundImage();
     bool isInstalled();
+    bool hasScreenShots();
     QString getApplicationId();
     QString getApplicationIcon();
     QString getApplicationName();
@@ -45,6 +48,8 @@ public:
     QString getApplicationDownloadSize();
     QString getApplicationWebsite();
     QString getApplicationDescription();
+    QStringList getApplicationScreenShots();
+
 signals:
     void applicationChanged();
     void hasPendingTasksChanged(bool hasPendingTasks);
