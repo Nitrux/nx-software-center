@@ -65,6 +65,7 @@ private:
     QString parseContentName(int idx);
 
     QString getCodeName(const QString &name) const;
+    const QString getContentDescription(int idx);
 };
 
 

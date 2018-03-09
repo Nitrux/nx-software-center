@@ -2,6 +2,7 @@
 // Created by alexis on 3/6/18.
 //
 #include <QDebug>
+#include <QTextDocument>
 #include <QtXmlPatterns/QXmlQuery>
 #include <QtXmlPatterns/QXmlResultItems>
 
@@ -57,6 +58,15 @@ QXmlQuery *OCSStoreDataParser::getQuery() {
     return queryInstance;
 }
 
+const QString OCSStoreDataParser::getContentDescription(int idx)
+{
+    QTextDocument text;
+    text.setHtml(getContentStringField(idx, "description"));
+    const QString description = text.toPlainText();
+
+    return description;
+}
+
 void OCSStoreDataParser::parseContentTag(int idx) {
     const QString name = parseContentName(idx);
     const QString codeName = getCodeName(name);
@@ -69,7 +79,7 @@ void OCSStoreDataParser::parseContentTag(int idx) {
     if (codeName.isEmpty() || downloadLink.isEmpty())
         return;
 
-    const QString description = getContentStringField(idx, "description");
+    const QString description = getContentDescription(idx);
     const QString autor = getContentStringField(idx, "personid");
     const QString icon = getContentStringField(idx, "smallpreviewpic1");
 
@@ -89,13 +99,14 @@ void OCSStoreDataParser::parseContentTag(int idx) {
 
 QString OCSStoreDataParser::getCodeName(const QString &name) const {
     QString codeName = name;
-    codeName.replace(" ","-").toLower();
+    codeName = codeName.replace(" ","-").toLower();
     return codeName;
 }
 
 QString OCSStoreDataParser::parseContentName(int idx) {
     QString name = getContentStringField(idx, "name");
     name = name.replace("-", " ").trimmed();
+    name = name.replace(" appimage", "", Qt::CaseInsensitive);
     return name;
 }
 
