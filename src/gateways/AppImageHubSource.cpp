@@ -122,9 +122,14 @@ QVariantMap AppImageHubSource::extractApplicationLinks(const QJsonObject &appIma
 
 QStringList AppImageHubSource::extractApplicationScreenshots(const QJsonObject &appImageDataObject) const {
     QStringList screenshots;
-    for (QJsonValue value :
-            appImageDataObject.value("screenshots").toArray())
-        screenshots << value.toString();
+    const auto screenshotsJson = appImageDataObject.value("screenshots").toArray();
+    for (QJsonValue value : screenshotsJson) {
+        QString screenshot = value.toString();
+        if (!screenshot.startsWith("http"))
+            screenshot = "https://appimage.github.io/database/" + screenshot;
+        screenshots << screenshot;
+    }
+
     return screenshots;
 }
 
