@@ -100,22 +100,18 @@ QString OCSStoreDataParser::parseContentName(int idx) {
 }
 
 QStringList OCSStoreDataParser::getScreenShots(int contentIdx) {
-    QString text;
-    QString queryStr = "/ocs/data/content[%1]/*[matches(name(), '^previewpic')]/text()";
+    QStringList screenShots;
+    QString queryStr = "/ocs/data/content[%1]/*[matches(name(), '^previewpic')]/string()";
     auto query = getQuery();
     query->setQuery(queryStr.arg(contentIdx));
 
     if (query->isValid())
-        query->evaluateTo(&text);
+        query->evaluateTo(&screenShots);
     else
         qWarning() << "Invalid name query.";
 
-    QStringList screenShots;
-    for (QString screenShot: text.split(" ")) {
-        screenShot = screenShot.trimmed();
-        if (!screenShot.isEmpty())
-            screenShots << screenShot;
-    }
+    for (QString &screenshot: screenShots)
+        screenshot = screenshot.trimmed();
 
     return screenShots;
 }
