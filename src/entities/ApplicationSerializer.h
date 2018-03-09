@@ -29,6 +29,8 @@ public:
 
     static const constexpr char *const APP_DOWNLOAD_URL = "downloadUrl";
 
+    static const constexpr char *const APP_DOWNLOAD_SIZE = "downloadSize";
+
     static const constexpr char *const APP_LICENCE = "licence";
 
     static const constexpr char *const APP_HOME_PAGE = "homePageUrl";
