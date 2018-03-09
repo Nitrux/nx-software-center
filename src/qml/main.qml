@@ -49,13 +49,10 @@ ApplicationWindow {
 
         function goTo(name, component) {
             var itemInstance = findItemByObjectName(name);
-            if (itemInstance) {
-                print("pop " + name);
+            if (itemInstance)
                 stackView.pop(itemInstance)
-            } else {
-                print("push " + name);
+            else
                 stackView.push(component, {objectName: name})
-            }
         }
     }
 
@@ -124,6 +121,11 @@ ApplicationWindow {
     function showSearchView() {
         main.title = "Explore";
         stackView.goTo("searchView", "qrc:/SearchView.qml");
+    }
+
+    function showApplicationView(applicationName) {
+        main.title = applicationName ? applicationName : "Details";
+        stackView.goTo("applicationView", "qrc:/ApplicationView.qml");
     }
 
     function showBusyMessage(message) {

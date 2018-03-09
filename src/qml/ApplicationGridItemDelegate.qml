@@ -18,6 +18,7 @@ Item {
     signal requestRemove
     signal requestGet
     signal requestUpgrade
+    signal requestView
 
     height: 200
     width: 200
@@ -28,6 +29,11 @@ Item {
         anchors.centerIn: parent
 
         imagePath: "opaque/widgets/panel-background"
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onReleased: requestView()
     }
 
     ColumnLayout {

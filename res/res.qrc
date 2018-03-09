@@ -1,5 +1,33 @@
 <RCC>
     <qresource prefix="/">
         <file>images/down-arrow.png</file>
+        <file>images/backgrounds/accessories.png</file>
+        <file>images/backgrounds/books-comics.png</file>
+        <file>images/backgrounds/business.png</file>
+        <file>images/backgrounds/communication.png</file>
+        <file>images/backgrounds/developer-tools.png</file>
+        <file>images/backgrounds/education.png</file>
+        <file>images/backgrounds/entertainment.png</file>
+        <file>images/backgrounds/finance.png</file>
+        <file>images/backgrounds/food-drink.png</file>
+        <file>images/backgrounds/games.png</file>
+        <file>images/backgrounds/graphics.png</file>
+        <file>images/backgrounds/health-fitness.png</file>
+        <file>images/backgrounds/internet.png</file>
+        <file>images/backgrounds/lifestyle.png</file>
+        <file>images/backgrounds/media-video.png</file>
+        <file>images/backgrounds/medical.png</file>
+        <file>images/backgrounds/music-audio.png</file>
+        <file>images/backgrounds/news-magazines.png</file>
+        <file>images/backgrounds/personalisation.png</file>
+        <file>images/backgrounds/productivity.png</file>
+        <file>images/backgrounds/reference.png</file>
+        <file>images/backgrounds/science-engineering.png</file>
+        <file>images/backgrounds/shopping.png</file>
+        <file>images/backgrounds/social-networking.png</file>
+        <file>images/backgrounds/sports.png</file>
+        <file>images/backgrounds/travel-local.png</file>
+        <file>images/backgrounds/universal-accessaccessibility.png</file>
+        <file>images/backgrounds/weather.png</file>
     </qresource>
 </RCC>

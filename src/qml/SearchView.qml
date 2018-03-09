@@ -40,6 +40,10 @@ Item {
                 onRequestRemove: UninstallController.uninstall(app_id)
                 onRequestUpgrade: UpgraderController.upgrade(app_code_name)
                 onRequestRun: RunController.run(app_id)
+                onRequestView: {
+                    ApplicationViewController.loadApplication(app_id);
+                    showApplicationView(app_name)
+                }
             }
         }
     }

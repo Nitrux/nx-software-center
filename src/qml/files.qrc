@@ -12,6 +12,7 @@
         <file>TasksView.qml</file>
         <file>RecordListItemDelegate.qml</file>
         <file>UpgradeListItemDelegate.qml</file>
+        <file>ApplicationView.qml</file>
     </qresource>
     <qresource prefix="/scripts"/>
 </RCC>

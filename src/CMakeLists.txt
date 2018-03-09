@@ -89,6 +89,8 @@ set(GUI_SRC
     ui/NotificationsController.h
     ui/RunController.cpp
     ui/RunController.h
+    ui/ApplicationViewController.cpp
+    ui/ApplicationViewController.h
     )
 
 ## add the qml.qrc file
