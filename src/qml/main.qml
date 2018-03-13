@@ -1,9 +1,10 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.0
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import org.nxos.softwarecenter 1.0
 
@@ -35,26 +36,37 @@ ApplicationWindow {
         visible: false
     }
 
-    StackView {
-        id: stackView
+
+    ScrollView {
+        id: scrollView
         anchors.fill: parent
-        initialItem: PlaceHolderView
+        clip: true
 
-        function findItemByObjectName(name) {
-            var item = stackView.find(function (item, index) {
-                return item.objectName === name
-            })
-            return item
-        }
+        StackView {
+            id: stackView
 
-        function goTo(name, component) {
-            var itemInstance = findItemByObjectName(name);
-            if (itemInstance)
-                stackView.pop(itemInstance)
-            else
-                stackView.push(component, {objectName: name})
+            height: scrollView.height
+            width: scrollView.width
+
+            initialItem: PlaceHolderView
+
+            function findItemByObjectName(name) {
+                var item = stackView.find(function (item, index) {
+                    return item.objectName === name
+                })
+                return item
+            }
+
+            function goTo(name, component) {
+                var itemInstance = findItemByObjectName(name);
+                if (itemInstance)
+                    stackView.pop(itemInstance)
+                else
+                    stackView.push(component, {objectName: name})
+            }
         }
     }
+
 
     Parts.MessageFrame {
         id: messageBox

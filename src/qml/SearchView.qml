@@ -8,43 +8,43 @@ import org.nxos.softwarecenter 1.0
 import "parts" as Parts
 
 Item {
-    id: searchViewRoot
+    GridView {
+        id: appImageHubListView
+        width: Math.floor( (parent.width - (anchors.leftMargin + anchors.rightMargin)) / cellWidth) * cellWidth
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.leftMargin: 18
+        anchors.rightMargin: 12
 
-    PlasmaExtras.ScrollArea {
-        anchors.fill: parent
-        anchors.topMargin: 12
-        anchors.bottomMargin: 6
-        anchors.rightMargin: 6
+        clip: true
 
-        GridView {
-            id: appImageHubListView
+        model: SearchController.model
 
-            clip: true
+        cellWidth: 200
+        cellHeight: 200
 
-            model: SearchController.model
+        delegate: ApplicationGridItemDelegate {
+            id: applicationGridItemDelegate
+            name: app_name
+            version: app_version
+            icon: app_icon
 
-            cellWidth: 200
-            cellHeight: 200
+            hasPendingAction: TasksController.affectedApplicationsIds.indexOf(
+                                  app_id) > -1
+            installed: RegistryController.installedApplications.indexOf(app_id) > -1
+            upgradable: UpgraderController.upgradableApplications.indexOf(
+                            app_code_name) > -1
 
-            delegate: ApplicationGridItemDelegate {
-                id: applicationGridItemDelegate
-                name: app_name
-                version: app_version
-                icon: app_icon
-
-                hasPendingAction: TasksController.affectedApplicationsIds.indexOf(app_id) > -1
-                installed: RegistryController.installedApplications.indexOf(app_id) > -1
-                upgradable: UpgraderController.upgradableApplications.indexOf(app_code_name) > -1
-
-                onRequestGet: InstallController.install(app_id)
-                onRequestRemove: UninstallController.uninstall(app_id)
-                onRequestUpgrade: UpgraderController.upgrade(app_code_name)
-                onRequestRun: RunController.run(app_id)
-                onRequestView: {
-                    ApplicationViewController.loadApplication(app_id);
-                    showApplicationView(app_name)
-                }
+            onRequestGet: InstallController.install(app_id)
+            onRequestRemove: UninstallController.uninstall(app_id)
+            onRequestUpgrade: UpgraderController.upgrade(app_code_name)
+            onRequestRun: RunController.run(app_id)
+            onRequestView: {
+                ApplicationViewController.loadApplication(app_id)
+                showApplicationView(app_name)
             }
         }
     }
 }
+
