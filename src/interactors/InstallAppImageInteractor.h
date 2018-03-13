@@ -27,6 +27,8 @@ public:
 
     void setCompletedMetadata();
 
+    static QString getInstallationDirPath();
+
 protected slots:
     void handleDownloadJobProgress(const int value, const int total, const QString &message);
     void handleDownloadJobFinished();
