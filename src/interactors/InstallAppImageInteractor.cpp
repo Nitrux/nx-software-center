@@ -132,13 +132,20 @@ void InstallAppImageInteractor::setRunningMetadata() {
     setMetadata(statusUpdate);
 }
 
-void InstallAppImageInteractor::createInstallationDirIfNotExist() {
+QString InstallAppImageInteractor::getInstallationDirPath()
+{
     QDir dir = QDir::home();
-    dir.mkdir("bin");
+    return dir.absoluteFilePath(tr("Applications"));
+}
+
+void InstallAppImageInteractor::createInstallationDirIfNotExist() {
+    const auto path = getInstallationDirPath();
+    QDir::home().mkpath(path);
 }
 
 void InstallAppImageInteractor::createInstallationPath(QString appFileName) {
-    QDir dir = QDir::home();
-    dir.cd("bin");
+    const auto path = getInstallationDirPath();
+
+    QDir dir(path);
     installationPath = dir.filePath(appFileName);
 }
