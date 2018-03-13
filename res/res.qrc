@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/down-arrow.png</file>
         <file>images/backgrounds/accessories.png</file>
         <file>images/backgrounds/books-comics.png</file>
         <file>images/backgrounds/business.png</file>

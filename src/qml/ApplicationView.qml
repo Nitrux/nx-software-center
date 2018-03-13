@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.3
 
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import org.nxos.softwarecenter 1.0
 
@@ -69,20 +70,20 @@ Item {
                 visible: !iconImage.visible
             }
 
-            Text {
+            PlasmaComponents.Label {
                 Layout.alignment: Qt.AlignHCenter
                 text: ApplicationViewController.appName
                 font.pointSize: 18
             }
 
-            Text {
+            PlasmaComponents.Label {
                 Layout.alignment: Qt.AlignHCenter
                 text: i18n("by ") + ApplicationViewController.appAuthor
                 font.pointSize: 16
                 visible: ApplicationViewController.appAuthor
             }
 
-            Text {
+            PlasmaComponents.Label {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.topMargin: 12
                 Layout.maximumWidth: 280
@@ -98,34 +99,43 @@ Item {
                 visible: !ApplicationViewController.hasPendingTasks
                 Layout.topMargin: 16
                 Layout.alignment: Qt.AlignHCenter
+                Layout.maximumHeight: 20
+
                 spacing: 16
 
-                Button {
+                PlasmaComponents.Button {
                     id: getButton
+                    Layout.maximumWidth: 72
                     text: i18n("Get")
+                    font.pointSize: 9
+
                     visible: !ApplicationViewController.isAppInstalled
 
-                    onReleased: InstallController.install(
+                    onClicked: InstallController.install(
                                     ApplicationViewController.appId)
                 }
 
-                Button {
+                PlasmaComponents.Button {
                     id: runButton
+                    Layout.maximumWidth: 72
                     text: i18n("Run")
+                    font.pointSize: 9
 
                     visible: ApplicationViewController.isAppInstalled
 
-                    onReleased: RunController.run(
+                    onClicked: RunController.run(
                                     ApplicationViewController.appId)
                 }
 
-                Button {
+                PlasmaComponents.Button {
                     id: removeButton
+                    Layout.maximumWidth: 72
                     text: i18n("Remove")
+                    font.pointSize: 9
 
                     visible: ApplicationViewController.isAppInstalled
 
-                    onReleased: UninstallController.uninstall(
+                    onClicked: UninstallController.uninstall(
                                     ApplicationViewController.appId)
                 }
             }
@@ -151,14 +161,14 @@ Item {
 
             spacing: 12
 
-            Text {
+            PlasmaComponents.Label {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                 text: i18n("Information")
                 font.pointSize: 16
             }
 
-            Text {
+            PlasmaComponents.Label {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                 text: i18n("- Website: %1".arg(
@@ -168,7 +178,7 @@ Item {
                 visible: ApplicationViewController.appWebsite
             }
 
-            Text {
+            PlasmaComponents.Label {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                 text: i18n("- Version: %1".arg(
@@ -178,7 +188,7 @@ Item {
                 visible: ApplicationViewController.appVersion
             }
 
-            Text {
+            PlasmaComponents.Label {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                 text: i18n("- Size: %1".arg(
@@ -188,7 +198,7 @@ Item {
                 visible: ApplicationViewController.appDownloadSize
             }
 
-            Text {
+            PlasmaComponents.Label {
                 Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                 Layout.fillHeight: true
                 Layout.fillWidth: true

@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.3
 
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
     property alias icon: iconImage.source
@@ -73,7 +74,7 @@ Item {
             Layout.leftMargin: 12
             Layout.rightMargin: 8
 
-            Label {
+            PlasmaComponents.Label {
                 id: labelName
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignBottom
@@ -85,7 +86,7 @@ Item {
                 font.pointSize: 8
             }
 
-            Label {
+            PlasmaComponents.Label {
                 id: labelVersion
                 Layout.fillWidth: true
                 elide: Text.ElideRight
@@ -101,7 +102,7 @@ Item {
                 sourceComponent: installed ? removeButton : getButton
             }
 
-            Label {
+            PlasmaComponents.Label {
                 id: labelSize
                 Layout.fillWidth: true
                 elide: Text.ElideRight
@@ -112,10 +113,10 @@ Item {
 
         Component {
             id: getButton
-            Button {
+            PlasmaComponents.Button {
                 enabled: !hasPendingAction
                 text: upgradable ? i18n("Upgrade") : i18n("Get")
-                font.pointSize: 7
+                font.pointSize: 8
 
                 onClicked: {
                     if (upgradable)
@@ -130,7 +131,7 @@ Item {
             id: removeButton
             RowLayout {
                 spacing: 0
-                Button {
+                PlasmaComponents.Button {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
@@ -138,36 +139,40 @@ Item {
                     text: i18n("Run")
 
                     onClicked: requestRun()
-                    font.pointSize: 7
+                    font.pointSize: 8
                 }
-                Button {
+
+                PlasmaComponents.ToolButton {
                     id: menuButton
                     Layout.maximumWidth: 20
                     Layout.fillHeight: true
-                    font.pointSize: 7
+                    flat: false
 
                     enabled: !hasPendingAction
 
-                    onClicked: actionsMenu.open()
+                    PlasmaCore.SvgItem {
+                        anchors.fill: parent
+                        anchors.margins: 2
 
-                    display: AbstractButton.IconOnly
-                    padding: 4
-                    spacing: 0
+                        elementId: "down-arrow"
+                        svg: PlasmaCore.Svg {
+                            id: svg
+                            imagePath: "widgets/arrows"
+                        }
+                    }
 
-                    icon.name: "down-arrow"
-                    icon.source: "qrc:/images/down-arrow.png"
+                    onClicked: actionsMenu.open(0, height)
 
                     Menu {
                         id: actionsMenu
-                        y: menuButton.height
 
                         MenuItem {
                             text: i18n("Remove")
-                            onTriggered: requestRemove()
-                            font.pointSize: 8
+                            onClicked: requestRemove()
                         }
                     }
                 }
+
             }
         }
     }
