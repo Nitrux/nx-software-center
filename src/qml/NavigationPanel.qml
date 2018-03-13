@@ -52,7 +52,7 @@ PlasmaCore.FrameSvgItem {
 
         PlasmaComponents.ToolButton {
             id: storeButton
-            iconName: "nx-software-center"
+            iconName: "appimage-store"
             Layout.fillHeight: true
             checked: currentView == "store"
             onClicked: {
@@ -63,7 +63,7 @@ PlasmaCore.FrameSvgItem {
 
         PlasmaComponents.ToolButton {
             id: tasksButton
-            iconName: "appimage-store"
+            iconName: "document-download"
             Layout.fillHeight: true
             checked: currentView == "tasks"
             onClicked: {
