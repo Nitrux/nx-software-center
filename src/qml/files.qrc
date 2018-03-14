@@ -10,7 +10,7 @@
         <file>parts/MessageFrame.qml</file>
         <file>SearchView.qml</file>
         <file>TasksView.qml</file>
-        <file>RecordListItemDelegate.qml</file>
+        <file>TaskRecordItem.qml</file>
         <file>UpgradeListItemDelegate.qml</file>
         <file>ApplicationView.qml</file>
     </qresource>

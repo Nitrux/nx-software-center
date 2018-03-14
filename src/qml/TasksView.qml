@@ -6,74 +6,66 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import org.nxos.softwarecenter 1.0
 
-Item {
+Flickable {
+    contentHeight: tasksViewRoot.height
+
+    flickableDirection: Flickable.VerticalFlick
     ColumnLayout {
         id: tasksViewRoot
-
-        anchors.fill: parent
-        anchors.margins: 12
+        width: parent.width > 1000 ? 976 : parent.width - 60;
+        anchors.horizontalCenter: parent.horizontalCenter
 
         PlasmaExtras.Heading {
             text: "Running Tasks"
-            visible: tasksScrollArea.visible
-        }
-        PlasmaExtras.ScrollArea {
-            id: tasksScrollArea
             visible: TasksController.model.rowCount() > 0
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            level: 4
+        }
 
-            ListView {
-                id: tasksListView
+        Repeater {
+            id: tasksListView
 
-                clip: true
+            model: TasksController.model
+            delegate: TaskListItemDelegate {
+                onRequestCancel: TasksController.cancelTask(task_id)
+                app_icon: "package-x-generic"
+                app_name: task_application_name
+                app_author: task_application_author
 
-                model: TasksController.model
-                spacing: 12
-                delegate: TaskListItemDelegate {
-                    onRequestCancel: TasksController.cancelTask(task_id)
-                    app_icon: "package-x-generic"
-                    app_name: task_application_name
-                    app_author: task_application_author
-
-                    progress_value: task_progress_value
-                    progress_total: task_progress_total
-                    progress_message: task_progress_message
-                }
+                progress_value: task_progress_value
+                progress_total: task_progress_total
+                progress_message: task_progress_message
             }
         }
+
         PlasmaExtras.Heading {
             text: "Updates"
-            visible: upgradesScrollArea.visible
+            visible: UpgraderController.model.rowCount() > 0
+            level: 4
         }
 
-        PlasmaExtras.ScrollArea {
-            id: upgradesScrollArea
-            visible: UpgraderController.model.rowCount() > 0
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        Repeater {
+            id: upgradesListView
+            model: UpgraderController.model
+            delegate: UpgradeListItemDelegate {
+                icon: "package-x-generic"
+                name: new_app_name
+                version: new_app_version
 
-            ListView {
-                id: upgradesListView
-                model: UpgraderController.model
-                delegate: UpgradeListItemDelegate {
-                    icon: "package-x-generic"
-                    name: new_app_name
-                    version: new_app_version
+                changeslog_message: "Newer version available"
 
-                    changeslog_message: "Newer version available"
-
-                    onRequestUpgrade: UpgraderController.upgrade(old_app_id, new_app_id);
-                }
+                onRequestUpgrade: UpgraderController.upgrade(old_app_id,
+                                                             new_app_id)
             }
         }
 
         RowLayout {
-            visible: registryScrollArea.visible
+            Layout.fillWidth: true
+            visible: RegistryController.model.rowCount() > 0
 
             PlasmaExtras.Heading {
                 Layout.fillWidth: true
                 text: "History"
+                level: 4
             }
 
             PlasmaComponents.Button {
@@ -83,23 +75,17 @@ Item {
             }
         }
 
-        PlasmaExtras.ScrollArea {
-            id: registryScrollArea
-            visible: RegistryController.model.rowCount() > 0
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        Repeater {
+            id: recordsListView
+            model: RegistryController.model
+            delegate: TaskRecordItem {
+                Layout.topMargin: 12
+                app_icon: "package-x-generic"
+                app_name: task_application_name
+                app_version: task_application_version
 
-            ListView {
-                id: recordsListView
-                model: RegistryController.model
-                delegate: RecordListItemDelegate {
-                    app_icon: "package-x-generic"
-                    app_name: task_application_name
-                    app_version: task_application_version
-
-                    record_timestamp: timestamp
-                    record_message: message
-                }
+                record_timestamp: timestamp
+                record_message: message
             }
         }
     }
@@ -107,5 +93,4 @@ Item {
     // Togle tasks notifications for this view
     Component.onCompleted: NotificationsController.tasksNotificationsEnabled = false
     Component.onDestruction: NotificationsController.tasksNotificationsEnabled = true
-
 }
