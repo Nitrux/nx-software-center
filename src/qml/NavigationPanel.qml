@@ -17,6 +17,8 @@ PlasmaCore.FrameSvgItem {
     imagePath: "opaque/widgets/panel-background"
     enabledBorders: PlasmaCore.FrameSvgItem.BottomBorder
 
+    property alias tasksCount: tasksCount.text
+
     function enable() {
         storeButton.enabled = true
         searchField.enabled = true
@@ -69,6 +71,43 @@ PlasmaCore.FrameSvgItem {
             onClicked: {
                 currentView = "tasks"
                 goTasks()
+            }
+
+            Item {
+                height: 18
+                width: 18
+
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.margins: 2
+                visible: tasksCount.text != "0"
+
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: 1
+                    radius: width
+
+                    color: "#3DAEE9"
+//                    border.color: "#3DAEE9"
+//                    border.width: 1
+
+                    SequentialAnimation on color {
+                        id: glowAnimation
+                        ColorAnimation { to: "white"; duration: 500 }
+                        ColorAnimation { to: "#3DAEE9"; duration: 500 }
+                    }
+                }
+
+                PlasmaComponents.Label {
+                    id: tasksCount
+                    anchors.centerIn: parent
+                    anchors.horizontalCenterOffset: -1
+                    anchors.verticalCenterOffset: -1
+
+                    font.bold: true
+                    font.pointSize: 8
+                    onTextChanged: glowAnimation.start()
+                }
             }
         }
 

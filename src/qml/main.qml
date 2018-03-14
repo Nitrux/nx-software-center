@@ -28,6 +28,29 @@ ApplicationWindow {
         onGoStore: main.handleGoStore()
         onGoTasks: main.showTasksView()
         onStoreQueryTyped: main.search(query)
+
+        tasksCount: "4"
+
+        Connections {
+            target: TasksController
+            onAffectedApplicationsIdsChanged: navigationPanel.updateTaskNumberHint()
+        }
+
+        Connections {
+            target: UpgraderController
+            onUpgradableApplicationsChanged: navigationPanel.updateTaskNumberHint()
+        }
+
+        function updateTaskNumberHint() {
+            var total = TasksController.model.rowCount() + UpgraderController.model.rowCount()
+            var value = ""
+            if (total > 10)
+                value = total % 10 + "*"
+            else
+                value = total
+
+            navigationPanel.tasksCount = value;
+        }
     }
 
     footer: StatusArea {
