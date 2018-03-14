@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
+import "parts" as Parts;
+
 PlasmaCore.FrameSvgItem {
     property alias query: searchField.text
 
@@ -17,7 +19,7 @@ PlasmaCore.FrameSvgItem {
     imagePath: "opaque/widgets/panel-background"
     enabledBorders: PlasmaCore.FrameSvgItem.BottomBorder
 
-    property alias tasksCount: tasksCount.text
+    property alias tasksCount: tasksCount.value
 
     function enable() {
         storeButton.enabled = true
@@ -41,17 +43,6 @@ PlasmaCore.FrameSvgItem {
         height: 34
         spacing: 12
 
-//        PlasmaComponents.ToolButton {
-//            Layout.fillHeight: true
-
-//            iconName: "nx-home"
-//            checked: currentView == "home"
-//            onClicked: {
-//                goHome()
-//                currentView = "home"
-//            }
-//        }
-
         PlasmaComponents.ToolButton {
             id: storeButton
             iconName: "appimage-store"
@@ -73,41 +64,14 @@ PlasmaCore.FrameSvgItem {
                 goTasks()
             }
 
-            Item {
+            Parts.CounterEmblem {
+                id: tasksCount
+
+                anchors.margins: 2
+                anchors.right: parent.right
+                anchors.top: parent.top
                 height: 18
                 width: 18
-
-                anchors.top: parent.top
-                anchors.right: parent.right
-                anchors.margins: 2
-                visible: tasksCount.text != "0"
-
-                Rectangle {
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    radius: width
-
-                    color: "#3DAEE9"
-//                    border.color: "#3DAEE9"
-//                    border.width: 1
-
-                    SequentialAnimation on color {
-                        id: glowAnimation
-                        ColorAnimation { to: "white"; duration: 500 }
-                        ColorAnimation { to: "#3DAEE9"; duration: 500 }
-                    }
-                }
-
-                PlasmaComponents.Label {
-                    id: tasksCount
-                    anchors.centerIn: parent
-                    anchors.horizontalCenterOffset: -1
-                    anchors.verticalCenterOffset: -1
-
-                    font.bold: true
-                    font.pointSize: 8
-                    onTextChanged: glowAnimation.start()
-                }
             }
         }
 
@@ -124,19 +88,5 @@ PlasmaCore.FrameSvgItem {
             Keys.onEnterPressed: storeQueryTyped(text)
             Keys.onReturnPressed: storeQueryTyped(text)
         }
-
-//        PlasmaComponents.ToolButton {
-//            Layout.alignment: Qt.AlignRight
-//            Layout.rightMargin: 12
-//            Layout.fillHeight: true
-//            iconName: "nx-configure"
-
-//            checked: currentView == "settings"
-//            onClicked: {
-//                goSettings()
-//                currentView = "settings"
-//            }
-
-//        }
     }
 }

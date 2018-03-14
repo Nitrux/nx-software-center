@@ -29,7 +29,7 @@ ApplicationWindow {
         onGoTasks: main.showTasksView()
         onStoreQueryTyped: main.search(query)
 
-        tasksCount: "4"
+        tasksCount: "0"
 
         Connections {
             target: TasksController
@@ -43,13 +43,7 @@ ApplicationWindow {
 
         function updateTaskNumberHint() {
             var total = TasksController.model.rowCount() + UpgraderController.model.rowCount()
-            var value = ""
-            if (total > 10)
-                value = total % 10 + "*"
-            else
-                value = total
-
-            navigationPanel.tasksCount = value;
+            navigationPanel.tasksCount = total > 9 ? "+9" : total
         }
     }
 

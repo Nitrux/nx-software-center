@@ -13,6 +13,7 @@
         <file>TaskRecordItem.qml</file>
         <file>UpgradeItem.qml</file>
         <file>ApplicationView.qml</file>
+        <file>parts/CounterEmblem.qml</file>
     </qresource>
     <qresource prefix="/scripts"/>
 </RCC>
