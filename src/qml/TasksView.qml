@@ -14,18 +14,23 @@ Flickable {
         id: tasksViewRoot
         width: parent.width > 1000 ? 976 : parent.width - 60;
         anchors.horizontalCenter: parent.horizontalCenter
+        spacing: 12
+
 
         PlasmaExtras.Heading {
-            text: "Running Tasks"
-            visible: TasksController.model.rowCount() > 0
-            level: 4
+            text: i18n("Downloads")
+            Layout.topMargin: 18
+            visible: tasksListView.count
+            level: 5
         }
 
         Repeater {
             id: tasksListView
+            Layout.bottomMargin: 18
+            visible: count
 
             model: TasksController.model
-            delegate: TaskListItemDelegate {
+            delegate: TaskItem {
                 onRequestCancel: TasksController.cancelTask(task_id)
                 app_icon: "package-x-generic"
                 app_name: task_application_name
@@ -35,18 +40,21 @@ Flickable {
                 progress_total: task_progress_total
                 progress_message: task_progress_message
             }
+
+
         }
 
         PlasmaExtras.Heading {
-            text: "Updates"
-            visible: UpgraderController.model.rowCount() > 0
-            level: 4
+            text: i18n("Updates available")
+            Layout.topMargin: 18
+            visible: upgradesListView.count
+            level: 5
         }
 
         Repeater {
             id: upgradesListView
             model: UpgraderController.model
-            delegate: UpgradeListItemDelegate {
+            delegate: UpgradeItem {
                 icon: "package-x-generic"
                 name: new_app_name
                 version: new_app_version
@@ -55,16 +63,32 @@ Flickable {
 
                 onRequestUpgrade: UpgraderController.upgrade(old_app_id,
                                                              new_app_id)
+                dontHavePendingTasks: TasksController.affectedApplicationsIds.indexOf(new_app_id) === -1
             }
+
+            Layout.bottomMargin: 18
+        }
+
+
+        PlasmaExtras.Heading {
+            Layout.preferredHeight: 200
+            Layout.alignment: Qt.AlignCenter
+            Layout.bottomMargin: 18
+
+            text: i18n("No updates found.")
+
+            visible: !upgradesListView.count
+            level: 5
         }
 
         RowLayout {
+            Layout.topMargin: 18
             Layout.fillWidth: true
-            visible: RegistryController.model.rowCount() > 0
+            visible: recordsListView.count
 
             PlasmaExtras.Heading {
                 Layout.fillWidth: true
-                text: "History"
+                text: i18n("Recent changes")
                 level: 4
             }
 
@@ -79,7 +103,7 @@ Flickable {
             id: recordsListView
             model: RegistryController.model
             delegate: TaskRecordItem {
-                Layout.topMargin: 12
+                Layout.topMargin: 8
                 app_icon: "package-x-generic"
                 app_name: task_application_name
                 app_version: task_application_version

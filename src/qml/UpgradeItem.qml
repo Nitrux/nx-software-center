@@ -4,23 +4,25 @@ import QtQuick.Layouts 1.3
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-Item {
+PlasmaComponents.ListItem {
+    id: itemRoot
     height: 48
     width: parent.width
 
-    property alias record_timestamp: labelTimestamp.text
-    property alias record_message: labelMessage.text
+    property alias changeslog_message: changesLogMessage.text
 
-    property alias app_icon: icon.source
-    property alias app_name: labelName.text
-    property alias app_version: labelVersion.text
+    property alias icon: icon.source
+    property alias name: labelName.text
+    property alias version: labelVersion.text
+    property alias dontHavePendingTasks: itemRoot.visible
+
+    signal requestUpgrade()
 
     PlasmaCore.FrameSvgItem {
+        id: background
         imagePath: "opaque/widgets/panel-background"
         enabledBorders: PlasmaCore.FrameSvgItem.TopBorder
 
-        id: background
-        anchors.topMargin: 4
         anchors.fill: parent
     }
 
@@ -30,11 +32,10 @@ Item {
         anchors.topMargin: 8
         anchors.bottomMargin: 4
 
-        columns: 3
+        columns: 4
         rows: 2
 
-        rowSpacing: 0
-        columnSpacing: 0
+        flow: GridLayout.TopToBottom
 
         PlasmaCore.IconItem {
             id: icon
@@ -42,6 +43,7 @@ Item {
             Layout.fillHeight: true
             Layout.margins: 0
         }
+
 
         PlasmaComponents.Label {
             id: labelName
@@ -53,28 +55,39 @@ Item {
         }
 
         PlasmaComponents.Label {
-            id: labelMessage
-            Layout.alignment: Qt.AlignRight
-            elide: Text.ElideRight
-            font.pointSize: 9
-
-            visible: text != ""
-        }
-
-        PlasmaComponents.Label {
             id: labelVersion
             Layout.fillWidth: true
             elide: Text.ElideRight
-            font.pointSize: 9
 
-            visible: text != ""
+            font.bold: true
+            font.pointSize: 9
         }
 
+
         PlasmaComponents.Label {
-            id: labelTimestamp
+            id: changesLogMessage
             Layout.alignment: Qt.AlignRight
-            elide: Text.ElideRight
+            Layout.rowSpan: 2
+
             font.pointSize: 9
+
+            elide: Text.ElideRight
+            wrapMode: Text.WordWrap
+        }
+
+
+        PlasmaComponents.Button {
+            text: i18n("Update")
+            Layout.alignment: Qt.AlignVCenter
+            Layout.maximumWidth: 72
+            Layout.maximumHeight: 24
+            Layout.rowSpan: 2
+            Layout.leftMargin: 18
+            Layout.rightMargin: 12
+
+            font.pointSize: 9
+
+            onClicked: requestUpgrade()
         }
     }
 }
