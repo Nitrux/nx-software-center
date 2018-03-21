@@ -8,7 +8,7 @@ chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
 export VERSION=$(git rev-parse --short HEAD)
 
-LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true appimage-wrapper ./linuxdeployqt-continuous-x86_64.AppImage \
+LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ./linuxdeployqt-continuous-x86_64.AppImage \
     appdir/usr/share/applications/*.desktop \
     -qmldir=src/qml \
     -bundle-non-qt-libs
@@ -20,6 +20,6 @@ popd
 
 wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
 chmod +x appimagetool-x86_64.AppImage
-appimage-wrapper ./appimagetool-x86_64.AppImage appdir
+./appimagetool-x86_64.AppImage appdir
 
 exit $?
