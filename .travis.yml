@@ -1,7 +1,6 @@
-sudo: required
-
-services:
-  - docker
+language: cpp
+compiler: gcc
+dist: trusty
 
 notifications:
   email: false
@@ -12,33 +11,55 @@ notifications:
     on_failure: always
     on_start: never
 
-before_install:
-  - docker pull nxos/nxos
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - sourceline: 'ppa:beineri/opt-qt-5.10.1-trusty'
+#    - sourceline: 'deb http://repo.nxos.org nxos main'
+#      key_url: 'http://repo.nxos.org/public.key'
+    packages:
+    - qt510base
+    - qt510declarative
+    - qt510tools
+    - qt510x11extras
+    - qt510svg
+    - qt510quickcontrols2
+    -  qt510xmlpatterns
+    - wget
+    - git
+    - cmake
+    - inkscape
+#    - nomad-plasma-look-and-feel
+#    - luv-icon-theme
+#    - nomad-desktop-settings
+
+
+install:
+  - wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
+  - mkdir ~/KF5
+  - tar xpf kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C ~/KF5
 
 script:
-  - docker run --rm -v $(pwd)/:/build/ -w /build/ nxos/nxos bash build_scripts/travis-build.sh
+  - /opt/qt510/bin/qt510-env.sh
+  - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="~/KF5"
+  - make -j$(nproc)
+  - build_scripts/appimage.create.sh
 
 after_success:
   - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - if [ -z "$TRAVIS_TAG" ]; then
-      export TRAVIS_TAG="continuous";
-      git tag -f $TRAVIS_TAG;
-    fi
+        export TRAVIS_TAG="continuous";
+        git tag -f $TRAVIS_TAG;
+      fi
   - mkdir out
   - mv -v Software_Center*.AppImage* out/
-  - echo "========  UPLOADING TO TRANSFER.SH  ========"
-  - curl --upload-file out/Software_Center*.AppImage https://transfer.sh/
-
+  - curl --upload-file "{$(echo out/* | tr ' ' ',')}" https://transfer.sh/
 
 branches:
   except:
     - # Do not build tags that we create when we upload to GitHub Releases
     - /^(?i:continuous)$/
-
-before_deploy:
-  - git config --local user.name "Travis CI"
-  - git config --local user.email "none@nitrux.org"
-  - git tag "continuous" -f
 
 deploy:
   provider: releases
@@ -47,7 +68,7 @@ deploy:
   file: out/*
   skip_cleanup: true
   prerelease: true
-  overwrite: true
   on:
     repo: nomad-desktop/nx-software-center
+    tags: true
     all_branches: true
