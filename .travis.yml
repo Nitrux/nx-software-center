@@ -34,7 +34,7 @@ addons:
     - nomad-plasma-look-and-feel
     - luv-icon-theme
     - nomad-desktop-settings
-    - patchelf
+#    - patchelf
 
 install:
   - wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
