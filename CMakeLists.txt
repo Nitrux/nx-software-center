@@ -1,4 +1,5 @@
-project(nomad_software_center)
+project(nx-software-center)
+set(PROJECT_VERSION 2.3)
 cmake_minimum_required(VERSION 3.3)
 
 cmake_policy(SET CMP0037 NEW)
@@ -26,10 +27,10 @@ include(KDECompilerSettings)
 include(FeatureSummary)
 include(ExternalProject)
 
-
 add_subdirectory(src)
 add_subdirectory(test)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 install(FILES "org.nxos.softwarecenter.desktop" DESTINATION share/applications)
+include(cmake/cpack_deb.cmake)
