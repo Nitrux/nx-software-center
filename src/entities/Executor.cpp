@@ -16,7 +16,7 @@ void Executor::execute(Interactor *interactor) {
     wrapInteractor(interactor);
 
     workerThread.start();
-    QMetaObject::invokeMethod(interactor, &Interactor::execute, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(interactor, "execute", Qt::QueuedConnection);
 
     emit taskStarted(interactor->getId(), interactor->getMetadata());
 }
