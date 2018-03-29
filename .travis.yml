@@ -21,7 +21,7 @@ addons:
     - qt510x11extras
     - qt510svg
     - qt510quickcontrols2
-    -  qt510xmlpatterns
+    - qt510xmlpatterns
     - wget
     - git
     - cmake
@@ -29,20 +29,19 @@ addons:
     - nomad-plasma-look-and-feel
     - luv-icon-theme
     - nomad-desktop-settings
-#    - patchelf
 
 install:
   - wget http://ftp.debian.org/debian/pool/main/p/patchelf/patchelf_0.8-2_amd64.deb
   - sudo dpkg -i patchelf_0.8-2_amd64.deb
   - wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
-  - mkdir ~/KF5
-  - tar xpf kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C ~/KF5
-  - sudo cp -rf ~/KF5/* /usr
+  - sudo tar xpf kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C /usr
 
 script:
   - /opt/qt510/bin/qt510-env.sh
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
   - make -j$(nproc)
+  - export PATH=$PATH:/opt/qt510/bin/
+  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/qt510/lib/
   - build_scripts/appimage.create.sh
 
 after_success:
@@ -70,4 +69,3 @@ deploy:
   on:
     repo: nomad-desktop/nx-software-center
     tags: true
-    all_branches: true
