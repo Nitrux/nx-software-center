@@ -37,10 +37,11 @@ install:
   - wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
   - mkdir ~/KF5
   - tar xpf kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C ~/KF5
+  - sudo cp -rf ~/KF5/* /usr
 
 script:
   - /opt/qt510/bin/qt510-env.sh
-  - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="~/KF5"
+  - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
   - make -j$(nproc)
   - build_scripts/appimage.create.sh
 
