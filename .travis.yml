@@ -32,6 +32,8 @@ addons:
 #    - patchelf
 
 install:
+  - wget http://ftp.debian.org/debian/pool/main/p/patchelf/patchelf_0.8-2_amd64.deb
+  - sudo dpkg -i patchelf_0.8-2_amd64.deb
   - wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
   - mkdir ~/KF5
   - tar xpf kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C ~/KF5
