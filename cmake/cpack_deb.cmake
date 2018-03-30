@@ -31,7 +31,7 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_DEBIAN_PACKAGE_SECTION Utilities)
-set(CPACK_DEBIAN_PACKAGE_RECOMMENDS appimage-desktop-integration)
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "appimage-desktop-integration-first-run, appimage-desktop-integration-user-apps-monitor")
 set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "AppImage Software Center\n Search, Install, Update and Remove AppImages in your system. Use it alongside appimaged.")
 
 set(CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY )
