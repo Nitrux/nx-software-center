@@ -7,7 +7,7 @@ source_dir=`dirname $build_scripts_dir`
 
 ./$build_scripts_dir/appimage.create.icon.sh || { echo "AppImage Creation Failed" && exit 1; }
 
-./$build_scripts_dir/appimage.include.qml.modules.sh "$source_dir/src/qml/" appdir || { echo "AppImage Creation Failed" && exit 1; }
+./$build_scripts_dir/appimage.include.qml.modules.py "$source_dir/src/qml/" appdir $QML_MODULES_FIND_DIRS || { echo "AppImage Creation Failed" && exit 1; }
 
 ./$build_scripts_dir/appimage.include.plasma.theme.sh nomad || { echo "AppImage Creation Failed" && exit 1; }
 

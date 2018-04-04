@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+###
+# ENVIRONMENT VARIABLES
+#   QML_MODULES_FIND_DIRS:
+#           semicolon list of dirs to search for qml modules
+#           example: "/usr/lib/qt/qml;/opt/kf5/qml"
+#
+#   QMLIMPORTSCANNER_BIN: qmlimportscanner binary path
+#
+###
+
 #set -x
 
 if [[ $# != 2 ]]; then
@@ -27,7 +37,7 @@ else
 fi
 
 IFS=";"
-for MODULE_DIR in "$QML_MODULES_FIND_DIRS;/usr/lib;/opt"; do
+for MODULE_DIR in "$QML_MODULES_FIND_DIRS;/usr/lib"; do
     qmldirs=$(find $MODULE_DIR -iname qmldir)
 done
 unset IFS
