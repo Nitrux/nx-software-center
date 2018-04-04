@@ -52,13 +52,13 @@ def main(arguments):
     qml_module_dirs = ["/usr/lib"]
     qml_module_dirs += sys.argv[3:]
 
-    qmlimportscanner_bin = "/home/alexis/.local/qt/5.10.1/gcc_64/bin/qmlimportscanner"
+    qmlimportscanner_bin = shutil.which("qmlimportscanner")
 
     print("QML Modules Search paths: ", qml_module_dirs)
 
     qml_imports = []
     for qmlModulesDir in qml_module_dirs:
-        process = Popen(["/home/alexis/.local/qt/5.10.1/gcc_64/bin/qmlimportscanner",
+        process = Popen([qmlimportscanner_bin,
                          "-rootPath", qml_source_dir,
                          "-importPath", qmlModulesDir], stdout=PIPE)
         process.wait()
