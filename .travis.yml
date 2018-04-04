@@ -21,6 +21,8 @@ addons:
     - qt510quickcontrols
     - qt510graphicaleffects
     - qt510x11extras
+    - qt510svg
+    - libphonon4qt5-4
     - wget
     - git
     - cmake
