@@ -44,5 +44,6 @@ for qmldir in $qmldirs; do
 done
 
 for dir_to_include in $dirs_to_include; do
-    cp -r $dir_to_include $2/usr/qml/
+    MODULE=$(cat $dir_to_include/qmldir | grep module | cut -f 2 -d\ )
+    cp -r $dir_to_include/* $2/usr/qml/${MODULE//\./\/}/
 done
