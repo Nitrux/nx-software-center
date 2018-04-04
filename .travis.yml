@@ -20,6 +20,7 @@ addons:
     - qt510tools
     - qt510x11extras
     - qt510svg
+    - qt510quickcontrols
     - qt510quickcontrols2
     - qt510xmlpatterns
     - wget
