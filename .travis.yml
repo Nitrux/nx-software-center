@@ -41,6 +41,7 @@ script:
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
   - make -j$(nproc)
   - export PATH=$PATH:/opt/qt510/bin/
+  - export QMLIMPORTSCANNER_BIN=/opt/qt510/bin/qmlimportscanner
   - export QML_MODULES_FIND_DIRS=/opt/qt510/lib/
   - build_scripts/appimage.create.sh
 

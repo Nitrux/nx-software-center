@@ -11,7 +11,7 @@ export VERSION=$(git rev-parse --short HEAD)
 LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ./linuxdeployqt-continuous-x86_64.AppImage \
     appdir/usr/share/applications/*.desktop \
     -qmldir=src/qml \
-    -bundle-non-qt-libs
+    -bundle-non-qt-libs || { echo "ERROR: linuxdeployqt failed!" && exit 1; }
 
 pushd appdir
 rm AppRun
