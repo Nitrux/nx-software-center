@@ -25,7 +25,7 @@ addons:
     - wget
     - git
     - cmake
-    - inkscape
+    - librsvg2-bin
     - nomad-plasma-look-and-feel
     - luv-icon-theme
     - nomad-desktop-settings
@@ -41,7 +41,7 @@ script:
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr
   - make -j$(nproc)
   - export PATH=$PATH:/opt/qt510/bin/
-  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/qt510/lib/
+  - export QML_MODULES_FIND_DIRS=/opt/qt510/lib/
   - build_scripts/appimage.create.sh
 
 after_success:
@@ -68,4 +68,5 @@ deploy:
   prerelease: true
   on:
     repo: nomad-desktop/nx-software-center
+    branch: master
     tags: true

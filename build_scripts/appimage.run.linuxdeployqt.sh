@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Getting linuxdeployqt"
-wget -c -nv "https://github.com/azubieta/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" || { echo "ERROR: Unable to get linuxdeployqt!" && exit 1; }
 chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 
 # Create the appimage
