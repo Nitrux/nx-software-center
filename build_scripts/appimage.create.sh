@@ -20,3 +20,5 @@ source_dir=`dirname $build_scripts_dir`
 ./$build_scripts_dir/appimage.run.patchelf.sh || { echo "AppImage Creation Failed" && exit 1; }
 
 ./$build_scripts_dir/appimage.run.linuxdeployqt.sh || { echo "AppImage Creation Failed" && exit 1; }
+
+./$build_scripts_dir/appimage.run.appimagetool.sh || { echo "AppImage Creation Failed" && exit 1; }
