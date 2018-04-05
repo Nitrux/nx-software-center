@@ -37,8 +37,7 @@ before_install:
 
 install:
   - sudo dpkg -i /tmp/patchelf_0.8-2_amd64.deb
-  - mkdir /tmp/kf5-5.44.0
-  - tar xpf /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C /tmp/kf5-5.44.0
+  - tar xpf /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C /usr/
   - sudo update-alternatives --install /usr/bin/qmake qmake /opt/qt510/bin/qmake 1
   - sudo update-alternatives --install /usr/bin/qmlimportscanner qmlimportscanner /opt/qt510/bin/qmlimportscanner 1
 
@@ -46,9 +45,9 @@ install:
 script:
   - /opt/qt510/bin/qt510-env.sh
   - export QT_SELECT=qt5
-  - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/;/tmp/kf5-5.44.0/"
+  - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/"
   - make -j$(nproc)
-  - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/qt510/lib/:/tmp/kf5-5.44.0/x86_64-linux-gnu/"
+  - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/qt510/lib/"
   - export PATH=$PATH:/opt/qt510/bin/
   - export QML_MODULES_FIND_DIRS="/opt/qt510/qml /tmp/kf5-5.44.0/lib/x86_64-linux-gnu/qml"
   - build_scripts/appimage.create.sh

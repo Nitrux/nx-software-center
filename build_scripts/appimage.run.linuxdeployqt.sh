@@ -10,8 +10,9 @@ chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
 export VERSION=$(git rev-parse --short HEAD)
 
+export LD_LIBRARY_PATH="/opt/qt510/lib/:/usr/lib/x86_64-linux-gnu/"
 env | grep LD_
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/qt510/lib/:/tmp/kf5-5.44.0/x86_64-linux-gnu/"
+
 LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ./linuxdeployqt-continuous-x86_64.AppImage \
     appdir/usr/share/applications/*.desktop \
     -verbose=1 \
