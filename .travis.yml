@@ -51,7 +51,7 @@ script:
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/;/tmp/kf5-5.44.0/"
   - make -j$(nproc)
   - export PATH=$PATH:/opt/qt510/bin/
-  - export QML_MODULES_FIND_DIRS="/opt/qt510/;/tmp/kf5-5.44.0/"
+  - export QML_MODULES_FIND_DIRS="/opt/qt510/qml /tmp/kf5-5.44.0/lib/x86_64-linux-gnu/qml"
   - build_scripts/appimage.create.sh
 
 after_success:
