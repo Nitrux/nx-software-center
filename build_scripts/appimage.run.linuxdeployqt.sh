@@ -15,7 +15,7 @@ env | grep LD_
 
 LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ./linuxdeployqt-continuous-x86_64.AppImage \
     appdir/usr/share/applications/*.desktop \
-    -verbose=1 \
+    -verbose=2 \
     -qmldir=src/qml \
     -bundle-non-qt-libs || { echo "ERROR: linuxdeployqt failed!" && exit 1; }
 
