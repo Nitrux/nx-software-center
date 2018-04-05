@@ -49,7 +49,7 @@ script:
   - make -j$(nproc)
   - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/qt510/lib/"
   - export PATH=$PATH:/opt/qt510/bin/
-  - export QML_MODULES_FIND_DIRS="/opt/qt510/qml /tmp/kf5-5.44.0/lib/x86_64-linux-gnu/qml"
+  - export QML_MODULES_FIND_DIRS="/opt/qt510/qml /usr/lib/x86_64-linux-gnu/qml"
   - build_scripts/appimage.create.sh
 
 after_success:
