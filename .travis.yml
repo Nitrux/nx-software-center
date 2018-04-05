@@ -19,6 +19,7 @@ addons:
     - qt510declarative
     - qt510xmlpatterns
     - qt510quickcontrols
+    - qt510quickcontrols2
     - qt510graphicaleffects
     - qt510x11extras
     - qt510svg
