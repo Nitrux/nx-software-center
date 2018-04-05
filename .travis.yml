@@ -41,7 +41,7 @@ install:
   - tar xpf /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C /tmp/kf5-5.44.0
   - echo "/opt/qt510/lib/" | sudo tee /etc/ld.so.conf.d/qt5.10.conf
   - echo "/tmp/kf5-5.44.0/x86_64-linux-gnu/" | sudo tee /etc/ld.so.conf.d/kf5.10.conf
-  - sudo ldconfig
+  - sudo ldconfig -p | grep libKF5
   - sudo update-alternatives --install /usr/bin/qmake qmake /opt/qt510/bin/qmake 1
   - sudo update-alternatives --install /usr/bin/qmlimportscanner qmlimportscanner /opt/qt510/bin/qmlimportscanner 1
 
