@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 build_scripts_dir=`dirname $0`
 source_dir=`dirname $build_scripts_dir`
 
