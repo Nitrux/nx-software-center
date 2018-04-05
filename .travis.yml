@@ -37,7 +37,7 @@ before_install:
 
 install:
   - sudo dpkg -i /tmp/patchelf_0.8-2_amd64.deb
-  - tar xpf /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C /usr/
+  - sudo tar xpf /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C /usr/
   - sudo update-alternatives --install /usr/bin/qmake qmake /opt/qt510/bin/qmake 1
   - sudo update-alternatives --install /usr/bin/qmlimportscanner qmlimportscanner /opt/qt510/bin/qmlimportscanner 1
 
