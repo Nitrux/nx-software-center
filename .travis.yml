@@ -48,9 +48,9 @@ script:
   - export QT_SELECT=qt5
   - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/"
   - make -j$(nproc)
-  - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/qt510/lib/"
   - export PATH=$PATH:/opt/qt510/bin/
   - export QML_MODULES_FIND_DIRS="/opt/qt510/qml /usr/lib/x86_64-linux-gnu/qml"
+  - sudo ldconfig -c /opt/qt510/lib/ /usr/lib/x86_64-linux-gnu/
   - build_scripts/appimage.create.sh
 
 after_success:
