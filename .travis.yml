@@ -65,7 +65,7 @@ branches:
     - /^(?i:continuous)$/
 
 before_deploy:
-  - if [ -z "$TRAVIS_TAG" ]; then; export TRAVIS_TAG="continuous"; git tag -f $TRAVIS_TAG; fi
+  - if [ -z "$TRAVIS_TAG" ]; then export TRAVIS_TAG="continuous"; git tag -f $TRAVIS_TAG; fi
 
 deploy:
   provider: releases
@@ -77,4 +77,3 @@ deploy:
   on:
     repo: nomad-desktop/nx-software-center
     branch: master
-    tags: true
