@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+###
+# ENVIRONMENT VARIABLES
+#   QML_MODULES_FIND_DIRS:
+#           semicolon list of dirs to search for qml modules
+#           example: "/usr/lib/qt/qml;/opt/kf5/qml"
+#
+#   QMLIMPORTSCANNER_BIN: qmlimportscanner binary path
+#
+###
+
 #set -x
 
 if [[ $# != 2 ]]; then
@@ -9,14 +19,14 @@ if [[ $# != 2 ]]; then
     exit 1
 fi
 
-if ! which qmlimportscanner; then
-    echo "qmlimportscanner binary is not reachable."
-    echo "please, check that it's installed and included in search paths."
-    exit 1
+which qmlimportscanner || { echo "ERROR: qmlimportscanner not found!" && exit 1; }
+
+if [[ -z "$QMLIMPORTSCANNER_BIN" ]]; then
+    QMLIMPORTSCANNER_BIN=`which qmlimportscanner`
 fi
 
 echo "## Looking for qml imports in $1"
-modules=$(qmlimportscanner $1 | grep -oE '"name":.*"(.*)"' | cut -d" " -f 2 | sort | uniq)
+modules=$($QMLIMPORTSCANNER_BIN $1 | grep -oE '"name":.*"(.*)"' | cut -d" " -f 2 | sort | uniq)
 modules="${modules//\"/}"
 if [[ -z $modules ]]; then
     echo "No imports found in $1"
@@ -26,9 +36,11 @@ else
     echo "";
 fi
 
-
-qmldirs=$(find /usr/lib -iname qmldir)
-qmldirs="$qmldirs $(find /opt -iname qmldir)"
+IFS=";"
+for MODULE_DIR in "$QML_MODULES_FIND_DIRS;/usr/lib"; do
+    qmldirs=$(find $MODULE_DIR -iname qmldir)
+done
+unset IFS
 
 echo "## Matching qmldirs with imports"
 dirs_to_include=""
@@ -42,5 +54,8 @@ for qmldir in $qmldirs; do
 done
 
 for dir_to_include in $dirs_to_include; do
-    cp -r $dir_to_include $2/usr/qml/
+    MODULE=$(cat $dir_to_include/qmldir | grep module | cut -f 2 -d\ )
+    TARGET_DIR=$2/usr/qml/${MODULE//\./\/}/
+    mkdir -p $TARGET_DIR
+    cp -r $dir_to_include/* $TARGET_DIR
 done
