@@ -23,6 +23,7 @@ void Executor::execute(Interactor *interactor) {
 
 void Executor::wrapInteractor(Interactor *interactor) {
     interactors.insert(interactor->getId(), interactor);
+    tasksData.insert(interactor->getId(), interactor->getMetadata());
 
     connect(interactor, &Interactor::completed, this, &Executor::handleInteractorComplete);
     connect(interactor, &Interactor::metadataChanged, this, &Executor::handleInteractorMetadataChanged);
@@ -38,6 +39,7 @@ void Executor::handleInteractorComplete() {
         QVariantMap resume;
         resume = i->getMetadata();
         interactors.remove(id);
+        tasksData.remove(id);
 
         if (i->isAutoDelete())
             i->deleteLater();
@@ -62,8 +64,11 @@ void Executor::cancel(const QString &id) {
 void Executor::handleInteractorMetadataChanged(const QVariantMap &data) {
     QMutexLocker locker(&lock);
     Interactor *i = dynamic_cast<Interactor *>(sender());
-    if (i != nullptr)
-            emit taskDataChanged(i->getId(), data);
+    if (i != nullptr) {
+        tasksData.insert(i->getId(), i->getMetadata());
+        emit taskDataChanged(i->getId(), data);
+    }
+
 }
 
 QVariantMap Executor::getTaskData(const QString &id) {
@@ -72,7 +77,7 @@ QVariantMap Executor::getTaskData(const QString &id) {
     if (i == nullptr)
         return QVariantMap();
     else
-        return i->getMetadata();
+        return tasksData.value(i->getId(), QVariantMap());
 }
 
 Executor::~Executor() {

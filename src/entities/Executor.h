@@ -21,6 +21,7 @@ Q_OBJECT
 
     QThread workerThread;
     QMap<QString, Interactor *> interactors;
+    QMap<QString, QVariantMap> tasksData;
 public:
     Executor(QObject *parent = 0) : QObject(parent) {}
 
