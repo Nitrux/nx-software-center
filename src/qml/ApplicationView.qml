@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import org.nxos.softwarecenter 1.0
 
@@ -198,15 +199,22 @@ Item {
                 visible: ApplicationViewController.appDownloadSize
             }
 
-            PlasmaComponents.Label {
+            PlasmaExtras.ScrollArea {
+                id: appDescriptionScrollArea
                 Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                PlasmaComponents.Label {
+                    width: appDescriptionScrollArea.width - 32
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignHCenter
 
-                text: '<font size="2">' + ApplicationViewController.appDescription + '</font>'
-                textFormat: Text.RichText
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+                    text: '<font size="2">' + ApplicationViewController.appDescription + '</font>'
+                    textFormat: Text.RichText
+                }
             }
         }
 
