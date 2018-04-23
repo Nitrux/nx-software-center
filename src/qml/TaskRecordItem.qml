@@ -66,8 +66,6 @@ Item {
             Layout.fillWidth: true
             elide: Text.ElideRight
             font.pointSize: 9
-
-            visible: text != ""
         }
 
         PlasmaComponents.Label {
