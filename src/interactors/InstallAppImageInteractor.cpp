@@ -42,7 +42,7 @@ void InstallAppImageInteractor::execute() {
     setRunningMetadata();
 
     QDir home = QDir::home();
-    home.mkdir("bin");
+    home.mkdir("Applications");
 
     downloadJob = downloadManager->download(app.getDownloadUrl(),
                                             installationPath);
