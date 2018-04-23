@@ -8,7 +8,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.nxos.softwarecenter 1.0
 
 Item {
-
+    height: childrenRect.height
     Item {
         id: topLayout
         anchors.top: parent.top
@@ -150,13 +150,13 @@ Item {
         anchors.margins: 16
         anchors.topMargin: 32
         width: parent.width > 1000 ? 976 : parent.width - 32;
-        height: 300
 
         ColumnLayout {
             id: informationColumn
             Layout.alignment: Qt.AlignTop | Qt.AlignLeft
-            Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.minimumWidth: 200
+            Layout.maximumWidth: parent.width / 2
             Layout.leftMargin: 12
 
             spacing: 12
@@ -200,7 +200,6 @@ Item {
 
             PlasmaComponents.Label {
                 Layout.alignment: Qt.AlignTop | Qt.AlignLeft
-                Layout.fillHeight: true
                 Layout.fillWidth: true
 
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -211,9 +210,10 @@ Item {
         }
 
         Item {
-            Layout.fillHeight: true
-            Layout.minimumWidth: bottomLayout.width / 2
-            Layout.minimumHeight: bottomLayout.height
+            Layout.fillWidth: true
+            Layout.minimumWidth: 200
+            Layout.maximumWidth: parent.width / 2
+            Layout.minimumHeight: 300
 
             PathView {
                 id: pathView
