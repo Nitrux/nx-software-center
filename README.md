@@ -2,7 +2,9 @@
 
 This is the repository for the Nomad Software Center.
 
-![](https://i.imgur.com/BDJ8OnO.png)
+![](https://user-images.githubusercontent.com/1138094/39208689-58d3ae84-47c9-11e8-83a9-28d89a6f2cbb.png)
+![](https://user-images.githubusercontent.com/1138094/39208724-6d128f5a-47c9-11e8-90e3-d41472374406.png)
+![](https://user-images.githubusercontent.com/1138094/39208748-7978ded4-47c9-11e8-98c4-5dffeaf5ee0d.png)
 
 # Requirements
  * Qt 5.8+.
