@@ -5,7 +5,7 @@ This is the repository for the Nomad Software Center.
 ![](https://i.imgur.com/BDJ8OnO.png)
 
 # Requirements
- * Qt 5.8.4+.
+ * Qt 5.8+.
  * appimaged (this is a runtime only dependency).
 
 # Issues
