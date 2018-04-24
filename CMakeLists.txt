@@ -27,6 +27,8 @@ include(KDECompilerSettings)
 include(FeatureSummary)
 include(ExternalProject)
 
+include(cmake/libappimage.cmake)
+
 add_subdirectory(src)
 add_subdirectory(test)
 
