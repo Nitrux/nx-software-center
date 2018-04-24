@@ -77,6 +77,8 @@ deploy:
   file: out/*
   skip_cleanup: true
   prerelease: true
+  overwrite: true
   on:
     repo: nomad-desktop/nx-software-center
     branch: master
+    tags: true
