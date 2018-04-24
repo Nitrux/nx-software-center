@@ -12,7 +12,12 @@ Say goodbye to things like:
 
 **Just download and run!**
 
-#Screenshots
+## Feeds
+The AppImages included are fetched from:
+* https://appimage.github.io/
+* https://www.appimagehub.com/
+
+# Screenshots
 
  * Search View
  
