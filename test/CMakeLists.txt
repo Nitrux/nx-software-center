@@ -45,6 +45,8 @@ target_link_libraries(test_core
     Qt5::Test
     Qt5::XmlPatterns
 
+    libappimage
+
     ${gtest_LIBRARIES}
     pthread # this must be last else it fails at linking
     )
