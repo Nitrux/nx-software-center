@@ -7,6 +7,8 @@
 #include <QCoreApplication>
 #include <QDebug>
 
+#include <appimage/appimage.h>
+
 #include <entities/Application.h>
 #include <gateways/DownloadManager.h>
 #include "InstallAppImageInteractor.h"
@@ -42,7 +44,7 @@ void InstallAppImageInteractor::execute() {
     setRunningMetadata();
 
     QDir home = QDir::home();
-    home.mkdir("bin");
+    home.mkdir("Applications");
 
     downloadJob = downloadManager->download(app.getDownloadUrl(),
                                             installationPath);
@@ -92,6 +94,7 @@ void InstallAppImageInteractor::handleDownloadJobFinished() {
     QFile f(installationPath);
     if (f.exists()) {
         f.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner);
+        appimage_register_in_system(installationPath.toStdString().c_str(), false);
     } else {
         qCritical() << "Target file not exist: " << installationPath;
     }

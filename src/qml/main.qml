@@ -8,7 +8,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import org.nxos.softwarecenter 1.0
 
-import "parts" as Parts;
+import "parts" as Parts
 
 ApplicationWindow {
     id: main
@@ -42,7 +42,8 @@ ApplicationWindow {
         }
 
         function updateTaskNumberHint() {
-            var total = TasksController.model.rowCount() + UpgraderController.model.rowCount()
+            var total = TasksController.model.rowCount(
+                        ) + UpgraderController.model.rowCount()
             navigationPanel.tasksCount = total > 9 ? "+9" : total
         }
     }
@@ -53,16 +54,19 @@ ApplicationWindow {
         visible: false
     }
 
-
-    ScrollView {
+    Flickable {
         id: scrollView
         anchors.fill: parent
+
+        contentWidth: stackView.width
+        contentHeight: stackView.height
+
         clip: true
 
         StackView {
             id: stackView
 
-            height: scrollView.height
+            clip: true
             width: scrollView.width
 
             initialItem: PlaceHolderView
@@ -75,15 +79,33 @@ ApplicationWindow {
             }
 
             function goTo(name, component) {
-                var itemInstance = findItemByObjectName(name);
+                var itemInstance = findItemByObjectName(name)
                 if (itemInstance)
                     stackView.pop(itemInstance)
                 else
-                    stackView.push(component, {objectName: name})
+                    stackView.push(component, {
+                                       objectName: name
+                                   })
+                adjustContentHeight()
+            }
+
+            function adjustContentHeight() {
+                var childrenHeight = stackView.currentItem.childrenRect.height
+                if (childrenHeight > scrollView.height)
+                    stackView.height = childrenHeight
+                else
+                    stackView.height = scrollView.height
+            }
+
+            Connections {
+                target: stackView.currentItem
+                onChildrenRectChanged: stackView.adjustContentHeight()
             }
         }
-    }
 
+        ScrollBar.vertical: ScrollBar {
+        }
+    }
 
     Parts.MessageFrame {
         id: messageBox
@@ -102,7 +124,7 @@ ApplicationWindow {
                 messageBox.text = message
                 messageBox.visible = true
             }
-            onNotificationExpired: messageBox.visible = false;
+            onNotificationExpired: messageBox.visible = false
         }
     }
 
@@ -116,7 +138,7 @@ ApplicationWindow {
 
     function showTasksView() {
         main.title = "Tasks"
-        stackView.goTo("tasksView", "qrc:/TasksView.qml");
+        stackView.goTo("tasksView", "qrc:/TasksView.qml")
     }
 
     Connections {
@@ -133,9 +155,9 @@ ApplicationWindow {
                 showBusyMessage("Loading store contents...")
             } else {
                 if (UpdaterController.isReady)
-                    showSearchView();
+                    showSearchView()
                 else
-                    showUpdateErrorMessage();
+                    showUpdateErrorMessage()
             }
         }
     }
@@ -148,30 +170,30 @@ ApplicationWindow {
     }
 
     function showSearchView() {
-        main.title = "Explore";
-        stackView.goTo("searchView", "qrc:/SearchView.qml");
+        main.title = "Explore"
+        stackView.goTo("searchView", "qrc:/SearchView.qml")
     }
 
     function showApplicationView(applicationName) {
-        main.title = applicationName ? applicationName : "Details";
-        stackView.goTo("applicationView", "qrc:/ApplicationView.qml");
+        main.title = applicationName ? applicationName : "Details"
+        stackView.goTo("applicationView", "qrc:/ApplicationView.qml")
     }
 
     function showBusyMessage(message) {
-        stackView.goTo("placeHolderView", "qrc:/PlaceHolderView.qml");
-        var item = stackView.findItemByObjectName("placeHolderView");
+        stackView.goTo("placeHolderView", "qrc:/PlaceHolderView.qml")
+        var item = stackView.findItemByObjectName("placeHolderView")
         item.message = message
-        item.iconName = "";
-        item.showBusyIndicator = true;
+        item.iconName = ""
+        item.showBusyIndicator = true
     }
 
     function showUpdateErrorMessage() {
-        stackView.goTo("placeHolderView", "qrc:/PlaceHolderView.qml");
-        var item = stackView.findItemByObjectName("placeHolderView");
+        stackView.goTo("placeHolderView", "qrc:/PlaceHolderView.qml")
+        var item = stackView.findItemByObjectName("placeHolderView")
 
         item.message = textConstants.fetchError
-        item.iconName = "network-wireless-disconnected";
-        item.showBusyIndicator = false;
+        item.iconName = "network-wireless-disconnected"
+        item.showBusyIndicator = false
     }
 
     Component.onCompleted: handleGoStore()

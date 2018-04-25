@@ -31,6 +31,9 @@ addons:
     - nomad-plasma-look-and-feel
     - luv-icon-theme
     - nomad-desktop-settings
+    - libappimage-dev
+    - libcairo2-dev
+    - libglib2.0-dev
 
 before_install:
   - wget http://ftp.debian.org/debian/pool/main/p/patchelf/patchelf_0.8-2_amd64.deb -O /tmp/patchelf_0.8-2_amd64.deb
@@ -74,6 +77,8 @@ deploy:
   file: out/*
   skip_cleanup: true
   prerelease: true
+  overwrite: true
   on:
     repo: nomad-desktop/nx-software-center
     branch: master
+    tags: true

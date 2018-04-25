@@ -35,6 +35,6 @@ set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "appimage-desktop-integration-first-run, app
 set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "AppImage Software Center\n Search, Install, Update and Remove AppImages in your system. Use it alongside appimaged.")
 
 set(CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY )
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5core5a, libqt5quick5, libqt5xmlpatterns5")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5core5a, libqt5quick5, libqt5xmlpatterns5, libappimage")
 
 include(CPack)

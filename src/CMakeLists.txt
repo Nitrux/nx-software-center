@@ -56,6 +56,7 @@ target_include_directories(core
     PUBLIC ${Qt5Network_INCLUDE_DIRS}
     PUBLIC ${Qt5Gui_INCLUDE_DIRS}
     PUBLIC ${Qt5Qml_INCLUDE_DIRS}
+    PUBLIC ${libappimage_INCLUDE_DIRECTORIES}
     )
 
 ###
@@ -122,7 +123,9 @@ target_link_libraries(nx_software_center
     Qt5::Gui
     Qt5::Qml
     Qt5::Network
-    Qt5::XmlPatterns)
+    Qt5::XmlPatterns
+
+    libappimage)
 
 install(TARGETS nx_software_center ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

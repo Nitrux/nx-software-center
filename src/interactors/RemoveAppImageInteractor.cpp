@@ -2,6 +2,7 @@
 // Created by alexis on 23/01/18.
 //
 
+#include <appimage/appimage.h>
 #include "RemoveAppImageInteractor.h"
 
 RemoveAppImageInteractor::RemoveAppImageInteractor(const Application &application, const QStringList &files, QObject *parent) :
@@ -31,6 +32,9 @@ void RemoveAppImageInteractor::execute() {
             errors << "";
         }
 
+        if (path.endsWith("AppImage", Qt::CaseInsensitive)) {
+            appimage_unregister_in_system(path.toStdString().c_str(), false);
+        }
     }
     if (error)
         setFailedMetadata();
