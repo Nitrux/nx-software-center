@@ -71,7 +71,7 @@ set(CMAKE_AUTORCC ON)
 set(GUI_SRC
     ui/ApplicationListModel.h
     ui/ApplicationListModel.cpp
-    ui/SearchControler.cpp
+    ui/SearchController.cpp
     ui/TasksController.cpp
     ui/TasksController.h
     ui/TaskListModel.cpp

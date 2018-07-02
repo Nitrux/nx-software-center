@@ -28,9 +28,10 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    void setApplications(const QList<Application> &applications);
+    void setApplications(const QList<QVariantMap> applications);
 private:
-    QList<Application> applications;
+    QList<QVariantMap> applications;
+    QVariant getLocalizedValue(const QString& lcName, const QMap<QString, QVariant>& lcField) const;
 };
 
 #endif // APPLICATIONLISTMODEL_H
