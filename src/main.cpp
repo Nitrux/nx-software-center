@@ -16,7 +16,7 @@
 #include "entities/Updater.h"
 #include "entities/Cache.h"
 
-#include "ui/SearchControler.h"
+#include "ui/SearchController.h"
 #include "ui/TasksController.h"
 #include "ui/InstallController.h"
 #include "ui/UninstallController.h"
@@ -32,6 +32,7 @@ Repository *repository;
 DownloadManager *downloadManager = nullptr;
 QNetworkAccessManager *networkAccessManager = nullptr;
 Executor *executor = nullptr;
+Explorer *explorer = nullptr;
 Registry *registry = nullptr;
 Updater *updater = nullptr;
 Cache *cache = nullptr;
@@ -78,6 +79,8 @@ void registerMetatypes() {
 void initSoftwareCenterModules(QObject *parent) {
     executor = new Executor();
 
+    explorer = new Explorer("http://apps.nxos.org/api");
+
     registry = new Registry();
     QObject::connect(executor, &Executor::taskCompleted, registry, &Registry::handleTaskCompleted);
 
@@ -87,10 +90,8 @@ void initSoftwareCenterModules(QObject *parent) {
     downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
 
     CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
-    AppImageHubSource *appImageHubSource = new AppImageHubSource(downloadManager, parent);
-    OCSStoreSource *ocsStoreSource = new OCSStoreSource(QUrl("https://www.appimagehub.com/ocs/v1/content/data"), parent);
 
-    updater = new Updater(repository, {cacheSource, appImageHubSource, ocsStoreSource});
+    updater = new Updater(repository, {cacheSource});
     updater->setExecutor(executor);
 
     cache = new Cache;
@@ -107,7 +108,7 @@ void initSoftwareCenterModules(QObject *parent) {
 
 
 static QObject *searchControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    SearchControler *searchControler = new SearchControler(repository);
+    SearchController *searchControler = new SearchController(explorer);
     return searchControler;
 }
 
@@ -161,7 +162,7 @@ static QObject *applicationViewControllerSingletonProvider(QQmlEngine *, QJSEngi
 }
 
 void registerQmlModules() {
-    qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+    qmlRegisterSingletonType<SearchController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                               "SearchController",
                                               searchControllerSingletonProvider);
 

@@ -1,3 +1,5 @@
+#include <QDebug>
+#include <QLocale>
 #include "ApplicationListModel.h"
 
 ApplicationListModel::ApplicationListModel(QObject *parent)
@@ -32,27 +34,29 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || applications.size() <= index.row())
         return QVariant();
 
-    Application a = applications.at(index.row());
-    // FIXME: Implement more
+    auto a = applications.at(index.row());
+    auto locale = QLocale::system();
+    auto lcName = locale.bcp47Name();
+
     QVariant ret;
     switch (role) {
     case Id:
-        ret = a.getId();
+        ret = a.value("id");
         break;
     case Version:
-        ret = a.getVersion();
+        ret = a.value("version", "latest");
         break;
     case CodeName:
-        ret = a.getCodeName();
+        ret = getLocalizedValue(lcName, a.value("name").toMap());
         break;
     case Name:
-        ret = a.getName();
+        ret = getLocalizedValue(lcName, a.value("name").toMap());
         break;
     case Description:
-        ret = a.getDescription();
+        ret = getLocalizedValue(lcName, a.value("description").toMap());
         break;
     case Icon:
-        ret = a.getIcon();
+        ret = a.value("icon");
         break;
     default:
         break;
@@ -60,8 +64,24 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
 
     return ret;
 }
+QVariant ApplicationListModel::getLocalizedValue(const QString& lcName, const QMap<QString, QVariant>& lcField) const
+{
+    QVariant value;
+    for (QString k: lcField.keys()) {
+            if (k.startsWith(lcName)) {
+                value = lcField[k];
+                break;
+            }
+        }
+    if (value.isNull() && lcField.contains("null"))
+            value = lcField["null"];
 
-void ApplicationListModel::setApplications(const QList<Application> &applications) {
+    if (value.isNull() && !lcField.isEmpty())
+            value = lcField.values().first();
+    return value;
+}
+
+void ApplicationListModel::setApplications(const QList<QVariantMap> applications) {
     beginResetModel();
     this->applications = applications;
     endResetModel();
