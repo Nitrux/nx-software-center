@@ -6,8 +6,6 @@ include(cmake/fetch_gtest.cmake)
 # Configure tests
 ######
 
-#add_subdirectory(core)
-
 find_package(Qt5 REQUIRED COMPONENTS Core Gui Network Test XmlPatterns)
 
 add_executable(test_core
@@ -24,7 +22,9 @@ add_executable(test_core
     src/TestUpdater.cpp
     src/TestCache.cpp
     src/TestApplicationSerializer.cpp
-    src/TestUpgrader.cpp src/TestOSCStoreParser.cpp)
+    src/TestUpgrader.cpp
+    src/TestOSCStoreParser.cpp
+    src/TestExplorer.cpp)
 
 target_include_directories(test_core
     PRIVATE ${CMAKE_SOURCE_DIR}/src/

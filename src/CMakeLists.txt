@@ -8,6 +8,8 @@ set(CORE_SRC
     entities/Application.cpp
     entities/Repository.cpp
     entities/Source.cpp
+    entities/Explorer.cpp
+    entities/Explorer.h
     interactors/Interactor.h
     gateways/DownloadManager.h
 
@@ -46,7 +48,9 @@ set(CORE_SRC
     interactors/RunInteractor.cpp
     interactors/RunInteractor.h
     gateways/OCSStoreDataParser.cpp
-    gateways/OCSStoreDataParser.h gateways/OCSStoreSource.cpp gateways/OCSStoreSource.h)
+    gateways/OCSStoreDataParser.h
+    gateways/OCSStoreSource.cpp
+    gateways/OCSStoreSource.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
