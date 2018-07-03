@@ -2,9 +2,11 @@
 #define APPLICATIONVIEWCONTROLLER_H
 
 #include <QObject>
+#include <QVariantMap>
 #include <entities/Repository.h>
 #include <entities/Registry.h>
 #include <entities/Executor.h>
+#include <entities/Explorer.h>
 
 class ApplicationViewController : public QObject
 {
@@ -12,8 +14,9 @@ class ApplicationViewController : public QObject
     Repository *repository;
     Registry *registry;
     Executor *executor;
+    Explorer *explorer;
 
-    Application application;
+    QVariantMap application;
 
     bool hasPendingTasks;
     Q_PROPERTY(QString backgroundImage READ getBackgroundImage NOTIFY applicationChanged)
@@ -36,6 +39,7 @@ public:
     void setRepository(Repository *repository);
     void setRegistry(Registry *registry);
     void setExecutor(Executor *executor);
+    void setExplorer(Explorer* explorer);
 
     QString getBackgroundImage();
     bool isInstalled();
@@ -61,11 +65,13 @@ protected slots:
     void handleTaskStarted(const QString &, const QVariantMap &data);
 
     void handleTaskCompleted(const QString &, const QVariantMap &data);
+    void handleGetApplicationCompleted(const QVariantMap &application);
 
 private:
 
     QString formatMemoryValue(float num);
     void checkIfHasPendingTasks();
+    QVariantMap getLatestRelease() const;
 };
 
 #endif // APPLICATIONVIEWCONTROLLER_H

@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QLocale>
 #include "ApplicationListModel.h"
+#include "LocalizationUtils.h"
 
 ApplicationListModel::ApplicationListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -35,8 +36,6 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     auto a = applications.at(index.row());
-    auto locale = QLocale::system();
-    auto lcName = locale.bcp47Name();
 
     QVariant ret;
     switch (role) {
@@ -47,13 +46,13 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
         ret = a.value("version", "latest");
         break;
     case CodeName:
-        ret = getLocalizedValue(lcName, a.value("name").toMap());
+        ret = LocalizationUtils::getLocalizedValue(a.value("name").toMap());
         break;
     case Name:
-        ret = getLocalizedValue(lcName, a.value("name").toMap());
+        ret = LocalizationUtils::getLocalizedValue(a.value("name").toMap());
         break;
     case Description:
-        ret = getLocalizedValue(lcName, a.value("description").toMap());
+        ret = LocalizationUtils::getLocalizedValue(a.value("description").toMap());
         break;
     case Icon:
         ret = a.value("icon");
@@ -63,22 +62,6 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     }
 
     return ret;
-}
-QVariant ApplicationListModel::getLocalizedValue(const QString& lcName, const QMap<QString, QVariant>& lcField) const
-{
-    QVariant value;
-    for (QString k: lcField.keys()) {
-            if (k.startsWith(lcName)) {
-                value = lcField[k];
-                break;
-            }
-        }
-    if (value.isNull() && lcField.contains("null"))
-            value = lcField["null"];
-
-    if (value.isNull() && !lcField.isEmpty())
-            value = lcField.values().first();
-    return value;
 }
 
 void ApplicationListModel::setApplications(const QList<QVariantMap> applications) {

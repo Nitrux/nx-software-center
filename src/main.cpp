@@ -158,6 +158,7 @@ static QObject *applicationViewControllerSingletonProvider(QQmlEngine *, QJSEngi
     applicationViewController->setRepository(repository);
     applicationViewController->setRegistry(registry);
     applicationViewController->setExecutor(executor);
+    applicationViewController->setExplorer(explorer);
     return applicationViewController;
 }
 

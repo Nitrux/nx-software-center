@@ -96,7 +96,8 @@ set(GUI_SRC
     ui/RunController.h
     ui/ApplicationViewController.cpp
     ui/ApplicationViewController.h
-    )
+    ui/LocalizationUtils.cpp
+    ui/LocalizationUtils.h)
 
 ## add the qml.qrc file
 qt5_add_resources(qml_QRC qml/files.qrc)

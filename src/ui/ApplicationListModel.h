@@ -31,7 +31,6 @@ public:
     void setApplications(const QList<QVariantMap> applications);
 private:
     QList<QVariantMap> applications;
-    QVariant getLocalizedValue(const QString& lcName, const QMap<QString, QVariant>& lcField) const;
 };
 
 #endif // APPLICATIONLISTMODEL_H
