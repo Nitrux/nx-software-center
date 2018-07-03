@@ -2,6 +2,7 @@
 // Created by alexis on 7/3/18.
 //
 
+#include <iostream>
 #include "AppImageInfo.h"
 AppImageInfo AppImageInfo::fromVariant(const QVariant& variant)
 {
@@ -41,13 +42,39 @@ AppImageInfo AppImageInfo::fromVariant(const QVariant& variant)
 }
 QVariant AppImageInfo::toVariant(const AppImageInfo& appImageInfo)
 {
+    auto qStringListToQVariantList = [](const QStringList src) {
+      QVariantList res;
+      for (const auto& s: src)
+          res << s;
+      return res;
+    };
+
     QVariantMap map;
+    map["format"] = QVariant(1).toDouble();
     map["id"] = appImageInfo.id;
     map["name"] = LocalizedQString::toVariant(appImageInfo.name);
     map["icon"] = appImageInfo.icon;
     map["abstract"] = LocalizedQString::toVariant(appImageInfo.abstract);
     map["description"] = LocalizedQString::toVariant(appImageInfo.description);
+    map["license"] = License::toVariant(appImageInfo.license);
+    map["categories"] = qStringListToQVariantList(appImageInfo.categories);
+    map["keywords"] = qStringListToQVariantList(appImageInfo.keywords);
+    map["languages"] = qStringListToQVariantList(appImageInfo.languages);
+    map["developer"] = Developer::toVariant(appImageInfo.developer);
+    map["release"] = Release::toVariant(appImageInfo.release);
+    map["file"] = File::toVariant(appImageInfo.file);
 
+    QVariantList screenshots;
+    for (const RemoteImage& image: appImageInfo.screenshots)
+        screenshots << RemoteImage::toVariant(image);
+    map["screenshots"] = screenshots;
+
+    map["mime-types"] = qStringListToQVariantList(appImageInfo.mimeTypes);
+
+    QVariantMap links;
+    for (const auto& k: appImageInfo.links.keys())
+        links[k] = appImageInfo.links[k];
+    map["links"] = links;
 
     return map;
 }
@@ -99,6 +126,14 @@ AppImageInfo::License AppImageInfo::License::fromVariant(QVariant& variant)
     l.body = map["body"].toString();
     return l;
 }
+QVariant AppImageInfo::License::toVariant(const AppImageInfo::License& license)
+{
+    QVariantMap map;
+    map["id"] = license.id;
+    map["name"] = license.name;
+    map["body"] = license.body;
+    return map;
+}
 bool AppImageInfo::Developer::operator==(const AppImageInfo::Developer& rhs) const
 {
     return name==rhs.name &&
@@ -127,6 +162,15 @@ AppImageInfo::Developer AppImageInfo::Developer::fromVariant(QVariant& variant)
 
     return developer;
 }
+QVariant AppImageInfo::Developer::toVariant(const AppImageInfo::Developer& developer)
+{
+    QVariantMap map;
+    map["name"] = developer.name;
+    map["avatar"] = developer.avatar;
+    map["pubkey"] = developer.pubkey;
+    map["website"] = developer.website;
+    return map;
+}
 bool AppImageInfo::Release::operator==(const AppImageInfo::Release& rhs) const
 {
     return date==rhs.date &&
@@ -149,11 +193,21 @@ AppImageInfo::Release AppImageInfo::Release::fromVariant(const QVariant& variant
     auto map = variant.toMap();
     AppImageInfo::Release release;
     release.version = map["version"].toString();
-    release.date = map["date"].toDateTime();
+    release.date = QDateTime::fromString(map["date"].toString(), Qt::RFC2822Date);
     release.channel = map["channel"].toString();
     release.changelog = LocalizedQString::fromVariant(map["changelog"]);
 
     return release;
+}
+QVariant AppImageInfo::Release::toVariant(const AppImageInfo::Release& release)
+{
+    QVariantMap map;
+    map["version"] = release.version;
+    map["date"] = release.date.toString(/*Qt::RFC2822Date*/);
+    map["channel"] = release.channel;
+    map["changelog"] = LocalizedQString::toVariant(release.changelog);
+
+    return map;
 }
 bool AppImageInfo::File::operator==(const AppImageInfo::File& rhs) const
 {
@@ -190,6 +244,18 @@ AppImageInfo::File AppImageInfo::File::fromVariant(const QVariant& variant)
 
     return file;
 }
+QVariant AppImageInfo::File::toVariant(const AppImageInfo::File& file)
+{
+    QVariantMap map;
+    map["type"] = QVariant(file.type).toDouble();
+    map["size"] = QVariant(file.size).toDouble();
+    map["architecture"] = file.architecture;
+    map["sha512checksum"] = file.sha512checksum;
+    map["remote_url"] = file.remote_url;
+    map["local_url"] = file.local_url;
+
+    return map;
+}
 bool AppImageInfo::RemoteImage::operator==(const AppImageInfo::RemoteImage& rhs) const
 {
     return height==rhs.height &&
@@ -219,6 +285,17 @@ AppImageInfo::RemoteImage AppImageInfo::RemoteImage::fromVariant(const QVariant&
     remoteImage.width = map["width"].toInt();
     remoteImage.language = map["language"].toString();
     return remoteImage;
+}
+QVariant AppImageInfo::RemoteImage::toVariant(const AppImageInfo::RemoteImage& image)
+{
+    QVariantMap map;
+    map["height"] = QVariant(image.height).toDouble();
+    map["width"] = QVariant(image.width).toDouble();
+    map["language"] = image.language;
+    map["caption"] = image.caption;
+    map["url"] = image.url;
+
+    return map;
 }
 std::ostream& operator<<(std::ostream& os, const AppImageInfo::LocalizedQString& string)
 {

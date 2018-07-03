@@ -32,6 +32,7 @@ public:
         bool operator!=(const License& rhs) const;
         friend std::ostream& operator<<(std::ostream& os, const License& license);
         static License fromVariant(QVariant& variant);
+        static QVariant toVariant(const License& license);
     };
 
     class Developer {
@@ -45,6 +46,7 @@ public:
         bool operator!=(const Developer& rhs) const;
         friend std::ostream& operator<<(std::ostream& os, const Developer& developer);
         static Developer fromVariant(QVariant& variant);
+        static QVariant toVariant(const Developer& developer);
     };
 
     class Release {
@@ -57,6 +59,7 @@ public:
         bool operator!=(const Release& rhs) const;
         friend std::ostream& operator<<(std::ostream& os, const Release& release);
         static Release fromVariant(const QVariant& variant);
+        static QVariant toVariant(const Release& release);
     };
 
     class File {
@@ -73,6 +76,7 @@ public:
         bool operator!=(const File& rhs) const;
         friend std::ostream& operator<<(std::ostream& os, const File& file);
         static File fromVariant(const QVariant& variant);
+        static QVariant toVariant(const File& file);
     };
 
     class RemoteImage {
@@ -88,6 +92,7 @@ public:
         bool operator!=(const RemoteImage& rhs) const;
         friend std::ostream& operator<<(std::ostream& os, const RemoteImage& image);
         static RemoteImage fromVariant(const QVariant& variant);
+        static QVariant toVariant(const RemoteImage& image);
     };
 
     QString id;

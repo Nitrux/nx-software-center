@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <entities/AppImageInfo.h>
 
+
 namespace NX_SOFTWARE_CENTER_TESTS {
 class TestAppImageInfo : public testing::Test {
 public:
@@ -59,7 +60,7 @@ public:
         a.developer = developer;
 
         AppImageInfo::Release release;
-        release.date = QDateTime::fromString("10/10/2017");
+        release.date = QDateTime::fromString("Tue, 26 Jun 2018 00:31:36 GMT", Qt::RFC2822Date);
         release.version = "0.1.0";
         release.channel = "stable";
         AppImageInfo::LocalizedQString changelog;
@@ -99,6 +100,13 @@ public:
 
 TEST_F(TestAppImageInfo, toVariant)
 {
+    auto src = TestAppImageInfo::initTestAppImageInfo();
+    auto result = AppImageInfo::toVariant(src);
+    auto expected = TestAppImageInfo::loadTestVariant();
+
+//    qInfo() << result;
+//    qInfo() << expected;
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(TestAppImageInfo, fromVariant)
@@ -109,5 +117,15 @@ TEST_F(TestAppImageInfo, fromVariant)
 
     ASSERT_EQ(result, expected);
 }
+
+TEST_F(TestAppImageInfo, toAndFromVariant) {
+    auto a = TestAppImageInfo::initTestAppImageInfo();
+    auto v = AppImageInfo::toVariant(a);
+    auto a2 = AppImageInfo::fromVariant(v);
+
+    ASSERT_EQ(a2, a);
+}
+
+
 
 }

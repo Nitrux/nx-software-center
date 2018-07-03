@@ -41,7 +41,7 @@
     "pubkey": "gpg public key"
   },
   "release": {
-    "date": "10/10/2017",
+    "date": "Tue Jun 26 00:31:36 2018 GMT",
     "version": "0.1.0",
     "channel": "stable",
     "changelog": {
@@ -54,7 +54,8 @@
     "size": 1882040,
     "architecture": "x86-64",
     "sha512checksum": "a big and fussy checksum",
-    "remote_url": "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+    "remote_url": "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage",
+    "local_url": ""
   },
   "screenshots": [
     {
