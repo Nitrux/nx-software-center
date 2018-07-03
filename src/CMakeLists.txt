@@ -50,7 +50,9 @@ set(CORE_SRC
     gateways/OCSStoreDataParser.cpp
     gateways/OCSStoreDataParser.h
     gateways/OCSStoreSource.cpp
-    gateways/OCSStoreSource.h)
+    gateways/OCSStoreSource.h
+    entities/AppImageInfo.cpp
+    entities/AppImageInfo.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
