@@ -6,8 +6,9 @@
 #include <QtCore/QJsonArray>
 #include <QtCore/QJsonObject>
 
-#include <entities/ApplicationAbstract.h>
 #include <iostream>
+#include <entities/ApplicationFull.h>
+#include <entities/ApplicationAbstract.h>
 #include "RestClient.h"
 #include "ApplicationsSearchRequest.h"
 
@@ -32,7 +33,7 @@ const QList<ApplicationAbstract>& ApplicationsSearchRequest::getResults() const
 {
     return results;
 }
-QUrl ApplicationsSearchRequest::buildSearchQueryUrl(const QString& query, const QString& category) const
+QUrl ApplicationsSearchRequest::getUrl() const
 {
     QString urlQuery;
     if (!query.isEmpty())
@@ -58,7 +59,7 @@ void ApplicationsSearchRequest::start()
     trySetRunning();
 
     results.clear();
-    QUrl url = buildSearchQueryUrl(query, category);
+    QUrl url = getUrl();
 
     QNetworkRequest request(url);
     reply = networkAccessManager->get(request);
@@ -129,8 +130,8 @@ ApplicationAbstract ApplicationsSearchRequest::getAbstract(const QVariantMap& vM
     ApplicationAbstract a;
     a.id = vMap["id"].toString();
     a.icon = vMap["icon"].toString();
-    a.name = AppImageInfo::LocalizedQString::fromVariant(vMap["name"]);
-    a.abstract = AppImageInfo::LocalizedQString::fromVariant(vMap["name"]);
+    a.name = ApplicationFull::LocalizedQString::fromVariant(vMap["name"]);
+    a.abstract = ApplicationFull::LocalizedQString::fromVariant(vMap["name"]);
 
     return a;
 }

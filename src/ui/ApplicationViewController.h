@@ -8,17 +8,18 @@
 #include <entities/Executor.h>
 #include <gateways/RestClient.h>
 #include <entities/AppImageInfo.h>
+#include <gateways/GetApplicationRequest.h>
 
 class ApplicationViewController : public QObject
 {
     Q_OBJECT
-    Repository *repository;
     Registry *registry;
     Executor *executor;
-    RestClient *explorer;
+    RestClient *restClient;
+    GetApplicationRequest *request;
 
     AppImageInfo appImageInfo;
-    QVariantMap application;
+    ApplicationFull application;
 
     bool hasPendingTasks;
     Q_PROPERTY(QString backgroundImage READ getBackgroundImage NOTIFY applicationChanged)
@@ -38,8 +39,7 @@ class ApplicationViewController : public QObject
 public:
     explicit ApplicationViewController(QObject *parent = nullptr);
 
-    void setRepository(Repository *repository);
-    void setRegistry(Registry *registry);
+    void setRegistry(Registry* registry);
     void setExecutor(Executor *executor);
     void setExplorer(RestClient* explorer);
 
@@ -67,10 +67,9 @@ protected slots:
     void handleTaskStarted(const QString &, const QVariantMap &data);
 
     void handleTaskCompleted(const QString &, const QVariantMap &data);
-    void handleGetApplicationCompleted(const QVariantMap &application);
+    void handleGetApplicationResult();
 
 private:
-
     QString formatMemoryValue(float num);
     void checkIfHasPendingTasks();
     QVariantMap getLatestRelease() const;

@@ -155,7 +155,6 @@ static QObject *runControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
 
 static QObject *applicationViewControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     auto applicationViewController = new ApplicationViewController();
-    applicationViewController->setRepository(repository);
     applicationViewController->setRegistry(registry);
     applicationViewController->setExecutor(executor);
     applicationViewController->setExplorer(explorer);

@@ -28,20 +28,20 @@ public:
     void setCategory(const QString& category);
     const QList<ApplicationAbstract>& getResults() const;
 
+    QUrl getUrl() const;
 public slots:
-    void start();
 
+    void start();
     void stop();
 signals:
     void resultsReady();
-    void failed(const QString reason);
 
+    void failed(const QString& reason);
 protected slots:
-    void handleReplyFinished();
 
+    void handleReplyFinished();
 protected:
     void trySetRunning();
-    QUrl buildSearchQueryUrl(const QString& query, const QString& category) const;
     QList<ApplicationAbstract> parseResponse(const QByteArray& response) const;
     ApplicationAbstract getAbstract(const QVariantMap& vMap) const;
 };

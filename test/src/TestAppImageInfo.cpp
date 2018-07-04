@@ -6,7 +6,6 @@
 #include <QJsonDocument>
 #include <entities/AppImageInfo.h>
 
-
 namespace NX_SOFTWARE_CENTER_TESTS {
 class TestAppImageInfo : public testing::Test {
 public:
@@ -28,22 +27,22 @@ public:
     {
         AppImageInfo a;
         a.id = "example-app.desktop";
-        AppImageInfo::LocalizedQString name;
+        ApplicationFull::LocalizedQString name;
         name["en"] = "Example App";
         name["es"] = "Aplicación de ejemplo";
         name["null"] = "this is used in the case that there is no locale info about this text";
         a.name = name;
         a.icon = "icon url";
-        AppImageInfo::LocalizedQString abstract;
+        ApplicationFull::LocalizedQString abstract;
         abstract["en"] = "Example Application Abstract.";
         abstract["es"] = "Resumen de la Applicación de Ejemplo.";
         a.abstract = abstract;
-        AppImageInfo::LocalizedQString description;
+        ApplicationFull::LocalizedQString description;
         description["en"] = "<p>English long description of example app</p>";
         description["es"] = "<p>Descripción en Español de la Aplicación de Ejemplo</p>";
         a.description = description;
 
-        AppImageInfo::License license;
+        ApplicationFull::License license;
         license.id = "gpl3";
         license.name = "GNU General Public License 3";
         license.body = "... GNU General Public License 3 ...";
@@ -52,24 +51,24 @@ public:
         a.keywords = QList<QString>{"application", "applicación", "example", "ejemplo"};
         a.languages = QList<QString>{"de_DE", "es_CU", "ru"};
 
-        AppImageInfo::Developer developer;
+        ApplicationFull::Developer developer;
         developer.name = "Bob";
         developer.avatar = "https://bob.blog/logo.sng";
         developer.website = "https://github.com/AppImage";
         developer.pubkey = "gpg public key";
         a.developer = developer;
 
-        AppImageInfo::Release release;
+        ApplicationFull::Release release;
         release.date = QDateTime::fromString("Tue, 26 Jun 2018 00:31:36 GMT", Qt::RFC2822Date);
         release.version = "0.1.0";
         release.channel = "stable";
-        AppImageInfo::LocalizedQString changelog;
+        ApplicationFull::LocalizedQString changelog;
         changelog["en"] = "<p>The application was created.</p>";
         changelog["es"] = "<p>La applicación fue creada.</p>";
         release.changelog = changelog;
         a.release = release;
 
-        AppImageInfo::File file;
+        ApplicationFull::File file;
         file.type = 2;
         file.size = 1882040;
         file.architecture = "x86-64";
@@ -78,7 +77,7 @@ public:
                           "appimagetool-x86_64.AppImage";
         a.file = file;
 
-        AppImageInfo::RemoteImage screenshot;
+        ApplicationFull::RemoteImage screenshot;
         screenshot.height = 0;
         screenshot.width = 0;
         screenshot.language = "";

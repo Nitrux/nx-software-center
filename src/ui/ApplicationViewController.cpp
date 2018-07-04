@@ -6,21 +6,12 @@
 #include <QDebug>
 ApplicationViewController::ApplicationViewController(QObject* parent)
         :
-        QObject(parent), repository(nullptr), registry(nullptr), executor(nullptr),
-        hasPendingTasks(false)
+        QObject(parent), registry(nullptr), executor(nullptr), restClient(nullptr),
+        request(nullptr), hasPendingTasks(false)
 {
 
 }
 
-void ApplicationViewController::setRepository(Repository* repository)
-{
-    ApplicationViewController::repository = repository;
-}
-
-void ApplicationViewController::setRegistry(Registry* registry)
-{
-//    ApplicationViewController::registry = registry;
-}
 
 void ApplicationViewController::setExecutor(Executor* executor)
 {
@@ -31,15 +22,15 @@ void ApplicationViewController::setExecutor(Executor* executor)
 
 QString ApplicationViewController::getApplicationId()
 {
-    return application.value("id").toString();
+    return application.id;
 }
 
 QString ApplicationViewController::getBackgroundImage()
 {
-    const auto screenshots = application.value("screenshots").toList();
+    const auto screenshots = application.screenshots;
     if (screenshots.length()>0) {
-        const auto first = screenshots.first().toMap();
-        return first["url"].toString();
+        const auto first = screenshots.first();
+        return first.url;
     }
 
     return QString();
@@ -47,33 +38,32 @@ QString ApplicationViewController::getBackgroundImage()
 
 bool ApplicationViewController::isInstalled()
 {
-    if (registry && !application.isEmpty())
-        return registry->getInstalledApplications().contains(application["id"].toString());
+    if (registry && !application.id.isEmpty())
+        return registry->getInstalledApplications().contains(application.id);
 
     return false;
 }
 
 bool ApplicationViewController::hasScreenShots()
 {
-    const auto screenshots = application.value("screenshots").toList();
-    return screenshots.length()>0;
+    return application.screenshots.length()>0;
 }
 
 QString ApplicationViewController::getApplicationIcon()
 {
-    return application["icon"].toString();
+    return application.icon;
 }
 
 QString ApplicationViewController::getApplicationName()
 {
-    return LocalizationUtils::getLocalizedValue(application["name"].toMap()).toString();
+    return LocalizationUtils::getLocalizedValue(application.name).toString();
 }
 
 QString ApplicationViewController::getApplicationAuthor()
 {
-    const auto developer = application["developer"].toMap();
-    if (developer.contains("name"))
-        return developer["name"].toString();
+    const auto developer = application.developer;
+    if (!developer.name.isEmpty())
+        return developer.name;
 
     return QString();
 }
@@ -94,58 +84,57 @@ QString ApplicationViewController::getApplicationVersion()
 }
 QVariantMap ApplicationViewController::getLatestRelease() const
 {
-    const auto releases = application["releases"].toList();
-    QVariantMap latestRelease;
-    for (const auto& v: releases) {
-        auto release = v.toMap();
-
-        if (latestRelease.isEmpty())
+    const auto releases = application.releases;
+    ApplicationFull::Release latestRelease;
+    for (const auto& release: releases) {
+        if (latestRelease.date.isValid())
             latestRelease = release;
 
-        if (release["date"].toDateTime() > latestRelease["date"].toDateTime())
+        if (release.date>latestRelease.date)
             latestRelease = release;
     }
-    return latestRelease;
+
+    auto result = ApplicationFull::Release::toVariant(latestRelease);
+    return result.toMap();
 }
 
 QString ApplicationViewController::getApplicationDownloadSize()
 {
-        auto latestRelease = getLatestRelease();
-        auto files = latestRelease["files"].toList();
-        QVariantMap downloadFile;
-        for (const auto& v: files) {
-            const auto file = v.toMap();
-            if (file["architecture"].toString().replace("-","_") == QSysInfo::currentCpuArchitecture())
-                downloadFile = file;
-        }
-        auto size = downloadFile.value("size", 0).toInt();
-        if (size > 0)
-            return formatMemoryValue(size);
+    auto latestRelease = getLatestRelease();
+    auto files = latestRelease["files"].toList();
+    QVariantMap downloadFile;
+    for (const auto& v: files) {
+        const auto file = v.toMap();
+        if (file["architecture"].toString().replace("-", "_")==QSysInfo::currentCpuArchitecture())
+            downloadFile = file;
+    }
+    auto size = downloadFile.value("size", 0).toInt();
+    if (size>0)
+        return formatMemoryValue(size);
 
-        return QString();
+    return QString();
 }
 
 QString ApplicationViewController::getApplicationDescription()
 {
-    auto description = LocalizationUtils::getLocalizedValue(application["description"].toMap()).toString();
+    auto description = LocalizationUtils::getLocalizedValue(application.description).toString();
     if (!description.isEmpty())
         return description;
 
-    auto abstract = LocalizationUtils::getLocalizedValue(application["abstract"].toMap()).toString();
+    auto abstract = LocalizationUtils::getLocalizedValue(application.abstract).toString();
     if (!abstract.isEmpty())
         return abstract;
 
-    return "No description provided by the application developer.";
+    return QString();
 }
 
 QStringList ApplicationViewController::getApplicationScreenShots()
 {
-    const auto screenshots = application.value("screenshots").toList();
+    const auto screenshots = application.screenshots;
     QStringList res;
-    for (const auto v: screenshots) {
-        auto map = v.toMap();
-        if (map.contains("url"))
-            res << map["url"].toString();
+    for (const auto screenshot: screenshots) {
+        if (!screenshot.url.isEmpty())
+            res << screenshot.url;
     }
 
     return res;
@@ -153,16 +142,17 @@ QStringList ApplicationViewController::getApplicationScreenShots()
 
 QString ApplicationViewController::getApplicationWebsite()
 {
-    const auto links = application["links"].toMap();
-    return links.value("homepage", QVariant()).toString();
+    const auto links = application.links;
+    return links.value("homepage");
 }
 
 void ApplicationViewController::loadApplication(const QString& id)
 {
-    if (explorer) {
-        connect(explorer, &RestClient::getApplicationCompleted, this,
-                &ApplicationViewController::handleGetApplicationCompleted);
-        explorer->getApplication(id);
+    if (restClient) {
+        request = restClient->buildGetApplicationRequest(id);
+        connect(request, &GetApplicationRequest::resultReady, this,
+                &ApplicationViewController::handleGetApplicationResult);
+        request->start();
     }
 }
 
@@ -175,7 +165,7 @@ void ApplicationViewController::checkIfHasPendingTasks()
         const auto data = executor->getTaskData(taskId);
         const QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
 
-        if (appId==application["id"].toString())
+        if (appId==application.id)
             hasPendingTasks = true;
     }
 
@@ -185,7 +175,7 @@ void ApplicationViewController::checkIfHasPendingTasks()
 void ApplicationViewController::handleTaskStarted(const QString&, const QVariantMap& data)
 {
     const QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
-    if (appId==application["id"].toString()) {
+    if (appId==application.id) {
         hasPendingTasks = true;
         emit hasPendingTasksChanged(hasPendingTasks);
     }
@@ -194,7 +184,7 @@ void ApplicationViewController::handleTaskStarted(const QString&, const QVariant
 void ApplicationViewController::handleTaskCompleted(const QString&, const QVariantMap& data)
 {
     const QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
-    if (appId==application["id"].toString()) {
+    if (appId==application.id) {
         hasPendingTasks = false;
         emit hasPendingTasksChanged(hasPendingTasks);
         emit applicationChanged();
@@ -218,14 +208,20 @@ QString ApplicationViewController::formatMemoryValue(float num)
 }
 void ApplicationViewController::setExplorer(RestClient* explorer)
 {
-    ApplicationViewController::explorer = explorer;
+    ApplicationViewController::restClient = explorer;
 }
-void ApplicationViewController::handleGetApplicationCompleted(const QVariantMap& application)
+void ApplicationViewController::handleGetApplicationResult()
 {
-    disconnect(explorer, &RestClient::getApplicationCompleted, this,
-            &ApplicationViewController::handleGetApplicationCompleted);
-    ApplicationViewController::application = application;
+    disconnect(request, &GetApplicationRequest::resultReady, this,
+            &ApplicationViewController::handleGetApplicationResult);
+    ApplicationViewController::application = request->getResult();
 
     checkIfHasPendingTasks();
+    request->deleteLater();
+    request = nullptr;
     emit applicationChanged();
+}
+void ApplicationViewController::setRegistry(Registry* registry)
+{
+    ApplicationViewController::registry = registry;
 }

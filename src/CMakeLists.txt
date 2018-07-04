@@ -5,6 +5,8 @@ find_package(Qt5 REQUIRED COMPONENTS Core Gui Qml Network XmlPatterns)
 ###
 
 set(CORE_SRC
+    entities/ApplicationFull.cpp
+    entities/ApplicationFull.h
     entities/Application.cpp
     entities/ApplicationAbstract.cpp
     entities/ApplicationAbstract.h
@@ -58,7 +60,8 @@ set(CORE_SRC
     entities/AppImageInfo.h
     gateways/ApplicationsSearchRequest.cpp
     gateways/ApplicationsSearchRequest.h
-    )
+    gateways/GetApplicationRequest.cpp
+    gateways/GetApplicationRequest.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
