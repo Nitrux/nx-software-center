@@ -3,7 +3,7 @@
 
 #include <QDebug>
 #include <QObject>
-#include "entities/Explorer.h"
+#include "entities/RestClient.h"
 #include "ApplicationListModel.h"
 #include "interactors/FetchApplicationsInteractor.h"
 
@@ -13,10 +13,10 @@ class SearchController : public QObject
     Q_PROPERTY(ApplicationListModel *model MEMBER model NOTIFY modelChanged);
 
     ApplicationListModel *model;
-    Explorer *explorer;
+    RestClient *explorer;
     QString query;
 public:
-    explicit SearchController(Explorer* explorer, QObject* parent = nullptr);
+    explicit SearchController(RestClient* explorer, QObject* parent = nullptr);
 
 signals:
     void searching();

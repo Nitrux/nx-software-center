@@ -160,7 +160,7 @@ QString ApplicationViewController::getApplicationWebsite()
 void ApplicationViewController::loadApplication(const QString& id)
 {
     if (explorer) {
-        connect(explorer, &Explorer::getApplicationCompleted, this,
+        connect(explorer, &RestClient::getApplicationCompleted, this,
                 &ApplicationViewController::handleGetApplicationCompleted);
         explorer->getApplication(id);
     }
@@ -216,13 +216,13 @@ QString ApplicationViewController::formatMemoryValue(float num)
 
     return QString().setNum(num, 'f', 2)+" "+unit;
 }
-void ApplicationViewController::setExplorer(Explorer* explorer)
+void ApplicationViewController::setExplorer(RestClient* explorer)
 {
     ApplicationViewController::explorer = explorer;
 }
 void ApplicationViewController::handleGetApplicationCompleted(const QVariantMap& application)
 {
-    disconnect(explorer, &Explorer::getApplicationCompleted, this,
+    disconnect(explorer, &RestClient::getApplicationCompleted, this,
             &ApplicationViewController::handleGetApplicationCompleted);
     ApplicationViewController::application = application;
 

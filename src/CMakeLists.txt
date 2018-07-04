@@ -8,8 +8,8 @@ set(CORE_SRC
     entities/Application.cpp
     entities/Repository.cpp
     entities/Source.cpp
-    entities/Explorer.cpp
-    entities/Explorer.h
+    entities/RestClient.cpp
+    entities/RestClient.h
     interactors/Interactor.h
     gateways/DownloadManager.h
 

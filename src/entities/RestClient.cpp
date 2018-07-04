@@ -6,18 +6,18 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-#include "Explorer.h"
+#include "RestClient.h"
 
-Explorer::Explorer(QString url, QObject* parent)
+RestClient::RestClient(QString url, QObject* parent)
         :QObject(parent), busy(false), api(url), networkAccessManager(new QNetworkAccessManager(this))
 {
 
 }
-bool Explorer::isBusy() const
+bool RestClient::isBusy() const
 {
     return busy;
 }
-void Explorer::search(const QString& query, const QString& category)
+void RestClient::search(const QString& query, const QString& category)
 {
     trySetBusy();
 
@@ -25,10 +25,10 @@ void Explorer::search(const QString& query, const QString& category)
 
     QNetworkRequest request(url);
     networkAccessManager->get(request);
-    connect(networkAccessManager, &QNetworkAccessManager::finished, this, &Explorer::handleSearchRequestResults);
+    connect(networkAccessManager, &QNetworkAccessManager::finished, this, &RestClient::handleSearchRequestResults);
 
 }
-QUrl Explorer::buildSearchQueryUrl(const QString& query, const QString& category) const
+QUrl RestClient::buildSearchQueryUrl(const QString& query, const QString& category) const
 {
     QString urlQuery;
     if (!query.isEmpty())
@@ -44,21 +44,21 @@ QUrl Explorer::buildSearchQueryUrl(const QString& query, const QString& category
     url.setQuery(urlQuery);
     return url;
 }
-void Explorer::trySetBusy()
+void RestClient::trySetBusy()
 {
     if (busy)
-        throw ExplorerBusy();
+        throw RestClientBusy();
 
     setBusy(true);
 }
-void Explorer::setBusy(bool busy)
+void RestClient::setBusy(bool busy)
 {
-    Explorer::busy = busy;
+    RestClient::busy = busy;
     emit isBusyChanged(busy);
 }
-void Explorer::handleSearchRequestResults(QNetworkReply* reply)
+void RestClient::handleSearchRequestResults(QNetworkReply* reply)
 {
-    disconnect(networkAccessManager, &QNetworkAccessManager::finished, this, &Explorer::handleSearchRequestResults);
+    disconnect(networkAccessManager, &QNetworkAccessManager::finished, this, &RestClient::handleSearchRequestResults);
 
     if (reply->error()!=QNetworkReply::NoError) {
         emit failure(reply->errorString());
@@ -88,7 +88,7 @@ void Explorer::handleSearchRequestResults(QNetworkReply* reply)
     reply->deleteLater();
     setBusy(false);
 }
-void Explorer::getApplication(const QString& id)
+void RestClient::getApplication(const QString& id)
 {
     trySetBusy();
 
@@ -96,17 +96,17 @@ void Explorer::getApplication(const QString& id)
 
     QNetworkRequest request(url);
     networkAccessManager->get(request);
-    connect(networkAccessManager, &QNetworkAccessManager::finished, this, &Explorer::handleGetApplicationResult);
+    connect(networkAccessManager, &QNetworkAccessManager::finished, this, &RestClient::handleGetApplicationResult);
 }
-QUrl Explorer::buildGetApplicationUrl(const QString& id) const
+QUrl RestClient::buildGetApplicationUrl(const QString& id) const
 {
     QUrl url = api+"/applications/"+id;
     url.setQuery(R"(filter={"include":[{"releases":{"files":{}}}]})");
     return url;
 }
-void Explorer::handleGetApplicationResult(QNetworkReply* reply)
+void RestClient::handleGetApplicationResult(QNetworkReply* reply)
 {
-    disconnect(networkAccessManager, &QNetworkAccessManager::finished, this, &Explorer::handleGetApplicationResult);
+    disconnect(networkAccessManager, &QNetworkAccessManager::finished, this, &RestClient::handleGetApplicationResult);
 
     if (reply->error()==QNetworkReply::NoError) {
         auto response = reply->readAll();
@@ -128,5 +128,5 @@ void Explorer::handleGetApplicationResult(QNetworkReply* reply)
     setBusy(false);
 }
 
-ExplorerBusy::ExplorerBusy(const std::string& __arg)
+RestClientBusy::RestClientBusy(const std::string& __arg)
         :runtime_error(__arg) { }

@@ -32,7 +32,7 @@ Repository *repository;
 DownloadManager *downloadManager = nullptr;
 QNetworkAccessManager *networkAccessManager = nullptr;
 Executor *executor = nullptr;
-Explorer *explorer = nullptr;
+RestClient *explorer = nullptr;
 Registry *registry = nullptr;
 Updater *updater = nullptr;
 Cache *cache = nullptr;
@@ -79,7 +79,7 @@ void registerMetatypes() {
 void initSoftwareCenterModules(QObject *parent) {
     executor = new Executor();
 
-    explorer = new Explorer("http://apps.nxos.org/api");
+    explorer = new RestClient("http://apps.nxos.org/api");
 
     registry = new Registry();
     QObject::connect(executor, &Executor::taskCompleted, registry, &Registry::handleTaskCompleted);

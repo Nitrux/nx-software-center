@@ -11,7 +11,7 @@
 #include <QVariantMap>
 #include <QNetworkReply>
 
-class Explorer : public QObject {
+class RestClient : public QObject {
 Q_OBJECT
     Q_PROPERTY(bool isBusy READ isBusy NOTIFY isBusyChanged)
 
@@ -19,7 +19,7 @@ Q_OBJECT
     QString api;
     QNetworkAccessManager *networkAccessManager;
 public:
-    explicit Explorer(QString url, QObject* parent = nullptr);
+    explicit RestClient(QString url, QObject* parent = nullptr);
     void search(const QString& query = "", const QString& category = "");
     void getApplication(const QString &id);
     bool isBusy() const;
@@ -41,10 +41,10 @@ protected:
     QUrl buildGetApplicationUrl(const QString& id) const;
 };
 
-class ExplorerBusy : public std::runtime_error {
+class RestClientBusy : public std::runtime_error {
 protected:
-    explicit ExplorerBusy(const std::string& __arg = "Another request is being processed.");
-    friend class Explorer;
+    explicit RestClientBusy(const std::string& __arg = "Another request is being processed.");
+    friend class RestClient;
 };
 
 #endif //NX_SOFTWARE_CENTER_EXPLORER_H

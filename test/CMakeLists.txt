@@ -24,7 +24,7 @@ add_executable(test_core
     src/TestApplicationSerializer.cpp
     src/TestUpgrader.cpp
     src/TestOSCStoreParser.cpp
-    src/TestExplorer.cpp
+    src/TestRestClient.cpp
     src/TestAppImageInfo.cpp)
 
 target_include_directories(test_core

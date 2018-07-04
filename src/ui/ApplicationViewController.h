@@ -6,7 +6,8 @@
 #include <entities/Repository.h>
 #include <entities/Registry.h>
 #include <entities/Executor.h>
-#include <entities/Explorer.h>
+#include <entities/RestClient.h>
+#include <entities/AppImageInfo.h>
 
 class ApplicationViewController : public QObject
 {
@@ -14,8 +15,9 @@ class ApplicationViewController : public QObject
     Repository *repository;
     Registry *registry;
     Executor *executor;
-    Explorer *explorer;
+    RestClient *explorer;
 
+    AppImageInfo appImageInfo;
     QVariantMap application;
 
     bool hasPendingTasks;
@@ -39,7 +41,7 @@ public:
     void setRepository(Repository *repository);
     void setRegistry(Registry *registry);
     void setExecutor(Executor *executor);
-    void setExplorer(Explorer* explorer);
+    void setExplorer(RestClient* explorer);
 
     QString getBackgroundImage();
     bool isInstalled();

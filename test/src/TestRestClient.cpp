@@ -4,53 +4,53 @@
 #include <gtest/gtest.h>
 #include <QSignalSpy>
 
-#include "entities/Explorer.h"
+#include "entities/RestClient.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {
-class TestExplorer : public testing::Test, public Explorer {
+class TestRestClient : public testing::Test, public RestClient {
 public:
-    TestExplorer()
-            :Explorer("http://localhost:3000/api") { }
+    TestRestClient()
+            :RestClient("http://localhost:3000/api") { }
 };
 
-TEST_F(TestExplorer, buildEmptyQuery)
+TEST_F(TestRestClient, buildEmptyQuery)
 {
     auto result = buildSearchQueryUrl("", "");
     QUrl expected("http://localhost:3000/api/applications/search");
     ASSERT_EQ(expected.toEncoded(), result.toEncoded());
 }
 
-TEST_F(TestExplorer, buildTextOnlyQuery)
+TEST_F(TestRestClient, buildTextOnlyQuery)
 {
     auto result = buildSearchQueryUrl("appimage", "");
     QUrl expected("http://localhost:3000/api/applications/search?query=appimage");
     ASSERT_EQ(expected.toEncoded(), result.toEncoded());
 }
 
-TEST_F(TestExplorer, buildCategoryOnlyQuery)
+TEST_F(TestRestClient, buildCategoryOnlyQuery)
 {
     auto result = buildSearchQueryUrl("", "Development");
     QUrl expected("http://localhost:3000/api/applications/search?category=Development");
     ASSERT_EQ(expected.toEncoded(), result.toEncoded());
 }
 
-TEST_F(TestExplorer, buildTextAndCategoryQuery)
+TEST_F(TestRestClient, buildTextAndCategoryQuery)
 {
     auto result = buildSearchQueryUrl("appimage", "Development");
     QUrl expected("http://localhost:3000/api/applications/search?query=appimage&category=Development");
     ASSERT_EQ(expected.toEncoded(), result.toEncoded());
 }
 
-TEST_F(TestExplorer, fullSearchQuery)
+TEST_F(TestRestClient, fullSearchQuery)
 {
-    QSignalSpy spy(this, &Explorer::searchCompleted);
+    QSignalSpy spy(this, &RestClient::searchCompleted);
     search("appimage", "Development");
 
     spy.wait();
     ASSERT_EQ(1, spy.count());
 }
 
-TEST_F(TestExplorer, buildGetApplicationUrl) {
+TEST_F(TestRestClient, buildGetApplicationUrl) {
     auto result = buildGetApplicationUrl("appimaged.desktop");
     QUrl expected(
             R"(http://localhost:3000/api/applications/appimaged.desktop?filter={"include":[{"releases":{"files":{}}}]})");
@@ -58,18 +58,18 @@ TEST_F(TestExplorer, buildGetApplicationUrl) {
 }
 
 
-TEST_F(TestExplorer, getUnexistentApp)
+TEST_F(TestRestClient, getUnexistentApp)
 {
-    QSignalSpy spy(this, &Explorer::failure);
+    QSignalSpy spy(this, &RestClient::failure);
     getApplication("dd");
 
     spy.wait();
     ASSERT_EQ(1, spy.count());
 }
 
-TEST_F(TestExplorer, getExistentApp)
+TEST_F(TestRestClient, getExistentApp)
 {
-    QSignalSpy spy(this, &Explorer::getApplicationCompleted);
+    QSignalSpy spy(this, &RestClient::getApplicationCompleted);
     getApplication("appimaged.desktop");
 
     spy.wait();
