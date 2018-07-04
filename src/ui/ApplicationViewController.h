@@ -6,7 +6,7 @@
 #include <entities/Repository.h>
 #include <entities/Registry.h>
 #include <entities/Executor.h>
-#include <entities/RestClient.h>
+#include <gateways/RestClient.h>
 #include <entities/AppImageInfo.h>
 
 class ApplicationViewController : public QObject

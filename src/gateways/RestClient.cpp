@@ -7,6 +7,7 @@
 #include <QJsonObject>
 
 #include "RestClient.h"
+#include "ApplicationsSearchRequest.h"
 
 RestClient::RestClient(QString url, QObject* parent)
         :QObject(parent), busy(false), api(url), networkAccessManager(new QNetworkAccessManager(this))
@@ -47,7 +48,8 @@ QUrl RestClient::buildSearchQueryUrl(const QString& query, const QString& catego
 void RestClient::trySetBusy()
 {
     if (busy)
-        throw RestClientBusy();
+        return;
+//        throw RestClientBusy();
 
     setBusy(true);
 }
@@ -126,6 +128,17 @@ void RestClient::handleGetApplicationResult(QNetworkReply* reply)
 
     reply->deleteLater();
     setBusy(false);
+}
+
+ApplicationsSearchRequest* RestClient::buildSearchRequest(const QString& query, const QString& category)
+{
+    auto request = new ApplicationsSearchRequest();
+    request->setNetworkAccessManager(networkAccessManager);
+    request->setApi(api);
+    request->setQuery(query);
+    request->setCategory(category);
+
+    return request;
 }
 
 RestClientBusy::RestClientBusy(const std::string& __arg)

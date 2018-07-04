@@ -3,14 +3,15 @@
 
 #include <gtest/gtest.h>
 #include <QSignalSpy>
+#include <gateways/ApplicationsSearchRequest.h>
 
-#include "entities/RestClient.h"
+#include "gateways/RestClient.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {
 class TestRestClient : public testing::Test, public RestClient {
 public:
     TestRestClient()
-            :RestClient("http://localhost:3000/api") { }
+            :RestClient("http://apps.nxos.org/api") { }
 };
 
 TEST_F(TestRestClient, buildEmptyQuery)
@@ -71,6 +72,16 @@ TEST_F(TestRestClient, getExistentApp)
 {
     QSignalSpy spy(this, &RestClient::getApplicationCompleted);
     getApplication("appimaged.desktop");
+
+    spy.wait();
+    ASSERT_EQ(1, spy.count());
+}
+
+TEST_F(TestRestClient, buildSearchRequest)
+{
+    auto request = buildSearchRequest();
+    QSignalSpy spy(request, &ApplicationsSearchRequest::resultsReady);
+    request->start();
 
     spy.wait();
     ASSERT_EQ(1, spy.count());

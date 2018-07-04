@@ -3,7 +3,7 @@
 
 #include <QDebug>
 #include <QObject>
-#include "entities/RestClient.h"
+#include "gateways/RestClient.h"
 #include "ApplicationListModel.h"
 #include "interactors/FetchApplicationsInteractor.h"
 
