@@ -18,17 +18,6 @@ bool RestClient::isBusy() const
 {
     return busy;
 }
-void RestClient::search(const QString& query, const QString& category)
-{
-    trySetBusy();
-
-    QUrl url = buildSearchQueryUrl(query, category);
-
-    QNetworkRequest request(url);
-    networkAccessManager->get(request);
-    connect(networkAccessManager, &QNetworkAccessManager::finished, this, &RestClient::handleSearchRequestResults);
-
-}
 QUrl RestClient::buildSearchQueryUrl(const QString& query, const QString& category) const
 {
     QString urlQuery;
@@ -116,7 +105,6 @@ void RestClient::handleGetApplicationResult(QNetworkReply* reply)
         if (jsonDoc.isObject()) {
             auto obj = jsonDoc.object();
             emit getApplicationCompleted(obj.toVariantMap());
-            qInfo() << obj;
         }
         else
             qWarning() << "Unexpected response: " << jsonDoc;

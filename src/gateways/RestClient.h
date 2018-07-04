@@ -21,7 +21,6 @@ Q_OBJECT
     QNetworkAccessManager *networkAccessManager;
 public:
     explicit RestClient(QString url, QObject* parent = nullptr);
-    void search(const QString& query = "", const QString& category = "");
     ApplicationsSearchRequest* buildSearchRequest(const QString& query = "", const QString& category = "");
     void getApplication(const QString &id);
     bool isBusy() const;

@@ -5,7 +5,7 @@
 #include <QAbstractListModel>
 
 #include "entities/Application.h"
-
+#include <entities/ApplicationAbstract.h>
 class ApplicationListModel : public QAbstractListModel {
 Q_OBJECT
     enum ApplicationListModelRoles {
@@ -26,9 +26,9 @@ public:
 
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-    void setApplications(const QList<QVariantMap> applications);
+    void setApplications(QList<ApplicationAbstract> applications);
 private:
-    QList<QVariantMap> applications;
+    QList<ApplicationAbstract> applications;
 };
 
 #endif // APPLICATIONLISTMODEL_H

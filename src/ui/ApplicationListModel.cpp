@@ -41,22 +41,22 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     QVariant ret;
     switch (role) {
     case Id:
-        ret = a.value("id");
+        ret = a.id;
         break;
     case Version:
-        ret = a.value("version", "");
+        ret = a.latestReleaseVersion;
         break;
     case Size:
-        ret = a.value("size", "").toString();
+        ret = a.fileSize;
         break;
     case Name:
-        ret = LocalizationUtils::getLocalizedValue(a.value("name").toMap());
+        ret = LocalizationUtils::getLocalizedValue(a.name);
         break;
     case Abstract:
-        ret = LocalizationUtils::getLocalizedValue(a.value("abstract").toMap());
+        ret = LocalizationUtils::getLocalizedValue(a.abstract);
         break;
     case Icon:
-        ret = a.value("icon", "");
+        ret = a.icon;
         break;
     default:
         break;
@@ -65,7 +65,7 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     return ret;
 }
 
-void ApplicationListModel::setApplications(const QList<QVariantMap> applications) {
+void ApplicationListModel::setApplications(const QList<ApplicationAbstract> applications) {
     beginResetModel();
     this->applications = applications;
     endResetModel();

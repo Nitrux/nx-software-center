@@ -42,15 +42,6 @@ TEST_F(TestRestClient, buildTextAndCategoryQuery)
     ASSERT_EQ(expected.toEncoded(), result.toEncoded());
 }
 
-TEST_F(TestRestClient, fullSearchQuery)
-{
-    QSignalSpy spy(this, &RestClient::searchCompleted);
-    search("appimage", "Development");
-
-    spy.wait();
-    ASSERT_EQ(1, spy.count());
-}
-
 TEST_F(TestRestClient, buildGetApplicationUrl) {
     auto result = buildGetApplicationUrl("appimaged.desktop");
     QUrl expected(

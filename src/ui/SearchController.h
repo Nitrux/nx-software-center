@@ -7,14 +7,16 @@
 #include "ApplicationListModel.h"
 #include "interactors/FetchApplicationsInteractor.h"
 
+class ApplicationSearchRequest;
 class SearchController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(ApplicationListModel *model MEMBER model NOTIFY modelChanged);
 
     ApplicationListModel *model;
-    RestClient *explorer;
+    RestClient *restClient;
     QString query;
+    ApplicationsSearchRequest *searchRequest;
 public:
     explicit SearchController(RestClient* explorer, QObject* parent = nullptr);
 
@@ -28,10 +30,9 @@ public slots:
     void search(const QString &query);
 
 protected slots:
-    void handleRepositoryChanged();
-    void handleSearchCompleted(const QList<QVariantMap> applications);
+    void handleSearchResults();
 protected:
-    void filterApplications();
+    void doSearch();
 };
 
 #endif // SEARCHCONTROLER_H

@@ -131,6 +131,6 @@ ApplicationAbstract ApplicationsSearchRequest::getAbstract(const QVariantMap& vM
     a.icon = vMap["icon"].toString();
     a.name = AppImageInfo::LocalizedQString::fromVariant(vMap["name"]);
     a.abstract = AppImageInfo::LocalizedQString::fromVariant(vMap["name"]);
-    std::cerr << a << std::endl;
+
     return a;
 }

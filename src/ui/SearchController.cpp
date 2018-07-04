@@ -1,34 +1,40 @@
+#include <gateways/ApplicationsSearchRequest.h>
 #include "SearchController.h"
 
 SearchController::SearchController(RestClient* explorer, QObject* parent)
         :
         QObject(parent),
-        model(new ApplicationListModel(this)), explorer(explorer)
+        model(new ApplicationListModel(this)), restClient(explorer),
+        searchRequest
+                (nullptr)
 {
-    filterApplications();
+    doSearch();
 }
 
-void SearchController::search(const QString &query) {
+void SearchController::search(const QString& query)
+{
     this->query = query;
-    filterApplications();
+    doSearch();
 }
 
-void SearchController::handleRepositoryChanged()
+void SearchController::doSearch()
 {
-    filterApplications();
-}
-
-void SearchController::filterApplications() {
     emit searching();
-    connect(explorer, &RestClient::searchCompleted, this, &SearchController::handleSearchCompleted);
-    connect(explorer, &RestClient::failure, this, &SearchController::failed);
-    explorer->search(query);
 
+    searchRequest = restClient->buildSearchRequest(query);
+    connect(searchRequest, &ApplicationsSearchRequest::resultsReady, this, &SearchController::handleSearchResults);
+    connect(searchRequest, &ApplicationsSearchRequest::failed, this, &SearchController::failed);
+    searchRequest->start();
 }
-void SearchController::handleSearchCompleted(const QList<QVariantMap> applications)
+void SearchController::handleSearchResults()
 {
-    disconnect(explorer, &RestClient::searchCompleted, this, &SearchController::handleSearchCompleted);
-    disconnect(explorer, &RestClient::failure, this, &SearchController::failed);
-    model->setApplications(applications);
+    disconnect(searchRequest, &ApplicationsSearchRequest::resultsReady, this, &SearchController::handleSearchResults);
+    disconnect(searchRequest, &ApplicationsSearchRequest::failed, this, &SearchController::failed);
+
+    model->setApplications(searchRequest->getResults());
+
+    searchRequest->deleteLater();
+    searchRequest = nullptr;
+
     emit resultsReady();
 }
