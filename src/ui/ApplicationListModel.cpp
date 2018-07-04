@@ -12,11 +12,12 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles.insert(Id, "app_id");
-    roles.insert(CodeName, "app_code_name");
     roles.insert(Name, "app_name");
-    roles.insert(Description, "app_description");
-    roles.insert(Version, "app_version");
     roles.insert(Icon, "app_icon");
+    roles.insert(Abstract, "app_abstract");
+    roles.insert(Version, "app_version");
+    roles.insert(Size, "app_size");
+
     return roles;
 }
 
@@ -43,19 +44,19 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
         ret = a.value("id");
         break;
     case Version:
-        ret = a.value("version", "latest");
+        ret = a.value("version", "");
         break;
-    case CodeName:
-        ret = LocalizationUtils::getLocalizedValue(a.value("name").toMap());
+    case Size:
+        ret = a.value("size", "").toString();
         break;
     case Name:
         ret = LocalizationUtils::getLocalizedValue(a.value("name").toMap());
         break;
-    case Description:
-        ret = LocalizationUtils::getLocalizedValue(a.value("description").toMap());
+    case Abstract:
+        ret = LocalizationUtils::getLocalizedValue(a.value("abstract").toMap());
         break;
     case Icon:
-        ret = a.value("icon");
+        ret = a.value("icon", "");
         break;
     default:
         break;

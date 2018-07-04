@@ -40,7 +40,7 @@ Item {
                 installed: RegistryController.installedApplications.indexOf(
                                app_id) > -1
                 upgradable: UpgraderController.upgradableApplications.indexOf(
-                                app_code_name) > -1
+                                app_id) > -1
 
                 onRequestGet: InstallController.install(app_id)
                 onRequestRemove: UninstallController.uninstall(app_id)

@@ -6,27 +6,25 @@
 
 #include "entities/Application.h"
 
-class ApplicationListModel : public QAbstractListModel
-{
-    Q_OBJECT
-    enum ApplicationListModelRoles
-    {
-        Id = Qt::UserRole + 1,
-        CodeName,
-        Name,
-        Version,
-        Description,
-        Icon
+class ApplicationListModel : public QAbstractListModel {
+Q_OBJECT
+    enum ApplicationListModelRoles {
+      Id = Qt::UserRole+1,
+      Name,
+      Version,
+      Abstract,
+      Icon,
+      Size
     };
 
 public:
-    explicit ApplicationListModel(QObject *parent = nullptr);
+    explicit ApplicationListModel(QObject* parent = nullptr);
 
-     QHash<int, QByteArray> roleNames() const;
+    QHash<int, QByteArray> roleNames() const;
     // Basic functionality:
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
     void setApplications(const QList<QVariantMap> applications);
 private:

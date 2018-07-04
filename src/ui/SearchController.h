@@ -4,7 +4,6 @@
 #include <QDebug>
 #include <QObject>
 #include "entities/Explorer.h"
-#include "entities/Application.h"
 #include "ApplicationListModel.h"
 #include "interactors/FetchApplicationsInteractor.h"
 
