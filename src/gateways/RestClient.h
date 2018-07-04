@@ -10,9 +10,9 @@
 #include <QString>
 #include <QVariantMap>
 #include <QNetworkReply>
-#include "GetApplicationRequest.h"
 
 class ApplicationsSearchRequest;
+class GetApplicationRequest;
 class RestClient : public QObject {
 Q_OBJECT
     QString api;
