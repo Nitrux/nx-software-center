@@ -18,9 +18,7 @@ set(CORE_SRC
     interactors/Interactor.h
     gateways/DownloadManager.h
 
-    gateways/AppImageHubSource.cpp
     interactors/FetchApplicationsInteractor.cpp
-    gateways/AppImageInstallLinksRegExParser.cpp
     gateways/SimpleDownloadManager.cpp
     entities/Registry.cpp
     entities/Registry.h
@@ -34,8 +32,6 @@ set(CORE_SRC
     gateways/Download.cpp
     gateways/ContentDownload.cpp
     gateways/ContentDownload.h
-    gateways/CachedDownloadManager.h
-    gateways/CachedDownloadManager.cpp
     gateways/CacheSource.cpp
     gateways/CacheSource.h
     interactors/TaskMetadata.h
@@ -52,10 +48,6 @@ set(CORE_SRC
     entities/ApplicationSerializer.h
     interactors/RunInteractor.cpp
     interactors/RunInteractor.h
-    gateways/OCSStoreDataParser.cpp
-    gateways/OCSStoreDataParser.h
-    gateways/OCSStoreSource.cpp
-    gateways/OCSStoreSource.h
     entities/AppImageInfo.cpp
     entities/AppImageInfo.h
     gateways/ApplicationsSearchRequest.cpp

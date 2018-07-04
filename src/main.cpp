@@ -5,12 +5,9 @@
 
 #include <ui/UpgraderController.h>
 #include <ui/NotificationsController.h>
-#include <gateways/OCSStoreSource.h>
 
 #include "gateways/CacheSource.h"
-#include "gateways/AppImageHubSource.h"
 #include "gateways/SimpleDownloadManager.h"
-#include "gateways/CachedDownloadManager.h"
 #include "entities/Registry.h"
 #include "entities/Executor.h"
 #include "entities/Updater.h"

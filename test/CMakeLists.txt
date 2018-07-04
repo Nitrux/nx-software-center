@@ -13,8 +13,6 @@ add_executable(test_core
     src/test_core_main.cpp
     src/TestFetchApplicationsInteractor.cpp
     src/DummySource.h src/BrokenDummySource.h
-    src/TestAppImageHubSource.cpp
-    src/TestAppImageInstallLinksRegExParser.cpp
     src/TestExecutor.cpp
     src/TestDownload.cpp
     src/FakeDownloadManager.h src/FakeDownloadManager.cpp
@@ -23,7 +21,6 @@ add_executable(test_core
     src/TestCache.cpp
     src/TestApplicationSerializer.cpp
     src/TestUpgrader.cpp
-    src/TestOSCStoreParser.cpp
     src/TestRestClient.cpp
     src/TestAppImageInfo.cpp)
 
