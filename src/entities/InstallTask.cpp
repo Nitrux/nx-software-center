@@ -16,7 +16,7 @@ void InstallTask::setId(const QString& id)
     InstallTask::id = id;
 }
 InstallTask::InstallTask()
-        :QObject(), restClient(nullptr), running(false), getApplicationRequest(nullptr), fileDownload(nullptr) { }
+        :Task(), restClient(nullptr), running(false), getApplicationRequest(nullptr), fileDownload(nullptr) { }
 void InstallTask::start()
 {
     if (running)
@@ -116,4 +116,8 @@ void InstallTask::registerAppImage(const QString& filePath)
             emit completed();
     else
             emit failed("Unable to register in system");
+}
+void InstallTask::stop()
+{
+    qWarning() << "InstallTask::stop not implemented yet";
 }

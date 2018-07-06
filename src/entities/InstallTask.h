@@ -8,10 +8,11 @@
 #include <QObject>
 #include <gateways/RestClient.h>
 #include "ApplicationFull.h"
+#include "Task.h"
 
 class GetApplicationRequest;
 class FileDownload;
-class InstallTask : public QObject {
+class InstallTask : public Task {
 Q_OBJECT
     RestClient* restClient;
     QString id;
@@ -20,7 +21,7 @@ Q_OBJECT
     bool running;
 
     GetApplicationRequest* getApplicationRequest;
-    FileDownload *fileDownload;
+    FileDownload* fileDownload;
 protected:
     friend class Installer;
     InstallTask();
@@ -28,13 +29,11 @@ protected:
     void setId(const QString& id);
 public:
     void setApplicationsDir(const QString& applicationsDir);
-
-public:
     const QString& getChannel() const;
     void setChannel(const QString& channel);
 
-public slots:
-    void start();
+    void start() override;
+    void stop() override;
 
 signals:
     void completed();

@@ -54,7 +54,11 @@ set(CORE_SRC
     gateways/ApplicationsSearchRequest.cpp
     gateways/ApplicationsSearchRequest.h
     gateways/GetApplicationRequest.cpp
-    gateways/GetApplicationRequest.h entities/InstallTask.cpp entities/InstallTask.h)
+    gateways/GetApplicationRequest.h
+    entities/InstallTask.cpp
+    entities/InstallTask.h
+    entities/Task.cpp
+    entities/Task.h entities/Worker.cpp entities/Worker.h)
 
 add_library(core OBJECT ${CORE_SRC})
 

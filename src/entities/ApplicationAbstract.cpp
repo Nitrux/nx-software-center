@@ -13,3 +13,14 @@ std::ostream& operator<<(std::ostream& os, const ApplicationAbstract& abstract)
 }
 ApplicationAbstract::ApplicationAbstract()
         :fileSize(0) { }
+QVariantMap ApplicationAbstract::toVariant() const
+{
+    QVariantMap map;
+    map["id"] = id;
+    map["icon"] = icon;
+    map["name"] = ApplicationFull::LocalizedQString::toVariant(name);
+    map["abstract"] = ApplicationFull::LocalizedQString::toVariant(abstract);
+    map["fileSize"] = fileSize;
+    map["latestReleaseVersion"] = latestReleaseVersion;
+    return QVariantMap();
+}
