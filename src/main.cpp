@@ -7,7 +7,6 @@
 #include <ui/NotificationsController.h>
 
 #include "gateways/CacheSource.h"
-#include "gateways/SimpleDownloadManager.h"
 #include "entities/Registry.h"
 #include "entities/Executor.h"
 #include "entities/Updater.h"
@@ -26,7 +25,6 @@
 #define QML_MODULE_MAJOR_VERSION 1
 
 Repository* repository;
-DownloadManager* downloadManager = nullptr;
 QNetworkAccessManager* networkAccessManager = nullptr;
 Executor* executor = nullptr;
 RestClient* restClient = nullptr;
@@ -89,8 +87,6 @@ void initSoftwareCenterModules(QObject* parent)
     installer->setRestClient(restClient);
     repository = new Repository();
 
-    downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
-
     CacheSource* cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
 
     updater = new Updater(repository, {cacheSource});
@@ -147,7 +143,7 @@ static QObject* updaterControllerSingletonProvider(QQmlEngine*, QJSEngine*)
 static QObject* upgraderControllerSingletonProvider(QQmlEngine*, QJSEngine*)
 {
     UpgraderController* upgraderController = new UpgraderController(upgrader, repository, registry, executor,
-            downloadManager);
+            nullptr);
     return upgraderController;
 }
 

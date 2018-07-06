@@ -21,7 +21,6 @@ set(CORE_SRC
     entities/Installer.cpp
     entities/Installer.h
     interactors/FetchApplicationsInteractor.cpp
-    gateways/SimpleDownloadManager.cpp
     entities/Registry.cpp
     entities/Registry.h
     entities/Executor.cpp
