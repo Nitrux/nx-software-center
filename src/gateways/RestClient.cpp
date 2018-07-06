@@ -36,3 +36,11 @@ GetApplicationRequest* RestClient::buildGetApplicationRequest(const QString& id)
 
     return request;
 }
+QNetworkAccessManager* RestClient::getNetworkAccessManager() const
+{
+    return networkAccessManager;
+}
+void RestClient::setNetworkAccessManager(QNetworkAccessManager* networkAccessManager)
+{
+    RestClient::networkAccessManager = networkAccessManager;
+}

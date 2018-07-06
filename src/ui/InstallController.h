@@ -2,25 +2,22 @@
 #define INSTALLCONTROLLER_H
 
 #include <QObject>
+#include <QList>
+#include "entities/Installer.h"
+#include <entities/InstallTask.h>
 
-#include "entities/Repository.h"
-#include "entities/Executor.h"
-#include "gateways/DownloadManager.h"
-
-class InstallController : public QObject
-{
-    Q_OBJECT
-    Repository *repository;
-    Executor *executor;
-    DownloadManager *downloadManager;
+class InstallController : public QObject {
+Q_OBJECT
+    Installer* installer;
+    QList<InstallTask*> tasks;
 public:
-    explicit InstallController(Repository *repository, Executor *executor, DownloadManager *downloadManager,
-                                   QObject *parent = nullptr);
-
-signals:
+    InstallController(Installer* installer, QObject* parent = nullptr);
 
 public slots:
-    void install(const QString &application_id);
+    void install(const QString& application_id);
+protected slots:
+    void handleInstallTaskCompleted();
+    void startTask(InstallTask* task) const;
 };
 
 #endif // INSTALLCONTROLLER_H

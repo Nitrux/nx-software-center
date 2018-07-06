@@ -18,6 +18,8 @@ set(CORE_SRC
     interactors/Interactor.h
     gateways/DownloadManager.h
 
+    entities/Installer.cpp
+    entities/Installer.h
     interactors/FetchApplicationsInteractor.cpp
     gateways/SimpleDownloadManager.cpp
     entities/Registry.cpp
@@ -53,7 +55,7 @@ set(CORE_SRC
     gateways/ApplicationsSearchRequest.cpp
     gateways/ApplicationsSearchRequest.h
     gateways/GetApplicationRequest.cpp
-    gateways/GetApplicationRequest.h)
+    gateways/GetApplicationRequest.h entities/InstallTask.cpp entities/InstallTask.h)
 
 add_library(core OBJECT ${CORE_SRC})
 

@@ -1,20 +1,32 @@
+#include <QList>
 #include "InstallController.h"
-#include <QDebug>
-#include "interactors/InstallAppImageInteractor.h"
-#include <QSharedPointer>
 
-InstallController::InstallController(Repository *repository, Executor *executor, DownloadManager *downloadManager,
-                                     QObject *parent)
-    : QObject(parent), repository(repository), executor(executor), downloadManager(downloadManager) {
+InstallController::InstallController(Installer* installer, QObject* parent)
+        :QObject(parent), installer(installer) { }
+
+void InstallController::install(const QString& application_id)
+{
+    auto task = installer->buildInstallLatestReleaseTask(application_id);
+    tasks << task;
+    if (tasks.size()==1)
+        startTask(task);
 
 }
-
-void InstallController::install(const QString &application_id)
+void InstallController::startTask(InstallTask* task) const
 {
-    qDebug() << "Downloading " << application_id;
+    connect(task, &InstallTask::completed, this, &InstallController::handleInstallTaskCompleted);
+    task->start();
+}
+void InstallController::handleInstallTaskCompleted()
+{
+    if (!tasks.isEmpty()) {
+        auto finishedTask = tasks.front();
+        tasks.pop_front();
 
-    const Application &a = repository->get(application_id);
-    InstallAppImageInteractor *i = new InstallAppImageInteractor(a, downloadManager);
+        disconnect(finishedTask, nullptr, nullptr, nullptr);
+        finishedTask->deleteLater();
+    }
 
-    executor->execute(i);
+    if (tasks.size()>0)
+        startTask(tasks.first());
 }

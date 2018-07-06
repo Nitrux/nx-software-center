@@ -5,6 +5,7 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
 #include <entities/ApplicationFull.h>
+#include <iostream>
 #include "GetApplicationRequest.h"
 #include "RestClient.h"
 GetApplicationRequest::GetApplicationRequest()
@@ -100,10 +101,10 @@ QList<ApplicationFull::Release> GetApplicationRequest::parseReleasesList(const Q
 {
     QList<ApplicationFull::Release> releases;
     for (const auto& v: vReleases) {
-        auto r = ApplicationFull::Release::fromVariant(v);
-
+        auto map = v.toMap();
+        auto r = ApplicationFull::Release::fromVariant(map);
         QList<ApplicationFull::File> files;
-        QVariantList vFiles;
+        const QVariantList &vFiles = map["files"].toList();
         for (const auto& vF: vFiles)
             files << ApplicationFull::File::fromVariant(vF);
 

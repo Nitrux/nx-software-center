@@ -21,7 +21,8 @@ public:
     explicit RestClient(QString url, QObject* parent = nullptr);
     ApplicationsSearchRequest* buildSearchRequest(const QString& query = "", const QString& category = "") const;
     GetApplicationRequest* buildGetApplicationRequest(const QString& id) const;
-
+    QNetworkAccessManager* getNetworkAccessManager() const;
+    void setNetworkAccessManager(QNetworkAccessManager* networkAccessManager);
 };
 
 #endif //NX_SOFTWARE_CENTER_EXPLORER_H

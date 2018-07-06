@@ -50,8 +50,7 @@ public:
         int size;
         QString architecture;
         QString sha512checksum;
-        QString remote_url;
-        QString local_url;
+        QString url;
 
         File();
         bool operator==(const File& rhs) const;
@@ -68,6 +67,7 @@ public:
         QString channel;
         LocalizedQString changelog;
         QList<File> files;
+        QList<File> compatibleFiles(const QString& cpuArchitecture) const;
         bool operator==(const Release& rhs) const;
         bool operator!=(const Release& rhs) const;
         friend std::ostream& operator<<(std::ostream& os, const Release& release);
@@ -106,6 +106,9 @@ public:
     QList<RemoteImage> screenshots;
     QStringList mimeTypes;
     QMap<QString, QString> links;
+
+    friend std::ostream& operator<<(std::ostream& os, const ApplicationFull& full);
+    Release latestCompatibleRelease(const QString& cpuArchitecture, const QString& channel = QString());
 };
 
 #endif //NX_SOFTWARE_CENTER_APPLICATIONFULL1_H

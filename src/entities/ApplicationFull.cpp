@@ -1,10 +1,10 @@
 //
 // Created by alexis on 7/4/18.
 //
-
+#include <QDebug>
 #include "AppImageInfo.h"
-#include <iostream>
 #include "ApplicationFull.h"
+
 ApplicationFull::LocalizedQString ApplicationFull::LocalizedQString::fromVariant(const QVariant& variant)
 {
     auto localizedStringVariant = variant.toMap();
@@ -22,7 +22,10 @@ QVariant ApplicationFull::LocalizedQString::toVariant(const ApplicationFull::Loc
 }
 std::ostream& operator<<(std::ostream& os, const ApplicationFull::LocalizedQString& string)
 {
-    os << ApplicationFull::LocalizedQString(string);
+    os << "[";
+    for (const auto& item: string.keys())
+        os << "{" << item.toStdString() << ": " << string[item].toStdString() << "}, ";
+    os << "]";
     return os;
 }
 bool ApplicationFull::License::operator==(const ApplicationFull::License& rhs) const
@@ -117,7 +120,13 @@ ApplicationFull::Release ApplicationFull::Release::fromVariant(const QVariant& v
     auto map = variant.toMap();
     ApplicationFull::Release release;
     release.version = map["version"].toString();
-    release.date = QDateTime::fromString(map["date"].toString(), Qt::RFC2822Date);
+
+    release.date = map["date"].toDateTime();
+    if (!release.date.isValid())
+        release.date = QDateTime::fromString(map["date"].toString(), Qt::ISODate);
+    if (!release.date.isValid())
+        release.date = QDateTime::fromString(map["date"].toString(), Qt::RFC2822Date);
+
     release.channel = map["channel"].toString();
     release.changelog = LocalizedQString::fromVariant(map["changelog"]);
 
@@ -133,13 +142,24 @@ QVariant ApplicationFull::Release::toVariant(const ApplicationFull::Release& rel
 
     return map;
 }
+QList<ApplicationFull::File> ApplicationFull::Release::compatibleFiles(const QString& cpuArchitecture) const
+{
+    QList<ApplicationFull::File> result;
+    for (const auto& file: files) {
+        QString arch = file.architecture;
+        if (arch.replace("-", "_")==cpuArchitecture)
+            result << file;
+    }
+
+    return result;
+}
 bool ApplicationFull::File::operator==(const ApplicationFull::File& rhs) const
 {
     return type==rhs.type &&
             size==rhs.size &&
             architecture==rhs.architecture &&
             sha512checksum==rhs.sha512checksum &&
-            remote_url==rhs.remote_url && local_url==rhs.local_url;
+            url==rhs.url;
 }
 bool ApplicationFull::File::operator!=(const ApplicationFull::File& rhs) const
 {
@@ -150,7 +170,7 @@ std::ostream& operator<<(std::ostream& os, const ApplicationFull::File& file)
     os << "{ type: " << file.type << " size: " << file.size
        << " architecture: " << file.architecture.toStdString()
        << " sha512checksum: " << file.sha512checksum.toStdString()
-       << " remote_url: " << file.remote_url.toStdString() << " local_url: " << file.local_url.toStdString() << " }";
+       << " url: " << file.url.toStdString() << " }";
     return os;
 }
 ApplicationFull::File::File()
@@ -164,8 +184,7 @@ ApplicationFull::File ApplicationFull::File::fromVariant(const QVariant& variant
     file.size = map["size"].toInt();
     file.architecture = map["architecture"].toString();
     file.sha512checksum = map["sha512checksum"].toString();
-    file.local_url = map["local_url"].toString();
-    file.remote_url = map["remote_url"].toString();
+    file.url = map["url"].toString();
 
     return file;
 }
@@ -176,8 +195,7 @@ QVariant ApplicationFull::File::toVariant(const ApplicationFull::File& file)
     map["size"] = QVariant(file.size).toDouble();
     map["architecture"] = file.architecture;
     map["sha512checksum"] = file.sha512checksum;
-    map["remote_url"] = file.remote_url;
-    map["local_url"] = file.local_url;
+    map["url"] = file.url;
 
     return map;
 }
@@ -198,8 +216,67 @@ std::ostream& operator<<(std::ostream& os, const ApplicationFull::RemoteImage& i
        << " caption: " << image.caption.toStdString() << " url: " << image.url.toStdString() << " }";
     return os;
 }
-ApplicationFull::RemoteImage::RemoteImage() 
+std::ostream& operator<<(std::ostream& os, const ApplicationFull& full)
+{
+    auto printQStringList = [](std::ostream& os, const QList<QString> list) {
+      for (const auto& item: list)
+          os << item.toStdString();
+    };
+    os << "id: " << full.id.toStdString();
+    os << " name: " << full.name;
+    os << " icon: " << full.icon.toStdString();
+    os << " abstract: " << full.abstract << " description: " << full.description << " license: " << full.license;
+    os << " categories: ";
+    printQStringList(os, full.categories);
+
+    os << " keywords: ";
+    printQStringList(os, full.keywords);
+
+    os << " languages: ";
+    printQStringList(os, full.languages);
+
+    os << " developer: " << full.developer;
+
+    os << " releases: ";
+    for (const auto& item: full.releases) {
+        os << item;
+        const auto& files = item.files;
+        os << "files: [";
+        for (const auto& file: files)
+            os << file << ", ";
+        os << "]";
+    }
+
+    os << " screenshots: ";
+    for (const auto& item: full.screenshots)
+        os << item;
+
+    os << " mimeTypes: ";
+    printQStringList(os, full.mimeTypes);
+    os << " links: ";
+    for (const auto& link: full.links.keys())
+        os << "{" << link.toStdString() << ": " << full.links[link].toStdString() << "}";
+    os << std::endl;
+    return os;
+}
+ApplicationFull::Release
+ApplicationFull::latestCompatibleRelease(const QString& cpuArchitecture, const QString& channel)
+{
+    ApplicationFull::Release latest;
+    if (releases.size()>0) {
+        for (const auto& release: releases) {
+            if ((!latest.date.isValid() || latest.date<release.date)
+                    && (channel.isEmpty() || release.channel==channel)
+                    && !release.compatibleFiles(cpuArchitecture).isEmpty())
+                latest = release;
+        }
+    }
+
+    return latest;
+}
+ApplicationFull::RemoteImage::RemoteImage()
         :height(0), width(0) { }
+
 ApplicationFull::RemoteImage ApplicationFull::RemoteImage::fromVariant(const QVariant& variant)
 {
     ApplicationFull::RemoteImage remoteImage;

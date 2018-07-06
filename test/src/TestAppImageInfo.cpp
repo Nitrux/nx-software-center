@@ -73,7 +73,7 @@ public:
         file.size = 1882040;
         file.architecture = "x86-64";
         file.sha512checksum = "a big and fussy checksum";
-        file.remote_url = "https://github.com/AppImage/AppImageKit/releases/download/continuous/"
+        file.url = "https://github.com/AppImage/AppImageKit/releases/download/continuous/"
                           "appimagetool-x86_64.AppImage";
         a.file = file;
 
