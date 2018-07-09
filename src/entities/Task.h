@@ -13,41 +13,67 @@
 class Task : public QObject {
 Q_OBJECT
     QMutex mutex;
+
+    QString id;
     QString status;
-
     QString type;
-
     qint64 progressValue;
     qint64 progressTotal;
     QString progressMessage;
     ApplicationAbstract applicationAbstract;
+
+    qint64 creationTime;
+    bool deleteOnceCompleted;
 public:
-    Task(QObject* parent = nullptr);
+    Task(QObject *parent = nullptr);
 
-    static constexpr const char* VALUE_STATUS_CREATED = "created";
-    static constexpr const char* VALUE_STATUS_RUNNING = "running";
-    static constexpr const char* VALUE_STATUS_COMPLETED = "completed";
-    static constexpr const char* VALUE_STATUS_FAILED = "failed";
-    const QString& getStatus();
-    void setStatus(const QString& status);
+    static constexpr const char *VALUE_STATUS_CREATED = "created";
+    static constexpr const char *VALUE_STATUS_RUNNING = "running";
+    static constexpr const char *VALUE_STATUS_COMPLETED = "completed";
+    static constexpr const char *VALUE_STATUS_FAILED = "failed";
 
-    const QString& getType();
-    void setType(const QString& type);
+    const QString &getId() const;
+
+    const QString &getStatus();
+
+    void setStatus(const QString &status);
+
+    const QString &getType();
+
+    void setType(const QString &type);
 
     qint64 getProgressValue();
+
     void setProgressValue(qint64 progressValue);
 
     qint64 getProgressTotal();
+
     void setProgressTotal(qint64 progressTotal);
 
-    const QString& getProgressMessage();
-    void setProgressMessage(const QString& progressMessage);
+    const QString &getProgressMessage();
 
-    const ApplicationAbstract& getApplicationAbstract();
-    void setApplicationAbstract(const ApplicationAbstract& applicationAbstract);
+    void setProgressMessage(const QString &progressMessage);
+
+    const ApplicationAbstract &getApplicationAbstract();
+
+    void setApplicationAbstract(const ApplicationAbstract &applicationAbstract);
+
+    bool isDeleteOnceCompletedSet() const;
+
+    void setDeleteOnceCompleted(bool deleteOnceCompleted);
+
+    qint64 getCreationTime() const;
 
     virtual void start() = 0;
+
     virtual void stop() = 0;
+
+    QVariantMap toVariant() const;
+
+signals:
+    void changed();
+    void failed();
+    void completed();
 };
 
 #endif //NX_SOFTWARE_CENTER_TASK_H

@@ -11,19 +11,32 @@
 
 class Worker : public QObject {
 Q_OBJECT
-    QQueue<Task*> queue;
+    QMap<QString, Task *> tasks;
+    QMutex mutex;
 public:
-    void enqueueForExecution(Task* task);
+    void execute(Task *task);
+    void terminate(const QString taskId);
 
+    QVariantList getTaskList();
 signals:
+
     void taskStarted(const QVariantMap task);
+
     void taskCompleted(const QVariantMap task);
-    void taskUpdated(const QVariantMap task);
+
+    void taskFailed(const QVariantMap task);
+
+    void taskChanged(const QVariantMap task);
 
 protected slots:
-    void startNextTask();
-    void handleTaskCompleted();
+
     void handleTaskChanged();
+
+    void handleTaskCompleted();
+
+    void handleTaskFailed();
+
+    void disposeTask(Task *task);
 };
 
 #endif //NX_SOFTWARE_CENTER_WORKER_H
