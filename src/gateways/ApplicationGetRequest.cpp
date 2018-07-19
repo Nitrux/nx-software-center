@@ -6,66 +6,61 @@
 #include <QtCore/QJsonObject>
 #include <entities/ApplicationFull.h>
 #include <iostream>
-#include "GetApplicationRequest.h"
-#include "RestClient.h"
-GetApplicationRequest::GetApplicationRequest()
-        :QObject(), running(false), networkAccessManager(nullptr), reply(nullptr) { }
-void GetApplicationRequest::setApi(const QString& api)
-{
-    GetApplicationRequest::api = api;
+#include "ApplicationGetRequest.h"
+#include "ApplicationRepositoryRestClient.h"
+
+ApplicationGetRequest::ApplicationGetRequest()
+        : running(false), networkAccessManager(nullptr), reply(nullptr) {}
+
+void ApplicationGetRequest::setApi(const QString &api) {
+    ApplicationGetRequest::api = api;
 }
-void GetApplicationRequest::setId(const QString& id)
-{
-    GetApplicationRequest::id = id;
+
+void ApplicationGetRequest::setNetworkAccessManager(QNetworkAccessManager *networkAccessManager) {
+    ApplicationGetRequest::networkAccessManager = networkAccessManager;
 }
-void GetApplicationRequest::setNetworkAccessManager(QNetworkAccessManager* networkAccessManager)
-{
-    GetApplicationRequest::networkAccessManager = networkAccessManager;
-}
-const ApplicationFull& GetApplicationRequest::getResult() const
-{
+
+const ApplicationFull &ApplicationGetRequest::getResult() const {
     return result;
 }
-void GetApplicationRequest::start()
-{
+
+void ApplicationGetRequest::start() {
     if (running)
         throw std::runtime_error("Get Application request already started.");
 
     running = true;
     QNetworkRequest request(getUrl());
     reply = networkAccessManager->get(request);
-    connect(reply, &QNetworkReply::finished, this, &GetApplicationRequest::handleRequestFinished);
+    connect(reply, &QNetworkReply::finished, this, &ApplicationGetRequest::handleRequestFinished);
 }
-QUrl GetApplicationRequest::getUrl()
-{
-    QUrl url = api+"/applications/"+id;
+
+QUrl ApplicationGetRequest::getUrl() {
+    QUrl url = api + "/applications/" + id;
     url.setQuery(R"(filter={"include":[{"releases":{"files":{}}}]})");
     return url;
 }
-void GetApplicationRequest::handleRequestFinished()
-{
-    disconnect(reply, &QNetworkReply::finished, this, &GetApplicationRequest::handleRequestFinished);
-    if (reply->error()==QNetworkReply::NoError) {
+
+void ApplicationGetRequest::handleRequestFinished() {
+    disconnect(reply, &QNetworkReply::finished, this, &ApplicationGetRequest::handleRequestFinished);
+    if (reply->error() == QNetworkReply::NoError) {
         auto response = reply->readAll();
         auto jsonDoc = QJsonDocument::fromJson(response);
         if (jsonDoc.isObject()) {
             auto obj = jsonDoc.object();
             auto vMap = obj.toVariantMap();
             result = parseResponse(vMap);
-            emit resultReady();
-        }
-        else
+            emit completed();
+        } else
             qWarning() << "Unexpected response: " << jsonDoc;
-    }
-    else
+    } else
             emit failed(reply->errorString());
 
     reply->deleteLater();
     reply = nullptr;
     running = false;
 }
-ApplicationFull GetApplicationRequest::parseResponse(const QVariantMap& map) const
-{
+
+ApplicationFull ApplicationGetRequest::parseResponse(const QVariantMap &map) const {
     ApplicationFull a;
     a.id = map["id"].toString();
     a.name = ApplicationFull::LocalizedQString::fromVariant(map["name"]);
@@ -82,7 +77,7 @@ ApplicationFull GetApplicationRequest::parseResponse(const QVariantMap& map) con
     a.releases = parseReleasesList(vReleases);
 
     QList<ApplicationFull::RemoteImage> screenshots;
-    for (const auto& v: map["screenshots"].toList()) {
+    for (const auto &v: map["screenshots"].toList()) {
         screenshots << ApplicationFull::RemoteImage::fromVariant(v);
     }
     a.screenshots = screenshots;
@@ -91,21 +86,21 @@ ApplicationFull GetApplicationRequest::parseResponse(const QVariantMap& map) con
 
     QMap<QString, QString> links;
     auto linksVMap = map["links"].toMap();
-    for (const auto& k: linksVMap.keys())
+    for (const auto &k: linksVMap.keys())
         links[k] = linksVMap[k].toString();
 
     a.links = links;
     return a;
 }
-QList<ApplicationFull::Release> GetApplicationRequest::parseReleasesList(const QVariantList& vReleases) const
-{
+
+QList<ApplicationFull::Release> ApplicationGetRequest::parseReleasesList(const QVariantList &vReleases) const {
     QList<ApplicationFull::Release> releases;
-    for (const auto& v: vReleases) {
+    for (const auto &v: vReleases) {
         auto map = v.toMap();
         auto r = ApplicationFull::Release::fromVariant(map);
         QList<ApplicationFull::File> files;
         const QVariantList &vFiles = map["files"].toList();
-        for (const auto& vF: vFiles)
+        for (const auto &vF: vFiles)
             files << ApplicationFull::File::fromVariant(vF);
 
         r.files = files;
@@ -113,8 +108,8 @@ QList<ApplicationFull::Release> GetApplicationRequest::parseReleasesList(const Q
     }
     return releases;
 }
-void GetApplicationRequest::stop()
-{
+
+void ApplicationGetRequest::stop() {
     if (reply)
         reply->abort();
 }

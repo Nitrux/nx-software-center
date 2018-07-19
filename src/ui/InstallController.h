@@ -3,21 +3,21 @@
 
 #include <QObject>
 #include <QList>
+#include "entities/Worker.h"
 #include "entities/Installer.h"
-#include <entities/InstallTask.h>
+#include "entities/InstallTask.h"
 
 class InstallController : public QObject {
 Q_OBJECT
+    Worker *worker;
     Installer* installer;
-    QList<InstallTask*> tasks;
 public:
     InstallController(Installer* installer, QObject* parent = nullptr);
 
+    void setWorker(Worker *worker);
+
 public slots:
     void install(const QString& application_id);
-protected slots:
-    void handleInstallTaskCompleted();
-    void startTask(InstallTask* task) const;
 };
 
 #endif // INSTALLCONTROLLER_H

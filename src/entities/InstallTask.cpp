@@ -4,69 +4,84 @@
 
 #include <iostream>
 #include <appimage/appimage.h>
-#include <gateways/GetApplicationRequest.h>
+#include <gateways/ApplicationGetRequest.h>
 #include <gateways/FileDownload.h>
+#include <QtCore/QFileInfo>
+#include <gateways/ApplicationRepository.h>
 #include "InstallTask.h"
-void InstallTask::setRestClient(RestClient* restClient)
+void InstallTask::setRepository(ApplicationRepository *restClient)
 {
-    InstallTask::restClient = restClient;
+    InstallTask::repository = restClient;
 }
 void InstallTask::setId(const QString& id)
 {
     InstallTask::id = id;
 }
 InstallTask::InstallTask()
-        :Task(), restClient(nullptr), running(false), getApplicationRequest(nullptr), fileDownload(nullptr) { }
+        :Task(), repository(nullptr), running(false), applicationRepositoryGet(nullptr), fileDownload(nullptr) { }
 void InstallTask::start()
 {
     if (running)
         throw std::runtime_error("InstallTask already running");
 
     running = true;
+    setStatus(VALUE_STATUS_RUNNING);
     getApplicationInfo();
 }
 void InstallTask::getApplicationInfo()
 {
-    if (restClient) {
-        getApplicationRequest = restClient->buildGetApplicationRequest(id);
-        connect(getApplicationRequest, &GetApplicationRequest::resultReady, this,
+    if (repository) {
+        setProgressMessage("Getting download information.");
+        applicationRepositoryGet = repository->buildGetApplicationRequest(id);
+        connect(applicationRepositoryGet, &ApplicationGetRequest::completed, this,
                 &InstallTask::handleGetApplicationInfoCompleted);
-        connect(getApplicationRequest, &GetApplicationRequest::failed, this,
+        connect(applicationRepositoryGet, &ApplicationGetRequest::failed, this,
                 &InstallTask::handleGetApplicationInfoFailed);
 
-        getApplicationRequest->start();
+        applicationRepositoryGet->start();
     }
     else
-        throw std::runtime_error("Uninitialized InstallTask: Missing RestClient.");
+        throw std::runtime_error("Uninitialized InstallTask: Missing ApplicationRepositoryRestClient.");
 }
 void InstallTask::handleGetApplicationInfoCompleted()
 {
-    auto applicationInfo = getApplicationRequest->getResult();
+    auto applicationInfo = applicationRepositoryGet->getApplication();
 
     if (!applicationInfo.releases.isEmpty())
         downloadApplicationFile(applicationInfo);
-    else emit failed("No releases available");
+    else
+        fail("No releases available");
 
-    getApplicationRequest->deleteLater();
-    getApplicationRequest = nullptr;
+    applicationRepositoryGet->deleteLater();
+    applicationRepositoryGet = nullptr;
 }
+
+void InstallTask::fail(const QString &msg) {
+    setStatus(VALUE_STATUS_FAILED);
+    setProgressMessage(msg);emit
+    failed(msg);
+}
+
 void InstallTask::downloadApplicationFile(ApplicationFull& applicationInfo)
 {
     ApplicationFull::Release r = applicationInfo.latestCompatibleRelease(QSysInfo::currentCpuArchitecture());
 
     const auto files = r.compatibleFiles(QSysInfo::currentCpuArchitecture());
 
-    if (files.isEmpty())
-            emit failed("No files compatible with this architecture");
+    if (files.isEmpty()) {
+        fail("No files compatible with this architecture");
+    }
     else {
         const auto& file = files.first();
 
         QString filePath = getDownloadFilePath(applicationInfo, r, file);
 
-        fileDownload = new FileDownload(file.url, filePath);
-        fileDownload->setNetworkAccessManager(restClient->getNetworkAccessManager());
+        fileDownload = repository->buildFileDownloadRequest(file.url, filePath);
         connect(fileDownload, &FileDownload::completed, this, &InstallTask::handleFileDownloadCompleted);
+        connect(fileDownload, &FileDownload::progress, this, &InstallTask::handleFileDownloadProgress);
         fileDownload->start();
+
+        setProgressMessage("Downloading AppImage file.");
     }
 }
 QString InstallTask::getDownloadFilePath(const ApplicationFull& applicationInfo, const ApplicationFull::Release& r,
@@ -80,11 +95,11 @@ QString InstallTask::getDownloadFilePath(const ApplicationFull& applicationInfo,
 }
 void InstallTask::handleGetApplicationInfoFailed(const QString& reason)
 {
-    getApplicationRequest->deleteLater();
-    getApplicationRequest = nullptr;
+    applicationRepositoryGet->deleteLater();
+    applicationRepositoryGet = nullptr;
 
     running = false;
-    emit failed("Unable to access application information: "+reason);
+    fail("Unable to access application information: "+reason);
 }
 const QString& InstallTask::getChannel() const
 {
@@ -100,24 +115,38 @@ void InstallTask::setApplicationsDir(const QString& applicationsDir)
 }
 void InstallTask::handleFileDownloadCompleted()
 {
-    const auto filePath = fileDownload->getTarget_path();
+    auto filePath = fileDownload->getTarget_path();
+    QFileInfo f(filePath);
+    qInfo() << filePath;
+    filePath = f.absoluteFilePath();
+    qInfo() << filePath;
     fileDownload->deleteLater();
     fileDownload = nullptr;
 
     if (QFile::exists(filePath))
         registerAppImage(filePath);
     else
-            emit failed("Download failed");
+            fail("Download failed");
 }
 void InstallTask::registerAppImage(const QString& filePath)
 {
+    setProgressMessage("Registering in the system.");
     appimage_register_in_system(filePath.toStdString().c_str(), false);
-    if (appimage_is_registered_in_system((filePath.toStdString().c_str())))
-            emit completed();
+    if (appimage_is_registered_in_system((filePath.toStdString().c_str()))) {
+        setStatus(VALUE_STATUS_COMPLETED);
+        setProgressMessage("Completed successfully");
+        emit completed();
+    }
     else
-            emit failed("Unable to register in system");
+            fail("Unable to register in system");
 }
 void InstallTask::stop()
 {
     qWarning() << "InstallTask::stop not implemented yet";
+}
+
+void InstallTask::handleFileDownloadProgress(qint64 progress, qint64 total, const QString &message) {
+    setProgressValue(progress);
+    setProgressTotal(total);
+    setProgressMessage(message);
 }

@@ -12,7 +12,7 @@ void Worker::handleTaskCompleted() {
     if (task) {
         QMutexLocker locker(&mutex);
 
-        emit taskCompleted(task->toVariant());
+        emit taskCompleted(Task::toVariant(task));
         disposeTask(task);
     }
 }
@@ -21,13 +21,13 @@ void Worker::handleTaskChanged() {
     Task *task;
     task = dynamic_cast<Task *>(sender());
     if (task)
-            emit taskChanged(task->toVariant());
+            emit taskChanged(Task::toVariant(task));
 }
 
 QVariantList Worker::getTaskList() {
     QVariantList tasksList;
     for (const auto &task: tasks.values())
-        tasksList << task->toVariant();
+        tasksList << Task::toVariant(task);
 
     return tasksList;
 }
@@ -36,13 +36,14 @@ void Worker::execute(Task *task) {
     Q_ASSERT(task);
     QMutexLocker locker(&mutex);
 
-    tasks[task->getId()] = task;
+    const auto &taskId = task->getId();
+    tasks.insert(taskId, task);
     connect(task, &Task::changed, this, &Worker::handleTaskChanged);
     connect(task, &Task::completed, this, &Worker::handleTaskCompleted);
     connect(task, &Task::failed, this, &Worker::handleTaskFailed);
 
     task->start();
-    emit taskStarted(task->toVariant());
+    emit taskStarted(Task::toVariant(task));
 }
 
 void Worker::terminate(const QString taskId) {
@@ -61,7 +62,7 @@ void Worker::handleTaskFailed() {
     if (task) {
         QMutexLocker locker(&mutex);
 
-        emit taskFailed(task->toVariant());
+        emit taskFailed(Task::toVariant(task));
 
         disposeTask(task);
     }

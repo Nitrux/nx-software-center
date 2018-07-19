@@ -32,7 +32,7 @@ public:
     static constexpr const char *VALUE_STATUS_COMPLETED = "completed";
     static constexpr const char *VALUE_STATUS_FAILED = "failed";
 
-    const QString &getId() const;
+    const QString &getId();
 
     const QString &getStatus();
 
@@ -58,17 +58,17 @@ public:
 
     void setApplicationAbstract(const ApplicationAbstract &applicationAbstract);
 
-    bool isDeleteOnceCompletedSet() const;
+    bool isDeleteOnceCompletedSet();
 
     void setDeleteOnceCompleted(bool deleteOnceCompleted);
 
-    qint64 getCreationTime() const;
+    qint64 getCreationTime();
 
     virtual void start() = 0;
 
     virtual void stop() = 0;
 
-    QVariantMap toVariant() const;
+    static QVariantMap toVariant(Task *task);
 
 signals:
     void changed();

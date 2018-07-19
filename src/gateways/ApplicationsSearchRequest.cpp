@@ -9,30 +9,24 @@
 #include <iostream>
 #include <entities/ApplicationFull.h>
 #include <entities/ApplicationAbstract.h>
-#include "RestClient.h"
+#include "ApplicationRepositoryRestClient.h"
 #include "ApplicationsSearchRequest.h"
 
 ApplicationsSearchRequest::ApplicationsSearchRequest()
-        :running(false), networkAccessManager(nullptr), reply(nullptr) { }
+    :running(false), networkAccessManager(nullptr), reply(nullptr) { }
 
-void ApplicationsSearchRequest::setQuery(const QString& query)
+ApplicationsSearchRequest::~ApplicationsSearchRequest()
 {
-    ApplicationsSearchRequest::query = query;
+    if (reply != nullptr)
+        reply->deleteLater();
 }
 
-void ApplicationsSearchRequest::setCategory(const QString& category)
-{
-    ApplicationsSearchRequest::category = category;
-}
 
 void ApplicationsSearchRequest::setNetworkAccessManager(QNetworkAccessManager* networkAccessManager)
 {
     ApplicationsSearchRequest::networkAccessManager = networkAccessManager;
 }
-const QList<ApplicationAbstract>& ApplicationsSearchRequest::getResults() const
-{
-    return results;
-}
+
 QUrl ApplicationsSearchRequest::getUrl() const
 {
     QString urlQuery;
@@ -43,6 +37,18 @@ QUrl ApplicationsSearchRequest::getUrl() const
         if (!urlQuery.isEmpty())
             urlQuery += "&";
         urlQuery += "category="+category;
+    }
+
+    if (offset > 0) {
+        if (!urlQuery.isEmpty())
+            urlQuery += "&";
+        urlQuery += "offset=" + QString::number(offset);
+    }
+
+    if (limit > 0) {
+        if (!urlQuery.isEmpty())
+            urlQuery += "&";
+        urlQuery += "limit=" + QString::number(limit);
     }
 
     QUrl url = api+"/applications/search";
@@ -95,7 +101,7 @@ void ApplicationsSearchRequest::handleReplyFinished()
         auto response = reply->readAll();
         results = parseResponse(response);
 
-        emit resultsReady();
+        emit completed();
     }
     else
             emit failed(reply->errorString());

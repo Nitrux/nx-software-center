@@ -6,7 +6,7 @@
 #include <QDebug>
 ApplicationViewController::ApplicationViewController(QObject* parent)
         :
-        QObject(parent), registry(nullptr), executor(nullptr), restClient(nullptr),
+        QObject(parent), registry(nullptr), executor(nullptr), repository(nullptr),
         request(nullptr), hasPendingTasks(false)
 {
 
@@ -148,9 +148,9 @@ QString ApplicationViewController::getApplicationWebsite()
 
 void ApplicationViewController::loadApplication(const QString& id)
 {
-    if (restClient) {
-        request = restClient->buildGetApplicationRequest(id);
-        connect(request, &GetApplicationRequest::resultReady, this,
+    if (repository) {
+        request = repository->buildGetApplicationRequest(id);
+        connect(request, &ApplicationRepositoryGet::completed, this,
                 &ApplicationViewController::handleGetApplicationResult);
         request->start();
     }
@@ -206,15 +206,15 @@ QString ApplicationViewController::formatMemoryValue(float num)
 
     return QString().setNum(num, 'f', 2)+" "+unit;
 }
-void ApplicationViewController::setExplorer(RestClient* explorer)
+void ApplicationViewController::setRepository(ApplicationRepository *explorer)
 {
-    ApplicationViewController::restClient = explorer;
+    ApplicationViewController::repository = explorer;
 }
 void ApplicationViewController::handleGetApplicationResult()
 {
-    disconnect(request, &GetApplicationRequest::resultReady, this,
+    disconnect(request, &ApplicationGetRequest::completed, this,
             &ApplicationViewController::handleGetApplicationResult);
-    ApplicationViewController::application = request->getResult();
+    ApplicationViewController::application = request->getApplication();
 
     checkIfHasPendingTasks();
     request->deleteLater();

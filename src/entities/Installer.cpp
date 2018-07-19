@@ -7,17 +7,17 @@
 #include "Installer.h"
 
 Installer::Installer()
-        :QObject(), restClient(nullptr) { }
+        :QObject(), repository(nullptr) { }
 
-void Installer::setRestClient(RestClient* restClient)
+void Installer::setRepository(ApplicationRepository *restClient)
 {
-    Installer::restClient = restClient;
+    Installer::repository = restClient;
 }
 InstallTask* Installer::buildInstallLatestReleaseTask(const QString& id)
 {
     auto task = new InstallTask();
     task->setId(id);
-    task->setRestClient(restClient);
+    task->setRepository(repository);
     task->setApplicationsDir(QDir::homePath() + "/Applications");
 
     return task;

@@ -103,8 +103,8 @@ TEST_F(TestAppImageInfo, toVariant)
     auto result = AppImageInfo::toVariant(src);
     auto expected = TestAppImageInfo::loadTestVariant();
 
-//    qInfo() << result;
-//    qInfo() << expected;
+    qInfo() << result;
+    qInfo() << expected;
     ASSERT_EQ(result, expected);
 }
 

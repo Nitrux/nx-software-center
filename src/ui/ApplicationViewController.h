@@ -6,17 +6,17 @@
 #include <entities/Repository.h>
 #include <entities/Registry.h>
 #include <entities/Executor.h>
-#include <gateways/RestClient.h>
+#include <gateways/ApplicationRepositoryRestClient.h>
 #include <entities/AppImageInfo.h>
-#include <gateways/GetApplicationRequest.h>
+#include <gateways/ApplicationRepositoryGet.h>
 
 class ApplicationViewController : public QObject
 {
     Q_OBJECT
     Registry *registry;
     Executor *executor;
-    RestClient *restClient;
-    GetApplicationRequest *request;
+    ApplicationRepository *repository;
+    ApplicationRepositoryGet *request;
 
     AppImageInfo appImageInfo;
     ApplicationFull application;
@@ -41,7 +41,7 @@ public:
 
     void setRegistry(Registry* registry);
     void setExecutor(Executor *executor);
-    void setExplorer(RestClient* explorer);
+    void setRepository(ApplicationRepository *explorer);
 
     QString getBackgroundImage();
     bool isInstalled();

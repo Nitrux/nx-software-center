@@ -3,31 +3,35 @@
 
 #include <QDebug>
 #include <QObject>
-#include "gateways/RestClient.h"
+#include "gateways/ApplicationRepositoryRestClient.h"
 #include "ApplicationListModel.h"
 #include "interactors/FetchApplicationsInteractor.h"
 
-class ApplicationSearchRequest;
+class ApplicationSearch;
 class SearchController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(ApplicationListModel *model MEMBER model NOTIFY modelChanged);
+    Q_PROPERTY(bool isBusy MEMBER busy NOTIFY isBusyChanged);
 
-    ApplicationListModel *model;
-    RestClient *restClient;
+    ApplicationRepository *repository;
+    ApplicationsRepositorySearch *searchRequest;
     QString query;
-    ApplicationsSearchRequest *searchRequest;
+    bool busy;
+    ApplicationListModel *model;
+
+    int page;
+    int itemsPerPage;
 public:
-    explicit SearchController(RestClient* explorer, QObject* parent = nullptr);
+    explicit SearchController(ApplicationRepository* repository, QObject* parent = nullptr);
 
 signals:
-    void searching();
-    void resultsReady();
-    void failed();
-
+    void isBusyChanged(const bool &isBusy);
     void modelChanged(ApplicationListModel *model);
 public slots:
     void search(const QString &query);
+    void nextPage();
+    void previousPage();
 
 protected slots:
     void handleSearchResults();

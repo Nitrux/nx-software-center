@@ -1,40 +1,61 @@
 #include <gateways/ApplicationsSearchRequest.h>
 #include "SearchController.h"
 
-SearchController::SearchController(RestClient* explorer, QObject* parent)
-        :
-        QObject(parent),
-        model(new ApplicationListModel(this)), restClient(explorer),
-        searchRequest
-                (nullptr)
-{
-    doSearch();
-}
 
-void SearchController::search(const QString& query)
-{
+void SearchController::search(const QString &query) {
     this->query = query;
+    page = 0;
     doSearch();
 }
 
-void SearchController::doSearch()
+void SearchController::nextPage()
 {
-    emit searching();
+    page ++;
+    doSearch();
+}
 
-    searchRequest = restClient->buildSearchRequest(query);
-    connect(searchRequest, &ApplicationsSearchRequest::resultsReady, this, &SearchController::handleSearchResults);
-    connect(searchRequest, &ApplicationsSearchRequest::failed, this, &SearchController::failed);
+void SearchController::previousPage()
+{
+    if (page > 0) {
+        page --;
+        doSearch();
+    }
+}
+
+void SearchController::doSearch() {
+    if (searchRequest != nullptr) {
+        disconnect(searchRequest, nullptr, this, nullptr);
+        searchRequest->stop();
+        searchRequest->deleteLater();
+        searchRequest = nullptr;
+    }
+
+    busy = true;
+    emit isBusyChanged(busy);
+
+    searchRequest = repository->buildSearchRequest(query, "");
+    connect(searchRequest, &ApplicationsSearchRequest::completed, this, &SearchController::handleSearchResults);
+    connect(searchRequest, &ApplicationsSearchRequest::failed, this, &SearchController::handleSearchResults);
+    searchRequest->setLimit(itemsPerPage);
+    searchRequest->setOffset(page * itemsPerPage);
     searchRequest->start();
 }
-void SearchController::handleSearchResults()
-{
-    disconnect(searchRequest, &ApplicationsSearchRequest::resultsReady, this, &SearchController::handleSearchResults);
-    disconnect(searchRequest, &ApplicationsSearchRequest::failed, this, &SearchController::failed);
+
+void SearchController::handleSearchResults() {
+    disconnect(searchRequest, &ApplicationsSearchRequest::completed, this, &SearchController::handleSearchResults);
+    disconnect(searchRequest, &ApplicationsSearchRequest::failed, this, &SearchController::handleSearchResults);
 
     model->setApplications(searchRequest->getResults());
 
     searchRequest->deleteLater();
     searchRequest = nullptr;
 
-    emit resultsReady();
+    busy = false;
+    emit isBusyChanged(busy);
+}
+
+SearchController::SearchController(ApplicationRepository *repository, QObject *parent) :
+        QObject(parent), repository(repository), searchRequest(nullptr), model(new ApplicationListModel(this)),
+        page(0), itemsPerPage(28) {
+    doSearch();
 }

@@ -8,36 +8,31 @@
 #include <QObject>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
-#include <entities/Application.h>
 #include <entities/ApplicationFull.h>
+#include <gateways/ApplicationRepositoryGet.h>
 
-class GetApplicationRequest : public QObject {
+class ApplicationGetRequest : public ApplicationRepositoryGet {
 Q_OBJECT
     QString api;
-    QString id;
     bool running;
     QNetworkAccessManager* networkAccessManager;
     QNetworkReply* reply;
     ApplicationFull result;
 
 protected:
-    friend class RestClient;
-    GetApplicationRequest();
+    friend class ApplicationRepositoryRestClient;
+    ApplicationGetRequest();
     void setApi(const QString& api);
     void setNetworkAccessManager(QNetworkAccessManager* networkAccessManager);
 
 public:
     QUrl getUrl();
-    void setId(const QString& id);
     const ApplicationFull& getResult() const;
 public slots:
 
-    void start();
-    void stop();
-signals:
-    void resultReady();
+    void start() override;
+    void stop() override;
 
-    void failed(const QString& reason);
 protected slots:
     void handleRequestFinished();
 protected:

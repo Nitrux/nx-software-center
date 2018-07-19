@@ -54,8 +54,7 @@
     "size": 1882040,
     "architecture": "x86-64",
     "sha512checksum": "a big and fussy checksum",
-    "remote_url": "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage",
-    "local_url": ""
+    "url": "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
   },
   "screenshots": [
     {

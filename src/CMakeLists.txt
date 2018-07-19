@@ -13,8 +13,8 @@ set(CORE_SRC
 
     entities/Repository.cpp
     entities/Source.cpp
-    gateways/RestClient.cpp
-    gateways/RestClient.h
+        gateways/ApplicationRepositoryRestClient.cpp
+        gateways/ApplicationRepositoryRestClient.h
     interactors/Interactor.h
     gateways/DownloadManager.h
 
@@ -53,12 +53,12 @@ set(CORE_SRC
     entities/AppImageInfo.h
     gateways/ApplicationsSearchRequest.cpp
     gateways/ApplicationsSearchRequest.h
-    gateways/GetApplicationRequest.cpp
-    gateways/GetApplicationRequest.h
+        gateways/ApplicationGetRequest.cpp
+        gateways/ApplicationGetRequest.h
     entities/InstallTask.cpp
     entities/InstallTask.h
     entities/Task.cpp
-    entities/Task.h entities/Worker.cpp entities/Worker.h)
+    entities/Task.h entities/Worker.cpp entities/Worker.h gateways/ApplicationsRepositorySearch.cpp gateways/ApplicationsRepositorySearch.h gateways/ApplicationRepositoryGet.cpp gateways/ApplicationRepositoryGet.h gateways/ApplicationRepository.cpp gateways/ApplicationRepository.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
