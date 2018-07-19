@@ -53,6 +53,16 @@ namespace NX_SOFTWARE_CENTER_TESTS {
         request->deleteLater();
     }
 
+    TEST_F(TestApplicationRepositoryRestClient, buildLimitOffsetQuery) {
+        ApplicationsSearchRequest *request = dynamic_cast<ApplicationsSearchRequest *>(buildSearchRequest());
+        request->setLimit(2);
+        request->setOffset(10);
+        auto result = request->getUrl();
+        QUrl expected("http://apps.nxos.org/api/applications/search?offset=10&limit=2");
+        ASSERT_EQ(expected.toEncoded(), result.toEncoded());
+        request->deleteLater();
+    }
+
     TEST_F(TestApplicationRepositoryRestClient, buildGetApplicationUrl) {
         auto request = buildGetApplicationRequest("appimaged.desktop");
         auto result = request->getUrl();
