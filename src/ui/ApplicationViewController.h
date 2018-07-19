@@ -21,6 +21,7 @@ class ApplicationViewController : public QObject
     AppImageInfo appImageInfo;
     ApplicationFull application;
 
+    bool busy;
     bool hasPendingTasks;
     Q_PROPERTY(QString backgroundImage READ getBackgroundImage NOTIFY applicationChanged)
     Q_PROPERTY(bool isAppInstalled READ isInstalled NOTIFY applicationChanged)
@@ -36,12 +37,13 @@ class ApplicationViewController : public QObject
     Q_PROPERTY(QString appWebsite READ getApplicationWebsite NOTIFY applicationChanged)
     Q_PROPERTY(QString appDescription READ getApplicationDescription NOTIFY applicationChanged)
     Q_PROPERTY(QStringList appScreenShots READ getApplicationScreenShots NOTIFY applicationChanged)
+    Q_PROPERTY(bool isBusy MEMBER busy NOTIFY isBusyChanged)
 public:
     explicit ApplicationViewController(QObject *parent = nullptr);
 
     void setRegistry(Registry* registry);
     void setExecutor(Executor *executor);
-    void setRepository(ApplicationRepository *explorer);
+    void setRepository(ApplicationRepository *repository);
 
     QString getBackgroundImage();
     bool isInstalled();
@@ -57,6 +59,7 @@ public:
     QStringList getApplicationScreenShots();
 
 signals:
+    void isBusyChanged(const bool &isBusy);
     void applicationChanged();
     void hasPendingTasksChanged(bool hasPendingTasks);
 

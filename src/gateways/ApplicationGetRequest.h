@@ -17,7 +17,6 @@ Q_OBJECT
     bool running;
     QNetworkAccessManager* networkAccessManager;
     QNetworkReply* reply;
-    ApplicationFull result;
 
 protected:
     friend class ApplicationRepositoryRestClient;
@@ -27,7 +26,6 @@ protected:
 
 public:
     QUrl getUrl();
-    const ApplicationFull& getResult() const;
 public slots:
 
     void start() override;

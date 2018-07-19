@@ -20,10 +20,6 @@ void ApplicationGetRequest::setNetworkAccessManager(QNetworkAccessManager *netwo
     ApplicationGetRequest::networkAccessManager = networkAccessManager;
 }
 
-const ApplicationFull &ApplicationGetRequest::getResult() const {
-    return result;
-}
-
 void ApplicationGetRequest::start() {
     if (running)
         throw std::runtime_error("Get Application request already started.");
@@ -48,7 +44,7 @@ void ApplicationGetRequest::handleRequestFinished() {
         if (jsonDoc.isObject()) {
             auto obj = jsonDoc.object();
             auto vMap = obj.toVariantMap();
-            result = parseResponse(vMap);
+            application = parseResponse(vMap);
             emit completed();
         } else
             qWarning() << "Unexpected response: " << jsonDoc;

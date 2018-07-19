@@ -197,7 +197,7 @@ ApplicationWindow {
     Item {
         id : busyView
         anchors.fill: parent
-        visible: SearchController.isBusy
+        visible: SearchController.isBusy || ApplicationViewController.isBusy
         Rectangle {
             id: busyIndicatorBacground
             anchors.fill: parent
