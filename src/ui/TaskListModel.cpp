@@ -1,4 +1,5 @@
 #include <QDebug>
+#include "LocalizationUtils.h"
 #include "TaskListModel.h"
 
 TaskListModel::TaskListModel(QObject *parent)
@@ -18,6 +19,7 @@ QHash<int, QByteArray> TaskListModel::roleNames() const {
     roles.insert(AppId, "task_application_id");
     roles.insert(AppName, "task_application_name");
     roles.insert(AppAuthor, "task_application_author");
+    roles.insert(AppIcon, "task_application_icon");
     return roles;
 }
 
@@ -37,7 +39,7 @@ QVariant TaskListModel::data(const QModelIndex &index, int role) const {
 
     QString id = tasksIds.at(index.row());
     QVariantMap t = tasks.value(id);
-    const auto app = t["application_abstract"].toMap();
+    const auto app = t["application"].toMap();
 
     QVariant ret;
     switch (role) {
@@ -66,16 +68,18 @@ QVariant TaskListModel::data(const QModelIndex &index, int role) const {
             ret = app["id"];
             break;
         case AppName:
-            ret = app["name"];
+            ret = LocalizationUtils::getLocalizedValue(app["name"].toMap());
             break;
         case AppAuthor:
-            ret = app["author"];
+            ret = app["author"].toMap().value("name", "");
+            break;
+        case AppIcon:
+            ret = app["icon"];
             break;
         default:
             break;
     }
 
-    qInfo() << role << ret;
     return ret;
 }
 
@@ -92,14 +96,11 @@ void TaskListModel::addTask(const QString &id, const QVariantMap &data) {
 void TaskListModel::updateTask(const QString &id, const QVariantMap &data) {
     int i = tasksIds.indexOf(id);
 
-    QVariantMap newData = tasks[id];
+    auto &newData = tasks[id];
     for (const QString &key: data.keys())
         newData.insert(key, data[key]);
-    tasks[id] = newData;
-
 
     emit dataChanged(index(i, 0), index(i, 0));
-
 }
 
 void TaskListModel::removeTask(const QString &id) {

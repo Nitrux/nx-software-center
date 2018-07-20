@@ -259,6 +259,37 @@ std::ostream& operator<<(std::ostream& os, const ApplicationFull& full)
     os << std::endl;
     return os;
 }
+QVariant ApplicationFull::toVariant() const
+{
+    QVariantMap map;
+    map["id"] = id;
+    map["name"] = LocalizedQString::toVariant(name);
+    map["icon"] = icon;
+    map["abstract"] = LocalizedQString::toVariant(abstract);
+    map["description"] = LocalizedQString::toVariant(description);
+    map["license"] = License::toVariant(license);
+    map["categories"] = categories;
+    map["keywords"] = keywords;
+    map["languages"] = languages;
+    map["developer"] = Developer::toVariant(developer);
+    QVariantList releasesVList;
+    for (const auto &release: releases)
+        releasesVList << Release::toVariant(release);
+    map["releases"] = releasesVList;
+
+    QVariantList screenshotsVList;
+    for (const auto &screenshot: screenshots)
+        screenshotsVList << RemoteImage::toVariant(screenshot);
+    map["releases"] = screenshotsVList;
+    map["mime-type"] = mimeTypes;
+    QVariantMap linksVmap;
+    for (const auto &key: links)
+        linksVmap[key] = links[key];
+    map["links"] = linksVmap;
+
+    return map;
+}
+
 ApplicationFull::Release
 ApplicationFull::latestCompatibleRelease(const QString& cpuArchitecture, const QString& channel)
 {

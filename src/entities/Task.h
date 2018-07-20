@@ -12,6 +12,7 @@
 
 class Task : public QObject {
 Q_OBJECT
+protected:
     QMutex mutex;
 
     QString id;
@@ -20,7 +21,7 @@ Q_OBJECT
     qint64 progressValue;
     qint64 progressTotal;
     QString progressMessage;
-    ApplicationAbstract applicationAbstract;
+    ApplicationFull application;
 
     qint64 creationTime;
     bool deleteOnceCompleted;
@@ -54,9 +55,9 @@ public:
 
     void setProgressMessage(const QString &progressMessage);
 
-    const ApplicationAbstract &getApplicationAbstract();
+    const ApplicationFull &getApplication();
 
-    void setApplicationAbstract(const ApplicationAbstract &applicationAbstract);
+    void setApplication(const ApplicationFull &application);
 
     bool isDeleteOnceCompletedSet();
 
@@ -72,7 +73,7 @@ public:
 
 signals:
     void changed();
-    void failed();
+    void failed(const QString &msg);
     void completed();
 };
 

@@ -17,7 +17,8 @@ class TaskListModel : public QAbstractListModel
         ProgressMessage,
         AppId,
         AppName,
-        AppAuthor
+        AppAuthor,
+        AppIcon,
     };
     QMap<QString, QVariantMap> tasks;
     QList<QString> tasksIds;

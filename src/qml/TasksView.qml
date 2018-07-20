@@ -32,8 +32,8 @@ Flickable {
             model: TasksController.model
             delegate: TaskItem {
                 onRequestCancel: TasksController.cancelTask(task_id)
-                app_icon: "package-x-generic"
                 app_name: task_application_name
+                app_icon: task_application_icon
                 app_author: task_application_author
 
                 progress_value: task_progress_value

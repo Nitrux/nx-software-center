@@ -107,6 +107,7 @@ public:
     QStringList mimeTypes;
     QMap<QString, QString> links;
 
+    QVariant toVariant() const;
     friend std::ostream& operator<<(std::ostream& os, const ApplicationFull& full);
     Release latestCompatibleRelease(const QString& cpuArchitecture, const QString& channel = QString());
 };

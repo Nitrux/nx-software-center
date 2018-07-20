@@ -45,10 +45,11 @@ void InstallTask::getApplicationInfo()
 }
 void InstallTask::handleGetApplicationInfoCompleted()
 {
-    auto applicationInfo = applicationRepositoryGet->getApplication();
+    application = applicationRepositoryGet->getApplication();
+    emit changed();
 
-    if (!applicationInfo.releases.isEmpty())
-        downloadApplicationFile(applicationInfo);
+    if (!application.releases.isEmpty())
+        downloadApplicationFile(application);
     else
         fail("No releases available");
 
@@ -58,8 +59,9 @@ void InstallTask::handleGetApplicationInfoCompleted()
 
 void InstallTask::fail(const QString &msg) {
     setStatus(VALUE_STATUS_FAILED);
-    setProgressMessage(msg);emit
-    failed(msg);
+    setProgressMessage(msg);
+
+    emit failed(msg);
 }
 
 void InstallTask::downloadApplicationFile(ApplicationFull& applicationInfo)
@@ -78,6 +80,7 @@ void InstallTask::downloadApplicationFile(ApplicationFull& applicationInfo)
 
         fileDownload = repository->buildFileDownloadRequest(file.url, filePath);
         connect(fileDownload, &FileDownload::completed, this, &InstallTask::handleFileDownloadCompleted);
+        connect(fileDownload, &FileDownload::stopped, this, &InstallTask::handleFileDownloadStopped);
         connect(fileDownload, &FileDownload::progress, this, &InstallTask::handleFileDownloadProgress);
         fileDownload->start();
 
@@ -117,16 +120,14 @@ void InstallTask::handleFileDownloadCompleted()
 {
     auto filePath = fileDownload->getTarget_path();
     QFileInfo f(filePath);
-    qInfo() << filePath;
     filePath = f.absoluteFilePath();
-    qInfo() << filePath;
     fileDownload->deleteLater();
     fileDownload = nullptr;
 
     if (QFile::exists(filePath))
         registerAppImage(filePath);
     else
-            fail("Download failed");
+        fail("Download failed");
 }
 void InstallTask::registerAppImage(const QString& filePath)
 {
@@ -142,11 +143,27 @@ void InstallTask::registerAppImage(const QString& filePath)
 }
 void InstallTask::stop()
 {
-    qWarning() << "InstallTask::stop not implemented yet";
+    if (applicationRepositoryGet != nullptr) {
+        applicationRepositoryGet->stop();
+    }
+
+    if (fileDownload != nullptr) {
+        fileDownload->stop();
+    }
 }
 
 void InstallTask::handleFileDownloadProgress(qint64 progress, qint64 total, const QString &message) {
     setProgressValue(progress);
     setProgressTotal(total);
     setProgressMessage(message);
+}
+
+void InstallTask::handleFileDownloadStopped() {
+    auto filePath = fileDownload->getTarget_path();
+    QFile::remove(filePath);
+
+    fileDownload->deleteLater();
+    fileDownload = nullptr;
+
+    fail("Download stopped");
 }

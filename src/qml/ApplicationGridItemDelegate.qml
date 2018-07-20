@@ -55,7 +55,6 @@ Item {
             asynchronous: true
             cache: false
             fillMode: Image.PreserveAspectFit
-
         }
 
         PlasmaCore.IconItem {

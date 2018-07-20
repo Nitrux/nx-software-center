@@ -6,11 +6,9 @@ InstallController::InstallController(Installer *installer, QObject *parent)
 
 void InstallController::install(const QString &application_id) {
     auto task = installer->buildInstallLatestReleaseTask(application_id);
-    qInfo() << Task::toVariant(task);
     task->setDeleteOnceCompleted(true);
     if (worker)
         worker->execute(task);
-
 }
 
 void InstallController::setWorker(Worker *worker) {

@@ -2,10 +2,12 @@
 // Created by alexis on 8/01/18.
 //
 
-#include "TasksController.h"
-#include <interactors/TaskMetadata.h>
+#include <QDebug>
 #include <QMutexLocker>
+
 #include <entities/Worker.h>
+#include <interactors/TaskMetadata.h>
+#include "TasksController.h"
 
 TasksController::TasksController(QObject *parent)
         : QObject(parent),
@@ -29,13 +31,15 @@ void TasksController::handleTaskStarted(const QVariantMap &data) {
 }
 
 void TasksController::addAffectedApplication(const QVariantMap &data) {
-    const QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
+    const auto application = data.value("application").toMap();
+    const QString appId = application.value("id").toString();
     affectedApplicationsIds.append(appId);emit
     affectedApplicationsIdsChanged(affectedApplicationsIds);
 }
 
 bool TasksController::isAnApplicationTask(const QVariantMap &data) const {
-    QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
+    const auto application = data.value("application").toMap();
+    const QString appId = application .value("id").toString();
     return !appId.isEmpty();
 }
 
@@ -53,7 +57,8 @@ void TasksController::handleTaskCompleted(const QVariantMap &data) {
 }
 
 void TasksController::removeAffectedApplication(const QVariantMap &data) {
-    QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
+    const auto application = data.value("application").toMap();
+    const QString appId = application .value("id").toString();
     affectedApplicationsIds.removeOne(appId);emit
     affectedApplicationsIdsChanged(affectedApplicationsIds);
 }
@@ -84,5 +89,5 @@ void TasksController::setWorker(Worker *worker) {
 }
 
 void TasksController::handleTaskFailed(const QVariantMap &data) {
-
+    model->removeTask(data["id"].toString());
 }

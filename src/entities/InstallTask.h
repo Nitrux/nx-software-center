@@ -34,9 +34,6 @@ protected:
     void setRepository(ApplicationRepository *restClient);
 
 public:
-    void setNetworkAccessManager(QNetworkAccessManager *networkAccessManager);
-
-public:
     void setApplicationsDir(const QString &applicationsDir);
 
     const QString &getChannel() const;
@@ -47,24 +44,20 @@ public:
 
     void stop() override;
 
-signals:
-
-    void completed();
-
-    void failed(const QString &reason);
-
-protected:
-    void getApplicationInfo();
-
 protected slots:
 
     void handleGetApplicationInfoCompleted();
 
     void handleGetApplicationInfoFailed(const QString &reason);
 
+    void handleFileDownloadStopped();
+
     void handleFileDownloadCompleted();
 
     void handleFileDownloadProgress(qint64 progress, qint64 total, const QString &message);
+
+protected:
+    void getApplicationInfo();
 
     QString getDownloadFilePath(const ApplicationFull &applicationInfo, const ApplicationFull::Release &r,
                                 const ApplicationFull::File &file) const;

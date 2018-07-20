@@ -23,8 +23,6 @@ public:
 
     const QString &getSource_url() const;
 
-    QNetworkAccessManager *getNetworkAccessManager() const;
-
     void setNetworkAccessManager(QNetworkAccessManager *networkAccessManager);
 
     void setProgressNotificationsEnabled(bool progressNotificationsEnabled);

@@ -67,14 +67,14 @@ void Task::setProgressMessage(const QString &progressMessage) {
     emit changed();
 }
 
-const ApplicationAbstract &Task::getApplicationAbstract() {
+const ApplicationFull &Task::getApplication() {
 //    QMutexLocker locker(&mutex);
-    return applicationAbstract;
+    return application;
 }
 
-void Task::setApplicationAbstract(const ApplicationAbstract &applicationAbstract) {
+void Task::setApplication(const ApplicationFull &application) {
 //    QMutexLocker locker(&mutex);
-    Task::applicationAbstract = applicationAbstract;
+    Task::application = application;
     emit changed();
 }
 
@@ -91,7 +91,7 @@ QVariantMap Task::toVariant(Task *task) {
     map["progress_value"] = task->getProgressValue();
     map["progress_total"] = task->getProgressTotal();
     map["progress_message"] = task->getProgressMessage();
-    map["application_abstract"] = task->getApplicationAbstract().toVariant();
+    map["application"] = task->getApplication().toVariant();
     map["creation_time"] = task->getCreationTime();
     return map;
 }

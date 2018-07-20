@@ -22,10 +22,6 @@ const QString &Download::getSource_url() const {
     return source_url;
 }
 
-QNetworkAccessManager *Download::getNetworkAccessManager() const {
-    return networkAccessManager;
-}
-
 void Download::setNetworkAccessManager(QNetworkAccessManager *networkAccessManager) {
     Download::networkAccessManager = networkAccessManager;
 }
