@@ -89,5 +89,10 @@ void TasksController::setWorker(Worker *worker) {
 }
 
 void TasksController::handleTaskFailed(const QVariantMap &data) {
-    model->removeTask(data["id"].toString());
+    const QString &id = data["id"].toString();
+    if (shouldBeListed(data))
+        model->removeTask(id);
+
+    if (isAnApplicationTask(data))
+        removeAffectedApplication(data);;
 }
