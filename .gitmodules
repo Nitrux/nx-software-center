@@ -1,0 +1,3 @@
+[submodule "lib/appimage-metadata-extractor"]
+	path = lib/appimage-metadata-extractor
+	url = https://github.com/azubieta/appimage-metadata-extractor.git
