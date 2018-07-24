@@ -1,4 +1,4 @@
-# NX Software Center [![Build Status](https://travis-ci.org/nomad-desktop/nx-software-center.svg?branch=master)](https://travis-ci.org/nomad-desktop/nx-software-center)
+# NX Software Center [![Build Status](https://travis-ci.org/Nitrux/nx-software-center.svg?branch=master)](https://travis-ci.org/Nitrux/nx-software-center)
 
 _A portable Software Center for Portable Applications thanks to [AppImage](https://appimage.org/)._
 
@@ -39,7 +39,7 @@ The AppImages included are fetched from:
  * LibAppImage (latest)
  
 ### Instructions
- 1. `git clone https://github.com/nomad-desktop/nx-software-center.git` 
+ 1. `git clone https://github.com/Nitrux/nx-software-center.git` 
  1. `mkdir build`
  1. `cd build`
  1. `cmake ../nx-software-center -DCMAKE_BUILD_PREFIX=Release -DCMAKE_INSTALL_PREFIX=/usr`
