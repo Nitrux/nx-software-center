@@ -10,21 +10,21 @@ AppImageInfo AppImageInfo::fromVariant(const QVariant& variant)
     if (!map.isEmpty()) {
         AppImageInfo a;
         a.id = map["id"].toString();
-        a.name = LocalizedQString::fromVariant(map["name"]);
+        a.name = ApplicationFull::LocalizedQString::fromVariant(map["name"]);
         a.icon = map["icon"].toString();
-        a.abstract = LocalizedQString::fromVariant(map["abstract"]);
-        a.description = LocalizedQString::fromVariant(map["description"]);
-        a.license = License::fromVariant(map["license"]);
+        a.abstract = ApplicationFull::LocalizedQString::fromVariant(map["abstract"]);
+        a.description = ApplicationFull::LocalizedQString::fromVariant(map["description"]);
+        a.license = ApplicationFull::License::fromVariant(map["license"]);
         a.categories = map["categories"].toStringList();
         a.keywords = map["keywords"].toStringList();
         a.languages = map["languages"].toStringList();
-        a.developer = Developer::fromVariant(map["developer"]);
-        a.release = Release::fromVariant(map["release"]);
-        a.file = File::fromVariant(map["file"]);
+        a.developer = ApplicationFull::Developer::fromVariant(map["developer"]);
+        a.release = ApplicationFull::Release::fromVariant(map["release"]);
+        a.file = ApplicationFull::File::fromVariant(map["file"]);
 
-        QList<RemoteImage> screenshots;
+        QList<ApplicationFull::RemoteImage> screenshots;
         for (const auto& v: map["screenshots"].toList()) {
-            screenshots << RemoteImage::fromVariant(v);
+            screenshots << ApplicationFull::RemoteImage::fromVariant(v);
         }
         a.screenshots = screenshots;
 
@@ -52,21 +52,21 @@ QVariant AppImageInfo::toVariant(const AppImageInfo& appImageInfo)
     QVariantMap map;
     map["format"] = QVariant(1).toDouble();
     map["id"] = appImageInfo.id;
-    map["name"] = LocalizedQString::toVariant(appImageInfo.name);
+    map["name"] = ApplicationFull::LocalizedQString::toVariant(appImageInfo.name);
     map["icon"] = appImageInfo.icon;
-    map["abstract"] = LocalizedQString::toVariant(appImageInfo.abstract);
-    map["description"] = LocalizedQString::toVariant(appImageInfo.description);
-    map["license"] = License::toVariant(appImageInfo.license);
+    map["abstract"] = ApplicationFull::LocalizedQString::toVariant(appImageInfo.abstract);
+    map["description"] = ApplicationFull::LocalizedQString::toVariant(appImageInfo.description);
+    map["license"] = ApplicationFull::License::toVariant(appImageInfo.license);
     map["categories"] = qStringListToQVariantList(appImageInfo.categories);
     map["keywords"] = qStringListToQVariantList(appImageInfo.keywords);
     map["languages"] = qStringListToQVariantList(appImageInfo.languages);
-    map["developer"] = Developer::toVariant(appImageInfo.developer);
-    map["release"] = Release::toVariant(appImageInfo.release);
-    map["file"] = File::toVariant(appImageInfo.file);
+    map["developer"] = ApplicationFull::Developer::toVariant(appImageInfo.developer);
+    map["release"] = ApplicationFull::Release::toVariant(appImageInfo.release);
+    map["file"] = ApplicationFull::File::toVariant(appImageInfo.file);
 
     QVariantList screenshots;
-    for (const RemoteImage& image: appImageInfo.screenshots)
-        screenshots << RemoteImage::toVariant(image);
+    for (const ApplicationFull::RemoteImage& image: appImageInfo.screenshots)
+        screenshots << ApplicationFull::RemoteImage::toVariant(image);
     map["screenshots"] = screenshots;
 
     map["mime-types"] = qStringListToQVariantList(appImageInfo.mimeTypes);

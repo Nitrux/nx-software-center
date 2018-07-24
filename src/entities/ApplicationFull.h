@@ -51,6 +51,7 @@ public:
         QString architecture;
         QString sha512checksum;
         QString url;
+        QString path;
 
         File();
         bool operator==(const File& rhs) const;

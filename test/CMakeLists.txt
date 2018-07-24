@@ -10,6 +10,7 @@ find_package(Qt5 REQUIRED COMPONENTS Core Gui Network Test XmlPatterns)
 
 add_executable(test_core
         $<TARGET_OBJECTS:core>
+        $<TARGET_OBJECTS:appimage-info>
         src/test_core_main.cpp
         src/TestFetchApplicationsInteractor.cpp
         src/DummySource.h src/BrokenDummySource.h
@@ -27,7 +28,8 @@ add_executable(test_core
         src/DummyApplicationRepository.cpp
         src/DummyApplicationRepository.h
         src/DummyApplicationRepositorySearch.hpp
-        src/DummyApplicationRepositoryGet.hpp)
+        src/DummyApplicationRepositoryGet.hpp
+        src/TestDeployedApplicationsRegistry.cpp)
 
 target_include_directories(test_core
         PRIVATE ${CMAKE_SOURCE_DIR}/src/
@@ -56,4 +58,5 @@ target_link_libraries(test_core
 
 add_dependencies(test_core gtest)
 
+set_target_properties(test_core PROPERTIES EXCLUDE_FROM_ALL TRUE)
 add_test(software_center_core test_core)

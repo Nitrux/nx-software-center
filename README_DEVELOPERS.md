@@ -15,18 +15,23 @@
 5. Conservative
     * Holds to a given release.
 
-6. Store Owner
+6. Offline user
+    * Add Application manually (by coping it at $HOME/Applications)
+    * List resumes of applications deployed at $HOME/Applications
+    * View deployed applications details (name, developer, release, icon, and other metadata)
+    
+7. Store Owner
     * Publishes software listings
     * Define how to get it's 
     * Defines the classification and description
 
-7. Software Packer
+8. Software Packer
     * Defines how a software is packed, deployed, executed and removed.
     * Defines the target systems.
     * Defines the name, release id, version and other attributes of
     the software.
 
-8. System Maker
+9. System Maker
     * Identifies the system. 
     * Defines how to record which software is available.
     * Defines where are it's binaries.

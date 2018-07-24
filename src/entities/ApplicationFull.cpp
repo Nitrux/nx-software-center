@@ -185,6 +185,7 @@ ApplicationFull::File ApplicationFull::File::fromVariant(const QVariant& variant
     file.architecture = map["architecture"].toString();
     file.sha512checksum = map["sha512checksum"].toString();
     file.url = map["url"].toString();
+    file.path = map["path"].toString();
 
     return file;
 }
@@ -196,6 +197,7 @@ QVariant ApplicationFull::File::toVariant(const ApplicationFull::File& file)
     map["architecture"] = file.architecture;
     map["sha512checksum"] = file.sha512checksum;
     map["url"] = file.url;
+    map["path"] = file.path;
 
     return map;
 }

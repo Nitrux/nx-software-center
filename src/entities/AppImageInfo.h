@@ -13,23 +13,23 @@
 #include <ostream>
 #include "ApplicationFull.h"
 
-class AppImageInfo : public ApplicationFull {
+class AppImageInfo  {
 public:
 
     QString id;
-    LocalizedQString name;
+    ApplicationFull::LocalizedQString name;
     QString icon;
-    LocalizedQString abstract;
-    LocalizedQString description;
+    ApplicationFull::LocalizedQString abstract;
+    ApplicationFull::LocalizedQString description;
 
-    License license;
+    ApplicationFull::License license;
     QStringList categories;
     QStringList keywords;
     QStringList languages;
-    Developer developer;
-    Release release;
-    File file;
-    QList<RemoteImage> screenshots;
+    ApplicationFull::Developer developer;
+    ApplicationFull::Release release;
+    ApplicationFull::File file;
+    QList<ApplicationFull::RemoteImage> screenshots;
     QStringList mimeTypes;
     QMap<QString, QString> links;
 

@@ -20,7 +20,8 @@ public:
 
     ApplicationAbstract();
     friend std::ostream& operator<<(std::ostream& os, const ApplicationAbstract& abstract);
-    QVariantMap toVariant() const;
+
+    virtual QVariantMap toVariant() const;
 };
 
 #endif //NX_SOFTWARE_CENTER_APPLICATIONABSTRACT_H
