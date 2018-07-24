@@ -79,6 +79,6 @@ deploy:
   prerelease: true
   overwrite: true
   on:
-    repo: nomad-desktop/nx-software-center
+    repo: Nitrux/nx-software-center
     branch: master
     tags: true
