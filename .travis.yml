@@ -3,9 +3,6 @@ compiler: gcc
 dist: trusty
 sudo: required
 
-notifications:
-  email: false
-
 addons:
   apt:
     sources:
