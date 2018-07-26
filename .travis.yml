@@ -82,3 +82,7 @@ deploy:
     repo: Nitrux/nx-software-center
     branch: master
     tags: true
+
+notifications:
+  email: false
+  slack: nitrux:LgpKKPnWky7IWShmzXsyVDWu
