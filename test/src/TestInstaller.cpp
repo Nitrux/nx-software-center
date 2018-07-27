@@ -5,8 +5,8 @@
 #include <gtest/gtest.h>
 #include <QSignalSpy>
 #include <appimage/appimage.h>
-#include "entities/Installer.h"
-#include <entities/InstallTask.h>
+#include "entities/Deployer.h"
+#include <entities/DeployTask.h>
 #include "DummyApplicationRepository.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {
@@ -15,11 +15,11 @@ namespace NX_SOFTWARE_CENTER_TESTS {
 
     TEST_F(TestInstaller, installApplication) {
         DummyApplicationRepository repository;
-        Installer i;
+        Deployer i;
         i.setRepository(&repository);
         auto task = i.buildInstallLatestReleaseTask("echo.desktop");
-        QSignalSpy spyCompleted(task, &InstallTask::completed);
-        QSignalSpy spyFailed(task, &InstallTask::failed);
+        QSignalSpy spyCompleted(task, &DeployTask::completed);
+        QSignalSpy spyFailed(task, &DeployTask::failed);
         task->start();
         spyCompleted.wait();
         ASSERT_TRUE(spyCompleted.count() > 0);

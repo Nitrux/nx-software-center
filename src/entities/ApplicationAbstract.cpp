@@ -22,5 +22,9 @@ QVariantMap ApplicationAbstract::toVariant() const
     map["abstract"] = ApplicationFull::LocalizedQString::toVariant(abstract);
     map["fileSize"] = fileSize;
     map["latestReleaseVersion"] = latestReleaseVersion;
-    return QVariantMap();
+    return map;
+}
+
+ApplicationAbstract::~ApplicationAbstract() {
+
 }

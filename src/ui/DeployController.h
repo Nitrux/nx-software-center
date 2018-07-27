@@ -4,15 +4,15 @@
 #include <QObject>
 #include <QList>
 #include "entities/Worker.h"
-#include "entities/Installer.h"
-#include "entities/InstallTask.h"
+#include "entities/Deployer.h"
+#include "entities/DeployTask.h"
 
-class InstallController : public QObject {
+class DeployController : public QObject {
 Q_OBJECT
     Worker *worker;
-    Installer* installer;
+    Deployer* installer;
 public:
-    InstallController(Installer* installer, QObject* parent = nullptr);
+    DeployController(Deployer* installer, QObject* parent = nullptr);
 
     void setWorker(Worker *worker);
 

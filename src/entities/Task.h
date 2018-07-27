@@ -9,6 +9,7 @@
 #include <QObject>
 #include <QString>
 #include "ApplicationAbstract.h"
+#include "AppImageInfo.h"
 
 class Task : public QObject {
 Q_OBJECT
@@ -21,7 +22,7 @@ protected:
     qint64 progressValue;
     qint64 progressTotal;
     QString progressMessage;
-    ApplicationFull application;
+    AppImageInfo appImageInfo;
 
     qint64 creationTime;
     bool deleteOnceCompleted;
@@ -55,9 +56,9 @@ public:
 
     void setProgressMessage(const QString &progressMessage);
 
-    const ApplicationFull &getApplication();
+    const AppImageInfo & getAppImageInfo();
 
-    void setApplication(const ApplicationFull &application);
+    void setAppImageInfo(const AppImageInfo &appImageInfo);
 
     bool isDeleteOnceCompletedSet();
 

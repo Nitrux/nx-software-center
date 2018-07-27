@@ -14,7 +14,7 @@ class ApplicationRepository;
 class ApplicationRepositoryGet;
 class FileDownload;
 
-class InstallTask : public Task {
+class DeployTask : public Task {
 Q_OBJECT
     ApplicationRepository *repository;
     QString id;
@@ -25,9 +25,9 @@ Q_OBJECT
     ApplicationRepositoryGet *applicationRepositoryGet;
     FileDownload *fileDownload;
 protected:
-    friend class Installer;
+    friend class Deployer;
 
-    InstallTask();
+    DeployTask();
 
     void setId(const QString &id);
 
@@ -59,10 +59,10 @@ protected slots:
 protected:
     void getApplicationInfo();
 
-    QString getDownloadFilePath(const ApplicationFull &applicationInfo, const ApplicationFull::Release &r,
+    QString getDownloadFilePath(AppImageInfo applicationInfo, const ApplicationFull::Release &r,
                                 const ApplicationFull::File &file) const;
 
-    void downloadApplicationFile(ApplicationFull &applicationInfo);
+    void downloadApplicationFile(AppImageInfo applicationInfo);
 
     void registerAppImage(const QString &filePath);
 

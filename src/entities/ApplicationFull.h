@@ -10,6 +10,7 @@
 #include <QVariant>
 #include <QDateTime>
 
+class AppImageInfo;
 class ApplicationFull {
 public:
     class LocalizedQString : public QMap<QString, QString> {
@@ -111,6 +112,8 @@ public:
     QVariant toVariant() const;
     friend std::ostream& operator<<(std::ostream& os, const ApplicationFull& full);
     Release latestCompatibleRelease(const QString& cpuArchitecture, const QString& channel = QString());
+
+    AppImageInfo latestCompatibleReleaseInfo();
 };
 
 #endif //NX_SOFTWARE_CENTER_APPLICATIONFULL1_H

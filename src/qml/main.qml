@@ -28,6 +28,7 @@ ApplicationWindow {
         onGoStore: main.handleGoStore()
         onGoTasks: main.showTasksView()
         onStoreQueryTyped: main.search(query)
+        onGoDeployed: main.showDeployedApplicationsView();
 
         tasksCount: "0"
 
@@ -140,6 +141,11 @@ ApplicationWindow {
     function showTasksView() {
         main.title = "Tasks"
         stackView.goTo("tasksView", "qrc:/TasksView.qml")
+    }
+
+    function showDeployedApplicationsView() {
+        main.title = "Deployed Applications"
+        stackView.goTo("deployedApplicationsView", "qrc:/DeployedApplicationsView.qml")
     }
 
 //    Connections {

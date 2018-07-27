@@ -1,5 +1,6 @@
 #include <QUuid>
 #include "Task.h"
+#include "AppImageInfo.h"
 
 //
 // Created by alexis on 7/6/18.
@@ -67,14 +68,14 @@ void Task::setProgressMessage(const QString &progressMessage) {
     emit changed();
 }
 
-const ApplicationFull &Task::getApplication() {
+const AppImageInfo & Task::getAppImageInfo() {
 //    QMutexLocker locker(&mutex);
-    return application;
+    return appImageInfo;
 }
 
-void Task::setApplication(const ApplicationFull &application) {
+void Task::setAppImageInfo(const AppImageInfo &appImageInfo) {
 //    QMutexLocker locker(&mutex);
-    Task::application = application;
+    Task::appImageInfo = appImageInfo;
     emit changed();
 }
 
@@ -91,7 +92,7 @@ QVariantMap Task::toVariant(Task *task) {
     map["progress_value"] = task->getProgressValue();
     map["progress_total"] = task->getProgressTotal();
     map["progress_message"] = task->getProgressMessage();
-    map["application"] = task->getApplication().toVariant();
+    map["application"] = task->getAppImageInfo().toVariant();
     map["creation_time"] = task->getCreationTime();
     return map;
 }

@@ -11,6 +11,8 @@
 
 class ApplicationAbstract {
 public:
+    virtual ~ApplicationAbstract();
+
     QString id;
     QString icon;
     ApplicationFull::LocalizedQString name;

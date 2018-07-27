@@ -18,8 +18,8 @@ set(CORE_SRC
         interactors/Interactor.h
         gateways/DownloadManager.h
 
-        entities/Installer.cpp
-        entities/Installer.h
+        entities/Deployer.cpp
+        entities/Deployer.h
         interactors/FetchApplicationsInteractor.cpp
         entities/Registry.cpp
         entities/Registry.h
@@ -55,8 +55,8 @@ set(CORE_SRC
         gateways/ApplicationsSearchRequest.h
         gateways/ApplicationGetRequest.cpp
         gateways/ApplicationGetRequest.h
-        entities/InstallTask.cpp
-        entities/InstallTask.h
+        entities/DeployTask.cpp
+        entities/DeployTask.h
         entities/Task.cpp
         entities/Task.h
         entities/Worker.cpp
@@ -68,7 +68,13 @@ set(CORE_SRC
         gateways/ApplicationRepository.cpp
         gateways/ApplicationRepository.h
         gateways/DeployedApplicationsRegistry.cpp
-        gateways/DeployedApplicationsRegistry.h entities/DeployedApplicationAbstract.cpp entities/DeployedApplicationAbstract.h)
+        gateways/DeployedApplicationsRegistry.h
+        entities/DeployedApplicationAbstract.cpp
+        entities/DeployedApplicationAbstract.h
+        entities/Remover.cpp
+        entities/Remover.h
+        entities/RemoveTask.cpp
+        entities/RemoveTask.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -95,14 +101,14 @@ set(GUI_SRC
         ui/TasksController.h
         ui/TaskListModel.cpp
         ui/TaskListModel.h
-        ui/InstallController.h
-        ui/InstallController.cpp
+        ui/DeployController.h
+        ui/DeployController.cpp
         ui/RegistryController.h
         ui/RegistryController.cpp
         ui/RegistryListModel.h
         ui/RegistryListModel.cpp
-        ui/UninstallController.cpp
-        ui/UninstallController.h
+        ui/RemoveController.cpp
+        ui/RemoveController.h
         ui/UpdaterController.cpp
         ui/UpdaterController.h
         ui/UpgraderController.cpp
@@ -116,7 +122,10 @@ set(GUI_SRC
         ui/ApplicationViewController.cpp
         ui/ApplicationViewController.h
         ui/LocalizationUtils.cpp
-        ui/LocalizationUtils.h)
+        ui/LocalizationUtils.h
+        ui/DeployedApplicationsController.cpp
+        ui/DeployedApplicationsController.h
+        )
 
 ## add the qml.qrc file
 qt5_add_resources(qml_QRC qml/files.qrc)
@@ -140,7 +149,8 @@ target_include_directories(gui
 add_executable(nx_software_center
         main.cpp
         $<TARGET_OBJECTS:core>
-        $<TARGET_OBJECTS:gui>)
+        $<TARGET_OBJECTS:gui>
+        $<TARGET_OBJECTS:appimage-info>)
 
 target_link_libraries(nx_software_center
         Qt5::Core

@@ -35,6 +35,7 @@ public:
 
     static AppImageInfo fromVariant(const QVariant& variant);
     static QVariant toVariant(const AppImageInfo& appImageInfo);
+    QVariant toVariant() const;
 
     bool operator==(const AppImageInfo& rhs) const;
     bool operator!=(const AppImageInfo& rhs) const;

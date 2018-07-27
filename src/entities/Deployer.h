@@ -5,21 +5,19 @@
 #ifndef NX_SOFTWARE_CENTER_INSTALLER_H
 #define NX_SOFTWARE_CENTER_INSTALLER_H
 
-#include <QObject>
 #include <QNetworkAccessManager>
 #include <gateways/ApplicationRepository.h>
 
-class InstallTask;
+class DeployTask;
 
-class Installer : public QObject {
-Q_OBJECT
+class Deployer {
     ApplicationRepository *repository;
 public:
-    Installer();
+    Deployer();
 
     void setRepository(ApplicationRepository *repository);
 
-    InstallTask *buildInstallLatestReleaseTask(const QString &id);
+    DeployTask *buildInstallLatestReleaseTask(const QString &id);
 };
 
 #endif //NX_SOFTWARE_CENTER_INSTALLER_H

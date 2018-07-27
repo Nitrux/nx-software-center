@@ -21,7 +21,7 @@ Item {
         anchors.rightMargin: 12
 
         Repeater {
-            model: SearchController.model
+            model: DeployedApplicationsController.applicationList
 
             delegate: ApplicationGridItemDelegate {
                 id: applicationGridItemDelegate
@@ -31,24 +31,21 @@ Item {
 
                 Layout.alignment: Qt.AlignTop | Qt.AlignLeft
 
-                name: app_name
-                version: app_version
-                icon: app_icon
+                name: modelData["name"]
+                version: modelData["latestReleaseVersion"]
+                icon: modelData["icon"]
+                size: modelData["fileSize"]
 
                 hasPendingAction: TasksController.affectedApplicationsIds.indexOf(
-                                      app_id) > -1
-                installed: RegistryController.installedApplications.indexOf(
-                               app_id) > -1
-//                upgradable: UpgraderController.upgradableApplications.indexOf(
-//                                app_id) > -1
+                                      modelData["id"]) > -1
 
                 onRequestGet: InstallController.install(app_id)
                 onRequestRemove: UninstallController.remove(app_id)
                 onRequestUpgrade: UpgraderController.upgrade(app_code_name)
                 onRequestRun: RunController.run(app_id)
                 onRequestView: {
-                    ApplicationViewController.loadApplication(app_id)
-                    showApplicationView(app_name)
+                    ApplicationViewController.loadApplication(modelData["id"])
+                    showApplicationView(modelData["name"])
                 }
             }
         }

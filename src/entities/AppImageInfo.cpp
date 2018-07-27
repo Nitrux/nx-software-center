@@ -120,3 +120,7 @@ std::ostream& operator<<(std::ostream& os, const AppImageInfo& info)
         os << key.toStdString() << ": " << info.links[key].toStdString() << ", ";
     return os;
 }
+
+QVariant AppImageInfo::toVariant() const {
+    return toVariant(*this);
+}
