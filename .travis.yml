@@ -3,9 +3,6 @@ compiler: gcc
 dist: trusty
 sudo: required
 
-notifications:
-  email: false
-
 addons:
   apt:
     sources:
@@ -82,3 +79,7 @@ deploy:
     repo: Nitrux/nx-software-center
     branch: master
     tags: true
+
+notifications:
+  email: false
+  slack: nitrux:LgpKKPnWky7IWShmzXsyVDWu
