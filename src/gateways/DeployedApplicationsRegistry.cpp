@@ -221,3 +221,16 @@ void DeployedApplicationsRegistry::registerFile(const QString &path, const AppIm
     QFile f(itemCacheDir.absoluteFilePath("record"));
 
 }
+
+AppImageInfo DeployedApplicationsRegistry::getLatestDeployedVersionOf(const QString &id) {
+    syncAppImageInfoCache();
+    AppImageInfo latest;
+    for (const AppImageInfo &item: appImageInfoCache.values()) {
+        if (item.id == id) {
+            if (latest.id.isEmpty() || latest.release.date < item.release.date)
+                latest = item;
+        }
+    }
+
+    return latest;
+}

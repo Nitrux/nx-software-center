@@ -159,7 +159,8 @@ static QObject *notificationsControllerSingletonProvider(QQmlEngine *, QJSEngine
 }
 
 static QObject *runControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    auto runController = new RunController(registry);
+    auto runController = new RunController(nullptr);
+    runController->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
     return runController;
 }
 

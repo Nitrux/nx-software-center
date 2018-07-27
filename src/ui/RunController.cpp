@@ -9,11 +9,15 @@
 
 
 void RunController::run(const QString &id) {
-    auto files = registry->getInstalledApplicationFiles(id);
+    AppImageInfo appImageInfo = deployedApplicationsRegistry->getLatestDeployedVersionOf(id);
+    spawnRunInteractor(appImageInfo.file.path);
+}
 
-    QString executable = getExecutable(files);
+void RunController::runAppImage(const QString &path) {
+    RunInteractor *i = new RunInteractor(path, this);
 
-    spawnRunInteractor(executable);
+    connect(i, &RunInteractor::completed, [i]() { i->deleteLater(); });
+    i->execute();
 }
 
 void RunController::spawnRunInteractor(const QString &executable) {
@@ -23,14 +27,10 @@ void RunController::spawnRunInteractor(const QString &executable) {
     i->execute();
 }
 
-QString RunController::getExecutable(const QStringList &files) const {
-    QString executable;
-    for (const QString &file: files) {
-        QFileInfo fi(file);
-        if (fi.isExecutable())
-            executable = fi.absoluteFilePath();
-    }
-    return executable;
+RunController::RunController(QObject *parent) : QObject(parent),
+                                                deployedApplicationsRegistry(nullptr) {}
+
+void RunController::setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry) {
+    RunController::deployedApplicationsRegistry = deployedApplicationsRegistry;
 }
 
-RunController::RunController(Registry *registry, QObject *parent) : QObject(parent), registry(registry) {}

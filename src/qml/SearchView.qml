@@ -37,7 +37,7 @@ Item {
 
                 hasPendingAction: TasksController.affectedApplicationsIds.indexOf(
                                       app_id) > -1
-                installed: RegistryController.installedApplications.indexOf(
+                deployed: DeployedApplicationsController.applicationsIds.indexOf(
                                app_id) > -1
 //                upgradable: UpgraderController.upgradableApplications.indexOf(
 //                                app_id) > -1

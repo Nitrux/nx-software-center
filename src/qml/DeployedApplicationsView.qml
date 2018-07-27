@@ -21,7 +21,7 @@ Item {
         anchors.rightMargin: 12
 
         Repeater {
-            model: DeployedApplicationsController.applicationList
+            model: DeployedApplicationsController.applications
 
             delegate: ApplicationGridItemDelegate {
                 id: applicationGridItemDelegate
@@ -39,10 +39,12 @@ Item {
                 hasPendingAction: TasksController.affectedApplicationsIds.indexOf(
                                       modelData["id"]) > -1
 
-                onRequestGet: InstallController.install(app_id)
-                onRequestRemove: UninstallController.remove(app_id)
-                onRequestUpgrade: UpgraderController.upgrade(app_code_name)
-                onRequestRun: RunController.run(app_id)
+                deployed: true
+
+                onRequestGet: InstallController.install(modelData["id"])
+                onRequestRemove: UninstallController.remove(modelData["id"])
+                onRequestUpgrade: UpgraderController.upgrade(modelData["id"])
+                onRequestRun: RunController.runAppImage(modelData["filePath"])
                 onRequestView: {
                     ApplicationViewController.loadApplication(modelData["id"])
                     showApplicationView(modelData["name"])

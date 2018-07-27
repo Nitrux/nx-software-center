@@ -7,19 +7,23 @@
 
 #include <QObject>
 #include <entities/Registry.h>
+#include <gateways/DeployedApplicationsRegistry.h>
 
 class RunController : public QObject {
-    Q_OBJECT
-    Registry *registry;
+Q_OBJECT
+    DeployedApplicationsRegistry *deployedApplicationsRegistry;
 public:
-    RunController(Registry *registry, QObject *parent = nullptr);
+    RunController(QObject *parent = nullptr);
+
+    void setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry);
 
 public slots:
+
     void run(const QString &id);
 
-private:
-    QString getExecutable(const QStringList &files) const;
+    void runAppImage(const QString &path);
 
+private:
     void spawnRunInteractor(const QString &executable);
 };
 

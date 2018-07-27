@@ -14,12 +14,13 @@
 #include "ApplicationListModel.h"
 
 class DeployedApplicationsController : public QObject {
-Q_OBJECT
-    Q_PROPERTY(QVariantList applicationList MEMBER applicationList NOTIFY applicationListChanged);
-    Q_PROPERTY(bool isBusy MEMBER busy NOTIFY isBusyChanged);
+    Q_OBJECT
+    Q_PROPERTY(QVariantList applications MEMBER applicationList NOTIFY applicationListChanged)
+    Q_PROPERTY(QStringList applicationsIds MEMBER applicationIds NOTIFY applicationListChanged)
 
     DeployedApplicationsRegistry *registry;
     QVariantList applicationList;
+    QStringList applicationIds;
     Worker *worker;
     bool busy;
 
@@ -31,7 +32,7 @@ public:
 
 signals:
     void isBusyChanged(const bool &isBusy);
-    void applicationListChanged(QVariantList QVAriantList);
+    void applicationListChanged();
 
 protected slots:
     void handleWorkerTaskCompleted(const QVariantMap task);

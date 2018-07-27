@@ -22,6 +22,9 @@ public:
     QList<DeployedApplicationAbstract> listApplications();
 
     void registerFile(const QString &path, const AppImageInfo & info);
+
+    AppImageInfo getLatestDeployedVersionOf(const QString &id);
+
 protected:
     QDir applicationsDir;
     QDir cacheDir;

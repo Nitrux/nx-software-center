@@ -25,17 +25,21 @@ void DeployedApplicationsController::updateApplicationsList()
     auto apps = registry->listApplications();
 
     QVariantList newList;
+    QStringList newListIds;
     for (const auto &app: apps) {
         QVariantMap v = app.toVariant();
         v["name"] = LocalizationUtils::getLocalizedValue(app.name);
         v["abstract"] = LocalizationUtils::getLocalizedValue(app.abstract);
         v["fileSize"] = formatMemoryValue(app.fileSize);
         newList << v;
+        newListIds << app.id;
     }
 
 
     applicationList = newList;
-    emit applicationListChanged(applicationList);
+    applicationIds = newListIds;
+
+    emit applicationListChanged();
 }
 
 QString DeployedApplicationsController::formatMemoryValue(float num) {

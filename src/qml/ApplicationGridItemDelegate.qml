@@ -11,7 +11,7 @@ Item {
     property alias version: labelVersion.text
     property alias size: labelSize.text
 
-    property bool installed: false
+    property bool deployed: false
     property bool upgradable: false
     property bool hasPendingAction: false
 
@@ -88,13 +88,13 @@ Item {
                 font.bold: true
             }
 
-//            Loader {
-//                id: loader
-//                Layout.rowSpan: 3
-//                Layout.maximumWidth: 72
-//                Layout.preferredHeight: 20
-//                sourceComponent: installed ? removeButton : getButton
-//            }
+            Loader {
+                id: loader
+                Layout.rowSpan: 3
+                Layout.maximumWidth: 72
+                Layout.preferredHeight: 20
+                sourceComponent: deployed ? removeButton : getButton
+            }
 
             PlasmaComponents.Label {
                 id: labelVersion
