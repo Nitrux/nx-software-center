@@ -17,7 +17,7 @@ public:
     void setWorker(Worker *worker);
 
 public slots:
-    void install(const QString& application_id);
+    void deploy(const QString &application_id);
 };
 
 #endif // INSTALLCONTROLLER_H

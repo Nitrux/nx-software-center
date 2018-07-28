@@ -41,8 +41,7 @@ Item {
 
                 deployed: true
 
-                onRequestGet: InstallController.install(modelData["id"])
-                onRequestRemove: UninstallController.remove(modelData["id"])
+                onRequestRemove: RemoveController.removeAppImage(modelData["filePath"])
                 onRequestUpgrade: UpgraderController.upgrade(modelData["id"])
                 onRequestRun: RunController.runAppImage(modelData["filePath"])
                 onRequestView: {

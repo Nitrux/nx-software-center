@@ -111,7 +111,7 @@ Item {
 
                     visible: !ApplicationViewController.isAppInstalled
 
-                    onClicked: DeployController.install(
+                    onClicked: DeployController.deploy(
                                     ApplicationViewController.appId)
                 }
 

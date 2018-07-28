@@ -53,7 +53,7 @@ protected:
 
     DeployedApplicationAbstract getAppImageInfoAbstract(const AppImageInfo &appImageInfo) const;
 
-    void dropDeleteFilesCache() const;
+    void dropDeleteFilesCache();
 };
 
 

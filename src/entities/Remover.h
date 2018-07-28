@@ -15,7 +15,8 @@ class Remover : public  QObject{
 public:
     void setRegistry(DeployedApplicationsRegistry *registry);
 
-    RemoveTask * buildRemoveTask(const QString &filePath);
+    RemoveTask * buildRemoveTaskByPath(const QString &filePath);
+    RemoveTask * buildRemoveTaskById(const QString &id);
 };
 
 

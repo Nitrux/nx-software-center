@@ -42,8 +42,8 @@ Item {
 //                upgradable: UpgraderController.upgradableApplications.indexOf(
 //                                app_id) > -1
 
-                onRequestGet: InstallController.install(app_id)
-                onRequestRemove: UninstallController.remove(app_id)
+                onRequestGet: DeployController.deploy(app_id)
+                onRequestRemove: RemoveController.remove(app_id)
                 onRequestUpgrade: UpgraderController.upgrade(app_code_name)
                 onRequestRun: RunController.run(app_id)
                 onRequestView: {

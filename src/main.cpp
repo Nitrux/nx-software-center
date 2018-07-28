@@ -18,6 +18,7 @@
 #include "ui/RegistryController.h"
 #include "ui/UpdaterController.h"
 #include "ui/RunController.h"
+#include "ui/RemoveController.h"
 #include "ui/ApplicationViewController.h"
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
@@ -29,9 +30,9 @@ Executor *executor = nullptr;
 Worker *worker = nullptr;
 Deployer *installer = nullptr;
 Registry *registry = nullptr;
-Updater *updater = nullptr;
 Cache *cache = nullptr;
 Upgrader *upgrader = nullptr;
+Remover *remover = nullptr;
 DeployedApplicationsRegistry *deployedApplicationsRegistry = nullptr;
 
 void registerQmlModules();
@@ -95,6 +96,9 @@ void initSoftwareCenterModules(QObject *parent) {
     deployedApplicationsRegistry->setCacheDir(cacheDirLocations.first());
     deployedApplicationsRegistry->setApplicationsDir(QDir::homePath() + "/Applications");
 
+    remover = new Remover();
+    remover->setRegistry(deployedApplicationsRegistry);
+
 //    updater = new Updater(repository, {cacheSource});
 //    updater->setExecutor(executor);
 
@@ -127,10 +131,11 @@ static QObject *deployControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return installControler;
 }
 
-static QObject *uninstallControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-//    auto *uninstallController = new RemoveController(repository, registry, executor);
-//    return uninstallController;
-    return new QObject();
+static QObject *removeControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    auto *removeController = new RemoveController();
+    removeController->setWorker(worker);
+    removeController->setRemover(remover);
+    return removeController;
 }
 
 static QObject *registryControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
@@ -196,7 +201,7 @@ void registerQmlModules() {
 
     qmlRegisterSingletonType<DeployController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                                "RemoveController",
-                                               uninstallControllerSingletonProvider);
+                                               removeControllerSingletonProvider);
 
     qmlRegisterSingletonType<RegistryController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                                  "RegistryController",

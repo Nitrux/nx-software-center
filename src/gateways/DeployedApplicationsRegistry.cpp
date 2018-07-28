@@ -98,13 +98,16 @@ void DeployedApplicationsRegistry::synchronizeCache() {
     syncAppImageInfoCache();
 }
 
-void DeployedApplicationsRegistry::dropDeleteFilesCache() const {
+void DeployedApplicationsRegistry::dropDeleteFilesCache() {
     const QList<QString> &deployedFilesSha1 = filesHash.values();
     const auto &entries = cacheDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     for (const auto &entry :entries) {
         if (!deployedFilesSha1.contains(entry)) {
             QDir entryDir{cacheDir.absoluteFilePath(entry)};
             entryDir.removeRecursively();
+
+            filesHash.remove(entry);
+            appImageInfoCache.remove(entry);
         }
     }
 }

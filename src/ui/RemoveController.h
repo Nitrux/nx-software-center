@@ -27,7 +27,8 @@ public:
 
 public slots:
 
-    void remove(const QString &path);
+    void removeAppImage(const QString &path);
+    void remove(const QString &id);
 };
 
 
