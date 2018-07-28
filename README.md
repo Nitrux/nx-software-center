@@ -1,14 +1,13 @@
 # NX Software Center [![Build Status](https://travis-ci.org/Nitrux/nx-software-center.svg?branch=master)](https://travis-ci.org/Nitrux/nx-software-center)
 
-_A portable Software Center for Portable Applications thanks to [AppImage](https://appimage.org/)._
+_A portable Software Center for portable applications thanks to [AppImage](https://appimage.org/)._
 
-You can now easily explore and get your favorite applications (in some cases 
-directly from their original authors) no matter which GNU/Linux distribution 
-are you using as long as it is newer than Ubuntu 14.04.
+You can now easily explore and get your favorite applications easily (in some cases directly from their original authors!). No matter which GNU/Linux distribution you are using.
 
 Say goodbye to things like:
- * the applications I want is not in my distribution repositories
- * missing our outdated libraries or conflicts
+ * The applications that I want is not in my distribution repositories.
+ * Missing or outdated libraries and package conflicts.
+ * Old application version.
 
 **Just download and run!**
 
