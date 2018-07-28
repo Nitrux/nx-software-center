@@ -1,4 +1,4 @@
-# NX Software Center [![Build Status](https://travis-ci.org/Nitrux/nx-software-center.svg?branch=master)](https://travis-ci.org/Nitrux/nx-software-center)
+# NX Software Center [![Build Status](https://travis-ci.org/Nitrux/nx-software-center.svg?branch=development)](https://travis-ci.org/Nitrux/nx-software-center)
 
 _A portable Software Center for portable applications thanks to [AppImage](https://appimage.org/)._
 
