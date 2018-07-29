@@ -41,8 +41,6 @@ set(CORE_SRC
         interactors/RemoveAppImageInteractor.h
         entities/Upgrader.cpp
         entities/Upgrader.h
-        entities/Updater.cpp
-        entities/Updater.h
         entities/Cache.cpp
         entities/Cache.h
         entities/ApplicationSerializer.cpp
@@ -109,8 +107,6 @@ set(GUI_SRC
         ui/RegistryListModel.cpp
         ui/RemoveController.cpp
         ui/RemoveController.h
-        ui/UpdaterController.cpp
-        ui/UpdaterController.h
         ui/UpgraderController.cpp
         ui/UpgraderController.h
         ui/UpgradesListModel.h

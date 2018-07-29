@@ -8,7 +8,6 @@
 #include <ui/DeployedApplicationsController.h>
 #include <QtCore/QStandardPaths>
 
-#include "entities/Updater.h"
 #include "entities/Cache.h"
 #include "gateways/CacheSource.h"
 
@@ -16,7 +15,6 @@
 #include "ui/TasksController.h"
 #include "ui/DeployController.h"
 #include "ui/RegistryController.h"
-#include "ui/UpdaterController.h"
 #include "ui/RunController.h"
 #include "ui/RemoveController.h"
 #include "ui/ApplicationViewController.h"
@@ -143,13 +141,6 @@ static QObject *registryControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     return registryControler;
 }
 
-static QObject *updaterControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-//    UpdaterController *updaterController = new UpdaterController(updater);
-//    return updaterController;
-    return new QObject();
-
-}
-
 static QObject *upgraderControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
 //    UpgraderController *upgraderController = new UpgraderController(upgrader, repository, registry, executor,
 //                                                                    nullptr);
@@ -206,10 +197,6 @@ void registerQmlModules() {
     qmlRegisterSingletonType<RegistryController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                                  "RegistryController",
                                                  registryControllerSingletonProvider);
-
-    qmlRegisterSingletonType<UpdaterController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                                "UpdaterController",
-                                                updaterControllerSingletonProvider);
 
     qmlRegisterSingletonType<UpgraderController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                                  "UpgraderController",
