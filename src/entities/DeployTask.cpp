@@ -2,12 +2,12 @@
 // Created by alexis on 7/4/18.
 //
 
-#include <iostream>
-#include <appimage/appimage.h>
+#include <QtCore/QFileInfo>
+#include <QtConcurrent/QtConcurrent>
 #include <gateways/ApplicationGetRequest.h>
 #include <gateways/FileDownload.h>
-#include <QtCore/QFileInfo>
 #include <gateways/ApplicationRepository.h>
+#include <appimage/appimage.h>
 #include <interactors/TaskMetadata.h>
 #include "DeployTask.h"
 
@@ -123,21 +123,29 @@ void DeployTask::handleFileDownloadCompleted() {
     fileDownload->deleteLater();
     fileDownload = nullptr;
 
-    if (QFile::exists(filePath))
-        registerAppImage(filePath);
-    else
+    if (!QFile::exists(filePath))
         fail("Download failed");
+
+    appImageInfo.file.path = filePath;
+    verifyAppImageFile(filePath);
 }
 
 void DeployTask::registerAppImage(const QString &filePath) {
     setProgressMessage("Registering in the system.");
     appimage_register_in_system(filePath.toStdString().c_str(), false);
-    if (appimage_is_registered_in_system((filePath.toStdString().c_str()))) {
-        setStatus(VALUE_STATUS_COMPLETED);
-        setProgressMessage("Completed successfully");
-        emit completed();
-    } else
+
+    Q_ASSERT(deployedApplicationsRegistry);
+    deployedApplicationsRegistry->registerFile(filePath, appImageInfo);
+    if (appimage_is_registered_in_system((filePath.toStdString().c_str())))
+        complete();
+    else
         fail("Unable to register in system");
+}
+
+void DeployTask::complete() {
+    setStatus(VALUE_STATUS_COMPLETED);
+    setProgressMessage("Completed successfully");emit
+    completed();
 }
 
 void DeployTask::stop() {
@@ -164,4 +172,40 @@ void DeployTask::handleFileDownloadStopped() {
     fileDownload = nullptr;
 
     fail("Download stopped");
+}
+
+void DeployTask::setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry) {
+    DeployTask::deployedApplicationsRegistry = deployedApplicationsRegistry;
+}
+
+void DeployTask::verifyAppImageFile(QString path) {
+    setProgressMessage("Verifying AppImage File");
+
+    auto appImageCheckSumFuture = QtConcurrent::run([=]() {
+        auto process = new QProcess();
+        QStringList arguments{path};
+        process->start("sha512sum", arguments);
+
+        process->waitForFinished();
+        if (process->exitCode() != 0)
+            throw std::runtime_error(process->errorString().toStdString());
+        QString rawOutput = process->readAll();
+        QString sha512checksum = rawOutput.section(" ", 0, 0).trimmed();
+
+        process->deleteLater();
+        return sha512checksum;
+    });
+
+    appImageCheckSumFutureWatcher.setFuture(appImageCheckSumFuture);
+    connect(&appImageCheckSumFutureWatcher, &QFutureWatcher<QString>::finished, this,
+            &DeployTask::handleAppImageCheckSumFutureFinished);
+
+}
+
+void DeployTask::handleAppImageCheckSumFutureFinished() {
+    if (appImageInfo.file.sha512checksum != appImageCheckSumFutureWatcher.result()) {
+        QFile::remove(appImageInfo.file.path);
+        fail("Check sum verification failed.");
+    } else
+        registerAppImage(appImageInfo.file.path);
 }

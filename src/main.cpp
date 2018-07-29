@@ -84,15 +84,16 @@ void initSoftwareCenterModules(QObject *parent) {
     registry = new Registry();
     QObject::connect(executor, &Executor::taskCompleted, registry, &Registry::handleTaskCompleted);
 
-    installer = new Deployer();
-    installer->setRepository(repository);
-
     CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
 
     deployedApplicationsRegistry = new DeployedApplicationsRegistry();
     auto cacheDirLocations = QStandardPaths::standardLocations(QStandardPaths::CacheLocation);
     deployedApplicationsRegistry->setCacheDir(cacheDirLocations.first());
     deployedApplicationsRegistry->setApplicationsDir(QDir::homePath() + "/Applications");
+
+    installer = new Deployer();
+    installer->setRepository(repository);
+    installer->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
 
     remover = new Remover();
     remover->setRegistry(deployedApplicationsRegistry);

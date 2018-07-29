@@ -18,6 +18,11 @@ DeployTask *Deployer::buildInstallLatestReleaseTask(const QString &id) {
     task->setId(id);
     task->setRepository(repository);
     task->setApplicationsDir(QDir::homePath() + "/Applications");
+    task->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
 
     return task;
+}
+
+void Deployer::setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry) {
+    Deployer::deployedApplicationsRegistry = deployedApplicationsRegistry;
 }

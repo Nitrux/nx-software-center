@@ -7,15 +7,20 @@
 
 #include <QNetworkAccessManager>
 #include <gateways/ApplicationRepository.h>
+#include <gateways/DeployedApplicationsRegistry.h>
 
 class DeployTask;
 
 class Deployer {
     ApplicationRepository *repository;
+    DeployedApplicationsRegistry *deployedApplicationsRegistry;
+
 public:
     Deployer();
 
     void setRepository(ApplicationRepository *repository);
+
+    void setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry);
 
     DeployTask *buildInstallLatestReleaseTask(const QString &id);
 };
