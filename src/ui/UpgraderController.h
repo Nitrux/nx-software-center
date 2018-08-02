@@ -31,8 +31,6 @@ public:
 
     Q_INVOKABLE void upgradeApplication(const QString &appId);
 
-    Q_INVOKABLE void upgradeFile(const QString &path);
-
 signals:
 
     void upgradableApplicationIdsChanged(const QStringList &upgradableApplications);

@@ -10,7 +10,7 @@
 #include <QList>
 #include "Remover.h"
 #include "Deployer.h"
-#include "UpgradeTask.h"
+#include "../tasks/UpgradeTask.h"
 #include <gateways/ApplicationRepository.h>
 #include <gateways/DeployedApplicationsRegistry.h>
 

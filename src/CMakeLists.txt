@@ -49,8 +49,8 @@ set(CORE_SRC
         entities/Remover.h
         tasks/RemoveTask.cpp
         tasks/RemoveTask.h
-        entities/UpgradeTask.cpp
-        entities/UpgradeTask.h
+        tasks/UpgradeTask.cpp
+        tasks/UpgradeTask.h
         entities/LocalizationUtils.cpp
         entities/LocalizationUtils.h
         )

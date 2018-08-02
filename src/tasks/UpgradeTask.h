@@ -5,11 +5,11 @@
 #ifndef NX_SOFTWARE_CENTER_UPGRADETASK_H
 #define NX_SOFTWARE_CENTER_UPGRADETASK_H
 
-#include "Task.h"
-#include "Deployer.h"
-#include "tasks/DeployTask.h"
-#include "Remover.h"
-#include "tasks/RemoveTask.h"
+#include "../entities/Task.h"
+#include "../entities/Deployer.h"
+#include "DeployTask.h"
+#include "../entities/Remover.h"
+#include "RemoveTask.h"
 
 class UpgradeTask : public Task {
     Q_OBJECT

@@ -28,10 +28,6 @@ void UpgraderController::upgradeApplication(const QString &appId) {
     worker->execute(task);
 }
 
-void UpgraderController::upgradeFile(const QString &path) {
-
-}
-
 void UpgraderController::handleUpgradesLookUpCompleted() {
     upgradableApplicationIds.clear();
     const auto &upgradableApplications = upgrader->getUpgradableApplications();
