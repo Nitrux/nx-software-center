@@ -328,6 +328,26 @@ AppImageInfo Application::latestCompatibleReleaseInfo() {
     return info;
 }
 
+Application Application::from(const AppImageInfo &appImageInfo) {
+    Application a;
+    a.id = appImageInfo.id;
+    a.name = appImageInfo.name;
+    a.icon = appImageInfo.icon;
+    a.abstract = appImageInfo.abstract;
+    a.description = appImageInfo.description;
+    a.license = appImageInfo.license;
+    a.categories = appImageInfo.categories;
+    a.keywords = appImageInfo.keywords;
+    a.languages = appImageInfo.languages;
+    a.developer = appImageInfo.developer;
+    a.releases = {appImageInfo.release};
+    a.screenshots = appImageInfo.screenshots;
+    a.mimeTypes = appImageInfo.mimeTypes;
+    a.links = appImageInfo.links;
+
+    return a;
+}
+
 Application::RemoteImage::RemoteImage()
         : height(0), width(0) {}
 

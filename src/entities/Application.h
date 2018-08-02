@@ -114,6 +114,8 @@ public:
     Release latestCompatibleRelease(const QString& cpuArchitecture, const QString& channel = QString());
 
     AppImageInfo latestCompatibleReleaseInfo();
+
+    static Application from(const AppImageInfo &appImageInfo);
 };
 
 #endif //NX_SOFTWARE_CENTER_APPLICATIONFULL1_H

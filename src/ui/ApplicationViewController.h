@@ -71,7 +71,8 @@ protected slots:
     void handleTaskStarted(const QVariantMap &data);
 
     void handleTaskCompleted(const QVariantMap &data);
-    void handleGetApplicationResult();
+    void handleGetApplicationCompleted();
+    void handleGetApplicationFailed();
 
 private:
     QString formatMemoryValue(float num);

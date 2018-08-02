@@ -135,6 +135,12 @@ QString ApplicationViewController::getApplicationWebsite() {
 }
 
 void ApplicationViewController::loadApplication(const QString &id) {
+    if (deployedApplicationsRegistry) {
+        const auto &appImageInfo = deployedApplicationsRegistry->getLatestDeployedVersionOf(id);
+        application = Application::from(appImageInfo);
+        emit applicationChanged();
+    }
+
     if (repository) {
 
         if (request) {
@@ -146,9 +152,9 @@ void ApplicationViewController::loadApplication(const QString &id) {
 
         request = repository->buildGetApplicationRequest(id);
         connect(request, &ApplicationRepositoryGet::completed, this,
-                &ApplicationViewController::handleGetApplicationResult);
+                &ApplicationViewController::handleGetApplicationCompleted);
         connect(request, &ApplicationRepositoryGet::failed, this,
-                &ApplicationViewController::handleGetApplicationResult);
+                &ApplicationViewController::handleGetApplicationFailed);
 
         busy = true;
         emit isBusyChanged(busy);
@@ -207,7 +213,7 @@ void ApplicationViewController::setRepository(ApplicationRepository *repository)
     ApplicationViewController::repository = repository;
 }
 
-void ApplicationViewController::handleGetApplicationResult() {
+void ApplicationViewController::handleGetApplicationCompleted() {
     disconnect(request, nullptr, this, nullptr);
     ApplicationViewController::application = request->getApplication();
 
@@ -223,4 +229,14 @@ void ApplicationViewController::handleGetApplicationResult() {
 void
 ApplicationViewController::setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry) {
     ApplicationViewController::deployedApplicationsRegistry = deployedApplicationsRegistry;
+}
+
+void ApplicationViewController::handleGetApplicationFailed() {
+    disconnect(request, nullptr, this, nullptr);
+    request->deleteLater();
+    request = nullptr;
+
+    busy = false;
+    emit isBusyChanged(busy);
+
 }
