@@ -2,7 +2,6 @@
 // Created by alexis on 7/3/18.
 //
 
-#include "ApplicationListModel.h"
 #include <QDebug>
 #include "LocalizationUtils.h"
 #include "entities/ApplicationFull.h"

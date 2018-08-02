@@ -12,24 +12,17 @@
 #include <QDateTime>
 #include <QSet>
 
-class Registry : public QObject {
+class TaskLogger : public QObject {
 Q_OBJECT
 
     QList<QVariantMap> records;
-    QMap<QString, QStringList> installedApplications;
     QDateTime expirationDate;
 
 public:
 
-    explicit Registry(QObject *parent = nullptr);
-
-    QStringList getInstalledApplications() const;
-
-    QStringList getInstalledApplicationFiles(const QString &appId);
+    explicit TaskLogger(QObject *parent = nullptr);
 
     QList<QVariantMap> getRecords() const;
-
-    void clearInstalledApplications();
 
     void clearRecords();
 
@@ -38,7 +31,7 @@ public:
 
 public slots:
 
-    void handleTaskCompleted(const QVariantMap resume);
+    void handleTaskCompleted(const QVariantMap &task);
 
 signals:
 
@@ -47,13 +40,11 @@ signals:
     void recordsChanged(const QList<QVariantMap> &records);
 
 private:
-    void registerInstallCompleted(QVariantMap &map);
+    void registerDeployCompleted(QVariantMap &map);
 
-    void registerInstallFailed(QVariantMap &map);
+    void registerDeployFailed(QVariantMap &map);
 
-    void appendInstallRecord(const QVariantMap &map);
-
-    void removeUnneededTaskFields(QVariantMap &map) const;
+    void appendDeployRecord(const QVariantMap &map);
 
     void appendRecord(const QVariantMap &map);
 
@@ -71,21 +62,14 @@ private:
 
     QList<QVariantMap> extractRecordsFromJson(QByteArray json);
 
-    void saveInstalledApplications();
+    void registerRemoveCompleted(QVariantMap &map);
 
-    void loadInstalledApplications();
+    void registerRemoveFailed(QVariantMap &map);
 
-    QString getInstalledApplicationsPath() const;
+    void registerUpgradeCompleted(QVariantMap &map);
 
-    QByteArray serializeInstalledApplicationsToJson() const;
+    void registerUpgradeFailed(QVariantMap &map);
 
-    void extractInstalledApplications(const QByteArray &json);
-
-    void registerUninstallCompleted(QVariantMap &map);
-
-    void removeInstalledApplication(QVariantMap &map);
-
-    void registerUninstallFailed(QVariantMap &map);
 };
 
 

@@ -35,7 +35,7 @@ InstallAppImageInteractor::InstallAppImageInteractor(const Application &applicat
     metadata.insert(TaskMetadata::KEY_APP_NAME, app.getName());
     metadata.insert(TaskMetadata::KEY_APP_AUTHOR, app.getAuthors().join(", "));
 
-    metadata.insert(TaskMetadata::KEY_TYPE, TaskMetadata::VALUE_TYPE_INSTALL);
+    metadata.insert(TaskMetadata::KEY_TYPE, TaskMetadata::VALUE_TYPE_DELPOY);
     metadata.insert(TaskMetadata::KEY_DOWNLOAD_URL, app.getDownloadUrl());
     metadata.insert(TaskMetadata::KEY_INSTALLATION_PATH, installationPath);
 }

@@ -14,7 +14,7 @@
 #include "ui/SearchController.h"
 #include "ui/TasksController.h"
 #include "ui/DeployController.h"
-#include "ui/RegistryController.h"
+#include "ui/TaskLoggerController.h"
 #include "ui/RunController.h"
 #include "ui/RemoveController.h"
 #include "ui/ApplicationViewController.h"
@@ -26,7 +26,7 @@ ApplicationRepository *repository;
 QNetworkAccessManager *networkAccessManager = nullptr;
 Worker *worker = nullptr;
 Deployer *deployer = nullptr;
-Registry *registry = nullptr;
+TaskLogger *registry = nullptr;
 Cache *cache = nullptr;
 Upgrader *upgrader = nullptr;
 Remover *remover = nullptr;
@@ -77,8 +77,8 @@ void initSoftwareCenterModules(QObject *parent) {
 
     repository = new ApplicationRepositoryRestClient("http://apps.nxos.org/api");
 
-    registry = new Registry();
-    QObject::connect(worker, &Worker::taskCompleted, registry, &Registry::handleTaskCompleted);
+    registry = new TaskLogger();
+    QObject::connect(worker, &Worker::taskCompleted, registry, &TaskLogger::handleTaskCompleted);
 
     CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
 
@@ -96,7 +96,7 @@ void initSoftwareCenterModules(QObject *parent) {
 
     cache = new Cache;
 //    cache->setRepository(repository);
-    QObject::connect(registry, &Registry::installedApplicationsChanged, cache,
+    QObject::connect(registry, &TaskLogger::installedApplicationsChanged, cache,
                      &Cache::handleInstalledApplicationsChanged);
 
     upgrader = new Upgrader();
@@ -133,7 +133,7 @@ static QObject *removeControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
 }
 
 static QObject *registryControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    RegistryController *registryControler = new RegistryController(registry);
+    TaskLoggerController *registryControler = new TaskLoggerController(registry);
     return registryControler;
 }
 
@@ -159,7 +159,7 @@ static QObject *runControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
 
 static QObject *applicationViewControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     auto applicationViewController = new ApplicationViewController();
-    applicationViewController->setRegistry(registry);
+    applicationViewController->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
     applicationViewController->setWorker(worker);
     applicationViewController->setRepository(repository);
     return applicationViewController;
@@ -191,8 +191,8 @@ void registerQmlModules() {
                                                "RemoveController",
                                                removeControllerSingletonProvider);
 
-    qmlRegisterSingletonType<RegistryController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                                 "RegistryController",
+    qmlRegisterSingletonType<TaskLoggerController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                                 "TaskLoggerController",
                                                  registryControllerSingletonProvider);
 
     qmlRegisterSingletonType<UpgraderController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,

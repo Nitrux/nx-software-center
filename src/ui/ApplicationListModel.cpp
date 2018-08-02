@@ -1,7 +1,7 @@
 #include <QDebug>
 #include <QLocale>
 #include "ApplicationListModel.h"
-#include "LocalizationUtils.h"
+#include "entities/LocalizationUtils.h"
 
 ApplicationListModel::ApplicationListModel(QObject *parent)
     : QAbstractListModel(parent)

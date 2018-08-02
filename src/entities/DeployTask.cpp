@@ -21,7 +21,7 @@ void DeployTask::setId(const QString &id) {
 
 DeployTask::DeployTask()
         : Task(), repository(nullptr), running(false), applicationRepositoryGet(nullptr), fileDownload(nullptr) {
-    type = TaskMetadata::VALUE_TYPE_INSTALL;
+    type = TaskMetadata::VALUE_TYPE_DELPOY;
 }
 
 void DeployTask::start() {
@@ -30,6 +30,7 @@ void DeployTask::start() {
 
     running = true;
     setStatus(VALUE_STATUS_RUNNING);
+    appImageInfo.id = id;
     getApplicationInfo();
 }
 

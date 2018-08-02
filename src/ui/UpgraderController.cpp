@@ -5,7 +5,7 @@
 #include <interactors/RemoveAppImageInteractor.h>
 #include <interactors/InstallAppImageInteractor.h>
 #include "UpgraderController.h"
-#include "LocalizationUtils.h"
+#include "entities/LocalizationUtils.h"
 
 UpgraderController::UpgraderController(QObject *parent) : QObject(parent), upgrader(nullptr), worker(nullptr) {}
 

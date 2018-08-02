@@ -4,16 +4,17 @@
 #include <QObject>
 #include <QVariantMap>
 #include <entities/Repository.h>
-#include <entities/Registry.h>
+#include <entities/TaskLogger.h>
 #include <entities/Worker.h>
 #include <gateways/ApplicationRepositoryRestClient.h>
 #include <entities/AppImageInfo.h>
 #include <gateways/ApplicationRepositoryGet.h>
+#include <gateways/DeployedApplicationsRegistry.h>
 
 class ApplicationViewController : public QObject
 {
     Q_OBJECT
-    Registry *registry;
+    DeployedApplicationsRegistry *deployedApplicationsRegistry;
     Worker *worker;
     ApplicationRepository *repository;
     ApplicationRepositoryGet *request;
@@ -41,7 +42,8 @@ class ApplicationViewController : public QObject
 public:
     explicit ApplicationViewController(QObject *parent = nullptr);
 
-    void setRegistry(Registry* registry);
+    void setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry);
+
     void setWorker(Worker *worker);
     void setRepository(ApplicationRepository *repository);
 

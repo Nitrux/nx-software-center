@@ -6,7 +6,7 @@
 #define NOMAD_SOFTWARE_CENTER_RUNCONTROLLER_H
 
 #include <QObject>
-#include <entities/Registry.h>
+#include <entities/TaskLogger.h>
 #include <gateways/DeployedApplicationsRegistry.h>
 
 class RunController : public QObject {

@@ -40,7 +40,7 @@ QString RegistryListModel::createRecordMessage(const QVariantMap& record) const 
 
         if (record.value(TaskMetadata::KEY_TYPE)
                 .toString()
-                .compare(TaskMetadata::VALUE_TYPE_INSTALL) == 0) {
+                .compare(TaskMetadata::VALUE_TYPE_DELPOY) == 0) {
 
             message = "Application installed successfully.";
         }
@@ -54,7 +54,7 @@ QString RegistryListModel::createRecordMessage(const QVariantMap& record) const 
     } else {
         if (record.value(TaskMetadata::KEY_TYPE)
                 .toString()
-                .compare(TaskMetadata::VALUE_TYPE_INSTALL) == 0) {
+                .compare(TaskMetadata::VALUE_TYPE_DELPOY) == 0) {
 
             message = "Installation failed.";
         }

@@ -21,8 +21,8 @@ set(CORE_SRC
         entities/Deployer.cpp
         entities/Deployer.h
         interactors/FetchApplicationsInteractor.cpp
-        entities/Registry.cpp
-        entities/Registry.h
+        entities/TaskLogger.cpp
+        entities/TaskLogger.h
         interactors/InstallAppImageInteractor.cpp
         interactors/InstallAppImageInteractor.h
         gateways/FileDownload.cpp
@@ -72,7 +72,10 @@ set(CORE_SRC
         entities/RemoveTask.cpp
         entities/RemoveTask.h
         entities/UpgradeTask.cpp
-        entities/UpgradeTask.h)
+        entities/UpgradeTask.h
+        entities/LocalizationUtils.cpp
+        entities/LocalizationUtils.h
+        )
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -101,8 +104,8 @@ set(GUI_SRC
         ui/TaskListModel.h
         ui/DeployController.h
         ui/DeployController.cpp
-        ui/RegistryController.h
-        ui/RegistryController.cpp
+        ui/TaskLoggerController.h
+        ui/TaskLoggerController.cpp
         ui/RegistryListModel.h
         ui/RegistryListModel.cpp
         ui/RemoveController.cpp
@@ -115,8 +118,6 @@ set(GUI_SRC
         ui/RunController.h
         ui/ApplicationViewController.cpp
         ui/ApplicationViewController.h
-        ui/LocalizationUtils.cpp
-        ui/LocalizationUtils.h
         ui/DeployedApplicationsController.cpp
         ui/DeployedApplicationsController.h
         )

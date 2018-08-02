@@ -4,7 +4,7 @@
 
 #include <interactors/TaskMetadata.h>
 #include "DeployedApplicationsController.h"
-#include "LocalizationUtils.h"
+#include "entities/LocalizationUtils.h"
 
 DeployedApplicationsController::DeployedApplicationsController(QObject *parent):
     QObject(parent), worker(nullptr)
@@ -58,7 +58,7 @@ QString DeployedApplicationsController::formatMemoryValue(float num) {
 
 void DeployedApplicationsController::handleWorkerTaskCompleted(const QVariantMap task)
 {
-    if (task[TaskMetadata::KEY_TYPE] == TaskMetadata::VALUE_TYPE_INSTALL ||
+    if (task[TaskMetadata::KEY_TYPE] == TaskMetadata::VALUE_TYPE_DELPOY ||
             task[TaskMetadata::KEY_TYPE] == TaskMetadata::VALUE_TYPE_REMOVE) {
 
         updateApplicationsList();

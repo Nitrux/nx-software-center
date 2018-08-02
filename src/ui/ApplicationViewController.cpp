@@ -1,11 +1,11 @@
 #include "ApplicationViewController.h"
 
 #include "interactors/TaskMetadata.h"
-#include "LocalizationUtils.h"
+#include "entities/LocalizationUtils.h"
 
 ApplicationViewController::ApplicationViewController(QObject *parent)
         :
-        QObject(parent), registry(nullptr), worker(nullptr), repository(nullptr),
+        QObject(parent), deployedApplicationsRegistry(nullptr), worker(nullptr), repository(nullptr),
         request(nullptr), busy(false), hasPendingTasks(false) {
 
 }
@@ -32,9 +32,12 @@ QString ApplicationViewController::getBackgroundImage() {
 }
 
 bool ApplicationViewController::isInstalled() {
-    if (registry && !application.id.isEmpty())
-        return registry->getInstalledApplications().contains(application.id);
-
+    if (deployedApplicationsRegistry && !application.id.isEmpty()) {
+        for (const auto &item: deployedApplicationsRegistry->listApplications()) {
+            if (item.id == application.id)
+                return true;
+        }
+    }
     return false;
 }
 
@@ -217,6 +220,7 @@ void ApplicationViewController::handleGetApplicationResult() {
     emit isBusyChanged(busy);
 }
 
-void ApplicationViewController::setRegistry(Registry *registry) {
-    ApplicationViewController::registry = registry;
+void
+ApplicationViewController::setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry) {
+    ApplicationViewController::deployedApplicationsRegistry = deployedApplicationsRegistry;
 }

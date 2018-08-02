@@ -3,7 +3,7 @@
 //
 
 #include <entities/Repository.h>
-#include <entities/Registry.h>
+#include <entities/TaskLogger.h>
 #include "RemoveController.h"
 
 #include "interactors/RemoveAppImageInteractor.h"

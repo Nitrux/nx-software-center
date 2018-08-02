@@ -1,5 +1,5 @@
 #include <QDebug>
-#include "LocalizationUtils.h"
+#include "entities/LocalizationUtils.h"
 #include "TaskListModel.h"
 
 TaskListModel::TaskListModel(QObject *parent)

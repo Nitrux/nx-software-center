@@ -94,13 +94,13 @@ Flickable {
             PlasmaComponents.Button {
                 Layout.rightMargin: 18
                 iconName: "trash-empty"
-                onClicked: RegistryController.clearRecords()
+                onClicked: TaskLoggerController.clearRecords()
             }
         }
 
         Repeater {
             id: recordsListView
-            model: RegistryController.model
+            model: TaskLoggerController.model
             delegate: TaskRecordItem {
                 Layout.topMargin: 8
                 app_icon: "package-x-generic"
