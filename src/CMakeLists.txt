@@ -13,7 +13,6 @@ set(CORE_SRC
 
         gateways/ApplicationRepositoryRestClient.cpp
         gateways/ApplicationRepositoryRestClient.h
-        interactors/Interactor.h
         gateways/DownloadManager.h
 
         entities/Deployer.cpp
