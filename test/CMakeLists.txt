@@ -14,7 +14,6 @@ add_executable(test_core
         src/test_core_main.cpp
         src/TestDownload.cpp
         src/TestTaskLogger.cpp
-        src/TestApplicationSerializer.cpp
         src/TestUpgrader.cpp
         src/TestApplicationRepositoryRestClient.cpp
         src/TestAppImageInfo.cpp

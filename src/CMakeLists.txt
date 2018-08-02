@@ -24,8 +24,6 @@ set(CORE_SRC
         entities/RecordMetadata.h
         entities/Upgrader.cpp
         entities/Upgrader.h
-        entities/ApplicationSerializer.cpp
-        entities/ApplicationSerializer.h
         entities/AppImageInfo.cpp
         entities/AppImageInfo.h
         gateways/ApplicationsSearchRequest.cpp
