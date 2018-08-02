@@ -5,63 +5,85 @@
 #include <QDebug>
 
 #include "Upgrader.h"
-#include "Repository.h"
 
-UpgradeList Upgrader::getUpgrades() {
-    UpgradeList upgrades;
+Upgrader::Upgrader(QObject *parent) : QObject(parent), pendingRequestCount(0) {
 
-    if (repository) {
-        for (const QString &appId: installedApplications) {
-            try {
-                const Application &current = repository->get(appId);
-                const Application &latest = repository->getLatestVersion(current.getCodeName());
+}
 
-                if (current < latest && !installedApplications.contains(latest.getId())) {
-                    QPair <QString, QString> upgrade;
-                    upgrade.first = current.getId();
-                    upgrade.second = latest.getId();
-                    upgrades.append(upgrade);
-                }
-            } catch (ApplicationNotFoundException e) {
-                qWarning() << e.getAppId() << " wasn't found and is reported as installed";
-            }
+void Upgrader::setApplicationRepository(ApplicationRepository *applicationRepository) {
+    Upgrader::applicationRepository = applicationRepository;
+}
+
+void Upgrader::setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry) {
+    Upgrader::deployedApplicationsRegistry = deployedApplicationsRegistry;
+}
+
+void Upgrader::lookUpForUpgrades() {
+    Q_ASSERT(applicationRepository);
+    Q_ASSERT(deployedApplicationsRegistry);
+
+    if (pendingRequestCount > 0) {
+        qWarning() << "Already looking up for upgrades.";
+        return;
+    }
+
+    auto deployedApps = deployedApplicationsRegistry->listApplications();
+    for (const auto &app :deployedApps) {
+        auto request = applicationRepository->buildGetApplicationRequest(app.id);
+        connect(request, &ApplicationRepositoryGet::completed, this,
+                &Upgrader::handleApplicationRepositoryGetResult);
+        connect(request, &ApplicationRepositoryGet::failed, this,
+                &Upgrader::handleApplicationRepositoryGetResult);
+
+        getApplicationsRequests << request;
+        pendingRequestCount ++;
+    }
+
+    for (auto &request: getApplicationsRequests)
+        request->start();
+}
+
+void Upgrader::handleApplicationRepositoryGetResult() {
+    pendingRequestCount --;
+    if (pendingRequestCount == 0) {
+        upgradableApplications.clear();
+
+        for (auto &request: getApplicationsRequests) {
+            auto app = request->getApplication();
+            auto latestReleaseInfo = app.latestCompatibleReleaseInfo();
+            auto deployedReleaseInfo = deployedApplicationsRegistry->getLatestDeployedVersionOf(app.id);
+            if (latestReleaseInfo.release.date > deployedReleaseInfo.release.date)
+                upgradableApplications << latestReleaseInfo;
         }
-    } else
-        qWarning() << "No repository set.";
 
-    return upgrades;
-}
+        for (auto &request: getApplicationsRequests)
+            request->deleteLater();
 
-void Upgrader::handleAvailableApplicationsChanged() {
-    UpgradeList newUpgrades = getUpgrades();
-    updateUpgradableApplications(newUpgrades);
-}
-
-void Upgrader::handleInstalledApplicationsChanged(const QStringList &installedApplications) {
-    this->installedApplications = installedApplications;
-    UpgradeList newUpgrades = getUpgrades();
-    updateUpgradableApplications(newUpgrades);
-}
-
-void Upgrader::updateUpgradableApplications(const UpgradeList &newUpgrades) {
-    if (newUpgrades != upgradableApplications) {
-        upgradableApplications = newUpgrades;
-        emit upgradableApplicationsChanged(upgradableApplications);
+        getApplicationsRequests.clear();
+        emit upgradesLookUpCompleted();
     }
 }
 
-Upgrader::Upgrader(QObject *parent) : QObject(parent), repository(nullptr) {
-
+const QList<AppImageInfo> &Upgrader::getUpgradableApplications() const {
+    return upgradableApplications;
 }
 
-void Upgrader::setRepository(Repository *repository) {
-    if (this->repository)
-        disconnect(this->repository, &Repository::changed, this, &Upgrader::handleAvailableApplicationsChanged);
-
-    this->repository = repository;
-    connect(this->repository, &Repository::changed, this, &Upgrader::handleAvailableApplicationsChanged);
+void Upgrader::setDeployer(Deployer *deployer) {
+    Upgrader::deployer = deployer;
 }
 
-void Upgrader::setInstalledApplications(const QStringList &installedApplications) { this->installedApplications = installedApplications; }
+void Upgrader::setRemover(Remover *remover) {
+    Upgrader::remover = remover;
+}
 
-UpgradeList Upgrader::getUpgradableApplications() { return upgradableApplications; }
+UpgradeTask *Upgrader::buildUpgradeTask(const QString &id) {
+    auto *task = new UpgradeTask();
+    task->setAppId(id);
+    task->setDeployer(deployer);
+    task->setRemover(remover);
+    task->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
+    task->setDeleteOnceCompleted(true);
+    return  task;
+}
+
+

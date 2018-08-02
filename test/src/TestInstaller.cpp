@@ -17,7 +17,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
         DummyApplicationRepository repository;
         Deployer i;
         i.setRepository(&repository);
-        auto task = i.buildInstallLatestReleaseTask("echo.desktop");
+        auto task = i.buildDeployLatestReleaseTask("echo.desktop");
         QSignalSpy spyCompleted(task, &DeployTask::completed);
         QSignalSpy spyFailed(task, &DeployTask::failed);
         task->start();

@@ -35,16 +35,13 @@ Item {
                 version: app_version
                 icon: app_icon
 
-                hasPendingAction: TasksController.affectedApplicationsIds.indexOf(
-                                      app_id) > -1
-                deployed: DeployedApplicationsController.applicationsIds.indexOf(
-                               app_id) > -1
-//                upgradable: UpgraderController.upgradableApplications.indexOf(
-//                                app_id) > -1
+                hasPendingAction: TasksController.affectedApplicationsIds.indexOf(app_id) > -1
+                deployed: DeployedApplicationsController.applicationsIds.indexOf(app_id) > -1
+                upgradable: UpgraderController.upgradableApplicationIds.indexOf(app_id) > -1
 
                 onRequestGet: DeployController.deploy(app_id)
                 onRequestRemove: RemoveController.remove(app_id)
-                onRequestUpgrade: UpgraderController.upgrade(app_code_name)
+                onRequestUpgrade: UpgraderController.upgradeApplication(app_id)
                 onRequestRun: RunController.run(app_id)
                 onRequestView: {
                     ApplicationViewController.loadApplication(app_id)

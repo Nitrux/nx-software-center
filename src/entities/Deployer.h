@@ -22,7 +22,8 @@ public:
 
     void setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry);
 
-    DeployTask *buildInstallLatestReleaseTask(const QString &id);
+    DeployTask *buildDeployLatestReleaseTask(const QString &id);
+    DeployTask *buildDeployTask(AppImageInfo appImageInfo);
 };
 
 #endif //NX_SOFTWARE_CENTER_INSTALLER_H

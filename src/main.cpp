@@ -26,7 +26,7 @@ ApplicationRepository *repository;
 QNetworkAccessManager *networkAccessManager = nullptr;
 Executor *executor = nullptr;
 Worker *worker = nullptr;
-Deployer *installer = nullptr;
+Deployer *deployer = nullptr;
 Registry *registry = nullptr;
 Cache *cache = nullptr;
 Upgrader *upgrader = nullptr;
@@ -41,7 +41,6 @@ Q_DECLARE_METATYPE(Application)
 
 Q_DECLARE_METATYPE(QList<Application>)
 
-Q_DECLARE_METATYPE(UpgradeList)
 
 void registerMetatypes();
 
@@ -70,7 +69,6 @@ int main(int argc, char *argv[]) {
 void registerMetatypes() {
     qRegisterMetaType<Application>("Application");
     qRegisterMetaType<QList<Application>>("ApplicationList");
-    qRegisterMetaType<UpgradeList>("UpgradeList");
 }
 
 void initSoftwareCenterModules(QObject *parent) {
@@ -91,9 +89,9 @@ void initSoftwareCenterModules(QObject *parent) {
     deployedApplicationsRegistry->setCacheDir(cacheDirLocations.first());
     deployedApplicationsRegistry->setApplicationsDir(QDir::homePath() + "/Applications");
 
-    installer = new Deployer();
-    installer->setRepository(repository);
-    installer->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
+    deployer = new Deployer();
+    deployer->setRepository(repository);
+    deployer->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
 
     remover = new Remover();
     remover->setRegistry(deployedApplicationsRegistry);
@@ -107,10 +105,12 @@ void initSoftwareCenterModules(QObject *parent) {
                      &Cache::handleInstalledApplicationsChanged);
 
     upgrader = new Upgrader();
-//    upgrader->setRepository(repository);
-    upgrader->setInstalledApplications(registry->getInstalledApplications());
-    QObject::connect(registry, &Registry::installedApplicationsChanged,
-                     upgrader, &Upgrader::handleInstalledApplicationsChanged);
+    upgrader->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
+    upgrader->setApplicationRepository(repository);
+    upgrader->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
+    upgrader->setRemover(remover);
+    upgrader->setDeployer(deployer);
+    upgrader->lookUpForUpgrades();
 }
 
 static QObject *searchControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
@@ -125,7 +125,7 @@ static QObject *tasksControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
 }
 
 static QObject *deployControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    DeployController *installControler = new DeployController(installer);
+    DeployController *installControler = new DeployController(deployer);
     installControler->setWorker(worker);
     return installControler;
 }
@@ -143,10 +143,11 @@ static QObject *registryControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
 }
 
 static QObject *upgraderControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-//    UpgraderController *upgraderController = new UpgraderController(upgrader, repository, registry, executor,
-//                                                                    nullptr);
-//    return upgraderController;
-    return new QObject();
+    auto *upgraderController = new UpgraderController();
+    upgraderController->setUpgrader(upgrader);
+    upgraderController->setWorker(worker);
+
+    return upgraderController;
 }
 
 static QObject *notificationsControllerSingletonProvider(QQmlEngine *, QJSEngine *) {

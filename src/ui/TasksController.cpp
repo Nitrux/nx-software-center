@@ -44,7 +44,8 @@ bool TasksController::isAnApplicationTask(const QVariantMap &data) const {
 }
 
 bool TasksController::shouldBeListed(const QVariantMap &data) const {
-    return data.value(TaskMetadata::KEY_TYPE) != TaskMetadata::VALUE_TYPE_UPDATE;
+    Q_UNUSED(data)
+    return true;
 }
 
 void TasksController::handleTaskCompleted(const QVariantMap &data) {

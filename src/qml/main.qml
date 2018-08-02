@@ -32,21 +32,23 @@ ApplicationWindow {
 
         tasksCount: "0"
 
-//        Connections {
-//            target: TasksController
-//            onAffectedApplicationsIdsChanged: navigationPanel.updateTaskNumberHint()
-//        }
+        Connections {
+            target: TasksController
+            onAffectedApplicationsIdsChanged: navigationPanel.updateTaskNumberHint()
+        }
 
-//        Connections {
-//            target: UpgraderController
-//            onUpgradableApplicationsChanged: navigationPanel.updateTaskNumberHint()
-//        }
+        Connections {
+            target: UpgraderController
+            onUpgradableApplicationIdsChanged: navigationPanel.updateTaskNumberHint()
+        }
 
         function updateTaskNumberHint() {
-            var total = TasksController.model.rowCount(
-                        ) + UpgraderController.model.rowCount()
+            var total = TasksController.model.rowCount()
+                    + UpgraderController.upgradableApplicationIds.length
             navigationPanel.tasksCount = total > 9 ? "+9" : total
         }
+
+        Component.onCompleted: updateTaskNumberHint()
     }
 
     footer: StatusArea {
@@ -147,11 +149,6 @@ ApplicationWindow {
         main.title = "Deployed Applications"
         stackView.goTo("deployedApplicationsView", "qrc:/DeployedApplicationsView.qml")
     }
-
-//    Connections {
-//        target: UpdaterController
-//        onIsWorkingChanged: handleUpdaterIsWorkingChanged(isWorking)
-//    }
 
     function handleUpdaterIsWorkingChanged(isWorking) {
         print("isWorking: " + UpdaterController.isWorking)

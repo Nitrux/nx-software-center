@@ -33,8 +33,16 @@ QStringList DeployedApplicationsRegistry::listApplicationFiles() {
 void DeployedApplicationsRegistry::extractFileInfo(const QString &path) {
     FileMetadataExtractor extractor(path);
 
-    auto metadata = extractor.extractMetadata();
-    const auto icon = extractor.extractIcon();
+
+    QVariantMap metadata;
+    QByteArray icon;
+
+    try {
+        metadata = extractor.extractMetadata();
+        icon = extractor.extractIcon();
+    } catch (std::runtime_error &error) {
+        qCritical() << error.what();
+    }
 
     const auto pathSha1 = getSha1(path);
     cacheDir.mkdir(pathSha1);

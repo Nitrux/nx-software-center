@@ -5,7 +5,7 @@ DeployController::DeployController(Deployer *installer, QObject *parent)
         : QObject(parent), installer(installer) {}
 
 void DeployController::deploy(const QString &application_id) {
-    auto task = installer->buildInstallLatestReleaseTask(application_id);
+    auto task = installer->buildDeployLatestReleaseTask(application_id);
     task->setDeleteOnceCompleted(true);
     if (worker)
         worker->execute(task);

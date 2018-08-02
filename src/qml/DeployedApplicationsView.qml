@@ -36,13 +36,13 @@ Item {
                 icon: modelData["icon"]
                 size: modelData["fileSize"]
 
-                hasPendingAction: TasksController.affectedApplicationsIds.indexOf(
-                                      modelData["id"]) > -1
+                hasPendingAction: TasksController.affectedApplicationsIds.indexOf(modelData["id"]) > -1
+                upgradable: UpgraderController.upgradableApplicationIds.indexOf(modelData["id"]) > -1
 
                 deployed: true
 
                 onRequestRemove: RemoveController.removeAppImage(modelData["filePath"])
-                onRequestUpgrade: UpgraderController.upgrade(modelData["id"])
+                onRequestUpgrade: UpgraderController.upgradeApplication(modelData["id"])
                 onRequestRun: RunController.runAppImage(modelData["filePath"])
                 onRequestView: {
                     ApplicationViewController.loadApplication(modelData["id"])

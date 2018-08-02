@@ -30,19 +30,17 @@ Q_OBJECT
 
     ApplicationRepositoryGet *applicationRepositoryGet;
     FileDownload *fileDownload;
-protected:
-    friend class Deployer;
 
+
+public:
     DeployTask();
 
     void setId(const QString &id);
 
     void setRepository(ApplicationRepository *restClient);
 
-public:
     void setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry);
 
-public:
     void setApplicationsDir(const QString &applicationsDir);
 
     const QString &getChannel() const;

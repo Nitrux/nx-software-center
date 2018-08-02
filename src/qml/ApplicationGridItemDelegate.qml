@@ -174,6 +174,12 @@ Item {
                             text: i18n("Remove")
                             onClicked: requestRemove()
                         }
+
+                        MenuItem {
+                            text: i18n("Upgrade")
+                            onClicked: requestUpgrade()
+                            enabled: upgradable
+                        }
                     }
                 }
 

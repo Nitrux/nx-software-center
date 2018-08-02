@@ -2,7 +2,7 @@
 // Created by alexis on 7/25/18.
 //
 
-#include <QFile>
+#include <QFile>8
 #include <appimage/appimage.h>
 
 #include "RemoveTask.h"
@@ -19,9 +19,14 @@ void RemoveTask::start() {
     QtConcurrent::run([=]() {
         const auto path = appImageInfo.file.path;
 
+        if (path.isEmpty()) {
+            setStatus(Task::VALUE_STATUS_FAILED);
+            emit failed("No file path in AppInfo.");
+            return;
+        }
+
         QFile::remove(path);
         int res = appimage_unregister_in_system(path.toStdString().c_str(), false);
-
 
         if (!res) {
             setProgressMessage("Remove completed");

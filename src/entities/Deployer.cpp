@@ -13,7 +13,11 @@ void Deployer::setRepository(ApplicationRepository *restClient) {
     Deployer::repository = restClient;
 }
 
-DeployTask *Deployer::buildInstallLatestReleaseTask(const QString &id) {
+void Deployer::setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry) {
+    Deployer::deployedApplicationsRegistry = deployedApplicationsRegistry;
+}
+
+DeployTask *Deployer::buildDeployLatestReleaseTask(const QString &id) {
     auto task = new DeployTask();
     task->setId(id);
     task->setRepository(repository);
@@ -23,6 +27,13 @@ DeployTask *Deployer::buildInstallLatestReleaseTask(const QString &id) {
     return task;
 }
 
-void Deployer::setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry) {
-    Deployer::deployedApplicationsRegistry = deployedApplicationsRegistry;
+DeployTask *Deployer::buildDeployTask(AppImageInfo appImageInfo) {
+    // TODO: Implement a direct download of the file pointed at the appImageInfo instead of downloading it again
+    auto task = new DeployTask();
+    task->setId(appImageInfo.id);
+    task->setRepository(repository);
+    task->setApplicationsDir(QDir::homePath() + "/Applications");
+    task->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
+
+    return task;
 }

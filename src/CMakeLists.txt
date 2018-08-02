@@ -72,7 +72,9 @@ set(CORE_SRC
         entities/Remover.cpp
         entities/Remover.h
         entities/RemoveTask.cpp
-        entities/RemoveTask.h)
+        entities/RemoveTask.h
+        entities/UpgradeTask.cpp
+        entities/UpgradeTask.h)
 
 add_library(core OBJECT ${CORE_SRC})
 
@@ -109,8 +111,6 @@ set(GUI_SRC
         ui/RemoveController.h
         ui/UpgraderController.cpp
         ui/UpgraderController.h
-        ui/UpgradesListModel.h
-        ui/UpgradesListModel.cpp
         ui/NotificationsController.cpp
         ui/NotificationsController.h
         ui/RunController.cpp

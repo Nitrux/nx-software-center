@@ -14,7 +14,6 @@ int main(int argc, char **argv)
     QCoreApplication app(argc, argv);
     qRegisterMetaType<Application>("Application");
     qRegisterMetaType<QList<Application>>("ApplicationList");
-    qRegisterMetaType<UpgradeList>("UpgradeList");
 
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
