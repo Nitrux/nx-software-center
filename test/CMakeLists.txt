@@ -13,7 +13,6 @@ add_executable(test_core
         $<TARGET_OBJECTS:appimage-info>
         src/test_core_main.cpp
         src/TestDownload.cpp
-        src/FakeDownloadManager.h src/FakeDownloadManager.cpp
         src/TestTaskLogger.cpp
         src/TestApplicationSerializer.cpp
         src/TestUpgrader.cpp

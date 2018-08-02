@@ -13,7 +13,6 @@ set(CORE_SRC
 
         gateways/ApplicationRepositoryRestClient.cpp
         gateways/ApplicationRepositoryRestClient.h
-        gateways/DownloadManager.h
 
         entities/Deployer.cpp
         entities/Deployer.h
@@ -23,8 +22,6 @@ set(CORE_SRC
         gateways/FileDownload.h
         gateways/Download.h
         gateways/Download.cpp
-        gateways/ContentDownload.cpp
-        gateways/ContentDownload.h
         interactors/TaskMetadata.h
         entities/RecordMetadata.h
         entities/Upgrader.cpp
