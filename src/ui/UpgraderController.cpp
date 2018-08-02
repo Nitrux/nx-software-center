@@ -2,8 +2,6 @@
 // Created by alexis on 25/01/18.
 //
 
-#include <interactors/RemoveAppImageInteractor.h>
-#include <interactors/InstallAppImageInteractor.h>
 #include "UpgraderController.h"
 #include "entities/LocalizationUtils.h"
 

@@ -6,7 +6,6 @@
 #include <QWriteLocker>
 
 #include "entities/Application.h"
-#include "interactors/FetchApplicationsInteractor.h"
 
 Repository::Repository(QObject *parent) : QObject(parent), isBeingUpdated(false) {}
 

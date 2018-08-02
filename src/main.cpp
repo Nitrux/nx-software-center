@@ -8,9 +8,6 @@
 #include <ui/DeployedApplicationsController.h>
 #include <QtCore/QStandardPaths>
 
-#include "entities/Cache.h"
-#include "gateways/CacheSource.h"
-
 #include "ui/SearchController.h"
 #include "ui/TasksController.h"
 #include "ui/DeployController.h"
@@ -27,7 +24,6 @@ QNetworkAccessManager *networkAccessManager = nullptr;
 Worker *worker = nullptr;
 Deployer *deployer = nullptr;
 TaskLogger *registry = nullptr;
-Cache *cache = nullptr;
 Upgrader *upgrader = nullptr;
 Remover *remover = nullptr;
 DeployedApplicationsRegistry *deployedApplicationsRegistry = nullptr;
@@ -80,8 +76,6 @@ void initSoftwareCenterModules(QObject *parent) {
     registry = new TaskLogger();
     QObject::connect(worker, &Worker::taskCompleted, registry, &TaskLogger::handleTaskCompleted);
 
-    CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
-
     deployedApplicationsRegistry = new DeployedApplicationsRegistry();
     auto cacheDirLocations = QStandardPaths::standardLocations(QStandardPaths::CacheLocation);
     deployedApplicationsRegistry->setCacheDir(cacheDirLocations.first());
@@ -93,11 +87,6 @@ void initSoftwareCenterModules(QObject *parent) {
 
     remover = new Remover();
     remover->setRegistry(deployedApplicationsRegistry);
-
-    cache = new Cache;
-//    cache->setRepository(repository);
-    QObject::connect(registry, &TaskLogger::installedApplicationsChanged, cache,
-                     &Cache::handleInstalledApplicationsChanged);
 
     upgrader = new Upgrader();
     upgrader->setDeployedApplicationsRegistry(deployedApplicationsRegistry);

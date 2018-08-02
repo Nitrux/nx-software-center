@@ -17,7 +17,6 @@ add_executable(test_core
         src/TestDownload.cpp
         src/FakeDownloadManager.h src/FakeDownloadManager.cpp
         src/TestTaskLogger.cpp
-        src/TestCache.cpp
         src/TestApplicationSerializer.cpp
         src/TestUpgrader.cpp
         src/TestApplicationRepositoryRestClient.cpp

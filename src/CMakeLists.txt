@@ -23,8 +23,6 @@ set(CORE_SRC
         interactors/FetchApplicationsInteractor.cpp
         entities/TaskLogger.cpp
         entities/TaskLogger.h
-        interactors/InstallAppImageInteractor.cpp
-        interactors/InstallAppImageInteractor.h
         gateways/FileDownload.cpp
         gateways/FileDownload.h
         gateways/Download.h
@@ -39,8 +37,6 @@ set(CORE_SRC
         interactors/RemoveAppImageInteractor.h
         entities/Upgrader.cpp
         entities/Upgrader.h
-        entities/Cache.cpp
-        entities/Cache.h
         entities/ApplicationSerializer.cpp
         entities/ApplicationSerializer.h
         interactors/RunInteractor.cpp
