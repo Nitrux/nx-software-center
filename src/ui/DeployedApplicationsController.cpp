@@ -2,7 +2,7 @@
 // Created by alexis on 7/27/18.
 //
 
-#include <interactors/TaskMetadata.h>
+#include <tasks/TaskMetadata.h>
 #include "DeployedApplicationsController.h"
 #include "entities/LocalizationUtils.h"
 

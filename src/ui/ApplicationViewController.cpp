@@ -1,6 +1,6 @@
 #include "ApplicationViewController.h"
 
-#include "interactors/TaskMetadata.h"
+#include "tasks/TaskMetadata.h"
 #include "entities/LocalizationUtils.h"
 
 ApplicationViewController::ApplicationViewController(QObject *parent)

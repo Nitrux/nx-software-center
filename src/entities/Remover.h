@@ -7,7 +7,7 @@
 
 #include <QObject>
 #include <gateways/DeployedApplicationsRegistry.h>
-#include "RemoveTask.h"
+#include "tasks/RemoveTask.h"
 
 class Remover : public  QObject{
     DeployedApplicationsRegistry *registry;

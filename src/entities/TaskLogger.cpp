@@ -12,7 +12,7 @@
 #include <QJsonDocument>
 
 #include "entities/LocalizationUtils.h"
-#include "interactors/TaskMetadata.h"
+#include "tasks/TaskMetadata.h"
 #include "RecordMetadata.h"
 
 static const char *const KEY_APPLICATION_ID = "appId";

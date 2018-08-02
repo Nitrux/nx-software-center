@@ -1,7 +1,7 @@
 //
 // Created by alexis on 7/6/18.
 //
-#include <interactors/TaskMetadata.h>
+#include <tasks/TaskMetadata.h>
 #include <entities/Task.h>
 #include "Worker.h"
 

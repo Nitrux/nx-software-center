@@ -6,7 +6,7 @@
 #define NX_SOFTWARE_CENTER_REMOVETASK_H
 
 
-#include "Task.h"
+#include "entities/Task.h"
 
 class RemoveTask : public Task {
 

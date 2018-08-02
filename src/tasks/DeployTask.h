@@ -9,8 +9,8 @@
 #include <QFutureWatcher>
 #include <gateways/DeployedApplicationsRegistry.h>
 #include <gateways/ApplicationRepositoryRestClient.h>
-#include "ApplicationFull.h"
-#include "Task.h"
+#include "entities/ApplicationFull.h"
+#include "entities/Task.h"
 
 class ApplicationRepository;
 

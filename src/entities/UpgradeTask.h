@@ -7,9 +7,9 @@
 
 #include "Task.h"
 #include "Deployer.h"
-#include "DeployTask.h"
+#include "tasks/DeployTask.h"
 #include "Remover.h"
-#include "RemoveTask.h"
+#include "tasks/RemoveTask.h"
 
 class UpgradeTask : public Task {
     Q_OBJECT

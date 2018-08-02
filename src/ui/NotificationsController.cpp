@@ -1,5 +1,5 @@
 #include <QDebug>
-#include <interactors/TaskMetadata.h>
+#include <tasks/TaskMetadata.h>
 #include "NotificationsController.h"
 #include "entities/LocalizationUtils.h"
 

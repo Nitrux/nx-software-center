@@ -7,7 +7,7 @@
 
 #include "RemoveTask.h"
 #include <QtConcurrent/QtConcurrent>
-#include <interactors/TaskMetadata.h>
+#include <tasks/TaskMetadata.h>
 
 void RemoveTask::start() {
     const auto path = appImageInfo.file.path;

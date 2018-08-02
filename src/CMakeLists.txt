@@ -20,7 +20,7 @@ set(CORE_SRC
         entities/TaskLogger.h
         gateways/FileDownload.h
         gateways/FileDownload.cpp
-        interactors/TaskMetadata.h
+        tasks/TaskMetadata.h
         entities/RecordMetadata.h
         entities/Upgrader.cpp
         entities/Upgrader.h
@@ -32,8 +32,8 @@ set(CORE_SRC
         gateways/ApplicationsSearchRequest.h
         gateways/ApplicationGetRequest.cpp
         gateways/ApplicationGetRequest.h
-        entities/DeployTask.cpp
-        entities/DeployTask.h
+        tasks/DeployTask.cpp
+        tasks/DeployTask.h
         entities/Task.cpp
         entities/Task.h
         entities/Worker.cpp
@@ -50,8 +50,8 @@ set(CORE_SRC
         entities/DeployedApplicationAbstract.h
         entities/Remover.cpp
         entities/Remover.h
-        entities/RemoveTask.cpp
-        entities/RemoveTask.h
+        tasks/RemoveTask.cpp
+        tasks/RemoveTask.h
         entities/UpgradeTask.cpp
         entities/UpgradeTask.h
         entities/LocalizationUtils.cpp

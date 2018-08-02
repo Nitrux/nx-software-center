@@ -3,7 +3,7 @@
 #include <QDateTime>
 
 #include "entities/RecordMetadata.h"
-#include "interactors/TaskMetadata.h"
+#include "tasks/TaskMetadata.h"
 
 RegistryListModel::RegistryListModel(QObject* parent)
     : QAbstractListModel(parent) {}

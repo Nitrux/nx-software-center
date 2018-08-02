@@ -5,7 +5,7 @@
 #include <QList>
 #include "entities/Worker.h"
 #include "entities/Deployer.h"
-#include "entities/DeployTask.h"
+#include "tasks/DeployTask.h"
 
 class DeployController : public QObject {
 Q_OBJECT

@@ -8,7 +8,7 @@
 #include <gateways/FileDownload.h>
 #include <gateways/ApplicationRepository.h>
 #include <appimage/appimage.h>
-#include <interactors/TaskMetadata.h>
+#include <tasks/TaskMetadata.h>
 #include "DeployTask.h"
 
 void DeployTask::setRepository(ApplicationRepository *restClient) {

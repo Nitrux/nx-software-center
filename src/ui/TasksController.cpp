@@ -6,7 +6,7 @@
 #include <QMutexLocker>
 
 #include <entities/Worker.h>
-#include <interactors/TaskMetadata.h>
+#include <tasks/TaskMetadata.h>
 #include "TasksController.h"
 
 TasksController::TasksController(QObject *parent)

@@ -6,7 +6,7 @@
 #include <QSignalSpy>
 #include <appimage/appimage.h>
 #include "entities/Deployer.h"
-#include <entities/DeployTask.h>
+#include <tasks/DeployTask.h>
 #include "DummyApplicationRepository.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {

@@ -3,7 +3,7 @@
 //
 
 #include <QtCore/QDir>
-#include "DeployTask.h"
+#include "tasks/DeployTask.h"
 #include "Deployer.h"
 
 Deployer::Deployer()

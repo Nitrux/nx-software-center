@@ -3,7 +3,7 @@
 //
 
 #include <QDebug>
-#include <interactors/TaskMetadata.h>
+#include <tasks/TaskMetadata.h>
 
 #include "UpgradeTask.h"
 
