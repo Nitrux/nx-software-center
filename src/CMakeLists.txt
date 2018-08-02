@@ -23,8 +23,6 @@ set(CORE_SRC
         interactors/FetchApplicationsInteractor.cpp
         entities/Registry.cpp
         entities/Registry.h
-        entities/Executor.cpp
-        entities/Executor.h
         interactors/InstallAppImageInteractor.cpp
         interactors/InstallAppImageInteractor.h
         gateways/FileDownload.cpp

@@ -21,7 +21,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
             QVariantMap task = TestRegistry::createInstallTaskMetadata(test_app_id);
             task.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_COMPLETED);
 
-            r->handleTaskCompleted("", task);
+            r->handleTaskCompleted(task);
         }
 
         static QVariantMap createInstallTaskMetadata(const char *app_id) {
@@ -71,7 +71,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
         QVariantMap task = TestRegistry::createInstallTaskMetadata(test_app_id);
         task.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_FAILED);
 
-        r.handleTaskCompleted("", task);
+        r.handleTaskCompleted(task);
 
         GTEST_ASSERT_EQ(1, spyRecordsChanged.count());
         GTEST_ASSERT_EQ(0, spyInstalledApplicationsChanged.count());
@@ -94,7 +94,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
         QVariantMap task = TestRegistry::createUninstallTaskMetadata(test_app_id);
         task.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_COMPLETED);
 
-        r.handleTaskCompleted("", task);
+        r.handleTaskCompleted(task);
 
         GTEST_ASSERT_EQ(1, spyRecordsChanged.count());
         GTEST_ASSERT_EQ(1, spyInstalledApplicationsChanged.count());
@@ -120,7 +120,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
         QVariantMap task = TestRegistry::createUninstallTaskMetadata(test_app_id);
         task.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_FAILED);
 
-        r.handleTaskCompleted("", task);
+        r.handleTaskCompleted(task);
 
         GTEST_ASSERT_EQ(1, spyRecordsChanged.count());
         GTEST_ASSERT_EQ(0, spyInstalledApplicationsChanged.count());
@@ -138,7 +138,7 @@ namespace NX_SOFTWARE_CENTER_TESTS {
             QVariantMap task = TestRegistry::createInstallTaskMetadata(test_app_id);
             task.insert(TaskMetadata::KEY_STATUS, TaskMetadata::VALUE_STATUS_COMPLETED);
 
-            registry.handleTaskCompleted("", task);
+            registry.handleTaskCompleted(task);
         }
 
         { // CHECK THAT THERE IS SOMETHING IN THERE

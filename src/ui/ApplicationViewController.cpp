@@ -5,16 +5,16 @@
 
 ApplicationViewController::ApplicationViewController(QObject *parent)
         :
-        QObject(parent), registry(nullptr), executor(nullptr), repository(nullptr),
+        QObject(parent), registry(nullptr), worker(nullptr), repository(nullptr),
         request(nullptr), busy(false), hasPendingTasks(false) {
 
 }
 
 
-void ApplicationViewController::setExecutor(Executor *executor) {
-    ApplicationViewController::executor = executor;
-    connect(executor, &Executor::taskStarted, this, &ApplicationViewController::handleTaskStarted);
-    connect(executor, &Executor::taskCompleted, this, &ApplicationViewController::handleTaskCompleted);
+void ApplicationViewController::setWorker(Worker *worker) {
+    ApplicationViewController::worker = worker;
+    connect(worker, &Worker::taskStarted, this, &ApplicationViewController::handleTaskStarted);
+    connect(worker, &Worker::taskCompleted, this, &ApplicationViewController::handleTaskCompleted);
 }
 
 QString ApplicationViewController::getApplicationId() {
@@ -156,9 +156,9 @@ void ApplicationViewController::loadApplication(const QString &id) {
 void ApplicationViewController::checkIfHasPendingTasks() {
     hasPendingTasks = false;
 
-    auto runningTasks = executor->getRunningTasks();
-    for (const QString taskId: runningTasks) {
-        const auto data = executor->getTaskData(taskId);
+    auto runningTasks = worker->getTaskList();
+    for (const QVariant task: runningTasks) {
+        const auto data = task.toMap();
         const QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
 
         if (appId == application.id)
@@ -168,7 +168,7 @@ void ApplicationViewController::checkIfHasPendingTasks() {
     emit hasPendingTasksChanged(hasPendingTasks);
 }
 
-void ApplicationViewController::handleTaskStarted(const QString &, const QVariantMap &data) {
+void ApplicationViewController::handleTaskStarted(const QVariantMap &data) {
     const QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
     if (appId == application.id) {
         hasPendingTasks = true;
@@ -176,7 +176,7 @@ void ApplicationViewController::handleTaskStarted(const QString &, const QVarian
     }
 }
 
-void ApplicationViewController::handleTaskCompleted(const QString &, const QVariantMap &data) {
+void ApplicationViewController::handleTaskCompleted(const QVariantMap &data) {
     const QString appId = data.value(TaskMetadata::KEY_APP_ID).toString();
     if (appId == application.id) {
         hasPendingTasks = false;

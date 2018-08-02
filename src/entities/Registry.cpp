@@ -19,7 +19,7 @@ static const char *const KEY_APPLICATION_ID = "appId";
 static const char *const KEY_APPLICATION_INSTALLED_FILES = "files";
 
 
-void Registry::handleTaskCompleted(const QString /*task_id*/, const QVariantMap resume) {
+void Registry::handleTaskCompleted(const QVariantMap resume) {
     QVariantMap map = resume;
     const QString &taskType = resume.value(TaskMetadata::KEY_TYPE, "unknown").toString();
     const QString &taskStatus = resume.value(TaskMetadata::KEY_STATUS, "unknown").toString();

@@ -14,7 +14,6 @@ add_executable(test_core
         src/test_core_main.cpp
         src/TestFetchApplicationsInteractor.cpp
         src/DummySource.h src/BrokenDummySource.h
-        src/TestExecutor.cpp
         src/TestDownload.cpp
         src/FakeDownloadManager.h src/FakeDownloadManager.cpp
         src/TestRegistry.cpp

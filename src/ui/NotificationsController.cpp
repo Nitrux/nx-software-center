@@ -4,27 +4,18 @@
 #include "NotificationsController.h"
 
 NotificationsController::NotificationsController(QObject *parent) :
-    QObject(parent), executor(nullptr), tasksNotificationsEnabled(true)
+    QObject(parent), worker(nullptr), tasksNotificationsEnabled(true)
 {
     connect(&expirationTimer, &QTimer::timeout, this, &NotificationsController::notificationExpired);
 }
 
-void NotificationsController::setExecutor(Executor *executor) {
-    if (NotificationsController::executor != nullptr)
-        disconnect(NotificationsController::executor, nullptr, this, nullptr);
 
-    NotificationsController::executor = executor;
-
-    connect(executor, &Executor::taskStarted, this, &NotificationsController::handleTaskStarted);
-    connect(executor, &Executor::taskCompleted, this, &NotificationsController::handleTaskCompleted);
-}
-
-void NotificationsController::handleTaskStarted(const QString &/*id*/, const QVariantMap &data) {
+void NotificationsController::handleTaskStarted(const QVariantMap &data) {
     if (tasksNotificationsEnabled && shouldBeNotified(data))
         notifyTaskDescription(data);
 }
 
-void NotificationsController::handleTaskCompleted(const QString &/*id*/, const QVariantMap &data) {
+void NotificationsController::handleTaskCompleted(const QVariantMap &data) {
     if (tasksNotificationsEnabled && shouldBeNotified(data))
         notifyTaskDescription(data);
 }
@@ -55,4 +46,16 @@ void NotificationsController::notifyTaskDescription(const QVariantMap &data) {
 void NotificationsController::hideNotification() {
     expirationTimer.stop();
     emit notificationExpired();
+}
+
+void NotificationsController::setWorker(Worker *worker) {
+    NotificationsController::worker = worker;
+
+    if (NotificationsController::worker != nullptr)
+        disconnect(NotificationsController::worker, nullptr, this, nullptr);
+
+    NotificationsController::worker = worker;
+
+    connect(worker, &Worker::taskStarted, this, &NotificationsController::handleTaskStarted);
+    connect(worker, &Worker::taskCompleted, this, &NotificationsController::handleTaskCompleted);
 }

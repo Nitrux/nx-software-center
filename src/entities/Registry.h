@@ -38,7 +38,7 @@ public:
 
 public slots:
 
-    void handleTaskCompleted(const QString task_id, const QVariantMap resume);
+    void handleTaskCompleted(const QVariantMap resume);
 
 signals:
 

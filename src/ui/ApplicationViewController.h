@@ -5,7 +5,7 @@
 #include <QVariantMap>
 #include <entities/Repository.h>
 #include <entities/Registry.h>
-#include <entities/Executor.h>
+#include <entities/Worker.h>
 #include <gateways/ApplicationRepositoryRestClient.h>
 #include <entities/AppImageInfo.h>
 #include <gateways/ApplicationRepositoryGet.h>
@@ -14,7 +14,7 @@ class ApplicationViewController : public QObject
 {
     Q_OBJECT
     Registry *registry;
-    Executor *executor;
+    Worker *worker;
     ApplicationRepository *repository;
     ApplicationRepositoryGet *request;
 
@@ -42,7 +42,7 @@ public:
     explicit ApplicationViewController(QObject *parent = nullptr);
 
     void setRegistry(Registry* registry);
-    void setExecutor(Executor *executor);
+    void setWorker(Worker *worker);
     void setRepository(ApplicationRepository *repository);
 
     QString getBackgroundImage();
@@ -67,9 +67,9 @@ public slots:
     void loadApplication(const QString &id);
 
 protected slots:
-    void handleTaskStarted(const QString &, const QVariantMap &data);
+    void handleTaskStarted(const QVariantMap &data);
 
-    void handleTaskCompleted(const QString &, const QVariantMap &data);
+    void handleTaskCompleted(const QVariantMap &data);
     void handleGetApplicationResult();
 
 private:

@@ -24,7 +24,6 @@
 
 ApplicationRepository *repository;
 QNetworkAccessManager *networkAccessManager = nullptr;
-Executor *executor = nullptr;
 Worker *worker = nullptr;
 Deployer *deployer = nullptr;
 Registry *registry = nullptr;
@@ -73,14 +72,13 @@ void registerMetatypes() {
 
 void initSoftwareCenterModules(QObject *parent) {
     networkAccessManager = new QNetworkAccessManager(parent);
-    executor = new Executor();
 
     worker = new Worker();
 
     repository = new ApplicationRepositoryRestClient("http://apps.nxos.org/api");
 
     registry = new Registry();
-    QObject::connect(executor, &Executor::taskCompleted, registry, &Registry::handleTaskCompleted);
+    QObject::connect(worker, &Worker::taskCompleted, registry, &Registry::handleTaskCompleted);
 
     CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
 
@@ -95,9 +93,6 @@ void initSoftwareCenterModules(QObject *parent) {
 
     remover = new Remover();
     remover->setRegistry(deployedApplicationsRegistry);
-
-//    updater = new Updater(repository, {cacheSource});
-//    updater->setExecutor(executor);
 
     cache = new Cache;
 //    cache->setRepository(repository);
@@ -119,9 +114,9 @@ static QObject *searchControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
 }
 
 static QObject *tasksControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    TasksController *taskControler = new TasksController(executor);
-    taskControler->setWorker(worker);
-    return taskControler;
+    TasksController *taskController = new TasksController();
+    taskController->setWorker(worker);
+    return taskController;
 }
 
 static QObject *deployControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
@@ -152,7 +147,7 @@ static QObject *upgraderControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
 
 static QObject *notificationsControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     auto *notificationsController = new NotificationsController();
-    notificationsController->setExecutor(executor);
+    notificationsController->setWorker(worker);
     return notificationsController;
 }
 
@@ -165,7 +160,7 @@ static QObject *runControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
 static QObject *applicationViewControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     auto applicationViewController = new ApplicationViewController();
     applicationViewController->setRegistry(registry);
-    applicationViewController->setExecutor(executor);
+    applicationViewController->setWorker(worker);
     applicationViewController->setRepository(repository);
     return applicationViewController;
 }
