@@ -8,6 +8,6 @@ void ApplicationRepositoryGet::setId(const QString &id) {
     ApplicationRepositoryGet::id = id;
 }
 
-ApplicationFull ApplicationRepositoryGet::getApplication() const {
+Application ApplicationRepositoryGet::getApplication() const {
     return application;
 }

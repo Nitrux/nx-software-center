@@ -20,13 +20,13 @@ public:
         application.categories = QStringList{"Utilities"};
         application.developer.name = "Jon Doe";
 
-        ApplicationFull::File f;
+        Application::File f;
         f.type = 2;
         f.url = "file://" TEST_DATA_DIR "echo-x86_64-8.25.AppImage";
         f.architecture = "x86_64";
         f.size = 121752;
 
-        ApplicationFull::Release r;
+        Application::Release r;
         r.date = QDateTime::currentDateTime();
         r.version = "8.25";
         r.files = {f};

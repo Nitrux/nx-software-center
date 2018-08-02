@@ -11,7 +11,7 @@
 #include <QDateTime>
 
 class AppImageInfo;
-class ApplicationFull {
+class Application {
 public:
     class LocalizedQString : public QMap<QString, QString> {
     public:
@@ -110,7 +110,7 @@ public:
     QMap<QString, QString> links;
 
     QVariant toVariant() const;
-    friend std::ostream& operator<<(std::ostream& os, const ApplicationFull& full);
+    friend std::ostream& operator<<(std::ostream& os, const Application& full);
     Release latestCompatibleRelease(const QString& cpuArchitecture, const QString& channel = QString());
 
     AppImageInfo latestCompatibleReleaseInfo();

@@ -19,7 +19,7 @@ class ApplicationViewController : public QObject
     ApplicationRepositoryGet *request;
 
     AppImageInfo appImageInfo;
-    ApplicationFull application;
+    Application application;
 
     bool busy;
     bool hasPendingTasks;

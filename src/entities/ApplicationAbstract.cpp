@@ -18,8 +18,8 @@ QVariantMap ApplicationAbstract::toVariant() const
     QVariantMap map;
     map["id"] = id;
     map["icon"] = icon;
-    map["name"] = ApplicationFull::LocalizedQString::toVariant(name);
-    map["abstract"] = ApplicationFull::LocalizedQString::toVariant(abstract);
+    map["name"] = Application::LocalizedQString::toVariant(name);
+    map["abstract"] = Application::LocalizedQString::toVariant(abstract);
     map["fileSize"] = fileSize;
     map["latestReleaseVersion"] = latestReleaseVersion;
     return map;

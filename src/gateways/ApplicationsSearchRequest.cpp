@@ -7,7 +7,7 @@
 #include <QtCore/QJsonObject>
 
 #include <iostream>
-#include <entities/ApplicationFull.h>
+#include <entities/Application.h>
 #include <entities/ApplicationAbstract.h>
 #include "ApplicationRepositoryRestClient.h"
 #include "ApplicationsSearchRequest.h"
@@ -136,8 +136,8 @@ ApplicationAbstract ApplicationsSearchRequest::getAbstract(const QVariantMap& vM
     ApplicationAbstract a;
     a.id = vMap["id"].toString();
     a.icon = vMap["icon"].toString();
-    a.name = ApplicationFull::LocalizedQString::fromVariant(vMap["name"]);
-    a.abstract = ApplicationFull::LocalizedQString::fromVariant(vMap["name"]);
+    a.name = Application::LocalizedQString::fromVariant(vMap["name"]);
+    a.abstract = Application::LocalizedQString::fromVariant(vMap["name"]);
 
     return a;
 }

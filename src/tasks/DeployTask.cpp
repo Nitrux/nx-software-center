@@ -88,8 +88,8 @@ void DeployTask::downloadApplicationFile(AppImageInfo applicationInfo) {
     }
 }
 
-QString DeployTask::getDownloadFilePath(AppImageInfo applicationInfo, const ApplicationFull::Release &r,
-                                        const ApplicationFull::File &file) const {
+QString DeployTask::getDownloadFilePath(AppImageInfo applicationInfo, const Application::Release &r,
+                                        const Application::File &file) const {
     QStringList fileBaseName{applicationInfo.id, QString::number(r.date.toMSecsSinceEpoch()),
                              r.version, file.architecture};
     QString fileName = fileBaseName.join("-") + ".AppImage";

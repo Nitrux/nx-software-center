@@ -77,7 +77,7 @@ QString ApplicationViewController::getApplicationVersion() {
 
 QVariantMap ApplicationViewController::getLatestRelease() const {
     const auto releases = application.releases;
-    ApplicationFull::Release latestRelease;
+    Application::Release latestRelease;
     for (const auto &release: releases) {
         if (latestRelease.date.isValid())
             latestRelease = release;
@@ -86,7 +86,7 @@ QVariantMap ApplicationViewController::getLatestRelease() const {
             latestRelease = release;
     }
 
-    auto result = ApplicationFull::Release::toVariant(latestRelease);
+    auto result = Application::Release::toVariant(latestRelease);
     return result.toMap();
 }
 

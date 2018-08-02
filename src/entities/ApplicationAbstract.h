@@ -7,7 +7,7 @@
 
 #include <ostream>
 #include <QString>
-#include "ApplicationFull.h"
+#include "Application.h"
 
 class ApplicationAbstract {
 public:
@@ -15,8 +15,8 @@ public:
 
     QString id;
     QString icon;
-    ApplicationFull::LocalizedQString name;
-    ApplicationFull::LocalizedQString abstract;
+    Application::LocalizedQString name;
+    Application::LocalizedQString abstract;
     int fileSize;
     QString latestReleaseVersion;
 

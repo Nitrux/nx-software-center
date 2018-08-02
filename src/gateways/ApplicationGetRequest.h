@@ -8,7 +8,7 @@
 #include <QObject>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
-#include <entities/ApplicationFull.h>
+#include <entities/Application.h>
 #include <gateways/ApplicationRepositoryGet.h>
 
 class ApplicationGetRequest : public ApplicationRepositoryGet {
@@ -34,8 +34,8 @@ public slots:
 protected slots:
     void handleRequestFinished();
 protected:
-    ApplicationFull parseResponse(const QVariantMap& map) const;
-    QList<ApplicationFull::Release> parseReleasesList(const QVariantList& vReleases) const;
+    Application parseResponse(const QVariantMap& map) const;
+    QList<Application::Release> parseReleasesList(const QVariantList& vReleases) const;
 };
 
 #endif //NX_SOFTWARE_CENTER_GETAPPLICATIONREQUEST_H

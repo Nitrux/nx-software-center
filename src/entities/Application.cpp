@@ -4,7 +4,7 @@
 #include <QDebug>
 #include "AppImageInfo.h"
 
-ApplicationFull::LocalizedQString ApplicationFull::LocalizedQString::fromVariant(const QVariant &variant) {
+Application::LocalizedQString Application::LocalizedQString::fromVariant(const QVariant &variant) {
     auto localizedStringVariant = variant.toMap();
     LocalizedQString localizedQString;
     for (const auto &k: localizedStringVariant.keys())
@@ -12,14 +12,14 @@ ApplicationFull::LocalizedQString ApplicationFull::LocalizedQString::fromVariant
     return localizedQString;
 }
 
-QVariant ApplicationFull::LocalizedQString::toVariant(const ApplicationFull::LocalizedQString &string) {
+QVariant Application::LocalizedQString::toVariant(const Application::LocalizedQString &string) {
     QVariantMap map;
     for (const auto &key: string.keys())
         map[key] = string[key];
     return map;
 }
 
-std::ostream &operator<<(std::ostream &os, const ApplicationFull::LocalizedQString &string) {
+std::ostream &operator<<(std::ostream &os, const Application::LocalizedQString &string) {
     os << "[";
     for (const auto &item: string.keys())
         os << "{" << item.toStdString() << ": " << string[item].toStdString() << "}, ";
@@ -27,23 +27,23 @@ std::ostream &operator<<(std::ostream &os, const ApplicationFull::LocalizedQStri
     return os;
 }
 
-bool ApplicationFull::License::operator==(const ApplicationFull::License &rhs) const {
+bool Application::License::operator==(const Application::License &rhs) const {
     return id == rhs.id &&
            name == rhs.name &&
            body == rhs.body;
 }
 
-bool ApplicationFull::License::operator!=(const ApplicationFull::License &rhs) const {
+bool Application::License::operator!=(const Application::License &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream &operator<<(std::ostream &os, const ApplicationFull::License &license) {
+std::ostream &operator<<(std::ostream &os, const Application::License &license) {
     os << "{ id: " << license.id.toStdString() << " name: " << license.name.toStdString()
        << " body: " << license.body.toStdString() << " }";
     return os;
 }
 
-ApplicationFull::License ApplicationFull::License::fromVariant(const QVariant &variant) {
+Application::License Application::License::fromVariant(const QVariant &variant) {
     License l;
     QVariantMap map = variant.toMap();
     l.id = map["id"].toString();
@@ -52,7 +52,7 @@ ApplicationFull::License ApplicationFull::License::fromVariant(const QVariant &v
     return l;
 }
 
-QVariant ApplicationFull::License::toVariant(const ApplicationFull::License &license) {
+QVariant Application::License::toVariant(const Application::License &license) {
     QVariantMap map;
     map["id"] = license.id;
     map["name"] = license.name;
@@ -60,26 +60,26 @@ QVariant ApplicationFull::License::toVariant(const ApplicationFull::License &lic
     return map;
 }
 
-bool ApplicationFull::Developer::operator==(const ApplicationFull::Developer &rhs) const {
+bool Application::Developer::operator==(const Application::Developer &rhs) const {
     return name == rhs.name &&
            avatar == rhs.avatar &&
            website == rhs.website &&
            pubkey == rhs.pubkey;
 }
 
-bool ApplicationFull::Developer::operator!=(const ApplicationFull::Developer &rhs) const {
+bool Application::Developer::operator!=(const Application::Developer &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream &operator<<(std::ostream &os, const ApplicationFull::Developer &developer) {
+std::ostream &operator<<(std::ostream &os, const Application::Developer &developer) {
     os << "{ name: " << developer.name.toStdString() << " avatar: " << developer.avatar.toStdString()
        << " website: " << developer.website.toStdString() << " pubkey: " << developer.pubkey.toStdString() << " }";
     return os;
 }
 
-ApplicationFull::Developer ApplicationFull::Developer::fromVariant(const QVariant &variant) {
+Application::Developer Application::Developer::fromVariant(const QVariant &variant) {
     auto map = variant.toMap();
-    ApplicationFull::Developer developer;
+    Application::Developer developer;
     developer.name = map["name"].toString();
     developer.avatar = map["avatar"].toString();
     developer.website = map["website"].toString();
@@ -88,7 +88,7 @@ ApplicationFull::Developer ApplicationFull::Developer::fromVariant(const QVarian
     return developer;
 }
 
-QVariant ApplicationFull::Developer::toVariant(const ApplicationFull::Developer &developer) {
+QVariant Application::Developer::toVariant(const Application::Developer &developer) {
     QVariantMap map;
     map["name"] = developer.name;
     map["avatar"] = developer.avatar;
@@ -97,26 +97,26 @@ QVariant ApplicationFull::Developer::toVariant(const ApplicationFull::Developer 
     return map;
 }
 
-bool ApplicationFull::Release::operator==(const ApplicationFull::Release &rhs) const {
+bool Application::Release::operator==(const Application::Release &rhs) const {
     return date == rhs.date &&
            version == rhs.version &&
            channel == rhs.channel &&
            changelog == rhs.changelog;
 }
 
-bool ApplicationFull::Release::operator!=(const ApplicationFull::Release &rhs) const {
+bool Application::Release::operator!=(const Application::Release &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream &operator<<(std::ostream &os, const ApplicationFull::Release &release) {
+std::ostream &operator<<(std::ostream &os, const Application::Release &release) {
     os << "{ date: " << release.date.toString().toStdString() << " version: " << release.version.toStdString()
        << " channel: " << release.channel.toStdString() << " changelog: " << release.changelog << " }";
     return os;
 }
 
-ApplicationFull::Release ApplicationFull::Release::fromVariant(const QVariant &variant) {
+Application::Release Application::Release::fromVariant(const QVariant &variant) {
     auto map = variant.toMap();
-    ApplicationFull::Release release;
+    Application::Release release;
     release.version = map["version"].toString();
 
     release.date = map["date"].toDateTime();
@@ -131,7 +131,7 @@ ApplicationFull::Release ApplicationFull::Release::fromVariant(const QVariant &v
     return release;
 }
 
-QVariant ApplicationFull::Release::toVariant(const ApplicationFull::Release &release) {
+QVariant Application::Release::toVariant(const Application::Release &release) {
     QVariantMap map;
     map["version"] = release.version;
     map["date"] = release.date.toString(/*Qt::RFC2822Date*/);
@@ -141,8 +141,8 @@ QVariant ApplicationFull::Release::toVariant(const ApplicationFull::Release &rel
     return map;
 }
 
-QList<ApplicationFull::File> ApplicationFull::Release::compatibleFiles(const QString &cpuArchitecture) const {
-    QList<ApplicationFull::File> result;
+QList<Application::File> Application::Release::compatibleFiles(const QString &cpuArchitecture) const {
+    QList<Application::File> result;
     for (const auto &file: files) {
         QString arch = file.architecture;
         if (arch.replace("-", "_") == cpuArchitecture)
@@ -152,7 +152,7 @@ QList<ApplicationFull::File> ApplicationFull::Release::compatibleFiles(const QSt
     return result;
 }
 
-bool ApplicationFull::File::operator==(const ApplicationFull::File &rhs) const {
+bool Application::File::operator==(const Application::File &rhs) const {
     return type == rhs.type &&
            size == rhs.size &&
            architecture == rhs.architecture &&
@@ -160,11 +160,11 @@ bool ApplicationFull::File::operator==(const ApplicationFull::File &rhs) const {
            url == rhs.url;
 }
 
-bool ApplicationFull::File::operator!=(const ApplicationFull::File &rhs) const {
+bool Application::File::operator!=(const Application::File &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream &operator<<(std::ostream &os, const ApplicationFull::File &file) {
+std::ostream &operator<<(std::ostream &os, const Application::File &file) {
     os << "{ type: " << file.type << " size: " << file.size
        << " architecture: " << file.architecture.toStdString()
        << " sha512checksum: " << file.sha512checksum.toStdString()
@@ -172,12 +172,12 @@ std::ostream &operator<<(std::ostream &os, const ApplicationFull::File &file) {
     return os;
 }
 
-ApplicationFull::File::File()
+Application::File::File()
         : type(0), size(0) {}
 
-ApplicationFull::File ApplicationFull::File::fromVariant(const QVariant &variant) {
+Application::File Application::File::fromVariant(const QVariant &variant) {
     auto map = variant.toMap();
-    ApplicationFull::File file;
+    Application::File file;
     file.type = map["type"].toInt();
     file.size = map["size"].toInt();
     file.architecture = map["architecture"].toString();
@@ -188,7 +188,7 @@ ApplicationFull::File ApplicationFull::File::fromVariant(const QVariant &variant
     return file;
 }
 
-QVariant ApplicationFull::File::toVariant(const ApplicationFull::File &file) {
+QVariant Application::File::toVariant(const Application::File &file) {
     QVariantMap map;
     map["type"] = QVariant(file.type).toDouble();
     map["size"] = QVariant(file.size).toDouble();
@@ -200,24 +200,24 @@ QVariant ApplicationFull::File::toVariant(const ApplicationFull::File &file) {
     return map;
 }
 
-bool ApplicationFull::RemoteImage::operator==(const ApplicationFull::RemoteImage &rhs) const {
+bool Application::RemoteImage::operator==(const Application::RemoteImage &rhs) const {
     return height == rhs.height &&
            width == rhs.width &&
            caption == rhs.caption &&
            url == rhs.url;
 }
 
-bool ApplicationFull::RemoteImage::operator!=(const ApplicationFull::RemoteImage &rhs) const {
+bool Application::RemoteImage::operator!=(const Application::RemoteImage &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream &operator<<(std::ostream &os, const ApplicationFull::RemoteImage &image) {
+std::ostream &operator<<(std::ostream &os, const Application::RemoteImage &image) {
     os << "{ height: " << image.height << " width: " << image.width
        << " caption: " << image.caption.toStdString() << " url: " << image.url.toStdString() << " }";
     return os;
 }
 
-std::ostream &operator<<(std::ostream &os, const ApplicationFull &full) {
+std::ostream &operator<<(std::ostream &os, const Application &full) {
     auto printQStringList = [](std::ostream &os, const QList<QString> list) {
         for (const auto &item: list)
             os << item.toStdString();
@@ -260,7 +260,7 @@ std::ostream &operator<<(std::ostream &os, const ApplicationFull &full) {
     return os;
 }
 
-QVariant ApplicationFull::toVariant() const {
+QVariant Application::toVariant() const {
     QVariantMap map;
     map["id"] = id;
     map["name"] = LocalizedQString::toVariant(name);
@@ -290,9 +290,9 @@ QVariant ApplicationFull::toVariant() const {
     return map;
 }
 
-ApplicationFull::Release
-ApplicationFull::latestCompatibleRelease(const QString &cpuArchitecture, const QString &channel) {
-    ApplicationFull::Release latest;
+Application::Release
+Application::latestCompatibleRelease(const QString &cpuArchitecture, const QString &channel) {
+    Application::Release latest;
     if (releases.size() > 0) {
         for (const auto &release: releases) {
             if ((!latest.date.isValid() || latest.date < release.date)
@@ -305,7 +305,7 @@ ApplicationFull::latestCompatibleRelease(const QString &cpuArchitecture, const Q
     return latest;
 }
 
-AppImageInfo ApplicationFull::latestCompatibleReleaseInfo() {
+AppImageInfo Application::latestCompatibleReleaseInfo() {
     AppImageInfo info;
     info.id = id;
     info.name = name;
@@ -328,11 +328,11 @@ AppImageInfo ApplicationFull::latestCompatibleReleaseInfo() {
     return info;
 }
 
-ApplicationFull::RemoteImage::RemoteImage()
+Application::RemoteImage::RemoteImage()
         : height(0), width(0) {}
 
-ApplicationFull::RemoteImage ApplicationFull::RemoteImage::fromVariant(const QVariant &variant) {
-    ApplicationFull::RemoteImage remoteImage;
+Application::RemoteImage Application::RemoteImage::fromVariant(const QVariant &variant) {
+    Application::RemoteImage remoteImage;
     auto map = variant.toMap();
     remoteImage.url = map["url"].toString();
     remoteImage.caption = map["caption"].toString();
@@ -342,7 +342,7 @@ ApplicationFull::RemoteImage ApplicationFull::RemoteImage::fromVariant(const QVa
     return remoteImage;
 }
 
-QVariant ApplicationFull::RemoteImage::toVariant(const ApplicationFull::RemoteImage &image) {
+QVariant Application::RemoteImage::toVariant(const Application::RemoteImage &image) {
     QVariantMap map;
     map["height"] = QVariant(image.height).toDouble();
     map["width"] = QVariant(image.width).toDouble();

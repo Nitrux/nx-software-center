@@ -11,25 +11,25 @@
 #include <QDateTime>
 #include <QVariant>
 #include <ostream>
-#include "ApplicationFull.h"
+#include "Application.h"
 
 class AppImageInfo  {
 public:
 
     QString id;
-    ApplicationFull::LocalizedQString name;
+    Application::LocalizedQString name;
     QString icon;
-    ApplicationFull::LocalizedQString abstract;
-    ApplicationFull::LocalizedQString description;
+    Application::LocalizedQString abstract;
+    Application::LocalizedQString description;
 
-    ApplicationFull::License license;
+    Application::License license;
     QStringList categories;
     QStringList keywords;
     QStringList languages;
-    ApplicationFull::Developer developer;
-    ApplicationFull::Release release;
-    ApplicationFull::File file;
-    QList<ApplicationFull::RemoteImage> screenshots;
+    Application::Developer developer;
+    Application::Release release;
+    Application::File file;
+    QList<Application::RemoteImage> screenshots;
     QStringList mimeTypes;
     QMap<QString, QString> links;
 

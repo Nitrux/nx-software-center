@@ -9,7 +9,7 @@
 #include <QFutureWatcher>
 #include <gateways/DeployedApplicationsRegistry.h>
 #include <gateways/ApplicationRepositoryRestClient.h>
-#include "entities/ApplicationFull.h"
+#include "entities/Application.h"
 #include "entities/Task.h"
 
 class ApplicationRepository;
@@ -68,8 +68,8 @@ protected slots:
 protected:
     void getApplicationInfo();
 
-    QString getDownloadFilePath(AppImageInfo applicationInfo, const ApplicationFull::Release &r,
-                                const ApplicationFull::File &file) const;
+    QString getDownloadFilePath(AppImageInfo applicationInfo, const Application::Release &r,
+                                const Application::File &file) const;
 
     void downloadApplicationFile(AppImageInfo applicationInfo);
 

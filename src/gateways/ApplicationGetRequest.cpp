@@ -4,7 +4,7 @@
 
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
-#include <entities/ApplicationFull.h>
+#include <entities/Application.h>
 #include <iostream>
 #include "ApplicationGetRequest.h"
 #include "ApplicationRepositoryRestClient.h"
@@ -56,25 +56,25 @@ void ApplicationGetRequest::handleRequestFinished() {
     running = false;
 }
 
-ApplicationFull ApplicationGetRequest::parseResponse(const QVariantMap &map) const {
-    ApplicationFull a;
+Application ApplicationGetRequest::parseResponse(const QVariantMap &map) const {
+    Application a;
     a.id = map["id"].toString();
-    a.name = ApplicationFull::LocalizedQString::fromVariant(map["name"]);
+    a.name = Application::LocalizedQString::fromVariant(map["name"]);
     a.icon = map["icon"].toString();
-    a.abstract = ApplicationFull::LocalizedQString::fromVariant(map["abstract"]);
-    a.description = ApplicationFull::LocalizedQString::fromVariant(map["description"]);
-    a.license = ApplicationFull::License::fromVariant(map["license"]);
+    a.abstract = Application::LocalizedQString::fromVariant(map["abstract"]);
+    a.description = Application::LocalizedQString::fromVariant(map["description"]);
+    a.license = Application::License::fromVariant(map["license"]);
     a.categories = map["categories"].toStringList();
     a.keywords = map["keywords"].toStringList();
     a.languages = map["languages"].toStringList();
-    a.developer = ApplicationFull::Developer::fromVariant(map["developer"]);
+    a.developer = Application::Developer::fromVariant(map["developer"]);
 
     QVariantList vReleases = map["releases"].toList();
     a.releases = parseReleasesList(vReleases);
 
-    QList<ApplicationFull::RemoteImage> screenshots;
+    QList<Application::RemoteImage> screenshots;
     for (const auto &v: map["screenshots"].toList()) {
-        screenshots << ApplicationFull::RemoteImage::fromVariant(v);
+        screenshots << Application::RemoteImage::fromVariant(v);
     }
     a.screenshots = screenshots;
 
@@ -89,15 +89,15 @@ ApplicationFull ApplicationGetRequest::parseResponse(const QVariantMap &map) con
     return a;
 }
 
-QList<ApplicationFull::Release> ApplicationGetRequest::parseReleasesList(const QVariantList &vReleases) const {
-    QList<ApplicationFull::Release> releases;
+QList<Application::Release> ApplicationGetRequest::parseReleasesList(const QVariantList &vReleases) const {
+    QList<Application::Release> releases;
     for (const auto &v: vReleases) {
         auto map = v.toMap();
-        auto r = ApplicationFull::Release::fromVariant(map);
-        QList<ApplicationFull::File> files;
+        auto r = Application::Release::fromVariant(map);
+        QList<Application::File> files;
         const QVariantList &vFiles = map["files"].toList();
         for (const auto &vF: vFiles)
-            files << ApplicationFull::File::fromVariant(vF);
+            files << Application::File::fromVariant(vF);
 
         r.files = files;
         releases << r;

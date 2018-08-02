@@ -6,13 +6,13 @@
 #define NX_SOFTWARE_CENTER_APPLICATIONGET_H
 
 #include <QObject>
-#include <entities/ApplicationFull.h>
+#include <entities/Application.h>
 
 class ApplicationRepositoryGet : public QObject {
 Q_OBJECT
 protected:
     QString id;
-    ApplicationFull application;
+    Application application;
 public:
     virtual void start() = 0;
 
@@ -20,7 +20,7 @@ public:
 
     void setId(const QString &id);
 
-    ApplicationFull getApplication() const;
+    Application getApplication() const;
 
 signals:
     void completed();

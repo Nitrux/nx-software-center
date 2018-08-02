@@ -4,7 +4,7 @@
 
 #include <QDebug>
 #include "LocalizationUtils.h"
-#include "entities/ApplicationFull.h"
+#include "entities/Application.h"
 
 QVariant LocalizationUtils::getLocalizedValue(const QMap<QString, QVariant>& lcField)
 {
@@ -25,7 +25,7 @@ QVariant LocalizationUtils::getLocalizedValue(const QMap<QString, QVariant>& lcF
         value = lcField.values().first();
     return value;
 }
-QVariant LocalizationUtils::getLocalizedValue(const ApplicationFull::LocalizedQString& lcField)
+QVariant LocalizationUtils::getLocalizedValue(const Application::LocalizedQString& lcField)
 {
     auto locale = QLocale::system();
     auto lcName = locale.bcp47Name();

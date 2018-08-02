@@ -2,7 +2,7 @@
 // Created by alexis on 7/25/18.
 //
 
-#include <QFile>8
+#include <QFile>
 #include <appimage/appimage.h>
 
 #include "RemoveTask.h"
