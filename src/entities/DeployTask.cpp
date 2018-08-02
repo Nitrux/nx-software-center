@@ -207,6 +207,8 @@ void DeployTask::handleAppImageCheckSumFutureFinished() {
     if (appImageInfo.file.sha512checksum != appImageCheckSumFutureWatcher.result()) {
         QFile::remove(appImageInfo.file.path);
         fail("Check sum verification failed.");
-    } else
+    } else {
         registerAppImage(appImageInfo.file.path);
+        QFile::setPermissions(appImageInfo.file.path, QFile::ReadOwner | QFile::ExeOwner);
+    }
 }
