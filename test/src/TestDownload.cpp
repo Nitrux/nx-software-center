@@ -7,7 +7,7 @@
 #include <QSignalSpy>
 
 #include <gtest/gtest.h>
-#include "gateways/Download.h"
+#include "gateways/FileDownload.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {
 
@@ -27,12 +27,12 @@ namespace NX_SOFTWARE_CENTER_TESTS {
 
         GTEST_ASSERT_EQ(true, source.exists());
         if (temporaryFile.open() )  {
-            Download f("file://" TEST_DATA_DIR "echo-x86_64-8.25.AppImage", temporaryFile.fileName());
+            FileDownload f("file://" TEST_DATA_DIR "echo-x86_64-8.25.AppImage", temporaryFile.fileName());
             f.setProgressNotificationsEnabled(true);
 
-            QSignalSpy signalSpyCompleted(&f, &Download::completed);
-            QSignalSpy signalSpyStopped(&f, &Download::stopped);
-            QSignalSpy signalSpyProgress(&f, &Download::progress);
+            QSignalSpy signalSpyCompleted(&f, &FileDownload::completed);
+            QSignalSpy signalSpyStopped(&f, &FileDownload::stopped);
+            QSignalSpy signalSpyProgress(&f, &FileDownload::progress);
 
             f.start();
             signalSpyCompleted.wait();

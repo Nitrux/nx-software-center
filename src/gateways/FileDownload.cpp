@@ -2,9 +2,9 @@
 // Created by alexis on 17/01/18.
 //
 
-#include "Download.h"
+#include "FileDownload.h"
 
-Download::Download(QString url, QString path, QObject *parent) : QObject(parent), source_url(url),
+FileDownload::FileDownload(QString url, QString path, QObject *parent) : QObject(parent), source_url(url),
                                                                  running(false),
                                                                  progressNotificationsEnabled(false),
                                                                  file(path),
@@ -14,19 +14,19 @@ Download::Download(QString url, QString path, QObject *parent) : QObject(parent)
 }
 
 
-Download::~Download() {
+FileDownload::~FileDownload() {
     reply.clear();
 }
 
-const QString &Download::getSource_url() const {
+const QString &FileDownload::getSource_url() const {
     return source_url;
 }
 
-void Download::setNetworkAccessManager(QNetworkAccessManager *networkAccessManager) {
-    Download::networkAccessManager = networkAccessManager;
+void FileDownload::setNetworkAccessManager(QNetworkAccessManager *networkAccessManager) {
+    FileDownload::networkAccessManager = networkAccessManager;
 }
 
-void Download::start() {
+void FileDownload::start() {
     if (!running) {
         running = true;
         createNetworkAccessManagerIfNotExist();
@@ -35,44 +35,44 @@ void Download::start() {
 
         reply = QSharedPointer<QNetworkReply>(networkAccessManager->get(request));
 
-        QObject::connect(reply.data(), &QNetworkReply::finished, this, &Download::handleFinished);
+        QObject::connect(reply.data(), &QNetworkReply::finished, this, &FileDownload::handleFinished);
 
         if (progressNotificationsEnabled) {
-            QObject::connect(reply.data(), &QNetworkReply::downloadProgress, this, &Download::handleDownloadProgress);
+            QObject::connect(reply.data(), &QNetworkReply::downloadProgress, this, &FileDownload::handleDownloadProgress);
 
-            connect(&timer, &QTimer::timeout, this, &Download::handleTimerTick);
+            connect(&timer, &QTimer::timeout, this, &FileDownload::handleTimerTick);
             timer.start(1000);
 
             emit  progress(0, 0, QString("Connecting to: %1").arg(request.url().toString()));
         }
 
-        Download::file.open(QIODevice::WriteOnly);
+        FileDownload::file.open(QIODevice::WriteOnly);
 
-        QObject::connect(this, &Download::completed, this, &Download::handleCompleted);
-        QObject::connect(this, &Download::stopped, this, &Download::handleStopped);
+        QObject::connect(this, &FileDownload::completed, this, &FileDownload::handleCompleted);
+        QObject::connect(this, &FileDownload::stopped, this, &FileDownload::handleStopped);
 
-        Download::start();
+        FileDownload::start();
         QObject::connect(reply.data(), &QIODevice::readyRead, this,
-                         &Download::handleReadyRead);
+                         &FileDownload::handleReadyRead);
     }
 }
 
-QNetworkRequest Download::createRequest() const {
+QNetworkRequest FileDownload::createRequest() const {
     QNetworkRequest request = QNetworkRequest(source_url);
     request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
     return request;
 }
 
-void Download::createNetworkAccessManagerIfNotExist() {
+void FileDownload::createNetworkAccessManagerIfNotExist() {
     if (!networkAccessManager)
         networkAccessManager = new QNetworkAccessManager(this);
 }
 
-void Download::stop() {
+void FileDownload::stop() {
     isStopRequested = true;
 }
 
-void Download::handleDownloadProgress(qint64 bytesRead, qint64 totalBytes) {
+void FileDownload::handleDownloadProgress(qint64 bytesRead, qint64 totalBytes) {
     if (isStopRequested)
         return;
 
@@ -82,7 +82,7 @@ void Download::handleDownloadProgress(qint64 bytesRead, qint64 totalBytes) {
     reportProgress();
 }
 
-QString Download::formatMemoryValue(float num) {
+QString FileDownload::formatMemoryValue(float num) {
     QStringList list;
     list << "KiB" << "MiB" << "GiB" << "TiB";
 
@@ -96,7 +96,7 @@ QString Download::formatMemoryValue(float num) {
     return QString().setNum(num, 'f', 2) + " " + unit;
 }
 
-void Download::updateDownloadSpeed() {
+void FileDownload::updateDownloadSpeed() {
     qint64 diff = bytesRead - bytesReadLastTick;
     bytesReadLastTick = bytesRead;
 
@@ -106,24 +106,24 @@ void Download::updateDownloadSpeed() {
     reportProgress();
 }
 
-void Download::handleTimerTick() {
+void FileDownload::handleTimerTick() {
     if (isStopRequested) {
         reply->abort();
     } else
         updateDownloadSpeed();
 }
 
-void Download::handleFinished() {
+void FileDownload::handleFinished() {
     running = false;
     if (wasCompletedProperly())
             emit completed();
     else {
-        QString msg = isStopRequested ? "Stopped" : "Download Error";
+        QString msg = isStopRequested ? "Stopped" : "FileDownload Error";
         emit stopped(msg);
     }
 }
 
-void Download::reportProgress() {
+void FileDownload::reportProgress() {
     QString speed = formatMemoryValue(this->speed);
     QString progressValue = formatMemoryValue(this->bytesRead);
     QString progressTotal = formatMemoryValue(this->totalBytes);
@@ -132,40 +132,40 @@ void Download::reportProgress() {
     emit progress(this->bytesRead, this->totalBytes, messageTemplate.arg(progressValue, progressTotal, speed));
 }
 
-bool Download::wasCompletedProperly() const {
+bool FileDownload::wasCompletedProperly() const {
     return reply->error() == QNetworkReply::NoError;
 }
 
 
-void Download::setProgressNotificationsEnabled(bool progressNotificationsEnabled) {
-    Download::progressNotificationsEnabled = progressNotificationsEnabled;
+void FileDownload::setProgressNotificationsEnabled(bool progressNotificationsEnabled) {
+    FileDownload::progressNotificationsEnabled = progressNotificationsEnabled;
 }
 
 
-bool Download::isRunning() { return running; }
+bool FileDownload::isRunning() { return running; }
 
 
-const QString Download::getTargetPath() const {
+const QString FileDownload::getTargetPath() const {
     return file.fileName();
 }
 
-void Download::handleReadyRead() {
+void FileDownload::handleReadyRead() {
     downloadAvailableBytes();
 }
 
-void Download::downloadAvailableBytes() {
+void FileDownload::downloadAvailableBytes() {
     if (file.isOpen())
         file.write(reply->readAll());
 }
 
-void Download::handleCompleted() {
+void FileDownload::handleCompleted() {
     downloadAvailableBytes();
 
-    Download::file.close();
+    FileDownload::file.close();
 }
 
 
-void Download::handleStopped() {
+void FileDownload::handleStopped() {
     file.remove();
 }
 

@@ -29,7 +29,7 @@ Q_OBJECT
     bool running;
 
     ApplicationRepositoryGet *applicationRepositoryGet;
-    Download *fileDownload;
+    FileDownload *fileDownload;
 
 
 public:

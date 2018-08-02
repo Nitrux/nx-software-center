@@ -9,7 +9,7 @@
 #include <QtCore/QString>
 #include "ApplicationGetRequest.h"
 #include "ApplicationsRepositorySearch.h"
-#include "Download.h"
+#include "FileDownload.h"
 
 class ApplicationRepository {
 public:
@@ -19,7 +19,7 @@ public:
 
     virtual ApplicationRepositoryGet *buildGetApplicationRequest(const QString &id) const = 0;
 
-    virtual Download * buildFileDownloadRequest(QString url, QString string) = 0;
+    virtual FileDownload * buildFileDownloadRequest(QString url, QString string) = 0;
 
 };
 

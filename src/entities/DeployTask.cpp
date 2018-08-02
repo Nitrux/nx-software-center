@@ -5,7 +5,7 @@
 #include <QtCore/QFileInfo>
 #include <QtConcurrent/QtConcurrent>
 #include <gateways/ApplicationGetRequest.h>
-#include <gateways/Download.h>
+#include <gateways/FileDownload.h>
 #include <gateways/ApplicationRepository.h>
 #include <appimage/appimage.h>
 #include <interactors/TaskMetadata.h>
@@ -79,9 +79,9 @@ void DeployTask::downloadApplicationFile(AppImageInfo applicationInfo) {
         QString filePath = getDownloadFilePath(applicationInfo, applicationInfo.release, file);
 
         fileDownload = repository->buildFileDownloadRequest(file.url, filePath);
-        connect(fileDownload, &Download::completed, this, &DeployTask::handleFileDownloadCompleted);
-        connect(fileDownload, &Download::stopped, this, &DeployTask::handleFileDownloadStopped);
-        connect(fileDownload, &Download::progress, this, &DeployTask::handleFileDownloadProgress);
+        connect(fileDownload, &FileDownload::completed, this, &DeployTask::handleFileDownloadCompleted);
+        connect(fileDownload, &FileDownload::stopped, this, &DeployTask::handleFileDownloadStopped);
+        connect(fileDownload, &FileDownload::progress, this, &DeployTask::handleFileDownloadProgress);
         fileDownload->start();
 
         setProgressMessage("Downloading AppImage file.");
@@ -125,7 +125,7 @@ void DeployTask::handleFileDownloadCompleted() {
     fileDownload = nullptr;
 
     if (!QFile::exists(filePath))
-        fail("Download failed");
+        fail("FileDownload failed");
 
     appImageInfo.file.path = filePath;
     verifyAppImageFile(filePath);
@@ -172,7 +172,7 @@ void DeployTask::handleFileDownloadStopped() {
     fileDownload->deleteLater();
     fileDownload = nullptr;
 
-    fail("Download stopped");
+    fail("FileDownload stopped");
 }
 
 void DeployTask::setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry) {

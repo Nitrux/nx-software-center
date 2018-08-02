@@ -11,7 +11,7 @@
 #include <QSharedPointer>
 #include <QFile>
 
-class Download : public QObject {
+class FileDownload : public QObject {
 Q_OBJECT
     QString source_url;
     bool running;
@@ -19,9 +19,9 @@ Q_OBJECT
     QFile file;
 
 public:
-    explicit Download(QString url, QString path, QObject *parent = nullptr);
+    explicit FileDownload(QString url, QString path, QObject *parent = nullptr);
 
-    virtual ~Download();
+    virtual ~FileDownload();
 
     const QString &getSource_url() const;
 
