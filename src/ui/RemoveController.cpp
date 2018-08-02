@@ -5,8 +5,6 @@
 #include <entities/TaskLogger.h>
 #include "RemoveController.h"
 
-#include "interactors/RemoveAppImageInteractor.h"
-
 RemoveController::RemoveController(QObject *parent)
         : QObject(parent) {}
 

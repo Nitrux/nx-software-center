@@ -5,9 +5,7 @@
 #include <QObject>
 #include "gateways/ApplicationRepositoryRestClient.h"
 #include "ApplicationListModel.h"
-#include "interactors/FetchApplicationsInteractor.h"
 
-class ApplicationSearch;
 class SearchController : public QObject
 {
     Q_OBJECT

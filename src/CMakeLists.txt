@@ -11,7 +11,6 @@ set(CORE_SRC
         entities/ApplicationAbstract.cpp
         entities/ApplicationAbstract.h
 
-        entities/Source.cpp
         gateways/ApplicationRepositoryRestClient.cpp
         gateways/ApplicationRepositoryRestClient.h
         interactors/Interactor.h
@@ -19,7 +18,6 @@ set(CORE_SRC
 
         entities/Deployer.cpp
         entities/Deployer.h
-        interactors/FetchApplicationsInteractor.cpp
         entities/TaskLogger.cpp
         entities/TaskLogger.h
         gateways/FileDownload.cpp
@@ -30,8 +28,6 @@ set(CORE_SRC
         gateways/ContentDownload.h
         interactors/TaskMetadata.h
         entities/RecordMetadata.h
-        interactors/RemoveAppImageInteractor.cpp
-        interactors/RemoveAppImageInteractor.h
         entities/Upgrader.cpp
         entities/Upgrader.h
         entities/ApplicationSerializer.cpp

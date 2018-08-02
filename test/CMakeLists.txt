@@ -12,8 +12,6 @@ add_executable(test_core
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:appimage-info>
         src/test_core_main.cpp
-        src/TestFetchApplicationsInteractor.cpp
-        src/DummySource.h src/BrokenDummySource.h
         src/TestDownload.cpp
         src/FakeDownloadManager.h src/FakeDownloadManager.cpp
         src/TestTaskLogger.cpp
