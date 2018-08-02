@@ -13,7 +13,7 @@ public:
 
     ApplicationRepositoryGet *buildGetApplicationRequest(const QString &id) const override;
 
-    FileDownload *buildFileDownloadRequest(QString url, QString path) override;
+    Download * buildFileDownloadRequest(QString url, QString path) override;
 
 };
 

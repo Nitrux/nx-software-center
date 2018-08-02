@@ -18,8 +18,6 @@ set(CORE_SRC
         entities/Deployer.h
         entities/TaskLogger.cpp
         entities/TaskLogger.h
-        gateways/FileDownload.cpp
-        gateways/FileDownload.h
         gateways/Download.h
         gateways/Download.cpp
         interactors/TaskMetadata.h

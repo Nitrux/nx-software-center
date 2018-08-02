@@ -2,15 +2,15 @@
 // Created by alexis on 17/01/18.
 //
 
-#include "FileDownload.h"
 #include "Download.h"
 
-Download::Download(QString url, QObject *parent) : QObject(parent), source_url(url),
-                                                   running(false),
-                                                   progressNotificationsEnabled(false),
-                                                   isStopRequested(false),
-                                                   networkAccessManager(nullptr),
-                                                   speed(0), bytesRead(0), bytesReadLastTick(0) {
+Download::Download(QString url, QString path, QObject *parent) : QObject(parent), source_url(url),
+                                                                 running(false),
+                                                                 progressNotificationsEnabled(false),
+                                                                 file(path),
+                                                                 isStopRequested(false),
+                                                                 networkAccessManager(nullptr),
+                                                                 speed(0), bytesRead(0), bytesReadLastTick(0) {
 }
 
 
@@ -45,6 +45,15 @@ void Download::start() {
 
             emit  progress(0, 0, QString("Connecting to: %1").arg(request.url().toString()));
         }
+
+        Download::file.open(QIODevice::WriteOnly);
+
+        QObject::connect(this, &Download::completed, this, &Download::handleCompleted);
+        QObject::connect(this, &Download::stopped, this, &Download::handleStopped);
+
+        Download::start();
+        QObject::connect(reply.data(), &QIODevice::readyRead, this,
+                         &Download::handleReadyRead);
     }
 }
 
@@ -134,3 +143,29 @@ void Download::setProgressNotificationsEnabled(bool progressNotificationsEnabled
 
 
 bool Download::isRunning() { return running; }
+
+
+const QString Download::getTargetPath() const {
+    return file.fileName();
+}
+
+void Download::handleReadyRead() {
+    downloadAvailableBytes();
+}
+
+void Download::downloadAvailableBytes() {
+    if (file.isOpen())
+        file.write(reply->readAll());
+}
+
+void Download::handleCompleted() {
+    downloadAvailableBytes();
+
+    Download::file.close();
+}
+
+
+void Download::handleStopped() {
+    file.remove();
+}
+

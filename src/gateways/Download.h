@@ -9,15 +9,17 @@
 #include <QTimer>
 #include <QNetworkReply>
 #include <QSharedPointer>
+#include <QFile>
 
 class Download : public QObject {
 Q_OBJECT
     QString source_url;
     bool running;
     bool progressNotificationsEnabled;
+    QFile file;
 
 public:
-    explicit Download(QString url, QObject *parent = nullptr);
+    explicit Download(QString url, QString path, QObject *parent = nullptr);
 
     virtual ~Download();
 
@@ -32,6 +34,8 @@ public:
     virtual void stop();
 
     bool isRunning();
+
+    const QString getTargetPath() const;
 
 signals:
 
@@ -49,15 +53,22 @@ protected slots:
 
     virtual void handleFinished();
 
+    void handleReadyRead();
+
+    void handleCompleted();
+
+    void handleStopped();
+
 protected:
     bool isStopRequested;
     QNetworkAccessManager *networkAccessManager;
-    QSharedPointer<QNetworkReply> reply;
 
+    QSharedPointer<QNetworkReply> reply;
     QTimer timer;
     float speed;
     qint64 totalBytes;
     qint64 bytesRead;
+
     qint64 bytesReadLastTick;
 
     static QString formatMemoryValue(float num);
@@ -71,6 +82,8 @@ protected:
     bool wasCompletedProperly() const;
 
     QNetworkRequest createRequest() const;
+
+    void downloadAvailableBytes();
 };
 
 

@@ -5,7 +5,7 @@
 #include "ApplicationRepositoryRestClient.h"
 #include "ApplicationsSearchRequest.h"
 #include "ApplicationGetRequest.h"
-#include "FileDownload.h"
+#include "Download.h"
 
 ApplicationRepositoryRestClient::ApplicationRepositoryRestClient(QString url, QObject *parent)
         : QObject(parent), ApplicationRepository(), api(url), networkAccessManager(new QNetworkAccessManager(this)) {
@@ -36,8 +36,8 @@ void ApplicationRepositoryRestClient::setNetworkAccessManager(QNetworkAccessMana
     ApplicationRepositoryRestClient::networkAccessManager = networkAccessManager;
 }
 
-FileDownload *ApplicationRepositoryRestClient::buildFileDownloadRequest(QString url, QString path) {
-    auto fileDownload = new FileDownload(url, path);
+Download * ApplicationRepositoryRestClient::buildFileDownloadRequest(QString url, QString path) {
+    auto fileDownload = new Download(url, path);
     fileDownload->setNetworkAccessManager(networkAccessManager);
     fileDownload->setProgressNotificationsEnabled(true);
     return fileDownload;

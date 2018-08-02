@@ -24,7 +24,7 @@ public:
 
     ApplicationGetRequest *buildGetApplicationRequest(const QString &id) const;
 
-    FileDownload *buildFileDownloadRequest(QString url, QString path) override;
+    Download * buildFileDownloadRequest(QString url, QString path) override;
 
     void setNetworkAccessManager(QNetworkAccessManager *networkAccessManager);
 };

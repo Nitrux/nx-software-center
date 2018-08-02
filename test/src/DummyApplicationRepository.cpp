@@ -5,7 +5,7 @@
 #include "DummyApplicationRepository.h"
 #include "DummyApplicationRepositoryGet.hpp"
 #include "DummyApplicationRepositorySearch.hpp"
-#include <gateways/FileDownload.h>
+#include <gateways/Download.h>
 
 ApplicationsRepositorySearch *
 DummyApplicationRepository::buildSearchRequest(const QString &query, const QString &category) const {
@@ -16,8 +16,8 @@ ApplicationRepositoryGet *DummyApplicationRepository::buildGetApplicationRequest
     return new DummyApplicationRepositoryGet();
 }
 
-FileDownload *DummyApplicationRepository::buildFileDownloadRequest(QString url, QString path) {
-    auto fileDownload = new FileDownload(url, path);
+Download * DummyApplicationRepository::buildFileDownloadRequest(QString url, QString path) {
+    auto fileDownload = new Download(url, path);
     fileDownload->setNetworkAccessManager(new QNetworkAccessManager());
     fileDownload->setProgressNotificationsEnabled(true);
     return fileDownload;

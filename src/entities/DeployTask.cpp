@@ -5,7 +5,7 @@
 #include <QtCore/QFileInfo>
 #include <QtConcurrent/QtConcurrent>
 #include <gateways/ApplicationGetRequest.h>
-#include <gateways/FileDownload.h>
+#include <gateways/Download.h>
 #include <gateways/ApplicationRepository.h>
 #include <appimage/appimage.h>
 #include <interactors/TaskMetadata.h>
@@ -79,9 +79,9 @@ void DeployTask::downloadApplicationFile(AppImageInfo applicationInfo) {
         QString filePath = getDownloadFilePath(applicationInfo, applicationInfo.release, file);
 
         fileDownload = repository->buildFileDownloadRequest(file.url, filePath);
-        connect(fileDownload, &FileDownload::completed, this, &DeployTask::handleFileDownloadCompleted);
-        connect(fileDownload, &FileDownload::stopped, this, &DeployTask::handleFileDownloadStopped);
-        connect(fileDownload, &FileDownload::progress, this, &DeployTask::handleFileDownloadProgress);
+        connect(fileDownload, &Download::completed, this, &DeployTask::handleFileDownloadCompleted);
+        connect(fileDownload, &Download::stopped, this, &DeployTask::handleFileDownloadStopped);
+        connect(fileDownload, &Download::progress, this, &DeployTask::handleFileDownloadProgress);
         fileDownload->start();
 
         setProgressMessage("Downloading AppImage file.");
@@ -118,7 +118,7 @@ void DeployTask::setApplicationsDir(const QString &applicationsDir) {
 }
 
 void DeployTask::handleFileDownloadCompleted() {
-    auto filePath = fileDownload->getTarget_path();
+    auto filePath = fileDownload->getTargetPath();
     QFileInfo f(filePath);
     filePath = f.absoluteFilePath();
     fileDownload->deleteLater();
@@ -166,7 +166,7 @@ void DeployTask::handleFileDownloadProgress(qint64 progress, qint64 total, const
 }
 
 void DeployTask::handleFileDownloadStopped() {
-    auto filePath = fileDownload->getTarget_path();
+    auto filePath = fileDownload->getTargetPath();
     QFile::remove(filePath);
 
     fileDownload->deleteLater();
