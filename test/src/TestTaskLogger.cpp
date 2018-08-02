@@ -10,7 +10,6 @@
 
 #include "entities/TaskLogger.h"
 #include "tasks/TaskMetadata.h"
-#include "entities/RecordMetadata.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {
     class TestTaskLogger : public testing::Test {

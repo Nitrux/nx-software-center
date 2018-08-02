@@ -19,6 +19,8 @@ Q_OBJECT
     QDateTime expirationDate;
 
 public:
+    static constexpr const char *KEY_TIME_STAMP = "timestamp";
+    static constexpr const char *KEY_IS_PERSISTENT = "persistence";
 
     explicit TaskLogger(QObject *parent = nullptr);
 

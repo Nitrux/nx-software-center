@@ -20,7 +20,6 @@ set(CORE_SRC
         gateways/FileDownload.h
         gateways/FileDownload.cpp
         tasks/TaskMetadata.h
-        entities/RecordMetadata.h
         entities/Upgrader.cpp
         entities/Upgrader.h
         entities/AppImageInfo.cpp

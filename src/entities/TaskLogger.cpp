@@ -13,7 +13,6 @@
 
 #include "entities/LocalizationUtils.h"
 #include "tasks/TaskMetadata.h"
-#include "RecordMetadata.h"
 
 static const char *const KEY_APPLICATION_ID = "appId";
 
@@ -27,7 +26,7 @@ void TaskLogger::handleTaskCompleted(const QVariantMap &task) {
     record[TaskMetadata::KEY_TYPE] = task[TaskMetadata::KEY_TYPE];
     const QString &taskStatus = task[TaskMetadata::KEY_STATUS].toString();
     record[TaskMetadata::KEY_STATUS] = task[TaskMetadata::KEY_STATUS];
-    record[RecordMetadata::KEY_TIME_STAMP] = QDateTime::currentDateTime();
+    record[KEY_TIME_STAMP] = QDateTime::currentDateTime();
 
     record[TaskMetadata::KEY_APP_ID] = app["id"].toString();
     record[TaskMetadata::KEY_APP_NAME] = LocalizationUtils::getLocalizedValue(app["name"].toMap());
@@ -66,7 +65,7 @@ void TaskLogger::handleTaskCompleted(const QVariantMap &task) {
 void TaskLogger::registerDeployCompleted(QVariantMap &map) {
 
     map[TaskMetadata::KEY_DESCRIPTION] = "Application installed successfully";
-    map[RecordMetadata::KEY_IS_PERSISTENT] = true;
+    map[KEY_IS_PERSISTENT] = true;
 
     appendDeployRecord(map);
 }
@@ -79,7 +78,7 @@ void TaskLogger::appendDeployRecord(const QVariantMap &map) {
 }
 
 void TaskLogger::registerDeployFailed(QVariantMap &map) {
-    map.insert(RecordMetadata::KEY_IS_PERSISTENT, false);
+    map.insert(KEY_IS_PERSISTENT, false);
     map[TaskMetadata::KEY_DESCRIPTION] = "Application install failed";
 
     appendRecord(map);
@@ -183,14 +182,14 @@ void TaskLogger::clearRecords() {
 
 void TaskLogger::registerRemoveCompleted(QVariantMap &map) {
     map[TaskMetadata::KEY_DESCRIPTION] = "Application removed successfully";
-    map.insert(RecordMetadata::KEY_IS_PERSISTENT, true);
+    map.insert(KEY_IS_PERSISTENT, true);
 
     appendRecord(map);
 }
 
 void TaskLogger::registerRemoveFailed(QVariantMap &map) {
     map[TaskMetadata::KEY_DESCRIPTION] = "Application remove failed";
-    map.insert(RecordMetadata::KEY_IS_PERSISTENT, false);
+    map.insert(KEY_IS_PERSISTENT, false);
 
     appendRecord(map);
 }
@@ -198,7 +197,7 @@ void TaskLogger::registerRemoveFailed(QVariantMap &map) {
 void TaskLogger::registerUpgradeCompleted(QVariantMap &map)
 {
     map[TaskMetadata::KEY_DESCRIPTION] = "Application upgraded successfully";
-    map.insert(RecordMetadata::KEY_IS_PERSISTENT, true);
+    map.insert(KEY_IS_PERSISTENT, true);
 
     appendRecord(map);
 }
@@ -206,7 +205,7 @@ void TaskLogger::registerUpgradeCompleted(QVariantMap &map)
 void TaskLogger::registerUpgradeFailed(QVariantMap &map)
 {
     map[TaskMetadata::KEY_DESCRIPTION] = "Application upgraded failed";
-    map.insert(RecordMetadata::KEY_IS_PERSISTENT, false);
+    map.insert(KEY_IS_PERSISTENT, false);
 
     appendRecord(map);
 }

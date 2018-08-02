@@ -13,7 +13,7 @@
 #include <ostream>
 #include "Application.h"
 
-class AppImageInfo  {
+class AppImageInfo {
 public:
 
     QString id;
@@ -33,13 +33,17 @@ public:
     QStringList mimeTypes;
     QMap<QString, QString> links;
 
-    static AppImageInfo fromVariant(const QVariant& variant);
-    static QVariant toVariant(const AppImageInfo& appImageInfo);
+    static AppImageInfo fromVariant(const QVariant &variant);
+
+    static QVariant toVariant(const AppImageInfo &appImageInfo);
+
     QVariant toVariant() const;
 
-    bool operator==(const AppImageInfo& rhs) const;
-    bool operator!=(const AppImageInfo& rhs) const;
-    friend std::ostream& operator<<(std::ostream& os, const AppImageInfo& info);
+    bool operator==(const AppImageInfo &rhs) const;
+
+    bool operator!=(const AppImageInfo &rhs) const;
+
+    friend std::ostream &operator<<(std::ostream &os, const AppImageInfo &info);
 
 };
 
