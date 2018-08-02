@@ -9,7 +9,7 @@
 #include <QSignalSpy>
 
 #include "entities/TaskLogger.h"
-#include "interactors/TaskMetadata.h"
+#include "tasks/TaskMetadata.h"
 #include "entities/RecordMetadata.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {

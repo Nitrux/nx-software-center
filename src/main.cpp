@@ -32,13 +32,6 @@ void registerQmlModules();
 
 void initSoftwareCenterModules(QObject *parent);
 
-Q_DECLARE_METATYPE(Application)
-
-Q_DECLARE_METATYPE(QList<Application>)
-
-
-void registerMetatypes();
-
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
 
@@ -52,18 +45,12 @@ int main(int argc, char *argv[]) {
     app.setApplicationDisplayName("Nomad Software Center");
     initSoftwareCenterModules(nullptr);
     registerQmlModules();
-    registerMetatypes();
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 
     return app.exec();
-}
-
-void registerMetatypes() {
-    qRegisterMetaType<Application>("Application");
-    qRegisterMetaType<QList<Application>>("ApplicationList");
 }
 
 void initSoftwareCenterModules(QObject *parent) {

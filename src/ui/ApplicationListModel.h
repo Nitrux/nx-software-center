@@ -4,7 +4,6 @@
 #include <QList>
 #include <QAbstractListModel>
 
-#include "entities/Application.h"
 #include <entities/ApplicationAbstract.h>
 class ApplicationListModel : public QAbstractListModel {
 Q_OBJECT
