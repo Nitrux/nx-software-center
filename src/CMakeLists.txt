@@ -32,8 +32,6 @@ set(CORE_SRC
         entities/Upgrader.h
         entities/ApplicationSerializer.cpp
         entities/ApplicationSerializer.h
-        interactors/RunInteractor.cpp
-        interactors/RunInteractor.h
         entities/AppImageInfo.cpp
         entities/AppImageInfo.h
         gateways/ApplicationsSearchRequest.cpp

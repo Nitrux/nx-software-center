@@ -23,8 +23,6 @@ public slots:
 
     void runAppImage(const QString &path);
 
-private:
-    void spawnRunInteractor(const QString &executable);
 };
 
 
