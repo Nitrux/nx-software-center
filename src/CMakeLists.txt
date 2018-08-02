@@ -28,8 +28,6 @@ set(CORE_SRC
         gateways/Download.cpp
         gateways/ContentDownload.cpp
         gateways/ContentDownload.h
-        gateways/CacheSource.cpp
-        gateways/CacheSource.h
         interactors/TaskMetadata.h
         entities/RecordMetadata.h
         interactors/RemoveAppImageInteractor.cpp
