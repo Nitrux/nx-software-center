@@ -6,7 +6,6 @@
 #define NOMAD_SOFTWARE_CENTER_UNINSTALLCONTROLLER_H
 
 #include <QObject>
-#include <entities/Repository.h>
 #include <gateways/DeployedApplicationsRegistry.h>
 
 #include "entities/Remover.h"

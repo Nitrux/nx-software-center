@@ -2,7 +2,6 @@
 // Created by alexis on 23/01/18.
 //
 
-#include <entities/Repository.h>
 #include <entities/TaskLogger.h>
 #include "RemoveController.h"
 

@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QVariantMap>
-#include <entities/Repository.h>
 #include <entities/TaskLogger.h>
 #include <entities/Worker.h>
 #include <gateways/ApplicationRepositoryRestClient.h>

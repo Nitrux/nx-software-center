@@ -11,7 +11,6 @@ set(CORE_SRC
         entities/ApplicationAbstract.cpp
         entities/ApplicationAbstract.h
 
-        entities/Repository.cpp
         entities/Source.cpp
         gateways/ApplicationRepositoryRestClient.cpp
         gateways/ApplicationRepositoryRestClient.h
