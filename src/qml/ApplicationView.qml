@@ -135,8 +135,7 @@ Item {
 
                     visible: ApplicationViewController.isAppInstalled
 
-                    onClicked: UnDeployController.remove(
-                                    ApplicationViewController.appId)
+                    onClicked: RemoveController.remove(ApplicationViewController.appId)
                 }
             }
         }
