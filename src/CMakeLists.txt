@@ -135,3 +135,8 @@ target_link_libraries(nx_software_center
 
 install(TARGETS nx_software_center ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
+# Wrapper used to build the AppImage
+add_executable(nx_software_center_wrapper wrapper.c )
+target_compile_definitions(nx_software_center_wrapper
+        PRIVATE BINARY_PATH="${CMAKE_INSTALL_PREFIX}/bin/nx_software_center")
+install(TARGETS nx_software_center_wrapper ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

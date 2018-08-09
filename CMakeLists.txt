@@ -6,6 +6,7 @@ cmake_policy(SET CMP0037 NEW)
 cmake_policy(SET CMP0063 NEW)
 
 # Enable C++14 support
+set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 14)
 
 # Enable exceptions
