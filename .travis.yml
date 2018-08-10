@@ -28,7 +28,6 @@ addons:
     - git
     - cmake
     - libappimage-dev
-    - libglib2.0-dev
 
 before_install:
   - wget http://ftp.debian.org/debian/pool/main/p/patchelf/patchelf_0.8-2_amd64.deb -O /tmp/patchelf_0.8-2_amd64.deb
