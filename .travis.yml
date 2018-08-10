@@ -27,9 +27,7 @@ addons:
     - wget
     - git
     - cmake
-    - librsvg2-bin
     - libappimage-dev
-    - libcairo2-dev
     - libglib2.0-dev
 
 before_install:
