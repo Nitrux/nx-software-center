@@ -35,9 +35,6 @@ before_install:
   - wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -O /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
 
 install:
-  - sudo apt-get -y update
-  - sudo apt-get -yq install dpkg
-  - sudo apt-get -yq install nomad-plasma-look-and-feel luv-icon-theme nomad-desktop-settings
   - sudo dpkg -i /tmp/patchelf_0.8-2_amd64.deb
   - sudo tar xpf /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C /usr/
   - sudo update-alternatives --install /usr/bin/qmake qmake /opt/qt510/bin/qmake 1
@@ -45,6 +42,9 @@ install:
 
 
 script:
+  - sudo apt-get -y update
+  - sudo apt-get -yq install dpkg
+  - sudo apt-get -yq install nomad-plasma-look-and-feel luv-icon-theme nomad-desktop-settings
   - /opt/qt510/bin/qt510-env.sh
   - export QT_SELECT=qt5
   - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/"
