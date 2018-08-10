@@ -11,7 +11,7 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     - sourceline: 'ppa:beineri/opt-qt-5.10.1-trusty'
-    - sourceline: 'deb http://repo.nxos.org nxos main'
+    - sourceline: 'deb http://repo.nxos.org/testing nxos main'
       key_url: 'http://repo.nxos.org/public.key'
     packages:
     - dpkg
@@ -33,9 +33,9 @@ addons:
     - libglib2.0-dev
 
 before_install:
-  - sudo apt update
-  - sudo apt install dpkg
-  - sudo apt install nomad-plasma-look-and-feel luv-icon-theme nomad-desktop-settings
+  - sudo apt-get update
+  - sudo apt-get install dpkg
+  - sudo apt-get install nomad-plasma-look-and-feel luv-icon-theme nomad-desktop-settings
   - wget http://ftp.debian.org/debian/pool/main/p/patchelf/patchelf_0.8-2_amd64.deb -O /tmp/patchelf_0.8-2_amd64.deb
   - wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -O /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
 
