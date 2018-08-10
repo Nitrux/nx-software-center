@@ -49,7 +49,7 @@ install:
 script:
   - /opt/qt510/bin/qt510-env.sh
   - export QT_SELECT=qt5
-  - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/"
+  - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/"
   - make -j$(nproc)
   - export PATH=$PATH:/opt/qt510/bin/
   - export QML_MODULES_FIND_DIRS="/opt/qt510/qml /usr/lib/x86_64-linux-gnu/qml"
@@ -58,9 +58,7 @@ script:
 
 after_success:
   - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-  - mkdir out
-  - mv -v Software_Center*.AppImage* out/
-  - curl --upload-file "{$(echo out/* | tr ' ' ',')}" https://transfer.sh/
+  - curl --upload-file "{$(echo dist/* | tr ' ' ',')}" https://transfer.sh/
 
 branches:
   except:
@@ -74,7 +72,7 @@ deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
   file_glob: true
-  file: out/*
+  file: dist/*
   skip_cleanup: true
   prerelease: true
   overwrite: true

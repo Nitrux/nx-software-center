@@ -13,7 +13,8 @@ export BASE_DIR=${PWD}
 export BUILD_DIR=${BASE_DIR}/build
 export APP_DIR=${BASE_DIR}/AppDir
 
-${build_scripts_dir}/appimage.create.initial.appdir.sh || { echo "Initial AppDir Creation Failed" && exit 1; }
+echo "## Install into ${APP_DIR}"
+DESTDIR=${APP_DIR} make -j$(nproc) install || exit 1
 
 APP_NAME=org.nxos.softwarecenter
 
