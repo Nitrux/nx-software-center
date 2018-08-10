@@ -28,14 +28,12 @@ addons:
     - git
     - cmake
     - librsvg2-bin
-    - nomad-plasma-look-and-feel
-    - luv-icon-theme
-    - nomad-desktop-settings
     - libappimage-dev
     - libcairo2-dev
     - libglib2.0-dev
 
 before_install:
+  - sudo apt install nomad-plasma-look-and-feel luv-icon-theme nomad-desktop-settings
   - wget http://ftp.debian.org/debian/pool/main/p/patchelf/patchelf_0.8-2_amd64.deb -O /tmp/patchelf_0.8-2_amd64.deb
   - wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -O /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
 
