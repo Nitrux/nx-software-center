@@ -9,7 +9,6 @@ notifications:
 addons:
   apt:
     sources:
-    - ubuntu-toolchain-r-test
     - sourceline: 'ppa:beineri/opt-qt-5.10.1-trusty'
     - sourceline: 'deb http://repo.nxos.org/testing nxos main'
       key_url: 'http://repo.nxos.org/public.key'
