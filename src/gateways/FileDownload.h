@@ -1,34 +1,57 @@
 //
-// Created by alexis on 16/01/18.
+// Created by alexis on 17/01/18.
 //
 
-#ifndef NOMAD_SOFTWARE_CENTER_FILEDOWNLOAD_H
-#define NOMAD_SOFTWARE_CENTER_FILEDOWNLOAD_H
+#ifndef NOMAD_SOFTWARE_CENTER_DOWNLOAD_H
+#define NOMAD_SOFTWARE_CENTER_DOWNLOAD_H
 
-#include <QFile>
-#include <QObject>
-#include <QString>
+
+#include <QTimer>
 #include <QNetworkReply>
-#include <QNetworkAccessManager>
+#include <QSharedPointer>
+#include <QFile>
 
-#include "Download.h"
-
-class FileDownload : public Download {
+class FileDownload : public QObject {
 Q_OBJECT
+    QString source_url;
+    bool running;
+    bool progressNotificationsEnabled;
     QFile file;
 
 public:
-    FileDownload(const QString &url, const QString &target_path, QObject *parent = nullptr);
+    explicit FileDownload(QString url, QString path, QObject *parent = nullptr);
 
     virtual ~FileDownload();
 
-    const QString getTarget_path() const;
+    const QString &getSource_url() const;
 
-public slots:
+    void setNetworkAccessManager(QNetworkAccessManager *networkAccessManager);
 
-    void start() override;
+    void setProgressNotificationsEnabled(bool progressNotificationsEnabled);
+
+    virtual void start();
+
+    virtual void stop();
+
+    bool isRunning();
+
+    const QString getTargetPath() const;
+
+signals:
+
+    void completed();
+
+    void stopped(const QString &message);
+
+    void progress(qint64 progress, qint64 total, const QString &message);
 
 protected slots:
+
+    virtual void handleDownloadProgress(qint64 bytesRead, qint64 totalBytes);
+
+    virtual void handleTimerTick();
+
+    virtual void handleFinished();
 
     void handleReadyRead();
 
@@ -36,9 +59,32 @@ protected slots:
 
     void handleStopped();
 
-private:
+protected:
+    bool isStopRequested;
+    QNetworkAccessManager *networkAccessManager;
+
+    QSharedPointer<QNetworkReply> reply;
+    QTimer timer;
+    float speed;
+    qint64 totalBytes;
+    qint64 bytesRead;
+
+    qint64 bytesReadLastTick;
+
+    static QString formatMemoryValue(float num);
+
+    void createNetworkAccessManagerIfNotExist();
+
+    void reportProgress();
+
+    void updateDownloadSpeed();
+
+    bool wasCompletedProperly() const;
+
+    QNetworkRequest createRequest() const;
+
     void downloadAvailableBytes();
 };
 
 
-#endif //NOMAD_SOFTWARE_CENTER_FILEDOWNLOAD_H
+#endif //NOMAD_SOFTWARE_CENTER_DOWNLOAD_H

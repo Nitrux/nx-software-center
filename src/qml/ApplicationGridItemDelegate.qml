@@ -11,7 +11,7 @@ Item {
     property alias version: labelVersion.text
     property alias size: labelSize.text
 
-    property bool installed: false
+    property bool deployed: false
     property bool upgradable: false
     property bool hasPendingAction: false
 
@@ -45,13 +45,16 @@ Item {
 
         Image {
             id: iconImage
-            Layout.maximumWidth: 180
+            Layout.maximumWidth: 120
             Layout.preferredHeight: 100
             Layout.maximumHeight: 120
             Layout.alignment: Qt.AlignCenter
             Layout.margins: 10
 
             visible: source != "" && status == Image.Ready
+            asynchronous: true
+            cache: false
+            fillMode: Image.PreserveAspectFit
         }
 
         PlasmaCore.IconItem {
@@ -78,12 +81,19 @@ Item {
                 id: labelName
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignBottom
-                Layout.columnSpan: 2
 
                 elide: Text.ElideRight
 
+                font.pointSize: 9
                 font.bold: true
-                font.pointSize: 8
+            }
+
+            Loader {
+                id: loader
+                Layout.rowSpan: 3
+                Layout.maximumWidth: 72
+                Layout.preferredHeight: 20
+                sourceComponent: deployed ? removeButton : getButton
             }
 
             PlasmaComponents.Label {
@@ -92,14 +102,7 @@ Item {
                 elide: Text.ElideRight
 
                 font.pointSize: 8
-            }
-
-            Loader {
-                id: loader
-                Layout.rowSpan: 2
-                Layout.maximumWidth: 72
-                Layout.preferredHeight: 20
-                sourceComponent: installed ? removeButton : getButton
+                visible: text
             }
 
             PlasmaComponents.Label {
@@ -108,6 +111,7 @@ Item {
                 elide: Text.ElideRight
 
                 font.pointSize: 8
+                visible: text
             }
         }
 
@@ -169,6 +173,12 @@ Item {
                         MenuItem {
                             text: i18n("Remove")
                             onClicked: requestRemove()
+                        }
+
+                        MenuItem {
+                            text: i18n("Upgrade")
+                            onClicked: requestUpgrade()
+                            enabled: upgradable
                         }
                     }
                 }

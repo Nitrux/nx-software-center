@@ -2,8 +2,8 @@
 
 #include <QDateTime>
 
-#include "entities/RecordMetadata.h"
-#include "interactors/TaskMetadata.h"
+#include "entities/TaskLogger.h"
+#include "tasks/TaskMetadata.h"
 
 RegistryListModel::RegistryListModel(QObject* parent)
     : QAbstractListModel(parent) {}
@@ -12,8 +12,8 @@ QHash<int, QByteArray> RegistryListModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles.insert(Type, TaskMetadata::KEY_TYPE);
     roles.insert(Message, "message");
-    roles.insert(TimeStamp, RecordMetadata::KEY_TIME_STAMP);
-    roles.insert(Persistence, RecordMetadata::KEY_IS_PERSISTENT);
+    roles.insert(TimeStamp, TaskLogger::KEY_TIME_STAMP);
+    roles.insert(Persistence, TaskLogger::KEY_IS_PERSISTENT);
     roles.insert(Result, TaskMetadata::KEY_STATUS);
     roles.insert(APP_ID, TaskMetadata::KEY_APP_ID);
     roles.insert(APP_NAME, TaskMetadata::KEY_APP_NAME);
@@ -40,7 +40,7 @@ QString RegistryListModel::createRecordMessage(const QVariantMap& record) const 
 
         if (record.value(TaskMetadata::KEY_TYPE)
                 .toString()
-                .compare(TaskMetadata::VALUE_TYPE_INSTALL) == 0) {
+                .compare(TaskMetadata::VALUE_TYPE_DELPOY) == 0) {
 
             message = "Application installed successfully.";
         }
@@ -54,7 +54,7 @@ QString RegistryListModel::createRecordMessage(const QVariantMap& record) const 
     } else {
         if (record.value(TaskMetadata::KEY_TYPE)
                 .toString()
-                .compare(TaskMetadata::VALUE_TYPE_INSTALL) == 0) {
+                .compare(TaskMetadata::VALUE_TYPE_DELPOY) == 0) {
 
             message = "Installation failed.";
         }
@@ -82,11 +82,11 @@ QVariant RegistryListModel::data(const QModelIndex& index, int role) const {
         return createRecordMessage(record);
     case TimeStamp:
     {
-        QDateTime dt  = record.value(RecordMetadata::KEY_TIME_STAMP).toDateTime();
+        QDateTime dt  = record.value(TaskLogger::KEY_TIME_STAMP).toDateTime();
         return dt.toString(Qt::SystemLocaleLongDate);
     }
     case Persistence:
-        return record.value(RecordMetadata::KEY_IS_PERSISTENT);
+        return record.value(TaskLogger::KEY_IS_PERSISTENT);
     case Result:
         return record.value(TaskMetadata::KEY_STATUS);
     case APP_ID:

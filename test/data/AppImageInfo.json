@@ -1,0 +1,78 @@
+{
+  "format": 1,
+    "id": "example-app.desktop",
+  "name": {
+    "null": "this is used in the case that there is no locale info about this text",
+    "en": "Example App",
+    "es": "Aplicación de ejemplo"
+  },
+  "icon": "icon url",
+  "abstract": {
+    "en": "Example Application Abstract.",
+    "es": "Resumen de la Applicación de Ejemplo."
+  },
+  "description": {
+    "en": "<p>English long description of example app</p>",
+    "es": "<p>Descripción en Español de la Aplicación de Ejemplo</p>"
+  },
+  "license": {
+    "id": "gpl3",
+    "name": "GNU General Public License 3",
+    "body": "... GNU General Public License 3 ..."
+  },
+  "categories": [
+    "Development"
+  ],
+  "keywords": [
+    "application",
+    "applicación",
+    "example",
+    "ejemplo"
+  ],
+  "languages": [
+    "de_DE",
+    "es_CU",
+    "ru"
+  ],
+  "developer": {
+    "name": "Bob",
+    "avatar": "https://bob.blog/logo.sng",
+    "website": "https://github.com/AppImage",
+    "pubkey": "gpg public key"
+  },
+  "release": {
+    "date": "Tue Jun 26 00:31:36 2018 GMT",
+    "version": "0.1.0",
+    "channel": "stable",
+    "changelog": {
+      "en": "<p>The application was created.</p>",
+      "es": "<p>La applicación fue creada.</p>"
+    }
+  },
+  "file": {
+    "type": 2,
+    "size": 1882040,
+    "architecture": "x86-64",
+    "sha512checksum": "a big and fussy checksum",
+    "url": "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+  },
+  "screenshots": [
+    {
+      "height": 0,
+      "width": 0,
+      "language": "",
+      "caption": "Update from Ubuntu with AppImageUpdate",
+      "url": "https://cloud.githubusercontent.com/assets/2480569/19410850/0390fe9c-92f6-11e6-9882-3ca6d360a190.jpg"
+    }
+  ],
+  "mime-types": [
+    "application/x-iso9660-image",
+    "application/vnd.appimage"
+  ],
+  "links": {
+    "homepage": "https://appimage.org",
+    "help": "https://github.com/AppImage/AppImageKit/wiki",
+    "donation": "https://www.paypal.me/azubieta",
+    "development": "https://github.com/AppImage/AppImageKit"
+  }
+}

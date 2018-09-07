@@ -5,34 +5,39 @@
 #include <gtest/gtest.h>
 
 #include <entities/Upgrader.h>
-#include <entities/Repository.h>
+
+#include <QtCore/QTemporaryDir>
 #include <QtTest/QSignalSpy>
+
+#include "DummyApplicationRepository.h"
 
 namespace NX_SOFTWARE_CENTER_TESTS {
     class TestUpgrader : public testing::Test {
     };
 
     TEST_F(TestUpgrader, checkForUpgrades) {
-        Repository repository;
+        QTemporaryDir applicationsTemporaryDir;
+        QTemporaryDir cacheTemporaryDir;
 
-        Application application1("test", "1");
-        Application application2("test", "2");
-        repository.add(application1);
-        repository.add(application2);
+        QFile::copy(TEST_DATA_DIR "echo-x86_64-8.25.AppImage",
+                    applicationsTemporaryDir.path() + "/echo-x86_64-8.25.AppImage");
+
+        DummyApplicationRepository dummyApplicationRepository;
+        DeployedApplicationsRegistry deployedApplicationsRegistry;
+        deployedApplicationsRegistry.setApplicationsDir(applicationsTemporaryDir.path());
+        deployedApplicationsRegistry.setCacheDir(cacheTemporaryDir.path());
 
         Upgrader upgrader;
-        upgrader.setRepository(&repository);
+        upgrader.setApplicationRepository(&dummyApplicationRepository);
+        upgrader.setDeployedApplicationsRegistry(&deployedApplicationsRegistry);
 
-        upgrader.handleInstalledApplicationsChanged({"test-1"});
-        UpgradeList upgrades = upgrader.getUpgradableApplications();
+        QSignalSpy spy(&upgrader, &Upgrader::upgradesLookUpCompleted);
 
-        ASSERT_TRUE(upgrades.contains(Upgrade("test-1","test-2")));
+        upgrader.lookUpForUpgrades();
 
-        Application application3("test", "3");
-        QSignalSpy spy(&upgrader, &Upgrader::upgradableApplicationsChanged);
-
-        repository.add(application3);
-
-        ASSERT_LT(0, spy.count());
+        ASSERT_EQ(1, spy.count());
+        auto upgrades = upgrader.getUpgradableApplications();
+        ASSERT_EQ(1, upgrades.size());
+        ASSERT_EQ(upgrades.first().id, "echo.desktop");
     }
 }

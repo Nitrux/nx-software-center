@@ -14,6 +14,7 @@
         <file>UpgradeItem.qml</file>
         <file>ApplicationView.qml</file>
         <file>parts/CounterEmblem.qml</file>
+        <file>DeployedApplicationsView.qml</file>
     </qresource>
     <qresource prefix="/scripts"/>
 </RCC>

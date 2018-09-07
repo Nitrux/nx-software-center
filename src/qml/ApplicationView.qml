@@ -112,7 +112,7 @@ Item {
 
                     visible: !ApplicationViewController.isAppInstalled
 
-                    onClicked: InstallController.install(
+                    onClicked: DeployController.deploy(
                                     ApplicationViewController.appId)
                 }
 
@@ -136,8 +136,7 @@ Item {
 
                     visible: ApplicationViewController.isAppInstalled
 
-                    onClicked: UninstallController.uninstall(
-                                    ApplicationViewController.appId)
+                    onClicked: RemoveController.remove(ApplicationViewController.appId)
                 }
             }
         }

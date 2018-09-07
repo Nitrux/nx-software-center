@@ -6,12 +6,10 @@ sudo: required
 addons:
   apt:
     sources:
-    - ubuntu-toolchain-r-test
     - sourceline: 'ppa:beineri/opt-qt-5.10.1-trusty'
-    - sourceline: 'deb http://repo.nxos.org nxos main'
+    - sourceline: 'deb http://repo.nxos.org/testing nxos main'
       key_url: 'http://repo.nxos.org/public.key'
     packages:
-    - dpkg
     - qt510base
     - qt510declarative
     - qt510xmlpatterns
@@ -24,13 +22,7 @@ addons:
     - wget
     - git
     - cmake
-    - librsvg2-bin
-    - nomad-plasma-look-and-feel
-    - luv-icon-theme
-    - nomad-desktop-settings
     - libappimage-dev
-    - libcairo2-dev
-    - libglib2.0-dev
 
 before_install:
   - wget http://ftp.debian.org/debian/pool/main/p/patchelf/patchelf_0.8-2_amd64.deb -O /tmp/patchelf_0.8-2_amd64.deb
@@ -44,9 +36,12 @@ install:
 
 
 script:
+  - sudo apt-get -y update
+  - sudo apt-get -yq install dpkg
+  - sudo apt-get -yq install nomad-plasma-look-and-feel luv-icon-theme nomad-desktop-settings
   - /opt/qt510/bin/qt510-env.sh
   - export QT_SELECT=qt5
-  - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/"
+  - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/"
   - make -j$(nproc)
   - export PATH=$PATH:/opt/qt510/bin/
   - export QML_MODULES_FIND_DIRS="/opt/qt510/qml /usr/lib/x86_64-linux-gnu/qml"
@@ -55,9 +50,7 @@ script:
 
 after_success:
   - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-  - mkdir out
-  - mv -v Software_Center*.AppImage* out/
-  - curl --upload-file "{$(echo out/* | tr ' ' ',')}" https://transfer.sh/
+  - curl --upload-file "{$(echo dist/* | tr ' ' ',')}" https://transfer.sh/
 
 branches:
   except:
@@ -71,7 +64,7 @@ deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
   file_glob: true
-  file: out/*
+  file: dist/*
   skip_cleanup: true
   prerelease: true
   overwrite: true

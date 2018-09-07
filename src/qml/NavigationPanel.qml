@@ -5,13 +5,14 @@ import QtQuick.Layouts 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-import "parts" as Parts;
+import "parts" as Parts
 
 PlasmaCore.FrameSvgItem {
     property alias query: searchField.text
 
     signal goHome
     signal goStore
+    signal goDeployed
     signal goTasks
     signal goSettings
     signal storeQueryTyped(var query)
@@ -42,7 +43,6 @@ PlasmaCore.FrameSvgItem {
 
         height: 34
         spacing: 12
-
         PlasmaComponents.ToolButton {
             id: storeButton
             iconName: "appimage-store"
@@ -72,6 +72,17 @@ PlasmaCore.FrameSvgItem {
                 anchors.top: parent.top
                 height: 18
                 width: 18
+            }
+        }
+
+        PlasmaComponents.ToolButton {
+            id: deployedButton
+            iconName: "update-none"
+            Layout.fillHeight: true
+            checked: currentView == "deployed"
+            onClicked: {
+                currentView = "deployed"
+                goDeployed()
             }
         }
 

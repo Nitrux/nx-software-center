@@ -28,6 +28,7 @@ ApplicationWindow {
         onGoStore: main.handleGoStore()
         onGoTasks: main.showTasksView()
         onStoreQueryTyped: main.search(query)
+        onGoDeployed: main.showDeployedApplicationsView();
 
         tasksCount: "0"
 
@@ -38,14 +39,16 @@ ApplicationWindow {
 
         Connections {
             target: UpgraderController
-            onUpgradableApplicationsChanged: navigationPanel.updateTaskNumberHint()
+            onUpgradableApplicationIdsChanged: navigationPanel.updateTaskNumberHint()
         }
 
         function updateTaskNumberHint() {
-            var total = TasksController.model.rowCount(
-                        ) + UpgraderController.model.rowCount()
+            var total = TasksController.model.rowCount()
+                    + UpgraderController.upgradableApplicationIds.length
             navigationPanel.tasksCount = total > 9 ? "+9" : total
         }
+
+        Component.onCompleted: updateTaskNumberHint()
     }
 
     footer: StatusArea {
@@ -134,6 +137,7 @@ ApplicationWindow {
 
     function search(query) {
         SearchController.search(query)
+        showSearchView()
     }
 
     function showTasksView() {
@@ -141,9 +145,9 @@ ApplicationWindow {
         stackView.goTo("tasksView", "qrc:/TasksView.qml")
     }
 
-    Connections {
-        target: UpdaterController
-        onIsWorkingChanged: handleUpdaterIsWorkingChanged(isWorking)
+    function showDeployedApplicationsView() {
+        main.title = "Deployed Applications"
+        stackView.goTo("deployedApplicationsView", "qrc:/DeployedApplicationsView.qml")
     }
 
     function handleUpdaterIsWorkingChanged(isWorking) {
@@ -163,10 +167,7 @@ ApplicationWindow {
     }
 
     function handleGoStore() {
-        if (UpdaterController.isReady)
             showSearchView()
-        else
-            UpdaterController.update()
     }
 
     function showSearchView() {
@@ -195,6 +196,24 @@ ApplicationWindow {
         item.iconName = "network-wireless-disconnected"
         item.showBusyIndicator = false
     }
+
+    Item {
+        id : busyView
+        anchors.fill: parent
+        visible: SearchController.isBusy || ApplicationViewController.isBusy
+        Rectangle {
+            id: busyIndicatorBacground
+            anchors.fill: parent
+            color: "white"
+            opacity: 0.3
+
+        }
+
+        BusyIndicator {
+            anchors.centerIn: parent;
+        }
+    }
+
 
     Component.onCompleted: handleGoStore()
 }

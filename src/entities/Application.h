@@ -1,99 +1,121 @@
-#ifndef APPLICATION_H
-#define APPLICATION_H
+//
+// Created by alexis on 7/4/18.
+//
 
+#ifndef NX_SOFTWARE_CENTER_APPLICATIONFULL1_H
+#define NX_SOFTWARE_CENTER_APPLICATIONFULL1_H
+
+#include <ostream>
 #include <QString>
-#include <QStringList>
+#include <QVariant>
+#include <QDateTime>
 
+class AppImageInfo;
 class Application {
-    QString id;
-    QString codeName;
-    QString version;
-
-    QString name;
-    QString arch;
-    QString description;
-    QString licence;
-    QStringList authors;
-    QStringList categories;
-    QStringList screenshots;
-
-    QString downloadUrl;
-    int downloadSize;
-    QString homePageUrl;
-    QString icon;
-
 public:
-    explicit Application();
+    class LocalizedQString : public QMap<QString, QString> {
+    public:
+        static LocalizedQString fromVariant(const QVariant& variant);
+        static QVariant toVariant(const LocalizedQString& string);
 
-    explicit Application(const QString &codeName, const QString &version);
+        friend std::ostream& operator<<(std::ostream& os, const LocalizedQString& string);
+    };
+    class License {
+    public:
+        QString id;
+        QString name;
+        QString body;
 
-    QString getId() const;
+        bool operator==(const License& rhs) const;
+        bool operator!=(const License& rhs) const;
+        friend std::ostream& operator<<(std::ostream& os, const License& license);
+        static License fromVariant(const QVariant& variant);
+        static QVariant toVariant(const License& license);
+    };
+    class Developer {
+    public:
+        QString name;
+        QString avatar;
+        QString website;
+        QString pubkey;
 
-    QString getVersion() const;
+        bool operator==(const Developer& rhs) const;
+        bool operator!=(const Developer& rhs) const;
+        friend std::ostream& operator<<(std::ostream& os, const Developer& developer);
+        static Developer fromVariant(const QVariant& variant);
+        static QVariant toVariant(const Developer& developer);
+    };
+    class File {
+    public:
+        int type;
+        int size;
+        QString architecture;
+        QString sha512checksum;
+        QString url;
+        QString path;
 
-    QString getCodeName() const;
+        File();
+        bool operator==(const File& rhs) const;
+        bool operator!=(const File& rhs) const;
+        friend std::ostream& operator<<(std::ostream& os, const File& file);
+        static File fromVariant(const QVariant& variant);
+        static QVariant toVariant(const File& file);
+    };
 
-    QString getDescription() const;
+    class Release {
+    public:
+        QDateTime date;
+        QString version;
+        QString channel;
+        LocalizedQString changelog;
+        QList<File> files;
+        QList<File> compatibleFiles(const QString& cpuArchitecture) const;
+        bool operator==(const Release& rhs) const;
+        bool operator!=(const Release& rhs) const;
+        friend std::ostream& operator<<(std::ostream& os, const Release& release);
+        static Release fromVariant(const QVariant& variant);
+        static QVariant toVariant(const Release& release);
+    };
 
-    void setDescription(const QString &description);
+    class RemoteImage {
+    public:
+        int height;
+        int width;
+        QString language;
+        QString caption;
+        QString url;
 
-    const QString &getName() const;
+        RemoteImage();
+        bool operator==(const RemoteImage& rhs) const;
+        bool operator!=(const RemoteImage& rhs) const;
+        friend std::ostream& operator<<(std::ostream& os, const RemoteImage& image);
+        static RemoteImage fromVariant(const QVariant& variant);
+        static QVariant toVariant(const RemoteImage& image);
+    };
 
-    void setName(const QString &name);
+    QString id;
+    LocalizedQString name;
+    QString icon;
+    LocalizedQString abstract;
+    LocalizedQString description;
 
-    const QString &getLicence() const;
+    License license;
+    QStringList categories;
+    QStringList keywords;
+    QStringList languages;
+    Developer developer;
+    QList<Release> releases;
+    QList<RemoteImage> screenshots;
+    QStringList mimeTypes;
+    QMap<QString, QString> links;
 
-    void setLicence(const QString &licence);
+    QVariant toVariant() const;
+    friend std::ostream& operator<<(std::ostream& os, const Application& full);
+    Release latestCompatibleRelease(const QString& cpuArchitecture, const QString& channel = QString());
 
-    const QStringList &getAuthors() const;
+    AppImageInfo latestCompatibleReleaseInfo();
 
-    void setAuthors(const QStringList &authors);
-
-    const QStringList &getCategories() const;
-
-    void setCategories(const QStringList &categories);
-
-    const QString &getArch() const;
-
-    void setArch(const QString &arch);
-
-    const QStringList &getScreenshots() const;
-
-    void setScreenshots(const QStringList &screenshots);
-
-    const QString &getDownloadUrl() const;
-
-    void setDownloadUrl(const QString &downloadUrl);
-
-    int getDownloadSize() const;
-
-    void setDownloadSize(int downloadSize);
-
-    const QString &getHomePageUrl() const;
-
-    void setHomePageUrl(const QString &webPortalUrl);
-
-    int compare(const Application &a) const;
-
-    int compare_by_name(const Application &a) const;
-
-    int compare_by_version(const Application &a) const;
-
-    bool operator==(const Application &a) const;
-
-    bool operator!=(const Application &a) const;
-
-    bool operator<(const Application &a) const;
-
-    bool isEmpty();
-
-    const QString &getIcon() const;
-
-    void setIcon(const QString &icon);
-
-private:
-    QString generateId(const QString &id, const QString &version) const;
+    static Application from(const AppImageInfo &appImageInfo);
 };
 
-
-#endif  // APPLICATION_H
+#endif //NX_SOFTWARE_CENTER_APPLICATIONFULL1_H

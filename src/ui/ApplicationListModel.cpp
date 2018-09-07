@@ -1,4 +1,7 @@
+#include <QDebug>
+#include <QLocale>
 #include "ApplicationListModel.h"
+#include "entities/LocalizationUtils.h"
 
 ApplicationListModel::ApplicationListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -9,11 +12,12 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles.insert(Id, "app_id");
-    roles.insert(CodeName, "app_code_name");
     roles.insert(Name, "app_name");
-    roles.insert(Description, "app_description");
-    roles.insert(Version, "app_version");
     roles.insert(Icon, "app_icon");
+    roles.insert(Abstract, "app_abstract");
+    roles.insert(Version, "app_version");
+    roles.insert(Size, "app_size");
+
     return roles;
 }
 
@@ -32,27 +36,27 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || applications.size() <= index.row())
         return QVariant();
 
-    Application a = applications.at(index.row());
-    // FIXME: Implement more
+    auto a = applications.at(index.row());
+
     QVariant ret;
     switch (role) {
     case Id:
-        ret = a.getId();
+        ret = a.id;
         break;
     case Version:
-        ret = a.getVersion();
+        ret = a.latestReleaseVersion;
         break;
-    case CodeName:
-        ret = a.getCodeName();
+    case Size:
+        ret = a.fileSize;
         break;
     case Name:
-        ret = a.getName();
+        ret = LocalizationUtils::getLocalizedValue(a.name);
         break;
-    case Description:
-        ret = a.getDescription();
+    case Abstract:
+        ret = LocalizationUtils::getLocalizedValue(a.abstract);
         break;
     case Icon:
-        ret = a.getIcon();
+        ret = a.icon;
         break;
     default:
         break;
@@ -61,7 +65,7 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     return ret;
 }
 
-void ApplicationListModel::setApplications(const QList<Application> &applications) {
+void ApplicationListModel::setApplications(const QList<ApplicationAbstract> applications) {
     beginResetModel();
     this->applications = applications;
     endResetModel();

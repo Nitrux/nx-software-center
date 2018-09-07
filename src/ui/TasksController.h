@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-#include "entities/Executor.h"
+#include "entities/Worker.h"
 #include "TaskListModel.h"
 #include <QMutex>
 
@@ -17,25 +17,31 @@ Q_OBJECT
     Q_PROPERTY(TaskListModel *model MEMBER model NOTIFY modelChanged)
     Q_PROPERTY(QStringList affectedApplicationsIds MEMBER affectedApplicationsIds NOTIFY affectedApplicationsIdsChanged)
     TaskListModel *model;
-    Executor *executor;
-    QMutex mutex;
+    Worker *worker;
+
     QStringList affectedApplicationsIds;
 public:
-    TasksController(Executor *executor, QObject *parent = 0);
+    TasksController(QObject *parent = 0);
 
     Q_INVOKABLE void cancelTask(const QString &id);
 
+    void setWorker(Worker *worker);
+
 signals:
+
     void modelChanged(TaskListModel *model);
+
     void affectedApplicationsIdsChanged(QStringList affectedApplicationsIds);
 
 protected slots:
 
-    void handleTaskStarted(const QString &id, const QVariantMap &data);
+    void handleTaskStarted(const QVariantMap &data);
 
-    void handleTaskCompleted(const QString &id, const QVariantMap &data);
+    void handleTaskChanged(const QVariantMap &data);
 
-    void handleTaskDataChanged(const QString &id, const QVariantMap &data);
+    void handleTaskCompleted(const QVariantMap &data);
+
+    void handleTaskFailed(const QVariantMap &data);
 
 private:
     void removeTaskApplicationRelation(const QString &id);

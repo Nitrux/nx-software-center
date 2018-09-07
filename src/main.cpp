@@ -5,46 +5,32 @@
 
 #include <ui/UpgraderController.h>
 #include <ui/NotificationsController.h>
-#include <gateways/OCSStoreSource.h>
+#include <ui/DeployedApplicationsController.h>
+#include <QtCore/QStandardPaths>
 
-#include "gateways/CacheSource.h"
-#include "gateways/AppImageHubSource.h"
-#include "gateways/SimpleDownloadManager.h"
-#include "gateways/CachedDownloadManager.h"
-#include "entities/Registry.h"
-#include "entities/Executor.h"
-#include "entities/Updater.h"
-#include "entities/Cache.h"
-
-#include "ui/SearchControler.h"
+#include "ui/SearchController.h"
 #include "ui/TasksController.h"
-#include "ui/InstallController.h"
-#include "ui/UninstallController.h"
-#include "ui/RegistryController.h"
-#include "ui/UpdaterController.h"
+#include "ui/DeployController.h"
+#include "ui/TaskLoggerController.h"
 #include "ui/RunController.h"
+#include "ui/RemoveController.h"
 #include "ui/ApplicationViewController.h"
 
 #define QML_MODULE_NAMESPACE "org.nxos.softwarecenter"
 #define QML_MODULE_MAJOR_VERSION 1
 
-Repository *repository;
-DownloadManager *downloadManager = nullptr;
+ApplicationRepository *repository;
 QNetworkAccessManager *networkAccessManager = nullptr;
-Executor *executor = nullptr;
-Registry *registry = nullptr;
-Updater *updater = nullptr;
-Cache *cache = nullptr;
+Worker *worker = nullptr;
+Deployer *deployer = nullptr;
+TaskLogger *registry = nullptr;
 Upgrader *upgrader = nullptr;
-
+Remover *remover = nullptr;
+DeployedApplicationsRegistry *deployedApplicationsRegistry = nullptr;
 
 void registerQmlModules();
-void initSoftwareCenterModules(QObject *parent);
 
-Q_DECLARE_METATYPE(Application)
-Q_DECLARE_METATYPE(QList<Application>)
-Q_DECLARE_METATYPE(UpgradeList)
-void registerMetatypes();
+void initSoftwareCenterModules(QObject *parent);
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
@@ -55,12 +41,10 @@ int main(int argc, char *argv[]) {
 
     QQmlApplicationEngine engine;
 
-
     app.setWindowIcon(QIcon::fromTheme("nx-software-center"));
     app.setApplicationDisplayName("Nomad Software Center");
     initSoftwareCenterModules(nullptr);
     registerQmlModules();
-    registerMetatypes();
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
@@ -69,134 +53,139 @@ int main(int argc, char *argv[]) {
     return app.exec();
 }
 
-void registerMetatypes() {
-    qRegisterMetaType<Application>("Application");
-    qRegisterMetaType<QList<Application>>("ApplicationList");
-    qRegisterMetaType<UpgradeList>("UpgradeList");
-}
-
 void initSoftwareCenterModules(QObject *parent) {
-    executor = new Executor();
-
-    registry = new Registry();
-    QObject::connect(executor, &Executor::taskCompleted, registry, &Registry::handleTaskCompleted);
-
-    repository = new Repository();
-
     networkAccessManager = new QNetworkAccessManager(parent);
-    downloadManager = new SimpleDownloadManager(networkAccessManager, parent);
 
-    CacheSource *cacheSource = new CacheSource(Cache::getApplicationsCachePath(), parent);
-    AppImageHubSource *appImageHubSource = new AppImageHubSource(downloadManager, parent);
-    OCSStoreSource *ocsStoreSource = new OCSStoreSource(QUrl("https://www.appimagehub.com/ocs/v1/content/data"), parent);
+    worker = new Worker();
 
-    updater = new Updater(repository, {cacheSource, appImageHubSource, ocsStoreSource});
-    updater->setExecutor(executor);
+    repository = new ApplicationRepositoryRestClient("http://apps.nxos.org/api");
 
-    cache = new Cache;
-    cache->setRepository(repository);
-    QObject::connect(registry, &Registry::installedApplicationsChanged, cache, &Cache::handleInstalledApplicationsChanged);
+    registry = new TaskLogger();
+    QObject::connect(worker, &Worker::taskCompleted, registry, &TaskLogger::handleTaskCompleted);
+
+    deployedApplicationsRegistry = new DeployedApplicationsRegistry();
+    auto cacheDirLocations = QStandardPaths::standardLocations(QStandardPaths::CacheLocation);
+    deployedApplicationsRegistry->setCacheDir(cacheDirLocations.first());
+    deployedApplicationsRegistry->setApplicationsDir(QDir::homePath() + "/Applications");
+
+    deployer = new Deployer();
+    deployer->setRepository(repository);
+    deployer->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
+
+    remover = new Remover();
+    remover->setRegistry(deployedApplicationsRegistry);
 
     upgrader = new Upgrader();
-    upgrader->setRepository(repository);
-    upgrader->setInstalledApplications(registry->getInstalledApplications());
-    QObject::connect(registry, &Registry::installedApplicationsChanged,
-                     upgrader, &Upgrader::handleInstalledApplicationsChanged);
+    upgrader->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
+    upgrader->setApplicationRepository(repository);
+    upgrader->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
+    upgrader->setRemover(remover);
+    upgrader->setDeployer(deployer);
+    upgrader->lookUpForUpgrades();
 }
 
-
-
 static QObject *searchControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    SearchControler *searchControler = new SearchControler(repository);
+    SearchController *searchControler = new SearchController(repository);
     return searchControler;
 }
 
 static QObject *tasksControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    TasksController *taskControler = new TasksController(executor);
-    return taskControler;
+    TasksController *taskController = new TasksController();
+    taskController->setWorker(worker);
+    return taskController;
 }
 
-static QObject *installControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    InstallController *installControler = new InstallController(repository, executor, downloadManager);
+static QObject *deployControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    DeployController *installControler = new DeployController(deployer);
+    installControler->setWorker(worker);
     return installControler;
 }
 
-static QObject *uninstallControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    auto *uninstallController = new UninstallController(repository, registry, executor);
-    return uninstallController;
+static QObject *removeControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    auto *removeController = new RemoveController();
+    removeController->setWorker(worker);
+    removeController->setRemover(remover);
+    return removeController;
 }
 
 static QObject *registryControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    RegistryController *registryControler = new RegistryController(registry);
+    TaskLoggerController *registryControler = new TaskLoggerController(registry);
     return registryControler;
 }
 
-static QObject *updaterControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    UpdaterController *updaterController = new UpdaterController(updater);
-    return updaterController;
-}
-
 static QObject *upgraderControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    UpgraderController *upgraderController = new UpgraderController(upgrader, repository, registry, executor, downloadManager);
+    auto *upgraderController = new UpgraderController();
+    upgraderController->setUpgrader(upgrader);
+    upgraderController->setWorker(worker);
+
     return upgraderController;
 }
 
 static QObject *notificationsControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     auto *notificationsController = new NotificationsController();
-    notificationsController->setExecutor(executor);
+    notificationsController->setWorker(worker);
     return notificationsController;
 }
 
 static QObject *runControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
-    auto runController = new RunController(registry);
+    auto runController = new RunController(nullptr);
+    runController->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
     return runController;
 }
 
 static QObject *applicationViewControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
     auto applicationViewController = new ApplicationViewController();
+    applicationViewController->setDeployedApplicationsRegistry(deployedApplicationsRegistry);
+    applicationViewController->setWorker(worker);
     applicationViewController->setRepository(repository);
-    applicationViewController->setRegistry(registry);
-    applicationViewController->setExecutor(executor);
     return applicationViewController;
 }
 
-void registerQmlModules() {
-    qmlRegisterSingletonType<SearchControler>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                              "SearchController",
-                                              searchControllerSingletonProvider);
 
+static QObject *deployedApplicationsControllerSingletonProvider(QQmlEngine *, QJSEngine *) {
+    auto deployedApplicationsController = new DeployedApplicationsController();
+    deployedApplicationsController->setWorker(worker);
+    deployedApplicationsController->setRegistry(deployedApplicationsRegistry);
+
+    return deployedApplicationsController;
+}
+
+void registerQmlModules() {
+    qmlRegisterSingletonType<SearchController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                               "SearchController",
+                                               searchControllerSingletonProvider);
 
     qmlRegisterSingletonType<TasksController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                       "TasksController",
-                                       tasksControllerSingletonProvider);
+                                              "TasksController",
+                                              tasksControllerSingletonProvider);
 
-    qmlRegisterSingletonType<InstallController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                       "InstallController",
-                                       installControllerSingletonProvider);
+    qmlRegisterSingletonType<DeployController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                               "DeployController",
+                                               deployControllerSingletonProvider);
 
-    qmlRegisterSingletonType<InstallController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                                "UninstallController",
-                                                uninstallControllerSingletonProvider);
+    qmlRegisterSingletonType<DeployController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                               "RemoveController",
+                                               removeControllerSingletonProvider);
 
-    qmlRegisterSingletonType<RegistryController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                       "RegistryController",
-                                       registryControllerSingletonProvider);
-
-    qmlRegisterSingletonType<UpdaterController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                       "UpdaterController",
-                                       updaterControllerSingletonProvider);
+    qmlRegisterSingletonType<TaskLoggerController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                                 "TaskLoggerController",
+                                                 registryControllerSingletonProvider);
 
     qmlRegisterSingletonType<UpgraderController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                       "UpgraderController",
-                                       upgraderControllerSingletonProvider);
+                                                 "UpgraderController",
+                                                 upgraderControllerSingletonProvider);
 
     qmlRegisterSingletonType<NotificationsController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
-                                                 "NotificationsController",
-                                                 notificationsControllerSingletonProvider);
+                                                      "NotificationsController",
+                                                      notificationsControllerSingletonProvider);
 
     qmlRegisterSingletonType<RunController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                             "RunController", runControllerSingletonProvider);
 
     qmlRegisterSingletonType<RunController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
                                             "ApplicationViewController", applicationViewControllerSingletonProvider);
+
+    qmlRegisterSingletonType<DeployedApplicationsController>(QML_MODULE_NAMESPACE, QML_MODULE_MAJOR_VERSION, 0,
+                                            "DeployedApplicationsController", deployedApplicationsControllerSingletonProvider);
+
 }

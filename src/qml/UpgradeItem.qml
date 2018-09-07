@@ -37,11 +37,15 @@ PlasmaComponents.ListItem {
 
         flow: GridLayout.TopToBottom
 
-        PlasmaCore.IconItem {
+        Image {
             id: icon
             Layout.rowSpan: 2
             Layout.fillHeight: true
             Layout.margins: 0
+            Layout.maximumHeight: 32
+            Layout.maximumWidth: 32
+            Layout.leftMargin: 12
+            Layout.rightMargin: 12
         }
 
 

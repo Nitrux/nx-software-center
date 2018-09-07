@@ -32,8 +32,8 @@ Flickable {
             model: TasksController.model
             delegate: TaskItem {
                 onRequestCancel: TasksController.cancelTask(task_id)
-                app_icon: "package-x-generic"
                 app_name: task_application_name
+                app_icon: task_application_icon
                 app_author: task_application_author
 
                 progress_value: task_progress_value
@@ -53,17 +53,16 @@ Flickable {
 
         Repeater {
             id: upgradesListView
-            model: UpgraderController.model
+            model: UpgraderController.upgrades
             delegate: UpgradeItem {
-                icon: "package-x-generic"
-                name: new_app_name
-                version: new_app_version
+                icon: modelData["app_icon"]
+                name: modelData["app_name"]
+                version: modelData["release_version"]
 
-                changeslog_message: "Newer version available"
+                changeslog_message: modelData["release_changelog"]
 
-                onRequestUpgrade: UpgraderController.upgrade(old_app_id,
-                                                             new_app_id)
-                dontHavePendingTasks: TasksController.affectedApplicationsIds.indexOf(new_app_id) === -1
+                onRequestUpgrade: UpgraderController.upgradeApplication(modelData["app_id"])
+                dontHavePendingTasks: TasksController.affectedApplicationsIds.indexOf(modelData["app_id"]) === -1
             }
 
             Layout.bottomMargin: 18
@@ -95,13 +94,13 @@ Flickable {
             PlasmaComponents.Button {
                 Layout.rightMargin: 18
                 iconName: "trash-empty"
-                onClicked: RegistryController.clearRecords()
+                onClicked: TaskLoggerController.clearRecords()
             }
         }
 
         Repeater {
             id: recordsListView
-            model: RegistryController.model
+            model: TaskLoggerController.model
             delegate: TaskRecordItem {
                 Layout.topMargin: 8
                 app_icon: "package-x-generic"

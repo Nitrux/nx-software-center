@@ -16,7 +16,7 @@ PlasmaComponents.ListItem {
     property alias app_name: labelName.text
     property alias app_author: labelAuthor.text
 
-    property string description: task_description
+//    property string description: task_description
     property string status: task_status
 
     property alias progress_message: labelProgress.text
@@ -44,15 +44,33 @@ PlasmaComponents.ListItem {
 
         flow: GridLayout.TopToBottom
 
-        PlasmaCore.IconItem {
+        Image {
             id: icon
             Layout.rowSpan: 2
             Layout.fillHeight: true
+            Layout.margins: 2
+            Layout.maximumWidth: 28
+
+            visible: source != "" && status == Image.Ready
+            asynchronous: true
+            cache: false
+            fillMode: Image.PreserveAspectFit
+        }
+
+        PlasmaCore.IconItem {
+            id: placeHolderIconImage
+            Layout.rowSpan: 2
+            Layout.fillHeight: true
+            Layout.maximumWidth: 28
             Layout.margins: 0
+
+            source: "package-x-generic"
+            visible: !icon.visible
         }
 
         PlasmaComponents.Label {
             id: labelName
+            Layout.leftMargin: 6
             Layout.fillWidth: true
             elide: Text.ElideRight
 

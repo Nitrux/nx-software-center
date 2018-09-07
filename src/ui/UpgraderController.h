@@ -6,50 +6,41 @@
 #define NOMAD_SOFTWARE_CENTER_UPGRADERCONTROLLER_H
 
 #include <QObject>
-#include <entities/Executor.h>
-#include <entities/Registry.h>
-#include <entities/Repository.h>
-#include <gateways/DownloadManager.h>
 #include <entities/Upgrader.h>
+#include <entities/Worker.h>
 
-#include "UpgradesListModel.h"
-class InstallAppImageInteractor;
 class UpgraderController : public QObject {
 Q_OBJECT
     Upgrader *upgrader;
-    Repository *repository;
-    Registry *registry;
-    Executor *executor;
-    DownloadManager *downloadManager;
+    Worker *worker;
 
-    QStringList upgradableApplications;
-    UpgradesListModel *model;
-    Q_PROPERTY(QStringList upgradableApplications MEMBER upgradableApplications NOTIFY upgradableApplicationsChanged)
-    Q_PROPERTY(UpgradesListModel *model MEMBER model NOTIFY modelChanged)
+    QVariantList upgrades;
+    Q_PROPERTY(QVariantList upgrades MEMBER upgrades NOTIFY upgradesChanged)
+
+    QStringList upgradableApplicationIds;
+    Q_PROPERTY(QStringList upgradableApplicationIds MEMBER upgradableApplicationIds NOTIFY upgradableApplicationIdsChanged)
 
 public:
-    UpgraderController(Upgrader *upgrader, Repository *repository, Registry *registry,
-                       Executor *executor, DownloadManager *downloadManager, QObject *parent = nullptr);
+    explicit UpgraderController(QObject *parent = nullptr);
 
-public slots:
-    void upgrade(const QString &appCodeName);
-    void upgrade(const QString &oldAppId, const QString &newAppId);
+    void setUpgrader(Upgrader *upgrader);
+
+    void setWorker(Worker *worker);
+
+    Q_INVOKABLE void findUpgrades();
+
+    Q_INVOKABLE void upgradeApplication(const QString &appId);
 
 signals:
-    void upgradableApplicationsChanged(const QStringList &upgradableApplications);
-    void modelChanged(const UpgradesListModel *upgradableApplications);
+
+    void upgradableApplicationIdsChanged(const QStringList &upgradableApplications);
+
+    void upgradesChanged(const QVariantList &upgrades);
 
 protected slots:
-    void handleUpgradableApplicationsChanged(const UpgradeList &upgradableApplications);
 
-private:
-    void updateApplicationsModel(const UpgradeList &upgradableApplications);
+    void handleUpgradesLookUpCompleted();
 
-    InstallAppImageInteractor *executeInstall(const QString &newAppId) const;
-
-    void executeRemove(const QString &oldAppId) const;
-
-    bool isTaskCompletedSuccesfully(const QVariantMap &metadata) const;
 };
 
 

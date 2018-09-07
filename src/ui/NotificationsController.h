@@ -8,11 +8,11 @@
 #include <QObject>
 #include <QTimer>
 
-#include <entities/Executor.h>
+#include <entities/Worker.h>
 
 class NotificationsController : public QObject {
 Q_OBJECT
-    Executor *executor;
+    Worker *worker;
     QTimer expirationTimer;
     void resetExpirationTimer();
 
@@ -27,9 +27,9 @@ public:
 
     explicit NotificationsController(QObject *parent = nullptr);
 
-    void setExecutor(Executor *executor);
-signals:
+    void setWorker(Worker *worker);
 
+signals:
     void showNotificationRequest(const int notficationType, const QString &message);
     void notificationExpired();
     void tasksNotificationsEnabledChanged(bool tasksNotificationsEnabled);
@@ -40,9 +40,9 @@ public slots:
 
 protected slots:
 
-    void handleTaskStarted(const QString &id, const QVariantMap &data);
+    void handleTaskStarted(const QVariantMap &data);
 
-    void handleTaskCompleted(const QString &id, const QVariantMap &data);
+    void handleTaskCompleted(const QVariantMap &data);
 
     void notifyTaskDescription(const QVariantMap &data);
 

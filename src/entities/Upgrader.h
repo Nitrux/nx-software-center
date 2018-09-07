@@ -8,43 +8,45 @@
 #include <QObject>
 #include <QPair>
 #include <QList>
-
-typedef QPair<QString, QString> Upgrade;
-typedef QList<Upgrade> UpgradeList;
-
-class Repository;
+#include "Remover.h"
+#include "Deployer.h"
+#include "../tasks/UpgradeTask.h"
+#include <gateways/ApplicationRepository.h>
+#include <gateways/DeployedApplicationsRegistry.h>
 
 class Upgrader : public QObject {
 Q_OBJECT
-    Repository *repository;
-    UpgradeList upgradableApplications;
-    QStringList installedApplications;
-    Q_PROPERTY(QList<QPair<QString, QString>> upgradableApplications
-                       MEMBER upgradableApplications
-                       NOTIFY upgradableApplicationsChanged)
+    ApplicationRepository *applicationRepository;
+    DeployedApplicationsRegistry *deployedApplicationsRegistry;
+    Deployer *deployer;
+    Remover *remover;
+
+    QList<AppImageInfo> upgradableApplications;
+
+    int pendingRequestCount;
+    QList<ApplicationRepositoryGet*> getApplicationsRequests;
+
 public:
-    Upgrader(QObject *parent = nullptr);
+    explicit Upgrader(QObject *parent = nullptr);
 
-    void setRepository(Repository *repository);;
+    void setApplicationRepository(ApplicationRepository *applicationRepository);
 
-    void setInstalledApplications(const QStringList &installedApplications);
+    void setDeployedApplicationsRegistry(DeployedApplicationsRegistry *deployedApplicationsRegistry);
 
-    UpgradeList getUpgradableApplications();
+    void setDeployer(Deployer *deployer);
 
-public slots:
-    void handleInstalledApplicationsChanged(const QStringList &installedApplications);
+    void setRemover(Remover *remover);
+
+    void lookUpForUpgrades();
+
+    const QList<AppImageInfo> &getUpgradableApplications() const;
+
+    UpgradeTask *buildUpgradeTask(const QString &id);
+signals:
+    void upgradesLookUpCompleted();
 
 protected slots:
-
-    void handleAvailableApplicationsChanged();
-
-signals:
-
-    void upgradableApplicationsChanged(const UpgradeList &upgradableApplications);
-
-protected:
-    UpgradeList getUpgrades();
-    void updateUpgradableApplications(const UpgradeList &newUpgrades);
+    void handleApplicationRepositoryGetResult();
 };
 
 

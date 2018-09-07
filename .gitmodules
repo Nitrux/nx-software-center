@@ -1,0 +1,3 @@
+[submodule "lib/AppImageInfo"]
+	path = lib/AppImageInfo
+	url = https://github.com/azubieta/AppImageInfo.git
