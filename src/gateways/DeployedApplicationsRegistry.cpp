@@ -6,11 +6,14 @@
 #include <QMap>
 #include <QDir>
 #include <QDebug>
+#include <QIcon>
 #include <QJsonDocument>
 #include <QCryptographicHash>
 
 #include "DeployedApplicationsRegistry.h"
-#include "../../lib/appimage-metadata-extractor/src/entities/FileMetadataExtractor.h"
+#include <nlohmann/json.hpp>
+#include <appimage/info.h>
+#include <QTemporaryFile>
 
 DeployedApplicationsRegistry::DeployedApplicationsRegistry() {
 }
@@ -31,15 +34,19 @@ QStringList DeployedApplicationsRegistry::listApplicationFiles() {
 }
 
 void DeployedApplicationsRegistry::extractFileInfo(const QString &path) {
-    FileMetadataExtractor extractor(path);
-
-
     QVariantMap metadata;
     QByteArray icon;
 
     try {
-        metadata = extractor.extractMetadata();
-        icon = extractor.extractIcon();
+        auto rawOuput = extract_appinamge_info(path.toStdString().c_str());
+        auto doc = QJsonDocument::fromJson(rawOuput);
+        metadata = doc.toVariant().toMap();
+
+        QTemporaryFile tmpFile;
+        if (tmpFile.open()) {
+            extract_appinamge_icon_file(path.toStdString().c_str(), tmpFile.fileName().toStdString().c_str());
+            icon = tmpFile.readAll();
+        }
     } catch (std::runtime_error &error) {
         qCritical() << error.what();
     }
@@ -198,10 +205,16 @@ AppImageInfo DeployedApplicationsRegistry::getApplicationInfo(const QString &fil
 }
 
 void DeployedApplicationsRegistry::registerFile(const QString &path, const AppImageInfo &info) {
-    FileMetadataExtractor extractor(path);
+    auto rawOuput = extract_appinamge_info(path.toStdString().c_str());
+    auto doc = QJsonDocument::fromJson(rawOuput);
+    auto metadata = doc.toVariant().toMap();
 
-    auto metadata = extractor.extractMetadata();
-    const auto icon = extractor.extractIcon();
+    QTemporaryFile tmpFile;
+    QByteArray icon;
+    if (tmpFile.open()) {
+        extract_appinamge_icon_file(path.toStdString().c_str(), tmpFile.fileName().toStdString().c_str());
+        icon = tmpFile.readAll();
+    }
 
     const auto pathSha1 = getSha1(path);
     cacheDir.mkdir(pathSha1);

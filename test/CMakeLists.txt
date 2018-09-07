@@ -10,7 +10,6 @@ find_package(Qt5 REQUIRED COMPONENTS Core Gui Network Test XmlPatterns)
 
 add_executable(test_core
         $<TARGET_OBJECTS:core>
-        $<TARGET_OBJECTS:appimage-info>
         src/test_core_main.cpp
         src/TestDownload.cpp
         src/TestTaskLogger.cpp
@@ -26,10 +25,10 @@ add_executable(test_core
 
 target_include_directories(test_core
         PRIVATE ${CMAKE_SOURCE_DIR}/src/
-        private ${gtest_INCLUDE_DIRS}
+        PRIVATE ${gtest_INCLUDE_DIRS}
         PRIVATE ${Qt5Core_INCLUDE_DIRS}
         PRIVATE ${Qt5Network_INCLUDE_DIRS}
-        PUBLIC ${Qt5XmlPatterns_INCLUDE_DIRS}
+        PRIVATE ${Qt5XmlPatterns_INCLUDE_DIRS}
         )
 
 target_compile_definitions(test_core
@@ -44,6 +43,7 @@ target_link_libraries(test_core
         Qt5::XmlPatterns
 
         libappimage
+        libappimageinfo
 
         ${gtest_LIBRARIES}
         pthread # this must be last else it fails at linking

@@ -56,14 +56,17 @@ set(CORE_SRC
 
 add_library(core OBJECT ${CORE_SRC})
 
+get_target_property(LIBAPPIMAGE_INCLUDE_DIRS libappimage INTERFACE_INCLUDE_DIRECTORIES )
+get_target_property(LIBAPPIMAGEINFO_INCLUDE_DIRS libappimageinfo INTERFACE_INCLUDE_DIRECTORIES )
 target_compile_options(core PUBLIC -fPIC -fexceptions)
 target_include_directories(core
         PUBLIC ${Qt5Core_INCLUDE_DIRS}
         PUBLIC ${Qt5Network_INCLUDE_DIRS}
         PUBLIC ${Qt5Gui_INCLUDE_DIRS}
         PUBLIC ${Qt5Qml_INCLUDE_DIRS}
-        PUBLIC ${libappimage_INCLUDE_DIRECTORIES}
-        PUBLIC ${APPIMAGE_INFO_INCLUDE_DIRECTORIES}
+        PUBLIC ${LIBAPPIMAGE_INCLUDE_DIRS}
+        PUBLIC ${LIBAPPIMAGEINFO_INCLUDE_DIRS}
+        PUBLIC ${NLOHMANN_JSON_INCLUDE_DIRS}
         )
 
 ###
@@ -121,8 +124,7 @@ target_include_directories(gui
 add_executable(nx_software_center
         main.cpp
         $<TARGET_OBJECTS:core>
-        $<TARGET_OBJECTS:gui>
-        $<TARGET_OBJECTS:appimage-info>)
+        $<TARGET_OBJECTS:gui>)
 
 target_link_libraries(nx_software_center
         Qt5::Core
@@ -130,13 +132,16 @@ target_link_libraries(nx_software_center
         Qt5::Qml
         Qt5::Network
         Qt5::XmlPatterns
+        libappimage
+        libappimageinfo)
 
-        libappimage)
-
-install(TARGETS nx_software_center ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS nx_software_center
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib)
 
 # Wrapper used to build the AppImage
 add_executable(nx_software_center_wrapper wrapper.c )
 target_compile_definitions(nx_software_center_wrapper
         PRIVATE BINARY_PATH="${CMAKE_INSTALL_PREFIX}/bin/nx_software_center")
-install(TARGETS nx_software_center_wrapper ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS nx_software_center_wrapper
+        RUNTIME DESTINATION bin)

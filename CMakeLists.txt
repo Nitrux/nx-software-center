@@ -19,12 +19,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 
-find_package(ECM 0.0.11 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
-
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDECompilerSettings)
 include(FeatureSummary)
 include(ExternalProject)
 
