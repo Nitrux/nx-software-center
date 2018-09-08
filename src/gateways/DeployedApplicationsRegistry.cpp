@@ -38,13 +38,13 @@ void DeployedApplicationsRegistry::extractFileInfo(const QString &path) {
     QByteArray icon;
 
     try {
-        auto rawOuput = extract_appinamge_info(path.toStdString().c_str());
+        auto rawOuput = appimage_extract_info(path.toStdString().c_str());
         auto doc = QJsonDocument::fromJson(rawOuput);
         metadata = doc.toVariant().toMap();
 
         QTemporaryFile tmpFile;
         if (tmpFile.open()) {
-            extract_appinamge_icon_file(path.toStdString().c_str(), tmpFile.fileName().toStdString().c_str());
+            appimage_extract_appinamge_icon_file(path.toStdString().c_str(), tmpFile.fileName().toStdString().c_str());
             icon = tmpFile.readAll();
         }
     } catch (std::runtime_error &error) {
@@ -205,14 +205,14 @@ AppImageInfo DeployedApplicationsRegistry::getApplicationInfo(const QString &fil
 }
 
 void DeployedApplicationsRegistry::registerFile(const QString &path, const AppImageInfo &info) {
-    auto rawOuput = extract_appinamge_info(path.toStdString().c_str());
+    auto rawOuput = appimage_extract_info(path.toStdString().c_str());
     auto doc = QJsonDocument::fromJson(rawOuput);
     auto metadata = doc.toVariant().toMap();
 
     QTemporaryFile tmpFile;
     QByteArray icon;
     if (tmpFile.open()) {
-        extract_appinamge_icon_file(path.toStdString().c_str(), tmpFile.fileName().toStdString().c_str());
+        appimage_extract_appinamge_icon_file(path.toStdString().c_str(), tmpFile.fileName().toStdString().c_str());
         icon = tmpFile.readAll();
     }
 
