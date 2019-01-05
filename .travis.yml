@@ -2,14 +2,13 @@ language: cpp
 compiler: gcc
 dist: trusty
 sudo: required
-
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
-    - sourceline: 'ppa:beineri/opt-qt-5.10.1-trusty'
-    - sourceline: 'deb http://repo.nxos.org nxos main'
-      key_url: 'http://repo.nxos.org/public.key'
+    - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
+    - sourceline: deb http://repo.nxos.org nxos main
+      key_url: http://repo.nxos.org/public.key
     packages:
     - dpkg
     - qt510base
@@ -31,42 +30,39 @@ addons:
     - libappimage-dev
     - libcairo2-dev
     - libglib2.0-dev
-
 before_install:
-  - wget http://ftp.debian.org/debian/pool/main/p/patchelf/patchelf_0.8-2_amd64.deb -O /tmp/patchelf_0.8-2_amd64.deb
-  - wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -O /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
-
+- wget http://ftp.debian.org/debian/pool/main/p/patchelf/patchelf_0.8-2_amd64.deb
+  -O /tmp/patchelf_0.8-2_amd64.deb
+- wget https://github.com/nomad-desktop/precompiled-kf5-linux/releases/download/continuous/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
+  -O /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz
 install:
-  - sudo dpkg -i /tmp/patchelf_0.8-2_amd64.deb
-  - sudo tar xpf /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C /usr/
-  - sudo update-alternatives --install /usr/bin/qmake qmake /opt/qt510/bin/qmake 1
-  - sudo update-alternatives --install /usr/bin/qmlimportscanner qmlimportscanner /opt/qt510/bin/qmlimportscanner 1
-
-
+- sudo dpkg -i /tmp/patchelf_0.8-2_amd64.deb
+- sudo tar xpf /tmp/kf5-5.44.0-Release-ubuntu-trusty-amd64.tar.xz -C /usr/
+- sudo update-alternatives --install /usr/bin/qmake qmake /opt/qt510/bin/qmake 1
+- sudo update-alternatives --install /usr/bin/qmlimportscanner qmlimportscanner /opt/qt510/bin/qmlimportscanner
+  1
 script:
-  - /opt/qt510/bin/qt510-env.sh
-  - export QT_SELECT=qt5
-  - cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/"
-  - make -j$(nproc)
-  - export PATH=$PATH:/opt/qt510/bin/
-  - export QML_MODULES_FIND_DIRS="/opt/qt510/qml /usr/lib/x86_64-linux-gnu/qml"
-  - sudo ldconfig -c /opt/qt510/lib/ /usr/lib/x86_64-linux-gnu/
-  - build_scripts/appimage.create.sh
-
+- "/opt/qt510/bin/qt510-env.sh"
+- export QT_SELECT=qt5
+- cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH="/opt/qt510/"
+- make -j$(nproc)
+- export PATH=$PATH:/opt/qt510/bin/
+- export QML_MODULES_FIND_DIRS="/opt/qt510/qml /usr/lib/x86_64-linux-gnu/qml"
+- sudo ldconfig -c /opt/qt510/lib/ /usr/lib/x86_64-linux-gnu/
+- build_scripts/appimage.create.sh
 after_success:
-  - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-  - mkdir out
-  - mv -v Software_Center*.AppImage* out/
-  - curl --upload-file "{$(echo out/* | tr ' ' ',')}" https://transfer.sh/
-
+- find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f
+  2-3 | sort | uniq
+- mkdir out
+- mv -v Software_Center*.AppImage* out/
+- curl --upload-file "{$(echo out/* | tr ' ' ',')}" https://transfer.sh/
 branches:
   except:
-    - # Do not build tags that we create when we upload to GitHub Releases
-    - /^(?i:continuous)$/
-
+  - 
+  - "/^(?i:continuous)$/"
 before_deploy:
-  - if [ -z "$TRAVIS_TAG" ]; then export TRAVIS_TAG="continuous"; git tag -f $TRAVIS_TAG; fi
-
+- if [ -z "$TRAVIS_TAG" ]; then export TRAVIS_TAG="continuous"; git tag -f $TRAVIS_TAG;
+  fi
 deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
@@ -79,7 +75,7 @@ deploy:
     repo: Nitrux/nx-software-center
     branch: master
     tags: true
-
 notifications:
   email: false
-  slack: nitrux:LgpKKPnWky7IWShmzXsyVDWu
+  slack:
+    secure: TbWvC61g9YAGwoIiGU10mdFkzdiEj0gcz3nxHCVNr/r/qt+0MNViQacT8l3W6nI2ypzMiI47EZlBfLbJR/nDLUl07v3ksQ2SXqdgODuBmf4Y0m3Yc0EWI5W6951emH9zsOlV7wo6yrr93b7uzxMODOudJjVjfYY2Reonl3XHkzpWsHH11VY4OooDh+UUsksySpxLeZ668dB0GycMJ0b6r+ZmBLR6/8e2pjsmF5b0OfKyt6n+rf2cRfI4Kfnl/eZaF63nGA6LpUzW1Ktbx+FU0ZVuxDgeTKK9F3wYbVk5HHzOIvCb2ZQPMZOLp8l97H2gCzPkyp6vmtJI5E4AsONpXV8wMLmk2iYnKsUd/GACqUuIaUhDfOYO128bRSEn0YYOOMQxt/XYZsfx4k81oX6H7XJWqme5xxtjg2tUi1QQ7LFOjOi0vkHF+jr0LQOPzsRjwRpcaWaPxDXvAmPXKOnLBWuP/plToNd6W1FTXdptulR1PHft1UMIdeC4+XO2CbYZVPzDVDTInZ2hpIco0kxEVIRjcNHmxBpqG3mwoDvN15hzmguaGvpDxM0IJHqSH4WIg0frccavZKCgyj1pSdCm/FiW2bbsZLYbM6IAXogurnbMwrxoRyHoh6ftkocZrZ8zyE87mPMjptBBcxLO22mjAJkmiQ39NG7+36ifNuT0/DU=
