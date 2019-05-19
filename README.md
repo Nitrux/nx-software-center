@@ -30,14 +30,20 @@ The AppImages included are fetched from:
  
 ![](https://user-images.githubusercontent.com/1138094/39208748-7978ded4-47c9-11e8-98c4-5dffeaf5ee0d.png)
 
-## Build
-### Requirements
+# Install
+
+## Official Binaries
+Official Releases can be found here: https://github.com/Nitrux/nx-software-center/releases/
+
+## Building from Source
+### Build
+#### Requirements
  * CMake 3.10.0 +
  * Qt 5.10+
  * KF5 Plasma 5.45.0 +
  * LibAppImage (latest)
  
-### Instructions
+#### Instructions
  1. `git clone https://github.com/Nitrux/nx-software-center.git` 
  1. `mkdir build`
  1. `cd build`
