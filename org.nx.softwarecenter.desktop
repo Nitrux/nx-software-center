@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Software Center
+Comment=Manage your system applications using NXOS Software Center
+Exec=nx_software_center
+Icon=nx-software-center
+Terminal=false
+Type=Application
+Categories=Utility;

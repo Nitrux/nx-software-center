@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>nx-software-center.svg</file>
+    </qresource>
+</RCC>

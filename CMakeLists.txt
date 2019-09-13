@@ -1,0 +1,48 @@
+project(nx-software-center)
+cmake_minimum_required(VERSION 3.0)
+
+find_package(ECM 1.7.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${ECM_MODULE_PATH})
+
+#find_package(MauiKit REQUIRED)
+find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Qml Quick Svg QuickControls2 Widgets WebEngine)
+include(KDEInstallDirs)
+include(KDECompilerSettings NO_POLICY_SCOPE)
+include(KDECMakeSettings)
+include(ECMInstallIcons)
+include(FeatureSummary)
+include(ECMAddAppIcon)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(nx_SRCS
+    src/main.cpp
+    )
+
+set(nx_HDRS
+    src/utils/nx.h
+    )
+
+set(nx_RSRCS
+    assets/nx-assets.qrc
+    src/ui/qml.qrc
+    )
+
+add_executable(${PROJECT_NAME}
+    ${nx_SRCS}
+    ${nx_HDRS}
+    ${nx_RSRCS}
+    )
+
+target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Svg Qt5::WebEngine)
+
+install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES org.nx.softwarecenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+install(FILES assets/nx-software-center.svg DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor/scalable/apps)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
