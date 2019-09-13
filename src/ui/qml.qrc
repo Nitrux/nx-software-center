@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>CategoriesSidebar.qml</file>
+        <file>views/apps/AppsView.qml</file>
+        <file>templates/CardDelegate.qml</file>
     </qresource>
 </RCC>

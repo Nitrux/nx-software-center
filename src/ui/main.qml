@@ -4,6 +4,9 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
+import "views/apps"
+import "templates"
+
 Maui.ApplicationWindow
 {
     id: root
@@ -11,7 +14,7 @@ Maui.ApplicationWindow
     Maui.App.iconName: "qrc:/nx-software-center.svg"
     Maui.App.description : "NX Software Center distributes AppImages for GNU Linux and APKS for Android"
 
-    readonly property var views: ({apps: 1, store: 2, system: 3, search: 5, progress: 4})
+    readonly property var views: ({apps: 0, store: 1, system: 2, search: 3, progress: 4})
     property int currentView: views.apps
 
     headBar.middleContent: [
@@ -22,6 +25,7 @@ Maui.ApplicationWindow
             checkable: true
             checked: currentView === views.apps
             autoExclusive: true
+            onClicked: root.currentView = views.apps
         },
 
         ToolButton
@@ -31,6 +35,7 @@ Maui.ApplicationWindow
             checkable: true
             checked: currentView === views.store
             autoExclusive: true
+            onClicked: root.currentView = views.store
         },
 
         ToolButton
@@ -40,6 +45,7 @@ Maui.ApplicationWindow
             checkable: true
             checked: currentView === views.system
             autoExclusive: true
+            onClicked: root.currentView = views.system
         }
     ]
 
@@ -79,8 +85,7 @@ Maui.ApplicationWindow
 
     globalDrawer: CategoriesSidebar
     {
-        width: Math.min(Kirigami.Units.gridUnit * 11, root.width)
-        modal: !root.isWide
+
     }
 
     SwipeView
@@ -90,7 +95,7 @@ Maui.ApplicationWindow
         onCurrentIndexChanged: root.currentView = currentIndex
         interactive: isMobile
 
-        Maui.Page
+        AppsView
         {
             id: _appsView
         }
@@ -98,6 +103,12 @@ Maui.ApplicationWindow
         Maui.Page
         {
             id: _storeView
+            Rectangle
+            {
+                color: "yellow"
+                height: 100
+                width: 200
+            }
         }
 
         Maui.Page
