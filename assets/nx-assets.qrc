@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>nx-software-center.svg</file>
+        <file>tests/banner_index.png</file>
     </qresource>
 </RCC>

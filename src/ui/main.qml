@@ -5,6 +5,8 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 import "views/apps"
+import "views/store"
+import "views/system"
 import "templates"
 
 Maui.ApplicationWindow
@@ -85,7 +87,6 @@ Maui.ApplicationWindow
 
     globalDrawer: CategoriesSidebar
     {
-
     }
 
     SwipeView
@@ -100,18 +101,12 @@ Maui.ApplicationWindow
             id: _appsView
         }
 
-        Maui.Page
+        StoreView
         {
             id: _storeView
-            Rectangle
-            {
-                color: "yellow"
-                height: 100
-                width: 200
-            }
         }
 
-        Maui.Page
+        SystemView
         {
             id: _systemView
         }

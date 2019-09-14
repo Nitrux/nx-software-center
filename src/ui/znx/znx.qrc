@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/components">
+        <file>DevicesPage.qml</file>
+    </qresource>
+</RCC>

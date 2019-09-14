@@ -57,7 +57,7 @@ SwipeDelegate
     {
         color:  hovered ? Kirigami.Theme.hoverColor : Kirigami.Theme.backgroundColor
         radius: control.radius
-        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(color.r, color.g, color.b, 0.7))
 
         RowLayout
         {
@@ -66,16 +66,22 @@ SwipeDelegate
             anchors.fill: parent
             anchors.margins: space.small
 
-            Kirigami.Icon
+            Item
             {
-                id: _icon
-                visible: control.width > Kirigami.Units.gridUnit * 15
-                Layout.preferredWidth: iconSizes.large
+                Layout.preferredWidth: parent.height
                 Layout.fillHeight: true
-                Layout.margins: Maui.Style.space.big
-                Layout.alignment: Qt.AlignCenter
-                clip: true
+                Layout.margins: Maui.Style.space.medium
+
+                Kirigami.Icon
+                {
+                    id: _icon
+                    visible: control.width > Kirigami.Units.gridUnit * 15
+                    width: Kirigami.Units.iconSizes.large
+                    height: width
+                    anchors.centerIn: parent
+                }
             }
+
 
             Item
             {
@@ -83,7 +89,6 @@ SwipeDelegate
 
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                clip: true
 
                 ColumnLayout
                 {
@@ -110,8 +115,8 @@ SwipeDelegate
                         Layout.fillWidth: visible
                         font.pointSize: fontSizes.small
                         font.weight: Font.Light
-                        wrapMode: Text.WrapAnywhere
-                        elide: Text.ElideMiddle
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        elide: Text.ElideRight
                         color: Kirigami.Theme.textColor
                     }
                 }
@@ -172,12 +177,12 @@ SwipeDelegate
                 {
                     id: _buttonsRow
                     anchors.centerIn: parent
+                    spacing: Maui.Style.space.medium
                     ToolButton
                     {
                         visible: showMenuIcon
                         icon.name: "overflow-menu"
                         onClicked: swipe.position < 0 ? swipe.close() : swipe.open(SwipeDelegate.Right)
-
                     }
                 }
             }
