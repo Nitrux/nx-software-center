@@ -3,6 +3,7 @@
 #include <QIcon>
 #include <QCommandLineParser>
 #include <QDebug>
+
 #include "utils/nx.h"
 #include "models/appsmodel.h"
 
