@@ -88,8 +88,18 @@ StackView
             }
         ]
 
+        Maui.Holder
+        {
+            title: qsTr("Oops!")
+            body: qsTr("Not apps found")
+            visible: _appsListView.count === 0
+            emoji: "qrc:/store.svg"
+            emojiSize: Kirigami.Units.iconSizes.huge
+        }
+
         ListView
         {
+            id: _appsListView
             anchors.fill: parent
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium

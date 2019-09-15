@@ -2,7 +2,7 @@
 
 AppsModel::AppsModel(QObject * parent) : MauiList(parent)
 {
-  this->setList();
+//  this->setList();
 }
 
 FMH::MODEL_LIST AppsModel::items() const
