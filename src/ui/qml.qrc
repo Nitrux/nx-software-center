@@ -10,6 +10,6 @@
         <file>znx/DevicesPage.qml</file>
         <file>znx/DevicePage.qml</file>
         <file>views/progress/ProgressView.qml</file>
-        <file>search/SearchView.qml</file>
+        <file>views/search/SearchView.qml</file>
     </qresource>
 </RCC>

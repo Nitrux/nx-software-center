@@ -8,6 +8,7 @@ import QtGraphicalEffects 1.0
 import "views/apps"
 import "views/store"
 import "views/system"
+import "views/search"
 import "views/progress"
 import "templates"
 
@@ -20,6 +21,8 @@ Maui.ApplicationWindow
 
     readonly property var views: ({apps: 0, store: 1, system: 2, search: 3, progress: 4})
     property int currentView: views.apps
+
+    onSearchButtonClicked: currentView = views.search
 
     headBar.middleContent: [
         ToolButton
@@ -70,6 +73,7 @@ Maui.ApplicationWindow
     Item
     {
         id: _overlayButton
+        visible: _progressView.isActive
         z: 999
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -138,7 +142,7 @@ Maui.ApplicationWindow
             id: _systemView
         }
 
-        Maui.Page
+        SearchView
         {
             id: _searchView
         }

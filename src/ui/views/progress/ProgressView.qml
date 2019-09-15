@@ -10,6 +10,8 @@ StackView
 {
     id: control
 
+    property bool isActive: false
+
     Component
     {
         id: _appPageComponent
