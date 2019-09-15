@@ -118,15 +118,42 @@ StackView
 
                         onMovementEnded: currentIndex = indexAt(contentX, contentY)
 
-
-                        Maui.Badge
+                        Row
                         {
-                            text: _featuredListview.currentIndex + 1
+                            spacing: Maui.Style.space.big
                             anchors.horizontalCenter: parent.horizontalCenter
                             z: 999
                             anchors.bottom: parent.bottom
                             anchors.margins: Maui.Style.space.big
+
+                            Rectangle
+                            {
+                                color: _countBadge.Kirigami.Theme.backgroundColor
+                                height: Kirigami.Units.iconSizes.small
+                                width: height
+                                radius: height
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            Maui.Badge
+                            {
+                                id: _countBadge
+                                text: _featuredListview.currentIndex + 1
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            Rectangle
+                            {
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: _countBadge.Kirigami.Theme.backgroundColor
+                                height: Kirigami.Units.iconSizes.small
+                                width: height
+                                radius: height
+                            }
+
                         }
+
+
 
                         model: ListModel
                         {

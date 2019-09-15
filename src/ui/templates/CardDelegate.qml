@@ -68,14 +68,14 @@ SwipeDelegate
 
             Item
             {
-                Layout.preferredWidth: parent.height
-                Layout.fillHeight: true
+                visible: control.width > Kirigami.Units.gridUnit * 15
+                Layout.preferredWidth: visible ? parent.height : 0
+                Layout.fillHeight: visible
                 Layout.margins: Maui.Style.space.medium
 
                 Kirigami.Icon
                 {
                     id: _icon
-                    visible: control.width > Kirigami.Units.gridUnit * 15
                     width: Kirigami.Units.iconSizes.large
                     height: width
                     anchors.centerIn: parent

@@ -7,14 +7,13 @@ import org.kde.mauikit 1.0 as Maui
 Maui.GlobalDrawer
 {
     property bool collapsed : !root.isWide
-    width: collapsed ? _sidebar.iconSize * 2 : Math.min(Kirigami.Units.gridUnit * 11, root.width)
+    width: currentView !== views.system ? (collapsed ? _sidebar.iconSize * 2 : Math.min(Kirigami.Units.gridUnit * 11, root.width)) : 0
     modal: false
 
     contentItem:  Maui.SideBar
     {
         id: _sidebar
         anchors.fill: parent
-        //        orientation: ListView.Vertical
         iconSize: Kirigami.Units.iconSizes.smallMedium
         showLabels: !collapsed
 
@@ -31,7 +30,6 @@ Maui.GlobalDrawer
             height: Maui.Style.toolBarHeightAlt
         }
         ScrollBar.vertical.policy: collapsed ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
-
 
         model: ListModel
         {
@@ -51,10 +49,10 @@ Maui.GlobalDrawer
             ListElement{ category: "Customization"; label: "Icons"; icon: "start-here"}
         }
 
-        //        delegate: Maui.ListDelegate
-        //        {
-
-        //        }
+        onItemClicked:
+        {
+            _swipeView.currentItem.categoryUri = _sidebar.model.get(index).label
+        }
     }
 
 }

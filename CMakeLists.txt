@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 3.0)
 find_package(ECM 1.7.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${ECM_MODULE_PATH})
 
-#find_package(MauiKit REQUIRED)
-find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Qml Quick Svg QuickControls2 Widgets WebEngine)
+find_package(MauiKit REQUIRED)
+find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Qml Quick Svg QuickControls2 Widgets WebEngine Sql)
 include(KDEInstallDirs)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(KDECMakeSettings)
@@ -21,10 +21,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(nx_SRCS
     src/main.cpp
+    src/models/appsmodel.cpp
+    src/models/storemodel.cpp
     )
 
 set(nx_HDRS
     src/utils/nx.h
+    src/models/appsmodel.h
+    src/models/storemodel.h
     )
 
 set(nx_RSRCS
@@ -38,7 +42,17 @@ add_executable(${PROJECT_NAME}
     ${nx_RSRCS}
     )
 
-target_link_libraries(${PROJECT_NAME} Qt5::Qml Qt5::Widgets Qt5::Svg Qt5::WebEngine)
+if (ANDROID)
+    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
+
+    target_link_libraries(vvave Qt5::AndroidExtras)
+#     kde_source_files_enable_exceptions(pix src/pix.cpp)
+else()
+    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config KIO Attica)
+    target_link_libraries(${PROJECT_NAME} KF5::ConfigCore KF5::Notifications KF5::KIOCore KF5::I18n KF5::KIOWidgets KF5::KIOFileWidgets)
+endif()
+
+target_link_libraries(${PROJECT_NAME} MauiKit Qt5::Qml Qt5::Widgets Qt5::Svg Qt5::WebEngine Qt5::Sql)
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES org.nx.softwarecenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

@@ -4,6 +4,7 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include "utils/nx.h"
+#include "models/appsmodel.h"
 
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
@@ -55,6 +56,8 @@ int main(int argc, char *argv[])
 #ifdef STATIC_MAUIKIT
     MauiKit::getInstance().registerTypes();
 #endif
+
+    qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

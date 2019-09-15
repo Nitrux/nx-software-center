@@ -112,7 +112,7 @@ Maui.Page
                         anchors.fill: parent
                         Repeater
                         {
-                            model: _sizeBarListView.model
+                            model: _sizeBarRepeater.model
 
                             Row
                             {
@@ -176,41 +176,44 @@ Maui.Page
                 radius:  radiusV
                 border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba("#333".r, "#333".g, "#333".b, 0.7))
 
-                ListView
+                Row
                 {
                     id: _sizeBarListView
                     anchors.fill: parent
-                    orientation: ListView.Horizontal
-                    interactive: false
-                    spacing: 2
+//                    orientation: ListView.Horizontal
+//                    interactive: false
+                    spacing: 1
                     anchors.leftMargin: _sizeBar.radius
                     anchors.rightMargin: _sizeBar.radius
-                    model: ListModel
+                    Repeater
                     {
-                        ListElement {name: "Efi"; size: "800"; color: "#673ab7"}
-                        ListElement {name: "Root"; size: "1500"; color: "#009688"}
-                        ListElement {name: "Free"; size: "82200"; color: "#26c6da"}
-                        ListElement {name: "Applications"; size: "8000"; color: "#ec407a"}
-                    }
-
-                    delegate: Rectangle
-                    {
-                        color: model.color
-                        width: (_sizeBarListView.width * model.size)/deviceInfo.size
-                        height: _sizeBarListView.height - 2
-
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        Label
+                        id: _sizeBarRepeater
+                        model: ListModel
                         {
-                            visible: implicitWidth < parent.width
-                            anchors.centerIn: parent
-                            font.weight: Font.Bold
-                            font.bold: true
-                            text: model.name + " " + model.size
+                            ListElement {name: "Efi"; size: "800"; color: "#673ab7"}
+                            ListElement {name: "Root"; size: "1500"; color: "#009688"}
+                            ListElement {name: "Free"; size: "82200"; color: "#26c6da"}
+                            ListElement {name: "Applications"; size: "8000"; color: "#ec407a"}
+                        }
+
+                        Rectangle
+                        {
+                            color: model.color
+                            width: (_sizeBarListView.width * model.size)/deviceInfo.size
+                            height: _sizeBarListView.height - 2
+
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            Label
+                            {
+                                visible: implicitWidth < parent.width
+                                anchors.centerIn: parent
+                                font.weight: Font.Bold
+                                font.bold: true
+                                text: model.name + " " + model.size
+                            }
                         }
                     }
-
                 }
             }
 
@@ -218,6 +221,7 @@ Maui.Page
             ListView
             {
                 id: _deployedSystemsListView
+                clip: true
                 Layout.fillWidth: true
                 Layout.preferredHeight: contentHeight
                 orientation: ListView.Vertical
@@ -245,7 +249,7 @@ Maui.Page
                 {
                     id: _delegate
                     height: 100
-                    width: control.width - Maui.Style.space.huge
+                    width: _deployedSystemsListView.width - Maui.Style.space.huge
                     anchors.horizontalCenter: parent.horizontalCenter
                     label1.text: model.label
                     label2.text: model.deviceName
@@ -276,11 +280,7 @@ Maui.Page
                         target: _delegate
                         onClicked:
                         {
-                            control.push(_devicePageComponent)
 
-                            //for testing the model this sia custom info model
-                            var deviceInfo = _devicesListview.model.get(_devicesListview.currentIndex)
-                            control.currentItem.deviceInfo = deviceInfo
                         }
                     }
 

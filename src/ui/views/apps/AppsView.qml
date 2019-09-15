@@ -3,12 +3,23 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
-
+import NXModels 1.0 as NX
 import "../../templates"
 
 StackView
 {
     id: control
+
+    property alias categoryUri : _appsList.categoryUri
+
+    Maui.BaseModel
+    {
+        id: _appsModel
+        list: NX.Apps
+        {
+            id: _appsList
+        }
+    }
 
     Component
     {
@@ -56,7 +67,7 @@ StackView
                 Layout.fillWidth: true
                 Layout.leftMargin: Maui.Style.space.small
                 Layout.rightMargin: Maui.Style.space.small
-                url: "Development/IDE/Sub"
+                url: _appsList.categoryUri
 
                 Maui.TextField
                 {
@@ -93,17 +104,8 @@ StackView
                 boldLabel: true
                 height: Maui.Style.toolBarHeightAlt
             }
-            model: ListModel
-            {
-                ListElement{ category: "Installed"; label: "All"; icon: "appimage-store"; count: 72000; itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Installed"; label: "Education"; icon: "applications-education"; count: 650; itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Installed"; label: "Development"; icon: "applications-development"; count: 300; itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Installed"; label: "Graphics"; icon: "applications-graphics"; count: 13}
-                ListElement{ category: "Installed"; label: "Internet"; icon: "applications-internet"; itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Installed"; label: "Games"; icon: "applications-games"; count: 7}
-                ListElement{ category: "Installed"; label: "Multimedia"; icon: "applications-multimedia"; itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Installed"; label: "Office"; icon: "applications-office"; itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-            }
+
+            model: _appsModel
 
             delegate: CardDelegate
             {
@@ -111,8 +113,8 @@ StackView
                 height: 100
                 width: control.width - Maui.Style.space.huge
                 anchors.horizontalCenter: parent.horizontalCenter
-                label1.text: model.label
-                label2.text: model.itemInfo
+                label1.text: model.name
+                label2.text: model.description
                 label3.text: model.count
                 iconImg.source: model.icon
 
@@ -150,6 +152,7 @@ StackView
                             iconName: "index",
                             iconImage: "",
                             downloadsToday: 34,
+                            size: "125 MB",
                             updated: Date(),
                             license: "GPL v3",
                             itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper. Curabitur fringilla rutrum mauris, in imperdiet dui commodo vitae. Fusce at enim ullamcorper, tincidunt orci a, tincidunt urna. Vivamus quis est ut elit dignissim semper. Vivamus erat leo, iaculis id faucibus ac, placerat eu lacus. Praesent arcu tortor, aliquet at volutpat eu, rutrum eget ante. Vivamus sed lorem sed massa interdum convallis. Suspendisse lacinia augue odio, id auctor ipsum varius id. Nam sit amet rhoncus augue. Vestibulum at lobortis velit. Proin ipsum eros, vehicula ut tempus vel, aliquam a orci. Fusce facilisis pulvinar orci. ",

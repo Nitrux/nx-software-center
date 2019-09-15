@@ -155,11 +155,23 @@ Maui.Page
                         font.pointSize: Maui.Style.fontSizes.medium
                     }
 
+                    Label
+                    {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignCenter
+                        horizontalAlignment: Qt.AlignHCenter
+                        text: appInfo.size
+                        elide: Text.ElideMiddle
+                        wrapMode: Text.NoWrap
+                        font.weight: Font.Light
+                        font.pointSize: Maui.Style.fontSizes.medium
+                    }
+
                     Row
                     {
                         id: _actionButtons
                         Layout.fillWidth: true
-                        Layout.margins: Maui.Style.space.big + Maui.Style.space.medium
+                        Layout.margins: Maui.Style.space.big
                         spacing: Maui.Style.space.medium
                         Layout.preferredHeight: implicitHeight
                     }
