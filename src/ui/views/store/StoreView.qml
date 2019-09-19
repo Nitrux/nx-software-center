@@ -89,7 +89,7 @@ StackView
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium
 
-//            headerPositioning: ListView.PullBackFooter
+            //            headerPositioning: ListView.PullBackFooter
             header: Item
             {
                 height: 250
@@ -128,11 +128,23 @@ StackView
 
                             Rectangle
                             {
+                                visible: _featuredListview.count > 0 && _featuredListview.currentIndex > 0
                                 color: _countBadge.Kirigami.Theme.backgroundColor
-                                height: Kirigami.Units.iconSizes.small
+                                border.color: Qt.darker(color)
+                                height: Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing
                                 width: height
-                                radius: height
+                                radius: radiusV
                                 anchors.verticalCenter: parent.verticalCenter
+                                ToolButton
+                                {
+                                    anchors.centerIn: parent
+                                    height: Kirigami.Units.iconSizes.small
+                                    width: height
+                                    icon.width: height
+                                    icon.color: "white"
+                                    icon.name: "go-previous"
+                                    onClicked: _featuredListview.decrementCurrentIndex()
+                                }
                             }
 
                             Maui.Badge
@@ -144,11 +156,24 @@ StackView
 
                             Rectangle
                             {
+                                visible: _featuredListview.count > 0 && _featuredListview.currentIndex < _featuredListview.count - 1
+
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: _countBadge.Kirigami.Theme.backgroundColor
-                                height: Kirigami.Units.iconSizes.small
+                                border.color: Qt.darker(color)
+                                height: Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing
                                 width: height
-                                radius: height
+                                radius: radiusV
+                                ToolButton
+                                {
+                                    anchors.centerIn: parent
+                                    height: Kirigami.Units.iconSizes.small
+                                    width: height
+                                    icon.color: "white"
+                                    icon.width: height
+                                    icon.name: "go-next"
+                                    onClicked: _featuredListview.incrementCurrentIndex()
+                                }
                             }
 
                         }

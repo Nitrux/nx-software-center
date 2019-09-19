@@ -36,7 +36,7 @@ Maui.GlobalDrawer
             ListElement{ category: "Applications"; label: "All"; icon: "appimage-store";}
             ListElement{ category: "Applications"; label: "Education"; icon: "applications-education";}
             ListElement{ category: "Applications"; label: "Development"; icon: "applications-development";}
-            ListElement{ category: "Applications"; label: "Graphics"; icon: "applications-graphics"; count: 13}
+            ListElement{ category: "Applications"; label: "Graphics"; icon: "applications-graphics"; count: 130000}
             ListElement{ category: "Applications"; label: "Internet"; icon: "applications-internet"}
             ListElement{ category: "Applications"; label: "Games"; icon: "applications-games"; count: 7}
             ListElement{ category: "Applications"; label: "Multimedia"; icon: "applications-multimedia"}
