@@ -63,8 +63,8 @@ StackView
             Maui.PathBar
             {
                 Layout.fillWidth: true
-                Layout.leftMargin: space.big
-                Layout.rightMargin: space.big
+                Layout.leftMargin: Maui.Style.space.big
+                Layout.rightMargin: Maui.Style.space.big
                 url: "Development/IDE/Sub"
 
                 Maui.TextField
@@ -105,7 +105,7 @@ StackView
                     Kirigami.Theme.inherit: false
                     color: Kirigami.Theme.backgroundColor
                     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-                    radius: radiusV
+                    radius: Maui.Style.radiusV
 
 
                     ListView
