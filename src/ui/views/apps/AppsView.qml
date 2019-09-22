@@ -64,9 +64,7 @@ StackView
         headBar.middleContent: [
             Maui.PathBar
             {
-                Layout.fillWidth: true
-                Layout.leftMargin: Maui.Style.space.small
-                Layout.rightMargin: Maui.Style.space.small
+                Layout.fillWidth: true              
                 url: _appsList.categoryUri
 
                 Maui.TextField

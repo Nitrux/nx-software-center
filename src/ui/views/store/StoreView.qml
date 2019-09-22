@@ -62,10 +62,10 @@ StackView
         headBar.middleContent: [
             Maui.PathBar
             {
-                Layout.fillWidth: true
-                Layout.leftMargin: Maui.Style.space.big
-                Layout.rightMargin: Maui.Style.space.big
+                Layout.fillWidth: true              
                 url: "Development/IDE/Sub"
+                onHomeClicked: url = "Development/"
+//                onPlaceClicked: browser.openFolder(path)
 
                 Maui.TextField
                 {
