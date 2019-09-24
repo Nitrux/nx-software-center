@@ -44,12 +44,6 @@ int main(int argc, char *argv[])
     parser.addOption(versionOption);
     parser.process(app);
 
-    const QStringList args = parser.positionalArguments();
-    QStringList paths;
-
-    if(!args.isEmpty())
-        paths = args;
-
 #ifdef STATIC_KIRIGAMI
     KirigamiPlugin::getInstance().registerTypes();
 #endif
@@ -58,18 +52,17 @@ int main(int argc, char *argv[])
     MauiKit::getInstance().registerTypes();
 #endif
 
-    qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
-
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url, paths](QObject *obj, const QUrl &objUrl)
+                     &app, [url](QObject *obj, const QUrl &objUrl)
     {
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
 
     }, Qt::QueuedConnection);
 
+    qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
     engine.load(url);
     return app.exec();
 }

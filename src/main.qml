@@ -5,12 +5,13 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
 
-import "views/apps"
-import "views/store"
-import "views/system"
-import "views/search"
-import "views/progress"
-import "templates"
+import "ui/views/apps"
+import "ui/views/store"
+import "ui/views/system"
+import "ui/views/search"
+import "ui/views/progress"
+import "ui/templates"
+import "ui"
 
 Maui.ApplicationWindow
 {
@@ -33,6 +34,7 @@ Maui.ApplicationWindow
             checked: currentView === views.apps
             autoExclusive: true
             onClicked: root.currentView = views.apps
+//            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
 
             Maui.Badge
             {
@@ -57,6 +59,7 @@ Maui.ApplicationWindow
             checked: currentView === views.store
             autoExclusive: true
             onClicked: root.currentView = views.store
+//            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
         },
 
         ToolButton
@@ -67,6 +70,7 @@ Maui.ApplicationWindow
             checked: currentView === views.system
             autoExclusive: true
             onClicked: root.currentView = views.system
+//            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
         }
     ]
 

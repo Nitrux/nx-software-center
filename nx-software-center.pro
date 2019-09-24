@@ -1,23 +1,15 @@
 QT += qml
 QT += quick
 QT += sql
-QT += widgets
-QT += quickcontrols2
 
-TARGET = nx-software-center
-TEMPLATE = app
-
-CONFIG += ordered
 CONFIG += c++17
 QMAKE_LINK += -nostdlib++
-
-DESTDIR = $$OUT_PWD/
 
 linux:unix:!android {
 } else:android {
 
     message(Building helpers for Android)
-    QT += androidextras webview
+#    QT += androidextras webview
     include($$PWD/3rdparty/kirigami/kirigami.pri)
     include($$PWD/3rdparty/mauikit/mauikit.pri)
 
@@ -39,19 +31,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/main.cpp \
-    src/models/appsmodel.cpp \
+     $$PWD/src/main.cpp \
+     $$PWD/src/models/appsmodel.cpp \
 #    $$PWD/src/models/storemodel.cpp \
 
 HEADERS += \
-    src/utils/nx.h \
-    src/models/appsmodel.h \
+     $$PWD/src/utils/nx.h \
+     $$PWD/src/models/appsmodel.h \
 #    $$PWD/src/models/storemodel.h \
 
 
 RESOURCES += \
-    src/ui/qml.qrc \
-    assets/nx-assets.qrc \
+    $$PWD/src/qml.qrc \
+     $$PWD/assets/nx-assets.qrc \
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -72,14 +64,8 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
 DISTFILES += \
     3rdparty/mauikit/src/android/AndroidManifest.xml \
     3rdparty/mauikit/src/android/build.gradle \
-    3rdparty/mauikit/src/android/build.gradle \
-    3rdparty/mauikit/src/android/gradle/wrapper/gradle-wrapper.jar \
     3rdparty/mauikit/src/android/gradle/wrapper/gradle-wrapper.jar \
     3rdparty/mauikit/src/android/gradle/wrapper/gradle-wrapper.properties \
-    3rdparty/mauikit/src/android/gradle/wrapper/gradle-wrapper.properties \
-    3rdparty/mauikit/src/android/gradlew \
     3rdparty/mauikit/src/android/gradlew \
     3rdparty/mauikit/src/android/gradlew.bat \
-    3rdparty/mauikit/src/android/gradlew.bat \
-    3rdparty/mauikit/src/android/res/values/libs.xml \
     3rdparty/mauikit/src/android/res/values/libs.xml

@@ -62,10 +62,10 @@ StackView
         headBar.middleContent: [
             Maui.PathBar
             {
-                Layout.fillWidth: true
-                Layout.leftMargin: space.big
-                Layout.rightMargin: space.big
+                Layout.fillWidth: true              
                 url: "Development/IDE/Sub"
+                onHomeClicked: url = "Development/"
+//                onPlaceClicked: browser.openFolder(path)
 
                 Maui.TextField
                 {
@@ -89,7 +89,7 @@ StackView
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium
 
-//            headerPositioning: ListView.PullBackFooter
+            //            headerPositioning: ListView.PullBackFooter
             header: Item
             {
                 height: 250
@@ -105,7 +105,7 @@ StackView
                     Kirigami.Theme.inherit: false
                     color: Kirigami.Theme.backgroundColor
                     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-                    radius: radiusV
+                    radius: Maui.Style.radiusV
 
 
                     ListView
@@ -128,11 +128,23 @@ StackView
 
                             Rectangle
                             {
+                                visible: _featuredListview.count > 0 && _featuredListview.currentIndex > 0
                                 color: _countBadge.Kirigami.Theme.backgroundColor
-                                height: Kirigami.Units.iconSizes.small
+                                border.color: Qt.darker(color)
+                                height: Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing
                                 width: height
-                                radius: height
+                                radius: radiusV
                                 anchors.verticalCenter: parent.verticalCenter
+                                ToolButton
+                                {
+                                    anchors.centerIn: parent
+                                    height: Kirigami.Units.iconSizes.small
+                                    width: height
+                                    icon.width: height
+                                    icon.color: "white"
+                                    icon.name: "go-previous"
+                                    onClicked: _featuredListview.decrementCurrentIndex()
+                                }
                             }
 
                             Maui.Badge
@@ -144,11 +156,24 @@ StackView
 
                             Rectangle
                             {
+                                visible: _featuredListview.count > 0 && _featuredListview.currentIndex < _featuredListview.count - 1
+
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: _countBadge.Kirigami.Theme.backgroundColor
-                                height: Kirigami.Units.iconSizes.small
+                                border.color: Qt.darker(color)
+                                height: Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing
                                 width: height
-                                radius: height
+                                radius: radiusV
+                                ToolButton
+                                {
+                                    anchors.centerIn: parent
+                                    height: Kirigami.Units.iconSizes.small
+                                    width: height
+                                    icon.color: "white"
+                                    icon.width: height
+                                    icon.name: "go-next"
+                                    onClicked: _featuredListview.incrementCurrentIndex()
+                                }
                             }
 
                         }
