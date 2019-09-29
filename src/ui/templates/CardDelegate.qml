@@ -23,7 +23,7 @@ SwipeDelegate
     property alias label3 : _label3
     property alias label4 : _label4
     property alias iconImg : _icon
-    property int radius : radiusV
+    property int radius : Maui.Style.radiusV
 
     swipe.enabled: showMenuIcon
 
@@ -64,7 +64,7 @@ SwipeDelegate
             id: _layout
 
             anchors.fill: parent
-            anchors.margins: space.small
+            anchors.margins: Maui.Style.space.small
 
             Item
             {
@@ -76,7 +76,7 @@ SwipeDelegate
                 Kirigami.Icon
                 {
                     id: _icon
-                    width: Kirigami.Units.iconSizes.large
+                    width: Maui.Style.iconSizes.large
                     height: width
                     anchors.centerIn: parent
                 }
@@ -100,7 +100,7 @@ SwipeDelegate
                         visible: text.length
                         Layout.fillHeight: visible
                         Layout.fillWidth: visible
-                        font.pointSize: fontSizes.big
+                        font.pointSize: Maui.Style.fontSizes.big
                         font.bold: true
                         font.weight: Font.Bold
                         elide: Text.ElideMiddle
@@ -113,7 +113,7 @@ SwipeDelegate
                         visible: text.length
                         Layout.fillHeight: visible
                         Layout.fillWidth: visible
-                        font.pointSize: fontSizes.small
+                        font.pointSize: Maui.Style.fontSizes.small
                         font.weight: Font.Light
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         elide: Text.ElideRight
@@ -141,7 +141,7 @@ SwipeDelegate
                         Layout.fillWidth: visible
                         Layout.alignment: Qt.AlignRight
                         horizontalAlignment: Qt.AlignRight
-                        font.pointSize: fontSizes.small
+                        font.pointSize: Maui.Style.fontSizes.small
                         font.weight: Font.Light
                         wrapMode: Text.WrapAnywhere
                         elide: Text.ElideMiddle
@@ -156,7 +156,7 @@ SwipeDelegate
                         Layout.fillWidth: visible
                         Layout.alignment: Qt.AlignRight
                         horizontalAlignment: Qt.AlignRight
-                        font.pointSize: fontSizes.small
+                        font.pointSize: Maui.Style.fontSizes.small
                         font.weight: Font.Light
                         wrapMode: Text.WrapAnywhere
                         elide: Text.ElideMiddle
@@ -169,9 +169,9 @@ SwipeDelegate
             Item
             {
                 Layout.fillHeight: true
-                Layout.preferredWidth: Math.max(iconSizes.big, _buttonsRow.implicitWidth)
+                Layout.preferredWidth: Math.max(Maui.Style.space.big, _buttonsRow.implicitWidth)
                 Layout.alignment: Qt.AlignRight
-                Layout.margins: space.big
+                Layout.margins: Maui.Style.space.big
 
                 Row
                 {
@@ -194,8 +194,8 @@ SwipeDelegate
         id: _rowActions
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        spacing: space.big
-        padding: space.medium
+        spacing: Maui.Style.space.big
+        padding: Maui.Style.space.medium
 
         ToolButton
         {

@@ -40,7 +40,7 @@ Maui.ApplicationWindow
             {
                 id: _countBadge
                 text: "3"
-                height: Kirigami.Units.iconSizes.small *1.4
+                height: Maui.Style.iconSizes.small *1.4
                 width: height
                 Kirigami.Theme.backgroundColor: "#D81B60"
                 anchors
@@ -81,9 +81,9 @@ Maui.ApplicationWindow
         z: 999
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: toolBarHeight
-        anchors.bottomMargin: toolBarHeight
-        height: toolBarHeight
+        anchors.margins: Maui.Style.toolBarHeight
+        anchors.bottomMargin: Maui.Style.toolBarHeight
+        height: Maui.Style.toolBarHeight
         width: height
 
         Rectangle
@@ -91,7 +91,7 @@ Maui.ApplicationWindow
             id: _rec
             anchors.fill: parent
             color: Kirigami.Theme.highlightColor
-            radius: radiusV
+            radius: Maui.Style.radiusV
             ToolButton
             {
                 anchors.fill : parent
@@ -118,7 +118,7 @@ Maui.ApplicationWindow
     }
 
 
-    globalDrawer: CategoriesSidebar
+    sideBar: CategoriesSidebar
     {
 
     }

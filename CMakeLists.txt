@@ -33,7 +33,7 @@ set(nx_HDRS
 
 set(nx_RSRCS
     assets/nx-assets.qrc
-    src/ui/qml.qrc
+    src/qml.qrc
     )
 
 add_executable(${PROJECT_NAME}

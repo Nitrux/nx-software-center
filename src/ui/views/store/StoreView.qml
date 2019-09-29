@@ -131,14 +131,14 @@ StackView
                                 visible: _featuredListview.count > 0 && _featuredListview.currentIndex > 0
                                 color: _countBadge.Kirigami.Theme.backgroundColor
                                 border.color: Qt.darker(color)
-                                height: Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing
+                                height: Maui.Style.iconSizes.small + Kirigami.Units.smallSpacing
                                 width: height
-                                radius: radiusV
+                                radius: Maui.Style.radiusV
                                 anchors.verticalCenter: parent.verticalCenter
                                 ToolButton
                                 {
                                     anchors.centerIn: parent
-                                    height: Kirigami.Units.iconSizes.small
+                                    height: Maui.Style.iconSizes.small
                                     width: height
                                     icon.width: height
                                     icon.color: "white"
@@ -161,13 +161,13 @@ StackView
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: _countBadge.Kirigami.Theme.backgroundColor
                                 border.color: Qt.darker(color)
-                                height: Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing
+                                height: Maui.Style.iconSizes.small + Kirigami.Units.smallSpacing
                                 width: height
-                                radius: radiusV
+                                radius: Maui.Style.radiusV
                                 ToolButton
                                 {
                                     anchors.centerIn: parent
-                                    height: Kirigami.Units.iconSizes.small
+                                    height: Maui.Style.iconSizes.small
                                     width: height
                                     icon.color: "white"
                                     icon.width: height
@@ -175,10 +175,7 @@ StackView
                                     onClicked: _featuredListview.incrementCurrentIndex()
                                 }
                             }
-
                         }
-
-
 
                         model: ListModel
                         {
@@ -233,7 +230,7 @@ StackView
 
                                 Kirigami.Icon
                                 {
-                                    height: Kirigami.Units.iconSizes.huge
+                                    height: Maui.Style.iconSizes.huge
                                     width: height
                                     anchors.centerIn: parent
                                     source: model.iconName
@@ -294,7 +291,7 @@ StackView
                                         Layout.topMargin: Maui.Style.space.big
                                         Layout.fillWidth: true
                                         Layout.fillHeight: true
-                                        font.pointSize: fontSizes.small
+                                        font.pointSize: Maui.Style.fontSizes.small
                                         font.weight: Font.Light
                                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                                         elide: Text.ElideRight

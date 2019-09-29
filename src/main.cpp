@@ -32,10 +32,11 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 #endif
 
-    app.setApplicationName(NX::app);
+    app.setApplicationName(NX::appName);
     app.setApplicationVersion(NX::version);
-    app.setApplicationDisplayName(NX::app);
-    app.setOrganizationName(NX::org);
+    app.setApplicationDisplayName(NX::displayName);
+    app.setOrganizationName(NX::orgName);
+    app.setOrganizationDomain(NX::orgDomain);
     app.setWindowIcon(QIcon(":/nx-software-center.svg"));
 
     QCommandLineParser parser;

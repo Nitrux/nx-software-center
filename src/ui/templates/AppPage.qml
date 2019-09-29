@@ -23,7 +23,7 @@ Maui.Page
 
         Kirigami.Separator
         {
-            Layout.preferredHeight: Kirigami.Units.iconSizes.small
+            Layout.preferredHeight: Maui.Style.iconSizes.small
             width:  2
         }
     ]
@@ -122,8 +122,8 @@ Maui.Page
 
                     Kirigami.Icon
                     {
-                        Layout.preferredHeight: Kirigami.Units.iconSizes.large
-                        Layout.preferredWidth: Kirigami.Units.iconSizes.large
+                        Layout.preferredHeight: Maui.Style.iconSizes.large
+                        Layout.preferredWidth: Maui.Style.iconSizes.large
                         Layout.alignment: Qt.AlignCenter
                         Layout.margins: Maui.Style.space.big
                         source: appInfo.iconName
@@ -194,8 +194,8 @@ Maui.Page
                 Kirigami.Icon
                 {
                     visible: isWide
-                    Layout.preferredHeight: Kirigami.Units.iconSizes.smallMedium
-                    Layout.preferredWidth: Kirigami.Units.iconSizes.smallMedium
+                    Layout.preferredHeight: Maui.Style.iconSizes.smallMedium
+                    Layout.preferredWidth: Maui.Style.iconSizes.smallMedium
                     Layout.margins: Maui.Style.space.big
                     Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
                     source: "view-list-details"
@@ -241,8 +241,8 @@ Maui.Page
                 Kirigami.Icon
                 {
                     visible: isWide
-                    Layout.preferredHeight: Kirigami.Units.iconSizes.smallMedium
-                    Layout.preferredWidth: Kirigami.Units.iconSizes.smallMedium
+                    Layout.preferredHeight: Maui.Style.iconSizes.smallMedium
+                    Layout.preferredWidth: Maui.Style.iconSizes.smallMedium
                     Layout.margins: Maui.Style.space.big
                     Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
                     source: "media-playlist-append"
@@ -310,8 +310,8 @@ Maui.Page
                 Kirigami.Icon
                 {
                     visible: isWide
-                    Layout.preferredHeight: Kirigami.Units.iconSizes.smallMedium
-                    Layout.preferredWidth: Kirigami.Units.iconSizes.smallMedium
+                    Layout.preferredHeight: Maui.Style.iconSizes.smallMedium
+                    Layout.preferredWidth: Maui.Style.iconSizes.smallMedium
                     Layout.margins: Maui.Style.space.big
                     Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
                     source: "view-media-recent"

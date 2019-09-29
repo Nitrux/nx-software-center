@@ -92,7 +92,7 @@ StackView
             body: qsTr("Not apps found")
             visible: _appsListView.count === 0
             emoji: "qrc:/store.svg"
-            emojiSize: Kirigami.Units.iconSizes.huge
+            emojiSize: Maui.Style.iconSizes.huge
         }
 
         ListView
@@ -107,7 +107,7 @@ StackView
             {
                 id: delegate
                 label: section
-                labelTxt.font.pointSize: fontSizes.big
+                labelTxt.font.pointSize: Maui.Style.fontSizes.big
                 isSection: true
                 boldLabel: true
                 height: Maui.Style.toolBarHeightAlt

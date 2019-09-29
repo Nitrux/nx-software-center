@@ -24,7 +24,7 @@ Maui.Page
 
         Kirigami.Separator
         {
-            Layout.preferredHeight: Kirigami.Units.iconSizes.small
+            Layout.preferredHeight: Maui.Style.iconSizes.small
             width:  2
         }
     ]
@@ -51,7 +51,7 @@ Maui.Page
                     Kirigami.Icon
                     {
                         id: _icon
-                        width: Kirigami.Units.iconSizes.huge
+                        width: Maui.Style.iconSizes.huge
                         height: width
                         source: deviceInfo.iconName
                         anchors.centerIn: parent
@@ -68,7 +68,7 @@ Maui.Page
                         text: deviceInfo.label
                         visible: text.length
                         Layout.fillWidth: visible
-                        font.pointSize: fontSizes.big
+                        font.pointSize: Maui.Style.fontSizes.big
                         font.bold: true
                         font.weight: Font.Bold
                         elide: Text.ElideMiddle
@@ -80,7 +80,7 @@ Maui.Page
                         text: deviceInfo.deviceName
                         visible: text.length
                         Layout.fillWidth: visible
-                        font.pointSize: fontSizes.small
+                        font.pointSize: Maui.Style.fontSizes.small
                         font.weight: Font.Light
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         elide: Text.ElideRight
@@ -92,7 +92,7 @@ Maui.Page
                         text: deviceInfo.state
                         visible: text.length
                         Layout.fillWidth: visible
-                        font.pointSize: fontSizes.small
+                        font.pointSize: Maui.Style.fontSizes.small
                         font.weight: Font.Light
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         elide: Text.ElideRight
@@ -119,7 +119,7 @@ Maui.Page
                                 spacing: Maui.Style.space.medium
                                 Rectangle
                                 {
-                                    height: Kirigami.Units.iconSizes.small
+                                    height: Maui.Style.iconSizes.small
                                     width: height
                                     color: model.color
                                     radius: 2
@@ -131,7 +131,7 @@ Maui.Page
                                     text: model.name
                                     visible: text.length
                                     horizontalAlignment: Qt.AlignRight
-                                    font.pointSize: fontSizes.small
+                                    font.pointSize: Maui.Style.fontSizes.small
                                     font.weight: Font.Light
                                     wrapMode: Text.WrapAnywhere
                                     elide: Text.ElideMiddle
@@ -152,7 +152,7 @@ Maui.Page
                     Layout.fillHeight: true
                     Layout.preferredWidth: Math.max(iconSizes.big, _buttonsRow.implicitWidth)
                     Layout.alignment: Qt.AlignRight
-                    Layout.margins: space.big
+                    Layout.margins: Maui.Style.space.big
 
                     Row
                     {
@@ -232,7 +232,7 @@ Maui.Page
                 {
                     id: delegate
                     label: section
-                    labelTxt.font.pointSize: fontSizes.big
+                    labelTxt.font.pointSize: Maui.Style.fontSizes.big
 
                     isSection: true
                     boldLabel: true
@@ -255,7 +255,7 @@ Maui.Page
                     label2.text: model.deviceName
                     label3.text: model.state
                     iconImg.source: model.iconName
-                    iconImg.width: Kirigami.Units.iconSizes.huge
+                    iconImg.width: Maui.Style.iconSizes.huge
 
                     quickButtons: [
                         Button

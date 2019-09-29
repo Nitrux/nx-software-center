@@ -4,11 +4,12 @@
 
 namespace NX
 {
-  const QString app = "NX Software Center";
-  const QString version = "1.0.0";
-  const QString description = "Software store";
-  const QString org = "org.maui.softwarecenter";
-
+const QString appName = QStringLiteral("NX Software Center");
+const QString displayName = QStringLiteral("NX Software Center");
+const QString version = QStringLiteral("1.0.0");
+const QString description = QStringLiteral("Software store");
+const QString orgName = QStringLiteral("Maui");
+const QString orgDomain = QStringLiteral("org.maui.nxsoftwarecenter");
 }
 
 

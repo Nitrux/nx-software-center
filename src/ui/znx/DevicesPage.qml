@@ -28,8 +28,8 @@ StackView
             Maui.PathBar
             {
                 Layout.fillWidth: true
-                Layout.leftMargin: space.big
-                Layout.rightMargin: space.big
+                Layout.leftMargin: Maui.Style.space.big
+                Layout.rightMargin: Maui.Style.space.big
                 url: "Devices/"
 
                 Maui.TextField
@@ -56,7 +56,7 @@ StackView
             {
                 id: delegate
                 label: section
-                labelTxt.font.pointSize: fontSizes.big
+                labelTxt.font.pointSize: Maui.Style.fontSizes.big
 
                 isSection: true
                 boldLabel: true
@@ -79,7 +79,7 @@ StackView
                 label2.text: model.deviceName
                 label3.text: model.state
                 iconImg.source: model.iconName
-                iconImg.width: Kirigami.Units.iconSizes.huge
+                iconImg.width: Maui.Style.iconSizes.huge
 
                 quickButtons: [
                     Button
