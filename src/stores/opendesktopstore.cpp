@@ -196,17 +196,17 @@ void OpenDesktopStore::parseGetCategoriesResponseAndReply(
 void OpenDesktopStore::parseGetApplicationsResponseAndReply(
     QNetworkReply *reply) {
   QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
-  ApplicationResponseDTO response;
+  ApplicationResponseDTO *response = new ApplicationResponseDTO(this);
   //  qDebug().noquote() << doc.toJson(QJsonDocument::JsonFormat::Indented);
   //  qDebug() << "###################";
 
   QJsonObject root = doc.object();
 
-  response.message = root["message"].toString();
-  response.status = root["status"].toString();
-  response.statusCode = root["statuscode"].toDouble();
-  response.totalItems = root["totalitems"].toString();
-  response.itemsPerPage = root["itemsperpage"].toDouble();
+  response->message = root["message"].toString();
+  response->status = root["status"].toString();
+  response->statusCode = root["statuscode"].toDouble();
+  response->totalItems = root["totalitems"].toString();
+  response->itemsPerPage = root["itemsperpage"].toDouble();
 
   QJsonArray arr = root["data"].toArray();
 
@@ -419,8 +419,10 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
     app->downloads = downloads;
     app->previewPics = previewPics;
     app->previewUrls = previewUrls;
-    response.applications.append(app);
+    response->applications.append(app);
   }
 
-  qDebug().noquote() << response.toString();
+  emit applicationsResponseReady(response);
+
+  //  qDebug().noquote() << response->toString();
 }

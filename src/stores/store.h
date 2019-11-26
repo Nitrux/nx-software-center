@@ -1,6 +1,7 @@
 #ifndef STORES_STORE_H
 #define STORES_STORE_H
 
+#include "ResponseDTO/applicationresponsedto.h"
 #include "ResponseDTO/category.h"
 #include "ResponseDTO/categoryresponsedto.h"
 
@@ -27,6 +28,9 @@ public:
                                QString nameFilter = "",
                                SORT_MODE sortMode = MODE_NEWEST,
                                QString page = "", QString pageSize = "") = 0;
+
+signals:
+  void applicationsResponseReady(ApplicationResponseDTO *response);
 };
 
 #endif
