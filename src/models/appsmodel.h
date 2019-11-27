@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "../stores/store.h"
+
 #ifdef STATIC_MAUIKIT
 #include "fmh.h"
 #include "mauilist.h"
@@ -11,10 +13,10 @@
 #include <MauiKit/mauilist.h>
 #endif
 
-class AppsModel : public MauiList
-{
+class AppsModel : public MauiList {
   Q_OBJECT
-  Q_PROPERTY(QString categoryUri READ getCategoryUri WRITE setCategoryUri NOTIFY categoryUriChanged)
+  Q_PROPERTY(QString categoryUri READ getCategoryUri WRITE setCategoryUri NOTIFY
+                 categoryUriChanged)
 
 public:
   explicit AppsModel(QObject *parent = nullptr);
@@ -28,6 +30,7 @@ signals:
 
 private:
   FMH::MODEL_LIST m_list;
+  Store *appImageHubStore;
 
   void setList();
 

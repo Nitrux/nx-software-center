@@ -36,11 +36,29 @@ set(nx_RSRCS
     src/qml.qrc
     )
 
+set(nx_STORES_SRCS
+    src/stores/opendesktopstore.cpp
+    src/stores/appimagehubstore.cpp
+
+    src/stores/ResponseDTO/category.cpp)
+
+set(nx_STORES_HDRS
+    src/stores/store.h
+    src/stores/opendesktopstore.h
+    src/stores/appimagehubstore.h
+
+    src/stores/ResponseDTO/category.h
+    src/stores/ResponseDTO/categoryresponsedto.h
+    src/stores/ResponseDTO/application.h
+    src/stores/ResponseDTO/applicationresponsedto.h)
+
 add_executable(${PROJECT_NAME}
     ${nx_SRCS}
     ${nx_HDRS}
     ${nx_RSRCS}
-    )
+
+    ${nx_STORES_SRCS}
+    ${nx_STORES_HDRS})
 
 if (ANDROID)
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
@@ -49,7 +67,7 @@ if (ANDROID)
 #     kde_source_files_enable_exceptions(pix src/pix.cpp)
 else()
     find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config KIO Attica SyntaxHighlighting)
-    target_link_libraries(${PROJECT_NAME} KF5::ConfigCore KF5::Notifications KF5::KIOCore KF5::I18n KF5::KIOWidgets KF5::KIOFileWidgets KF5::SyntaxHighlighting)
+    target_link_libraries(${PROJECT_NAME} KF5::ConfigCore KF5::Notifications KF5::KIOCore KF5::I18n KF5::KIOWidgets KF5::KIOFileWidgets)
 endif()
 
 target_link_libraries(${PROJECT_NAME} MauiKit Qt5::Qml Qt5::Widgets Qt5::Svg Qt5::WebEngine Qt5::Sql)
