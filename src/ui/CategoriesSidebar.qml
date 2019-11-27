@@ -21,8 +21,9 @@ Maui.SideBar
         labelTxt.font.pointSize: Maui.Style.fontSizes.big
 
         isSection: true
-        boldLabel: true
+        labelTxt.font.bold: true
         height: Maui.Style.toolBarHeightAlt
+        width: parent.width
     }
     //        ScrollBar.vertical.policy: collapsed ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
 

@@ -82,6 +82,7 @@ StackView
 
         ListView
         {
+            id: _listView
             anchors.fill: parent
 
             Layout.fillWidth: true
@@ -320,29 +321,30 @@ StackView
                 ListElement{ category: "Applications"; label: "Office"; icon: "applications-office"; description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
             }
 
-            delegate: CardDelegate
+            delegate: Maui.SwipeBrowserDelegate
             {
                 id: _delegate
                 height: 100
-                width: control.width - Maui.Style.space.huge
-                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width
                 label1.text: model.label
                 label2.text: model.description
-                label3.text: model.count
-                iconImg.source: model.icon
+                label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+//                label3.text: model.count
+                iconSource: model.icon
+                iconSizeHint: Maui.Style.iconSizes.large
 
-                quickButtons: [
-                    ToolButton
+                quickActions: [
+                    Action
                     {
                         icon.name: "document-share"
                     },
 
-                    ToolButton
+                    Action
                     {
                         icon.name: "media-playback-start"
                     },
 
-                    ToolButton
+                    Action
                     {
                         icon.name: "entry-delete"
                     }
@@ -353,6 +355,7 @@ StackView
                     target: _delegate
                     onClicked:
                     {
+                        _listView.currentIndex = index
                         control.push(_appPageComponent)
 
                         //for testing the model this sia custom info model
