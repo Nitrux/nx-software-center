@@ -80,7 +80,7 @@ void AppsModel::setList() {
   appImageHubStore->getApplications(QList<QString>());
   connect(appImageHubStore, &Store::applicationsResponseReady,
           [=](ApplicationResponseDTO *response) {
-            for (ApplicationResponseDTO::Application app :
+            for (Application app :
                  response->applications) {
               this->m_list.append(QHash<FMH::MODEL_KEY, QString>{
                   {FMH::MODEL_KEY::CHANGED, ""},
