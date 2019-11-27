@@ -188,8 +188,6 @@ void OpenDesktopStore::parseGetCategoriesResponseAndReply(
 
   response.categories = list;
 
-  //  qDebug().noquote() << doc.toJson(QJsonDocument::JsonFormat::Indented);
-
   qDebug().noquote() << response.toString();
 }
 
@@ -197,8 +195,6 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
     QNetworkReply *reply) {
   QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
   ApplicationResponseDTO *response = new ApplicationResponseDTO(this);
-  //  qDebug().noquote() << doc.toJson(QJsonDocument::JsonFormat::Indented);
-  //  qDebug() << "###################";
 
   QJsonObject root = doc.object();
 
@@ -329,13 +325,6 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
       }
     }
 
-    //    qDebug().noquote() << QJsonDocument(parsedJson)
-    //                              .toJson(QJsonDocument::JsonFormat::Indented);
-
-    //    qDebug().noquote() << QJsonDocument(obj).toJson(
-    //                              QJsonDocument::JsonFormat::Indented)
-    //                       << "\n\n";
-
     QList<Application::Download *> downloads;
 
     for (QString key : parsedJson["downloads"].toObject().keys()) {
@@ -423,6 +412,4 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
   }
 
   emit applicationsResponseReady(response);
-
-  //  qDebug().noquote() << response->toString();
 }
