@@ -29,7 +29,10 @@ void OpenDesktopStore::getCategories() {
   QUrl url = API_CATEGORIES_URL;
   url.setQuery(query);
 
-  manager->get(QNetworkRequest(url));
+  QNetworkReply *reply = manager->get(QNetworkRequest(url));
+  connect(
+      reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+      this, [=](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
 void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
@@ -72,19 +75,19 @@ void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
   QNetworkReply *reply = manager->get(QNetworkRequest(url));
   connect(
       reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
-      this, [=](QNetworkReply::NetworkError err) { qDebug() << url << err; });
+      this, [=](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
 void OpenDesktopStore::parseGetCategoriesResponseAndReply(
     QNetworkReply *reply) {
-  CategoryResponseDTO response(this);
+  CategoryResponseDTO *response = new CategoryResponseDTO(this);
   QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
   QJsonObject root = doc.object();
 
-  response.message = root["message"].toString();
-  response.status = root["status"].toString();
-  response.statusCode = root["statuscode"].toDouble();
-  response.totalItems = root["totalitems"].toDouble();
+  response->message = root["message"].toString();
+  response->status = root["status"].toString();
+  response->statusCode = root["statuscode"].toDouble();
+  response->totalItems = root["totalitems"].toDouble();
 
   QJsonArray array = root["data"].toArray();
 
@@ -186,9 +189,9 @@ void OpenDesktopStore::parseGetCategoriesResponseAndReply(
     }
   }
 
-  response.categories = list;
+  response->categories = list;
 
-  qDebug().noquote() << response.toString();
+  emit categorisResponseReady(response);
 }
 
 void OpenDesktopStore::parseGetApplicationsResponseAndReply(
