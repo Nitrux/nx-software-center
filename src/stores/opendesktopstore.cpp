@@ -191,7 +191,7 @@ void OpenDesktopStore::parseGetCategoriesResponseAndReply(
 
   response->categories = list;
 
-  emit categorisResponseReady(response);
+  emit categoriesResponseReady(response);
 }
 
 void OpenDesktopStore::parseGetApplicationsResponseAndReply(

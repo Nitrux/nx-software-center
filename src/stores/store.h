@@ -31,7 +31,7 @@ public:
                                QString page = "", QString pageSize = "") = 0;
 
 signals:
-  void categorisResponseReady(CategoryResponseDTO *response);
+  void categoriesResponseReady(CategoryResponseDTO *response);
   void applicationsResponseReady(ApplicationResponseDTO *response);
   void error(QNetworkReply::NetworkError error);
 };
