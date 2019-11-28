@@ -23,12 +23,14 @@ set(nx_SRCS
     src/main.cpp
     src/models/appsmodel.cpp
     src/models/storemodel.cpp
+    src/models/categoriesmodel.cpp
     )
 
 set(nx_HDRS
     src/utils/nx.h
     src/models/appsmodel.h
     src/models/storemodel.h
+    src/models/categoriesmodel.h
     )
 
 set(nx_RSRCS
