@@ -10,7 +10,7 @@ StackView
 {
     id: control
 
-    property alias categoryUri : _appsList.categoryUri
+//    property alias category : _appsList.category
 
     Maui.BaseModel
     {
@@ -65,7 +65,7 @@ StackView
             Maui.PathBar
             {
                 Layout.fillWidth: true
-                url: _appsList.categoryUri
+                url: _appsList.category.name
 
                 Maui.TextField
                 {

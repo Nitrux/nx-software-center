@@ -12,7 +12,8 @@ Maui.SideBar
 
     collapsible: true
     collapsed: !root.isWide
-    preferredWidth: Math.min(Kirigami.Units.gridUnit * 11, root.width)
+    preferredWidth: count > 0 ? Math.min(Kirigami.Units.gridUnit * 11, root.width) : 0
+
     iconSize : Maui.Style.iconSizes.medium
     section.property: !showLabels ? "" : "category"
     section.criteria: ViewSection.FullString
@@ -74,7 +75,7 @@ Maui.SideBar
 
     onItemClicked:
     {
-        _swipeView.currentItem.categoryUri = control.model.get(index).id
+        _swipeView.currentItem.category = control.model.get(index)
     }
 }
 

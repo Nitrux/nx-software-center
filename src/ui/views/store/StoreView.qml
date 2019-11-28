@@ -6,10 +6,12 @@ import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
 
 import "../../templates"
+import NXModels 1.0 as NX
 
 StackView
 {
     id: control
+    property alias category : _storeList.category
 
     Component
     {
@@ -302,23 +304,16 @@ StackView
                             }
                         }
                     }
-
-
                 }
-
             }
 
-
-            model: ListModel
+            model:  Maui.BaseModel
             {
-                ListElement{ category: "Applications"; label: "All"; icon: "appimage-store"; count: 72000; description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Applications"; label: "Education"; icon: "applications-education"; count: 650; description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Applications"; label: "Development"; icon: "applications-development"; count: 300; description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Applications"; label: "Graphics"; icon: "applications-graphics"; count: 13}
-                ListElement{ category: "Applications"; label: "Internet"; icon: "applications-internet"; description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Applications"; label: "Games"; icon: "applications-games"; count: 7}
-                ListElement{ category: "Applications"; label: "Multimedia"; icon: "applications-multimedia"; description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                ListElement{ category: "Applications"; label: "Office"; icon: "applications-office"; description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
+                id: _appsModel
+                list: NX.Store
+                {
+                    id: _storeList
+                }
             }
 
             delegate: Maui.SwipeBrowserDelegate
@@ -326,12 +321,13 @@ StackView
                 id: _delegate
                 height: 100
                 width: parent.width
-                label1.text: model.label
+                anchors.horizontalCenter: parent.horizontalCenter
+                label1.text: model.name
                 label2.text: model.description
-                label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-//                label3.text: model.count
-                iconSource: model.icon
-                iconSizeHint: Maui.Style.iconSizes.large
+                label3.text: model.totaldownloads + qsTr(" Downloads")
+                label4.text: model.score + qsTr(" Points")
+                imageSource: model.smallpic
+                iconSizeHint: height * 0.7
 
                 quickActions: [
                     Action
@@ -357,25 +353,7 @@ StackView
                     {
                         _listView.currentIndex = index
                         control.push(_appPageComponent)
-
-                        //for testing the model this sia custom info model
-                        var appInfo = {
-                            name: "Index",
-                            version: "1.0.0",
-                            author: "Camilo Higuita",
-                            organization: "Maui",
-                            bannerImage: "qrc:/tests/banner_index.png",
-                            iconName: "index",
-                            iconImage: "",
-                            downloadsToday: 34,
-                            updated: Date(),
-                            license: "GPL v3",
-                            itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper. Curabitur fringilla rutrum mauris, in imperdiet dui commodo vitae. Fusce at enim ullamcorper, tincidunt orci a, tincidunt urna. Vivamus quis est ut elit dignissim semper. Vivamus erat leo, iaculis id faucibus ac, placerat eu lacus. Praesent arcu tortor, aliquet at volutpat eu, rutrum eget ante. Vivamus sed lorem sed massa interdum convallis. Suspendisse lacinia augue odio, id auctor ipsum varius id. Nam sit amet rhoncus augue. Vestibulum at lobortis velit. Proin ipsum eros, vehicula ut tempus vel, aliquam a orci. Fusce facilisis pulvinar orci. ",
-                            changelogInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper. Curabitur fringilla rutrum mauris, in imperdiet dui commodo vitae. Fusce at enim ullamcorper, tincidunt orci a, tincidunt urna. Vivamus quis est ut elit dignissim semper. Vivamus erat leo, iaculis id faucibus ac, placerat eu lacus. Praesent arcu tortor, aliquet at volutpat eu, rutrum eget ante. Vivamus sed lorem sed massa interdum convallis. Suspendisse lacinia augue odio, id auctor ipsum varius id. Nam sit amet rhoncus augue. Vestibulum at lobortis velit. Proin ipsum eros, vehicula ut tempus vel, aliquam a orci. Fusce facilisis pulvinar orci. ",
-                            changelogVersion: "2.5.0"
-
-                        }
-                        control.currentItem.appInfo = appInfo
+                        control.currentItem.appInfo = _storeList.getApp(_listView.model.get(_listView.currentIndex).id)
                     }
                 }
 

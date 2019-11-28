@@ -53,6 +53,7 @@ Maui.Page
             {
                 text: qsTr("Pling")
                 icon.name: "headphones"
+                onTriggered: Qt.openUrlExternally(appInfo.detailpage)
             },
 
             Action
@@ -87,7 +88,7 @@ Maui.Page
                 {
                     id: _bannerImage
                     anchors.fill: parent
-                    source: appInfo.bannerImage
+                    source: appInfo.preview
                     sourceSize.height: parent.height
                     sourceSize.width: parent.width
                     fillMode: Image.PreserveAspectCrop
@@ -102,7 +103,7 @@ Maui.Page
                     anchors.fill: parent
                     y:1
                     source: _bannerImage
-                    radius: 50
+                    radius: 120
                     transparentBorder: false
                     cached: true
                 }
@@ -111,7 +112,7 @@ Maui.Page
                 {
                     anchors.fill: parent
                     color: Kirigami.Theme.viewBackgroundColor
-                    opacity: 0.7
+                    opacity: 0.8
                 }
 
                 ColumnLayout
@@ -120,13 +121,20 @@ Maui.Page
                     anchors.centerIn: parent
                     spacing: 0
 
-                    Kirigami.Icon
+                    Image
                     {
-                        Layout.preferredHeight: Maui.Style.iconSizes.large
-                        Layout.preferredWidth: Maui.Style.iconSizes.large
+                        Layout.preferredHeight: Maui.Style.iconSizes.huge
+                        Layout.preferredWidth: Maui.Style.iconSizes.huge
                         Layout.alignment: Qt.AlignCenter
                         Layout.margins: Maui.Style.space.big
-                        source: appInfo.iconName
+                        source: _bannerImage.source
+
+                        sourceSize.height: height
+                        sourceSize.width: width
+                        fillMode: Image.PreserveAspectFit
+                        antialiasing: true
+                        smooth: true
+                        asynchronous: true
                     }
 
                     Label
@@ -148,7 +156,7 @@ Maui.Page
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignCenter
                         horizontalAlignment: Qt.AlignHCenter
-                        text: appInfo.author
+                        text: appInfo.personid
                         elide: Text.ElideMiddle
                         wrapMode: Text.NoWrap
                         font.weight: Font.Light
@@ -160,7 +168,7 @@ Maui.Page
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignCenter
                         horizontalAlignment: Qt.AlignHCenter
-                        text: appInfo.size
+                        text: appInfo.version
                         elide: Text.ElideMiddle
                         wrapMode: Text.NoWrap
                         font.weight: Font.Light
@@ -194,8 +202,8 @@ Maui.Page
                 Kirigami.Icon
                 {
                     visible: isWide
-                    Layout.preferredHeight: Maui.Style.iconSizes.smallMedium
-                    Layout.preferredWidth: Maui.Style.iconSizes.smallMedium
+                    Layout.preferredHeight: Maui.Style.iconSizes.medium
+                    Layout.preferredWidth: Maui.Style.iconSizes.medium
                     Layout.margins: Maui.Style.space.big
                     Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
                     source: "view-list-details"
@@ -220,7 +228,7 @@ Maui.Page
                         font.weight: Font.Light
                         elide: Text.ElideRight
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        text: appInfo.itemInfo
+                        text: appInfo.description
                     }
                 }
             }
@@ -241,8 +249,8 @@ Maui.Page
                 Kirigami.Icon
                 {
                     visible: isWide
-                    Layout.preferredHeight: Maui.Style.iconSizes.smallMedium
-                    Layout.preferredWidth: Maui.Style.iconSizes.smallMedium
+                    Layout.preferredHeight: Maui.Style.iconSizes.medium
+                    Layout.preferredWidth: Maui.Style.iconSizes.medium
                     Layout.margins: Maui.Style.space.big
                     Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
                     source: "media-playlist-append"
@@ -261,35 +269,184 @@ Maui.Page
                         font.bold: true
                     }
 
-                    Label
+                    Column
                     {
-                        Layout.fillWidth: true
-                        text: qsTr("License") + " " + appInfo.license
-                        elide: Text.ElideRight
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: qsTr("License")
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            font.weight: Font.Light
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: appInfo.license || "-"
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
                     }
 
-                    Label
+                    Column
                     {
-                        Layout.fillWidth: true
-                        text: qsTr("Version") + " " + appInfo.version
-                        elide: Text.ElideRight
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    }
-                    Label
-                    {
-                        Layout.fillWidth: true
-                        text: qsTr("Updated") + " " + appInfo.updated
-                        elide: Text.ElideRight
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: qsTr("Version")
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            font.weight: Font.Light
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: appInfo.version || "-"
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
                     }
 
-                    Label
+                    Column
                     {
-                        Layout.fillWidth: true
-                        text: qsTr("Downloads today") + " " + appInfo.downloadsToday
-                        elide: Text.ElideRight
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: qsTr("Updated")
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            font.weight: Font.Light
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: appInfo.changed || "-"
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
+                    }
+
+                    Column
+                    {
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: qsTr("Created")
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            font.weight: Font.Light
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: appInfo.created || "-"
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
+                    }
+
+                    Column
+                    {
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: qsTr("Author")
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            font.weight: Font.Light
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: appInfo.personid || "-"
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
+                    }
+
+                    Column
+                    {
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: qsTr("Language")
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            font.weight: Font.Light
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: appInfo.language || "-"
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
+                    }
+
+                    Column
+                    {
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: qsTr("Tags")
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            font.weight: Font.Light
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: appInfo.tags || "-"
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
+                    }
+
+                    Column
+                    {
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: qsTr("Score")
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            font.weight: Font.Light
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: appInfo.score || "-"
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
+                    }
+
+                    Column
+                    {
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: qsTr("Downloads")
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            font.weight: Font.Light
+                        }
+
+                        Label
+                        {
+                            Layout.fillWidth: true
+                            text: appInfo.totaldownloads || "-"
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
                     }
                 }
             }
@@ -310,8 +467,8 @@ Maui.Page
                 Kirigami.Icon
                 {
                     visible: isWide
-                    Layout.preferredHeight: Maui.Style.iconSizes.smallMedium
-                    Layout.preferredWidth: Maui.Style.iconSizes.smallMedium
+                    Layout.preferredHeight: Maui.Style.iconSizes.medium
+                    Layout.preferredWidth: Maui.Style.iconSizes.medium
                     Layout.margins: Maui.Style.space.big
                     Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
                     source: "view-media-recent"
