@@ -7,6 +7,7 @@
 
 #include <QJsonObject>
 #include <QList>
+#include <QNetworkReply>
 #include <QObject>
 #include <QString>
 
@@ -30,7 +31,9 @@ public:
                                QString page = "", QString pageSize = "") = 0;
 
 signals:
+  void categoriesResponseReady(CategoryResponseDTO *response);
   void applicationsResponseReady(ApplicationResponseDTO *response);
+  void error(QNetworkReply::NetworkError error);
 };
 
 #endif
