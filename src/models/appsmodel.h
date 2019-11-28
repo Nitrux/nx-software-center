@@ -2,9 +2,6 @@
 #define APPSMODEL_H
 
 #include <QObject>
-
-#include "../stores/store.h"
-
 #ifdef STATIC_MAUIKIT
 #include "fmh.h"
 #include "mauilist.h"
@@ -13,28 +10,35 @@
 #include <MauiKit/mauilist.h>
 #endif
 
+class Store;
+class Application;
 class AppsModel : public MauiList {
-  Q_OBJECT
-  Q_PROPERTY(QString categoryUri READ getCategoryUri WRITE setCategoryUri NOTIFY
-                 categoryUriChanged)
+    Q_OBJECT
+    Q_PROPERTY(QString categoryUri READ getCategoryUri WRITE setCategoryUri NOTIFY
+               categoryUriChanged)
 
 public:
-  explicit AppsModel(QObject *parent = nullptr);
-  FMH::MODEL_LIST items() const override final;
+    explicit AppsModel(QObject *parent = nullptr);
 
-  QString getCategoryUri() const;
-  void setCategoryUri(QString categoryUri);
+    // QQmlParserStatus interface
+    void componentComplete() override final;
+
+    FMH::MODEL_LIST items() const override final;
+
+    QString getCategoryUri() const;
+    void setCategoryUri(QString categoryUri);
 
 signals:
-  void categoryUriChanged(QString categoryUri);
+    void categoryUriChanged(QString categoryUri);
 
 private:
-  FMH::MODEL_LIST m_list;
-  Store *appImageHubStore;
+    FMH::MODEL_LIST m_list;
+    QHash<QString, Application *> m_app;
+    Store *m_store;
 
-  void setList();
+    void setList();
 
-  QString m_categoryUri;
+    QString m_categoryUri;
 };
 
 #endif // APPSMODEL_H

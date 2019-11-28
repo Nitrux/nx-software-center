@@ -19,6 +19,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/stores
+    ${CMAKE_CURRENT_BINARY_DIR}/src/stores
+    )
+
 set(nx_SRCS
     src/main.cpp
     src/models/appsmodel.cpp

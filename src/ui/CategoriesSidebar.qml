@@ -4,9 +4,11 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
+import NXModels 1.0 as NX
+
 Maui.SideBar
 {
-    id: _sidebar
+    id: control
 
     collapsible: true
     collapsed: !root.isWide
@@ -27,27 +29,52 @@ Maui.SideBar
     }
     //        ScrollBar.vertical.policy: collapsed ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
 
-    model: ListModel
+    model: Maui.BaseModel
     {
-        ListElement{ category: "Applications"; label: "All"; icon: "appimage-store";}
-        ListElement{ category: "Applications"; label: "Education"; icon: "applications-education";}
-        ListElement{ category: "Applications"; label: "Development"; icon: "applications-development";}
-        ListElement{ category: "Applications"; label: "Graphics"; icon: "applications-graphics"; count: 130000}
-        ListElement{ category: "Applications"; label: "Internet"; icon: "applications-internet"}
-        ListElement{ category: "Applications"; label: "Games"; icon: "applications-games"; count: 7}
-        ListElement{ category: "Applications"; label: "Multimedia"; icon: "applications-multimedia"}
-        ListElement{ category: "Applications"; label: "Office"; icon: "applications-office"}
-        ListElement{ category: "Customization"; label: "Plasma Themes"; icon: "start-here"}
-        ListElement{ category: "Customization"; label: "Plasma Color"; icon: "start-here"}
-        ListElement{ category: "Customization"; label: "GTK Themes"; icon: "start-here"}
-        ListElement{ category: "Customization"; label: "Cursors"; icon: "start-here"}
-        ListElement{ category: "Customization"; label: "Wallpapers"; icon: "start-here"}
-        ListElement{ category: "Customization"; label: "Icons"; icon: "start-here"}
+        id: _appsModel
+        list: NX.Categories
+        {
+            id: _categoriesist
+        }
+    }
+
+    delegate: Maui.ListDelegate
+    {
+        id: itemDelegate
+        iconSize: control.iconSize
+        labelVisible: control.showLabels
+        label: model.title
+        count: model.count > 0 ? model.count : ""
+        iconName: model.icon +  (Qt.platform.os == "android" ? ("-sidebar") : "")
+        leftPadding:  Maui.Style.space.tiny
+        rightPadding:  Maui.Style.space.tiny
+
+        Connections
+        {
+            target: itemDelegate
+            onClicked:
+            {
+                control.currentIndex = index
+                control.itemClicked(index)
+            }
+
+            onRightClicked:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+
+            onPressAndHold:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+        }
     }
 
     onItemClicked:
     {
-        _swipeView.currentItem.categoryUri = _sidebar.model.get(index).label
+        _swipeView.currentItem.categoryUri = control.model.get(index).id
     }
 }
 

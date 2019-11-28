@@ -6,6 +6,7 @@
 
 #include "utils/nx.h"
 #include "models/appsmodel.h"
+#include "models/categoriesmodel.h"
 
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
@@ -64,6 +65,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
+    qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
     engine.load(url);
     return app.exec();
 }

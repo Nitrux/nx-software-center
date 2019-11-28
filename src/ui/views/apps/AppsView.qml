@@ -64,7 +64,7 @@ StackView
         headBar.middleContent: [
             Maui.PathBar
             {
-                Layout.fillWidth: true              
+                Layout.fillWidth: true
                 url: _appsList.categoryUri
 
                 Maui.TextField
@@ -116,29 +116,31 @@ StackView
 
             model: _appsModel
 
-            delegate: CardDelegate
+            delegate: Maui.SwipeBrowserDelegate
             {
                 id: _delegate
                 height: 100
-                width: control.width - Maui.Style.space.huge
+                width: parent.width
                 anchors.horizontalCenter: parent.horizontalCenter
                 label1.text: model.name
                 label2.text: model.description
-                label3.text: model.count
-                iconImg.source: model.icon
+                label3.text: model.totaldownloads + qsTr(" Downloads")
+                label4.text: model.score + qsTr(" Points")
+                imageSource: model.smallpic
+                iconSizeHint: height * 0.7
 
-                quickButtons: [
-                    ToolButton
+                quickActions: [
+                    Action
                     {
                         icon.name: "document-share"
                     },
 
-                    ToolButton
+                    Action
                     {
                         icon.name: "media-playback-start"
                     },
 
-                    ToolButton
+                    Action
                     {
                         icon.name: "entry-delete"
                     }
