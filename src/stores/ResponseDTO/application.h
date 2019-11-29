@@ -1,15 +1,21 @@
 #ifndef STORES_RESPONSEDTO_APPLICATION_H
 #define STORES_RESPONSEDTO_APPLICATION_H
 
+#include <QNetworkReply>
 #include <QObject>
 #include <QString>
+#include <QUrl>
+
+#include <MauiKit/downloader.h>
 
 class Application : public QObject {
   Q_OBJECT
 
 public:
-  class Download {
+  class Download : public QObject {
   public:
+    Download(QObject *parent = nullptr) : QObject(parent) {}
+
     QString packageArch = "";
     QString packageType = "";
     QString gpgFingerprint = "";
@@ -24,25 +30,22 @@ public:
     QString type = "";
     QString way = "";
 
-    QString toString() {
-      return "{name: " + name + ", link: " + link + ", ...}";
-    }
+    QString toString();
+    FMH::Downloader *downloadFile(QUrl filepath);
   };
 
   class PreviewPic {
   public:
     QString pic = "";
     QString smallPic = "";
-    QString toString() {
-      return "{pic: " + pic + ", smallpic: " + smallPic + "}";
-    }
+    QString toString();
   };
 
   class PreviewUrl {
   public:
     QString preview = "";
 
-    QString toString() { return "{preview: " + preview + "}"; }
+    QString toString();
   };
 
   Application(QObject *parent = nullptr) : QObject(parent) {}
@@ -70,43 +73,7 @@ public:
   QList<PreviewUrl *> previewUrls = QList<PreviewUrl *>();
   QList<Download *> downloads = QList<Download *>();
 
-  QString toString(bool verbose = false) {
-    QString q;
-    if (!verbose) {
-      q = "{name: " + name + ", ...}";
-    } else {
-      q = "{id: " + id + ", name: " + name + ", changed: " + changed +
-          ", comments: " + comments + ", created: " + created +
-          ", description: " + description + ", detailpage: " + detailPage +
-          ", details: " + details +
-          ", totalDownloads: " + QString::number(totalDownloads) +
-          ", ghnsExcluded: " + ghnsExcluded + ", language: " + language +
-          ", personId: " + personId + ", score: " + QString::number(score) +
-          ", summary: " + summary + ", tags: " + tags +
-          ", typeId: " + typeId + ", typeName: " + typeName +
-          ", version: " + version + ", xdgType: " + xdgType + "}";
-    }
-
-    for (const auto &i : downloads) {
-      q.append("\n            - " + i->toString());
-    }
-
-    q.append("\n");
-
-    for (const auto &i : previewPics) {
-      q.append("\n            - " + i->toString());
-    }
-
-    q.append("\n");
-
-    for (const auto &i : previewUrls) {
-      q.append("\n            - " + i->toString());
-    }
-
-    q.append("\n");
-
-    return q;
-  }
+  QString toString(bool verbose = false);
 };
 
 #endif

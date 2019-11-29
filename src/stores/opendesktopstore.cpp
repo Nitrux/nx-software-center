@@ -331,7 +331,7 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
     QList<Application::Download *> downloads;
 
     for (QString key : parsedJson["downloads"].toObject().keys()) {
-      Application::Download *download = new Application::Download();
+      Application::Download *download = new Application::Download(this);
 
       download->name =
           parsedJson["downloads"].toObject()[key].toObject()["name"].toString();
