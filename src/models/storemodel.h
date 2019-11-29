@@ -29,6 +29,8 @@ public:
 
   QVariantMap getCategory() const;
 
+  QString getCategoryPath() const;
+
 public slots:
   void setCategory(QVariantMap category);
   void clear();
@@ -37,11 +39,14 @@ public slots:
 signals:
   void categoryChanged(QVariantMap category);
 
+  void categoryPathChanged(QString categoryPath);
+
 private:
     FMH::MODEL_LIST m_list;
     QHash<QString, Application *> m_appMap; //id,app
     Store *m_store;
     QVariantMap m_category;
+    QString m_categoryPath;
 };
 
 #endif // STOREMODEL_H
