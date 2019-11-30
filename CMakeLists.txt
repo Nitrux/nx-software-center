@@ -46,7 +46,6 @@ set(nx_RSRCS
 set(nx_STORES_SRCS
     src/stores/opendesktopstore.cpp
     src/stores/appimagehubstore.cpp
-
     src/stores/ResponseDTO/category.cpp
     src/stores/ResponseDTO/application.cpp)
 

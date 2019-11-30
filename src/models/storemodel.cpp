@@ -11,10 +11,11 @@ void StoreModel::componentComplete()
 {
     connect(this->m_store, &Store::applicationsResponseReady,
             [=](ApplicationResponseDTO *response) {
-        emit this->preListChanged();
         for (const auto &app :response->applications)
         {
             //preview pics
+            emit this->preItemAppended();
+
             m_appMap.insert(app->id, app);
             const auto preview_pic = app->previewPics.isEmpty() ? "" : app->previewPics.first()->pic;
             const auto small_pic = app->previewPics.isEmpty() ? "" : app->previewPics.first()->smallPic;
@@ -47,9 +48,9 @@ void StoreModel::componentComplete()
                                     {FMH::MODEL_KEY::VERSION, app->version},
                                     {FMH::MODEL_KEY::WAY, ""},
                                     {FMH::MODEL_KEY::XDG_TYPE, app->xdgType}});
+            emit this->postItemAppended();
         }
 
-        emit this->postListChanged();
     });
 }
 
@@ -68,6 +69,11 @@ QString StoreModel::getCategoryPath() const
     return m_categoryPath;
 }
 
+int StoreModel::getPage() const
+{
+    return m_page;
+}
+
 void StoreModel::setCategory(QVariantMap category)
 {
     if (m_category == category)
@@ -75,9 +81,14 @@ void StoreModel::setCategory(QVariantMap category)
 
     m_category = category;
     this->clear();
-    this->m_store->getApplications({FMH::mapValue(this->m_category, FMH::MODEL_KEY::ID)});
 
+#if defined Q_PROCESSOR_ARM && defined Q_OS_LINUX
+    this->m_store->getApplicationsByArch({FMH::mapValue(this->m_category, FMH::MODEL_KEY::ID)}, "", Store::SORT_MODE::MODE_NEWEST, QString::number(this->m_page), QString::number(5), {}, Store::Arch::arm64);
+#else
+    this->m_store->getApplicationsByArch({FMH::mapValue(this->m_category, FMH::MODEL_KEY::ID)}, "", Store::SORT_MODE::MODE_NEWEST, QString::number(this->m_page), QString::number(5), {}, Store::Arch::amd64 );
+#endif
     emit categoryChanged(m_category);
+
 }
 
 void StoreModel::clear()
@@ -142,6 +153,18 @@ QVariantMap StoreModel::getApp(const QString &id)
                           {FMH::MODEL_KEY::WAY, ""},
                           {FMH::MODEL_KEY::XDG_TYPE, app->xdgType},
                           {FMH::MODEL_KEY::PACKAGE_ARCH, d_arch.join(",")}});
+}
+
+void StoreModel::setPage(int page)
+{
+    if (m_page == page)
+        return;
+
+    m_page = page;
+    qDebug()<< "SETTING PAGE" << m_page;
+    this->m_store->getApplications({FMH::mapValue(this->m_category, FMH::MODEL_KEY::ID)}, "", Store::SORT_MODE::MODE_NEWEST, QString::number(this->m_page), QString::number(5));
+
+    emit pageChanged(m_page);
 }
 
 
