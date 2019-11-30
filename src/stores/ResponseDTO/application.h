@@ -12,10 +12,8 @@ class Application : public QObject {
   Q_OBJECT
 
 public:
-  class Download : public QObject {
+  class Download {
   public:
-    Download(QObject *parent = nullptr) : QObject(parent) {}
-
     QString packageArch = "";
     QString packageType = "";
     QString gpgFingerprint = "";

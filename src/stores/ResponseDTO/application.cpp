@@ -52,7 +52,7 @@ QString Application::Download::toString() {
 }
 
 FMH::Downloader *Application::Download::downloadFile(QUrl filepath) {
-    FMH::Downloader *downloader = new FMH::Downloader(this);
+    FMH::Downloader *downloader = new FMH::Downloader();
 
     downloader->downloadFile(QUrl(link), filepath);
 

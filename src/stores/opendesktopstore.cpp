@@ -38,7 +38,7 @@ void OpenDesktopStore::getCategories() {
 void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
                                        QString nameFilter,
                                        Store::SORT_MODE sortMode, QString page,
-                                       QString pageSize) {
+                                       QString pageSize, QList<QString> tags) {
   QNetworkAccessManager *manager = new QNetworkAccessManager(this);
   connect(manager, &QNetworkAccessManager::finished, this,
           &OpenDesktopStore::parseGetApplicationsResponseAndReply);
@@ -47,6 +47,7 @@ void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
   query.addQueryItem("format", "json");
   query.addQueryItem("categories", categoriesFilter.join("x"));
   query.addQueryItem("search", nameFilter);
+  query.addQueryItem("tags", tags.join(","));
 
   switch (sortMode) {
   case MODE_NEWEST:
@@ -72,10 +73,32 @@ void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
   QUrl url = API_LISTING_URL;
   url.setQuery(query);
 
+  qDebug() << url;
+
   QNetworkReply *reply = manager->get(QNetworkRequest(url));
   connect(
       reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
       this, [=](QNetworkReply::NetworkError err) { emit error(err); });
+}
+
+void OpenDesktopStore::getApplicationsByArch(QList<QString> categoriesFilter, QString nameFilter,
+                                             SORT_MODE sortMode, QString page,
+                                             QString pageSize, QList<QString> tags,
+                                             Arch arch) {
+    switch (arch) {
+        case Arch::amd64 :
+            tags.append("x86-64");
+            break;
+
+        case Arch::arm64 :
+            tags.append("arm64");
+            break;
+
+        case Arch::all :
+            break;
+    }
+
+    getApplications(categoriesFilter, nameFilter, sortMode, page, pageSize, tags);
 }
 
 void OpenDesktopStore::parseGetCategoriesResponseAndReply(
@@ -331,7 +354,7 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
     QList<Application::Download *> downloads;
 
     for (QString key : parsedJson["downloads"].toObject().keys()) {
-      Application::Download *download = new Application::Download(this);
+      Application::Download *download = new Application::Download();
 
       download->name =
           parsedJson["downloads"].toObject()[key].toObject()["name"].toString();
