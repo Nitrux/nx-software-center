@@ -81,7 +81,6 @@ StackView
             icon.name: "view-sort"
         }
 
-
         ListView
         {
             id: _listView
@@ -91,6 +90,15 @@ StackView
             Layout.fillHeight: true
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium
+            onAtYEndChanged:
+            {
+                if(_listView.atYEnd)
+               {
+                    const prevPos = _listView.contentY
+                     _storeList.page ++
+
+                }
+            }
 
             //            headerPositioning: ListView.PullBackFooter
             header: Item
