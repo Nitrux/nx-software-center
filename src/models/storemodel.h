@@ -54,6 +54,8 @@ private:
     QVariantMap m_category;
     QString m_categoryPath;
     int m_page = 0;
+
+    void requestApps();
 };
 
 #endif // STOREMODEL_H
