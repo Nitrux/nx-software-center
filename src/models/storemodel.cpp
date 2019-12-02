@@ -6,7 +6,14 @@ StoreModel::StoreModel(QObject *parent) : MauiList(parent),
 {
 
 }
-
+void StoreModel::requestApps()
+{
+#if defined Q_PROCESSOR_ARM && defined Q_OS_LINUX
+    this->m_store->getApplicationsByArch({FMH::mapValue(this->m_category, FMH::MODEL_KEY::ID)}, "", Store::SORT_MODE::MODE_NEWEST, QString::number(this->m_page), QString::number(5), {}, Store::Arch::arm64);
+#else
+    this->m_store->getApplicationsByArch({FMH::mapValue(this->m_category, FMH::MODEL_KEY::ID)}, "", Store::SORT_MODE::MODE_NEWEST, QString::number(this->m_page), QString::number(5), {}, Store::Arch::amd64 );
+#endif
+}
 void StoreModel::componentComplete()
 {
     connect(this->m_store, &Store::applicationsResponseReady,
@@ -81,7 +88,7 @@ void StoreModel::setCategory(QVariantMap category)
 
     m_category = category;
     this->clear();
-    this->m_store->getApplications({FMH::mapValue(this->m_category, FMH::MODEL_KEY::ID)}, "", Store::SORT_MODE::MODE_NEWEST, QString::number(this->m_page), QString::number(5));
+    this->setPage(0);
     emit categoryChanged(m_category);
 }
 
@@ -155,9 +162,7 @@ void StoreModel::setPage(int page)
         return;
 
     m_page = page;
-    qDebug()<< "SETTING PAGE" << m_page;
-    this->m_store->getApplications({FMH::mapValue(this->m_category, FMH::MODEL_KEY::ID)}, "", Store::SORT_MODE::MODE_NEWEST, QString::number(this->m_page), QString::number(5));
-
+    this->requestApps();
     emit pageChanged(m_page);
 }
 

@@ -29,6 +29,7 @@ set(nx_SRCS
     src/models/appsmodel.cpp
     src/models/storemodel.cpp
     src/models/categoriesmodel.cpp
+    src/models/app.cpp
     )
 
 set(nx_HDRS
@@ -36,6 +37,7 @@ set(nx_HDRS
     src/models/appsmodel.h
     src/models/storemodel.h
     src/models/categoriesmodel.h
+    src/models/app.h
     )
 
 set(nx_RSRCS
@@ -47,7 +49,8 @@ set(nx_STORES_SRCS
     src/stores/opendesktopstore.cpp
     src/stores/appimagehubstore.cpp
     src/stores/ResponseDTO/category.cpp
-    src/stores/ResponseDTO/application.cpp)
+    src/stores/ResponseDTO/application.cpp
+    )
 
 
 set(nx_STORES_HDRS
