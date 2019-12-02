@@ -20,6 +20,11 @@ public:
     MODE_HIGHEST_RATED,
     MODE_MOST_DOWNLOADED
   };
+  enum Arch {
+      all,
+      amd64,
+      arm64
+  };
 
   Store(QObject *parent = nullptr) : QObject(parent) {}
 
@@ -28,7 +33,12 @@ public:
   virtual void getApplications(QList<QString> categoriesFilter,
                                QString nameFilter = "",
                                SORT_MODE sortMode = MODE_NEWEST,
-                               QString page = "", QString pageSize = "") = 0;
+                               QString page = "", QString pageSize = "",
+                               QList<QString> tags = {}) = 0;
+  virtual void getApplicationsByArch(QList<QString> categoriesFilter, QString nameFilter = "",
+                             SORT_MODE sortMode = MODE_NEWEST, QString page = "",
+                             QString pageSize = "", QList<QString> tags = {},
+                             Arch arch = Arch::all) = 0;
 
 signals:
   void categoriesResponseReady(CategoryResponseDTO *response);
