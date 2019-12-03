@@ -37,6 +37,8 @@ private:
 
 public slots:
 void setCurrentCategory(const QString &id);
+Category *baseCategory();
+Category *featureCategory();
 
 signals:
 void currentCategoryChanged(Category * currentCategory);

@@ -11,6 +11,7 @@ Maui.SideBar
     id: control
 
     property alias currentCategory : _categoriesList.currentCategory
+    property alias list : _categoriesList
 
     collapsible: true
     collapsed: !root.isWide
@@ -75,9 +76,11 @@ Maui.SideBar
         }
     }
 
-    onItemClicked:
+    onItemClicked: control.setCurrentCategory(index)
+
+    function setCurrentCategory(index)
     {
-       _categoriesList.setCurrentCategory(control.model.get(index).id)
+        _categoriesList.setCurrentCategory(control.model.get(index).id)
     }
 }
 

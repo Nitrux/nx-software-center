@@ -24,8 +24,10 @@ emit this->imagesChanged(this->m_images);
 for(const auto data : this->m_data->previewUrls)
   this->m_urls << QVariantMap {{FMH::MODEL_NAME[FMH::MODEL_KEY::PREVIEW], data->preview}};
 
+qDebug()<< m_images;
+
 for(const auto &data : this->m_data->downloads)
-  this->m_images << QVariantMap {
+  this->m_downloads << QVariantMap {
     {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_ARCH], data->packageArch},
     {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_TYPE], data->packageType},
     {FMH::MODEL_NAME[FMH::MODEL_KEY::GPG_SIGNATURE], data->gpgSignature},
@@ -75,9 +77,12 @@ void App::removeApp()
 
 }
 
-void App::installApp()
+void App::installApp(const int &packageIndex)
 {
-
+    if(packageIndex >  this->m_data->downloads.size() || packageIndex < 0)
+        return;
+const auto package =   this->m_data->downloads.at(packageIndex);
+  package->downloadFile(FMH::DownloadsPath+("/")+package->name);
 }
 
 void App::launchApp()

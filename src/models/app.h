@@ -54,7 +54,7 @@ signals:
 public slots:
     void updateApp();
     void removeApp();
-    void installApp();
+    void installApp(const int &packageIndex);
     void launchApp();
     void buyApp();
     void setData(Application * data);

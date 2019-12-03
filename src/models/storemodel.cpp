@@ -4,9 +4,7 @@
 
 StoreModel::StoreModel(QObject *parent) : MauiList(parent),
     m_store(new AppImageHubStore(this)), m_app(new Application(this)),  m_category(new Category(this))
-{
-
-}
+{}
 void StoreModel::requestApps()
 {
     if(!m_category)

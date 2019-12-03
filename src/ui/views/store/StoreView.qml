@@ -35,7 +35,6 @@ StackView
                 {
                     text: qsTr("Download")
                     visible: !app.isInstalled
-                    onClicked: app.downloadApp()
                     Kirigami.Theme.textColor: "#37474F"
                     Kirigami.Theme.backgroundColor: Qt.rgba("#546E7A".r, "#546E7A".g, "#546E7A".b, 0.2)
 
@@ -82,8 +81,13 @@ StackView
             Maui.PathBar
             {
                 Layout.fillWidth: true              
-                url: "Development/IDE/Sub"
-                onHomeClicked: url = "Development/"
+                url: _storeList.categoryPath
+                onHomeClicked:
+                {
+                    _categoriesSidebar.currentIndex = 0
+                    _categoriesSidebar.setCurrentCategory(_categoriesSidebar.currentIndex)
+                }
+
 //                onPlaceClicked: browser.openFolder(path)
 
                 Maui.TextField
@@ -134,7 +138,6 @@ StackView
                     color: Kirigami.Theme.backgroundColor
                     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
                     radius: Maui.Style.radiusV
-
 
                     ListView
                     {
@@ -205,10 +208,13 @@ StackView
                             }
                         }
 
-                        model: ListModel
+                        model: Maui.BaseModel
                         {
-                            ListElement {name:"Index"; author:"Camilo Higuita"; organization:"Maui"; version: "1.0.0";  iconName: "index"; bannerImg: "qrc:/tests/banner_index.png";  count: 72000; itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
-                            ListElement {name:"Vvave"; version: "1.0.0";  iconName: "vvave"; bannerImg: "qrc:/tests/banner_index.png";  count: 72000; itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper."}
+                            list: NX.Store
+                            {
+                                id: _featureList
+                                category: _categoriesSidebar.list.featureCategory()
+                            }
                         }
 
                         delegate: RowLayout
@@ -224,27 +230,37 @@ StackView
                                 Layout.margins: 1
                                 Layout.alignment: Qt.AlignCenter
 
-                                Image
+                                Rectangle
                                 {
-                                    id: _bannerImage
+                                    id: _banner
                                     height: parent.height
                                     width: parent.width
-                                    sourceSize.height: height
-                                    sourceSize.width: width
-                                    source: model.bannerImg
-                                    fillMode: Image.PreserveAspectCrop
-                                    antialiasing: true
-                                    smooth: true
-                                    asynchronous: true
+                                    color: "#333"
+                                    opacity: 0.2
 
+                                    Image
+                                    {
+                                        id: _bannerImage
+                                      anchors.fill : parent
+                                        sourceSize.height: height
+                                        sourceSize.width: width
+                                        source: model.preview
+                                        fillMode: Image.PreserveAspectCrop
+                                        antialiasing: true
+                                        smooth: true
+                                        asynchronous: true
+
+                                    }
                                 }
+
+
 
                                 FastBlur
                                 {
                                     id: fastBlur
-                                    anchors.fill: parent
-                                    source: _bannerImage
-                                    radius: 50
+                                    anchors.fill: _banner
+                                    source: _banner
+                                    radius: 90
                                     transparentBorder: false
                                     cached: true
                                 }
@@ -256,12 +272,15 @@ StackView
                                     opacity: 0.7
                                 }
 
-                                Kirigami.Icon
+                                Image
                                 {
                                     height: Maui.Style.iconSizes.huge
                                     width: height
+                                    sourceSize.height: height
+                                    sourceSize.width: width
                                     anchors.centerIn: parent
-                                    source: model.iconName
+                                    fillMode: Image.PreserveAspectFit
+                                    source: _bannerImage.source
                                 }
                             }
 
@@ -294,7 +313,7 @@ StackView
 
                                     Label
                                     {
-                                        text: model.author
+                                        text: model.personid
                                         visible: text.length
                                         Layout.fillWidth: true
                                         font.weight: Font.Light
@@ -304,7 +323,7 @@ StackView
 
                                     Label
                                     {
-                                        text: model.organization
+                                        text: model.version
                                         visible: text.length
                                         Layout.fillWidth: true
                                         font.weight: Font.Light
@@ -314,7 +333,7 @@ StackView
 
                                     Label
                                     {
-                                        text: model.itemInfo
+                                        text: model.description
                                         visible: text.length
                                         Layout.topMargin: Maui.Style.space.big
                                         Layout.fillWidth: true

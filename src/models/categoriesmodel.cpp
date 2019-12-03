@@ -40,7 +40,7 @@ void CategoriesModel::componentComplete()
             {FMH::MODEL_KEY::CATEGORY, tr("Apps")},
             {FMH::MODEL_KEY::TITLE, c->displayName},
             {FMH::MODEL_KEY::PARENT_ID, c->parentId},
-            {FMH::MODEL_KEY::COUNT, QString::number(c->childCount())},
+//            {FMH::MODEL_KEY::COUNT, QString::number(c->childCount())},
         };
         this->m_categoryMap.insert(c->id, std::move(c));
     }
@@ -69,5 +69,17 @@ void CategoriesModel::setCurrentCategory(const QString &id)
     else this->m_currentCategory = new Category(this);
 
     emit this->currentCategoryChanged(this->m_currentCategory);
+}
+
+Category * CategoriesModel::baseCategory()
+{
+    return new Category();
+}
+
+Category * CategoriesModel::featureCategory()
+{
+    auto category = new Category();
+    category->id = "";
+    return category;
 }
 
