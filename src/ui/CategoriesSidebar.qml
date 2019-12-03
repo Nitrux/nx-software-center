@@ -10,6 +10,8 @@ Maui.SideBar
 {
     id: control
 
+    property alias currentCategory : _categoriesList.currentCategory
+
     collapsible: true
     collapsed: !root.isWide
     preferredWidth: count > 0 ? Math.min(Kirigami.Units.gridUnit * 11, root.width) : 0
@@ -35,7 +37,7 @@ Maui.SideBar
         id: _appsModel
         list: NX.Categories
         {
-            id: _categoriesist
+            id: _categoriesList
         }
     }
 
@@ -75,7 +77,7 @@ Maui.SideBar
 
     onItemClicked:
     {
-        _swipeView.currentItem.category = control.model.get(index)
+       _categoriesList.setCurrentCategory(control.model.get(index).id)
     }
 }
 

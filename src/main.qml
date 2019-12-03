@@ -120,7 +120,7 @@ Maui.ApplicationWindow
 
     sideBar: CategoriesSidebar
     {
-
+id: _categoriesSidebar
     }
 
     SwipeView

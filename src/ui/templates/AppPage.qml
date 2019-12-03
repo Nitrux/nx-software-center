@@ -5,14 +5,28 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
 
+import NXModels 1.0 as NX
+
 Maui.Page
 {
     id: control
-    property var appInfo : ({})
+    property alias appInfo : _appHandler.info
+    property alias imagesInfo : _appHandler.images
+    property alias downloadsInfo : _appHandler.downloads
+    property alias urlsInfo : _appHandler.urls
+
     property alias buttonActions : _actionButtons.data
+    property alias data : _appHandler.data
+    property alias app : _appHandler
+
     signal exit()
     padding: 0
     onGoBackTriggered: control.exit()
+
+    NX.App
+    {
+        id: _appHandler
+    }
 
     headBar.leftContent: [
         ToolButton
@@ -88,7 +102,7 @@ Maui.Page
                 {
                     id: _bannerImage
                     anchors.fill: parent
-                    source: appInfo.preview
+                    source: imagesInfo[0].pic
                     sourceSize.height: parent.height
                     sourceSize.width: parent.width
                     fillMode: Image.PreserveAspectCrop

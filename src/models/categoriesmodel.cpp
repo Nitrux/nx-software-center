@@ -1,9 +1,10 @@
 #include "categoriesmodel.h"
 #include "store.h"
 #include "appimagehubstore.h"
+#include "ResponseDTO/category.h"
 
 CategoriesModel::CategoriesModel(QObject *parent) : MauiList(parent),
-    m_store(new AppImageHubStore(this)) {}
+    m_store(new AppImageHubStore(this)), m_currentCategory(new Category(this)) {}
 
 static const QHash<QString, QString> iconName =
 {
@@ -30,8 +31,9 @@ void CategoriesModel::componentComplete()
                              {FMH::MODEL_KEY::CATEGORY, tr("Apps")}});
 
         const auto categories = response->categories;
-        for(const auto &c : categories)
+        for(auto &c : response->categories)
         {
+            qDebug() << c->toString();
             this->m_list << FMH::MODEL { {FMH::MODEL_KEY::ID, c->id},
             {FMH::MODEL_KEY::NAME, c->name},
             {FMH::MODEL_KEY::ICON, iconName[c->name]},
@@ -40,7 +42,10 @@ void CategoriesModel::componentComplete()
             {FMH::MODEL_KEY::PARENT_ID, c->parentId},
             {FMH::MODEL_KEY::COUNT, QString::number(c->childCount())},
         };
+        this->m_categoryMap.insert(c->id, std::move(c));
     }
+
+    qDebug()<< this->m_list;
     emit this->postListChanged();
 });
 }
@@ -48,5 +53,21 @@ void CategoriesModel::componentComplete()
 FMH::MODEL_LIST CategoriesModel::items() const
 {
     return this->m_list;
+}
+
+Category *CategoriesModel::getCurrentCategory() const
+{
+    return m_currentCategory;
+}
+
+void CategoriesModel::setCurrentCategory(const QString &id)
+{
+    const auto category =  this->m_categoryMap[id];
+
+    if(category)
+        this->m_currentCategory = category;
+    else this->m_currentCategory = new Category(this);
+
+    emit this->currentCategoryChanged(this->m_currentCategory);
 }
 

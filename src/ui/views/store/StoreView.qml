@@ -11,7 +11,16 @@ import NXModels 1.0 as NX
 StackView
 {
     id: control
-    property alias category : _storeList.category
+
+    Connections
+    {
+        target: _categoriesSidebar
+        onItemClicked:
+        {
+            if(control.depth > 1)
+                control.pop()
+        }
+    }
 
     Component
     {
@@ -25,6 +34,8 @@ StackView
                 Button
                 {
                     text: qsTr("Download")
+                    visible: !app.isInstalled
+                    onClicked: app.downloadApp()
                     Kirigami.Theme.textColor: "#37474F"
                     Kirigami.Theme.backgroundColor: Qt.rgba("#546E7A".r, "#546E7A".g, "#546E7A".b, 0.2)
 
@@ -33,6 +44,8 @@ StackView
                 Button
                 {
                     text: qsTr("Run")
+                    visible: app.isInstalled
+                    onClicked: app.launchApp()
                     Kirigami.Theme.textColor: "#37474F"
                     Kirigami.Theme.backgroundColor: Qt.rgba("#546E7A".r, "#546E7A".g, "#546E7A".b, 0.2)
 
@@ -41,6 +54,8 @@ StackView
                 Button
                 {
                     text: qsTr("Update")
+                    visible: app.isInstalled && app.isUpdatable
+                    onClicked: app.updateApp()
                     Kirigami.Theme.textColor: Kirigami.Theme.positiveTextColor
                     Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.positiveTextColor.r, Kirigami.Theme.positiveTextColor.g, Kirigami.Theme.positiveTextColor.b, 0.2)
 
@@ -49,6 +64,8 @@ StackView
                 Button
                 {
                     text: qsTr("Remove")
+                    visible: app.isInstalled
+                    onClicked: app.removeApp()
                     Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
                     Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.negativeTextColor.r, Kirigami.Theme.negativeTextColor.g, Kirigami.Theme.negativeTextColor.b, 0.2)
 
@@ -321,6 +338,7 @@ StackView
                 list: NX.Store
                 {
                     id: _storeList
+                    category: _categoriesSidebar.currentCategory
                 }
             }
 
@@ -361,14 +379,12 @@ StackView
                     {
                         _listView.currentIndex = index
                         control.push(_appPageComponent)
-                        control.currentItem.appInfo = _storeList.getApp(_listView.model.get(_listView.currentIndex).id)
+                        _storeList.setApp(_listView.model.get(_listView.currentIndex).id)
+                        control.currentItem.data = _storeList.app
                     }
                 }
 
             }
         }
-
-
-
     }
 }

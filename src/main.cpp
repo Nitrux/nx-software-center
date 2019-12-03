@@ -6,8 +6,11 @@
 
 #include "utils/nx.h"
 #include "models/appsmodel.h"
+#include "models/app.h"
 #include "models/categoriesmodel.h"
 #include "models/storemodel.h"
+#include "ResponseDTO/application.h"
+#include "ResponseDTO/category.h"
 
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
@@ -65,7 +68,10 @@ int main(int argc, char *argv[])
 
     }, Qt::QueuedConnection);
 
+    qmlRegisterType<App>("NXModels", 1, 0, "App");
     qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
+    qmlRegisterType<Application>();
+    qmlRegisterType<Category>();
     qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
     qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
     engine.load(url);
