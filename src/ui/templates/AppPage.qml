@@ -178,7 +178,7 @@ Maui.Page
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignCenter
                         horizontalAlignment: Qt.AlignHCenter
-                        text: appInfo.personid
+                        text: appInfo.version
                         elide: Text.ElideMiddle
                         wrapMode: Text.NoWrap
                         font.weight: Font.Light
@@ -190,7 +190,7 @@ Maui.Page
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignCenter
                         horizontalAlignment: Qt.AlignHCenter
-                        text: appInfo.version
+                        text: appInfo.personid
                         elide: Text.ElideMiddle
                         wrapMode: Text.NoWrap
                         font.weight: Font.Light

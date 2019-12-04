@@ -11,9 +11,9 @@ void StoreModel::requestApps()
         return;
 
 #if defined Q_PROCESSOR_ARM && defined Q_OS_LINUX
-    this->m_store->getApplicationsByArch({FMH::mapValue(this->m_category, FMH::MODEL_KEY::ID)}, "", Store::SORT_MODE::MODE_NEWEST, QString::number(this->m_page), QString::number(5), {}, Store::Arch::arm64);
+    this->m_store->getApplicationsByArch({this->m_category->id}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, Store::Arch::arm64);
 #else
-    this->m_store->getApplicationsByArch({this->m_category->id}, "", Store::SORT_MODE::MODE_NEWEST, QString::number(this->m_page), QString::number(5), {}, Store::Arch::amd64 );
+    this->m_store->getApplicationsByArch({this->m_category->id}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, Store::Arch::amd64 );
 #endif
 }
 
@@ -90,6 +90,26 @@ Application *StoreModel::getApp() const
     return m_app;
 }
 
+int StoreModel::getPageSize() const
+{
+    return m_pageSize;
+}
+
+StoreModel::SORT StoreModel::getSort() const
+{
+    return m_sort;
+}
+
+QStringList StoreModel::getTags() const
+{
+    return m_tags;
+}
+
+QString StoreModel::getNameFilter() const
+{
+    return m_nameFilter;
+}
+
 void StoreModel::setCategory(Category * category)
 {
     if (m_category == category)
@@ -129,6 +149,58 @@ void StoreModel::setPage(int page)
     m_page = page;
     this->requestApps();
     emit pageChanged(m_page);
+}
+
+void StoreModel::setPageSize(int pageSize)
+{
+    if (m_pageSize == pageSize)
+        return;
+
+    m_pageSize = pageSize;
+
+    this->clear();
+    this->requestApps();
+
+    emit pageSizeChanged(m_pageSize);
+}
+
+void StoreModel::setSort(StoreModel::SORT sort)
+{
+    if (m_sort == sort)
+        return;
+
+    m_sort = sort;
+
+    this->clear();
+    this->requestApps();
+
+    emit sortChanged(m_sort);
+}
+
+void StoreModel::setTags(QStringList tags)
+{
+    if (m_tags == tags)
+        return;
+
+    m_tags = tags;
+
+    this->clear();
+    this->requestApps();
+
+    emit tagsChanged(m_tags);
+}
+
+void StoreModel::setNameFilter(QString nameFilter)
+{
+    if (m_nameFilter == nameFilter)
+        return;
+
+    m_nameFilter = nameFilter;
+
+    this->clear();
+    this->requestApps();
+
+    emit nameFilterChanged(m_nameFilter);
 }
 
 

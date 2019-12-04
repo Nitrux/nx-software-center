@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
@@ -78,22 +78,11 @@ StackView
         padding: control.depth === 2 ? 0 : Maui.Style.space.big
 
         headBar.middleContent: [
-            Maui.PathBar
+            Maui.TextField
             {
-                Layout.fillWidth: true              
-                url: _storeList.categoryPath
-                onHomeClicked:
-                {
-                    _categoriesSidebar.currentIndex = 0
-                    _categoriesSidebar.setCurrentCategory(_categoriesSidebar.currentIndex)
-                }
-
-//                onPlaceClicked: browser.openFolder(path)
-
-                Maui.TextField
-                {
-                    visible: false
-                }
+                Layout.fillWidth: true
+                placeholderText: qsTr("Search package ...")
+                onAccepted: _storeList.nameFilter = text
             }
         ]
 
@@ -214,6 +203,8 @@ StackView
                             {
                                 id: _featureList
                                 category: _categoriesSidebar.list.featureCategory()
+                                pageSize: 5
+                                sort: NX.Store.MOST_DOWNLOADED
                             }
                         }
 
