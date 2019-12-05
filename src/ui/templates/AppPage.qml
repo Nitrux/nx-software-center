@@ -88,6 +88,7 @@ Maui.Page
         rightPadding: padding
         topPadding: padding
         bottomPadding: padding
+
         ColumnLayout
         {
             spacing: 0

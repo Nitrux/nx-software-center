@@ -86,9 +86,44 @@ StackView
             }
         ]
 
-        headBar.rightContent: ToolButton
+        headBar.rightContent: Maui.ToolButtonMenu
         {
             icon.name: "view-sort"
+            MenuItem
+            {
+                text: qsTr("Newest")
+                onTriggered: _storeList.sort = NX.Store.NEWEST
+                checked: _storeList.sort === NX.Store.NEWEST
+                checkable: true
+                autoExclusive: true
+            }
+
+            MenuItem
+            {
+                text: qsTr("A-Z")
+                onTriggered: _storeList.sort = NX.Store.ALPHABETICAL
+                checked: _storeList.sort === NX.Store.ALPHABETICAL
+                checkable: true
+                autoExclusive: true
+            }
+
+            MenuItem
+            {
+                text: qsTr("Highest Rated")
+                onTriggered: _storeList.sort = NX.Store.HIGHEST_RATED
+                checked: _storeList.sort === NX.Store.HIGHEST_RATED
+                checkable: true
+                autoExclusive: true
+            }
+
+            MenuItem
+            {
+                text: qsTr("Most Downloaded")
+                onTriggered: _storeList.sort = NX.Store.MOST_DOWNLOADED
+                checked: _storeList.sort === NX.Store.MOST_DOWNLOADED
+                checkable: true
+                autoExclusive: true
+            }
         }
 
         ListView
@@ -103,9 +138,9 @@ StackView
             onAtYEndChanged:
             {
                 if(_listView.atYEnd)
-               {
+                {
                     const prevPos = _listView.contentY
-                     _storeList.page ++
+                    _storeList.page ++
 
                 }
             }
@@ -126,7 +161,85 @@ StackView
                     Kirigami.Theme.inherit: false
                     color: Kirigami.Theme.backgroundColor
                     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-                    radius: Maui.Style.radiusV
+                    radius: Maui.Style.radiusV * 2
+
+                    Rectangle
+                    {
+                        id: _banner
+                        anchors.fill: parent
+
+                        Image
+                        {
+                            id: _bannerImage
+                            anchors.fill : parent
+
+                            sourceSize.height: height /20
+                            sourceSize.width: width /20
+                            source: _featuredListview.currentItem.imageSource
+                            fillMode: Image.PreserveAspectCrop
+                            antialiasing: false
+                            smooth: false
+                            asynchronous: true
+
+                            layer.enabled: true
+                            layer.effect: OpacityMask
+                            {
+                                maskSource: Item
+                                {
+                                    width: _bannerImage.width
+                                    height: _bannerImage.height
+
+                                    Rectangle
+                                    {
+                                        anchors.centerIn: parent
+                                        width: _bannerImage.width
+                                        height: _bannerImage.height
+                                        radius: _featuredSection.radius
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+
+                    FastBlur
+                    {
+                        id: fastBlur
+                        anchors.fill: _banner
+                        source: _banner
+                        radius: 90
+                        transparentBorder: false
+                        cached: true
+
+                        layer.enabled: true
+                        layer.effect: OpacityMask
+                        {
+                            maskSource: Item
+                            {
+                                width: fastBlur.width
+                                height: fastBlur.height
+
+                                Rectangle
+                                {
+                                    anchors.centerIn: parent
+                                    width: fastBlur.width
+                                    height: fastBlur.height
+                                    radius: _featuredSection.radius
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle
+                    {
+                        anchors.fill: parent
+                        color: Kirigami.Theme.backgroundColor
+                        radius: _featuredSection.radius
+                        opacity: 0.7
+                        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+                    }
+
+
 
                     ListView
                     {
@@ -138,64 +251,93 @@ StackView
 
                         onMovementEnded: currentIndex = indexAt(contentX, contentY)
 
+                        MouseArea
+                        {
+                            id: _featureMouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            propagateComposedEvents: true
+                        }
+                        Timer
+                        {
+                            interval: 7000
+                            repeat: true
+                            running: !_featureMouseArea.containsPress || !_featureMouseArea.containsMouse
+                            onTriggered: _featuredListview.incrementCurrentIndex()
+                        }
+
                         Row
                         {
-                            spacing: Maui.Style.space.big
+                            spacing: Maui.Style.space.medium
                             anchors.horizontalCenter: parent.horizontalCenter
                             z: 999
                             anchors.bottom: parent.bottom
                             anchors.margins: Maui.Style.space.big
 
-                            Rectangle
+                            Repeater
                             {
-                                visible: _featuredListview.count > 0 && _featuredListview.currentIndex > 0
-                                color: _countBadge.Kirigami.Theme.backgroundColor
-                                border.color: Qt.darker(color)
-                                height: Maui.Style.iconSizes.small + Kirigami.Units.smallSpacing
-                                width: height
-                                radius: Maui.Style.radiusV
-                                anchors.verticalCenter: parent.verticalCenter
-                                ToolButton
+                                model: _featureList.count
+
+                                Rectangle
                                 {
-                                    anchors.centerIn: parent
-                                    height: Maui.Style.iconSizes.small
-                                    width: height
-                                    icon.width: height
-                                    icon.color: "white"
-                                    icon.name: "go-previous"
-                                    onClicked: _featuredListview.decrementCurrentIndex()
+                                    width: Maui.Style.iconSizes.tiny
+                                    height: width
+                                    radius: width
+
+                                    color: "grey"
+                                    opacity: index === _featuredListview.currentIndex ? 1 : 0.5
                                 }
                             }
 
-                            Maui.Badge
-                            {
-                                id: _countBadge
-                                text: _featuredListview.currentIndex + 1
-                                anchors.verticalCenter: parent.verticalCenter
-                            }
+                        }
 
-                            Rectangle
-                            {
-                                visible: _featuredListview.count > 0 && _featuredListview.currentIndex < _featuredListview.count - 1
+                        Rectangle
+                        {
+                            visible: _featuredListview.count > 0 && _featuredListview.currentIndex > 0
+                            color: "#333"
+                            border.color: Qt.darker(color)
+                            height: Maui.Style.iconSizes.medium + Kirigami.Units.smallSpacing
+                            width: height
+                            radius: Maui.Style.radiusV
+                            anchors.left: parent.left
+                            anchors.margins: Maui.Style.space.medium
+                            anchors.verticalCenter: parent.verticalCenter
 
-                                anchors.verticalCenter: parent.verticalCenter
-                                color: _countBadge.Kirigami.Theme.backgroundColor
-                                border.color: Qt.darker(color)
-                                height: Maui.Style.iconSizes.small + Kirigami.Units.smallSpacing
+                            ToolButton
+                            {
+                                anchors.centerIn: parent
+                                height: Maui.Style.iconSizes.small
                                 width: height
-                                radius: Maui.Style.radiusV
-                                ToolButton
-                                {
-                                    anchors.centerIn: parent
-                                    height: Maui.Style.iconSizes.small
-                                    width: height
-                                    icon.color: "white"
-                                    icon.width: height
-                                    icon.name: "go-next"
-                                    onClicked: _featuredListview.incrementCurrentIndex()
-                                }
+                                icon.width: height
+                                icon.color: "white"
+                                icon.name: "go-previous"
+                                onClicked: _featuredListview.decrementCurrentIndex()
                             }
                         }
+
+                        Rectangle
+                        {
+                            visible: _featuredListview.count > 0 && _featuredListview.currentIndex < _featuredListview.count - 1
+                            anchors.right: parent.right
+                            anchors.margins: Maui.Style.space.medium
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: "#333"
+                            border.color: Qt.darker(color)
+                            height: Maui.Style.iconSizes.medium + Kirigami.Units.smallSpacing
+                            width: height
+                            radius: Maui.Style.radiusV
+                            ToolButton
+                            {
+                                anchors.centerIn: parent
+                                height: Maui.Style.iconSizes.small
+                                width: height
+                                icon.color: "white"
+                                icon.width: height
+                                icon.name: "go-next"
+                                onClicked: _featuredListview.incrementCurrentIndex()
+                            }
+                        }
+
 
                         model: Maui.BaseModel
                         {
@@ -208,132 +350,91 @@ StackView
                             }
                         }
 
-                        delegate: RowLayout
+                        delegate: Item
                         {
-                            spacing: 0
+
+                            property url imageSource: model.preview
                             height: _featuredListview.height
                             width: _featuredListview.width
 
-                            Item
+                            RowLayout
                             {
-                                Layout.fillHeight: true
-                                Layout.preferredWidth: parent.height
-                                Layout.margins: 1
-                                Layout.alignment: Qt.AlignCenter
+                                spacing: 0
+                                anchors.fill: parent
 
-                                Rectangle
+                                Item
                                 {
-                                    id: _banner
-                                    height: parent.height
-                                    width: parent.width
-                                    color: "#333"
-                                    opacity: 0.2
+                                    Layout.fillHeight: true
+                                    Layout.preferredWidth: Maui.Style.iconSizes.huge * 1.5
+                                    Layout.margins: 1
+                                    Layout.alignment: Qt.AlignCenter
 
                                     Image
                                     {
-                                        id: _bannerImage
-                                      anchors.fill : parent
+                                        height: Maui.Style.iconSizes.huge
+                                        width: height
                                         sourceSize.height: height
                                         sourceSize.width: width
-                                        source: model.preview
-                                        fillMode: Image.PreserveAspectCrop
-                                        antialiasing: true
-                                        smooth: true
-                                        asynchronous: true
-
+                                        anchors.centerIn: parent
+                                        fillMode: Image.PreserveAspectFit
+                                        source: imageSource
                                     }
                                 }
 
-
-
-                                FastBlur
+                                Item
                                 {
-                                    id: fastBlur
-                                    anchors.fill: _banner
-                                    source: _banner
-                                    radius: 90
-                                    transparentBorder: false
-                                    cached: true
-                                }
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    Layout.margins: Maui.Style.space.huge
 
-                                Rectangle
-                                {
-                                    anchors.fill: parent
-                                    color: Kirigami.Theme.viewBackgroundColor
-                                    opacity: 0.7
-                                }
-
-                                Image
-                                {
-                                    height: Maui.Style.iconSizes.huge
-                                    width: height
-                                    sourceSize.height: height
-                                    sourceSize.width: width
-                                    anchors.centerIn: parent
-                                    fillMode: Image.PreserveAspectFit
-                                    source: _bannerImage.source
-                                }
-                            }
-
-                            Kirigami.Separator
-                            {
-                                Layout.fillHeight: true
-                                Layout.preferredWidth: 1
-                            }
-
-                            Item
-                            {
-                                Layout.fillHeight: true
-                                Layout.fillWidth: true
-                                Layout.margins: Maui.Style.space.huge
-
-                                ColumnLayout
-                                {
-                                    anchors.fill: parent
-                                    spacing: 0
-                                    Label
+                                    ColumnLayout
                                     {
-                                        text: model.name
-                                        visible: text.length
-                                        Layout.fillWidth: true
-                                        font.bold: true
-                                        font.weight: Font.Bold
-                                        elide: Text.ElideMiddle
-                                        color: Kirigami.Theme.textColor
-                                    }
+                                        anchors.fill: parent
+                                        spacing: 0
+                                        Label
+                                        {
+                                            text: model.name
+                                            visible: text.length
+                                            Layout.fillWidth: true
+                                            font.bold: true
+                                            font.weight: Font.Bold
+                                            elide: Text.ElideMiddle
+                                            color: Kirigami.Theme.textColor
+                                        }
 
-                                    Label
-                                    {
-                                        text: model.personid
-                                        visible: text.length
-                                        Layout.fillWidth: true
-                                        font.weight: Font.Light
-                                        elide: Text.ElideMiddle
-                                        color: Kirigami.Theme.textColor
-                                    }
+                                        Label
+                                        {
+                                            text: model.personid
+                                            visible: text.length
+                                            Layout.fillWidth: true
+                                            font.weight: Font.Light
+                                            elide: Text.ElideMiddle
+                                            color: Kirigami.Theme.textColor
+                                        }
 
-                                    Label
-                                    {
-                                        text: model.version
-                                        visible: text.length
-                                        Layout.fillWidth: true
-                                        font.weight: Font.Light
-                                        elide: Text.ElideMiddle
-                                        color: Kirigami.Theme.textColor
-                                    }
+                                        Label
+                                        {
+                                            text: model.version
+                                            visible: text.length
+                                            Layout.fillWidth: true
+                                            font.weight: Font.Light
+                                            elide: Text.ElideMiddle
+                                            color: Kirigami.Theme.textColor
+                                        }
 
-                                    Label
-                                    {
-                                        text: model.description
-                                        visible: text.length
-                                        Layout.topMargin: Maui.Style.space.big
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-                                        font.pointSize: Maui.Style.fontSizes.small
-                                        font.weight: Font.Light
-                                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                                        elide: Text.ElideRight
-                                        color: Kirigami.Theme.textColor
+                                        Label
+                                        {
+                                            text: model.description
+                                            visible: text.length
+                                            Layout.topMargin: Maui.Style.space.big
+                                            Layout.fillWidth: true
+                                            Layout.fillHeight: true
+                                            font.pointSize: Maui.Style.fontSizes.small
+                                            font.weight: Font.Light
+                                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                                            elide: Text.ElideRight
+                                            color: Kirigami.Theme.textColor
+                                        }
                                     }
                                 }
                             }
