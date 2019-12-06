@@ -4,6 +4,12 @@
 App::App(QObject *parent) : QObject(parent), m_data(new Application(this))
 {}
 
+App::App(const App &other, QObject *parent) : QObject(parent), m_data(other.m_data),
+    m_info(other.m_info), m_downloads(other.m_downloads), m_images(other.m_images), m_urls(other.m_urls), m_id(other.m_id), m_isInstalled(other.m_isInstalled), m_isUpdatable(other.m_isUpdatable)
+{
+qDebug()<< "COPYING APP";
+}
+
 Application *App::getData() const
 {
     return m_data;
@@ -102,6 +108,7 @@ void App::setData(Application *data)
 
     qDebug()<< "Setting app model" << data->name;
     this->m_data = data;
+    this->m_id = data->id;
     this->setModels();
     emit dataChanged(m_data);
 }

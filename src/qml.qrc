@@ -11,5 +11,6 @@
         <file>ui/CategoriesSidebar.qml</file>
         <file>ui/templates/CardDelegate.qml</file>
         <file>ui/templates/AppPage.qml</file>
+        <file>ui/views/progress/PackageDelegate.qml</file>
     </qresource>
 </RCC>

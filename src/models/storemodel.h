@@ -38,10 +38,10 @@ public:
   StoreModel(QObject *parent = nullptr);
 
   // QQmlParserStatus interface
-  void componentComplete();
+  void componentComplete() override final;
 
   // MauiList interface
-  FMH::MODEL_LIST items() const;
+  FMH::MODEL_LIST items() const override final;
 
   Category *getCategory() const;
 

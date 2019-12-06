@@ -30,6 +30,7 @@ set(nx_SRCS
     src/models/storemodel.cpp
     src/models/categoriesmodel.cpp
     src/models/app.cpp
+    src/models/progressmanager.cpp
     )
 
 set(nx_HDRS
@@ -38,6 +39,7 @@ set(nx_HDRS
     src/models/storemodel.h
     src/models/categoriesmodel.h
     src/models/app.h
+    src/models/progressmanager.h
     )
 
 set(nx_RSRCS

@@ -34,7 +34,7 @@ Maui.ApplicationWindow
             checked: currentView === views.apps
             autoExclusive: true
             onClicked: root.currentView = views.apps
-//            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
+            //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
 
             Maui.Badge
             {
@@ -59,7 +59,7 @@ Maui.ApplicationWindow
             checked: currentView === views.store
             autoExclusive: true
             onClicked: root.currentView = views.store
-//            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
+            //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
         },
 
         ToolButton
@@ -70,7 +70,7 @@ Maui.ApplicationWindow
             checked: currentView === views.system
             autoExclusive: true
             onClicked: root.currentView = views.system
-//            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
+            //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
         }
     ]
 
@@ -85,6 +85,16 @@ Maui.ApplicationWindow
         anchors.bottomMargin: Maui.Style.toolBarHeight
         height: Maui.Style.toolBarHeight
         width: height
+
+        Maui.Badge
+        {
+            text: String(_progressView.manager.count)
+            anchors
+            {
+                horizontalCenter: parent.right
+                verticalCenter: parent.top
+            }
+        }
 
         Rectangle
         {
@@ -120,7 +130,7 @@ Maui.ApplicationWindow
 
     sideBar: CategoriesSidebar
     {
-id: _categoriesSidebar
+        id: _categoriesSidebar
     }
 
     SwipeView

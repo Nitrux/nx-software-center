@@ -6,6 +6,7 @@
 
 #include "utils/nx.h"
 #include "models/appsmodel.h"
+#include "models/progressmanager.h"
 #include "models/app.h"
 #include "models/categoriesmodel.h"
 #include "models/storemodel.h"
@@ -70,6 +71,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<App>("NXModels", 1, 0, "App");
     qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
+    qmlRegisterType<ProgressManager>("NXModels", 1, 0, "ProgressManager");
+    qmlRegisterType<Package>();
     qmlRegisterType<Application>();
     qmlRegisterType<Category>();
     qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");

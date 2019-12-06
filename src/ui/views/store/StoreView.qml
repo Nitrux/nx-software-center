@@ -29,6 +29,13 @@ StackView
         AppPage
         {
             onExit: control.pop()
+
+            onPackageClicked:
+            {
+                console.log("trying to append package app ", app.id)
+                _progressView.manager.appendPackage(app, index)
+            }
+
             buttonActions: [
 
                 Button
@@ -173,8 +180,8 @@ StackView
                             id: _bannerImage
                             anchors.fill : parent
 
-                            sourceSize.height: height /20
-                            sourceSize.width: width /20
+                            sourceSize.height: height /50
+                            sourceSize.width: width /50
                             source: _featuredListview.currentItem.imageSource
                             fillMode: Image.PreserveAspectCrop
                             antialiasing: false
@@ -480,7 +487,13 @@ StackView
                     Action
                     {
                         icon.name: "entry-delete"
+                    },
+
+                    Action
+                    {
+                        icon.name: "document-download"
                     }
+
                 ]
 
                 Connections

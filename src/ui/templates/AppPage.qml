@@ -20,6 +20,8 @@ Maui.Page
     property alias app : _appHandler
 
     signal exit()
+    signal packageClicked(int index)
+
     padding: 0
     onGoBackTriggered: control.exit()
 
@@ -111,8 +113,8 @@ Maui.Page
                         id: _bannerImage
                         anchors.fill: parent
                         source: imagesInfo[0].pic
-                        sourceSize.height: parent.height
-                        sourceSize.width: parent.width
+                        sourceSize.height: parent.height /50
+                        sourceSize.width: parent.width /50
                         fillMode: Image.PreserveAspectCrop
                         antialiasing: true
                         smooth: true
@@ -550,7 +552,7 @@ Maui.Page
 
                         onClicked:
                         {
-                            app.installApp(index)
+                            control.packageClicked(index)
                         }
 
                     }
