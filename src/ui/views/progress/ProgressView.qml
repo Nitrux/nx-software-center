@@ -90,17 +90,12 @@ StackView
             }
             model: _progressManager
 
-            Label{
-                anchors.centerIn: parent
-                text: _listView.count
-            }
-
             delegate: PackageDelegate
             {
                 id: _delegate
 
-                height: 100
-                width: control.width - Maui.Style.space.huge
+                height: 140
+                width: parent.width - Maui.Style.space.huge
                 anchors.horizontalCenter: parent.horizontalCenter
 
             }

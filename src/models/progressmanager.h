@@ -18,13 +18,13 @@ private:
     int m_packageIndex;
 
     QString m_link;
+    int m_percent = 60;
 
     QVariantMap m_package;
 
 public:
     Package(const Package &other, QObject *parent = nullptr);
     void stop();
-    int m_percent;
     void setPackageIndex(const int &index);
     int getPackageIndex() const;
     QString getLink() const;
