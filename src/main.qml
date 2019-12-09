@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
@@ -25,54 +25,49 @@ Maui.ApplicationWindow
 
     onSearchButtonClicked: currentView = views.search
 
-    headBar.middleContent: [
-        ToolButton
+    headBar.middleContent: Maui.ActionGroup
+    {
+        id: _actionGroup
+        Layout.fillHeight: true
+        //        Layout.fillWidth: true
+        Layout.minimumWidth: implicitWidth
+        currentIndex : _swipeView.currentIndex
+        onCurrentIndexChanged: _swipeView.currentIndex = currentIndex
+
+//        Maui.Badge
+//        {
+//            id: _countBadge
+//            text: "3"
+//            height: Maui.Style.iconSizes.small *1.4
+//            width: height
+//            Kirigami.Theme.backgroundColor: "#D81B60"
+//            anchors
+//            {
+//                horizontalCenter: parent.left
+//                top: parent.top
+//            }
+//        }
+        Action
         {
             text: qsTr("Apps")
             icon.name: "nx-home"
-            checkable: true
-            checked: currentView === views.apps
-            autoExclusive: true
-            onClicked: root.currentView = views.apps
-            //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
 
-            Maui.Badge
-            {
-                id: _countBadge
-                text: "3"
-                height: Maui.Style.iconSizes.small *1.4
-                width: height
-                Kirigami.Theme.backgroundColor: "#D81B60"
-                anchors
-                {
-                    horizontalCenter: parent.left
-                    top: parent.top
-                }
-            }
-        },
 
-        ToolButton
+        }
+
+        Action
         {
             text: qsTr("Store")
             icon.name: "nx-software-center"
-            checkable: true
-            checked: currentView === views.store
-            autoExclusive: true
-            onClicked: root.currentView = views.store
-            //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
-        },
+         //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
+        }
 
-        ToolButton
+        Action
         {
             text: qsTr("System")
             icon.name: "start-here"
-            checkable: true
-            checked: currentView === views.system
-            autoExclusive: true
-            onClicked: root.currentView = views.system
-            //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
         }
-    ]
+    }
 
     Item
     {
@@ -137,8 +132,9 @@ Maui.ApplicationWindow
     {
         id: _swipeView
         anchors.fill: parent
-        currentIndex: root.currentView
-        onCurrentIndexChanged: root.currentView = currentIndex
+        currentIndex: _actionGroup.currentIndex
+        onCurrentIndexChanged: _actionGroup.currentIndex = currentIndex
+
         interactive: isMobile
 
         AppsView
