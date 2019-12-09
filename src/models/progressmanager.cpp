@@ -62,6 +62,13 @@ Package *ProgressManager::appendPackage(App *app, const int &packageIndex, const
     this->m_count = this->m_list.size();
     emit this->countChanged(this->m_count);
 
+    switch (static_cast<Package::MODE>(mode))
+    {
+    case Package::MODE::DOWNLOAD:
+        package->installPackage();
+        break;
+    }
+
     endInsertRows();
 
     return package;
@@ -135,6 +142,13 @@ void Package::setMode(const Package::MODE &mode)
 
 }
 
+void Package::setProgress(const int &progress)
+{
+    qDebug()<< "SETTING PROGRESS"<< progress;
+    this->m_progress = progress;
+    emit this->progressChanged(this->m_progress);
+}
+
 int Package::getPackageIndex() const
 {
     return m_packageIndex;
@@ -153,4 +167,33 @@ QString Package::getLink() const
 QVariantMap Package::getPackage() const
 {
     return m_package;
+}
+
+void Package::updatePackage()
+{
+
+}
+
+void Package::removePackage()
+{
+
+}
+
+void Package::installPackage()
+{
+    const auto package =   this->m_data->downloads.at(this->m_packageIndex);
+    FMH::Downloader *downloader = new FMH::Downloader;
+    QObject::connect(downloader, &FMH::Downloader::progress, this, &Package::setProgress);
+    connect(downloader, &FMH::Downloader::done, downloader, &FMH::Downloader::deleteLater);
+    downloader->downloadFile(QUrl::fromUserInput(this->m_link), FMH::DownloadsPath+("/")+package->name);
+}
+
+void Package::launchPackage()
+{
+
+}
+
+void Package::buyPackage()
+{
+
 }

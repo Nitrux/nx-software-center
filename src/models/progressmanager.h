@@ -5,6 +5,12 @@
 #include <QAbstractListModel>
 #include "app.h"
 
+#ifdef STATIC_MAUIKIT
+#include "downloader.h"
+#else
+#include <MauiKit/downloader.h>
+#endif
+
 class Downloader;
 class Package : public App
 {
@@ -13,7 +19,7 @@ class Package : public App
     Q_PROPERTY(QVariantMap package READ getPackage NOTIFY packageChanged CONSTANT FINAL)
     Q_PROPERTY(MODE mode MEMBER m_mode NOTIFY modeChanged CONSTANT FINAL)
     Q_PROPERTY(QString modeLabel MEMBER m_modeLabel NOTIFY modeLabelChanged CONSTANT FINAL)
-    Q_PROPERTY(int percent MEMBER m_percent NOTIFY percentChanged)
+    Q_PROPERTY(int progress MEMBER m_progress NOTIFY progressChanged)
     Q_PROPERTY(int packageIndex READ getPackageIndex NOTIFY packagedIndexChanged CONSTANT FINAL)
     using App::App;
 
@@ -29,25 +35,35 @@ public:
 
     Package(const Package &other, QObject *parent = nullptr);
     void stop();
+
     void setPackageIndex(const int &index);
     void setMode(const Package::MODE &mode);
+    void setProgress(const int &progress);
+
     int getPackageIndex() const;
     QString getModelLabel() const;
     QString getLink() const;
     QVariantMap getPackage() const;
 
+public slots:
+    void updatePackage();
+    void removePackage();
+    void installPackage();
+    void launchPackage();
+    void buyPackage();
+
 private:
     QVariantMap m_package; //the actual package from the app to perform action upon
-    int m_packageIndex; //the index of the actual package from the app
-
-    QString m_link; //download link of the actual package
-    int m_percent = 60; //percent from 0 to 100 on the current action(mode) being performed on the package
-    Package::MODE m_mode = MODE::NONE;
-
     QString m_modeLabel = "Other";
 
+    QString m_link; //download link of the actual package
+    int m_progress = 60; //percent from 0 to 100 on the current action(mode) being performed on the package
+    int m_packageIndex; //the index of the actual package from the app
+
+    Package::MODE m_mode = MODE::NONE;
+
 signals:
-    void percentChanged(int percent);
+    void progressChanged(int percent);
     void packagedIndexChanged(int packageIndex);
     void linkChanged(QString link);
     void packageChanged(QVariantMap package);

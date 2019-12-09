@@ -59,7 +59,7 @@ Maui.ItemDelegate
                 {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    value: model.item.percent
+                    value: model.item.progress
                     from: 0
                     to: 100
                     anchors.verticalCenter: parent.verticalCenter
