@@ -2,6 +2,7 @@
 #define APP_H
 
 #include <QObject>
+#include <MauiKit/downloader.h>
 
 #ifdef STATIC_MAUIKIT
 #include "fmh.h"
@@ -9,6 +10,7 @@
 #include <MauiKit/fmh.h>
 #endif
 
+class Downloader;
 class Application;
 class App : public QObject
 {
@@ -30,6 +32,7 @@ public:
 
 protected:
     Application * m_data;
+    FMH::Downloader *downloader;
 
     QVariantMap m_info;
     QVariantList m_downloads;
@@ -42,8 +45,8 @@ protected:
     bool m_isUpdatable = false;
 
     void setModels();
-signals:
 
+signals:
     void infoChanged(QVariantMap info);
     void downloadsChanged(QVariantList downloads);
     void imagesChanged(QVariantList images);

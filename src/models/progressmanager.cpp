@@ -12,8 +12,9 @@ bool ProgressManager::contains(const App &app, const int &packageIndex) const
 QHash<int, QByteArray> ProgressManager::roleNames() const
 {
     QHash<int, QByteArray> roles;
-     roles[Qt::UserRole + 1] = "item";
-     return roles;
+    roles[ROLES::ITEM] = "item";
+    roles[ROLES::MODE] = "mode";
+    return roles;
 }
 
 ProgressManager::ProgressManager(QObject *parent) : QAbstractListModel(parent),
@@ -30,11 +31,20 @@ int ProgressManager::rowCount(const QModelIndex &) const
 QVariant ProgressManager::data(const QModelIndex &index, int role) const
 {
     auto item = m_list.at(index.row());
-    qDebug()<< "REQUESTING PACKAGE FOR MDOEL"<< index << item->getData()->name;
-    return QVariant::fromValue(item);
+
+    switch (role)
+    {
+    case ROLES::ITEM:
+        return QVariant::fromValue(item);
+    case ROLES::MODE:
+        qDebug()<< "REQUESTING MODE <<" << item->getModelLabel();
+        return item->getModelLabel();
+    default:
+        return QVariant();
+    }
 }
 
-Package *ProgressManager::appendPackage(App *app, const int &packageIndex)
+Package *ProgressManager::appendPackage(App *app, const int &packageIndex, const uint &mode)
 {
     if(this->contains(*app, packageIndex))
     {
@@ -43,15 +53,15 @@ Package *ProgressManager::appendPackage(App *app, const int &packageIndex)
     }
     const auto package = new Package(*app, this);
     package->setPackageIndex(packageIndex);
-    qDebug()<< "APPNDIGN PACKAGE" << package->getData()->downloads.at(packageIndex)->name;
+    package->setMode(static_cast<Package::MODE>(mode));
 
     beginInsertRows(QModelIndex(), this->m_list.size(), this->m_list.size());
-    this->m_packages[package->getData()->downloads.at(packageIndex)->link] = package;
+
+    this->m_packages[package->getLink()] = package;
     this->m_list << package;
-
-
     this->m_count = this->m_list.size();
     emit this->countChanged(this->m_count);
+
     endInsertRows();
 
     return package;
@@ -107,9 +117,32 @@ void Package::setPackageIndex(const int &index)
     emit this->packagedIndexChanged(this->m_packageIndex);
 }
 
+static const QHash<Package::MODE, QString> MODE_MAP = {
+    {Package::MODE::DOWNLOAD, "Download"},
+    {Package::MODE::LAUNCH, "Launch"},
+    {Package::MODE::REMOVE, "Remove"},
+    {Package::MODE::UPDATE, "Update"}
+};
+
+void Package::setMode(const Package::MODE &mode)
+{
+    this->m_mode = mode;
+    emit this->modeChanged(this->m_mode);
+
+    this->m_modeLabel = MODE_MAP[this->m_mode];
+    emit this->modeLabelChanged(this->m_modeLabel);
+    qDebug()<< "Setting mode"<<  m_modeLabel;
+
+}
+
 int Package::getPackageIndex() const
 {
     return m_packageIndex;
+}
+
+QString Package::getModelLabel() const
+{
+    return this->m_modeLabel;
 }
 
 QString Package::getLink() const

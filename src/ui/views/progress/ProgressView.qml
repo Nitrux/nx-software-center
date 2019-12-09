@@ -77,7 +77,7 @@ StackView
             anchors.fill: parent
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium
-            section.property: "category"
+            section.property: "mode"
             section.criteria: ViewSection.FullString
             section.delegate: Maui.LabelDelegate
             {
@@ -97,7 +97,6 @@ StackView
                 height: 140
                 width: parent.width - Maui.Style.space.huge
                 anchors.horizontalCenter: parent.horizontalCenter
-
             }
         }
     }

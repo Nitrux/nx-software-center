@@ -1,13 +1,14 @@
 #include "app.h"
 #include "ResponseDTO/application.h"
 
-App::App(QObject *parent) : QObject(parent), m_data(new Application(this))
-{}
+App::App(QObject *parent) : QObject(parent), m_data(new Application(this)), downloader(nullptr)
+{
+}
 
 App::App(const App &other, QObject *parent) : QObject(parent), m_data(other.m_data),
     m_info(other.m_info), m_downloads(other.m_downloads), m_images(other.m_images), m_urls(other.m_urls), m_id(other.m_id), m_isInstalled(other.m_isInstalled), m_isUpdatable(other.m_isUpdatable)
 {
-qDebug()<< "COPYING APP";
+    qDebug()<< "COPYING APP";
 }
 
 Application *App::getData() const
@@ -87,8 +88,8 @@ void App::installApp(const int &packageIndex)
 {
     if(packageIndex >  this->m_data->downloads.size() || packageIndex < 0)
         return;
-const auto package =   this->m_data->downloads.at(packageIndex);
-  package->downloadFile(FMH::DownloadsPath+("/")+package->name);
+    const auto package =   this->m_data->downloads.at(packageIndex);
+    this->downloader = package->downloadFile(FMH::DownloadsPath+("/")+package->name);
 }
 
 void App::launchApp()
