@@ -34,19 +34,7 @@ Maui.ApplicationWindow
         currentIndex : _swipeView.currentIndex
         onCurrentIndexChanged: _swipeView.currentIndex = currentIndex
 
-//        Maui.Badge
-//        {
-//            id: _countBadge
-//            text: "3"
-//            height: Maui.Style.iconSizes.small *1.4
-//            width: height
-//            Kirigami.Theme.backgroundColor: "#D81B60"
-//            anchors
-//            {
-//                horizontalCenter: parent.left
-//                top: parent.top
-//            }
-//        }
+
         Action
         {
             text: qsTr("Apps")
@@ -69,7 +57,7 @@ Maui.ApplicationWindow
         }
     }
 
-    Item
+    Maui.FloatingButton
     {
         id: _overlayButton
         visible: _progressView.isActive
@@ -81,6 +69,10 @@ Maui.ApplicationWindow
         height: Maui.Style.toolBarHeight
         width: height
 
+        icon.name: "appimage-store"
+        icon.color: Kirigami.Theme.highlightedTextColor
+        onClicked: currentView = views.progress
+
         Maui.Badge
         {
             text: String(_progressView.manager.count)
@@ -90,36 +82,6 @@ Maui.ApplicationWindow
                 verticalCenter: parent.top
             }
         }
-
-        Rectangle
-        {
-            id: _rec
-            anchors.fill: parent
-            color: Kirigami.Theme.highlightColor
-            radius: Maui.Style.radiusV
-            ToolButton
-            {
-                anchors.fill : parent
-                icon.name: "appimage-store"
-                icon.color: Kirigami.Theme.highlightedTextColor
-                onClicked: currentView = views.progress
-            }
-        }
-
-        DropShadow
-        {
-            id: rectShadow
-            anchors.fill: parent
-            cached: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 16
-            color: "#333"
-            smooth: true
-            source: _rec
-        }
-
     }
 
 

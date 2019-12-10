@@ -450,7 +450,7 @@ StackView
                 }
             }
 
-            model:  Maui.BaseModel
+            model: Maui.BaseModel
             {
                 id: _appsModel
                 list: NX.Store

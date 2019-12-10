@@ -108,6 +108,7 @@ Maui.Page
                     width: parent.width
                     color: "#333"
                     opacity: 0.2
+
                     Image
                     {
                         id: _bannerImage
@@ -215,6 +216,7 @@ Maui.Page
             {
                 Layout.fillWidth: true
             }
+
             ColumnLayout
             {
                 id: _div1
@@ -586,7 +588,6 @@ Maui.Page
             }
 
 
-
             ColumnLayout
             {
                 id: _div5
@@ -594,8 +595,6 @@ Maui.Page
                 Layout.fillWidth: true
                 Layout.preferredHeight: implicitHeight
                 Layout.margins: Maui.Style.space.big
-
-
 
                 RowLayout
                 {
@@ -694,7 +693,6 @@ Maui.Page
                     }
                 }
             }
-
 
         }
     }
