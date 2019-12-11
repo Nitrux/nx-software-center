@@ -15,7 +15,7 @@ class Downloader;
 class Package : public App
 {
     Q_OBJECT
-    Q_PROPERTY(QString link READ getLink NOTIFY linkChanged CONSTANT FINAL)
+    Q_PROPERTY(QUrl link READ getLink NOTIFY linkChanged CONSTANT FINAL)
     Q_PROPERTY(QVariantMap package READ getPackage NOTIFY packageChanged CONSTANT FINAL)
     Q_PROPERTY(MODE mode MEMBER m_mode NOTIFY modeChanged CONSTANT FINAL)
     Q_PROPERTY(QString modeLabel MEMBER m_modeLabel NOTIFY modeLabelChanged CONSTANT FINAL)
@@ -42,7 +42,7 @@ public:
 
     int getPackageIndex() const;
     QString getModelLabel() const;
-    QString getLink() const;
+    QUrl getLink() const;
     QVariantMap getPackage() const;
 
 public slots:
@@ -53,10 +53,10 @@ public slots:
     void buyPackage();
 
 private:
-    QVariantMap m_package; //the actual package from the app to perform action upon
     QString m_modeLabel = "Other";
+    QVariantMap m_package; //the actual package from the app to perform action upon
 
-    QString m_link; //download link of the actual package
+    QUrl m_link; //download link of the actual package
     int m_progress = 60; //percent from 0 to 100 on the current action(mode) being performed on the package
     int m_packageIndex; //the index of the actual package from the app
 
@@ -65,7 +65,7 @@ private:
 signals:
     void progressChanged(int percent);
     void packagedIndexChanged(int packageIndex);
-    void linkChanged(QString link);
+    void linkChanged(QUrl link);
     void packageChanged(QVariantMap package);
     void modeLabelChanged(QString modeLabel);
     void modeChanged(MODE mode);

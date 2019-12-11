@@ -28,8 +28,12 @@
 #include "3rdparty/mauikit/src/mauikit.h"
 #endif
 
+#include <MauiKit/fmstatic.h>
+
 int main(int argc, char *argv[])
 {
+
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
 #ifdef Q_OS_ANDROID
@@ -58,6 +62,9 @@ int main(int argc, char *argv[])
 #ifdef STATIC_MAUIKIT
     MauiKit::getInstance().registerTypes();
 #endif
+
+        FMStatic::createDir(NX::AppsPath, QString());
+
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

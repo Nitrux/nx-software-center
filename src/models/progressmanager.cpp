@@ -1,5 +1,6 @@
 #include "progressmanager.h"
 #include "ResponseDTO/application.h"
+#include "nx.h"
 
 bool ProgressManager::contains(const App &app, const int &packageIndex) const
 {
@@ -57,7 +58,7 @@ Package *ProgressManager::appendPackage(App *app, const int &packageIndex, const
 
     beginInsertRows(QModelIndex(), this->m_list.size(), this->m_list.size());
 
-    this->m_packages[package->getLink()] = package;
+    this->m_packages[package->getLink().toString()] = package;
     this->m_list << package;
     this->m_count = this->m_list.size();
     emit this->countChanged(this->m_count);
@@ -66,6 +67,15 @@ Package *ProgressManager::appendPackage(App *app, const int &packageIndex, const
     {
     case Package::MODE::DOWNLOAD:
         package->installPackage();
+        break;
+    case Package::MODE::UPDATE:
+        package->updatePackage();
+        break;
+    case Package::MODE::REMOVE:
+        package->removePackage();
+        break;
+    case Package::MODE::LAUNCH:
+        package->launchPackage();
         break;
     }
 
@@ -158,7 +168,7 @@ QString Package::getModelLabel() const
     return this->m_modeLabel;
 }
 
-QString Package::getLink() const
+QUrl Package::getLink() const
 {
     return m_link;
 }
@@ -181,10 +191,10 @@ void Package::removePackage()
 void Package::installPackage()
 {
     const auto package =   this->m_data->downloads.at(this->m_packageIndex);
-    FMH::Downloader *downloader = new FMH::Downloader;
+    auto downloader = new FMH::Downloader;
     connect(downloader, &FMH::Downloader::progress, this, &Package::setProgress);
     connect(downloader, &FMH::Downloader::done, downloader, &FMH::Downloader::deleteLater);
-    downloader->downloadFile(QUrl::fromUserInput(this->m_link), FMH::DownloadsPath+("/")+package->name);
+    downloader->downloadFile(this->m_link, NX::AppsPath.toString()+("/")+package->name);
 }
 
 void Package::launchPackage()
