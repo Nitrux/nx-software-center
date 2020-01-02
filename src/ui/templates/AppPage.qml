@@ -46,6 +46,7 @@ Maui.Page
 
     headBar.rightContent: Kirigami.ActionToolBar
     {
+        Layout.fillWidth: true
         display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         hiddenActions: [
             Action

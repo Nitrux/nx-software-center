@@ -32,58 +32,59 @@
 
 int main(int argc, char *argv[])
 {
-
-
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
 #ifdef Q_OS_ANDROID
-    QGuiApplication app(argc, argv);
+	QGuiApplication app(argc, argv);
 #else
-    QApplication app(argc, argv);
+	QApplication app(argc, argv);
 #endif
 
-    app.setApplicationName(NX::appName);
-    app.setApplicationVersion(NX::version);
-    app.setApplicationDisplayName(NX::displayName);
-    app.setOrganizationName(NX::orgName);
-    app.setOrganizationDomain(NX::orgDomain);
-    app.setWindowIcon(QIcon(":/nx-software-center.svg"));
+#ifdef MAUIKIT_STYLE
+	MauiKit::getInstance().initResources();
+#endif
 
-    QCommandLineParser parser;
-    parser.setApplicationDescription(NX::description);
-    const QCommandLineOption versionOption = parser.addVersionOption();
-    parser.addOption(versionOption);
-    parser.process(app);
+	app.setApplicationName(NX::appName);
+	app.setApplicationVersion(NX::version);
+	app.setApplicationDisplayName(NX::displayName);
+	app.setOrganizationName(NX::orgName);
+	app.setOrganizationDomain(NX::orgDomain);
+	app.setWindowIcon(QIcon(":/nx-software-center.svg"));
+
+	QCommandLineParser parser;
+	parser.setApplicationDescription(NX::description);
+	const QCommandLineOption versionOption = parser.addVersionOption();
+	parser.addOption(versionOption);
+	parser.process(app);
 
 #ifdef STATIC_KIRIGAMI
-    KirigamiPlugin::getInstance().registerTypes();
+	KirigamiPlugin::getInstance().registerTypes();
 #endif
 
 #ifdef STATIC_MAUIKIT
-    MauiKit::getInstance().registerTypes();
+	MauiKit::getInstance().registerTypes();
 #endif
 
-        FMStatic::createDir(NX::AppsPath, QString());
+	FMStatic::createDir(NX::AppsPath, QString());
 
+	QQmlApplicationEngine engine;
+	const QUrl url(QStringLiteral("qrc:/main.qml"));
+	QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+					 &app, [url](QObject *obj, const QUrl &objUrl)
+	{
+		if (!obj && url == objUrl)
+			QCoreApplication::exit(-1);
 
-    QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl)
-    {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
+	}, Qt::QueuedConnection);
 
-    }, Qt::QueuedConnection);
-
-    qmlRegisterType<App>("NXModels", 1, 0, "App");
-    qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
-    qmlRegisterType<ProgressManager>("NXModels", 1, 0, "ProgressManager");
-    qmlRegisterType<Package>("NXModels", 1, 0, "Package");
-    qmlRegisterType<Application>();
-    qmlRegisterType<Category>();
-    qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
-    qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
-    engine.load(url);
-    return app.exec();
+	qmlRegisterType<App>("NXModels", 1, 0, "App");
+	qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
+	qmlRegisterType<ProgressManager>("NXModels", 1, 0, "ProgressManager");
+	qmlRegisterType<Package>("NXModels", 1, 0, "Package");
+	qmlRegisterType<Application>();
+	qmlRegisterType<Category>();
+	qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
+	qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
+	engine.load(url);
+	return app.exec();
 }

@@ -71,7 +71,7 @@ Maui.ApplicationWindow
 
         icon.name: "appimage-store"
         icon.color: Kirigami.Theme.highlightedTextColor
-        onClicked: currentView = views.progress
+        onClicked: _actionGroup.currentIndex = views.progress
 
         Maui.Badge
         {
