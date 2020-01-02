@@ -13,6 +13,8 @@ include(ECMInstallIcons)
 include(FeatureSummary)
 include(ECMAddAppIcon)
 
+option(MAUIKIT_STYLE "If set to true then the icons and styled is packaged as well")
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -75,6 +77,10 @@ add_executable(${PROJECT_NAME}
 
     ${nx_STORES_SRCS}
     ${nx_STORES_HDRS})
+
+if(MAUIKIT_STYLE)
+    target_compile_definitions(index PUBLIC MAUIKIT_STYLE)
+endif()
 
 if (ANDROID)
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
