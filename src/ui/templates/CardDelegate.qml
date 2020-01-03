@@ -233,7 +233,7 @@ SwipeDelegate
 
         ToolButton
         {
-            icon.name: "call-start"
+            icon.name: "download"
             anchors.verticalCenter: parent.verticalCenter
             //            icon.color: _bg.Kirigami.Theme.textColor
 

@@ -3,5 +3,8 @@
         <file>nx-software-center.svg</file>
         <file>tests/banner_index.png</file>
         <file>store.svg</file>
+        <file>nx-home.svg</file>
+        <file>appimage-store.svg</file>
+        <file>start-here.svg</file>
     </qresource>
 </RCC>

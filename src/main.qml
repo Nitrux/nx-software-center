@@ -38,22 +38,23 @@ Maui.ApplicationWindow
         Action
         {
             text: qsTr("Apps")
-            icon.name: "nx-home"
-
-
+            icon.name: "go-home"
+            icon.source: "qrc:/nx-home.svg"
         }
 
         Action
         {
             text: qsTr("Store")
-            icon.name: "nx-software-center"
+            icon.name: "download"
+            icon.source: "qrc:/store.svg"
          //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
         }
 
         Action
         {
             text: qsTr("System")
-            icon.name: "start-here"
+            icon.name: "drive-harddisk"
+            icon.source: "qrc:/start-here.svg"
         }
     }
 
@@ -69,7 +70,8 @@ Maui.ApplicationWindow
         height: Maui.Style.toolBarHeight
         width: height
 
-        icon.name: "appimage-store"
+        icon.name: "package"
+        icon.source: "qrc:/appimage-store.svg"
         icon.color: Kirigami.Theme.highlightedTextColor
         onClicked: _actionGroup.currentIndex = views.progress
 

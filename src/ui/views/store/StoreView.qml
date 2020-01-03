@@ -491,7 +491,7 @@ StackView
 
                     Action
                     {
-                        icon.name: "document-download"
+                        icon.name: "download"
                     }
 
                 ]
