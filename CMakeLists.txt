@@ -79,13 +79,13 @@ add_executable(${PROJECT_NAME}
     ${nx_STORES_HDRS})
 
 if(MAUIKIT_STYLE)
-    target_compile_definitions(index PUBLIC MAUIKIT_STYLE)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC MAUIKIT_STYLE)
 endif()
 
 if (ANDROID)
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
 
-    target_link_libraries(vvave Qt5::AndroidExtras)
+    target_link_libraries(${PROJECT_NAME} Qt5::AndroidExtras)
 #     kde_source_files_enable_exceptions(pix src/pix.cpp)
 else()
     find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config KIO Attica SyntaxHighlighting)
