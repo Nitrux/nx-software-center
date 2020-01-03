@@ -26,6 +26,8 @@
 
 #ifdef STATIC_MAUIKIT
 #include "3rdparty/mauikit/src/mauikit.h"
+#elif defined MAUIKIT_STYLE
+#include <MauiKit/mauikit.h>
 #endif
 
 #include <MauiKit/fmstatic.h>
