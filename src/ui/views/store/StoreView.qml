@@ -255,6 +255,8 @@ StackView
                         orientation: ListView.Horizontal
                         snapMode: ListView.SnapOneItem
                         clip: true
+                        highlightMoveDuration: 1000
+                        highlightMoveVelocity: -1
 
                         onMovementEnded: currentIndex = indexAt(contentX, contentY)
 
@@ -267,10 +269,11 @@ StackView
                         }
                         Timer
                         {
+                            id: _featuredListviewTimer
                             interval: 7000
                             repeat: true
                             running: !_featureMouseArea.containsPress || !_featureMouseArea.containsMouse
-                            onTriggered: _featuredListview.incrementCurrentIndex()
+                            onTriggered: _featuredListview.cycleSlideForward()
                         }
 
                         Row
@@ -300,7 +303,6 @@ StackView
 
                         Rectangle
                         {
-                            visible: _featuredListview.count > 0 && _featuredListview.currentIndex > 0
                             color: "#333"
                             border.color: Qt.darker(color)
                             height: Maui.Style.iconSizes.medium + Kirigami.Units.smallSpacing
@@ -318,13 +320,12 @@ StackView
                                 icon.width: height
                                 icon.color: "white"
                                 icon.name: "go-previous"
-                                onClicked: _featuredListview.decrementCurrentIndex()
+                                onClicked: _featuredListview.cycleSlideBackward()
                             }
                         }
 
                         Rectangle
                         {
-                            visible: _featuredListview.count > 0 && _featuredListview.currentIndex < _featuredListview.count - 1
                             anchors.right: parent.right
                             anchors.margins: Maui.Style.space.medium
                             anchors.verticalCenter: parent.verticalCenter
@@ -341,7 +342,7 @@ StackView
                                 icon.color: "white"
                                 icon.width: height
                                 icon.name: "go-next"
-                                onClicked: _featuredListview.incrementCurrentIndex()
+                                onClicked: _featuredListview.cycleSlideForward()
                             }
                         }
 
@@ -445,6 +446,26 @@ StackView
                                     }
                                 }
                             }
+                        }
+
+                        function cycleSlideForward() {
+                          _featuredListviewTimer.restart();
+
+                          if (_featuredListview.currentIndex === _featuredListview.count - 1) {
+                            _featuredListview.currentIndex = 0;
+                          } else {
+                            _featuredListview.incrementCurrentIndex();
+                          }
+                        }
+
+                        function cycleSlideBackward() {
+                          _featuredListviewTimer.restart();
+
+                          if (_featuredListview.currentIndex === 0) {
+                            _featuredListview.currentIndex = _featuredListview.count - 1;
+                          } else {
+                            _featuredListview.decrementCurrentIndex();
+                          }
                         }
                     }
                 }
