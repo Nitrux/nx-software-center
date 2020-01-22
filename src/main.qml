@@ -20,8 +20,8 @@ Maui.ApplicationWindow
     Maui.App.iconName: "qrc:/nx-software-center.svg"
     Maui.App.description : "NX Software Center distributes AppImages for GNU Linux and APKS for Android"
 
-    readonly property var views: ({apps: 0, store: 1, system: 2, search: 3, progress: 4})
-    property int currentView: views.apps
+    readonly property var views: ({store: 0, apps: 1, system: 2, search: 3, progress: 4})
+    property int currentView: views.store
 
     onSearchButtonClicked: currentView = views.search
 
@@ -34,20 +34,19 @@ Maui.ApplicationWindow
         currentIndex : _swipeView.currentIndex
         onCurrentIndexChanged: _swipeView.currentIndex = currentIndex
 
-
-        Action
-        {
-            text: qsTr("Apps")
-            icon.name: "go-home"
-            icon.source: "qrc:/nx-home.svg"
-        }
-
         Action
         {
             text: qsTr("Store")
             icon.name: "download"
             icon.source: "qrc:/store.svg"
          //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
+        }
+
+        Action
+        {
+            text: qsTr("Apps")
+            icon.name: "go-home"
+            icon.source: "qrc:/nx-home.svg"
         }
 
         Action
@@ -99,16 +98,16 @@ Maui.ApplicationWindow
         currentIndex: _actionGroup.currentIndex
         onCurrentIndexChanged: _actionGroup.currentIndex = currentIndex
 
-        interactive: isMobile
-
-        AppsView
-        {
-            id: _appsView
-        }
+        interactive: isMobile        
 
         StoreView
         {
             id: _storeView
+        }
+
+        AppsView
+        {
+            id: _appsView
         }
 
         SystemView
