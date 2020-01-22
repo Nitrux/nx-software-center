@@ -56,6 +56,7 @@ Maui.ApplicationWindow
             icon.source: "qrc:/start-here.svg"
         }
     }
+    rightIcon.visible: false
 
     Maui.FloatingButton
     {
