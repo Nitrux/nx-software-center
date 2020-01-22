@@ -89,7 +89,7 @@ StackView
         Maui.Holder
         {
             title: qsTr("Oops!")
-            body: qsTr("Not apps found")
+            body: qsTr("No apps found")
             visible: _appsListView.count === 0
             emoji: "qrc:/store.svg"
             emojiSize: Maui.Style.iconSizes.huge
