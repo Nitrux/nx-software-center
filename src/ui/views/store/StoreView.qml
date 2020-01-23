@@ -148,7 +148,7 @@ StackView
                 right: _listView.right
                 top: _listView.top
                 bottom : _listView.bottom
-                rightMargin: -20
+                rightMargin: -18
               }
             }
             onAtYEndChanged:
