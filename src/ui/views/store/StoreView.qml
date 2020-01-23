@@ -142,6 +142,15 @@ StackView
             Layout.fillHeight: true
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium
+            ScrollBar.vertical: ScrollBar {
+              active: true
+              anchors {
+                right: _listView.right
+                top: _listView.top
+                bottom : _listView.bottom
+                rightMargin: -20
+              }
+            }
             onAtYEndChanged:
             {
                 if(_listView.atYEnd)
