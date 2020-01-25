@@ -19,11 +19,61 @@ Maui.Page
     property alias data : _appHandler.data
     property alias app : _appHandler
 
+    property bool shouldAnimateScroll: false
+    readonly property int scrollAnimationDuration: 1000
+
+    enum Sections {
+        Description,
+        Details,
+        Packages,
+        Screenshots,
+        Changelog,
+        Comments
+    }
+
     signal exit()
     signal packageClicked(int index)
 
+    function scrollTo(section) {
+        shouldAnimateScroll = true;
+
+        switch (section) {
+            case AppPage.Sections.Description:
+                _scrollablePage.flickable.contentY = _div1.y;
+                break;
+            case AppPage.Sections.Details:
+                _scrollablePage.flickable.contentY = _div2.y;
+                break;
+            case AppPage.Sections.Packages:
+                _scrollablePage.flickable.contentY = _div3.y;
+                break;
+            case AppPage.Sections.Screenshots:
+                _scrollablePage.flickable.contentY = _div4.y;
+                break;
+            case AppPage.Sections.Changelog:
+                _scrollablePage.flickable.contentY = _div5.y;
+                break;
+            case AppPage.Sections.Comments:
+                _scrollablePage.flickable.contentY = _div6.y;
+                break;
+        }
+
+        scrollAnimationResetTimer.start()
+    }
+
+
+
     padding: 0
     onGoBackTriggered: control.exit()
+
+    Timer {
+        id: scrollAnimationResetTimer
+        interval: scrollAnimationDuration
+        repeat: false
+        onTriggered: {
+            shouldAnimateScroll = false;
+        }
+    }
 
     NX.App
     {
@@ -85,12 +135,32 @@ Maui.Page
 
     Kirigami.ScrollablePage
     {
+        id: _scrollablePage
         anchors.fill: parent
         padding: 0
         leftPadding: padding
         rightPadding: padding
         topPadding: padding
         bottomPadding: padding
+        flickable {
+          Behavior on contentX {
+            enabled: shouldAnimateScroll
+
+            NumberAnimation {
+              duration: scrollAnimationDuration
+              easing.type: Easing.InOutQuad
+            }
+          }
+
+          Behavior on contentY {
+            enabled: shouldAnimateScroll
+
+            NumberAnimation {
+              duration: scrollAnimationDuration
+              easing.type: Easing.InOutQuad
+            }
+          }
+        }
 
         ColumnLayout
         {

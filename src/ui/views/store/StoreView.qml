@@ -28,6 +28,7 @@ StackView
 
         AppPage
         {
+            id: _appPage
             onExit: control.pop()
 
             onPackageClicked:
@@ -44,7 +45,9 @@ StackView
                     visible: !app.isInstalled
                     Kirigami.Theme.textColor: "#37474F"
                     Kirigami.Theme.backgroundColor: Qt.rgba("#546E7A".r, "#546E7A".g, "#546E7A".b, 0.2)
-
+                    onClicked: {
+                        _appPage.scrollTo(AppPage.Sections.Packages)
+                    }
                 },
 
                 Button
