@@ -377,6 +377,11 @@ StackView
                             height: _featuredListview.height
                             width: _featuredListview.width
 
+                            MouseArea {
+                                id: _featuredDelegateClickable
+                                anchors.fill: parent
+                            }
+
                             RowLayout
                             {
                                 spacing: 0
@@ -456,6 +461,17 @@ StackView
                                             color: Kirigami.Theme.textColor
                                         }
                                     }
+                                }
+                            }
+
+                            Connections
+                            {
+                                target: _featuredDelegateClickable
+                                onClicked:
+                                {
+                                    control.push(_appPageComponent)
+                                    _storeList.setApp(_featuredListview.model.get(_featuredListview.currentIndex).id)
+                                    control.currentItem.data = _storeList.app
                                 }
                             }
                         }
