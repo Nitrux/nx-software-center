@@ -23,8 +23,6 @@ Maui.ApplicationWindow
     readonly property var views: ({store: 0, apps: 1, system: 2, search: 3, progress: 4})
     property int currentView: views.store
 
-    onSearchButtonClicked: currentView = views.search
-
     headBar.middleContent: Maui.ActionGroup
     {
         id: _actionGroup
@@ -56,7 +54,6 @@ Maui.ApplicationWindow
             icon.source: "qrc:/start-here.svg"
         }
     }
-    rightIcon.visible: false
 
     Maui.FloatingButton
     {
