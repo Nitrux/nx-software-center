@@ -522,28 +522,28 @@ StackView
                 imageSource: model.smallpic
                 iconSizeHint: height * 0.7
 
-                quickActions: [
-                    Action
-                    {
-                        icon.name: "document-share"
-                    },
+//                quickActions: [
+//                    Action
+//                    {
+//                        icon.name: "document-share"
+//                    },
 
-                    Action
-                    {
-                        icon.name: "media-playback-start"
-                    },
+//                    Action
+//                    {
+//                        icon.name: "media-playback-start"
+//                    },
 
-                    Action
-                    {
-                        icon.name: "entry-delete"
-                    },
+//                    Action
+//                    {
+//                        icon.name: "entry-delete"
+//                    },
 
-                    Action
-                    {
-                        icon.name: "download"
-                    }
+//                    Action
+//                    {
+//                        icon.name: "download"
+//                    }
 
-                ]
+//                ]
 
                 Connections
                 {
