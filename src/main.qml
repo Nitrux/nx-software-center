@@ -19,6 +19,9 @@ Maui.ApplicationWindow
 
     Maui.App.iconName: "qrc:/nx-software-center.svg"
     Maui.App.description : "NX Software Center distributes AppImages for GNU Linux and APKS for Android"
+    Maui.App.webPage: "https://nxos.org/"
+    Maui.App.donationPage: "https://www.patreon.com/nitrux"
+    Maui.App.reportPage: "https://github.com/Nitrux/nx-software-center/issues/"
 
     readonly property var views: ({store: 0, apps: 1, system: 2, search: 3, progress: 4})
     property int currentView: views.store
