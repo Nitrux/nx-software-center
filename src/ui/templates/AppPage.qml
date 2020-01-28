@@ -632,32 +632,62 @@ Maui.Page
                 }
             }
 
-            ListView
+            ColumnLayout
             {
                 id: _div4
-
                 Layout.fillWidth: true
-                Layout.preferredHeight: 500
-                clip: true
-                model: control.imagesInfo
+                Layout.preferredHeight: implicitHeight
+                Layout.margins: Maui.Style.space.big
 
-                orientation: ListView.Horizontal
-                snapMode: ListView.SnapOneItem
-
-                delegate:Item
+                RowLayout
                 {
-                    height: _div4.height
-                    width: _div4.width
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: Maui.Style.toolBarHeight
+                    Layout.margins: Maui.Style.space.medium
+                    spacing:  Maui.Style.space.big
 
-                    Maui.ImageViewer
+                    Kirigami.Icon
                     {
-                        anchors.fill: parent
-                        anchors.margins: Maui.Style.space.big
-                        source: modelData.pic
+                        visible: isWide
+                        Layout.preferredHeight: Maui.Style.iconSizes.medium
+                        Layout.preferredWidth: Maui.Style.iconSizes.medium
+                        Layout.alignment: Qt.AlignHCenter
+                        source: "folder-pictures"
+                    }
+
+                    Label
+                    {
+                        Layout.fillWidth: true
+                        text: qsTr("Screenshots")
+                        font.weight: Font.Bold
+                        font.bold: true
+                    }
+                }
+
+                ListView
+                {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 500
+                    clip: true
+                    model: control.imagesInfo
+
+                    orientation: ListView.Horizontal
+                    snapMode: ListView.SnapOneItem
+
+                    delegate:Item
+                    {
+                        height: _div4.height
+                        width: _div4.width
+
+                        Maui.ImageViewer
+                        {
+                            anchors.fill: parent
+                            anchors.margins: Maui.Style.space.big
+                            source: modelData.pic
+                        }
                     }
                 }
             }
-
 
             ColumnLayout
             {
