@@ -92,7 +92,7 @@ StackView
             {
                 Layout.fillWidth: true
                 placeholderText: qsTr("Search package ...")
-                onAccepted: _storeList.nameFilter = text
+                onTextChanged: _storeList.nameFilter = text
             }
         ]
 
