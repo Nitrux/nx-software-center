@@ -23,7 +23,7 @@ Maui.ApplicationWindow
     Maui.App.donationPage: "https://www.patreon.com/nitrux"
     Maui.App.reportPage: "https://github.com/Nitrux/nx-software-center/issues/"
 
-    readonly property var views: ({store: 0, apps: 1, system: 2, search: 3, progress: 4})
+    readonly property var views: ({store: 0, apps: 1, /*system: 2,*/ search: 2, progress: 3})
     property int currentView: views.store
 
     headBar.middleContent: Maui.ActionGroup
@@ -50,12 +50,12 @@ Maui.ApplicationWindow
             icon.source: "qrc:/nx-home.svg"
         }
 
-        Action
-        {
-            text: qsTr("System")
-            icon.name: "drive-harddisk"
-            icon.source: "qrc:/start-here.svg"
-        }
+//        Action
+//        {
+//            text: qsTr("System")
+//            icon.name: "drive-harddisk"
+//            icon.source: "qrc:/start-here.svg"
+//        }
     }
 
     Maui.FloatingButton
@@ -111,10 +111,10 @@ Maui.ApplicationWindow
             id: _appsView
         }
 
-        SystemView
-        {
-            id: _systemView
-        }
+//        SystemView
+//        {
+//            id: _systemView
+//        }
 
         SearchView
         {
