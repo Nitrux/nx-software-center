@@ -196,6 +196,7 @@ void StoreModel::setNameFilter(QString nameFilter)
         return;
 
     m_nameFilter = nameFilter;
+    m_page = 0;
 
     this->clear();
     this->requestApps();
