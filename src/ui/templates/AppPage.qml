@@ -110,23 +110,32 @@ Maui.Page
         ]
 
         actions: [
-            Action
-            {
-                text: qsTr("Favorite")
-                icon.name: "love"
-            },
-
+//            Action
+//            {
+//                text: qsTr("Favorite")
+//                icon.name: "love"
+//            },
             Action
             {
                 text: qsTr("Pling")
                 icon.name: "headphones"
                 onTriggered: Qt.openUrlExternally(appInfo.detailpage)
             },
-
+            Action
+            {
+                text: qsTr("Packages")
+                icon.name: "media-playlist-append"
+                onTriggered: {
+                  scrollTo(AppPage.Sections.Packages);
+                }
+            },
             Action
             {
                 text: qsTr("Screenshots")
                 icon.name: "image-multiple"
+                onTriggered: {
+                  scrollTo(AppPage.Sections.Screenshots);
+                }
             }
 
         ]
