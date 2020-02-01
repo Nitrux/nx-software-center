@@ -126,55 +126,19 @@ StackView
                 label2.text: model.description
                 label3.text: model.totaldownloads + qsTr(" Downloads")
                 label4.text: model.score + qsTr(" Points")
-                imageSource: model.smallpic
+                iconSource: model.smallpic
                 iconSizeHint: height * 0.7
 
                 quickActions: [
                     Action
                     {
-                        icon.name: "document-share"
-                    },
-
-                    Action
-                    {
                         icon.name: "media-playback-start"
                     },
-
                     Action
                     {
                         icon.name: "entry-delete"
                     }
                 ]
-
-                Connections
-                {
-                    target: _delegate
-                    onClicked:
-                    {
-                        control.push(_appPageComponent)
-
-                        //for testing the model this sia custom info model
-                        var appInfo = {
-                            name: "Index",
-                            version: "1.0.0",
-                            author: "Camilo Higuita",
-                            organization: "Maui",
-                            bannerImage: "qrc:/tests/banner_index.png",
-                            iconName: "index",
-                            iconImage: "",
-                            downloadsToday: 34,
-                            size: "125 MB",
-                            updated: Date(),
-                            license: "GPL v3",
-                            itemInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper. Curabitur fringilla rutrum mauris, in imperdiet dui commodo vitae. Fusce at enim ullamcorper, tincidunt orci a, tincidunt urna. Vivamus quis est ut elit dignissim semper. Vivamus erat leo, iaculis id faucibus ac, placerat eu lacus. Praesent arcu tortor, aliquet at volutpat eu, rutrum eget ante. Vivamus sed lorem sed massa interdum convallis. Suspendisse lacinia augue odio, id auctor ipsum varius id. Nam sit amet rhoncus augue. Vestibulum at lobortis velit. Proin ipsum eros, vehicula ut tempus vel, aliquam a orci. Fusce facilisis pulvinar orci. ",
-                            changelogInfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eleifend est lectus, quis fringilla nisl luctus eu. Mauris a varius massa, sit amet venenatis massa. Nunc a ex ac urna aliquam egestas vitae ut est. Curabitur volutpat id turpis sed ullamcorper. Curabitur fringilla rutrum mauris, in imperdiet dui commodo vitae. Fusce at enim ullamcorper, tincidunt orci a, tincidunt urna. Vivamus quis est ut elit dignissim semper. Vivamus erat leo, iaculis id faucibus ac, placerat eu lacus. Praesent arcu tortor, aliquet at volutpat eu, rutrum eget ante. Vivamus sed lorem sed massa interdum convallis. Suspendisse lacinia augue odio, id auctor ipsum varius id. Nam sit amet rhoncus augue. Vestibulum at lobortis velit. Proin ipsum eros, vehicula ut tempus vel, aliquam a orci. Fusce facilisis pulvinar orci. ",
-                            changelogVersion: "2.5.0"
-
-                        }
-                        control.currentItem.appInfo = appInfo
-                    }
-                }
-
             }
         }
     }
