@@ -101,6 +101,7 @@ StackView
             anchors.fill: parent
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium
+//            currentIndex: -1
             section.property: "category"
             section.criteria: ViewSection.FullString
             section.delegate: Maui.LabelDelegate
@@ -124,8 +125,6 @@ StackView
                 anchors.horizontalCenter: parent.horizontalCenter
                 label1.text: model.name
                 label2.text: model.description
-                label3.text: model.totaldownloads + qsTr(" Downloads")
-                label4.text: model.score + qsTr(" Points")
                 iconSource: model.smallpic
                 iconSizeHint: height * 0.7
 
@@ -133,6 +132,10 @@ StackView
                     Action
                     {
                         icon.name: "media-playback-start"
+                        onTriggered: {
+                            console.log(">>>>", model.path)
+                            _appsList.launchApp(model.path)
+                        }
                     },
                     Action
                     {

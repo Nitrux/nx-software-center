@@ -25,6 +25,9 @@ public:
 
 signals:
 
+public slots:
+    void launchApp(QString path);
+
 private:
     FMH::MODEL_LIST m_list;
     QHash<QString, Application *> m_app;

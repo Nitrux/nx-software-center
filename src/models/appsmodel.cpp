@@ -21,11 +21,13 @@ void AppsModel::componentComplete() {
             if (fileNameRe.match(entry.stringValue(entry.UDS_NAME)).hasMatch()) {
                 emit this->preItemAppended();
 
-                KFileItem kAppimageItem(QUrl("file://" + QDir::homePath() + "/Applications/" + entry.stringValue(entry.UDS_NAME)));;
+                QString filePath("file://" + QDir::homePath() + "/Applications/" + entry.stringValue(entry.UDS_NAME));
+                KFileItem kAppimageItem(filePath);
 
                 this->m_list.append(FMH::MODEL{
                     {FMH::MODEL_KEY::NAME, entry.stringValue(entry.UDS_NAME)},
-                    {FMH::MODEL_KEY::SMALL_PIC, kAppimageItem.iconName()}
+                    {FMH::MODEL_KEY::SMALL_PIC, kAppimageItem.iconName()},
+                    {FMH::MODEL_KEY::PATH, filePath}
                 });
 
                 emit this->postItemAppended();
@@ -40,4 +42,9 @@ void AppsModel::componentComplete() {
 }
 
 FMH::MODEL_LIST AppsModel::items() const { return this->m_list; }
+
+void AppsModel::launchApp(QString path)
+{
+    qDebug() << path;
+}
 
