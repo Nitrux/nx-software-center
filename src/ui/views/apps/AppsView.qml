@@ -128,6 +128,8 @@ StackView
                 iconSource: model.smallpic
                 iconSizeHint: height * 0.7
 
+                onClicked: console.log("JAJAJAJ")
+
                 quickActions: [
                     Action
                     {
