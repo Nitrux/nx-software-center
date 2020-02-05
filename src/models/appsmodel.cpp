@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QRegularExpression>
 #include <QPixmap>
+#include <QProcess>
 #include <KIO/ListJob>
 #include <KIO/PreviewJob>
 #include <KFileItem>
@@ -45,6 +46,24 @@ FMH::MODEL_LIST AppsModel::items() const { return this->m_list; }
 
 void AppsModel::launchApp(QString path)
 {
-    qDebug() << path;
+    QProcess *appProcess = new QProcess(this);
+    appProcess->start(path.replace("file://", ""));
+
+//    appProcess->waitForFinished();
+
+//    qDebug() << appProcess->readAll();
+
+    connect(appProcess, &QProcess::errorOccurred, [=](QProcess::ProcessError err) {
+        qDebug() << "QPROCESS ERROR" << err;
+        emit appLaunchError(err);
+    });
+    connect(appProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
+        qDebug() << "QPROCESS FINISHED" << exitCode << exitStatus;
+        emit appLaunchSuccess();
+    });
+}
+
+void AppsModel::removeApp(QString path)
+{
 }
 
