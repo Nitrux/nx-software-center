@@ -6,14 +6,14 @@
 #include <QProcess>
 #include <KIO/ListJob>
 #include <KIO/PreviewJob>
+#include <KIO/DeleteJob>
 #include <KFileItem>
-#include <KIO/ThumbCreator>
 
 AppsModel::AppsModel(QObject *parent) : MauiList(parent) {}
 
 void AppsModel::componentComplete() {
     QRegularExpression fileNameRe("\\.appimage", QRegularExpression::CaseInsensitiveOption);
-    KIO::ListJob *listJob = KIO::listDir(QUrl("file://" + QDir::homePath() + "/Applications"));
+    KIO::ListJob *listJob = KIO::listDir(QUrl("file://" + QDir::homePath() + "/Applications"), KIO::JobFlag::HideProgressInfo);
 
     connect(listJob, &KIO::ListJob::entries, [=](KIO::Job *job, const KIO::UDSEntryList &list) {
         Q_UNUSED(job)
@@ -34,6 +34,7 @@ void AppsModel::componentComplete() {
                 emit this->postItemAppended();
             }
         }
+
     });
 
     connect(listJob, &KIO::ListJob::slotError, [=](int i, QString err) {
@@ -44,14 +45,9 @@ void AppsModel::componentComplete() {
 
 FMH::MODEL_LIST AppsModel::items() const { return this->m_list; }
 
-void AppsModel::launchApp(QString path)
-{
+void AppsModel::launchApp(QString path) {
     QProcess *appProcess = new QProcess(this);
     appProcess->start(path.replace("file://", ""));
-
-//    appProcess->waitForFinished();
-
-//    qDebug() << appProcess->readAll();
 
     connect(appProcess, &QProcess::errorOccurred, [=](QProcess::ProcessError err) {
         qDebug() << "QPROCESS ERROR" << err;
@@ -63,7 +59,20 @@ void AppsModel::launchApp(QString path)
     });
 }
 
-void AppsModel::removeApp(QString path)
-{
+void AppsModel::removeApp(QString path) {
+    KIO::DeleteJob *deleteJob = KIO::del(path);
+
+    connect(deleteJob, &KIO::DeleteJob::deleting, [=](KIO::Job *job, QUrl file) {
+        Q_UNUSED(job)
+        Q_UNUSED(file)
+
+        emit appDeleteSuccess();
+
+        /* TODO : Reset the list after an item is deleted. The current solution below produces some wierd empty rows
+                  below the already populated list.
+        */
+        this->m_list.clear();
+        componentComplete();
+    });
 }
 

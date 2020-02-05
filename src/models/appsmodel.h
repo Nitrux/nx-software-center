@@ -28,6 +28,7 @@ public:
 signals:
     void appLaunchSuccess();
     void appLaunchError(int err);
+    void appDeleteSuccess();
 
 public slots:
     void launchApp(QString path);

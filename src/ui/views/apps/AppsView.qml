@@ -47,6 +47,24 @@ StackView
         }
     }
 
+    Maui.Dialog {
+        property var filePath: ""
+
+        id: appRemoveDialog
+
+        title: "Remove"
+        message: "Are you sure you want to remove this application?"
+
+        acceptButton.onClicked: {
+            _appsList.removeApp(filePath);
+        }
+
+        function showDialog(path) {
+            appRemoveDialog.visible = true;
+            filePath = path;
+        }
+    }
+
     Component
     {
         id: _appPageComponent
@@ -168,6 +186,7 @@ StackView
                         icon.name: "entry-delete"
                         onTriggered: {
                             _appsListView.currentIndex = index;
+                            appRemoveDialog.showDialog(model.path);
                         }
                     }
                 ]
@@ -177,6 +196,7 @@ StackView
 
     Connections {
         target: _appsList
+
         onAppLaunchError: {
             console.log("App Launch Error", err);
             appLaunchErrorDialog.showDialog(_appsListView.model.get(_appsListView.currentIndex).path.split("/").pop(), err);
@@ -184,6 +204,10 @@ StackView
         }
         onAppLaunchSuccess: {
             _appsListView.currentIndex = -1;
+        }
+
+        onAppDeleteSuccess: {
+            appRemoveDialog.visible = false;
         }
     }
 }
