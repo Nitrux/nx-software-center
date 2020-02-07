@@ -6,5 +6,6 @@
         <file>nx-home.svg</file>
         <file>appimage-store.svg</file>
         <file>start-here.svg</file>
+        <file>download.svg</file>
     </qresource>
 </RCC>

@@ -60,6 +60,7 @@ Maui.ItemDelegate
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     value: model.item.progress
+                    visible: model.item.progress < 100
                     from: 0
                     to: 100
                     anchors.verticalCenter: parent.verticalCenter
@@ -69,11 +70,16 @@ Maui.ItemDelegate
             ToolButton
             {
                 icon.name: "process-stop"
+                visible: model.item.progress < 100
             }
 
             ToolButton
             {
-                icon.name: "media-playback-start"
+                icon.name: "tab-close"
+                visible: model.item.progress === 100
+                onClicked: {
+
+                }
             }
         }
 
