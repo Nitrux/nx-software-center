@@ -21,6 +21,50 @@ StackView
         }
     }
 
+    Maui.Dialog {
+        id: appLaunchErrorDialog
+
+        title: "Error"
+        message: "Error launching application"
+        rejectButton.visible: false
+
+        acceptButton.onClicked: {
+            appLaunchErrorDialog.visible = false;
+        }
+
+        function showDialog(fileName, errCode) {
+            switch (errCode) {
+                case 0:
+                    message = "Error launching application <b>" + fileName + "</b>. Please check if you have correct permission"
+                    break;
+
+                default:
+                    message = "Error launching application " + fileName
+                    break;
+            }
+
+            appLaunchErrorDialog.visible = true;
+        }
+    }
+
+    Maui.Dialog {
+        property var filePath: ""
+
+        id: appRemoveDialog
+
+        title: "Remove"
+        message: "Are you sure you want to remove this application?"
+
+        acceptButton.onClicked: {
+            _appsList.removeApp(filePath);
+        }
+
+        function showDialog(path) {
+            appRemoveDialog.visible = true;
+            filePath = path;
+        }
+    }
+
     Component
     {
         id: _appPageComponent
@@ -101,7 +145,7 @@ StackView
             anchors.fill: parent
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium
-//            currentIndex: -1
+            currentIndex: -1
             section.property: "category"
             section.criteria: ViewSection.FullString
             section.delegate: Maui.LabelDelegate
@@ -135,16 +179,37 @@ StackView
                     {
                         icon.name: "media-playback-start"
                         onTriggered: {
-                            console.log(">>>>", model.path)
-                            _appsList.launchApp(model.path)
+                            _appsListView.currentIndex = index;
+                            _appsList.launchApp(model.path);
                         }
                     },
                     Action
                     {
                         icon.name: "entry-delete"
+                        onTriggered: {
+                            _appsListView.currentIndex = index;
+                            appRemoveDialog.showDialog(model.path);
+                        }
                     }
                 ]
             }
+        }
+    }
+
+    Connections {
+        target: _appsList
+
+        onAppLaunchError: {
+            console.log("App Launch Error", err);
+            appLaunchErrorDialog.showDialog(_appsListView.model.get(_appsListView.currentIndex).path.split("/").pop(), err);
+            _appsListView.currentIndex = -1;
+        }
+        onAppLaunchSuccess: {
+            _appsListView.currentIndex = -1;
+        }
+
+        onAppDeleteSuccess: {
+            appRemoveDialog.visible = false;
         }
     }
 }

@@ -2,6 +2,8 @@
 #define APPSMODEL_H
 
 #include <QObject>
+#include <QProcess>
+
 #ifdef STATIC_MAUIKIT
 #include "fmh.h"
 #include "mauilist.h"
@@ -24,9 +26,13 @@ public:
     FMH::MODEL_LIST items() const override final;
 
 signals:
+    void appLaunchSuccess();
+    void appLaunchError(int err);
+    void appDeleteSuccess();
 
 public slots:
     void launchApp(QString path);
+    void removeApp(QString path);
 
 private:
     FMH::MODEL_LIST m_list;

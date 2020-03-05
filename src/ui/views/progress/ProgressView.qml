@@ -71,23 +71,20 @@ StackView
             }
         ]
 
+        Maui.Holder
+        {
+            body: qsTr("Downloads in progress will appear here")
+            visible: _listView.count === 0
+            emoji: "qrc:/download.svg"
+            emojiSize: Maui.Style.iconSizes.huge
+        }
+
         ListView
         {
             id: _listView
             anchors.fill: parent
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium
-            section.property: "mode"
-            section.criteria: ViewSection.FullString
-            section.delegate: Maui.LabelDelegate
-            {
-                label: section
-                labelTxt.font.pointSize: Maui.Style.fontSizes.big
-                isSection: true
-                labelTxt.font.bold: true
-                height: Maui.Style.toolBarHeightAlt
-                width: parent.width
-            }
             model: _progressManager
 
             delegate: PackageDelegate
