@@ -3,6 +3,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.1 as MauiLab
+
 import QtGraphicalEffects 1.0
 
 import "ui/views/apps"
@@ -25,38 +27,6 @@ Maui.ApplicationWindow
 
     readonly property var views: ({store: 0, apps: 1, /*system: 2,*/ search: 2, progress: 3})
     property int currentView: views.store
-
-    headBar.middleContent: Maui.ActionGroup
-    {
-        id: _actionGroup
-        Layout.fillHeight: true
-        //        Layout.fillWidth: true
-        Layout.minimumWidth: implicitWidth
-        currentIndex : _swipeView.currentIndex
-        onCurrentIndexChanged: _swipeView.currentIndex = currentIndex
-
-        Action
-        {
-            text: qsTr("Store")
-            icon.name: "download"
-            icon.source: "qrc:/store.svg"
-         //            display: isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon
-        }
-
-        Action
-        {
-            text: qsTr("Apps")
-            icon.name: "go-home"
-            icon.source: "qrc:/nx-home.svg"
-        }
-
-//        Action
-//        {
-//            text: qsTr("System")
-//            icon.name: "drive-harddisk"
-//            icon.source: "qrc:/start-here.svg"
-//        }
-    }
 
     Maui.FloatingButton
     {
@@ -86,29 +56,32 @@ Maui.ApplicationWindow
         }
     }
 
-
     sideBar: CategoriesSidebar
     {
         id: _categoriesSidebar
     }
 
-    SwipeView
+    MauiLab.AppViews
     {
         id: _swipeView
         anchors.fill: parent
-        currentIndex: _actionGroup.currentIndex
-        onCurrentIndexChanged: _actionGroup.currentIndex = currentIndex
-
-        interactive: isMobile        
 
         StoreView
         {
             id: _storeView
+            MauiLab.AppView.iconName: "download"
+            MauiLab.AppView.title: qsTr("Store")
+//            icon.source: "qrc:/store.svg"
+
         }
 
         AppsView
         {
             id: _appsView
+            MauiLab.AppView.iconName: "go-home"
+            MauiLab.AppView.title: qsTr("Apps")
+//            icon.source: "qrc:/nx-home.svg"
+
         }
 
 //        SystemView
@@ -116,14 +89,12 @@ Maui.ApplicationWindow
 //            id: _systemView
 //        }
 
-        SearchView
-        {
-            id: _searchView
-        }
 
         ProgressView
         {
             id: _progressView
+            MauiLab.AppView.iconName: "view-pim-notes"
+            MauiLab.AppView.title: qsTr("Progress")
         }
     }
 }

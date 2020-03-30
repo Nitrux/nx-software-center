@@ -606,7 +606,6 @@ Maui.Page
                     Layout.fillHeight: true
                     model: control.downloadsInfo
                     adaptContent: false
-                    centerContent: true
                     itemWidth: width * 0.5
                     itemHeight: 100
 

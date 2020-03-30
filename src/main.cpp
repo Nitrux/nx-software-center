@@ -26,11 +26,16 @@
 
 #ifdef STATIC_MAUIKIT
 #include "3rdparty/mauikit/src/mauikit.h"
-#elif defined MAUIKIT_STYLE
-#include <MauiKit/mauikit.h>
+#include "mauiapp.h"
+#include "fmstatic.h"
+#else
+#include <MauiKit/mauiapp.h>
+#include <MauiKit/fmstatic.h>
 #endif
 
-#include <MauiKit/fmstatic.h>
+#if defined MAUIKIT_STYLE
+#include <MauiKit/mauikit.h>
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -52,6 +57,9 @@ int main(int argc, char *argv[])
 	app.setOrganizationName(NX::orgName);
 	app.setOrganizationDomain(NX::orgDomain);
 	app.setWindowIcon(QIcon(":/nx-software-center.svg"));
+	MauiApp::instance()->setHandleAccounts(false); //for now index can not handle cloud accounts
+	MauiApp::instance()->setCredits ({QVariantMap({{"name", "Camilo Higuita"}, {"email", "milo.h@aol.com"}, {"year", "2019-2020"}}),
+									 QVariantMap({{"name", "Anupam Basak"}, {"email", "anupam.basak27@gmail.com"}, {"year", "2019-2020"}})});
 
 	QCommandLineParser parser;
 	parser.setApplicationDescription(NX::description);

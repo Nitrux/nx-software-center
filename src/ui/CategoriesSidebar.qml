@@ -12,6 +12,7 @@ Maui.SideBar
 
     property alias currentCategory : _categoriesList.currentCategory
     property alias list : _categoriesList
+    collapsedSize: Maui.Style.iconSizes.medium + (Maui.Style.space.medium*4) - Maui.Style.space.tiny
 
     collapsible: true
     collapsed: !root.isWide
