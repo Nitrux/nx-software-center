@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
 	app.setOrganizationDomain(NX::orgDomain);
 	app.setWindowIcon(QIcon(":/nx-software-center.svg"));
 	MauiApp::instance()->setHandleAccounts(false); //for now index can not handle cloud accounts
-	MauiApp::instance()->setCredits ({QVariantMap({{"name", "Camilo Higuita"}, {"email", "milo.h@aol.com"}, {"year", "2019-2020"}}),
-									 QVariantMap({{"name", "Anupam Basak"}, {"email", "anupam.basak27@gmail.com"}, {"year", "2019-2020"}})});
+//	MauiApp::instance()->setCredits ({QVariantMap({{"name", "Camilo Higuita"}, {"email", "milo.h@aol.com"}, {"year", "2019-2020"}}),
+//									 QVariantMap({{"name", "Anupam Basak"}, {"email", "anupam.basak27@gmail.com"}, {"year", "2019-2020"}})});
 
 	QCommandLineParser parser;
 	parser.setApplicationDescription(NX::description);
