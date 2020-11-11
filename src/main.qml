@@ -19,47 +19,38 @@ Maui.ApplicationWindow
 {
     id: root
 
-//    Maui.App.iconName: "qrc:/nx-software-center.svg"
-//    Maui.App.description : "NX Software Center distributes AppImages for GNU Linux and APKS for Android"
-//    Maui.App.webPage: "https://nxos.org/"
-//    Maui.App.donationPage: "https://www.patreon.com/nitrux"
-//    Maui.App.reportPage: "https://github.com/Nitrux/nx-software-center/issues/"
-
     readonly property var views: ({store: 0, apps: 1, /*system: 2,*/ search: 2, progress: 3})
     property int currentView: views.store
 
-    Maui.FloatingButton
-    {
-        id: _overlayButton
-        visible: _progressView.isActive
-        z: 999
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.margins: Maui.Style.toolBarHeight
-        anchors.bottomMargin: Maui.Style.toolBarHeight
-        height: Maui.Style.toolBarHeight
-        width: height
+//    altHeader: true
+//    page.headerBackground.color: "transparent"
+//    Maui.FloatingButton
+//    {
+//        id: _overlayButton
+//        visible: _progressView.isActive
+//        z: 999
+//        anchors.right: parent.right
+//        anchors.bottom: parent.bottom
+//        anchors.margins: Maui.Style.toolBarHeight
+//        anchors.bottomMargin: Maui.Style.toolBarHeight
+//        height: Maui.Style.toolBarHeight
+//        width: height
 
-        icon.name: "package"
-        icon.source: "qrc:/appimage-store.svg"
-        icon.color: Kirigami.Theme.highlightedTextColor
-        onClicked: _actionGroup.currentIndex = views.progress
+//        icon.name: "package"
+//        icon.source: "qrc:/appimage-store.svg"
+//        icon.color: Kirigami.Theme.highlightedTextColor
+//        onClicked: _actionGroup.currentIndex = views.progress
 
-        Maui.Badge
-        {
-            text: String(_progressView.manager.count)
-            anchors
-            {
-                horizontalCenter: parent.right
-                verticalCenter: parent.top
-            }
-        }
-    }
-
-    sideBar: CategoriesSidebar
-    {
-        id: _categoriesSidebar
-    }
+//        Maui.Badge
+//        {
+//            text: String(_progressView.manager.count)
+//            anchors
+//            {
+//                horizontalCenter: parent.right
+//                verticalCenter: parent.top
+//            }
+//        }
+//    }
 
     MauiLab.AppViews
     {
@@ -69,7 +60,7 @@ Maui.ApplicationWindow
         StoreView
         {
             id: _storeView
-            MauiLab.AppView.iconName: "download"
+            MauiLab.AppView.iconName: "nx-software-center"
             MauiLab.AppView.title: qsTr("Store")
 //            icon.source: "qrc:/store.svg"
 
@@ -84,16 +75,10 @@ Maui.ApplicationWindow
 
         }
 
-//        SystemView
-//        {
-//            id: _systemView
-//        }
-
-
         ProgressView
         {
             id: _progressView
-            MauiLab.AppView.iconName: "view-pim-notes"
+            MauiLab.AppView.iconName: "document-download"
             MauiLab.AppView.title: qsTr("Progress")
         }
     }

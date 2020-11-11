@@ -33,39 +33,56 @@
 #include <MauiKit/fmstatic.h>
 #endif
 
+#if defined Q_OS_MACOS || defined Q_OS_WIN
+#include <KF5/KI18n/KLocalizedString>
+#else
+#include <KI18n/KLocalizedString>
+#endif
+
 #if defined MAUIKIT_STYLE
 #include <MauiKit/mauikit.h>
 #endif
 
+#define NX_URI "org.maui.nx"
+
 int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+	QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+	QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+	QCoreApplication::setAttribute(Qt::AA_DisableSessionManager, true);
 
 #ifdef Q_OS_ANDROID
 	QGuiApplication app(argc, argv);
+	if (!MAUIAndroid::checkRunTimePermissions({"android.permission.WRITE_EXTERNAL_STORAGE"}))
+		return -1;
 #else
 	QApplication app(argc, argv);
 #endif
 
-#ifdef MAUIKIT_STYLE
-	MauiKit::getInstance().initResources();
-#endif
-
-	app.setApplicationName(NX::appName);
-	app.setApplicationVersion(NX::version);
-	app.setApplicationDisplayName(NX::displayName);
-	app.setOrganizationName(NX::orgName);
-	app.setOrganizationDomain(NX::orgDomain);
+	app.setOrganizationName(QStringLiteral("Maui"));
 	app.setWindowIcon(QIcon(":/nx-software-center.svg"));
 	MauiApp::instance()->setHandleAccounts(false); //for now index can not handle cloud accounts
-//	MauiApp::instance()->setCredits ({QVariantMap({{"name", "Camilo Higuita"}, {"email", "milo.h@aol.com"}, {"year", "2019-2020"}}),
-//									 QVariantMap({{"name", "Anupam Basak"}, {"email", "anupam.basak27@gmail.com"}, {"year", "2019-2020"}})});
+	MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
+
+	KLocalizedString::setApplicationDomain("nx-software-center");
+	KAboutData about(QStringLiteral("nx-software-center"), i18n("NX Software Center"), NX::version, i18n("NX Software Center distributes AppImages for GNU Linux and APKS for Android."),
+					 KAboutLicense::LGPL_V3, i18n("© 2019-2020 Nitrux Development Team"));
+	about.addAuthor(i18n("Camilo Higuita"), i18n("Developer"), QStringLiteral("milo.h@aol.com"));
+	about.setHomepage("https://nxos.org");
+	about.setProductName("maui/nx-software-center");
+	about.setBugAddress("https://github.com/nitrux/issues");
+	about.setOrganizationDomain(NX_URI);
+	about.setProgramLogo(app.windowIcon());
+
+	KAboutData::setApplicationData(about);
 
 	QCommandLineParser parser;
-	parser.setApplicationDescription(NX::description);
-	const QCommandLineOption versionOption = parser.addVersionOption();
-	parser.addOption(versionOption);
 	parser.process(app);
+
+	about.setupCommandLine(&parser);
+	about.processCommandLine(&parser);
+
 
 #ifdef STATIC_KIRIGAMI
 	KirigamiPlugin::getInstance().registerTypes();
