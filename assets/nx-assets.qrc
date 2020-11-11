@@ -7,5 +7,15 @@
         <file>appimage-store.svg</file>
         <file>start-here.svg</file>
         <file>download.svg</file>
+        <file>applications-utilities.svg</file>
+        <file>applications-other.svg</file>
+        <file>applications-office.svg</file>
+        <file>applications-multimedia.svg</file>
+        <file>applications-internet.svg</file>
+        <file>applications-graphics.svg</file>
+        <file>applications-games.svg</file>
+        <file>applications-education.svg</file>
+        <file>applications-education-mathematics.svg</file>
+        <file>applications-development.svg</file>
     </qresource>
 </RCC>
