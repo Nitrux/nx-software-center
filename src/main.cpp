@@ -43,7 +43,7 @@
 #include <MauiKit/mauikit.h>
 #endif
 
-#define NX_URI "org.maui.nx"
+#define NX_URI "org.nx.softwarecenter"
 
 int main(int argc, char *argv[])
 {
