@@ -21,14 +21,6 @@ Maui.Page
         placeholderText: i18n ("Search your app package...")
     }
 
-    Rectangle
-    {
-        id: rect
-        anchors.fill: parent
-        color: "orange"
-        anchors.margins: 10
-    }
-
     Maui.GridView
     {
         id: _featureGridView
@@ -74,7 +66,7 @@ Maui.Page
 
         flickable.header: ColumnLayout
         {
-            width: GridView.view.width
+            width: _featureGridView.flickable.width
             spacing: Maui.Style.space.big
 
             Item
