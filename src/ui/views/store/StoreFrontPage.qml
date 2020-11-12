@@ -264,39 +264,38 @@ Maui.Page
                 }
             }
 
-            GridLayout
+            Maui.ListBrowser
             {
                 id: _categoriesListView
-                //                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter
+
+                Layout.fillWidth: true
+                implicitWidth: contentWidth
+                implicitHeight: 160
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 Layout.margins: Maui.Style.space.big
-                //                implicitHeight: 140
-                columns: 5
 
-                //                orientation: Qt.Horizontal
-                //                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-                //                verticalScrollBarPolicy:  ScrollBar.AlwaysOff
+                orientation: Qt.Horizontal
+                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
+                verticalScrollBarPolicy:  ScrollBar.AlwaysOff
 
-                Repeater
+                model: Maui.BaseModel
                 {
-                    model: Maui.BaseModel
+                    id: _categoriesModel
+                    list: NX.Categories
                     {
-                        id: _categoriesModel
-                        list: NX.Categories
-                        {
-                            id: _categoriesList
-                        }
-                    }
-
-                    delegate: GridItemCard
-                    {
-                        width: 100
-                        height: 120
-                        iconSource: model.icon
-                        iconSizeHint: Maui.Style.iconSizes.big
-                        label1.text: model.title
+                        id: _categoriesList
                     }
                 }
+
+                delegate: GridItemCard
+                {
+                    width: 100
+                    height: 120
+                    iconSource: model.icon
+                    iconSizeHint: Maui.Style.iconSizes.big
+                    label1.text: model.title
+                }
+
             }
 
             Maui.Separator
