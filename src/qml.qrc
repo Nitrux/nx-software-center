@@ -16,5 +16,6 @@
         <file>ui/views/store/StoreCategoryPage.qml</file>
         <file>ui/templates/GridItemCard.qml</file>
         <file>ui/templates/FeatureGridCard.qml</file>
+        <file>ui/templates/FloatingCardDelegate.qml</file>
     </qresource>
 </RCC>

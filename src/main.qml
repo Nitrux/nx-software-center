@@ -22,36 +22,6 @@ Maui.ApplicationWindow
     readonly property var views: ({store: 0, apps: 1, /*system: 2,*/ search: 2, progress: 3})
     property int currentView: views.store
 
-//    altHeader: true
-//    page.headerBackground.color: "transparent"
-//    Maui.FloatingButton
-//    {
-//        id: _overlayButton
-//        visible: _progressView.isActive
-//        z: 999
-//        anchors.right: parent.right
-//        anchors.bottom: parent.bottom
-//        anchors.margins: Maui.Style.toolBarHeight
-//        anchors.bottomMargin: Maui.Style.toolBarHeight
-//        height: Maui.Style.toolBarHeight
-//        width: height
-
-//        icon.name: "package"
-//        icon.source: "qrc:/appimage-store.svg"
-//        icon.color: Kirigami.Theme.highlightedTextColor
-//        onClicked: _actionGroup.currentIndex = views.progress
-
-//        Maui.Badge
-//        {
-//            text: String(_progressView.manager.count)
-//            anchors
-//            {
-//                horizontalCenter: parent.right
-//                verticalCenter: parent.top
-//            }
-//        }
-//    }
-
     MauiLab.AppViews
     {
         id: _swipeView
@@ -62,17 +32,13 @@ Maui.ApplicationWindow
             id: _storeView
             MauiLab.AppView.iconName: "nx-software-center"
             MauiLab.AppView.title: qsTr("Store")
-//            icon.source: "qrc:/store.svg"
-
         }
 
-        AppsView
+        Item
         {
             id: _appsView
             MauiLab.AppView.iconName: "go-home"
             MauiLab.AppView.title: qsTr("Apps")
-//            icon.source: "qrc:/nx-home.svg"
-
         }
 
         ProgressView

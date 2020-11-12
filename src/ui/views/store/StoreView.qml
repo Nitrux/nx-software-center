@@ -12,16 +12,6 @@ StackView
 {
     id: control
 
-//    Connections
-//    {
-//        target: _categoriesSidebar
-//        onItemClicked:
-//        {
-//            if(control.depth > 1)
-//                control.pop()
-//        }
-//    }
-
     Component
     {
         id: _appPageComponent
@@ -82,8 +72,6 @@ StackView
             ]
         }
     }
-
-
 
     initialItem: StoreFrontPage
     {
