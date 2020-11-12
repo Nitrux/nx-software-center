@@ -46,9 +46,9 @@ Maui.Page
             width: _featureGridView.cellWidth
             height: _featureGridView.cellHeight
             label1.text: model.name
-            label2.text: model.personid
+            label2.text: model.typename
             label3.text: model.totaldownloads
-            label4.text: i18n("Downloads")
+            label4.text: model.personid
 
             NX.App
             {
@@ -344,7 +344,7 @@ Maui.Page
                     height: 100
 
                     label1.text: model.name
-                    label2.text: model.personid
+                    label2.text: model.typename
                     label3.text: model.version
 
                     iconSource: model.smallpic
