@@ -1,12 +1,14 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.14 as Kirigami
-import org.kde.mauikit 1.2 as Maui
 import QtGraphicalEffects 1.0
 
-import "../../templates"
+import org.kde.kirigami 2.14 as Kirigami
+import org.kde.mauikit 1.2 as Maui
+
 import NXModels 1.0 as NX
+
+import "../../templates"
 
 Maui.Page
 {
@@ -18,11 +20,7 @@ Maui.Page
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
 
-    NX.Categories
-    {
-        id: _categoriesList
-    }
-
+    headBar.visible: true
     headBar.middleContent: Maui.TextField
     {
         Layout.fillWidth: true
@@ -279,7 +277,7 @@ Maui.Page
                 id: _categoriesListView
 
                 Layout.fillWidth: true
-                implicitWidth: contentWidth
+                Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
                 implicitHeight: 160
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
@@ -320,16 +318,9 @@ Maui.Page
                 position: Qt.Horizontal
             }
 
-            Maui.ListItemTemplate
+            SectionTitle
             {
-                Layout.fillWidth: true
-                Layout.margins: Maui.Style.space.medium
-                implicitHeight: leftLabels.implicitHeight
-                label1.text: i18n("Newest")
-                label1.font.pointSize: Maui.Style.fontSizes.enormous
-                label1.font.bold: true
-                label1.font.weight: Font.Bold
-                label2.font.pointSize: Maui.Style.fontSizes.huge
+                 label1.text: i18n("Newest")
                 label2.text: i18n("Most newest additions to our collection.")
             }
 
@@ -384,16 +375,9 @@ Maui.Page
                 position: Qt.Horizontal
             }
 
-            Maui.ListItemTemplate
+            SectionTitle
             {
-                Layout.fillWidth: true
-                Layout.margins: Maui.Style.space.medium
-                implicitHeight: leftLabels.implicitHeight
                 label1.text: i18n("Most Popular")
-                label1.font.pointSize: Maui.Style.fontSizes.enormous
-                label1.font.bold: true
-                label1.font.weight: Font.Bold
-                label2.font.pointSize: Maui.Style.fontSizes.huge
                 label2.text: i18n("Most downloaded packages.")
             }
 

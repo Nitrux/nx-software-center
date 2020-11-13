@@ -17,5 +17,6 @@
         <file>ui/templates/GridItemCard.qml</file>
         <file>ui/templates/FeatureGridCard.qml</file>
         <file>ui/templates/FloatingCardDelegate.qml</file>
+        <file>ui/templates/SectionTitle.qml</file>
     </qresource>
 </RCC>

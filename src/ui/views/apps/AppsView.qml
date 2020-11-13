@@ -10,8 +10,6 @@ StackView
 {
     id: control
 
-//    property alias category : _appsList.category
-
     Maui.BaseModel
     {
         id: _appsModel
@@ -103,7 +101,6 @@ StackView
 
     initialItem: Maui.Page
     {
-        padding: control.depth === 2 ? 0 : Maui.Style.space.big
 
         headBar.middleContent: [
             Maui.PathBar
@@ -139,13 +136,12 @@ StackView
             emojiSize: Maui.Style.iconSizes.huge
         }
 
-        ListView
+        Maui.ListBrowser
         {
             id: _appsListView
             anchors.fill: parent
             orientation: ListView.Vertical
             spacing: Maui.Style.space.medium
-            currentIndex: -1
             section.property: "category"
             section.criteria: ViewSection.FullString
             section.delegate: Maui.LabelDelegate
@@ -164,7 +160,7 @@ StackView
             delegate: Maui.SwipeBrowserDelegate
             {
                 id: _delegate
-                height: 100
+                height: 64
                 width: parent.width
                 anchors.horizontalCenter: parent.horizontalCenter
                 label1.text: model.name

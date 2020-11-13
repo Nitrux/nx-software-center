@@ -3,21 +3,26 @@
 
 #include <QObject>
 
-class Category : public QObject {
-  Q_OBJECT
- public:
-  Category(QObject* parent = nullptr);
+class Category : public QObject
+{
+		Q_OBJECT
+		Q_PROPERTY(QString name MEMBER name)
+		Q_PROPERTY(QString id MEMBER id)
+		Q_PROPERTY(QString displayName MEMBER displayName)
 
-  QString id = "";
-  QString parentId = "";
-  QString name = "";
-  QString displayName = "";
-  QString xdgType = "";
-  QList<Category*> categories = QList<Category*>();
+	public:
+		Category(QObject* parent = nullptr);
 
-  bool isAParent();
-  double childCount();
-  QString toString();
+		QString id = "";
+		QString parentId = "";
+		QString name = "";
+		QString displayName = "";
+		QString xdgType = "";
+		QList<Category*> categories = QList<Category*>();
+
+		bool isAParent();
+		double childCount();
+		QString toString();
 };
 
 #endif

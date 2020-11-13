@@ -14,6 +14,11 @@ StackView
 {
     id: control
 
+    NX.Categories
+    {
+        id: _categoriesList
+    }
+
     Component
     {
         id: _appPageComponent

@@ -34,7 +34,7 @@ Maui.ApplicationWindow
             MauiLab.AppView.title: qsTr("Store")
         }
 
-        Item
+        AppsView
         {
             id: _appsView
             MauiLab.AppView.iconName: "go-home"

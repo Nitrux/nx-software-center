@@ -15,33 +15,44 @@ class Store;
 class Category;
 class CategoriesModel : public MauiList
 {
-    Q_OBJECT
-    Q_PROPERTY(Category * currentCategory  READ getCurrentCategory NOTIFY currentCategoryChanged)
-public:
-    CategoriesModel(QObject * parent = nullptr);
+		Q_OBJECT
+		Q_PROPERTY(Category * currentCategory READ getCurrentCategory NOTIFY currentCategoryChanged)
 
-    // QQmlParserStatus interface
-    void componentComplete() override final;
+		Q_PROPERTY(Category * category READ getCategory WRITE setCategory NOTIFY categoryChanged)
+	public:
+		CategoriesModel(QObject * parent = nullptr);
 
-    // MauiList interface
-    FMH::MODEL_LIST items() const override final;
+		// QQmlParserStatus interface
+		void componentComplete() override final;
 
-    Category * getCurrentCategory() const;
+		// MauiList interface
+		FMH::MODEL_LIST items() const override final;
 
-private:
-    FMH::MODEL_LIST m_list;
-    QHash<QString, Category *> m_categoryMap; //id,app
-    Store *m_store;
+		Category * getCurrentCategory() const;
 
-    Category * m_currentCategory;
+		Category * getCategory() const;
 
-public slots:
-void setCurrentCategory(const QString &id);
-Category *baseCategory();
-Category *featureCategory();
+	private:
+		FMH::MODEL_LIST m_list;
+		QHash<QString, Category *> m_categoryMap; //id,app
+		Store *m_store;
 
-signals:
-void currentCategoryChanged(Category * currentCategory);
+		Category * m_currentCategory;
+		Category * m_category;
+
+		void setList();
+
+	public slots:
+		void setCurrentCategory(const QString &id);
+		Category *baseCategory();
+		Category *featureCategory();
+
+		void setCategory(Category * category);
+		void clear();
+
+	signals:
+		void currentCategoryChanged(Category * currentCategory);
+		void categoryChanged();
 };
 
 #endif // CATEGORIESMODEL_H
