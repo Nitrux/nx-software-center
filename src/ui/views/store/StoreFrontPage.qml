@@ -13,9 +13,15 @@ Maui.Page
     id: control
 
     signal itemClicked(var app)
+    signal categoryClicked(var category)
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
+
+    NX.Categories
+    {
+        id: _categoriesList
+    }
 
     headBar.middleContent: Maui.TextField
     {
@@ -36,7 +42,7 @@ Maui.Page
             list: NX.Store
             {
                 id: _featureList
-                //                                category: _categoriesSidebar.list.featureCategory()
+                category: _categoriesList.baseCategory()
                 pageSize: 14
                 sort: NX.Store.MOST_DOWNLOADED
             }
@@ -185,9 +191,9 @@ Maui.Page
 
                         onClicked:
                         {
-                            control.push(_appPageComponent)
-                            _storeList.setApp(_featuredListview.model.get(_featuredListview.currentIndex).id)
-                            control.currentItem.data = _storeList.app
+                            _featuredListview.currentIndex = index
+                            _featureListBanner.setApp(model.id)
+                            control.itemClicked(_featureListBanner.app)
                         }
 
                         Maui.ListItemTemplate
@@ -211,6 +217,7 @@ Maui.Page
                             label4.text: i18n("Score")
 
                             iconVisible: isWide
+                            rightLabels.visible: isWide
                             imageSource: model.preview
                             imageSizeHint: width * 0.3
 
@@ -275,7 +282,7 @@ Maui.Page
                 implicitWidth: contentWidth
                 implicitHeight: 160
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                Layout.margins: Maui.Style.space.big
+                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
                 snapMode: ListView.SnapOneItem
                 orientation: Qt.Horizontal
                 horizontalScrollBarPolicy: ScrollBar.AlwaysOff
@@ -284,19 +291,25 @@ Maui.Page
                 model: Maui.BaseModel
                 {
                     id: _categoriesModel
-                    list: NX.Categories
-                    {
-                        id: _categoriesList
-                    }
+                    list: _categoriesList
                 }
 
                 delegate: GridItemCard
                 {
+                    isCurrentItem: ListView.isCurrentItem
                     width: 100
                     height: 120
                     iconSource: model.icon
                     iconSizeHint: Maui.Style.iconSizes.big
                     label1.text: model.title
+
+                    onClicked:
+                    {
+                        console.log("Category id", model.id)
+                        _categoriesListView.currentIndex = index
+                        _categoriesList.setCurrentCategory(_categoriesModel.get(index).id)
+                        control.categoryClicked(_categoriesList.currentCategory)
+                    }
                 }
 
             }
@@ -322,7 +335,10 @@ Maui.Page
 
             Maui.ListBrowser
             {
+                id: _newestListView
                 Layout.fillWidth: true
+                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
+
                 implicitHeight: 120
                 orientation: Qt.Horizontal
                 spacing: Maui.Style.space.big
@@ -335,6 +351,7 @@ Maui.Page
                     list: NX.Store
                     {
                         id: _newestListModel
+                        category: _categoriesList.baseCategory()
                         pageSize: 6
                         sort: NX.Store.NEWEST
                     }
@@ -351,6 +368,13 @@ Maui.Page
 
                     iconSource: model.smallpic
                     iconSizeHint: Maui.Style.iconSizes.huge
+
+                    onClicked:
+                    {
+                        _newestListView.currentIndex = index
+                        _newestListModel.setApp(model.id)
+                        control.itemClicked(_newestListModel.app)
+                    }
                 }
             }
 
@@ -376,10 +400,5 @@ Maui.Page
             Item{Layout.fillWidth: true}
         }
 
-    }
-
-    function setCurrentCategory(index)
-    {
-        _categoriesList.setCurrentCategory(control.model.get(index).id)
     }
 }

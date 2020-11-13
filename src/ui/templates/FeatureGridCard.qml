@@ -21,13 +21,11 @@ Maui.ItemDelegate
     property alias iconSource : _template.iconSource
     property alias iconSizeHint: _template.iconSizeHint
 
-    Rectangle
+    Item
     {
         id: _cover
         anchors.fill: parent
-        anchors.margins: isWide ? Maui.Style.space.big * 1.5 : Maui.Style.space.medium
-        color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-        radius: Maui.Style.radiusV
+        anchors.margins: isWide ? Maui.Style.space.big : Maui.Style.space.medium
 
         Rectangle
         {
@@ -35,20 +33,16 @@ Maui.ItemDelegate
             color: Kirigami.Theme.backgroundColor
             radius: Maui.Style.radiusV
 
-            MouseArea
-            {
-                id: _featureMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                propagateComposedEvents: true
-            }
+//            HoverHandler
+//            {
+//                id: _hoverHandler
+//            }
 
             Timer
             {
                 id: _featuredTimer
                 interval: 7000
                 repeat: true
-                running: !_featureMouseArea.containsPress || !_featureMouseArea.containsMouse
                 onTriggered: _featuredRoll.cycleSlideForward()
             }
 
@@ -56,12 +50,12 @@ Maui.ItemDelegate
             {
                 id: _featuredRoll
                 anchors.fill: parent
+                interactive: false
                 orientation: Qt.Horizontal
                 snapMode: ListView.SnapOneItem
                 clip: true
 
                 model: control.images
-
 
                 function cycleSlideForward() {
                     _featuredTimer.restart();

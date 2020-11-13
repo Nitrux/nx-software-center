@@ -14,10 +14,17 @@ void StoreModel::requestApps()
 	if(!m_category)
 		return;
 
+	qDebug() << "@REQUEST APPS FOR CATEGORY" << m_category->name << m_category->id;
+
+	if(m_category->id.isEmpty ())
+		return;
+
+	const auto categoryId = this->m_category->id == "0" ? "" : this->m_category->id;
 #if defined Q_PROCESSOR_ARM && defined Q_OS_LINUX
-	this->m_store->getApplicationsByArch({this->m_category->id}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, Store::Arch::arm64);
+	this->m_store->getApplicationsByArch({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, Store::Arch::arm64);
 #else
-	this->m_store->getApplicationsByArch({this->m_category->id}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, Store::Arch::amd64 );
+	qDebug() << "REQUEST APPS FOR CATEGORY" << m_category->name << m_category->id;
+	this->m_store->getApplicationsByArch({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, Store::Arch::amd64 );
 #endif
 }
 
@@ -114,6 +121,11 @@ QString StoreModel::getNameFilter() const
 	return m_nameFilter;
 }
 
+QString StoreModel::getCategoryName() const
+{
+	return m_category->name;
+}
+
 void StoreModel::setCategory(Category * category)
 {
 	if (m_category == category)
@@ -124,6 +136,7 @@ void StoreModel::setCategory(Category * category)
 	this->clear();
 	this->setPage(0);
 	emit categoryChanged(m_category);
+	emit categoryNameChanged (m_category->name);
 }
 
 void StoreModel::clear()

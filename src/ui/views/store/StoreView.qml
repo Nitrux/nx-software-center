@@ -1,12 +1,14 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.14 as Kirigami
-import org.kde.mauikit 1.2 as Maui
 import QtGraphicalEffects 1.0
 
-import "../../templates"
+import org.kde.kirigami 2.14 as Kirigami
+import org.kde.mauikit 1.2 as Maui
+
 import NXModels 1.0 as NX
+
+import "../../templates"
 
 StackView
 {
@@ -73,6 +75,20 @@ StackView
         }
     }
 
+    Component
+    {
+        id: _categoryPageComponent
+
+        StoreCategoryPage
+        {
+            headBar.farLeftContent: ToolButton
+            {
+                icon.name: "go-previous"
+                onClicked: control.pop()
+            }
+        }
+    }
+
     initialItem: StoreFrontPage
     {
         id: _frontPage
@@ -81,6 +97,12 @@ StackView
         {
             control.push(_appPageComponent)
             control.currentItem.data = app
+        }
+
+        onCategoryClicked:
+        {
+            control.push(_categoryPageComponent)
+            control.currentItem.category = category
         }
     }
 }

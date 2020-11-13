@@ -41,6 +41,8 @@ void CategoriesModel::componentComplete()
 	{
 		emit this->preListChanged();
 		this->m_list.append({{FMH::MODEL_KEY::TITLE, tr("All")},
+							 {FMH::MODEL_KEY::NAME, "all"},
+							 {FMH::MODEL_KEY::ID, "0"},
 							 {FMH::MODEL_KEY::ICON, iconName["All"]},
 							 {FMH::MODEL_KEY::CATEGORY, tr("Apps")}});
 
@@ -80,20 +82,23 @@ void CategoriesModel::setCurrentCategory(const QString &id)
 
 	if(category)
 		this->m_currentCategory = category;
-	else this->m_currentCategory = new Category(this);
+	else this->m_currentCategory = baseCategory ();
 
 	emit this->currentCategoryChanged(this->m_currentCategory);
 }
 
 Category * CategoriesModel::baseCategory()
 {
-	return new Category();
+	auto category = new Category();
+	category->id = "0";
+	category->displayName = "All";
+	category->name = "all";
+
+	return category;
 }
 
 Category * CategoriesModel::featureCategory()
 {
-	auto category = new Category();
-	category->id = "";
-	return category;
+	return baseCategory ();
 }
 
