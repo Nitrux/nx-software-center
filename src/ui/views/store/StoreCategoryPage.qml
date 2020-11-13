@@ -93,9 +93,9 @@ Maui.Page
                 id: _categoriesListView
 
                 Layout.fillWidth: true
-                implicitHeight: 120
+                implicitHeight: 80
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
+                Layout.margins: isWide ? Maui.Style.space.big : Maui.Style.space.small
                 snapMode: ListView.SnapOneItem
                 orientation: Qt.Horizontal
                 horizontalScrollBarPolicy: ScrollBar.AlwaysOff
@@ -113,7 +113,7 @@ Maui.Page
                 delegate: Maui.ItemDelegate
                 {
                     isCurrentItem: ListView.isCurrentItem
-                    width: 160
+                    width: Math.max(160, _template.leftLabels.implicitWidth)
                     height: 64
 
                     background:Rectangle
@@ -125,6 +125,7 @@ Maui.Page
 
                     Maui.ListItemTemplate
                     {
+                        id: _template
                         anchors.fill: parent
                         label1.text: model.title
                         label1.horizontalAlignment: Qt.AlignHCenter
@@ -145,6 +146,64 @@ Maui.Page
 
             SectionTitle
             {
+                label1.text: i18n("Favorite in %1 ", control.category.displayName)
+                label2.text: i18n("Hightest rated app packages.")
+            }
+
+            Maui.ListBrowser
+            {
+                id: _popularListView
+
+                Layout.fillWidth: true
+                Layout.margins: isWide ? Maui.Style.space.big : Maui.Style.space.small
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                implicitHeight: 220
+                orientation: Qt.Horizontal
+                spacing: Maui.Style.space.big
+                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
+                snapMode: ListView.SnapOneItem
+                verticalScrollBarPolicy: ScrollBar.AlwaysOff
+
+                model: Maui.BaseModel
+                {
+                    list: NX.Store
+                    {
+                        id: _popularListModel
+                        category: control.category
+                        pageSize: 4
+                        sort: NX.Store.HIGHEST_RATED
+                    }
+                }
+
+                delegate: FeatureGridCard
+                {
+                    images: _app.images
+
+                    width: Math.min(ListView.view.width, 320)
+                    height: 200
+                    label1.text: model.name
+                    label2.text: model.typename
+                    label3.text: model.totaldownloads
+                    label4.text: model.personid
+
+                    NX.App
+                    {
+                        id: _app
+                        data: _popularListModel.application(model.id)
+                    }
+
+                    onClicked:
+                    {
+                        _popularListView.currentIndex = index
+                        _popularListModel.setApp(model.id)
+                        control.itemClicked(_popularListModel.app)
+                    }
+                }
+            }
+
+            SectionTitle
+            {
                 label1.text: i18n("Newest in %1 ", control.category.displayName)
                 label2.text: i18n("Most newest additions to our collection.")
             }
@@ -154,7 +213,7 @@ Maui.Page
                 id: _newestListView
 
                 Layout.fillWidth: true
-                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
+                Layout.margins: isWide ? Maui.Style.space.big : Maui.Style.space.small
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
                 implicitHeight: 120
@@ -171,7 +230,7 @@ Maui.Page
                         id: _newestListModel
                         category: control.category
                         pageSize: 4
-                        sort: NX.Store.MOST_DOWNLOADED
+                        sort: NX.Store.NEWEST
                     }
                 }
 
@@ -198,10 +257,9 @@ Maui.Page
 
             SectionTitle
             {
-                label1.text: control.category.displayName
-                label2.text: i18n("Packages under category.")
+                label1.text: i18n("All in %1 ", control.category.displayName)
+                label2.text: i18n("All packages under category.")
             }
-
 
             Item
             {
@@ -230,8 +288,6 @@ Maui.Page
             label1.font.pointSize: Maui.Style.fontSizes.big
             label1.font.bold: true
             label1.font.weight: Font.Bold
-            //                    label2.wrapMode: Text.WordWrap
-            //                    label2.text: model.description.slice(0, Math.min(model.description.length, 100))
             label2.text: model.totaldownloads + qsTr(" Downloads") + "\n" + model.score + qsTr(" Points")
             label3.text: model.typename
             //                    label4.text: model.score + qsTr(" Points")

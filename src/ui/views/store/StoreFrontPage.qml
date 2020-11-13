@@ -350,7 +350,7 @@ Maui.Page
 
                 delegate: FloatingCardDelegate
                 {
-                    width: Math.min(ListView.view.width * 0.9, 350)
+                    width: Math.min(ListView.view.width * 0.9, implicitWidth)
                     height: 100
 
                     label1.text: model.name

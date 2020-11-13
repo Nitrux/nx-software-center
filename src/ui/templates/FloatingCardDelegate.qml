@@ -17,6 +17,8 @@ Maui.ItemDelegate
 
     background: Item {}
 
+    implicitWidth: Math.max(350, _template.leftLabels.implicitWidth + height)
+
     Rectangle
     {
         id: _card
