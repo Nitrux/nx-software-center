@@ -27,6 +27,8 @@ Maui.ItemDelegate
         radius: Maui.Style.radiusV
         color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
+        border.color: control.isCurrentItem || control.hovered ? Kirigami.Theme.highlightColor : "transparent"
+
         Maui.ListItemTemplate
         {
             id: _template
@@ -44,56 +46,79 @@ Maui.ItemDelegate
         }
     }
 
-    Rectangle
+    Item
     {
-        id: _iconRec
+        id: _iconItem
         width: height
         height: parent.height
-        color: Kirigami.Theme.backgroundColor
-
-        FastBlur
-        {
-            id: fastBlur
-            height: parent.height * 2
-            width: parent.width * 2
-            anchors.centerIn: parent
-            source: _icon
-            radius: 64
-            transparentBorder: false
-            cached: true
-        }
 
         Rectangle
         {
+            id: _iconRec
             anchors.fill: parent
-            opacity: 0.5
-            color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-            radius: Maui.Style.radiusV
+            anchors.margins: 2
+            color: Kirigami.Theme.backgroundColor
 
-        }
-
-        Kirigami.Icon
-        {
-            id: _icon
-            anchors.centerIn: parent
-            width: height
-        }
-
-        layer.enabled: true
-        layer.effect: OpacityMask
-        {
-            maskSource: Item
+            FastBlur
             {
-                width: _iconRec.width
-                height: _iconRec.height
+                id: fastBlur
+                height: parent.height * 2
+                width: parent.width * 2
+                anchors.centerIn: parent
+                source: _icon
+                radius: 64
+                transparentBorder: false
+                cached: true
+            }
 
-                Rectangle
+            Rectangle
+            {
+                anchors.fill: parent
+                opacity: 0.5
+                color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                radius: Maui.Style.radiusV
+
+            }
+
+            Kirigami.Icon
+            {
+                id: _icon
+                anchors.centerIn: parent
+                width: height
+            }
+
+            layer.enabled: true
+            layer.effect: OpacityMask
+            {
+                maskSource: Item
                 {
-                    anchors.fill: parent
-                    radius: Maui.Style.radiusV
+                    width: _iconRec.width
+                    height: _iconRec.height
+
+                    Rectangle
+                    {
+                        anchors.fill: parent
+                        radius: Maui.Style.radiusV
+                    }
                 }
             }
         }
+
     }
+
+    DropShadow
+    {
+        visible: control.hovered
+        anchors.fill: _iconItem
+        cached: true
+        horizontalOffset: 0
+        verticalOffset: 0
+        radius: 8.0
+        samples: 16
+        color: "#333"
+        smooth: true
+        source: _iconItem
+    }
+
 
 }

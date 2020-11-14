@@ -21,6 +21,8 @@ Maui.ItemDelegate
     property alias iconSource : _template.iconSource
     property alias iconSizeHint: _template.iconSizeHint
 
+    Component.onCompleted: _featuredTimer.start()
+
     Item
     {
         id: _cover
@@ -33,15 +35,15 @@ Maui.ItemDelegate
             color: Kirigami.Theme.backgroundColor
             radius: Maui.Style.radiusV
 
-//            HoverHandler
-//            {
-//                id: _hoverHandler
-//            }
+            HoverHandler
+            {
+                id: _hoverHandler
+            }
 
             Timer
             {
                 id: _featuredTimer
-                interval: 7000
+                interval: 6000
                 repeat: true
                 onTriggered: _featuredRoll.cycleSlideForward()
             }
@@ -57,25 +59,53 @@ Maui.ItemDelegate
 
                 model: control.images
 
-                function cycleSlideForward() {
-                    _featuredTimer.restart();
-                    _featuredRoll.incrementCurrentIndex();
+                function cycleSlideForward()
+                {
+                    _featuredTimer.restart()
 
+                    if (_featuredRoll.currentIndex === _featuredRoll.count - 1)
+                    {
+                        _featuredRoll.currentIndex = 0
+                    } else
+                    {
+                        _featuredRoll.incrementCurrentIndex()
+                    }
                 }
 
-                function cycleSlideBackward() {
-                    _featuredTimer.restart();
-                    _featuredRoll.decrementCurrentIndex();
+                function cycleSlideBackward()
+                {
+                    _featuredTimer.restart()
+
+                    if (_featuredRoll.currentIndex === 0)
+                    {
+                        _featuredRoll.currentIndex = _featuredRoll.count - 1;
+                    } else
+                    {
+                        _featuredRoll.decrementCurrentIndex();
+                    }
                 }
 
                 delegate: Image
                 {
+//                    anchors.centerIn: parent
                     width: ListView.view.width
-                    height: ListView.view.height
+                    height: ListView.view.height * (_hoverHandler.hovered ? 1.2 : 1)
                     source: modelData.pic
                     fillMode: Image.PreserveAspectCrop
-                    sourceSize.height: height
-                    sourceSize.width : height
+                    sourceSize.height: ListView.view.height
+                    sourceSize.width : ListView.view.height
+
+                    horizontalAlignment: Qt.AlignHCenter
+                    verticalAlignment: Qt.AlignVCenter
+
+                    Behavior on height
+                    {
+                        NumberAnimation
+                        {
+                            duration: Kirigami.Units.shortDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                 }
             }
 

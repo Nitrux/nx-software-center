@@ -116,11 +116,20 @@ Maui.Page
                     width: Math.max(160, _template.leftLabels.implicitWidth)
                     height: 64
 
-                    background:Rectangle
+                    background: Rectangle
                     {
                         opacity: 0.5
                         color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
                         radius: Maui.Style.radiusV
+
+                        Rectangle
+                        {
+                            visible: hovered || isCurrentItem
+                            width: parent.width
+                            height: 8
+                            color: Kirigami.Theme.textColor
+                            anchors.bottom: parent.bottom
+                        }
                     }
 
                     Maui.ListItemTemplate
