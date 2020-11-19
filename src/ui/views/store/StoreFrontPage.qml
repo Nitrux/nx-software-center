@@ -85,6 +85,8 @@ Maui.Page
                 height: 250
                 Layout.fillWidth: true
                 Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
+                Layout.maximumWidth: 1200
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
                 Image
                 {
@@ -318,35 +320,17 @@ Maui.Page
                 position: Qt.Horizontal
             }
 
-            SectionTitle
-            {
-                 label1.text: i18n("Newest")
-                label2.text: i18n("Most newest additions to our collection.")
-            }
-
-            Maui.ListBrowser
+            FeatureStrip
             {
                 id: _newestListView
+
                 Layout.fillWidth: true
-                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
-
-                implicitHeight: 120
-                orientation: Qt.Horizontal
-                spacing: Maui.Style.space.big
-                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-                snapMode: ListView.SnapOneItem
-                verticalScrollBarPolicy: ScrollBar.AlwaysOff
-
-                model: Maui.BaseModel
-                {
-                    list: NX.Store
-                    {
-                        id: _newestListModel
-                        category: _categoriesList.baseCategory()
-                        pageSize: 6
-                        sort: NX.Store.NEWEST
-                    }
-                }
+                title.text: i18n("Newest")
+                subtitle.text: i18n("Most newest additions to our collection.")
+                category: _categoriesList.baseCategory()
+                pageSize: 6
+                sort: NX.Store.NEWEST
+                listView.implicitHeight: 120
 
                 delegate: FloatingCardDelegate
                 {
@@ -363,10 +347,44 @@ Maui.Page
                     onClicked:
                     {
                         _newestListView.currentIndex = index
-                        _newestListModel.setApp(model.id)
-                        control.itemClicked(_newestListModel.app)
+                        _newestListView.list.setApp(model.id)
+                        control.itemClicked(_newestListView.list.app)
                     }
                 }
+            }
+
+            Maui.Separator
+            {
+                Layout.fillWidth: true
+                position: Qt.Horizontal
+            }
+
+            FeatureStrip
+            {
+                Layout.fillWidth: true
+                title.text: i18n("Popular in Audio")
+                subtitle.text: i18n("Most popular Audio packages in our collection.")
+
+                category: _categoriesList.audioCategory()
+                pageSize: 6
+                sort: NX.Store.MOST_DOWNLOADED
+            }
+
+            Maui.Separator
+            {
+                Layout.fillWidth: true
+                position: Qt.Horizontal
+            }
+
+            FeatureStrip
+            {
+                Layout.fillWidth: true
+                title.text: i18n("Popular in Games")
+                subtitle.text: i18n("Most popular Games packages in our collection.")
+
+                category: _categoriesList.gamesCategory()
+                pageSize: 6
+                sort: NX.Store.MOST_DOWNLOADED
             }
 
             Maui.Separator
@@ -380,9 +398,6 @@ Maui.Page
                 label1.text: i18n("Most Popular")
                 label2.text: i18n("Most downloaded packages.")
             }
-
-            Item{Layout.fillWidth: true}
         }
-
     }
 }

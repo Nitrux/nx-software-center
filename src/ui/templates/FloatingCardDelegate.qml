@@ -56,7 +56,7 @@ Maui.ItemDelegate
         {
             id: _iconRec
             anchors.fill: parent
-            anchors.margins: 2
+//            anchors.margins: 2
             color: Kirigami.Theme.backgroundColor
 
             FastBlur
@@ -104,21 +104,40 @@ Maui.ItemDelegate
             }
         }
 
+        Rectangle
+        {
+            Kirigami.Theme.inherit: false
+            anchors.fill: parent
+            color: "transparent"
+            radius: Maui.Style.radiusV
+            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+            opacity: 0.6
+
+            Rectangle
+            {
+                anchors.fill: parent
+                color: "transparent"
+                radius: parent.radius - 0.5
+                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                opacity: 0.8
+                anchors.margins: 1
+            }
+        }
     }
 
-    DropShadow
-    {
-        visible: control.hovered
-        anchors.fill: _iconItem
-        cached: true
-        horizontalOffset: 0
-        verticalOffset: 0
-        radius: 8.0
-        samples: 16
-        color: "#333"
-        smooth: true
-        source: _iconItem
-    }
+//    DropShadow
+//    {
+//        visible: control.hovered
+//        anchors.fill: _iconItem
+//        cached: true
+//        horizontalOffset: 0
+//        verticalOffset: 0
+//        radius: 8.0
+//        samples: 16
+//        color: "#333"
+//        smooth: true
+//        source: _iconItem
+//    }
 
 
 }

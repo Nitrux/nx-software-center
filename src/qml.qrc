@@ -18,5 +18,6 @@
         <file>ui/templates/FeatureGridCard.qml</file>
         <file>ui/templates/FloatingCardDelegate.qml</file>
         <file>ui/templates/SectionTitle.qml</file>
+        <file>ui/views/store/FeatureStrip.qml</file>
     </qresource>
 </RCC>

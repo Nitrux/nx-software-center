@@ -18,7 +18,7 @@ class CategoriesModel : public MauiList
 		Q_OBJECT
 		Q_PROPERTY(Category * currentCategory READ getCurrentCategory NOTIFY currentCategoryChanged)
 
-		Q_PROPERTY(Category * category READ getCategory WRITE setCategory NOTIFY categoryChanged)
+        Q_PROPERTY(Category * category READ category WRITE setCategory NOTIFY categoryChanged)
 	public:
 		CategoriesModel(QObject * parent = nullptr);
 
@@ -30,7 +30,7 @@ class CategoriesModel : public MauiList
 
 		Category * getCurrentCategory() const;
 
-		Category * getCategory() const;
+        Category * category() const;
 
 	private:
 		FMH::MODEL_LIST m_list;
@@ -44,8 +44,16 @@ class CategoriesModel : public MauiList
 
 	public slots:
 		void setCurrentCategory(const QString &id);
+
 		Category *baseCategory();
-		Category *featureCategory();
+        Category *featureCategory();
+        Category *audioCategory();
+        Category *videoCategory();
+        Category *educationCategory();
+        Category *graphicsCategory();
+        Category *gamesCategory();
+
+        Category *getCategory(const QString &id);
 
 		void setCategory(Category * category);
 		void clear();

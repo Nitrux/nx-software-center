@@ -153,95 +153,36 @@ Maui.Page
                 }
             }
 
-            SectionTitle
-            {
-                label1.text: i18n("Favorite in %1 ", control.category.displayName)
-                label2.text: i18n("Hightest rated app packages.")
-            }
-
-            Maui.ListBrowser
+            FeatureStrip
             {
                 id: _popularListView
+                 Layout.fillWidth: true
+                title.text: i18n("Favorite in %1 ", control.category.displayName)
+                subtitle.text: i18n("Hightest rated app packages.")
 
-                Layout.fillWidth: true
-                Layout.margins: isWide ? Maui.Style.space.big : Maui.Style.space.small
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                category: control.category
+                pageSize: 4
+                sort: NX.Store.HIGHEST_RATED
 
-                implicitHeight: 220
-                orientation: Qt.Horizontal
-                spacing: Maui.Style.space.big
-                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-                snapMode: ListView.SnapOneItem
-                verticalScrollBarPolicy: ScrollBar.AlwaysOff
-
-                model: Maui.BaseModel
+                onAppClicked:
                 {
-                    list: NX.Store
-                    {
-                        id: _popularListModel
-                        category: control.category
-                        pageSize: 4
-                        sort: NX.Store.HIGHEST_RATED
-                    }
-                }
-
-                delegate: FeatureGridCard
-                {
-                    images: _app.images
-
-                    width: Math.min(ListView.view.width, 320)
-                    height: 200
-                    label1.text: model.name
-                    label2.text: model.typename
-                    label3.text: model.totaldownloads
-                    label4.text: model.personid
-
-                    NX.App
-                    {
-                        id: _app
-                        data: _popularListModel.application(model.id)
-                    }
-
-                    onClicked:
-                    {
-                        _popularListView.currentIndex = index
-                        _popularListModel.setApp(model.id)
-                        control.itemClicked(_popularListModel.app)
-                    }
+                    control.itemClicked(app)
                 }
             }
 
-            SectionTitle
-            {
-                label1.text: i18n("Newest in %1 ", control.category.displayName)
-                label2.text: i18n("Most newest additions to our collection.")
-            }
-
-            Maui.ListBrowser
+            FeatureStrip
             {
                 id: _newestListView
 
                 Layout.fillWidth: true
-                Layout.margins: isWide ? Maui.Style.space.big : Maui.Style.space.small
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                title.text: i18n("Newest in %1 ", control.category.displayName)
+                subtitle.text: i18n("Most newest additions to our collection.")
 
-                implicitHeight: 120
-                orientation: Qt.Horizontal
-                spacing: Maui.Style.space.big
-                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-                snapMode: ListView.SnapOneItem
-                verticalScrollBarPolicy: ScrollBar.AlwaysOff
+                listView.implicitHeight: 120
 
-                model: Maui.BaseModel
-                {
-                    list: NX.Store
-                    {
-                        id: _newestListModel
-                        category: control.category
-                        pageSize: 4
-                        sort: NX.Store.NEWEST
-                    }
-                }
+                category: control.category
+                pageSize: 4
+                sort: NX.Store.NEWEST
 
                 delegate: FloatingCardDelegate
                 {
@@ -258,10 +199,16 @@ Maui.Page
                     onClicked:
                     {
                         _newestListView.currentIndex = index
-                        _newestListModel.setApp(model.id)
-                        control.itemClicked(_newestListModel.app)
+                        _newestListView.list.setApp(model.id)
+                        control.itemClicked(_newestListView.list.app)
                     }
                 }
+            }
+
+            Maui.Separator
+            {
+                Layout.fillWidth: true
+                position: Qt.Horizontal
             }
 
             SectionTitle
