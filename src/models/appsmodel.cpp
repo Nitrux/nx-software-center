@@ -43,7 +43,7 @@ void AppsModel::componentComplete() {
     });
 }
 
-FMH::MODEL_LIST AppsModel::items() const { return this->m_list; }
+const FMH::MODEL_LIST &AppsModel::items() const { return this->m_list; }
 
 void AppsModel::launchApp(QString path) {
     QProcess *appProcess = new QProcess(this);

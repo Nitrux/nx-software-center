@@ -42,7 +42,7 @@ void CategoriesModel::componentComplete()
     setList();
 }
 
-FMH::MODEL_LIST CategoriesModel::items() const
+const FMH::MODEL_LIST &CategoriesModel::items() const
 {
     return this->m_list;
 }

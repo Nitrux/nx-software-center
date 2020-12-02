@@ -23,7 +23,7 @@ Maui.ItemDelegate
     {
         id: _card
         anchors.fill: parent
-        anchors.margins: Maui.Style.space.medium
+//        anchors.margins: Maui.Style.space.medium
         radius: Maui.Style.radiusV
         color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 

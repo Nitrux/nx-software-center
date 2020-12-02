@@ -25,6 +25,8 @@ ColumnLayout
     property alias subtitle : _section.label2
     property alias delegate : _listView.delegate
 
+    property alias currentIndex: _listView.currentIndex
+
     signal appClicked(var app)
 
     SectionTitle
@@ -79,5 +81,95 @@ ColumnLayout
                 control.appClicked(_appsList.app)
             }
         }
+
+
+        Rectangle
+        {
+            id: _leftHandle
+            visible: !_listView.atXBeginning && _listView.contentWidth > _listView.width
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+
+            height: Maui.Style.iconSizes.big
+            width: height
+
+            radius: height* 0.5
+
+            color: Kirigami.Theme.backgroundColor
+
+            MouseArea
+            {
+                anchors.fill: parent
+                onClicked: _listView.flickable.decrementCurrentIndex()
+            }
+
+            Kirigami.Icon
+            {
+                anchors.centerIn: parent
+                height: Maui.Style.iconSizes.medium
+                width: height
+                source: "go-previous"
+            }
+        }
+
+        Rectangle
+        {
+            id: _rightHandle
+            visible: !_listView.atXEnd && _listView.contentWidth > _listView.width
+
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+
+            height: Maui.Style.iconSizes.big
+            width: height
+
+            radius: height* 0.5
+
+            color: Kirigami.Theme.backgroundColor
+
+            MouseArea
+            {
+                anchors.fill: parent
+                onClicked: _listView.flickable.incrementCurrentIndex()
+            }
+
+            Kirigami.Icon
+            {
+                anchors.centerIn: parent
+                height: Maui.Style.iconSizes.medium
+                width: height
+                source: "go-next"
+            }
+        }
+
+        DropShadow
+        {
+
+            anchors.fill: _leftHandle
+            cached: true
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: 8.0
+            samples: 16
+            color: "#333"
+            smooth: true
+            source: _leftHandle
+        }
+
+        DropShadow
+        {
+
+            anchors.fill: _rightHandle
+            cached: true
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: 8.0
+            samples: 16
+            color: "#333"
+            smooth: true
+            source: _rightHandle
+        }
+
     }
+
 }

@@ -76,7 +76,7 @@ void StoreModel::componentComplete()
 	});
 }
 
-FMH::MODEL_LIST StoreModel::items() const
+const FMH::MODEL_LIST &StoreModel::items() const
 {
 	return m_list;
 }

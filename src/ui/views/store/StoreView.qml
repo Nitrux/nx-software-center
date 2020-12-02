@@ -91,6 +91,12 @@ StackView
                 icon.name: "go-previous"
                 onClicked: control.pop()
             }
+
+            onItemClicked:
+            {
+                control.push(_appPageComponent)
+                control.currentItem.data = app
+            }
         }
     }
 

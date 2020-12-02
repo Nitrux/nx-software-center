@@ -23,7 +23,7 @@ public:
     // QQmlParserStatus interface
     void componentComplete() override final;
 
-    FMH::MODEL_LIST items() const override final;
+    const FMH::MODEL_LIST &items() const override final;
 
 signals:
     void appLaunchSuccess();
