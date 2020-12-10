@@ -15,25 +15,69 @@ Maui.ItemDelegate
     property alias iconSource : _icon.source
     property alias iconSizeHint: _icon.height
 
-    background: Item {}
+    implicitWidth: Math.max(350, _layout.implicitWidth)
 
-    implicitWidth: Math.max(350, _template.leftLabels.implicitWidth + height)
-
-    Rectangle
+    background: Rectangle
     {
-        id: _card
-        anchors.fill: parent
-//        anchors.margins: Maui.Style.space.medium
         radius: Maui.Style.radiusV
         color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
         border.color: control.isCurrentItem || control.hovered ? Kirigami.Theme.highlightColor : "transparent"
 
+    }
+
+    RowLayout
+    {
+        id: _layout
+        anchors.fill: parent
+
+        Item
+        {
+            id: _iconItem
+            Layout.fillHeight: true
+            implicitWidth: height
+            clip: true
+            Rectangle
+            {
+                id: _iconRec
+                anchors.fill: parent
+                color: Kirigami.Theme.backgroundColor
+
+                FastBlur
+                {
+                    id: fastBlur
+                    height: parent.height * 2
+                    width: parent.width * 2
+                    anchors.centerIn: parent
+                    source: _icon
+                    radius: 64
+                    transparentBorder: false
+                    cached: true
+                }
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    opacity: 0.5
+                    color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                }
+
+                Kirigami.Icon
+                {
+                    id: _icon
+                    anchors.centerIn: parent
+                    width: height
+                }
+            }
+        }
+
+
         Maui.ListItemTemplate
         {
             id: _template
-            anchors.fill: parent
-            anchors.leftMargin: _iconRec.width
+            implicitWidth: leftLabels.implicitWidth
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             label1.font.pointSize: Maui.Style.fontSizes.huge
             label1.font.weight: Font.Bold
             label1.font.bold: true
@@ -46,98 +90,22 @@ Maui.ItemDelegate
         }
     }
 
-    Item
+
+
+    layer.enabled: true
+    layer.effect: OpacityMask
     {
-        id: _iconItem
-        width: height
-        height: parent.height
-
-        Rectangle
+        maskSource: Item
         {
-            id: _iconRec
-            anchors.fill: parent
-//            anchors.margins: 2
-            color: Kirigami.Theme.backgroundColor
-
-            FastBlur
-            {
-                id: fastBlur
-                height: parent.height * 2
-                width: parent.width * 2
-                anchors.centerIn: parent
-                source: _icon
-                radius: 64
-                transparentBorder: false
-                cached: true
-            }
+            width: control.width
+            height: control.height
 
             Rectangle
             {
                 anchors.fill: parent
-                opacity: 0.5
-                color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
                 radius: Maui.Style.radiusV
-
-            }
-
-            Kirigami.Icon
-            {
-                id: _icon
-                anchors.centerIn: parent
-                width: height
-            }
-
-            layer.enabled: true
-            layer.effect: OpacityMask
-            {
-                maskSource: Item
-                {
-                    width: _iconRec.width
-                    height: _iconRec.height
-
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        radius: Maui.Style.radiusV
-                    }
-                }
-            }
-        }
-
-        Rectangle
-        {
-            Kirigami.Theme.inherit: false
-            anchors.fill: parent
-            color: "transparent"
-            radius: Maui.Style.radiusV
-            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-            opacity: 0.6
-
-            Rectangle
-            {
-                anchors.fill: parent
-                color: "transparent"
-                radius: parent.radius - 0.5
-                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                opacity: 0.8
-                anchors.margins: 1
             }
         }
     }
-
-//    DropShadow
-//    {
-//        visible: control.hovered
-//        anchors.fill: _iconItem
-//        cached: true
-//        horizontalOffset: 0
-//        verticalOffset: 0
-//        radius: 8.0
-//        samples: 16
-//        color: "#333"
-//        smooth: true
-//        source: _iconItem
-//    }
-
 
 }
