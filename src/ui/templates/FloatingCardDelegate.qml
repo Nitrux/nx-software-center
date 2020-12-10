@@ -62,12 +62,32 @@ Maui.ItemDelegate
                     color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
                 }
 
-                Kirigami.Icon
-                {
-                    id: _icon
-                    anchors.centerIn: parent
-                    width: height
-                }
+
+            }
+
+
+            OpacityMask {
+                        source: mask
+                        maskSource: _iconRec
+                    }
+
+                    LinearGradient {
+                        id: mask
+                        anchors.fill: parent
+                        gradient: Gradient {
+                            GradientStop { position: 0.2; color: "transparent"}
+                            GradientStop { position: 0.5; color: control.background.color}
+                        }
+
+                        start: Qt.point(0, 0)
+                        end: Qt.point(_iconRec.width, _iconRec.height)
+                    }
+
+            Kirigami.Icon
+            {
+                id: _icon
+                anchors.centerIn: parent
+                width: height
             }
         }
 
@@ -88,24 +108,40 @@ Maui.ItemDelegate
 
             rightLabels.visible: true
         }
-    }
 
-
-
-    layer.enabled: true
-    layer.effect: OpacityMask
-    {
-        maskSource: Item
+        layer.enabled: true
+        layer.effect: OpacityMask
         {
-            width: control.width
-            height: control.height
-
-            Rectangle
+            maskSource: Item
             {
-                anchors.fill: parent
-                radius: Maui.Style.radiusV
+                width: control.width
+                height: control.height
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    radius: Maui.Style.radiusV
+                }
             }
         }
     }
 
+    Rectangle
+    {
+        Kirigami.Theme.inherit: false
+        anchors.fill: parent
+        color: "transparent"
+        radius: Maui.Style.radiusV
+        border.color: control.isCurrentItem || control.hovered ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.2)
+
+        Rectangle
+        {
+            anchors.fill: parent
+            color: "transparent"
+            radius: parent.radius - 0.5
+            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+            opacity: 0.2
+            anchors.margins: 1
+        }
+    }
 }

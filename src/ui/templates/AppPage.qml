@@ -22,6 +22,11 @@ Maui.Page
     property bool shouldAnimateScroll: false
     readonly property int scrollAnimationDuration: 1000
 
+    flickable: _scrollablePage.flickable
+    floatingHeader: true
+    headerPositioning: ListView.PullBackHeader
+    headerBackground.color: "transparent"
+
     enum Sections {
         Description,
         Details,
@@ -173,6 +178,7 @@ Maui.Page
 
         ColumnLayout
         {
+            width: parent.width
             spacing: 0
             Item
             {

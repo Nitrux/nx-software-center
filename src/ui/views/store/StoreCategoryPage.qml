@@ -18,6 +18,7 @@ Maui.Page
 
     signal itemClicked(var app)
 
+//    headBar.visible: true
     headBar.middleContent: [
         Maui.TextField
         {
@@ -86,7 +87,7 @@ Maui.Page
 
         flickable.header: ColumnLayout
         {
-            width: _listView.width
+            width: parent.width
 
             Maui.ListBrowser
             {
