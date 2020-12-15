@@ -43,32 +43,29 @@ Maui.Page
         shouldAnimateScroll = true;
 
         switch (section) {
-            case AppPage.Sections.Description:
-                _scrollablePage.flickable.contentY = _div1.y;
-                break;
-            case AppPage.Sections.Details:
-                _scrollablePage.flickable.contentY = _div2.y;
-                break;
-            case AppPage.Sections.Packages:
-                _scrollablePage.flickable.contentY = _div3.y;
-                break;
-            case AppPage.Sections.Screenshots:
-                _scrollablePage.flickable.contentY = _div4.y;
-                break;
-            case AppPage.Sections.Changelog:
-                _scrollablePage.flickable.contentY = _div5.y;
-                break;
-            case AppPage.Sections.Comments:
-                _scrollablePage.flickable.contentY = _div6.y;
-                break;
+        case AppPage.Sections.Description:
+            _scrollablePage.flickable.contentY = _div1.y;
+            break;
+        case AppPage.Sections.Details:
+            _scrollablePage.flickable.contentY = _div2.y;
+            break;
+        case AppPage.Sections.Packages:
+            _scrollablePage.flickable.contentY = _div3.y;
+            break;
+        case AppPage.Sections.Screenshots:
+            _scrollablePage.flickable.contentY = _div4.y;
+            break;
+        case AppPage.Sections.Changelog:
+            _scrollablePage.flickable.contentY = _div5.y;
+            break;
+        case AppPage.Sections.Comments:
+            _scrollablePage.flickable.contentY = _div6.y;
+            break;
         }
 
         scrollAnimationResetTimer.start()
     }
 
-
-
-    padding: 0
     onGoBackTriggered: control.exit()
 
     Timer {
@@ -115,11 +112,11 @@ Maui.Page
         ]
 
         actions: [
-//            Action
-//            {
-//                text: qsTr("Favorite")
-//                icon.name: "love"
-//            },
+            //            Action
+            //            {
+            //                text: qsTr("Favorite")
+            //                icon.name: "love"
+            //            },
             Action
             {
                 text: qsTr("Pling")
@@ -131,7 +128,7 @@ Maui.Page
                 text: qsTr("Packages")
                 icon.name: "media-playlist-append"
                 onTriggered: {
-                  scrollTo(AppPage.Sections.Packages);
+                    scrollTo(AppPage.Sections.Packages);
                 }
             },
             Action
@@ -139,10 +136,9 @@ Maui.Page
                 text: qsTr("Screenshots")
                 icon.name: "image-multiple"
                 onTriggered: {
-                  scrollTo(AppPage.Sections.Screenshots);
+                    scrollTo(AppPage.Sections.Screenshots);
                 }
             }
-
         ]
     }
 
@@ -157,34 +153,34 @@ Maui.Page
         topPadding: padding
         bottomPadding: padding
         flickable {
-          Behavior on contentX {
-            enabled: shouldAnimateScroll
+            Behavior on contentX {
+                enabled: shouldAnimateScroll
 
-            NumberAnimation {
-              duration: scrollAnimationDuration
-              easing.type: Easing.InOutQuad
+                NumberAnimation {
+                    duration: scrollAnimationDuration
+                    easing.type: Easing.InOutQuad
+                }
             }
-          }
 
-          Behavior on contentY {
-            enabled: shouldAnimateScroll
+            Behavior on contentY {
+                enabled: shouldAnimateScroll
 
-            NumberAnimation {
-              duration: scrollAnimationDuration
-              easing.type: Easing.InOutQuad
+                NumberAnimation {
+                    duration: scrollAnimationDuration
+                    easing.type: Easing.InOutQuad
+                }
             }
-          }
         }
 
         ColumnLayout
         {
             width: parent.width
             spacing: 0
+
             Item
             {
                 id: _header
                 Layout.preferredHeight: 230
-                Layout.margins: 0
                 Layout.fillWidth: true
 
                 Rectangle
@@ -227,70 +223,29 @@ Maui.Page
                     opacity: 0.8
                 }
 
-                ColumnLayout
+                Maui.ListItemTemplate
                 {
                     id: _bannerInfo
+                    anchors.fill: parent
                     anchors.centerIn: parent
                     spacing: 0
 
-                    Image
-                    {
-                        Layout.preferredHeight: Maui.Style.iconSizes.huge
-                        Layout.preferredWidth: Maui.Style.iconSizes.huge
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.margins: Maui.Style.space.big
-                        source: _bannerImage.source
+                    iconSizeHint: Maui.Style.iconSizes.huge
+                    imageBorder: false
+                    imageSource: _bannerImage.source
+                    label1.text: appInfo.name
+                    label1.elide: Text.ElideMiddle
+                    label1.wrapMode: Text.NoWrap
+                    label1.font.weight: Font.Bold
+                    label1.font.bold: true
+                    label1.font.pointSize: Maui.Style.fontSizes.huge
+                    label2.text: appInfo.category
+                    label3.text: appInfo.personid
 
-                        sourceSize.height: height
-                        sourceSize.width: width
-                        fillMode: Image.PreserveAspectFit
-                        antialiasing: true
-                        smooth: true
-                        asynchronous: true
-                    }
-
-                    Label
-                    {
-                        Layout.fillWidth: true
-                        text: appInfo.name
-                        width: parent.width
-                        Layout.alignment: Qt.AlignCenter
-                        horizontalAlignment: Qt.AlignHCenter
-                        elide: Text.ElideMiddle
-                        wrapMode: Text.NoWrap
-                        font.weight: Font.Bold
-                        font.bold: true
-                        font.pointSize: Maui.Style.fontSizes.big
-                    }
-
-                    Label
-                    {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignCenter
-                        horizontalAlignment: Qt.AlignHCenter
-                        text: appInfo.version
-                        elide: Text.ElideMiddle
-                        wrapMode: Text.NoWrap
-                        font.weight: Font.Light
-                        font.pointSize: Maui.Style.fontSizes.medium
-                    }
-
-                    Label
-                    {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignCenter
-                        horizontalAlignment: Qt.AlignHCenter
-                        text: appInfo.personid
-                        elide: Text.ElideMiddle
-                        wrapMode: Text.NoWrap
-                        font.weight: Font.Light
-                        font.pointSize: Maui.Style.fontSizes.medium
-                    }
 
                     Row
                     {
                         id: _actionButtons
-                        Layout.fillWidth: true
                         Layout.margins: Maui.Style.space.big
                         spacing: Maui.Style.space.medium
                         Layout.preferredHeight: implicitHeight
@@ -308,7 +263,6 @@ Maui.Page
                 id: _div1
 
                 Layout.fillWidth: true
-                Layout.preferredHeight: implicitHeight
                 Layout.margins: Maui.Style.space.big
 
                 RowLayout

@@ -51,7 +51,7 @@ Maui.ItemDelegate
                     anchors.centerIn: parent
                     source: _icon
                     radius: 64
-                    transparentBorder: false
+                    transparentBorder: true
                     cached: true
                 }
 
@@ -66,22 +66,24 @@ Maui.ItemDelegate
             }
 
 
-            OpacityMask {
-                        source: mask
-                        maskSource: _iconRec
-                    }
+            OpacityMask
+            {
+                source: mask
+                maskSource: _iconRec
+            }
 
-                    LinearGradient {
-                        id: mask
-                        anchors.fill: parent
-                        gradient: Gradient {
-                            GradientStop { position: 0.2; color: "transparent"}
-                            GradientStop { position: 0.5; color: control.background.color}
-                        }
+            LinearGradient
+            {
+                id: mask
+                anchors.fill: parent
+                gradient: Gradient {
+                    GradientStop { position: 0.2; color: "transparent"}
+                    GradientStop { position: 0.5; color: control.background.color}
+                }
 
-                        start: Qt.point(0, 0)
-                        end: Qt.point(_iconRec.width, _iconRec.height)
-                    }
+                start: Qt.point(0, 0)
+                end: Qt.point(_iconRec.width, _iconRec.height)
+            }
 
             Kirigami.Icon
             {
