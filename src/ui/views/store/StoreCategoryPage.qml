@@ -18,7 +18,7 @@ Maui.Page
 
     signal itemClicked(var app)
 
-//    headBar.visible: true
+    //    headBar.visible: true
     headBar.middleContent: [
         Maui.TextField
         {
@@ -149,7 +149,7 @@ Maui.Page
                         console.log("Category id", model.id)
                         _categoriesListView.currentIndex = index
                         _categoriesList.setCurrentCategory(_categoriesModel.get(index).id)
-                        control.categoryClicked(_categoriesList.currentCategory)
+                        control.category = _categoriesList.currentCategory
                     }
                 }
             }
@@ -157,7 +157,7 @@ Maui.Page
             FeatureStrip
             {
                 id: _popularListView
-                 Layout.fillWidth: true
+                Layout.fillWidth: true
                 title.text: i18n("Favorite in %1 ", control.category.displayName)
                 subtitle.text: i18n("Hightest rated app packages.")
 
@@ -236,39 +236,50 @@ Maui.Page
             }
         }
 
-        delegate: Maui.SwipeBrowserDelegate
+        delegate: Maui.ItemDelegate
         {
             id: _delegate
-            height: Math.min(template.leftLabels.implicitHeight + Maui.Style.space.huge, 100)
+            height: Math.min(template.implicitHeight + Maui.Style.space.huge, 100)
             width: ListView.view.width
-            label1.text: model.name
-            label1.font.pointSize: Maui.Style.fontSizes.big
-            label1.font.bold: true
-            label1.font.weight: Font.Bold
-            label2.text: model.totaldownloads + qsTr(" Downloads") + "\n" + model.score + qsTr(" Points")
-            label3.text: model.typename
-            //                    label4.text: model.score + qsTr(" Points")
-            iconSource: model.smallpic
-            iconVisible: true
-            iconSizeHint:  Maui.Style.iconSizes.large
 
-            quickActions: [
+            Maui.ListItemTemplate
+            {
+                id: template
+                anchors.fill: parent
+                label1.text: model.name
+                label1.font.pointSize: Maui.Style.fontSizes.big
+                label1.font.bold: true
+                label1.font.weight: Font.Bold
+                label2.text: model.typename
+                //                    label4.text: model.score + qsTr(" Points")
+                iconSource: model.smallpic
+                iconVisible: true
+                iconSizeHint:  Maui.Style.iconSizes.large
 
-                Action
+                Maui.GridItemTemplate
                 {
-                    icon.name: "media-playback-start"
-                },
+                    implicitWidth: 64
+                    implicitHeight: 48
+                    iconComponent: Rectangle
+                    {
+                        Layout.preferredWidth: 48
+                        radius: Maui.Style.radiusV
+                        color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
 
-                Action
-                {
-                    icon.name: "entry-delete"
-                },
+                        Label
+                        {
+                            anchors.fill: parent
+                            horizontalAlignment: Qt.AlignHCenter
+                            text: model.score
+                            font.bold: true
+                            font.weight: Font.Black
+                            font.pointSize: 16
+                        }
+                    }
 
-                Action
-                {
-                    icon.name: "download"
+                    label1.text: i18n("Score")
                 }
-            ]
+            }
 
             onClicked:
             {

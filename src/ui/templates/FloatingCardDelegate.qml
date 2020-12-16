@@ -61,10 +61,7 @@ Maui.ItemDelegate
                     opacity: 0.5
                     color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
                 }
-
-
             }
-
 
             OpacityMask
             {
