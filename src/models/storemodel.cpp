@@ -6,7 +6,6 @@ StoreModel::StoreModel(QObject *parent) : MauiList(parent),
 	m_store(new AppImageHubStore(this)), m_app(new Application(this)),  m_category(new Category(this))
 {
 	qRegisterMetaType<Application *>("Application *");
-
 }
 
 void StoreModel::requestApps()
@@ -14,7 +13,7 @@ void StoreModel::requestApps()
 	if(!m_category)
 		return;
 
-	qDebug() << "@REQUEST APPS FOR CATEGORY" << m_category->name << m_category->id;
+    qDebug() << "@REQUEST APPS FOR CATEGORY" << m_category->name << m_category->id << m_pageSize;
 
 	if(m_category->id.isEmpty ())
 		return;
@@ -28,13 +27,6 @@ void StoreModel::requestApps()
 #endif
 }
 
-void StoreModel::setCategoryPath()
-{
-	if(!m_category->isAParent())
-		this->m_categoryPath = this->m_category->name;
-
-	emit this->categoryPathChanged(this->m_categoryPath);
-}
 void StoreModel::componentComplete()
 {
 	connect(this->m_store, &Store::applicationsResponseReady,
@@ -71,9 +63,20 @@ void StoreModel::componentComplete()
 									{FMH::MODEL_KEY::VERSION, app->version},
 									{FMH::MODEL_KEY::XDG_TYPE, app->xdgType}});
 			emit this->postItemAppended();
+
 		}
 
+        emit countChanged();
+
 	});
+
+    connect(this, &StoreModel::pageChanged, this , &StoreModel::requestApps);
+    connect(this, &StoreModel::pageSizeChanged, this , &StoreModel::requestApps);
+    connect(this, &StoreModel::sortChanged, this , &StoreModel::requestApps);
+    connect(this, &StoreModel::tagsChanged, this , &StoreModel::requestApps);
+    connect(this, &StoreModel::nameFilterChanged, this , &StoreModel::requestApps);
+
+    requestApps();
 }
 
 const FMH::MODEL_LIST &StoreModel::items() const
@@ -84,11 +87,6 @@ const FMH::MODEL_LIST &StoreModel::items() const
 Category * StoreModel::getCategory() const
 {
 	return m_category;
-}
-
-QString StoreModel::getCategoryPath() const
-{
-	return m_categoryPath;
 }
 
 int StoreModel::getPage() const
@@ -128,11 +126,14 @@ QString StoreModel::getCategoryName() const
 
 void StoreModel::setCategory(Category * category)
 {
+
 	if (m_category == category)
 		return;
 
 	m_category = category;
-	this->setCategoryPath();
+
+    qDebug() << "@@REQUEST APPS FOR CATEGORY" << m_category->name << m_category->id << m_pageSize;
+
 	this->clear();
 	this->setPage(0);
 	emit categoryChanged(m_category);
@@ -141,9 +142,9 @@ void StoreModel::setCategory(Category * category)
 
 void StoreModel::clear()
 {
-	emit this->preListChanged();
-	this->m_list.clear();
-	emit this->postListChanged();
+    emit this->preListChanged();
+    this->m_list.clear();
+    emit this->postListChanged();
 }
 
 void StoreModel::setApp(const QString &id)
@@ -170,37 +171,32 @@ Application * StoreModel::application(const QString & id)
 
 void StoreModel::setPage(int page)
 {
-	if (m_page == page)
-		return;
+//    if (m_page == page)
+//        return;
 
 	m_page = page;
-	this->requestApps();
 	emit pageChanged(m_page);
 }
 
 void StoreModel::setPageSize(int pageSize)
 {
-	if (m_pageSize == pageSize)
-		return;
+    if (m_pageSize == pageSize)
+        return;
 
-	m_pageSize = pageSize;
+    m_pageSize = pageSize;
 
-	this->clear();
-	this->requestApps();
-
-	emit pageSizeChanged(m_pageSize);
+    this->clear();
+    emit pageSizeChanged(m_pageSize);
 }
 
 void StoreModel::setSort(StoreModel::SORT sort)
 {
-	if (m_sort == sort)
-		return;
+    if (m_sort == sort)
+        return;
 
 	m_sort = sort;
 
 	this->clear();
-	this->requestApps();
-
 	emit sortChanged(m_sort);
 }
 
@@ -212,8 +208,6 @@ void StoreModel::setTags(QStringList tags)
 	m_tags = tags;
 
 	this->clear();
-	this->requestApps();
-
 	emit tagsChanged(m_tags);
 }
 
@@ -226,8 +220,6 @@ void StoreModel::setNameFilter(QString nameFilter)
 	m_page = 0;
 
 	this->clear();
-	this->requestApps();
-
 	emit nameFilterChanged(m_nameFilter);
 }
 

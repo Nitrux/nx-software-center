@@ -17,7 +17,6 @@ class StoreModel : public MauiList
 {
     Q_OBJECT
     Q_PROPERTY(Category * category READ getCategory WRITE setCategory NOTIFY categoryChanged)
-    Q_PROPERTY(QString categoryPath READ getCategoryPath NOTIFY categoryPathChanged)
     Q_PROPERTY(QString categoryName READ getCategoryName NOTIFY categoryNameChanged)
     Q_PROPERTY(int page READ getPage WRITE setPage NOTIFY pageChanged)
     Q_PROPERTY(int pageSize READ getPageSize WRITE setPageSize NOTIFY pageSizeChanged)
@@ -45,8 +44,6 @@ public:
     const FMH::MODEL_LIST &items() const override final;
 
     Category *getCategory() const;
-
-    QString getCategoryPath() const;
 
     int getPage() const;
 
@@ -79,8 +76,6 @@ public slots:
 signals:
     void categoryChanged(Category * category);
 
-    void categoryPathChanged(QString categoryPath);
-
     void pageChanged(int page);
 
     void appChanged(Application * app);
@@ -102,7 +97,7 @@ private:
     Application * m_app;
 
     Category * m_category;
-    QString m_categoryPath;
+
     int m_page = -1;
     int m_pageSize = 10;
     QString m_nameFilter;
@@ -111,7 +106,6 @@ private:
 
     //methods
     void requestApps();
-    void setCategoryPath();
 };
 
 #endif // STOREMODEL_H

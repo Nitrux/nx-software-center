@@ -307,8 +307,7 @@ Maui.Page
                     {
                         console.log("Category id", model.id)
                         _categoriesListView.currentIndex = index
-                        _categoriesList.setCurrentCategory(_categoriesModel.get(index).id)
-                        control.categoryClicked(_categoriesList.currentCategory)
+                        currentCategory = _categoriesList.getCategory(_categoriesModel.get(index).id)
                     }
                 }
 

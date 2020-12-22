@@ -1,12 +1,10 @@
 #include "categoriesmodel.h"
 #include "store.h"
 #include "appimagehubstore.h"
-#include "ResponseDTO/category.h"
 
 CategoriesModel::CategoriesModel(QObject *parent) : MauiList(parent),
-    m_store(new AppImageHubStore(this)), m_currentCategory(nullptr), m_category(nullptr)
+    m_store(new AppImageHubStore(this)), m_category(nullptr)
 {
-    connect(this, &CategoriesModel::categoryChanged, this, &CategoriesModel::setList);
 }
 
 static const QHash<QString, QString> iconName =
@@ -39,17 +37,13 @@ static const QHash<QString, QString> cardColor =
 
 void CategoriesModel::componentComplete()
 {
+    connect(this, &CategoriesModel::categoryChanged, this, &CategoriesModel::setList);
     setList();
 }
 
 const FMH::MODEL_LIST &CategoriesModel::items() const
 {
     return this->m_list;
-}
-
-Category *CategoriesModel::getCurrentCategory() const
-{
-    return m_currentCategory;
 }
 
 Category * CategoriesModel::category() const
@@ -61,12 +55,17 @@ void CategoriesModel::setList()
 {
     this->clear();
 
+    qDebug() << "Setting SUBCATEGORIES list" << m_category;
+
+
     if(m_category)
     {
         emit this->preListChanged();
+        qDebug() << "Setting SUBCATEGORIES list" << m_category->categories.size();
 
-        for(auto &c : m_category->categories)
+        for(auto c : m_category->categories)
         {
+
             qDebug() << c->toString();
             this->m_list << FMH::MODEL { {FMH::MODEL_KEY::ID, c->id},
             {FMH::MODEL_KEY::NAME, c->name},
@@ -76,7 +75,16 @@ void CategoriesModel::setList()
             {FMH::MODEL_KEY::PARENT_ID, c->parentId},
             //            {FMH::MODEL_KEY::COUNT, QString::number(c->childCount())},
         };
-        this->m_categoryMap.insert(c->id, std::move(c));
+
+        Category * cat = new Category(this);
+        cat->id = c->id;
+        cat->parentId = c->parentId;
+        cat->name = c->name;
+        cat->displayName = c->displayName;
+        cat->xdgType = c->xdgType;
+        cat->categories = c->categories;
+
+        this->m_categoryMap.insert(c->id, cat);
     }
 
     emit this->postListChanged();
@@ -96,8 +104,7 @@ connect(this->m_store, &Store::categoriesResponseReady, [=](CategoryResponseDTO 
                          {FMH::MODEL_KEY::ICON, iconName["All"]},
                          {FMH::MODEL_KEY::CATEGORY, tr("Apps")}});
 
-    const auto categories = response->categories;
-    for(auto &c : response->categories)
+    for(auto c : response->categories)
     {
         qDebug() << c->toString();
         this->m_list << FMH::MODEL { {FMH::MODEL_KEY::ID, c->id},
@@ -108,7 +115,19 @@ connect(this->m_store, &Store::categoriesResponseReady, [=](CategoryResponseDTO 
         {FMH::MODEL_KEY::PARENT_ID, c->parentId},
         //            {FMH::MODEL_KEY::COUNT, QString::number(c->childCount())},
     };
-    this->m_categoryMap.insert(c->id, std::move(c));
+//    auto cat = std::move(c);
+//    auto _cat = this->m_categoryMap[id];
+
+        Category * cat = new Category(this); // copy prtoblem here so do a deep copy of the category to store
+        cat->id = c->id;
+        cat->parentId = c->parentId;
+        cat->name = c->name;
+        cat->displayName = c->displayName;
+        cat->xdgType = c->xdgType;
+        cat->categories = c->categories;
+//        qDebug() << "requesting category" << _cat->categories.size();
+
+    this->m_categoryMap.insert(c->id, cat);
 }
 
 qDebug()<< this->m_list;
@@ -116,21 +135,6 @@ emit this->postListChanged();
 
 });
 }
-}
-
-void CategoriesModel::setCurrentCategory(const QString &id)
-{
-    const auto category =  this->m_categoryMap[id];
-
-    if(category)
-    {
-        this->m_currentCategory = category;
-    }
-    else
-    {
-        this->m_currentCategory = baseCategory ();
-    }
-    emit this->currentCategoryChanged(this->m_currentCategory);
 }
 
 Category * CategoriesModel::baseCategory()
@@ -195,8 +199,9 @@ Category *CategoriesModel::gamesCategory()
 
 Category *CategoriesModel::getCategory(const QString &id)
 {
-    auto index = this->indexOf(FMH::MODEL_KEY::ID, id);
-    if(index >=0 )
+    qDebug() << "requesting category" << id;
+
+    if(this->m_categoryMap.contains(id))
     {
         return this->m_categoryMap[id];
     }
@@ -206,10 +211,12 @@ Category *CategoriesModel::getCategory(const QString &id)
 
 void CategoriesModel::setCategory(Category * category)
 {
-    if (m_category == category)
+    if (category == nullptr)
         return;
 
     m_category = category;
+    qDebug() << "SETTING UP CATEGORY" << m_category->name;
+
     emit categoryChanged();
 }
 

@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 	qmlRegisterType<ProgressManager>("NXModels", 1, 0, "ProgressManager");
 	qmlRegisterType<Package>("NXModels", 1, 0, "Package");
 	qmlRegisterType<Application>();
-	qmlRegisterType<Category>();
+    qmlRegisterType<Category>("NXModels", 1, 0, "Category");
 	qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
 	qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
 	engine.load(url);

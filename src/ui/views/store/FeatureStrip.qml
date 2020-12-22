@@ -13,6 +13,7 @@ import "../../templates"
 ColumnLayout
 {
     id: control
+//    visible: list.count > 0
     spacing: Maui.Style.space.small
 
     property alias listView : _listView
@@ -32,6 +33,7 @@ ColumnLayout
     SectionTitle
     {
         id: _section
+        label3.text: list.count
     }
 
     Maui.ListBrowser

@@ -107,14 +107,15 @@ Maui.Page
                     id: _categoriesModel
                     list: NX.Categories
                     {
-                        category: control.category
+                        id: _subCategories
+                        category: currentCategory
                     }
                 }
 
                 delegate: Maui.ItemDelegate
                 {
                     isCurrentItem: ListView.isCurrentItem
-                    width: Math.max(160, _template.leftLabels.implicitWidth)
+                    width: Math.max(160, _template.implicitWidth)
                     height: 64
 
                     background: Rectangle
@@ -148,8 +149,7 @@ Maui.Page
                     {
                         console.log("Category id", model.id)
                         _categoriesListView.currentIndex = index
-                        _categoriesList.setCurrentCategory(_categoriesModel.get(index).id)
-                        control.category = _categoriesList.currentCategory
+                        control.category = _subCategories.getCategory(_categoriesModel.get(_categoriesListView.currentIndex).id)
                     }
                 }
             }

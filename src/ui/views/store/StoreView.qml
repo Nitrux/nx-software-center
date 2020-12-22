@@ -14,6 +14,14 @@ StackView
 {
     id: control
 
+    property NX.Category currentCategory : null
+
+    onCurrentCategoryChanged:
+    {
+        console.log("MEHEHEHEHE", currentCategory.name)
+        control.push(_categoryPageComponent)
+    }
+
     NX.Categories
     {
         id: _categoriesList
@@ -86,6 +94,7 @@ StackView
 
         StoreCategoryPage
         {
+            category : currentCategory
             headBar.farLeftContent: ToolButton
             {
                 icon.name: "go-previous"
@@ -110,10 +119,6 @@ StackView
             control.currentItem.data = app
         }
 
-        onCategoryClicked:
-        {
-            control.push(_categoryPageComponent)
-            control.currentItem.category = category
-        }
+
     }
 }
