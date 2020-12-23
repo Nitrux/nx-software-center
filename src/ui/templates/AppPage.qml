@@ -305,6 +305,9 @@ Maui.Page
 
                         anchors.margins: Maui.Style.space.big
                         source: modelData.pic
+
+                        verticalAlignment: Qt.AlignVCenter
+                        horizontalAlignment: Qt.AlignHCenter
                     }
 
                     layer.enabled: true
@@ -345,11 +348,13 @@ Maui.Page
                 {
                     model: String(appInfo.tags).split(",")
 
-                    Maui.Badge
+                    Maui.Chip
                     {
-                        size: Maui.Style.iconSizes.medium
-                        text: modelData
-                        radius: Maui.Style.radiusV
+//                        size: Maui.Style.iconSizes.medium
+                        width: implicitWidth
+                        label.text: modelData
+                        iconSource: "tag"
+//                        radius: Maui.Style.radiusV
                     }
 
                 }
@@ -417,7 +422,7 @@ Maui.Page
                             label2.text: info.tags
                             label3.text: info.packageArch
                             label4.text: info.size
-                            iconSource: "appimage-store"
+                            iconSource: Maui.FM.iconName(info.name)
                         }
 
                         onClicked:
