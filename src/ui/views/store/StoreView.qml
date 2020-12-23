@@ -48,8 +48,8 @@ StackView
                 {
                     text: qsTr("Download")
                     visible: !app.isInstalled
-                    Kirigami.Theme.textColor: "#37474F"
-                    Kirigami.Theme.backgroundColor: Qt.rgba("#546E7A".r, "#546E7A".g, "#546E7A".b, 0.2)
+                    Kirigami.Theme.textColor: "#fafafa"
+                    Kirigami.Theme.backgroundColor: "#26c6da"
                     onClicked: {
                         _appPage.scrollTo(AppPage.Sections.Packages)
                     }

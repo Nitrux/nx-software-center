@@ -50,7 +50,7 @@ Maui.Page
             _scrollablePage.flickable.contentY = _div2.y;
             break;
         case AppPage.Sections.Packages:
-            _scrollablePage.flickable.contentY = _div3.y;
+            _scrollablePage.flickable.contentY = _packagesGrid.y;
             break;
         case AppPage.Sections.Screenshots:
             _scrollablePage.flickable.contentY = _screenshotsSection.y;
@@ -98,7 +98,7 @@ Maui.Page
 
     headBar.rightContent: [
 
-    ToolButton
+        ToolButton
         {
             text: qsTr("Pling")
             icon.name: "pling"
@@ -148,7 +148,7 @@ Maui.Page
         ColumnLayout
         {
             width: control.width
-            spacing: Maui.Style.space.huge
+            spacing: Maui.Style.space.large
 
             Item
             {
@@ -276,9 +276,7 @@ Maui.Page
                 }
             }
 
-
-
-            ListView
+            Maui.ListBrowser
             {
                 id: _screenshotsSection
 
@@ -297,43 +295,74 @@ Maui.Page
                     color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
                     height: ListView.view.height
                     width: Math.max(100, ListView.view.width * 0.3)
+                    radius: Maui.Style.radiusV
 
-                    Image
+                    Item
                     {
-                        width: parent.width
-                        fillMode: Image.PreserveAspectCrop
-
-                        anchors.margins: Maui.Style.space.big
-                        source: modelData.pic
-
-                        verticalAlignment: Qt.AlignVCenter
-                        horizontalAlignment: Qt.AlignHCenter
-                    }
-
-                    layer.enabled: true
-                    layer.effect: OpacityMask
-                    {
-                        maskSource: Item
+                        anchors.fill: parent
+                        Image
                         {
-                            width: _delegate.width
-                            height: _delegate.height
+                            width: parent.width
+                            fillMode: Image.PreserveAspectCrop
 
-                            Rectangle
+                            anchors.margins: Maui.Style.space.big
+                            source: modelData.pic
+
+                            verticalAlignment: Qt.AlignVCenter
+                            horizontalAlignment: Qt.AlignHCenter
+                        }
+
+                        layer.enabled: true
+                        layer.effect: OpacityMask
+                        {
+                            maskSource: Item
                             {
-                                anchors.fill: parent
-                                radius: Maui.Style.radiusV
+                                width: _delegate.width
+                                height: _delegate.height
+
+                                Rectangle
+                                {
+                                    anchors.fill: parent
+                                    radius: Maui.Style.radiusV
+                                }
                             }
                         }
                     }
+
+                    Rectangle
+                    {
+                        Kirigami.Theme.inherit: false
+                        anchors.fill: parent
+                        color: "transparent"
+                        radius: Maui.Style.radiusV
+                        border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.2)
+
+                        Rectangle
+                        {
+                            anchors.fill: parent
+                            color: "transparent"
+                            radius: parent.radius - 0.5
+                            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                            opacity: 0.2
+                            anchors.margins: 1
+                        }
+                    }
                 }
+            }
+
+            SectionTitle
+            {
+                label1.text: i18n("About")
+                label2.text: i18n("Information about the application.")
             }
 
             Maui.ListItemTemplate
             {
                 id: _div1
                 Layout.fillWidth: true
+                Layout.margins: Maui.Style.space.medium
 
-                label1.text: i18n("About the package")
+                label1.text: appInfo.name
                 label2.text: appInfo.description
                 label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
@@ -350,89 +379,68 @@ Maui.Page
 
                     Maui.Chip
                     {
-//                        size: Maui.Style.iconSizes.medium
+                        showCloseButton: false
                         width: implicitWidth
                         label.text: modelData
                         iconSource: "tag"
-//                        radius: Maui.Style.radiusV
+                        //                        radius: Maui.Style.radiusV
                     }
 
                 }
             }
 
-
-            ColumnLayout
+            Maui.Separator
             {
-                id: _div3
                 Layout.fillWidth: true
-                Layout.preferredHeight: implicitHeight
-                Layout.margins: Maui.Style.space.big
+                position: Q.Horizontal
+            }
 
-                RowLayout
+            SectionTitle
+            {
+                label1.text: i18n("Packages")
+                label2.text: i18n("Avaliable packages to download")
+            }
+
+            Maui.GridView
+            {
+                id: _packagesGrid
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                model: control.downloadsInfo
+                adaptContent: false
+                itemWidth: width * 0.5
+                itemHeight: 100
+
+                delegate: Maui.ItemDelegate
                 {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: Maui.Style.toolBarHeight
-                    Layout.margins: Maui.Style.space.medium
-                    spacing:  Maui.Style.space.big
+                    property var info : modelData
+                    Kirigami.Theme.backgroundColor: "grey"
+                    Kirigami.Theme.textColor: "white"
+                    Kirigami.Theme.highlightColor: "#333"
 
-                    Kirigami.Icon
+                    width: _packagesGrid.cellWidth * 0.9
+                    height: _packagesGrid.cellHeight * 0.9
+
+                    Maui.ListItemTemplate
                     {
-                        visible: isWide
-                        Layout.preferredHeight: Maui.Style.iconSizes.medium
-                        Layout.preferredWidth: Maui.Style.iconSizes.medium
-                        Layout.alignment: Qt.AlignHCenter
-                        source: "media-playlist-append"
+                        anchors.fill: parent
+                        label1.text: info.name
+                        label1.font.weight: Font.Bold
+                        label1.font.bold: true
+                        label2.text: info.tags
+                        label3.text: info.packageArch
+                        label4.text: info.size
+                        iconSource: Maui.FM.iconName(info.name)
                     }
 
-                    Label
+                    onClicked:
                     {
-                        Layout.fillWidth: true
-                        text: qsTr("Packages")
-                        font.weight: Font.Bold
-                        font.bold: true
+                        control.packageClicked(index)
                     }
-                }
 
-                Maui.GridView
-                {
-                    id: _packagesGrid
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    model: control.downloadsInfo
-                    adaptContent: false
-                    itemWidth: width * 0.5
-                    itemHeight: 100
-
-                    delegate: Maui.ItemDelegate
-                    {
-                        property var info : modelData
-                        Kirigami.Theme.backgroundColor: "grey"
-                        Kirigami.Theme.textColor: "white"
-                        Kirigami.Theme.highlightColor: "#333"
-
-                        width: _packagesGrid.cellWidth * 0.9
-                        height: _packagesGrid.cellHeight * 0.9
-
-                        Maui.ListItemTemplate
-                        {
-                            anchors.fill: parent
-                            label1.text: info.name
-                            label1.font.weight: Font.Bold
-                            label1.font.bold: true
-                            label2.text: info.tags
-                            label3.text: info.packageArch
-                            label4.text: info.size
-                            iconSource: Maui.FM.iconName(info.name)
-                        }
-
-                        onClicked:
-                        {
-                            control.packageClicked(index)
-                        }
-
-                    }
                 }
             }
+
         }
     }
 }
