@@ -102,8 +102,13 @@ private:
     int m_pageSize = 10;
     QString m_nameFilter;
     QStringList m_tags;
-    SORT m_sort = SORT::NEWEST;
+    SORT m_sort = SORT::NEWEST;    
 
+#if defined Q_PROCESSOR_ARM && defined Q_OS_LINUX
+    Store::Arch m_arch = Store::Arch::arm64;
+#else
+   Store::Arch m_arch = Store::Arch::amd64;
+#endif
     //methods
     void requestApps();
 };

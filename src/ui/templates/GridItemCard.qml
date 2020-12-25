@@ -13,6 +13,8 @@ Maui.ItemDelegate
     property alias iconSource : _icon.source
     property alias iconSizeHint: _icon.height
 
+    background: Item {}
+
     ColumnLayout
     {
         anchors.fill: parent
@@ -27,8 +29,8 @@ Maui.ItemDelegate
             Rectangle
             {
                 anchors.fill: parent
-                opacity: 0.5
-                color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                opacity: control.isCurrentItem ? 1 : 0.5
+                color: control.isCurrentItem || control.hovered ?  Kirigami.Theme.highlightColor : Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
                 radius: Maui.Style.radiusV
             }
 
@@ -38,7 +40,7 @@ Maui.ItemDelegate
                 anchors.centerIn: parent
                 width: height
                 isMask: true
-                color: Kirigami.Theme.textColor
+                color: control.isCurrentItem || control.hovered ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
             }
         }
 

@@ -24,7 +24,8 @@ Maui.Page
         {
             Layout.fillWidth: true
             placeholderText: i18n("Search package in %1", _storeList.categoryName )
-            onTextChanged: _storeList.nameFilter = text
+            onAccepted: _storeList.nameFilter = text
+            onCleared: _storeList.nameFilter = ""
         }
     ]
 
@@ -75,9 +76,9 @@ Maui.Page
         orientation: ListView.Vertical
         spacing: Maui.Style.space.big
 
-        onAtYEndChanged:
+        onAtYEndChanged: //TODO if the list is at end beacuse there si not enough items to flick thend o not increase page
         {
-            if(_listView.atYEnd)
+            if(_listView.atYEnd && _listView.count> 0)
             {
                 const prevPos = _listView.contentY
                 _storeList.page ++
@@ -88,11 +89,15 @@ Maui.Page
         flickable.header: ColumnLayout
         {
             width: parent.width
+            height: visible ? implicitHeight : 0
+            visible: _storeList.nameFilter === ""
 
             Maui.ListBrowser
             {
                 id: _categoriesListView
 
+                visible: count > 0
+                currentIndex: -1
                 Layout.fillWidth: true
                 implicitHeight: 80
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
@@ -101,6 +106,53 @@ Maui.Page
                 orientation: Qt.Horizontal
                 horizontalScrollBarPolicy: ScrollBar.AlwaysOff
                 verticalScrollBarPolicy:  ScrollBar.AlwaysOff
+
+                flickable.header: Item
+                {
+                    width : 180
+                    height: 64
+
+                    Maui.ItemDelegate
+                    {
+                        isCurrentItem: _categoriesListView.currentIndex === -1
+                        width: 160
+                        height: 64
+
+                        anchors.centerIn: parent
+
+                        background: Rectangle
+                        {
+                            opacity: 0.5
+                            color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                            radius: Maui.Style.radiusV
+
+                            Rectangle
+                            {
+                                visible: _categoriesListView.currentIndex === -1
+                                width: parent.width
+                                height: 8
+                                color: Kirigami.Theme.textColor
+                                anchors.bottom: parent.bottom
+                            }
+                        }
+
+                        Maui.ListItemTemplate
+                        {
+                            anchors.fill: parent
+                            label1.text: currentCategory.name
+                            label1.horizontalAlignment: Qt.AlignHCenter
+                            label1.font.pointSize: Maui.Style.fontSizes.big
+                            label1.font.bold: true
+                            label1.font.weight: Font.Bold
+                        }
+
+                        onClicked:
+                        {
+                            _categoriesListView.currentIndex = -1
+                            control.category = currentCategory
+                        }
+                    }
+                }
 
                 model: Maui.BaseModel
                 {

@@ -310,7 +310,6 @@ Maui.Page
                         currentCategory = _categoriesList.getCategory(_categoriesModel.get(index).id)
                     }
                 }
-
             }
 
             Maui.Separator
@@ -367,6 +366,11 @@ Maui.Page
                 category: _categoriesList.audioCategory()
                 pageSize: 6
                 sort: NX.Store.MOST_DOWNLOADED
+
+                onAppClicked:
+                {
+                    control.itemClicked(app)
+                }
             }
 
             Maui.Separator
@@ -384,6 +388,11 @@ Maui.Page
                 category: _categoriesList.gamesCategory()
                 pageSize: 6
                 sort: NX.Store.MOST_DOWNLOADED
+
+                onAppClicked:
+                {
+                    control.itemClicked(app)
+                }
             }
 
             Maui.Separator

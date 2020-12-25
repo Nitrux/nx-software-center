@@ -50,7 +50,7 @@ Maui.Page
             _scrollablePage.flickable.contentY = _div2.y;
             break;
         case AppPage.Sections.Packages:
-            _scrollablePage.flickable.contentY = _packagesGrid.y;
+            _scrollablePage.flickable.contentY = _div2.y;
             break;
         case AppPage.Sections.Screenshots:
             _scrollablePage.flickable.contentY = _screenshotsSection.y;
@@ -175,8 +175,8 @@ Maui.Page
                 FastBlur
                 {
                     id: fastBlur
-                    anchors.fill: _banner
-                    source: _banner
+                    anchors.fill: _bannerImage
+                    source: _bannerImage
                     radius: 64
                     transparentBorder: false
                 }
@@ -279,6 +279,7 @@ Maui.Page
             Maui.ListBrowser
             {
                 id: _screenshotsSection
+                verticalScrollBarPolicy: ScrollBar.AlwaysOff
 
                 Layout.fillWidth: true
                 Layout.preferredHeight: 200
@@ -367,25 +368,25 @@ Maui.Page
                 label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
 
-
-            Row
+            Maui.ListBrowser
             {
                 Layout.fillWidth: true
-                Layout.preferredHeight: Maui.Style.toolBarHeight
+                Layout.preferredHeight: Maui.Style.toolBarHeight* 1.5
+                Layout.margins: Maui.Style.space.medium
+                verticalScrollBarPolicy: ScrollBar.AlwaysOff
+
                 spacing: Maui.Style.space.big
-                Repeater
+
+                orientation: ListView.Horizontal
+                model: String(appInfo.tags).split(",")
+
+                delegate: Maui.Chip
                 {
-                    model: String(appInfo.tags).split(",")
-
-                    Maui.Chip
-                    {
-                        showCloseButton: false
-                        width: implicitWidth
-                        label.text: modelData
-                        iconSource: "tag"
-                        //                        radius: Maui.Style.radiusV
-                    }
-
+                    showCloseButton: false
+                    width: implicitWidth
+                    label.text: modelData
+                    iconSource: "tag"
+                    //                        radius: Maui.Style.radiusV
                 }
             }
 
@@ -397,6 +398,7 @@ Maui.Page
 
             SectionTitle
             {
+                id: _div2
                 label1.text: i18n("Packages")
                 label2.text: i18n("Avaliable packages to download")
             }
@@ -406,13 +408,15 @@ Maui.Page
                 id: _packagesGrid
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.margins: Maui.Style.space.medium
                 model: control.downloadsInfo
-                adaptContent: false
-                itemWidth: width * 0.5
+                adaptContent: true
+                itemSize: 220
                 itemHeight: 100
 
                 delegate: Maui.ItemDelegate
                 {
+                    id: _delegate
                     property var info : modelData
                     Kirigami.Theme.backgroundColor: "grey"
                     Kirigami.Theme.textColor: "white"
@@ -421,26 +425,35 @@ Maui.Page
                     width: _packagesGrid.cellWidth * 0.9
                     height: _packagesGrid.cellHeight * 0.9
 
+                    background: Rectangle
+                    {
+                        color: _delegate.isCurrentItem || _delegate.hovered ?  Kirigami.Theme.highlightColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
+                        radius: Maui.Style.radiusV
+                    }
+
                     Maui.ListItemTemplate
                     {
                         anchors.fill: parent
                         label1.text: info.name
+                        label1.font.pointSize: Maui.Style.fontSizes.huge
                         label1.font.weight: Font.Bold
                         label1.font.bold: true
-                        label2.text: info.tags
+                        label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        //                        label2.text: info.tags
                         label3.text: info.packageArch
-                        label4.text: info.size
+                        label2.text: info.size
                         iconSource: Maui.FM.iconName(info.name)
+                        iconSizeHint: Maui.Style.iconSizes.large
                     }
 
                     onClicked:
                     {
-                        control.packageClicked(index)
+                        //                        control.packageClicked(index)
+                        for (var info of control.downloadsInfo)
+                            console.log(info)
                     }
-
                 }
             }
-
         }
     }
 }

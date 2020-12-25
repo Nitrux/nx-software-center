@@ -3,72 +3,70 @@
 #include "app.h"
 
 StoreModel::StoreModel(QObject *parent) : MauiList(parent),
-	m_store(new AppImageHubStore(this)), m_app(new Application(this)),  m_category(new Category(this))
+    m_store(new AppImageHubStore(this)), m_app(new Application(this)),  m_category(new Category(this))
 {
-	qRegisterMetaType<Application *>("Application *");
+    qRegisterMetaType<Application *>("Application *");
 }
 
 void StoreModel::requestApps()
 {
-	if(!m_category)
-		return;
+    if(!m_category)
+        return;
 
-    qDebug() << "@REQUEST APPS FOR CATEGORY" << m_category->name << m_category->id << m_pageSize;
+    qDebug() << "@REQUEST APPS FOR CATEGORY" << m_nameFilter << m_category->name << m_category->id << m_pageSize << m_page;
 
-	if(m_category->id.isEmpty ())
-		return;
+    if(m_category->id.isEmpty ())
+    {
+        return;
+    }
 
-	const auto categoryId = this->m_category->id == "0" ? "" : this->m_category->id;
-#if defined Q_PROCESSOR_ARM && defined Q_OS_LINUX
-	this->m_store->getApplicationsByArch({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, Store::Arch::arm64);
-#else
-	qDebug() << "REQUEST APPS FOR CATEGORY" << m_category->name << m_category->id;
-	this->m_store->getApplicationsByArch({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, Store::Arch::amd64 );
-#endif
+    const auto categoryId = this->m_category->id == "0" ? "" : this->m_category->id;
+
+    this->m_store->getApplicationsByArch({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, this->m_arch);
 }
 
 void StoreModel::componentComplete()
 {
-	connect(this->m_store, &Store::applicationsResponseReady,
-			[=](ApplicationResponseDTO *response) {
-		for (const auto &app :response->applications)
-		{
-			//preview pics
-			emit this->preItemAppended();
+    connect(this->m_store, &Store::applicationsResponseReady,
+            [=](ApplicationResponseDTO *response) {
+        for (const auto &app :response->applications)
+        {
+            //preview pics
+            emit this->preItemAppended();
 
-			m_appMap.insert(app->id, std::move(app));
-			const auto preview_pic = app->previewPics.isEmpty() ? "" : app->previewPics.first()->pic;
-			const auto small_pic = app->previewPics.isEmpty() ? "" : app->previewPics.first()->smallPic;
-			this->m_list.append(FMH::MODEL{
-									{FMH::MODEL_KEY::CHANGED, app->changed},
-									{FMH::MODEL_KEY::COMMENTS, app->comments},
-									{FMH::MODEL_KEY::CREATED, app->created},
-									{FMH::MODEL_KEY::DESCRIPTION, app->description},
-									{FMH::MODEL_KEY::DETAIL_PAGE, app->detailPage},
-									{FMH::MODEL_KEY::DETAILS, app->details},
-									{FMH::MODEL_KEY::GHNS_EXCLUDED, app->ghnsExcluded},
-									{FMH::MODEL_KEY::ID, app->id},
-									{FMH::MODEL_KEY::LANGUAGE, app->language},
-									{FMH::MODEL_KEY::NAME, app->name},
-									{FMH::MODEL_KEY::PERSON_ID, app->personId},
-									{FMH::MODEL_KEY::PREVIEW, preview_pic},
-									{FMH::MODEL_KEY::REPOSITORY, ""},
-									{FMH::MODEL_KEY::SCORE, QString::number(app->score)},
-									{FMH::MODEL_KEY::SMALL_PIC, small_pic},
-									{FMH::MODEL_KEY::SUMMARY, app->summary},
-									{FMH::MODEL_KEY::TAGS, app->tags},
-									{FMH::MODEL_KEY::TOTAL_DOWNLOADS, QString::number(app->totalDownloads)},
-									{FMH::MODEL_KEY::TYPE_ID, app->typeId},
-									{FMH::MODEL_KEY::TYPE_NAME, app->typeName},
-									{FMH::MODEL_KEY::VERSION, app->version},
-									{FMH::MODEL_KEY::XDG_TYPE, app->xdgType}});
-			emit this->postItemAppended();
+            m_appMap.insert(app->id, std::move(app));
+            const auto preview_pic = app->previewPics.isEmpty() ? "" : app->previewPics.first()->pic;
+            const auto small_pic = app->previewPics.isEmpty() ? "" : app->previewPics.first()->smallPic;
+            this->m_list.append(FMH::MODEL{
+                                    {FMH::MODEL_KEY::CHANGED, app->changed},
+                                    {FMH::MODEL_KEY::COMMENTS, app->comments},
+                                    {FMH::MODEL_KEY::CREATED, app->created},
+                                    {FMH::MODEL_KEY::DESCRIPTION, app->description},
+                                    {FMH::MODEL_KEY::DETAIL_PAGE, app->detailPage},
+                                    {FMH::MODEL_KEY::DETAILS, app->details},
+                                    {FMH::MODEL_KEY::GHNS_EXCLUDED, app->ghnsExcluded},
+                                    {FMH::MODEL_KEY::ID, app->id},
+                                    {FMH::MODEL_KEY::LANGUAGE, app->language},
+                                    {FMH::MODEL_KEY::NAME, app->name},
+                                    {FMH::MODEL_KEY::PERSON_ID, app->personId},
+                                    {FMH::MODEL_KEY::PREVIEW, preview_pic},
+                                    {FMH::MODEL_KEY::REPOSITORY, ""},
+                                    {FMH::MODEL_KEY::SCORE, QString::number(app->score)},
+                                    {FMH::MODEL_KEY::SMALL_PIC, small_pic},
+                                    {FMH::MODEL_KEY::SUMMARY, app->summary},
+                                    {FMH::MODEL_KEY::TAGS, app->tags},
+                                    {FMH::MODEL_KEY::TOTAL_DOWNLOADS, QString::number(app->totalDownloads)},
+                                    {FMH::MODEL_KEY::TYPE_ID, app->typeId},
+                                    {FMH::MODEL_KEY::TYPE_NAME, app->typeName},
+                                    {FMH::MODEL_KEY::VERSION, app->version},
+                                    {FMH::MODEL_KEY::XDG_TYPE, app->xdgType}});
+            emit this->postItemAppended();
 
-		}
+        }
 
         emit countChanged();
 
-	});
+    });
 
     connect(this, &StoreModel::pageChanged, this , &StoreModel::requestApps);
     connect(this, &StoreModel::pageSizeChanged, this , &StoreModel::requestApps);
@@ -81,63 +79,63 @@ void StoreModel::componentComplete()
 
 const FMH::MODEL_LIST &StoreModel::items() const
 {
-	return m_list;
+    return m_list;
 }
 
 Category * StoreModel::getCategory() const
 {
-	return m_category;
+    return m_category;
 }
 
 int StoreModel::getPage() const
 {
-	return m_page;
+    return m_page;
 }
 
 Application *StoreModel::getApp() const
 {
-	return m_app;
+    return m_app;
 }
 
 int StoreModel::getPageSize() const
 {
-	return m_pageSize;
+    return m_pageSize;
 }
 
 StoreModel::SORT StoreModel::getSort() const
 {
-	return m_sort;
+    return m_sort;
 }
 
 QStringList StoreModel::getTags() const
 {
-	return m_tags;
+    return m_tags;
 }
 
 QString StoreModel::getNameFilter() const
 {
-	return m_nameFilter;
+    return m_nameFilter;
 }
 
 QString StoreModel::getCategoryName() const
 {
-	return m_category->name;
+    return m_category->name;
 }
 
 void StoreModel::setCategory(Category * category)
 {
 
-	if (m_category == category)
-		return;
+    if (m_category == category)
+        return;
 
-	m_category = category;
+    m_category = category;
 
     qDebug() << "@@REQUEST APPS FOR CATEGORY" << m_category->name << m_category->id << m_pageSize;
 
-	this->clear();
-	this->setPage(0);
-	emit categoryChanged(m_category);
-	emit categoryNameChanged (m_category->name);
+    this->clear();
+    this->setPage(0);
+    emit categoryChanged(m_category);
+    emit categoryNameChanged (m_category->name);
 }
 
 void StoreModel::clear()
@@ -149,33 +147,33 @@ void StoreModel::clear()
 
 void StoreModel::setApp(const QString &id)
 {
-	const auto app = this->m_appMap[id];
+    const auto app = this->m_appMap[id];
 
-	if(app)
-		this->m_app = app;
-	else
-		this->m_app = new Application(this);
+    if(app)
+        this->m_app = app;
+    else
+        this->m_app = new Application(this);
 
-	emit this->appChanged(this->m_app);
+    emit this->appChanged(this->m_app);
 }
 
 Application * StoreModel::application(const QString & id)
 {
-	const auto app = this->m_appMap[id];
+    const auto app = this->m_appMap[id];
 
-	if(app)
-		return app;
-	else
-		return nullptr;
+    if(app)
+        return app;
+    else
+        return nullptr;
 }
 
 void StoreModel::setPage(int page)
 {
-//    if (m_page == page)
-//        return;
+    //    if (m_page == page)
+    //        return;
 
-	m_page = page;
-	emit pageChanged(m_page);
+    m_page = page;
+    emit pageChanged(m_page);
 }
 
 void StoreModel::setPageSize(int pageSize)
@@ -194,33 +192,33 @@ void StoreModel::setSort(StoreModel::SORT sort)
     if (m_sort == sort)
         return;
 
-	m_sort = sort;
+    m_sort = sort;
 
-	this->clear();
-	emit sortChanged(m_sort);
+    this->clear();
+    emit sortChanged(m_sort);
 }
 
 void StoreModel::setTags(QStringList tags)
 {
-	if (m_tags == tags)
-		return;
+    if (m_tags == tags)
+        return;
 
-	m_tags = tags;
+    m_tags = tags;
 
-	this->clear();
-	emit tagsChanged(m_tags);
+    this->clear();
+    emit tagsChanged(m_tags);
 }
 
 void StoreModel::setNameFilter(QString nameFilter)
 {
-	if (m_nameFilter == nameFilter)
-		return;
+    if (m_nameFilter == nameFilter)
+        return;
 
-	m_nameFilter = nameFilter;
-	m_page = 0;
+    m_nameFilter = nameFilter;
+    m_page = 0;
 
-	this->clear();
-	emit nameFilterChanged(m_nameFilter);
+    this->clear();
+    emit nameFilterChanged(m_nameFilter);
 }
 
 

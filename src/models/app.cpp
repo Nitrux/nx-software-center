@@ -81,5 +81,6 @@ void App::setData(Application *data)
     this->m_data = data;
     this->m_id = data->id;
     this->setModels();
+    qDebug() << m_downloads;
     emit dataChanged(m_data);
 }

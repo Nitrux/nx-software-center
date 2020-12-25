@@ -206,7 +206,7 @@ Category *CategoriesModel::getCategory(const QString &id)
         return this->m_categoryMap[id];
     }
 
-    return nullptr;
+    return this->baseCategory();
 }
 
 void CategoriesModel::setCategory(Category * category)
