@@ -112,9 +112,7 @@ Maui.Page
             onClicked: Qt.openUrlExternally(appInfo.detailpage)
 
         }
-
     ]
-
 
     Kirigami.ScrollablePage
     {
@@ -204,7 +202,7 @@ Maui.Page
                     label1.font.weight: Font.Bold
                     label1.font.bold: true
                     label1.font.pointSize: Maui.Style.fontSizes.enormous
-                    //                    label2.text: appInfo.typename
+                    label2.text: String("<a href='%1'>%1</a>").arg(appInfo.personid)
                     template.leftLabels.spacing: Maui.Style.space.medium
                     rowSpacing: Maui.Style.space.big
                     template.spacing: Maui.Style.space.huge
@@ -290,13 +288,19 @@ Maui.Page
                 orientation: ListView.Horizontal
                 //                snapMode: ListView.SnapOneItem
 
-                delegate: Rectangle
+                delegate: Maui.ItemDelegate
                 {
                     id: _delegate
-                    color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
+                    //                    color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
                     height: ListView.view.height
                     width: Math.max(100, ListView.view.width * 0.3)
-                    radius: Maui.Style.radiusV
+                    //                    radius: Maui.Style.radiusV
+
+                    onClicked:
+                    {
+                        _imageViewerDialog.source = modelData.pic
+                        _imageViewerDialog.open()
+                    }
 
                     Item
                     {
@@ -453,6 +457,26 @@ Maui.Page
                     }
                 }
             }
+        }
+    }
+
+    Popup
+    {
+        id: _imageViewerDialog
+
+        background: null
+        modal: true
+
+        property alias source :_imageViewer.source
+        height: control.height* 0.8
+        width: control.width* 0.8
+
+        Maui.ImageViewer
+        {
+            id: _imageViewer
+
+            anchors.fill: parent
+            anchors.margins: Maui.Style.space.huge
         }
     }
 }
