@@ -411,7 +411,7 @@ Maui.Page
                 Layout.margins: Maui.Style.space.medium
                 model: control.downloadsInfo
                 adaptContent: true
-                itemSize: 220
+                itemSize: 300
                 itemHeight: 100
 
                 delegate: Maui.ItemDelegate
@@ -422,8 +422,8 @@ Maui.Page
                     Kirigami.Theme.textColor: "white"
                     Kirigami.Theme.highlightColor: "#333"
 
-                    width: _packagesGrid.cellWidth * 0.9
-                    height: _packagesGrid.cellHeight * 0.9
+                    width: _packagesGrid.cellWidth * 0.95
+                    height: _packagesGrid.cellHeight * 0.95
 
                     background: Rectangle
                     {
@@ -433,6 +433,7 @@ Maui.Page
 
                     Maui.ListItemTemplate
                     {
+                        anchors.margins: Maui.Style.space.medium
                         anchors.fill: parent
                         label1.text: info.name
                         label1.font.pointSize: Maui.Style.fontSizes.huge
@@ -448,9 +449,7 @@ Maui.Page
 
                     onClicked:
                     {
-                        //                        control.packageClicked(index)
-                        for (var info of control.downloadsInfo)
-                            console.log(info)
+                        control.packageClicked(index)
                     }
                 }
             }

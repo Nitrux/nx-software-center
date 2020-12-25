@@ -16,12 +16,6 @@ StackView
 
     property NX.Category currentCategory : null
 
-    onCurrentCategoryChanged:
-    {
-        console.log("MEHEHEHEHE", currentCategory.name)
-        control.push(_categoryPageComponent)
-    }
-
     NX.Categories
     {
         id: _categoriesList
@@ -119,6 +113,17 @@ StackView
             control.currentItem.data = app
         }
 
+        onCategoryClicked:
+        {
+            currentCategory = category
+            control.push(_categoryPageComponent)
+        }
 
+        onSearchFor:
+        {
+            currentCategory = _categoriesList.baseCategory()
+            control.push(_categoryPageComponent)
+            control.currentItem.search(query)
+        }
     }
 }

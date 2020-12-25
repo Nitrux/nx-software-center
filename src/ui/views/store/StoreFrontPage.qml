@@ -16,6 +16,7 @@ Maui.Page
 
     signal itemClicked(var app)
     signal categoryClicked(var category)
+    signal searchFor(var query)
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
@@ -26,6 +27,7 @@ Maui.Page
         Layout.fillWidth: true
         Layout.maximumWidth: 500
         placeholderText: i18n ("Search your app package...")
+        onAccepted: control.searchFor(text)
     }
 
     Maui.GridView
@@ -307,7 +309,7 @@ Maui.Page
                     {
                         console.log("Category id", model.id)
                         _categoriesListView.currentIndex = index
-                        currentCategory = _categoriesList.getCategory(_categoriesModel.get(index).id)
+                        control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
                     }
                 }
             }

@@ -22,10 +22,11 @@ Maui.Page
     headBar.middleContent: [
         Maui.TextField
         {
+            id: _searchField
             Layout.fillWidth: true
             placeholderText: i18n("Search package in %1", _storeList.categoryName )
-            onAccepted: _storeList.nameFilter = text
-            onCleared: _storeList.nameFilter = ""
+            onAccepted: search(text)
+            onCleared: search("")
         }
     ]
 
@@ -342,4 +343,9 @@ Maui.Page
         }
     }
 
+    function search(query)
+    {
+        _searchField.text = query
+        _storeList.nameFilter = query
+    }
 }
