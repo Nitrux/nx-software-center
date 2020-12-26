@@ -9,9 +9,10 @@ Maui.GalleryRollItem
 {
     id: control
     isCurrentItem: GridView.isCurrentItem
+    cache: true
 
     cb : function(model)
-        {
-            return model.pic
-        }
+    {
+        return model.pic
+    }
  }
