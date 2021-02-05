@@ -429,7 +429,7 @@ Maui.Page
                     {
 
                         console.log( _swipeView.actionGroup.mapToGlobal(_aniImg.x,_aniImg.y), _swipeView.actionGroup.mapToItem(_aniImg,0,0))
-                        animate( _delegate.mapToItem(control, _delegate.x, _delegate.y), Maui.FM.iconName(info.name))
+                        animate( _delegate.mapToItem(control, 0, 0), Maui.FM.iconName(info.name))
 //                        control.packageClicked(index)
 
                     }
@@ -451,7 +451,7 @@ Maui.Page
             id: _aniX
               running: false
               from: _aniImg.x; to: root.width /2
-              duration: 250
+              duration: 500
               loops: 1
 
           }
@@ -460,7 +460,7 @@ Maui.Page
             id: _aniY
               running: false
               from: _aniImg.y; to: _swipeView.actionGroup.mapToItem(control,control.x, control.y).y
-              duration: 500
+              duration: 750
               loops: 1
 
           }
@@ -480,7 +480,7 @@ Maui.Page
         _aniX.start()
         _aniY.start()
 
-        root.notify(icon, appInfo.name, i18n("Your package is being download. Check progress."), goToProgressView)
+        root.notify(icon, appInfo.name, i18n("Your package is being download. Check progress."), goToProgressView, 2500, i18n("Check"))
     }
 
 
