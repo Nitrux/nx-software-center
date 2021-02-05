@@ -82,37 +82,11 @@ Maui.Page
         id: _appHandler
     }
 
-    headBar.leftContent: [
-        ToolButton
+    headBar.leftContent: ToolButton
         {
             icon.name: "go-previous"
             onClicked: control.exit()
-        },
-
-        Kirigami.Separator
-        {
-            Layout.preferredHeight: Maui.Style.iconSizes.small
-            width:  2
         }
-    ]
-
-    headBar.rightContent: [
-
-        ToolButton
-        {
-            text: qsTr("Pling")
-            icon.name: "pling"
-            onClicked: Qt.openUrlExternally(appInfo.detailpage)
-        },
-
-        ToolButton
-        {
-            text: qsTr("Report")
-            icon.name: "tools-report-bug"
-            onClicked: Qt.openUrlExternally(appInfo.detailpage)
-
-        }
-    ]
 
     Kirigami.ScrollablePage
     {
@@ -453,12 +427,62 @@ Maui.Page
 
                     onClicked:
                     {
-                        control.packageClicked(index)
+
+                        console.log( _swipeView.actionGroup.mapToGlobal(_aniImg.x,_aniImg.y), _swipeView.actionGroup.mapToItem(_aniImg,0,0))
+                        animate( _delegate.mapToItem(control, _delegate.x, _delegate.y), Maui.FM.iconName(info.name))
+//                        control.packageClicked(index)
+
                     }
                 }
             }
         }
     }
+
+    Kirigami.Icon
+    {
+        id: _aniImg
+        parent: root
+        source: imagesInfo[0].pic
+        height: 60
+        width: 60
+        opacity: y
+
+        NumberAnimation on x {
+            id: _aniX
+              running: false
+              from: _aniImg.x; to: root.width /2
+              duration: 250
+              loops: 1
+
+          }
+
+        NumberAnimation on y {
+            id: _aniY
+              running: false
+              from: _aniImg.y; to: _swipeView.actionGroup.mapToItem(control,control.x, control.y).y
+              duration: 500
+              loops: 1
+
+          }
+    }
+
+    function goToProgressView()
+    {
+        _swipeView.currentIndex = root.views.progress
+    }
+
+    function animate(pos, icon)
+    {
+        _aniImg.source = icon
+        _aniImg.x = pos.x
+        _aniImg.y = pos.y
+
+        _aniX.start()
+        _aniY.start()
+
+        root.notify(icon, appInfo.name, i18n("Your package is being download. Check progress."), goToProgressView)
+    }
+
 
     Popup
     {
