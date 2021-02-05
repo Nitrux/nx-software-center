@@ -20,28 +20,10 @@
 #include <QApplication>
 #endif
 
-#ifdef STATIC_KIRIGAMI
-#include "3rdparty/kirigami/src/kirigamiplugin.h"
-#endif
-
-#ifdef STATIC_MAUIKIT
-#include "3rdparty/mauikit/src/mauikit.h"
-#include "mauiapp.h"
-#include "fmstatic.h"
-#else
 #include <MauiKit/mauiapp.h>
 #include <MauiKit/fmstatic.h>
-#endif
 
-#if defined Q_OS_MACOS || defined Q_OS_WIN
-#include <KF5/KI18n/KLocalizedString>
-#else
 #include <KI18n/KLocalizedString>
-#endif
-
-#if defined MAUIKIT_STYLE
-#include <MauiKit/mauikit.h>
-#endif
 
 #define NX_URI "org.nx.softwarecenter"
 
@@ -67,8 +49,9 @@ int main(int argc, char *argv[])
 
 	KLocalizedString::setApplicationDomain("nx-software-center");
 	KAboutData about(QStringLiteral("nx-software-center"), i18n("NX Software Center"), NX::version, i18n("NX Software Center distributes AppImages for GNU Linux and APKS for Android."),
-					 KAboutLicense::LGPL_V3, i18n("© 2019-2020 Nitrux Development Team"));
+                     KAboutLicense::LGPL_V3, i18n("© 2019-%1 Nitrux Development Team", QString::number(QDate::currentDate().year())));
 	about.addAuthor(i18n("Camilo Higuita"), i18n("Developer"), QStringLiteral("milo.h@aol.com"));
+    about.addAuthor(i18n("Anupam Basak"), i18n("Developer"), QStringLiteral("anupam.basak27@gmail.com"));
 	about.setHomepage("https://nxos.org");
 	about.setProductName("maui/nx-software-center");
 	about.setBugAddress("https://github.com/nitrux/issues");
@@ -82,15 +65,6 @@ int main(int argc, char *argv[])
 
 	about.setupCommandLine(&parser);
 	about.processCommandLine(&parser);
-
-
-#ifdef STATIC_KIRIGAMI
-	KirigamiPlugin::getInstance().registerTypes();
-#endif
-
-#ifdef STATIC_MAUIKIT
-	MauiKit::getInstance().registerTypes();
-#endif
 
 	FMStatic::createDir(NX::AppsPath, QString());
 
