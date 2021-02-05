@@ -11,7 +11,6 @@ Maui.GalleryRollItem
     isCurrentItem: GridView.isCurrentItem
     cache: true
 
-
     cb : function(model)
     {
         return model.pic
