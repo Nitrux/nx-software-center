@@ -69,6 +69,7 @@ signals:
     void packageChanged(QVariantMap package);
     void modeLabelChanged(QString modeLabel);
     void modeChanged(MODE mode);
+    void progressFinished();
 };
 
 class ProgressManager : public QAbstractListModel

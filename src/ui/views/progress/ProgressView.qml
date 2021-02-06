@@ -13,6 +13,7 @@ Maui.Page
     property bool isActive: true
     property alias manager : _progressManager
 
+    headBar.visible: false
 
     NX.ProgressManager
     {
@@ -39,7 +40,16 @@ Maui.Page
         delegate: PackageDelegate
         {
             id: _delegate
-            width: ListView.view.width
+            width: ListView.view.width            
+
+            Connections
+            {
+                target: model.item
+                function onProgressFinished()
+                {
+                    _appsView.list.resfresh()
+                }
+            }
         }
     }
 }

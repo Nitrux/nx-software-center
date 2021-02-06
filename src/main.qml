@@ -19,7 +19,7 @@ Maui.ApplicationWindow
 {
     id: root
     altHeader: Kirigami.Settings.isMobile
-    readonly property var views: ({store: 0, apps: 1, search: 2, progress: 3})
+    readonly property var views: ({store: 0, apps: 1, progress: 2})
     property int currentView: views.store
 
     MauiLab.AppViews

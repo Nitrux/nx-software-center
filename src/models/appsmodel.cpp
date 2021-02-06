@@ -9,70 +9,69 @@
 #include <KIO/DeleteJob>
 #include <KFileItem>
 
+#include <MauiKit/fmstatic.h>
+#include <MauiKit/fileloader.h>
+
 AppsModel::AppsModel(QObject *parent) : MauiList(parent) {}
 
-void AppsModel::componentComplete() {
-    QRegularExpression fileNameRe("\\.appimage", QRegularExpression::CaseInsensitiveOption);
-    KIO::ListJob *listJob = KIO::listDir(QUrl("file://" + QDir::homePath() + "/Applications"), KIO::JobFlag::HideProgressInfo);
-
-    connect(listJob, &KIO::ListJob::entries, [=](KIO::Job *job, const KIO::UDSEntryList &list) {
-        Q_UNUSED(job)
-
-        for (KIO::UDSEntry entry : list) {
-            if (fileNameRe.match(entry.stringValue(entry.UDS_NAME)).hasMatch()) {
-                emit this->preItemAppended();
-
-                QString filePath("file://" + QDir::homePath() + "/Applications/" + entry.stringValue(entry.UDS_NAME));
-                KFileItem kAppimageItem(filePath);
-
-                this->m_list.append(FMH::MODEL{
-                    {FMH::MODEL_KEY::NAME, entry.stringValue(entry.UDS_NAME)},
-                    {FMH::MODEL_KEY::SMALL_PIC, kAppimageItem.iconName()},
-                    {FMH::MODEL_KEY::PATH, filePath}
-                });
-
-                emit this->postItemAppended();
-            }
-        }
-
-    });
-
-    connect(listJob, &KIO::ListJob::slotError, [=](int i, QString err) {
-        Q_UNUSED(i)
-        qDebug() << "INSTALLED APP LISTING ERROR" << err;
-    });
+void AppsModel::componentComplete() {    
+   setList();
 }
 
 const FMH::MODEL_LIST &AppsModel::items() const { return this->m_list; }
 
-void AppsModel::launchApp(QString path) {
-    QProcess *appProcess = new QProcess(this);
-    appProcess->start(path.replace("file://", ""));
+void AppsModel::launchApp(const int &index) {
 
-    connect(appProcess, &QProcess::errorOccurred, [=](QProcess::ProcessError err) {
-        qDebug() << "QPROCESS ERROR" << err;
-        emit appLaunchError(err);
-    });
-    connect(appProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
-        qDebug() << "QPROCESS FINISHED" << exitCode << exitStatus;
+    const auto url = this->get(index).value("url").toUrl();
+
+    if(FMStatic::openUrl(url))
+    {
         emit appLaunchSuccess();
-    });
+
+    }else
+    {
+        emit appLaunchError(0);
+    }
 }
 
-void AppsModel::removeApp(QString path) {
-    KIO::DeleteJob *deleteJob = KIO::del(path);
+void AppsModel::removeApp(const int &index) {
 
-    connect(deleteJob, &KIO::DeleteJob::deleting, [=](KIO::Job *job, QUrl file) {
-        Q_UNUSED(job)
-        Q_UNUSED(file)
+    const auto url = this->get(index).value("url").toUrl();
 
+    emit preItemRemoved(index);
+
+    if(FMStatic::removeFiles({url}))
+    {
         emit appDeleteSuccess();
+    }
 
-        /* TODO : Reset the list after an item is deleted. The current solution below produces some wierd empty rows
-                  below the already populated list.
-        */
-        this->m_list.clear();
-        componentComplete();
+    emit postItemRemoved();
+}
+
+void AppsModel::resfresh()
+{
+    this->setList();
+}
+
+void AppsModel::setList()
+{
+    emit preListChanged();
+    this->m_list.clear();
+    emit postListChanged();
+
+    FMH::FileLoader *fileLoader = new FMH::FileLoader;
+    fileLoader->informer = &FMH::getFileInfoModel;
+
+    connect(fileLoader, &FMH::FileLoader::finished, [=](FMH::MODEL_LIST items, QList<QUrl>) {
+
+        emit this->preItemsAppended(items.size());
+
+        this->m_list << items;
+
+        emit this->postItemAppended();
+
     });
+
+    fileLoader->requestPath({FMH::HomePath+"/Applications"}, false, {"*.appimage"});
 }
 

@@ -4,13 +4,8 @@
 #include <QObject>
 #include <QProcess>
 
-#ifdef STATIC_MAUIKIT
-#include "fmh.h"
-#include "mauilist.h"
-#else
 #include <MauiKit/fmh.h>
 #include <MauiKit/mauilist.h>
-#endif
 
 class Store;
 class Application;
@@ -31,13 +26,15 @@ signals:
     void appDeleteSuccess();
 
 public slots:
-    void launchApp(QString path);
-    void removeApp(QString path);
+    void launchApp(const int &index);
+    void removeApp(const int &index);
+    void resfresh();
 
 private:
     FMH::MODEL_LIST m_list;
     QHash<QString, Application *> m_app;
     Store *m_store;
+    void setList();
 };
 
 #endif // APPSMODEL_H

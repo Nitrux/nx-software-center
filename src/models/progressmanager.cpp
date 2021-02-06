@@ -193,7 +193,12 @@ void Package::installPackage()
     const auto package =   this->m_data->downloads.at(this->m_packageIndex);
     auto downloader = new FMH::Downloader;
     connect(downloader, &FMH::Downloader::progress, this, &Package::setProgress);
-    connect(downloader, &FMH::Downloader::done, downloader, &FMH::Downloader::deleteLater);
+    connect(downloader, &FMH::Downloader::done, [this, downloader]()
+    {
+        this->progressFinished();
+        downloader->deleteLater();
+    });
+
     downloader->downloadFile(this->m_link, NX::AppsPath.toString()+("/")+package->name);
 }
 

@@ -83,10 +83,10 @@ Maui.Page
     }
 
     headBar.leftContent: ToolButton
-        {
-            icon.name: "go-previous"
-            onClicked: control.exit()
-        }
+    {
+        icon.name: "go-previous"
+        onClicked: control.exit()
+    }
 
     Kirigami.ScrollablePage
     {
@@ -427,11 +427,8 @@ Maui.Page
 
                     onClicked:
                     {
-
-                        console.log( _swipeView.actionGroup.mapToGlobal(_aniImg.x,_aniImg.y), _swipeView.actionGroup.mapToItem(_aniImg,0,0))
                         animate( _delegate.mapToItem(control, 0, 0), Maui.FM.iconName(info.name))
-//                        control.packageClicked(index)
-
+                        control.packageClicked(index)
                     }
                 }
             }
@@ -441,29 +438,60 @@ Maui.Page
     Kirigami.Icon
     {
         id: _aniImg
-        parent: root
+        visible: _aniX.running
+        parent: ApplicationWindow.overlay
         source: imagesInfo[0].pic
         height: 60
         width: 60
-        opacity: y
 
-        NumberAnimation on x {
+        property point endPos
+
+        NumberAnimation on height
+        {
+            running: _aniY.running
+            from: 120
+            to: Maui.Style.iconSizes.medium
+            duration: _aniY.duration
+        }
+
+        NumberAnimation on width
+        {
+            running: _aniY.running
+            from: 120
+            to: Maui.Style.iconSizes.medium
+            duration: _aniY.duration
+        }
+
+        NumberAnimation on x
+        {
             id: _aniX
-              running: false
-              from: _aniImg.x; to: root.width /2
-              duration: 500
-              loops: 1
+            running: false
+            from: _aniImg.x; to: _aniImg.endPos.x + _swipeView.actionGroup.width - (_aniImg.width)
+            duration: Kirigami.Units.longDuration * 2
+            loops: 1
+            easing.type: Easing.OutQuad
+        }
 
-          }
-
-        NumberAnimation on y {
+        NumberAnimation on y
+        {
             id: _aniY
-              running: false
-              from: _aniImg.y; to: _swipeView.actionGroup.mapToItem(control,control.x, control.y).y
-              duration: 750
-              loops: 1
+            running: false
+            easing.type: Easing.OutQuad
+            from: _aniImg.y; to: _aniImg.endPos.y + _aniImg.height
+            duration:  Kirigami.Units.longDuration * 2.5
+            loops: 1
 
-          }
+
+        }
+
+        Connections
+        {
+            target: _aniY
+            function onFinished()
+            {
+                goToProgressView()
+            }
+        }
     }
 
     function goToProgressView()
@@ -474,13 +502,16 @@ Maui.Page
     function animate(pos, icon)
     {
         _aniImg.source = icon
+
+        _aniImg.endPos = _swipeView.actionGroup.mapToItem(control, 0, 0)
+
         _aniImg.x = pos.x
         _aniImg.y = pos.y
 
         _aniX.start()
         _aniY.start()
 
-        root.notify(icon, appInfo.name, i18n("Your package is being download. Check progress."), goToProgressView, 2500, i18n("Check"))
+//        root.notify(icon, appInfo.name, i18n("Your package is being download. Check progress."), goToProgressView, 2500, i18n("Check"))
     }
 
 

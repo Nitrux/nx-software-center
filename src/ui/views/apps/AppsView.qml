@@ -12,11 +12,13 @@ Maui.Page
 {
     id: control
 
+    property alias list : _appsList
+
     Maui.Dialog {
         id: appLaunchErrorDialog
 
-        title: "Error"
-        message: "Error launching application"
+        title: i18n("Error")
+        message: i18n("Error launching application")
         rejectButton.visible: false
 
         acceptButton.onClicked: {
@@ -39,20 +41,17 @@ Maui.Page
     }
 
     Maui.Dialog {
-        property var filePath: ""
 
         id: appRemoveDialog
 
-        title: "Remove"
-        message: "Are you sure you want to remove this application?"
+        property int index : -1
 
-        acceptButton.onClicked: {
-            _appsList.removeApp(filePath);
-        }
+        title: i18n("Remove")
+        message: i18n("Are you sure you want to remove this application?")
+        template.iconSource: "emblem-warning"
 
-        function showDialog(path) {
-            appRemoveDialog.visible = true;
-            filePath = path;
+        onAccepted: {
+            _appsList.removeApp(index);
         }
     }
 
@@ -137,8 +136,7 @@ Maui.Page
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             label1.text: model.name
-            label2.text: model.description
-            iconSource: model.smallpic
+            iconSource: model.icon
             iconSizeHint: height * 0.7
 
             onClicked: console.log("JAJAJAJ")
@@ -149,7 +147,7 @@ Maui.Page
                     icon.name: "media-playback-start"
                     onTriggered: {
                         _appsListView.currentIndex = index;
-                        _appsList.launchApp(model.path);
+                        _appsList.launchApp(index);
                     }
                 },
                 Action
@@ -157,7 +155,8 @@ Maui.Page
                     icon.name: "entry-delete"
                     onTriggered: {
                         _appsListView.currentIndex = index;
-                        appRemoveDialog.showDialog(model.path);
+                        appRemoveDialog.index = index
+                        appRemoveDialog.open()
                     }
                 }
             ]
