@@ -12,9 +12,17 @@
 #include <MauiKit/fmstatic.h>
 #include <MauiKit/fileloader.h>
 
-AppsModel::AppsModel(QObject *parent) : MauiList(parent) {}
+#include <QFileSystemWatcher>
 
-void AppsModel::componentComplete() {    
+AppsModel::AppsModel(QObject *parent) : MauiList(parent)
+  , m_watcher(new QFileSystemWatcher(this))
+{
+//    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &AppsModel::setList);
+
+//    m_watcher->addPath(QUrl(FMH::HomePath+"/Applications").toLocalFile());
+}
+
+void AppsModel::componentComplete() {
    setList();
 }
 

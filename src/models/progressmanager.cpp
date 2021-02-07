@@ -2,6 +2,10 @@
 #include "ResponseDTO/application.h"
 #include "nx.h"
 
+#include <QProcess>
+
+#include <MauiKit/fmstatic.h>
+
 bool ProgressManager::contains(const App &app, const int &packageIndex) const
 {
     if(packageIndex > app.getData()->downloads.size() || packageIndex < 0)
@@ -178,6 +182,37 @@ QVariantMap Package::getPackage() const
     return m_package;
 }
 
+QUrl Package::getPath() const
+{
+    return m_path;
+}
+
+void Package::integratePackage(const QString &path)
+{
+    m_path = QUrl(path);
+    emit pathChanged(m_path);
+
+    if(!FMH::fileExists(m_path))
+        return;
+    qDebug() << "integrate this appimage" << path << m_path;
+
+    //    QFile file(m_path.toLocalFile());
+    //    file.setPermissions(QFile::ExeGroup | QFile::ExeUser);
+
+    QProcess *appProcess = new QProcess(this);
+    appProcess->start("ail-cli", {"integrate", m_path.toLocalFile()});
+
+    connect(appProcess, &QProcess::errorOccurred, [=](QProcess::ProcessError err) {
+        qDebug() << "QPROCESS ERROR" << err;
+        emit this->progressFinished();
+
+    });
+    connect(appProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
+        qDebug() << "QPROCESS FINISHED" << exitCode << exitStatus;
+        emit this->progressFinished();
+    });
+}
+
 void Package::updatePackage()
 {
 
@@ -192,19 +227,30 @@ void Package::installPackage()
 {
     const auto package =   this->m_data->downloads.at(this->m_packageIndex);
     auto downloader = new FMH::Downloader;
+
+    auto appimagePath = NX::AppsPath.toString()+("/")+package->name;
+
     connect(downloader, &FMH::Downloader::progress, this, &Package::setProgress);
-    connect(downloader, &FMH::Downloader::done, [this, downloader]()
+    connect(downloader, &FMH::Downloader::done, [this, downloader, appimagePath]()
     {
-        this->progressFinished();
+        this->integratePackage(appimagePath);
         downloader->deleteLater();
     });
 
-    downloader->downloadFile(this->m_link, NX::AppsPath.toString()+("/")+package->name);
+    //    connect(downloader, &FMH::Downloader::fileSaved, this, &Package::integratePackage);
+
+    downloader->downloadFile(this->m_link, appimagePath);
 }
 
 void Package::launchPackage()
 {
+    qDebug() << "launch the package if it is locally avaliable" << m_path;
+    if(FMH::fileExists(m_path))
+    {
+        qDebug() << "launch the package if it is locally avaliable EXISTS" << m_path;
 
+        FMStatic::openUrl(m_path);
+    }
 }
 
 void Package::buyPackage()

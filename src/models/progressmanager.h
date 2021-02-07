@@ -16,6 +16,7 @@ class Package : public App
 {
     Q_OBJECT
     Q_PROPERTY(QUrl link READ getLink NOTIFY linkChanged CONSTANT FINAL)
+    Q_PROPERTY(QUrl path READ getPath NOTIFY pathChanged CONSTANT FINAL)
     Q_PROPERTY(QVariantMap package READ getPackage NOTIFY packageChanged CONSTANT FINAL)
     Q_PROPERTY(MODE mode MEMBER m_mode NOTIFY modeChanged CONSTANT FINAL)
     Q_PROPERTY(QString modeLabel MEMBER m_modeLabel NOTIFY modeLabelChanged CONSTANT FINAL)
@@ -45,7 +46,10 @@ public:
     QUrl getLink() const;
     QVariantMap getPackage() const;
 
+    QUrl getPath() const;
+
 public slots:
+    void integratePackage(const QString &path);
     void updatePackage();
     void removePackage();
     void installPackage();
@@ -62,6 +66,8 @@ private:
 
     Package::MODE m_mode = MODE::NONE;
 
+    QUrl m_path;
+
 signals:
     void progressChanged(int percent);
     void packagedIndexChanged(int packageIndex);
@@ -70,6 +76,7 @@ signals:
     void modeLabelChanged(QString modeLabel);
     void modeChanged(MODE mode);
     void progressFinished();
+    void pathChanged(QUrl path);
 };
 
 class ProgressManager : public QAbstractListModel

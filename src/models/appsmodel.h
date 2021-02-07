@@ -7,6 +7,8 @@
 #include <MauiKit/fmh.h>
 #include <MauiKit/mauilist.h>
 
+class QFileSystemWatcher;
+
 class Store;
 class Application;
 class AppsModel : public MauiList {
@@ -34,6 +36,8 @@ private:
     FMH::MODEL_LIST m_list;
     QHash<QString, Application *> m_app;
     Store *m_store;
+    QFileSystemWatcher * m_watcher;
+
     void setList();
 };
 

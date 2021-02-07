@@ -42,12 +42,16 @@ Maui.Page
             id: _delegate
             width: ListView.view.width            
 
+            onClicked:  model.item.launchPackage()
+
             Connections
             {
                 target: model.item
                 function onProgressFinished()
                 {
                     _appsView.list.resfresh()
+                    root.notify(model.item.images[0].pic, model.item.info.name, i18n("Your package is ready."),  model.item.launchPackage, 2500, i18n("Launch"))
+
                 }
             }
         }

@@ -510,8 +510,6 @@ Maui.Page
 
         _aniX.start()
         _aniY.start()
-
-//        root.notify(icon, appInfo.name, i18n("Your package is being download. Check progress."), goToProgressView, 2500, i18n("Check"))
     }
 
 
