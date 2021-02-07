@@ -136,7 +136,8 @@ Maui.Page
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             label1.text: model.name
-            iconSource: model.icon
+//            iconSource: model.icon
+            imageSource: "image://thumbnailer/" + model.path
             iconSizeHint: height * 0.7
 
             onClicked: console.log("JAJAJAJ")
