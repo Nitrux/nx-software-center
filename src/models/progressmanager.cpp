@@ -196,9 +196,6 @@ void Package::integratePackage(const QString &path)
         return;
     qDebug() << "integrate this appimage" << path << m_path;
 
-    //    QFile file(m_path.toLocalFile());
-    //    file.setPermissions(QFile::ExeGroup | QFile::ExeUser);
-
     QProcess *appProcess = new QProcess(this);
     appProcess->start("ail-cli", {"integrate", m_path.toLocalFile()});
 

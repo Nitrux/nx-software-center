@@ -39,6 +39,8 @@ private:
     QFileSystemWatcher * m_watcher;
 
     void setList();
+
+    void unintegrate(const QUrl &url);
 };
 
 #endif // APPSMODEL_H
