@@ -50,9 +50,16 @@ Maui.Page
                 function onProgressFinished()
                 {
                     _appsView.list.resfresh()
-                    root.notify(model.item.images[0].pic, model.item.info.name, i18n("Your package is ready."),  model.item.launchPackage, 2500, i18n("Launch"))
+                    root.notify(model.item.images[0].pic, model.item.info.name, i18n("Your package is ready."),  goToApps, 3500, i18n("Check"))
+
+//                    _progressManager.removePackage()
 
                 }
+            }
+
+            function goToApps()
+            {
+                _swipeView.currentIndex = root.views.apps
             }
         }
     }

@@ -189,8 +189,7 @@ QUrl Package::getPath() const
 
 void Package::integratePackage(const QString &path)
 {
-    m_path = QUrl(path);
-    emit pathChanged(m_path);
+    this->setPath(path);
 
     if(!FMH::fileExists(m_path))
         return;
@@ -234,8 +233,6 @@ void Package::installPackage()
         downloader->deleteLater();
     });
 
-    //    connect(downloader, &FMH::Downloader::fileSaved, this, &Package::integratePackage);
-
     downloader->downloadFile(this->m_link, appimagePath);
 }
 
@@ -252,5 +249,12 @@ void Package::launchPackage()
 
 void Package::buyPackage()
 {
+
+}
+
+void Package::setPath(const QString &path)
+{
+    m_path = QUrl(path);
+    emit pathChanged(m_path);
 
 }

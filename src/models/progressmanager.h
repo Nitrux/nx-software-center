@@ -3,13 +3,10 @@
 
 #include <QObject>
 #include <QAbstractListModel>
+
 #include "app.h"
 
-#ifdef STATIC_MAUIKIT
-#include "downloader.h"
-#else
 #include <MauiKit/downloader.h>
-#endif
 
 class Downloader;
 class Package : public App
@@ -67,6 +64,8 @@ private:
     Package::MODE m_mode = MODE::NONE;
 
     QUrl m_path;
+
+    void setPath(const QString &path);
 
 signals:
     void progressChanged(int percent);
