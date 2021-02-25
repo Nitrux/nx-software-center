@@ -317,7 +317,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                position: Qt.Horizontal
+                edge: Qt.BottomEdge
             }
 
             FeatureStrip
@@ -356,7 +356,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                position: Qt.Horizontal
+                 edge: Qt.BottomEdge
             }
 
             FeatureStrip
@@ -378,7 +378,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                position: Qt.Horizontal
+                 edge: Qt.BottomEdge
             }
 
             FeatureStrip
@@ -400,7 +400,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                position: Qt.Horizontal
+                 edge: Qt.BottomEdge
             }
 
             SectionTitle
