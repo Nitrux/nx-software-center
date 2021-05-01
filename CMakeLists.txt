@@ -1,19 +1,26 @@
-project(nx-software-center)
 cmake_minimum_required(VERSION 3.0)
+
+project(nx-software-center)
+
+set(REQUIRED_QT_VERSION 5.14.0)
+set(REQUIRED_KF5_VERSION 5.60)
 
 find_package(ECM 1.7.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${ECM_MODULE_PATH})
 
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml Quick Sql Svg  WebEngine QuickControls2 Concurrent)
+
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
+
 find_package(MauiKit REQUIRED)
-find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Qml Quick Svg QuickControls2 Widgets WebEngine Sql)
+find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
+
 include(KDEInstallDirs)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(KDECMakeSettings)
 include(ECMInstallIcons)
 include(FeatureSummary)
 include(ECMAddAppIcon)
-
-option(MAUIKIT_STYLE "If set to true then the icons and styled is packaged as well")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -78,10 +85,6 @@ add_executable(${PROJECT_NAME}
     ${nx_STORES_SRCS}
     ${nx_STORES_HDRS})
 
-if(MAUIKIT_STYLE)
-    target_compile_definitions(${PROJECT_NAME} PUBLIC MAUIKIT_STYLE)
-endif()
-
 if (ANDROID)
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
 
@@ -92,7 +95,7 @@ else()
     target_link_libraries(${PROJECT_NAME} KF5::ConfigCore KF5::Notifications KF5::KIOCore KF5::I18n KF5::KIOWidgets KF5::KIOFileWidgets)
 endif()
 
-target_link_libraries(${PROJECT_NAME} MauiKit Qt5::Qml Qt5::Widgets Qt5::Svg Qt5::WebEngine Qt5::Sql)
+target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Qml Qt5::Svg Qt5::WebEngine Qt5::Sql)
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES org.nx.softwarecenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

@@ -2,7 +2,7 @@
 #define APP_H
 
 #include <QObject>
-#include <MauiKit/fmh.h>
+#include <MauiKit/Core/fmh.h>
 
 class Downloader;
 class Application;

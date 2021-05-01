@@ -6,7 +6,7 @@
 #include <QString>
 #include <QUrl>
 
-#include <MauiKit/downloader.h>
+#include <MauiKit/FileBrowsing/downloader.h>
 
 class Application : public QObject {
   Q_OBJECT

@@ -6,7 +6,7 @@
 
 #include "app.h"
 
-#include <MauiKit/downloader.h>
+#include <MauiKit/FileBrowsing/downloader.h>
 
 class Downloader;
 class Package : public App

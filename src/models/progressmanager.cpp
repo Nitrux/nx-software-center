@@ -4,7 +4,7 @@
 
 #include <QProcess>
 
-#include <MauiKit/fmstatic.h>
+#include <MauiKit/FileBrowsing/fmstatic.h>
 
 bool ProgressManager::contains(const App &app, const int &packageIndex) const
 {

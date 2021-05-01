@@ -9,8 +9,8 @@
 #include <KIO/DeleteJob>
 #include <KFileItem>
 
-#include <MauiKit/fmstatic.h>
-#include <MauiKit/fileloader.h>
+#include <MauiKit/FileBrowsing/fmstatic.h>
+#include <MauiKit/FileBrowsing/fileloader.h>
 
 #include <QFileSystemWatcher>
 
@@ -18,7 +18,7 @@ AppsModel::AppsModel(QObject *parent) : MauiList(parent)
   , m_watcher(new QFileSystemWatcher(this))
 {
     connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &AppsModel::setList);
-    m_watcher->addPath(QUrl(FMH::HomePath+"/Applications").toLocalFile());
+    m_watcher->addPath(QUrl(FMStatic::HomePath+"/Applications").toLocalFile());
 }
 
 void AppsModel::componentComplete() {
@@ -69,7 +69,7 @@ void AppsModel::setList()
     emit postListChanged();
 
     FMH::FileLoader *fileLoader = new FMH::FileLoader;
-    fileLoader->informer = &FMH::getFileInfoModel;
+    fileLoader->informer = &FMStatic::getFileInfoModel;
 
     connect(fileLoader, &FMH::FileLoader::finished, [=](FMH::MODEL_LIST items, QList<QUrl>) {
 
@@ -81,7 +81,7 @@ void AppsModel::setList()
 
     });
 
-    fileLoader->requestPath({FMH::HomePath+"/Applications"}, false, {"*.appimage"});
+    fileLoader->requestPath({FMStatic::HomePath+"/Applications"}, false, {"*.appimage"});
 }
 
 void AppsModel::unintegrate(const QUrl &url)

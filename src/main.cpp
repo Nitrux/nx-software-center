@@ -20,8 +20,8 @@
 #include <QApplication>
 #endif
 
-#include <MauiKit/mauiapp.h>
-#include <MauiKit/fmstatic.h>
+#include <MauiKit/Core/mauiapp.h>
+#include <MauiKit/FileBrowsing/fmstatic.h>
 
 #include <KI18n/KLocalizedString>
 

@@ -1,8 +1,12 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
+
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.3 as Maui
+import org.mauikit.controls 1.3 as Maui
+import org.mauikit.filebrowsing 1.0 as FB
+import org.mauikit.imagetools 1.0 as IT
+
 import QtGraphicalEffects 1.0
 
 import NXModels 1.0 as NX
@@ -421,13 +425,13 @@ Maui.Page
                         //                        label2.text: info.tags
                         label3.text: info.packageArch
                         label2.text: info.size
-                        iconSource: Maui.FM.iconName(info.name)
+                        iconSource: FB.FM.iconName(info.name)
                         iconSizeHint: Maui.Style.iconSizes.large
                     }
 
                     onClicked:
                     {
-                        animate( _delegate.mapToItem(control, 0, 0), Maui.FM.iconName(info.name))
+                        animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
                         control.packageClicked(index)
                     }
                 }
@@ -524,7 +528,7 @@ Maui.Page
         height: control.height* 0.8
         width: control.width* 0.8
 
-        Maui.ImageViewer
+        IT.ImageViewer
         {
             id: _imageViewer
 

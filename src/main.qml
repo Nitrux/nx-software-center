@@ -2,8 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.mauikit.controls 1.3 as Maui
 
 import QtGraphicalEffects 1.0
 
@@ -22,7 +21,7 @@ Maui.ApplicationWindow
     readonly property var views: ({store: 0, apps: 1, progress: 2})
     property int currentView: views.store
 
-    MauiLab.AppViews
+    Maui.AppViews
     {
         id: _swipeView
         anchors.fill: parent
@@ -30,22 +29,22 @@ Maui.ApplicationWindow
         StoreView
         {
             id: _storeView
-            MauiLab.AppView.iconName: "nx-software-center"
-            MauiLab.AppView.title: qsTr("Store")
+            Maui.AppView.iconName: "nx-software-center"
+            Maui.AppView.title: qsTr("Store")
         }
 
         AppsView
         {
             id: _appsView
-            MauiLab.AppView.iconName: "go-home"
-            MauiLab.AppView.title: qsTr("Apps")
+            Maui.AppView.iconName: "go-home"
+            Maui.AppView.title: qsTr("Apps")
         }
 
         ProgressView
         {
             id: _progressView
-            MauiLab.AppView.iconName: "document-download"
-            MauiLab.AppView.title: qsTr("Progress")
+            Maui.AppView.iconName: "document-download"
+            Maui.AppView.title: qsTr("Progress")
         }
     }
 }
