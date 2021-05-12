@@ -12,7 +12,8 @@ wget -qO /etc/apt/sources.list.d/neon-user-repo.list https://raw.githubuserconte
 wget -qO /etc/apt/sources.list.d/nitrux-repo.list https://raw.githubusercontent.com/Nitrux/iso-tool/development/configs/files/sources.list.nitrux
 
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys \
-	55751E5D > /dev/null
+	55751E5D \
+	1B69B2DA > /dev/null
 
 apt -qq update
 
