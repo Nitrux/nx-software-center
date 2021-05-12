@@ -2,7 +2,7 @@
 
 _A graphical front end to manage [AppImage](https://appimage.org/) applications built using [MauiKit](mauikit.org/)._
 
-The AppImages included are fetched from:
+The AppImages displayed are fetched from:
 * https://www.appimagehub.com/
 
 # Screenshots
