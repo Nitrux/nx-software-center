@@ -1,0 +1,12 @@
+Source: nx-software-center
+Section: KDE
+Priority: optional
+Maintainer: Uri Herrera <uri_herrera@nxos.org>
+Build-Depends: debhelper (>=9), cmake, extra-cmake-modules, build-essential, cmake extra-cmake-modules qtbase5-dev git qtdeclarative5-dev libqt5xmlpatterns5-dev autotools-dev automake libtool libgtk2.0-dev libfuse-dev libappimage-dev patchelf xxd desktop-file-utils
+Standards-Version: 3.9.6
+
+Package: nx-software-center
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: A software store for AppImages built with MauiKit.
+ Software Center for Nitrux.

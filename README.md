@@ -1,41 +1,18 @@
-# NX Software Center [![Build Status](https://travis-ci.org/Nitrux/nx-software-center.svg?branch=master)](https://travis-ci.org/Nitrux/nx-software-center)
+# NXSoftware Center [![Build Status](https://travis-ci.org/Nitrux/nx-software-center.svg?branch=master)](https://travis-ci.org/Nitrux/nx-software-center)
 
-_A portable Software Center for portable applications thanks to [AppImage](https://appimage.org/)._
+_A graphical front end to manage [AppImage](https://appimage.org/) applications built using [MauiKit](mauikit.org/)._
 
-You can now easily explore and get your favorite applications easily (in some cases directly from their original authors!). No matter which GNU/Linux distribution you are using.
-
-Say goodbye to things like:
- * The applications that I want is not in my distribution repositories.
- * Missing or outdated libraries and package conflicts.
- * Old application version.
-
-**Just download and run!**
-
-## Feeds
 The AppImages included are fetched from:
-* https://appimage.github.io/
 * https://www.appimagehub.com/
 
 # Screenshots
 
- * Search View
+ * Store View
  
-![](https://user-images.githubusercontent.com/1138094/39208689-58d3ae84-47c9-11e8-83a9-28d89a6f2cbb.png)
-
- * Application Details View
- 
-![](https://user-images.githubusercontent.com/1138094/39208724-6d128f5a-47c9-11e8-90e3-d41472374406.png)
-
- * Tasks View
- 
-![](https://user-images.githubusercontent.com/1138094/39208748-7978ded4-47c9-11e8-98c4-5dffeaf5ee0d.png)
+![](https://user-images.githubusercontent.com/5911329/99120975-c80ecf00-25c9-11eb-8712-7a7c14d3b928.png)
 
 # Install
 
-## Official Binaries
-Official Releases can be found here: https://github.com/Nitrux/nx-software-center/releases/
-
-## Building from Source
 ### Requirements
  * CMake 3.10.0 +
  * Qt 5.10+
@@ -52,4 +29,4 @@ Official Releases can be found here: https://github.com/Nitrux/nx-software-cente
 # Issues
 If you find problems with the contents of this repository please create an issue.
 
-©2018 Nitrux Latinoamericana S.C.
+©2021 Nitrux Latinoamericana S.C.
