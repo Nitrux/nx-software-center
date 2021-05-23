@@ -221,9 +221,6 @@ Maui.Page
                             iconVisible: isWide
                             rightLabels.visible: isWide
                             imageSource: model.preview
-                            imageSizeHint: width * 0.3
-
-                            imageBorder: false
 
                             fillMode: Image.PreserveAspectFit
 

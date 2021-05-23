@@ -31,14 +31,15 @@ void AppsModel::launchApp(const int &index) {
 
     const auto url = this->get(index).value("url").toUrl();
 
-    if(FMStatic::openUrl(url))
-    {
-        emit appLaunchSuccess();
+    FMStatic::openUrl(url);
 
-    }else
-    {
-        emit appLaunchError(0);
-    }
+//    {
+//        emit appLaunchSuccess();
+
+//    }else
+//    {
+//        emit appLaunchError(0);
+//    }
 }
 
 void AppsModel::removeApp(const int &index) {

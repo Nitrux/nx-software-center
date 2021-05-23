@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
 
 	app.setOrganizationName(QStringLiteral("Maui"));
 	app.setWindowIcon(QIcon(":/nx-software-center.svg"));
-	MauiApp::instance()->setHandleAccounts(false); //for now index can not handle cloud accounts
-	MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
+
+    MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
 
 	KLocalizedString::setApplicationDomain("nx-software-center");
 	KAboutData about(QStringLiteral("nx-software-center"), i18n("NX Software Center"), NX::version, i18n("NX Software Center distributes AppImages for GNU Linux and APKS for Android."),

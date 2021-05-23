@@ -172,7 +172,6 @@ Maui.Page
                     anchors.centerIn: parent
                     wide: root.isWide
                     iconSizeHint: Maui.Style.iconSizes.huge
-                    template.imageBorder: false
                     imageSource: _bannerImage.source
                     label1.text: appInfo.name
                     label1.elide: Text.ElideMiddle

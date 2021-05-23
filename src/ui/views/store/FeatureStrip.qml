@@ -49,7 +49,6 @@ ColumnLayout
         horizontalScrollBarPolicy: ScrollBar.AlwaysOff
         snapMode: ListView.SnapOneItem
         verticalScrollBarPolicy: ScrollBar.AlwaysOff
-        interactive: Kirigami.Settings.hasTransientTouchInput
 
         model: Maui.BaseModel
         {
