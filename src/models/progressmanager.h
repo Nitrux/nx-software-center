@@ -12,13 +12,13 @@ class Downloader;
 class Package : public App
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl link READ getLink NOTIFY linkChanged CONSTANT FINAL)
-    Q_PROPERTY(QUrl path READ getPath NOTIFY pathChanged CONSTANT FINAL)
-    Q_PROPERTY(QVariantMap package READ getPackage NOTIFY packageChanged CONSTANT FINAL)
-    Q_PROPERTY(MODE mode MEMBER m_mode NOTIFY modeChanged CONSTANT FINAL)
-    Q_PROPERTY(QString modeLabel MEMBER m_modeLabel NOTIFY modeLabelChanged CONSTANT FINAL)
+    Q_PROPERTY(QUrl link READ getLink NOTIFY linkChanged FINAL)
+    Q_PROPERTY(QUrl path READ getPath NOTIFY pathChanged FINAL)
+    Q_PROPERTY(QVariantMap package READ getPackage NOTIFY packageChanged FINAL)
+    Q_PROPERTY(MODE mode MEMBER m_mode NOTIFY modeChanged FINAL)
+    Q_PROPERTY(QString modeLabel MEMBER m_modeLabel NOTIFY modeLabelChanged FINAL)
     Q_PROPERTY(int progress MEMBER m_progress NOTIFY progressChanged)
-    Q_PROPERTY(int packageIndex READ getPackageIndex NOTIFY packagedIndexChanged CONSTANT FINAL)
+    Q_PROPERTY(int packageIndex READ getPackageIndex NOTIFY packagedIndexChanged FINAL)
     using App::App;
 
 public:
