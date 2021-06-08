@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Name=Software Center
+Comment=Manage your system applications using NXOS Software Center
+Exec=nx-software-center
+Icon=nx-software-center
+Terminal=false
+Type=Application
+Categories=Utility;

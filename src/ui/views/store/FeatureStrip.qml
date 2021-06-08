@@ -64,7 +64,7 @@ ColumnLayout
 
             width: Math.min(ListView.view.width, 320)
             height: 200
-            margins: Maui.Style.space.tiny
+//            margins: Maui.Style.space.tiny
             label1.text: model.name
             label2.text: model.typename
             label3.text: model.totaldownloads

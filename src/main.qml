@@ -21,6 +21,11 @@ Maui.ApplicationWindow
     readonly property var views: ({store: 0, apps: 1, progress: 2})
     property int currentView: views.store
 
+    mainMenu: Action
+    {
+        text: i18n("Settings")
+    }
+
     Maui.AppViews
     {
         id: _swipeView

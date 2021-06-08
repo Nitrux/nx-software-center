@@ -50,10 +50,11 @@ Maui.Page
 
         delegate: FeatureGridCard
         {
+            width: GridView.view.cellWidth
+            height: GridView.view.cellHeight
+
             images: _app.images
 
-            width: _featureGridView.cellWidth
-            height: _featureGridView.cellHeight
             label1.text: model.name
             label2.text: model.typename
             label3.text: model.totaldownloads
@@ -353,7 +354,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                 edge: Qt.BottomEdge
+                edge: Qt.BottomEdge
             }
 
             FeatureStrip
@@ -375,7 +376,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                 edge: Qt.BottomEdge
+                edge: Qt.BottomEdge
             }
 
             FeatureStrip
@@ -397,7 +398,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                 edge: Qt.BottomEdge
+                edge: Qt.BottomEdge
             }
 
             SectionTitle

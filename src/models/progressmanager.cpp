@@ -81,6 +81,7 @@ Package *ProgressManager::appendPackage(App *app, const int &packageIndex, const
     case Package::MODE::LAUNCH:
         package->launchPackage();
         break;
+    default: return package;
     }
 
     endInsertRows();

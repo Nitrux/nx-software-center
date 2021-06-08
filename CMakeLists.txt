@@ -1,105 +1,86 @@
-cmake_minimum_required(VERSION 3.0)
+# Copyright 2018-2020 Camilo Higuita <milo.h@aol.com>
+# Copyright 2018-2020 Nitrux Latinoamericana S.C.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
-project(nx-software-center)
+cmake_minimum_required(VERSION 3.14)
+
+set(NX_SC_VERSION 2.0.0)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+project(nx-software-center VERSION ${NX_SC_VERSION})
 
 set(REQUIRED_QT_VERSION 5.14.0)
-set(REQUIRED_KF5_VERSION 5.60)
+set(REQUIRED_KF5_VERSION 5.40.0)
 
-find_package(ECM 1.7.0 REQUIRED NO_MODULE)
+find_package(ECM ${REQUIRED_KF5_VERSION} NO_MODULE)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${ECM_MODULE_PATH})
+
+if(UNIX AND NOT APPLE AND NOT ANDROID)
+    include(KDEInstallDirs)
+    include(KDECMakeSettings)
+    include(ECMInstallIcons)
+    include(ECMAddAppIcon)
+endif()
+
+include(KDECompilerSettings NO_POLICY_SCOPE)
+include(KDEClangFormat)
+include(ECMSetupVersion)
+include(ECMSourceVersionControl)
+include(FeatureSummary)
+include(ECMQMLModules)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml Quick Sql Svg  WebEngine QuickControls2 Concurrent)
 
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
 
+if (ANDROID)
+    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
+else()
+    find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config KIO)
+endif()
+
 find_package(MauiKit REQUIRED)
 find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
 
-include(KDEInstallDirs)
-include(KDECompilerSettings NO_POLICY_SCOPE)
-include(KDECMakeSettings)
-include(ECMInstallIcons)
-include(FeatureSummary)
-include(ECMAddAppIcon)
+if(${ECM_SOURCE_UNDER_VERSION_CONTROL})
+execute_process(
+  COMMAND git rev-parse --abbrev-ref HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_BRANCH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Get the latest abbreviated commit hash of the working branch
+execute_process(
+  COMMAND git log -1 --format=%h
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_COMMIT_HASH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/stores
-    ${CMAKE_CURRENT_BINARY_DIR}/src/stores
+add_definitions(-DGIT_COMMIT_HASH="${GIT_COMMIT_HASH}")
+add_definitions(-DGIT_BRANCH="${GIT_BRANCH}")
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils
-    )
-
-set(nx_SRCS
-    src/main.cpp
-    src/models/appsmodel.cpp
-    src/models/storemodel.cpp
-    src/models/categoriesmodel.cpp
-    src/models/app.cpp
-    src/models/progressmanager.cpp
-    )
-
-set(nx_HDRS
-    src/utils/nx.h
-    src/models/appsmodel.h
-    src/models/storemodel.h
-    src/models/categoriesmodel.h
-    src/models/app.h
-    src/models/progressmanager.h
-    )
-
-set(nx_RSRCS
-    assets/nx-assets.qrc
-    src/qml.qrc
-    )
-
-set(nx_STORES_SRCS
-    src/stores/opendesktopstore.cpp
-    src/stores/appimagehubstore.cpp
-    src/stores/ResponseDTO/category.cpp
-    src/stores/ResponseDTO/application.cpp
-    )
-
-
-set(nx_STORES_HDRS
-    src/stores/store.h
-    src/stores/opendesktopstore.h
-    src/stores/appimagehubstore.h
-
-    src/stores/ResponseDTO/category.h
-    src/stores/ResponseDTO/categoryresponsedto.h
-    src/stores/ResponseDTO/application.h
-    src/stores/ResponseDTO/applicationresponsedto.h)
-
-add_executable(${PROJECT_NAME}
-    ${nx_SRCS}
-    ${nx_HDRS}
-    ${nx_RSRCS}
-
-    ${nx_STORES_SRCS}
-    ${nx_STORES_HDRS})
-
-if (ANDROID)
-    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
-
-    target_link_libraries(${PROJECT_NAME} Qt5::AndroidExtras)
-#     kde_source_files_enable_exceptions(pix src/pix.cpp)
 else()
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config KIO Attica SyntaxHighlighting)
-    target_link_libraries(${PROJECT_NAME} KF5::ConfigCore KF5::Notifications KF5::KIOCore KF5::I18n KF5::KIOWidgets KF5::KIOFileWidgets)
+    add_definitions(-DGIT_COMMIT_HASH="${NX_SC_VERSION}")
+    add_definitions(-DGIT_BRANCH="Stable")
 endif()
 
-target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Qml Qt5::Svg Qt5::WebEngine Qt5::Sql)
+ecm_setup_version(${NX_SC_VERSION}
+    VARIABLE_PREFIX NX_SC
+    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/nx_sc_version.h"
+    )
 
-install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES org.nx.softwarecenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-
-install(FILES assets/nx-software-center.svg DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor/scalable/apps)
+add_subdirectory(src)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

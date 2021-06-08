@@ -31,7 +31,7 @@ void OpenDesktopStore::getCategories() {
 
   QNetworkReply *reply = manager->get(QNetworkRequest(url));
   connect(
-      reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+      reply, &QNetworkReply::errorOccurred,
       this, [=](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
@@ -77,7 +77,7 @@ void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
 
   QNetworkReply *reply = manager->get(QNetworkRequest(url));
   connect(
-      reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+      reply, &QNetworkReply::errorOccurred,
       this, [=](QNetworkReply::NetworkError err) { emit error(err); });
 }
 

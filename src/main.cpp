@@ -15,7 +15,6 @@
 
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
-#include <QIcon>
 #else
 #include <QApplication>
 #endif
@@ -25,7 +24,9 @@
 
 #include <KI18n/KLocalizedString>
 
-#define NX_URI "org.nx.softwarecenter"
+#include "../nx_sc_version.h"
+
+#define NX_URI "org.nitrux.nxsc"
 
 int main(int argc, char *argv[])
 {
@@ -42,18 +43,18 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 #endif
 
-	app.setOrganizationName(QStringLiteral("Maui"));
+    app.setOrganizationName(QStringLiteral("Nitrux"));
 	app.setWindowIcon(QIcon(":/nx-software-center.svg"));
 
     MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
 
 	KLocalizedString::setApplicationDomain("nx-software-center");
-	KAboutData about(QStringLiteral("nx-software-center"), i18n("NX Software Center"), NX::version, i18n("NX Software Center distributes AppImages for GNU Linux and APKS for Android."),
-                     KAboutLicense::LGPL_V3, i18n("© 2019-%1 Nitrux Development Team", QString::number(QDate::currentDate().year())));
+    KAboutData about(QStringLiteral("nx-software-center"), i18n("NX Software Center"), NX_SC_VERSION_STRING, i18n("Browse and install AppImages."),
+                     KAboutLicense::LGPL_V3, i18n("© 2019-%1 Nitrux Development Team", QString::number(QDate::currentDate().year())), QString(GIT_BRANCH) + "/" + QString(GIT_COMMIT_HASH));
 	about.addAuthor(i18n("Camilo Higuita"), i18n("Developer"), QStringLiteral("milo.h@aol.com"));
     about.addAuthor(i18n("Anupam Basak"), i18n("Developer"), QStringLiteral("anupam.basak27@gmail.com"));
 	about.setHomepage("https://nxos.org");
-	about.setProductName("maui/nx-software-center");
+    about.setProductName("nitrux/nx-software-center");
 	about.setBugAddress("https://github.com/nitrux/issues");
 	about.setOrganizationDomain(NX_URI);
 	about.setProgramLogo(app.windowIcon());
@@ -82,10 +83,12 @@ int main(int argc, char *argv[])
 	qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
 	qmlRegisterType<ProgressManager>("NXModels", 1, 0, "ProgressManager");
 	qmlRegisterType<Package>("NXModels", 1, 0, "Package");
-	qmlRegisterType<Application>();
+    qmlRegisterAnonymousType<Application>("NXModels", 1);
     qmlRegisterType<Category>("NXModels", 1, 0, "Category");
 	qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
 	qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
+
 	engine.load(url);
+
 	return app.exec();
 }
