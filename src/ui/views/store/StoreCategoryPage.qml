@@ -26,6 +26,7 @@ Maui.Page
         {
             id: _searchField
             Layout.fillWidth: true
+            Layout.maximumWidth: 500
             placeholderText: i18n("Search package in %1", _storeList.categoryName )
             onAccepted: search(text)
             onCleared: search("")
