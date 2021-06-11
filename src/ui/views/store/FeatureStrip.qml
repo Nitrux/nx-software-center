@@ -67,8 +67,8 @@ ColumnLayout
 //            margins: Maui.Style.space.tiny
             label1.text: model.name
             label2.text: model.typename
-            label3.text: model.totaldownloads
-            label4.text: model.personid
+//            label3.text: model.totaldownloads
+//            label4.text: model.personid
 
             NX.App
             {

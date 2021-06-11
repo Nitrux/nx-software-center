@@ -48,32 +48,37 @@ Maui.Page
             }
         }
 
-        delegate: FeatureGridCard
+        delegate: Item
         {
             width: GridView.view.cellWidth
             height: GridView.view.cellHeight
 
-            images: _app.images
-
-            label1.text: model.name
-            label2.text: model.typename
-            label3.text: model.totaldownloads
-            label4.text: model.personid
-
-            NX.App
+            FeatureGridCard
             {
-                id: _app
-                data: _featureList.application(model.id)
-            }
+                anchors.fill: parent
+                anchors.margins: Maui.Style.space.medium
 
-            onClicked:
-            {
-                _featureGridView.currentIndex = index
-                _featureList.setApp(model.id)
-                control.itemClicked(_featureList.app)
+                images: _app.images
+
+                label1.text: model.name
+                label2.text: model.typename
+                //            label3.text: model.totaldownloads
+                //            label4.text: model.personid
+
+                NX.App
+                {
+                    id: _app
+                    data: _featureList.application(model.id)
+                }
+
+                onClicked:
+                {
+                    _featureGridView.currentIndex = index
+                    _featureList.setApp(model.id)
+                    control.itemClicked(_featureList.app)
+                }
             }
         }
-
         flickable.header: ColumnLayout
         {
             width: _featureGridView.flickable.width
