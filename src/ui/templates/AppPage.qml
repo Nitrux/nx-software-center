@@ -86,6 +86,7 @@ Maui.Page
         id: _appHandler
     }
 
+    title: appInfo.name
     headBar.leftContent: ToolButton
     {
         icon.name: "go-previous"
@@ -124,7 +125,7 @@ Maui.Page
         ColumnLayout
         {
             width: control.width
-            spacing: Maui.Style.space.large
+            spacing: Maui.Style.space.big
 
             Item
             {
@@ -160,7 +161,7 @@ Maui.Page
                 Rectangle
                 {
                     anchors.fill: parent
-                    color: Kirigami.Theme.viewBackgroundColor
+                    color: control.Kirigami.Theme.backgroundColor
                     opacity: 0.9
                 }
 
@@ -175,7 +176,7 @@ Maui.Page
                     imageSource: _bannerImage.source
                     label1.text: appInfo.name
                     label1.elide: Text.ElideMiddle
-                    label1.wrapMode: Text.NoWrap
+                    label1.wrapMode: Text.WrapAnywhere
                     label1.font.weight: Font.Bold
                     label1.font.bold: true
                     label1.font.pointSize: Maui.Style.fontSizes.enormous
@@ -236,10 +237,9 @@ Maui.Page
 
                             iconSource: "license"
                             iconSizeHint: Maui.Style.iconSizes.medium
-                            label1.text: appInfo.license
+                            label1.text: appInfo.license || i18n("Unkown")
                         }
                     }
-
                 }
 
                 Maui.Separator
@@ -256,78 +256,42 @@ Maui.Page
                 id: _screenshotsSection
                 verticalScrollBarPolicy: ScrollBar.AlwaysOff
 
+                Kirigami.Theme.colorSet: Kirigami.Theme.Window
+                Kirigami.Theme.inherit: false
+
                 Layout.fillWidth: true
-                Layout.preferredHeight: 200
-                Layout.margins: Maui.Style.space.big
-                clip: true
+                Layout.preferredHeight: 500
                 model: control.imagesInfo
-                spacing:  Maui.Style.space.big
+                spacing: 0
                 orientation: ListView.Horizontal
-                //                snapMode: ListView.SnapOneItem
 
-                delegate: Maui.ItemDelegate
+                flickable.highlightFollowsCurrentItem: true
+                flickable.highlightMoveDuration: 0
+                snapMode: ListView.SnapOneItem
+                flickable.highlightRangeMode: ListView.StrictlyEnforceRange
+                flickable.keyNavigationEnabled: true
+                flickable.keyNavigationWraps : true
+
+                delegate: MouseArea
                 {
-                    id: _delegate
-                    //                    color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
                     height: ListView.view.height
-                    width: Math.max(100, ListView.view.width * 0.3)
-                    //                    radius: Maui.Style.radiusV
+                    width: ListView.view.width
 
-                    onClicked:
+                    onDoubleClicked:
                     {
                         _imageViewerDialog.source = modelData.pic
                         _imageViewerDialog.open()
                     }
 
-                    Item
+                    Image
                     {
                         anchors.fill: parent
-                        Image
-                        {
-                            width: parent.width
-                            fillMode: Image.PreserveAspectCrop
+                        fillMode: Image.PreserveAspectFit
 
-                            anchors.margins: Maui.Style.space.big
-                            source: modelData.pic
+                        source: modelData.pic
 
-                            verticalAlignment: Qt.AlignVCenter
-                            horizontalAlignment: Qt.AlignHCenter
-                        }
-
-                        layer.enabled: true
-                        layer.effect: OpacityMask
-                        {
-                            maskSource: Item
-                            {
-                                width: _delegate.width
-                                height: _delegate.height
-
-                                Rectangle
-                                {
-                                    anchors.fill: parent
-                                    radius: Maui.Style.radiusV
-                                }
-                            }
-                        }
-                    }
-
-                    Rectangle
-                    {
-                        Kirigami.Theme.inherit: false
-                        anchors.fill: parent
-                        color: "transparent"
-                        radius: Maui.Style.radiusV
-                        border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.2)
-
-                        Rectangle
-                        {
-                            anchors.fill: parent
-                            color: "transparent"
-                            radius: parent.radius - 0.5
-                            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                            opacity: 0.2
-                            anchors.margins: 1
-                        }
+                        verticalAlignment: Qt.AlignVCenter
+                        horizontalAlignment: Qt.AlignHCenter
                     }
                 }
             }
@@ -374,7 +338,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                 edge: Qt.BottomEdge
+                edge: Qt.BottomEdge
             }
 
             SectionTitle
@@ -392,43 +356,29 @@ Maui.Page
                 Layout.margins: Maui.Style.space.medium
                 model: control.downloadsInfo
                 adaptContent: true
-                itemSize: 300
+                itemSize: 360
                 itemHeight: 100
 
-                delegate: Maui.ItemDelegate
+                delegate: FloatingCardDelegate
                 {
                     id: _delegate
                     property var info : modelData
-                    Kirigami.Theme.backgroundColor: "grey"
-                    Kirigami.Theme.textColor: "white"
-                    Kirigami.Theme.highlightColor: "#333"
 
-                    width: _packagesGrid.cellWidth * 0.95
-                    height: _packagesGrid.cellHeight * 0.95
+                    width: GridView.view.cellWidth
+                    height: GridView.view.cellHeight
 
-                    background: Rectangle
-                    {
-                        color: _delegate.isCurrentItem || _delegate.hovered ?  Kirigami.Theme.highlightColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
-                        radius: Maui.Style.radiusV
-                    }
+                    label1.text: info.name
+                    label1.font.pointSize: Maui.Style.fontSizes.huge
+                    label1.font.weight: Font.Bold
+                    label1.font.bold: true
+                    label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    //                        label2.text: info.tags
+                    label3.text: info.packageArch
+                    label2.text: info.size
+                    iconSource: FB.FM.iconName(info.name)
+                    iconSizeHint: Maui.Style.iconSizes.large
 
-                    Maui.ListItemTemplate
-                    {
-                        anchors.margins: Maui.Style.space.medium
-                        anchors.fill: parent
-                        label1.text: info.name
-                        label1.font.pointSize: Maui.Style.fontSizes.huge
-                        label1.font.weight: Font.Bold
-                        label1.font.bold: true
-                        label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        //                        label2.text: info.tags
-                        label3.text: info.packageArch
-                        label2.text: info.size
-                        iconSource: FB.FM.iconName(info.name)
-                        iconSizeHint: Maui.Style.iconSizes.large
-                    }
-
-                    onClicked:
+                    onDoubleClicked:
                     {
                         animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
                         control.packageClicked(index)
@@ -483,8 +433,6 @@ Maui.Page
             from: _aniImg.y; to: _aniImg.endPos.y + _aniImg.height
             duration:  Kirigami.Units.longDuration * 2.5
             loops: 1
-
-
         }
 
         Connections
@@ -519,13 +467,13 @@ Maui.Page
     Popup
     {
         id: _imageViewerDialog
-
+        parent: root
         background: null
         modal: true
 
         property alias source :_imageViewer.source
-        height: control.height* 0.8
-        width: control.width* 0.8
+        height: root.height
+        width: root.width
 
         IT.ImageViewer
         {
