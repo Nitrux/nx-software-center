@@ -251,51 +251,6 @@ Maui.Page
                 }
             }
 
-            Maui.ListBrowser
-            {
-                id: _screenshotsSection
-                verticalScrollBarPolicy: ScrollBar.AlwaysOff
-
-                Kirigami.Theme.colorSet: Kirigami.Theme.Window
-                Kirigami.Theme.inherit: false
-
-                Layout.fillWidth: true
-                Layout.preferredHeight: 500
-                model: control.imagesInfo
-                spacing: 0
-                orientation: ListView.Horizontal
-
-                flickable.highlightFollowsCurrentItem: true
-                flickable.highlightMoveDuration: 0
-                snapMode: ListView.SnapOneItem
-                flickable.highlightRangeMode: ListView.StrictlyEnforceRange
-                flickable.keyNavigationEnabled: true
-                flickable.keyNavigationWraps : true
-
-                delegate: MouseArea
-                {
-                    height: ListView.view.height
-                    width: ListView.view.width
-
-                    onDoubleClicked:
-                    {
-                        _imageViewerDialog.source = modelData.pic
-                        _imageViewerDialog.open()
-                    }
-
-                    Image
-                    {
-                        anchors.fill: parent
-                        fillMode: Image.PreserveAspectFit
-
-                        source: modelData.pic
-
-                        verticalAlignment: Qt.AlignVCenter
-                        horizontalAlignment: Qt.AlignHCenter
-                    }
-                }
-            }
-
             SectionTitle
             {
                 label1.text: i18n("About")
@@ -318,7 +273,9 @@ Maui.Page
                 Layout.fillWidth: true
                 Layout.preferredHeight: Maui.Style.toolBarHeight* 1.5
                 Layout.margins: Maui.Style.space.medium
+
                 verticalScrollBarPolicy: ScrollBar.AlwaysOff
+                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
 
                 spacing: Maui.Style.space.big
 
@@ -359,32 +316,87 @@ Maui.Page
                 itemSize: 360
                 itemHeight: 100
 
-                delegate: FloatingCardDelegate
+                delegate: Item
                 {
-                    id: _delegate
                     property var info : modelData
 
                     width: GridView.view.cellWidth
                     height: GridView.view.cellHeight
 
-                    label1.text: info.name
-                    label1.font.pointSize: Maui.Style.fontSizes.huge
-                    label1.font.weight: Font.Bold
-                    label1.font.bold: true
-                    label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    //                        label2.text: info.tags
-                    label3.text: info.packageArch
-                    label2.text: info.size
-                    iconSource: FB.FM.iconName(info.name)
-                    iconSizeHint: Maui.Style.iconSizes.large
-
-                    onDoubleClicked:
+                    FloatingCardDelegate
                     {
-                        animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
-                        control.packageClicked(index)
+                        id: _delegate
+
+                        anchors.centerIn: parent
+                        width: _packagesGrid.itemSize - Maui.Style.space.medium
+                        height: _packagesGrid.itemHeight  - Maui.Style.space.medium
+
+                        label1.text: info.name
+                        label1.font.pointSize: Maui.Style.fontSizes.huge
+                        label1.font.weight: Font.Bold
+                        label1.font.bold: true
+                        label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        //                        label2.text: info.tags
+                        label3.text: info.packageArch
+                        label2.text: info.size
+                        iconSource: FB.FM.iconName(info.name)
+                        iconSizeHint: Maui.Style.iconSizes.large
+
+                        onDoubleClicked:
+                        {
+                            animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
+                            control.packageClicked(index)
+                        }
                     }
                 }
             }
+
+
+           ListView
+            {
+                id: _screenshotsSection
+
+                Kirigami.Theme.colorSet: Kirigami.Theme.Window
+                Kirigami.Theme.inherit: false
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: 500
+                model: control.imagesInfo
+                spacing: 0
+                orientation: ListView.Horizontal
+
+                highlightFollowsCurrentItem: true
+                highlightMoveDuration: 0
+                snapMode: ListView.SnapOneItem
+                highlightRangeMode: ListView.StrictlyEnforceRange
+                keyNavigationEnabled: true
+                keyNavigationWraps : true
+
+                delegate: MouseArea
+                {
+                    height: ListView.view.height
+                    width: ListView.view.width
+
+                    onDoubleClicked:
+                    {
+                        _imageViewerDialog.source = modelData.pic
+                        _imageViewerDialog.open()
+                    }
+
+                    Image
+                    {
+                        anchors.fill: parent
+                        fillMode: Image.PreserveAspectFit
+
+                        source: modelData.pic
+
+                        verticalAlignment: Qt.AlignVCenter
+                        horizontalAlignment: Qt.AlignHCenter
+                    }
+                }
+            }
+
+
         }
     }
 
