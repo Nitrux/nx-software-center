@@ -93,16 +93,16 @@ Maui.Page
         onClicked: control.exit()
     }
 
-    Kirigami.ScrollablePage
+    ScrollView
     {
         id: _scrollablePage
         anchors.fill: parent
-        padding: 0
-        leftPadding: padding
-        rightPadding: padding
-        topPadding: padding
-        bottomPadding: padding
-        flickable {
+        clip: control.clip
+        contentHeight: _pageLayout.implicitHeight
+        contentWidth: availableWidth
+
+        Flickable
+        {
             Behavior on contentX {
                 enabled: shouldAnimateScroll
 
@@ -120,283 +120,284 @@ Maui.Page
                     easing.type: Easing.InOutQuad
                 }
             }
-        }
 
-        ColumnLayout
-        {
-            width: control.width
-            spacing: Maui.Style.space.big
-
-            Item
+            ColumnLayout
             {
-                id: _header
-                Layout.preferredHeight: _bannerInfo.implicitHeight + Maui.Style.space.enormous
-                Layout.fillWidth: true
-                clip: true
+                id: _pageLayout
+                width: parent.width
+                spacing: Maui.Style.space.big
 
-                Image
+                Item
                 {
-                    id: _bannerImage
-                    anchors.centerIn: parent
-                    height: parent.height * 2
-                    width: parent.width * 2
-                    source: imagesInfo[0].pic
-                    sourceSize.height: 100
-                    sourceSize.width: 100
-                    fillMode: Image.PreserveAspectCrop
-                    antialiasing: true
-                    smooth: true
-                    asynchronous: true
-                }
+                    id: _header
+                    Layout.preferredHeight: _bannerInfo.implicitHeight + Maui.Style.space.enormous
+                    Layout.fillWidth: true
+                    clip: true
 
-                FastBlur
-                {
-                    id: fastBlur
-                    anchors.fill: _bannerImage
-                    source: _bannerImage
-                    radius: 64
-                    transparentBorder: false
-                }
-
-                Rectangle
-                {
-                    anchors.fill: parent
-                    color: control.Kirigami.Theme.backgroundColor
-                    opacity: 0.9
-                }
-
-                Maui.FlexListItem
-                {
-                    id: _bannerInfo
-                    width: parent.width
-                    //                    anchors.fill: parent
-                    anchors.centerIn: parent
-                    wide: root.isWide
-                    iconSizeHint: Maui.Style.iconSizes.huge
-                    imageSource: _bannerImage.source
-                    label1.text: appInfo.name
-                    label1.elide: Text.ElideMiddle
-                    label1.wrapMode: Text.WrapAnywhere
-                    label1.font.weight: Font.Bold
-                    label1.font.bold: true
-                    label1.font.pointSize: Maui.Style.fontSizes.enormous
-                    label2.text: String("<a href='%1'>%1</a>").arg(appInfo.personid)
-                    template.leftLabels.spacing: Maui.Style.space.medium
-                    rowSpacing: Maui.Style.space.big
-                    template.spacing: Maui.Style.space.huge
-                    //                    label3.text: appInfo.personid
-
-
-                    template.leftLabels.data: Row
+                    Image
                     {
-                        id: _actionButtons
-                        //                        Layout.fillWidth: parent.wide
-                        //                        Layout.margins: Maui.Style.space.big
-                        //                        spacing: Maui.Style.space.medium
-                        Layout.preferredHeight: implicitHeight
+                        id: _bannerImage
+                        anchors.centerIn: parent
+                        height: parent.height * 2
+                        width: parent.width * 2
+                        source: imagesInfo[0].pic
+                        sourceSize.height: 100
+                        sourceSize.width: 100
+                        fillMode: Image.PreserveAspectCrop
+                        antialiasing: true
+                        smooth: true
+                        asynchronous: true
                     }
 
-                    RowLayout
+                    FastBlur
                     {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignCenter
-                        spacing: Maui.Style.space.big
+                        id: fastBlur
+                        anchors.fill: _bannerImage
+                        source: _bannerImage
+                        radius: 64
+                        transparentBorder: false
+                    }
 
-                        Maui.GridItemTemplate
+                    Rectangle
+                    {
+                        anchors.fill: parent
+                        color: control.Kirigami.Theme.backgroundColor
+                        opacity: 0.9
+                    }
+
+                    Maui.FlexListItem
+                    {
+                        id: _bannerInfo
+                        width: parent.width
+                        //                    anchors.fill: parent
+                        anchors.centerIn: parent
+                        wide: root.isWide
+                        iconSizeHint: Maui.Style.iconSizes.huge
+                        imageSource: _bannerImage.source
+                        label1.text: appInfo.name
+                        label1.elide: Text.ElideMiddle
+                        label1.wrapMode: Text.WrapAnywhere
+                        label1.font.weight: Font.Bold
+                        label1.font.bold: true
+                        label1.font.pointSize: Maui.Style.fontSizes.enormous
+                        label2.text: String("<a href='%1'>%1</a>").arg(appInfo.personid)
+                        template.leftLabels.spacing: Maui.Style.space.medium
+                        rowSpacing: Maui.Style.space.big
+                        template.spacing: Maui.Style.space.huge
+                        //                    label3.text: appInfo.personid
+
+
+                        template.leftLabels.data: Row
                         {
-                            Layout.fillWidth: true
-                            implicitWidth:  64
-                            implicitHeight: 64
-                            iconSource: "rating"
-                            iconSizeHint: Maui.Style.iconSizes.medium
-                            label1.text: appInfo.score
-                            label1.font.bold: true
-                            label1.font.weight: Font.Bold
-                            label1.font.pointSize: Maui.Style.fontSizes.big
+                            id: _actionButtons
+                            //                        Layout.fillWidth: parent.wide
+                            //                        Layout.margins: Maui.Style.space.big
+                            //                        spacing: Maui.Style.space.medium
+                            Layout.preferredHeight: implicitHeight
                         }
 
-                        Maui.GridItemTemplate
+                        RowLayout
                         {
                             Layout.fillWidth: true
-                            implicitWidth:  64
-                            implicitHeight: 64
-                            iconSource: "download"
-                            iconSizeHint: Maui.Style.iconSizes.medium
-                            label1.text: appInfo.totaldownloads
-                            label1.font.bold: true
-                            label1.font.weight: Font.Bold
-                            label1.font.pointSize: Maui.Style.fontSizes.big
+                            Layout.alignment: Qt.AlignCenter
+                            spacing: Maui.Style.space.big
+
+                            Maui.GridItemTemplate
+                            {
+                                Layout.fillWidth: true
+                                implicitWidth:  64
+                                implicitHeight: 64
+                                iconSource: "rating"
+                                iconSizeHint: Maui.Style.iconSizes.medium
+                                label1.text: appInfo.score
+                                label1.font.bold: true
+                                label1.font.weight: Font.Bold
+                                label1.font.pointSize: Maui.Style.fontSizes.big
+                            }
+
+                            Maui.GridItemTemplate
+                            {
+                                Layout.fillWidth: true
+                                implicitWidth:  64
+                                implicitHeight: 64
+                                iconSource: "download"
+                                iconSizeHint: Maui.Style.iconSizes.medium
+                                label1.text: appInfo.totaldownloads
+                                label1.font.bold: true
+                                label1.font.weight: Font.Bold
+                                label1.font.pointSize: Maui.Style.fontSizes.big
+                            }
+
+                            Maui.GridItemTemplate
+                            {
+                                Layout.fillWidth: true
+
+                                implicitWidth:  64
+                                implicitHeight: 64
+
+                                iconSource: "license"
+                                iconSizeHint: Maui.Style.iconSizes.medium
+                                label1.text: appInfo.license || i18n("Unkown")
+                            }
                         }
+                    }
 
-                        Maui.GridItemTemplate
-                        {
-                            Layout.fillWidth: true
+                    Maui.Separator
+                    {
+                        edge: Qt.BottomEdge
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                    }
+                }
 
-                            implicitWidth:  64
-                            implicitHeight: 64
+                SectionTitle
+                {
+                    label1.text: i18n("About")
+                    label2.text: i18n("Information about the application.")
+                }
 
-                            iconSource: "license"
-                            iconSizeHint: Maui.Style.iconSizes.medium
-                            label1.text: appInfo.license || i18n("Unkown")
-                        }
+                Maui.ListItemTemplate
+                {
+                    id: _div1
+                    Layout.fillWidth: true
+                    Layout.margins: Maui.Style.space.medium
+
+                    label1.text: appInfo.name
+                    label2.text: appInfo.description
+                    label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                }
+
+                Maui.ListBrowser
+                {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: Maui.Style.toolBarHeight* 1.5
+                    Layout.margins: Maui.Style.space.medium
+
+                    verticalScrollBarPolicy: ScrollBar.AlwaysOff
+                    horizontalScrollBarPolicy: ScrollBar.AlwaysOff
+
+                    spacing: Maui.Style.space.big
+
+                    orientation: ListView.Horizontal
+                    model: String(appInfo.tags).split(",")
+
+                    delegate: Maui.Chip
+                    {
+                        showCloseButton: false
+                        width: implicitWidth
+                        label.text: modelData
+                        iconSource: "tag"
+                        //                        radius: Maui.Style.radiusV
                     }
                 }
 
                 Maui.Separator
                 {
+                    Layout.fillWidth: true
                     edge: Qt.BottomEdge
-                    anchors.bottom: parent.bottom
-                    anchors.left: parent.left
-                    anchors.right: parent.right
                 }
-            }
 
-            SectionTitle
-            {
-                label1.text: i18n("About")
-                label2.text: i18n("Information about the application.")
-            }
-
-            Maui.ListItemTemplate
-            {
-                id: _div1
-                Layout.fillWidth: true
-                Layout.margins: Maui.Style.space.medium
-
-                label1.text: appInfo.name
-                label2.text: appInfo.description
-                label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            }
-
-            Maui.ListBrowser
-            {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Maui.Style.toolBarHeight* 1.5
-                Layout.margins: Maui.Style.space.medium
-
-                verticalScrollBarPolicy: ScrollBar.AlwaysOff
-                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-
-                spacing: Maui.Style.space.big
-
-                orientation: ListView.Horizontal
-                model: String(appInfo.tags).split(",")
-
-                delegate: Maui.Chip
+                SectionTitle
                 {
-                    showCloseButton: false
-                    width: implicitWidth
-                    label.text: modelData
-                    iconSource: "tag"
-                    //                        radius: Maui.Style.radiusV
+                    id: _div2
+                    label1.text: i18n("Packages")
+                    label2.text: i18n("Avaliable packages to download")
                 }
-            }
 
-            Maui.Separator
-            {
-                Layout.fillWidth: true
-                edge: Qt.BottomEdge
-            }
-
-            SectionTitle
-            {
-                id: _div2
-                label1.text: i18n("Packages")
-                label2.text: i18n("Avaliable packages to download")
-            }
-
-            Maui.GridView
-            {
-                id: _packagesGrid
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.margins: Maui.Style.space.medium
-                model: control.downloadsInfo
-                adaptContent: true
-                itemSize: 360
-                itemHeight: 100
-
-                delegate: Item
+                Maui.GridView
                 {
-                    property var info : modelData
+                    id: _packagesGrid
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.margins: Maui.Style.space.medium
+                    model: control.downloadsInfo
+                    adaptContent: true
+                    itemSize: 360
+                    itemHeight: 100
 
-                    width: GridView.view.cellWidth
-                    height: GridView.view.cellHeight
-
-                    FloatingCardDelegate
+                    delegate: Item
                     {
-                        id: _delegate
+                        property var info : modelData
 
-                        anchors.centerIn: parent
-                        width: _packagesGrid.itemSize - Maui.Style.space.medium
-                        height: _packagesGrid.itemHeight  - Maui.Style.space.medium
+                        width: GridView.view.cellWidth
+                        height: GridView.view.cellHeight
 
-                        label1.text: info.name
-                        label1.font.pointSize: Maui.Style.fontSizes.huge
-                        label1.font.weight: Font.Bold
-                        label1.font.bold: true
-                        label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        //                        label2.text: info.tags
-                        label3.text: info.packageArch
-                        label2.text: info.size
-                        iconSource: FB.FM.iconName(info.name)
-                        iconSizeHint: Maui.Style.iconSizes.large
-
-                        onDoubleClicked:
+                        FloatingCardDelegate
                         {
-                            animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
-                            control.packageClicked(index)
+                            id: _delegate
+
+                            anchors.centerIn: parent
+                            width: _packagesGrid.itemSize - Maui.Style.space.medium
+                            height: _packagesGrid.itemHeight  - Maui.Style.space.medium
+
+                            label1.text: info.name
+                            label1.font.pointSize: Maui.Style.fontSizes.huge
+                            label1.font.weight: Font.Bold
+                            label1.font.bold: true
+                            label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                            //                        label2.text: info.tags
+                            label3.text: info.packageArch
+                            label2.text: info.size
+                            iconSource: FB.FM.iconName(info.name)
+                            iconSizeHint: Maui.Style.iconSizes.large
+
+                            onDoubleClicked:
+                            {
+                                animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
+                                control.packageClicked(index)
+                            }
                         }
                     }
                 }
-            }
 
 
-           ListView
-            {
-                id: _screenshotsSection
-
-                Kirigami.Theme.colorSet: Kirigami.Theme.Window
-                Kirigami.Theme.inherit: false
-
-                Layout.fillWidth: true
-                Layout.preferredHeight: 500
-                model: control.imagesInfo
-                spacing: 0
-                orientation: ListView.Horizontal
-
-                highlightFollowsCurrentItem: true
-                highlightMoveDuration: 0
-                snapMode: ListView.SnapOneItem
-                highlightRangeMode: ListView.StrictlyEnforceRange
-                keyNavigationEnabled: true
-                keyNavigationWraps : true
-
-                delegate: MouseArea
+                ListView
                 {
-                    height: ListView.view.height
-                    width: ListView.view.width
+                    id: _screenshotsSection
 
-                    onDoubleClicked:
+                    Kirigami.Theme.colorSet: Kirigami.Theme.Window
+                    Kirigami.Theme.inherit: false
+
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 500
+                    model: control.imagesInfo
+                    spacing: 0
+                    orientation: ListView.Horizontal
+
+                    highlightFollowsCurrentItem: true
+                    highlightMoveDuration: 0
+                    snapMode: ListView.SnapOneItem
+                    highlightRangeMode: ListView.StrictlyEnforceRange
+                    keyNavigationEnabled: true
+                    keyNavigationWraps : true
+
+                    delegate: MouseArea
                     {
-                        _imageViewerDialog.source = modelData.pic
-                        _imageViewerDialog.open()
-                    }
+                        height: ListView.view.height
+                        width: ListView.view.width
 
-                    Image
-                    {
-                        anchors.fill: parent
-                        fillMode: Image.PreserveAspectFit
+                        onDoubleClicked:
+                        {
+                            _imageViewerDialog.source = modelData.pic
+                            _imageViewerDialog.open()
+                        }
 
-                        source: modelData.pic
+                        Image
+                        {
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectFit
 
-                        verticalAlignment: Qt.AlignVCenter
-                        horizontalAlignment: Qt.AlignHCenter
+                            source: modelData.pic
+
+                            verticalAlignment: Qt.AlignVCenter
+                            horizontalAlignment: Qt.AlignHCenter
+                        }
                     }
                 }
+
+
             }
-
-
         }
     }
 
