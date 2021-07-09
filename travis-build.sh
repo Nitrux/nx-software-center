@@ -23,7 +23,7 @@ apt -qq update
 
 ### Install Dependencies
 
-DEBIAN_FRONTEND=noninteractive apt -qq -yy install devscripts lintian build-essential automake autotools-dev
+DEBIAN_FRONTEND=noninteractive apt -qq -yy install devscripts debhelper gettext lintian build-essential automake autotools-dev cmake extra-cmake-modules
 mk-build-deps -i -t "apt-get --yes" -r
 
 ### Build Deb
