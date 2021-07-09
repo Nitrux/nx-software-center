@@ -8,5 +8,5 @@ Standards-Version: 3.9.6
 Package: nx-software-center
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: A software store for AppImages built with MauiKit.
+Description: Software store for AppImages built with MauiKit.
  Software Center for Nitrux.
