@@ -2,7 +2,7 @@ Source: nx-software-center
 Section: kde
 Priority: optional
 Maintainer: Camilo Higuita <milohr@aol.org>
-Build-Depends: debhelper (>=9), cmake, extra-cmake-modules, build-essential, cmake, extra-cmake-modules, qtbase5-dev, git, qtdeclarative5-dev, libqt5xmlpatterns5-dev, autotools-dev, automake, libtool, libgtk2.0-dev, libfuse-dev, libappimage-dev, patchelf, xxd, desktop-file-utils, libqt5svg5-dev, mauikit-dev, qtwebengine5-dev, qtquickcontrols2-5-dev, libkf5i18n-dev, libkf5coreaddons-dev, libkf5notifications-dev, libkf5config-dev, libkf5kio-dev, libkf5attica-dev, libkf5syntaxhighlighting-dev,
+Build-Depends: debhelper (>=9), cmake, extra-cmake-modules, mauikit-dev
 Standards-Version: 3.9.6
 
 Package: nx-software-center
