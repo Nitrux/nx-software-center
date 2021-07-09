@@ -1,19 +1,15 @@
 dist: focal
 
+before_install:
+  - gem install package_cloud
+
 script:
   - sudo ./travis-build.sh
+  - package_cloud push nitrux/repo/debian/trixie *.deb
 
 branches:
   only:
-    - dev-mauikit-ui
-
-deploy:
-  - provider: script
-    script: wget -qO - https://raw.githubusercontent.com/Nitrux/nitrux-repository-util/master/upload-pkgs | sh -s *.deb
-    skip_cleanup: true
-    on:
-      branch: dev-mauikit-ui
+    - master
 
 notifications:
   email: false
-  
