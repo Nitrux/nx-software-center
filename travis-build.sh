@@ -16,7 +16,7 @@ apt -qq update
 
 ### Install Dependencies
 
-DEBIAN_FRONTEND=noninteractive apt -qq -yy install devscripts debhelper gettext lintian build-essential automake autotools-dev cmake extra-cmake-modules mauikit-dev libmauikit-filebrowsing-dev
+DEBIAN_FRONTEND=noninteractive apt -qq -yy install devscripts debhelper gettext lintian build-essential automake autotools-dev cmake extra-cmake-modules mauikit-dev libmauikitfilebrowsing-dev
 mk-build-deps -i -t "apt-get --yes" -r
 
 ### Build Deb
