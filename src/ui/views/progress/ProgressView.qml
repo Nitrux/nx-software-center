@@ -40,7 +40,7 @@ Maui.Page
         delegate: PackageDelegate
         {
             id: _delegate
-            width: ListView.view.width            
+            width: ListView.view.width
 
             onClicked:  model.item.launchPackage()
 
@@ -59,7 +59,7 @@ Maui.Page
 
             function goToApps()
             {
-                _swipeView.currentIndex = root.views.apps
+                _stackView.pop()
             }
         }
     }

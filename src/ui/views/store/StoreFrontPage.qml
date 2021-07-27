@@ -1,7 +1,6 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
@@ -79,207 +78,26 @@ Maui.Page
                 }
             }
         }
+
         flickable.header: ColumnLayout
         {
             width: _featureGridView.flickable.width
             spacing: Maui.Style.space.big
 
-            Item
+            FeatureHeader
             {
-                id: _featuredSection
-                Kirigami.Theme.inherit: false
-                Kirigami.Theme.backgroundColor: "#333"
-                Kirigami.Theme.textColor: "#fafafa"
-                height: 250
+                id: _featureHeader
                 Layout.fillWidth: true
                 Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
-                Layout.maximumWidth: 1200
+                Layout.maximumWidth: 600
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-
-                Image
+                onAppClicked:
                 {
-                    id: _bannerImage
-                    anchors.centerIn: parent
-                    width: parent.width *2
-                    height: parent.height * 2
-                    sourceSize.height: height * 0.3
-                    sourceSize.width: width * 0.3
-                    source: _featuredListview.currentItem.imageSource
-                    fillMode: Image.PreserveAspectCrop
-                    antialiasing: false
-                    smooth: false
-                    asynchronous: true
-                }
-
-                FastBlur
-                {
-                    id: fastBlur
-                    anchors.fill: parent
-                    source: _bannerImage
-                    radius: 64
-                    transparentBorder: false
-                    cached: true
-                }
-
-                Rectangle
-                {
-                    anchors.fill: parent
-                    opacity: 0.7
-                    color: Kirigami.Theme.backgroundColor
-                }
-
-                ListView
-                {
-                    id: _featuredListview
-                    anchors.fill: parent
-                    orientation: ListView.Horizontal
-                    snapMode: ListView.SnapOneItem
-                    clip: true
-                    highlightMoveDuration: 1000
-                    highlightMoveVelocity: -1
-
-                    onMovementEnded: currentIndex = indexAt(contentX, contentY)
-
-                    model: Maui.BaseModel
-                    {
-                        list: NX.Store
-                        {
-                            id: _featureListBanner
-                            category: _categoriesList.baseCategory()
-                            pageSize: 2
-                            sort: NX.Store.HIGHEST_RATED
-                        }
-                    }
-
-                    MouseArea
-                    {
-                        id: _featureMouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        propagateComposedEvents: true
-                    }
-
-                    Timer
-                    {
-                        id: _featuredListviewTimer
-                        interval: 7000
-                        repeat: true
-                        running: !_featureMouseArea.containsPress || !_featureMouseArea.containsMouse
-                        onTriggered: _featuredListview.cycleSlideForward()
-                    }
-
-                    Row
-                    {
-                        spacing: Maui.Style.space.medium
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        z: 999
-                        anchors.bottom: parent.bottom
-                        anchors.margins: Maui.Style.space.big
-
-                        Repeater
-                        {
-                            model: _featureListBanner.count
-
-                            Rectangle
-                            {
-                                width: Maui.Style.iconSizes.tiny
-                                height: width
-                                radius: width
-                                color: Kirigami.Theme.textColor
-                                opacity: index === _featuredListview.currentIndex ? 1 : 0.5
-                            }
-                        }
-                    }
-
-                    delegate: Maui.ItemDelegate
-                    {
-                        property url imageSource: model.preview
-                        height: _featuredListview.height
-                        width: _featuredListview.width
-
-                        onClicked:
-                        {
-                            _featuredListview.currentIndex = index
-                            _featureListBanner.setApp(model.id)
-                            control.itemClicked(_featureListBanner.app)
-                        }
-
-                        Maui.ListItemTemplate
-                        {
-                            anchors.fill: parent
-
-                            anchors.margins: Maui.Style.space.huge
-
-                            label1.font.pointSize: Maui.Style.fontSizes.enormous * 2
-                            label1.font.bold: true
-                            label1.font.weight: Font.Bold
-                            label1.text: model.name
-                            label2.text: model.description
-                            label2.wrapMode: Text.WordWrap
-
-                            label3.font.pointSize: Maui.Style.fontSizes.enormous
-                            label3.font.bold: true
-                            label3.font.weight: Font.Bold
-                            label3.font.underline: true
-                            label3.text: model.score
-                            label4.text: i18n("Score")
-
-                            iconVisible: isWide
-                            rightLabels.visible: isWide
-                            imageSource: model.preview
-
-                            fillMode: Image.PreserveAspectFit
-
-                            leftLabels.data: Label
-                            {
-                                Layout.fillWidth: true
-                                font.bold: true
-                                font.weight: Font.Bold
-                                color: Kirigami.Theme.textColor
-                                text: model.typename + " - " + model.personid
-                            }
-                        }
-                    }
-
-                    function cycleSlideForward() {
-                        _featuredListviewTimer.restart();
-
-                        if (_featuredListview.currentIndex === _featuredListview.count - 1) {
-                            _featuredListview.currentIndex = 0;
-                        } else {
-                            _featuredListview.incrementCurrentIndex();
-                        }
-                    }
-
-                    function cycleSlideBackward() {
-                        _featuredListviewTimer.restart();
-
-                        if (_featuredListview.currentIndex === 0) {
-                            _featuredListview.currentIndex = _featuredListview.count - 1;
-                        } else {
-                            _featuredListview.decrementCurrentIndex();
-                        }
-                    }
-                }
-
-                layer.enabled: true
-                layer.effect: OpacityMask
-                {
-                    maskSource: Item
-                    {
-                        width: _featuredSection.width
-                        height: _featuredSection.height
-
-                        Rectangle
-                        {
-                            anchors.fill: parent
-                            radius: Maui.Style.radiusV * 2
-                        }
-                    }
+                    control.itemClicked(app)
                 }
             }
 
-            Maui.ListBrowser
+        Maui.ListBrowser
             {
                 id: _categoriesListView
 
@@ -317,11 +135,23 @@ Maui.Page
                 }
             }
 
-            Maui.Separator
+        FeatureStrip
+        {
+            Layout.fillWidth: true
+            title.text: i18n("Maui Apps")
+            subtitle.text: i18n("Convergent applications for desktop and mobile computers made with MauiKit.")
+
+            category: _categoriesList.baseCategory()
+            pageSize: 6
+            sort: NX.Store.MOST_DOWNLOADED
+            list.tags: ["mauikit"]
+
+            listView.implicitHeight: 320
+            onAppClicked:
             {
-                Layout.fillWidth: true
-                edge: Qt.BottomEdge
+                control.itemClicked(app)
             }
+        }
 
             FeatureStrip
             {
@@ -356,34 +186,6 @@ Maui.Page
                 }
             }
 
-            Maui.Separator
-            {
-                Layout.fillWidth: true
-                edge: Qt.BottomEdge
-            }
-
-            FeatureStrip
-            {
-                Layout.fillWidth: true
-                title.text: i18n("Popular in Audio")
-                subtitle.text: i18n("Most popular Audio packages in our collection.")
-
-                category: _categoriesList.audioCategory()
-                pageSize: 6
-                sort: NX.Store.MOST_DOWNLOADED
-
-                onAppClicked:
-                {
-                    control.itemClicked(app)
-                }
-            }
-
-            Maui.Separator
-            {
-                Layout.fillWidth: true
-                edge: Qt.BottomEdge
-            }
-
             FeatureStrip
             {
                 Layout.fillWidth: true
@@ -400,10 +202,39 @@ Maui.Page
                 }
             }
 
-            Maui.Separator
+
+            FeatureStrip
             {
+                id: _popularAudioList
                 Layout.fillWidth: true
-                edge: Qt.BottomEdge
+                listView.implicitHeight: 120
+
+                title.text: i18n("Popular in Audio")
+                subtitle.text: i18n("Most popular Audio packages in our collection.")
+
+                category: _categoriesList.audioCategory()
+                pageSize: 6
+                sort: NX.Store.MOST_DOWNLOADED
+
+                delegate: FloatingCardDelegate
+                {
+                    width: Math.min(ListView.view.width * 0.9, implicitWidth)
+                    height: 100
+
+                    label1.text: model.name
+                    label2.text: model.typename
+                    label3.text: model.version
+
+                    iconSource: model.smallpic
+                    iconSizeHint: Maui.Style.iconSizes.huge
+
+                    onClicked:
+                    {
+                        _popularAudioList.currentIndex = index
+                        _popularAudioList.list.setApp(model.id)
+                        control.itemClicked(_popularAudioList.list.app)
+                    }
+                }
             }
 
             SectionTitle

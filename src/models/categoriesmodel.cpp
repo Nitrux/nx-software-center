@@ -98,11 +98,11 @@ connect(this->m_store, &Store::categoriesResponseReady, [=](CategoryResponseDTO 
         return;
 
     emit this->preListChanged();
-    this->m_list.append({{FMH::MODEL_KEY::TITLE, tr("All")},
-                         {FMH::MODEL_KEY::NAME, "all"},
-                         {FMH::MODEL_KEY::ID, "0"},
-                         {FMH::MODEL_KEY::ICON, iconName["All"]},
-                         {FMH::MODEL_KEY::CATEGORY, tr("Apps")}});
+//    this->m_list.append({{FMH::MODEL_KEY::TITLE, tr("All")},
+//                         {FMH::MODEL_KEY::NAME, "all"},
+//                         {FMH::MODEL_KEY::ID, "0"},
+//                         {FMH::MODEL_KEY::ICON, iconName["All"]},
+//                         {FMH::MODEL_KEY::CATEGORY, tr("Apps")}});
 
     for(auto c : response->categories)
     {
@@ -145,11 +145,6 @@ Category * CategoriesModel::baseCategory()
     category->name = "all";
 
     return category;
-}
-
-Category * CategoriesModel::featureCategory()
-{
-    return baseCategory ();
 }
 
 Category *CategoriesModel::audioCategory()

@@ -36,7 +36,6 @@ private:
 
 public slots:
     Category *baseCategory();
-    Category *featureCategory();
     Category *audioCategory();
     Category *videoCategory();
     Category *educationCategory();

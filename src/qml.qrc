@@ -19,5 +19,7 @@
         <file>ui/templates/FloatingCardDelegate.qml</file>
         <file>ui/templates/SectionTitle.qml</file>
         <file>ui/views/store/FeatureStrip.qml</file>
+        <file>ui/views/store/FeatureHeader.qml</file>
+        <file>ui/views/store/FeatureFlex.qml</file>
     </qresource>
 </RCC>

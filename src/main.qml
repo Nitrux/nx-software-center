@@ -20,31 +20,39 @@ Maui.ApplicationWindow
     altHeader: Kirigami.Settings.isMobile
     readonly property var views: ({store: 0, apps: 1, progress: 2})
     property int currentView: views.store
+    headBar.visible: false
 
-    Maui.AppViews
+    StackView
     {
-        id: _swipeView
+        id: _stackView
         anchors.fill: parent
 
-        StoreView
+        initialItem: StoreView
         {
             id: _storeView
-            Maui.AppView.iconName: "nx-software-center"
-            Maui.AppView.title: qsTr("Store")
+
+            frontPage.headBar.rightContent: ToolButton
+            {
+                icon.name: "download"
+                onClicked: _stackView.push(_appsView)
+            }
         }
 
         AppsView
         {
             id: _appsView
-            Maui.AppView.iconName: "go-home"
-            Maui.AppView.title: qsTr("Apps")
+           visible: StackView.status === StackView.Active
+           headBar.farLeftContent: ToolButton
+           {
+               icon.name: "go-previous"
+               onClicked: _stackView.pop()
+           }
         }
 
         ProgressView
         {
             id: _progressView
-            Maui.AppView.iconName: "document-download"
-            Maui.AppView.title: qsTr("Progress")
+            visible: StackView.status === StackView.Active
         }
     }
 }

@@ -16,6 +16,8 @@ StackView
 
     property NX.Category currentCategory : null
 
+    readonly property alias frontPage : _frontPage
+
     NX.Categories
     {
         id: _categoriesList

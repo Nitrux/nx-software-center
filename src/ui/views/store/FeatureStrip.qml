@@ -33,10 +33,9 @@ ColumnLayout
     SectionTitle
     {
         id: _section
-        label3.text: list.count
     }
 
-    Maui.ListBrowser
+    ListView
     {
         id: _listView
         Layout.fillWidth: true
@@ -46,9 +45,9 @@ ColumnLayout
         implicitHeight: 220
         orientation: Qt.Horizontal
         spacing: Maui.Style.space.big
-        horizontalScrollBarPolicy: ScrollBar.AlwaysOff
+//        horizontalScrollBarPolicy: ScrollBar.AlwaysOff
         snapMode: ListView.SnapOneItem
-        verticalScrollBarPolicy: ScrollBar.AlwaysOff
+//        verticalScrollBarPolicy: ScrollBar.AlwaysOff
 
         model: Maui.BaseModel
         {
@@ -63,7 +62,7 @@ ColumnLayout
             images: _app.images
 
             width: Math.min(ListView.view.width, 320)
-            height: 200
+            height: ListView.view.height * 0.9
 //            margins: Maui.Style.space.tiny
             label1.text: model.name
             label2.text: model.typename
