@@ -117,18 +117,21 @@ Maui.Page
                     list: _categoriesList
                 }
 
-                delegate: GridItemCard
+                delegate: Maui.GridBrowserDelegate
                 {
                     isCurrentItem: ListView.isCurrentItem
-                    width: 100
+                    width: 140
                     height: 120
                     iconSource: model.icon
                     iconSizeHint: Maui.Style.iconSizes.big
                     label1.text: model.title
+                    label1.font.bold: true
+                    label1.font.weight: Font.Bold
+                    label1.font.pointSize: Maui.Style.fontSizes.big
+                    template.labelSizeHint: 32
 
                     onClicked:
                     {
-                        console.log("Category id", model.id)
                         _categoriesListView.currentIndex = index
                         control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
                     }

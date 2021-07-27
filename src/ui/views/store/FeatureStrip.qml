@@ -13,7 +13,7 @@ import "../../templates"
 ColumnLayout
 {
     id: control
-//    visible: list.count > 0
+    //    visible: list.count > 0
     spacing: Maui.Style.space.small
 
     property alias listView : _listView
@@ -35,140 +35,119 @@ ColumnLayout
         id: _section
     }
 
-    ListView
+    RowLayout
     {
-        id: _listView
         Layout.fillWidth: true
-        Layout.margins: isWide ? Maui.Style.space.medium : Maui.Style.space.small
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-        cacheBuffer: contentWidth
-        implicitHeight: 220
-        orientation: Qt.Horizontal
-        spacing: Maui.Style.space.big
-//        horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-        snapMode: ListView.SnapOneItem
-//        verticalScrollBarPolicy: ScrollBar.AlwaysOff
+        spacing: Maui.Style.space.medium
+//        Layout.margins: isWide ? Maui.Style.space.medium : Maui.Style.space.small
 
-        model: Maui.BaseModel
-        {
-            list: NX.Store
-            {
-                id: _appsList
-            }
-        }
-
-        delegate: FeatureGridCard
-        {
-            images: _app.images
-
-            width: Math.min(ListView.view.width, 320)
-            height: ListView.view.height * 0.9
-//            margins: Maui.Style.space.tiny
-            label1.text: model.name
-            label2.text: model.typename
-//            label3.text: model.totaldownloads
-//            label4.text: model.personid
-
-            NX.App
-            {
-                id: _app
-                data: _appsList.application(model.id)
-            }
-
-            onClicked:
-            {
-                _listView.currentIndex = index
-                _appsList.setApp(model.id)
-                control.appClicked(_appsList.app)
-            }
-        }
-
-
-        Rectangle
+        AbstractButton
         {
             id: _leftHandle
-            visible: !_listView.atXBeginning && _listView.contentWidth > _listView.width
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
+//            visible: !_listView.atXBeginning && _listView.contentWidth > _listView.width
+z: _listView.z +1
+            implicitHeight: Maui.Style.iconSizes.big
+            implicitWidth: height
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
-            height: Maui.Style.iconSizes.big
-            width: height
-
-            radius: height* 0.5
-
-            color: Kirigami.Theme.backgroundColor
-
-            MouseArea
+            background: Rectangle
             {
-                anchors.fill: parent
-                onClicked: _listView.flickable.decrementCurrentIndex()
+                radius: height* 0.5
+                color: Kirigami.Theme.backgroundColor
             }
 
-            Kirigami.Icon
+            onClicked: _listView.decrementCurrentIndex()
+
+            contentItem: Item
             {
-                anchors.centerIn: parent
-                height: Maui.Style.iconSizes.medium
-                width: height
-                source: "go-previous"
+                Kirigami.Icon
+                {
+                    anchors.centerIn: parent
+                    height: Maui.Style.iconSizes.medium
+                    width: height
+                    source: "go-previous"
+                }
             }
         }
 
-        Rectangle
+        ListView
+        {
+            id: _listView
+            Layout.fillWidth: true
+//            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+            cacheBuffer: contentWidth
+            implicitHeight: 220
+            orientation: Qt.Horizontal
+            spacing: Maui.Style.space.big
+            //        horizontalScrollBarPolicy: ScrollBar.AlwaysOff
+            snapMode: ListView.SnapToItem
+            //        verticalScrollBarPolicy: ScrollBar.AlwaysOff
+
+            model: Maui.BaseModel
+            {
+                list: NX.Store
+                {
+                    id: _appsList
+                }
+            }
+
+            delegate: FeatureGridCard
+            {
+                images: _app.images
+
+                width: Math.min(ListView.view.width, 320)
+                height: ListView.view.height * 0.9
+                //            margins: Maui.Style.space.tiny
+                label1.text: model.name
+                label2.text: model.typename
+                //            label3.text: model.totaldownloads
+                //            label4.text: model.personid
+
+                NX.App
+                {
+                    id: _app
+                    data: _appsList.application(model.id)
+                }
+
+                onClicked:
+                {
+                    _listView.currentIndex = index
+                    _appsList.setApp(model.id)
+                    control.appClicked(_appsList.app)
+                }
+            }
+
+
+
+        }
+
+        AbstractButton
         {
             id: _rightHandle
-            visible: !_listView.atXEnd && _listView.contentWidth > _listView.width
+//            visible: !_listView.atXEnd && _listView.contentWidth > _listView.width
+            implicitHeight: Maui.Style.iconSizes.big
+            implicitWidth: height
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-
-            height: Maui.Style.iconSizes.big
-            width: height
-
-            radius: height* 0.5
-
-            color: Kirigami.Theme.backgroundColor
-
-            MouseArea
+            background: Rectangle
             {
-                anchors.fill: parent
-                onClicked: _listView.flickable.incrementCurrentIndex()
+                radius: height* 0.5
+                color: Kirigami.Theme.backgroundColor
             }
 
-            Kirigami.Icon
+            onClicked: _listView.incrementCurrentIndex()
+
+            contentItem: Item
             {
-                anchors.centerIn: parent
-                height: Maui.Style.iconSizes.medium
-                width: height
-                source: "go-next"
+                Kirigami.Icon
+                {
+                    anchors.centerIn: parent
+                    height: Maui.Style.iconSizes.medium
+                    width: height
+                    source: "go-next"
+                }
             }
-        }
-
-        DropShadow
-        {
-
-            anchors.fill: _leftHandle
-            cached: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 16
-            color: "#333"
-            smooth: true
-            source: _leftHandle
-        }
-
-        DropShadow
-        {
-
-            anchors.fill: _rightHandle
-            cached: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 16
-            color: "#333"
-            smooth: true
-            source: _rightHandle
         }
 
     }
