@@ -1,3 +1,9 @@
+nx-software-center (0.0.2) nitrux; urgency=medium
+
+  * Update package.
+
+ -- Uri Hererra <uri_herrera@nxos.org>  Tue, 27 Jul 2021 19:03:00 -0500
+
 nx-software-center (0.0.1) nitrux; urgency=medium
 
   * Create package.
