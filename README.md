@@ -1,6 +1,6 @@
-# NX Software Center [![Build Status](https://travis-ci.org/Nitrux/nx-software-center.svg?branch=dev-mauikit-ui)](https://travis-ci.org/Nitrux/nx-software-center)
+# NX Software Center [![Build Status](https://travis-ci.org/Nitrux/nx-software-center.svg?branch=master)](https://travis-ci.org/Nitrux/nx-software-center)
 
-_A graphical front end to manage [AppImage](https://appimage.org/) applications built using [MauiKit](mauikit.org/)._
+_A graphical front end to manage [AppImage](https://appimage.org/) applications built using [MauiKit](https://mauikit.org/)._
 
 The AppImages displayed are fetched from:
 * https://www.appimagehub.com/
