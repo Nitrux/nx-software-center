@@ -9,7 +9,7 @@ script:
 
 branches:
   only:
-    - dev-mauikit-ui
+    - master
 
 notifications:
   email: false

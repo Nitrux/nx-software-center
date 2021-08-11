@@ -1,12 +1,40 @@
 Source: nx-software-center
-Section: kde
+Section: utils
 Priority: optional
-Maintainer: Camilo Higuita <milohr@aol.org>
-Build-Depends: debhelper (>=9), mauikit-dev, qtbase5-dev, qtdeclarative5-dev, qtwebengine5-dev, qtquickcontrols2-5-dev,libqt5xmlpatterns5-dev, libqt5svg5-dev, libfuse-dev, libappimage-dev, desktop-file-utils, libkf5i18n-dev, libkf5coreaddons-dev, libkf5notifications-dev, libkf5config-dev, libkf5kio-dev
-Standards-Version: 3.9.6
+Build-Depends: debhelper,
+               extra-cmake-modules,
+               libkf5config-dev (>= 5.24.0~),
+               libkf5coreaddons-dev (>= 5.24.0~),
+               libkf5i18n-dev (>= 5.24.0~),
+               libkf5kio-dev,
+               libkf5notifications-dev (>= 5.24.0~),
+               libkf5service-dev (>= 5.24.0~),
+               libqt5svg5-dev,
+               libqt5webview5-dev,
+               libqt5xmlpatterns5-dev,
+               libfuse-dev,
+               libappimage-dev,
+               desktop-file-utils,
+               mauikit-dev,
+               libmauikitfilebrowsing-dev,
+               libmauikitaccounts-dev,
+               qt5-qmake,
+               qtbase5-dev (>= 5.5.0~),
+               qtdeclarative5-dev,
+               qtquickcontrols2-5-dev,
+               qtwebengine5-dev
+Standards-Version: 4.2.1
+Homepage: https://github.com/maui-project/nx-software-center
+Vcs-Git: https://anongit.neon.kde.org/mobile/nx-software-center
+Vcs-Browser: https://packaging.neon.kde.org/mobile/nx-software-center.git
+Maintainer: Neon CI <neon@kde.org>
 
 Package: nx-software-center
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: qml-module-org-kde-mauikit,
+         qml-module-qt-labs-platform,
+         qml-module-qtwebview,
+         ${misc:Depends},
+         ${shlibs:Depends}
 Description: Software store for AppImages built with MauiKit.
  Software Center for Nitrux.
