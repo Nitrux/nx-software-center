@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: nx-software-center
-Source: https://github.com/nx-desktop/nx-software-center
+Source: https://github.com/Nitrux/nx-software-center
 
 Files: *
 Copyright: 2020 Uri Herrera <uri_herrera@nxos.org>

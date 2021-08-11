@@ -24,10 +24,10 @@ Build-Depends: debhelper,
                qtquickcontrols2-5-dev,
                qtwebengine5-dev
 Standards-Version: 4.2.1
-Homepage: https://github.com/maui-project/nx-software-center
-Vcs-Git: https://anongit.neon.kde.org/mobile/nx-software-center
-Vcs-Browser: https://packaging.neon.kde.org/mobile/nx-software-center.git
-Maintainer: Neon CI <neon@kde.org>
+Homepage: https://github.com/Nitrux/nx-software-center
+Vcs-Git: https://github.com/Nitrux/nx-software-center
+Vcs-Browser: https://github.com/Nitrux/nx-software-center.git
+Maintainer: Uri Herrera <uri_herrera@nxos.org>
 
 Package: nx-software-center
 Architecture: any
