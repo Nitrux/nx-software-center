@@ -97,19 +97,19 @@ Maui.Page
                 }
             }
 
-        Maui.ListBrowser
+            ListView
             {
                 id: _categoriesListView
-
+                spacing: Maui.Style.space.medium
                 Layout.fillWidth: true
                 Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
-                implicitHeight: 160
+                implicitHeight: 100
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
-                snapMode: ListView.SnapOneItem
+//                snapMode: ListView.SnapOneItem
                 orientation: Qt.Horizontal
-                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-                verticalScrollBarPolicy:  ScrollBar.AlwaysOff
+//                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
+//                verticalScrollBarPolicy:  ScrollBar.AlwaysOff
 
                 model: Maui.BaseModel
                 {
@@ -117,18 +117,18 @@ Maui.Page
                     list: _categoriesList
                 }
 
-                delegate: Maui.GridBrowserDelegate
+                delegate: Maui.ListBrowserDelegate
                 {
                     isCurrentItem: ListView.isCurrentItem
-                    width: 140
-                    height: 120
+                    width: 200
+                    height: 64
+                    iconVisible: true
                     iconSource: model.icon
-                    iconSizeHint: Maui.Style.iconSizes.big
+                    iconSizeHint: Maui.Style.iconSizes.medium
                     label1.text: model.title
                     label1.font.bold: true
                     label1.font.weight: Font.Bold
                     label1.font.pointSize: Maui.Style.fontSizes.big
-                    template.labelSizeHint: 32
 
                     onClicked:
                     {
@@ -138,23 +138,23 @@ Maui.Page
                 }
             }
 
-        FeatureStrip
-        {
-            Layout.fillWidth: true
-            title.text: i18n("Maui Apps")
-            subtitle.text: i18n("Convergent applications for desktop and mobile computers made with MauiKit.")
-
-            category: _categoriesList.baseCategory()
-            pageSize: 6
-            sort: NX.Store.MOST_DOWNLOADED
-            list.tags: ["mauikit"]
-
-            listView.implicitHeight: 320
-            onAppClicked:
+            FeatureStrip
             {
-                control.itemClicked(app)
+                Layout.fillWidth: true
+                title.text: i18n("Maui Apps")
+                subtitle.text: i18n("Convergent applications for desktop and mobile computers made with MauiKit.")
+
+                category: _categoriesList.baseCategory()
+                pageSize: 6
+                sort: NX.Store.MOST_DOWNLOADED
+                list.tags: ["mauikit"]
+
+                listView.implicitHeight: 320
+                onAppClicked:
+                {
+                    control.itemClicked(app)
+                }
             }
-        }
 
             FeatureStrip
             {
