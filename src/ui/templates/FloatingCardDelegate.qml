@@ -21,17 +21,28 @@ Maui.ListBrowserDelegate
 
     rightLabels.visible: true
 
-    background: Rectangle
+    background: Kirigami.ShadowedRectangle
     {
-        radius: Maui.Style.radiusV
         color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 
-        Rectangle
+        corners
+        {
+            topLeftRadius: control.radius
+            topRightRadius: control.radius
+            bottomLeftRadius: control.radius
+            bottomRightRadius: control.radius
+        }
+
+        shadow.xOffset: 0
+        shadow.yOffset: 0
+        shadow.color: Qt.rgba(0, 0, 0, 0.3)
+        shadow.size: 10
+
+        Item
         {
             id: _iconRec
-            opacity: 0.7
+            opacity: 0.5
             anchors.fill: parent
-            color: Kirigami.Theme.backgroundColor
             clip: true
 
             FastBlur
@@ -46,50 +57,40 @@ Maui.ListBrowserDelegate
                 cached: true
             }
 
-            Rectangle
+            OpacityMask
             {
-                anchors.fill: parent
-                opacity: 0.5
-                color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-            }
-        }
-
-        OpacityMask
-        {
-            source: mask
-            maskSource: _iconRec
-        }
-
-        LinearGradient
-        {
-            id: mask
-            anchors.fill: parent
-            gradient: Gradient {
-                GradientStop { position: 0.2; color: "transparent"}
-                GradientStop { position: 0.5; color: control.background.color}
+                source: mask
+                maskSource: _iconRec
             }
 
-            start: Qt.point(0, 0)
-            end: Qt.point(_iconRec.width, _iconRec.height)
-        }
-    }
-
-
-    layer.enabled: true
-    layer.effect: OpacityMask
-    {
-        maskSource: Item
-        {
-            width: control.width
-            height: control.height
-
-            Rectangle
+            LinearGradient
             {
+                id: mask
                 anchors.fill: parent
-                radius: Maui.Style.radiusV
+                gradient: Gradient {
+                    GradientStop { position: 0.2; color: "transparent"}
+                    GradientStop { position: 0.5; color: control.background.color}
+                }
+
+                start: Qt.point(0, 0)
+                end: Qt.point(_iconRec.width, _iconRec.height)
+            }
+
+            layer.enabled: true
+            layer.effect: OpacityMask
+            {
+                maskSource: Item
+                {
+                    width: control.width
+                    height: control.height
+
+                    Rectangle
+                    {
+                        anchors.fill: parent
+                        radius: Maui.Style.radiusV
+                    }
+                }
             }
         }
     }
-
-
 }

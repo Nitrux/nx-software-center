@@ -104,6 +104,7 @@ Maui.Page
                 Layout.fillWidth: true
                 Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
                 implicitHeight: 100
+
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
 //                snapMode: ListView.SnapOneItem
@@ -125,6 +126,7 @@ Maui.Page
                     iconVisible: true
                     iconSource: model.icon
                     iconSizeHint: Maui.Style.iconSizes.medium
+
                     label1.text: model.title
                     label1.font.bold: true
                     label1.font.weight: Font.Bold

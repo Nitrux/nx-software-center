@@ -9,11 +9,15 @@ Maui.GalleryRollItem
     id: control
     isCurrentItem: GridView.isCurrentItem
     cache: true
-
-//    template.labelSizeHint: 32
+    orientation: Qt.Vertical
+//    template.labelSizeHint: 64
+    label1.horizontalAlignment: Qt.AlignLeft
+    label2.horizontalAlignment: Qt.AlignLeft
 
     cb : function(model)
     {
         return model.pic
     }
+
+    background: null
  }
