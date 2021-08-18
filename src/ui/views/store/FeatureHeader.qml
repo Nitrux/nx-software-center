@@ -38,15 +38,12 @@ Kirigami.ShadowedRectangle
     Item
     {
         anchors.fill: parent
-        opacity: 0.3
-
-        Item
-        {
-            id: _bannerImage
-            anchors.fill: parent
+opacity: 0.3
             clip: true
             Image
             {
+                id: _bannerImage
+
                 anchors.centerIn: parent
                 width: parent.width *3
                 height: parent.height * 3
@@ -59,7 +56,7 @@ Kirigami.ShadowedRectangle
                 asynchronous: true
                 rotation: 150
             }
-        }
+
 
         FastBlur
         {
@@ -111,20 +108,13 @@ Kirigami.ShadowedRectangle
             }
         }
 
-        MouseArea
-        {
-            id: _featureMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            propagateComposedEvents: true
-        }
 
         Timer
         {
             id: _featuredListviewTimer
-            interval: 7000
+            interval: 8000
             repeat: true
-            running: !_featureMouseArea.containsPress || !_featureMouseArea.containsMouse
+            running: !_featureHover.hovered
             onTriggered: _featuredListview.cycleSlideForward()
         }
 
@@ -132,7 +122,6 @@ Kirigami.ShadowedRectangle
         {
             spacing: Maui.Style.space.medium
             anchors.horizontalCenter: parent.horizontalCenter
-            z: 999
             anchors.bottom: parent.bottom
             anchors.margins: Maui.Style.space.big
 
@@ -157,18 +146,12 @@ Kirigami.ShadowedRectangle
             height: ListView.view.height
             width: ListView.view.width
 
-            onClicked:
-            {
-                _featuredListview.currentIndex = index
-                _featureListBanner.setApp(model.id)
-                control.appClicked(_featureListBanner.app)
-            }
 
             Maui.ListItemTemplate
             {
                 //                            anchors.fill: parent
                 anchors.centerIn: parent
-                width: parent.width
+                width: Math.min(parent.width*0.8, parent.width)
                 //                            anchors.margins: Maui.Style.space.huge
 
                 label1.font.pointSize: Maui.Style.fontSizes.enormous * 2
@@ -182,15 +165,33 @@ Kirigami.ShadowedRectangle
                 //                            label2.verticalAlignment: Qt.AlignTop
 
                 iconVisible: isWide
-                imageSizeHint: Maui.Style.iconSizes.huge * 2
+                imageSizeHint: Maui.Style.iconSizes.huge
                 headerSizeHint: imageSizeHint * 1.5
-                rightLabels.visible: isWide
                 imageSource: model.preview
+                leftLabels.spacing: Maui.Style.space.medium
+                leftLabels.data: Button
+                {
+                    text: i18n("View")
+z: 999
+                    onClicked:
+                    {
+                        _featuredListview.currentIndex = index
+                        _featureListBanner.setApp(model.id)
+                        control.appClicked(_featureListBanner.app)
+                    }
+                }
 
                 fillMode: Image.PreserveAspectFit
 
             }
         }
+
+        HoverHandler
+        {
+            id: _featureHover
+            target: _featuredListview
+        }
+
 
         function cycleSlideForward() {
             _featuredListviewTimer.restart();

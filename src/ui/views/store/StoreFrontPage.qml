@@ -58,10 +58,10 @@ Maui.Page
                 anchors.margins: Maui.Style.space.medium
 
                 images: _app.images
-
+                imageSource: model.preview
                 label1.text: model.name
                 label2.text: model.typename
-                //            label3.text: model.totaldownloads
+                label3.text: model.totaldownloads
                 //            label4.text: model.personid
 
                 NX.App

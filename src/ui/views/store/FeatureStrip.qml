@@ -39,24 +39,25 @@ ColumnLayout
     {
         Layout.fillWidth: true
         spacing: Maui.Style.space.medium
-//        Layout.margins: isWide ? Maui.Style.space.medium : Maui.Style.space.small
+        //        Layout.margins: isWide ? Maui.Style.space.medium : Maui.Style.space.small
 
         AbstractButton
         {
             id: _leftHandle
-//            visible: !_listView.atXBeginning && _listView.contentWidth > _listView.width
-z: _listView.z +1
+            visible: !Maui.Handy.isTouch
+            z: _listView.z +1
             implicitHeight: Maui.Style.iconSizes.big
             implicitWidth: height
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+            enabled: !_listView.atXBeginning
 
             background: Rectangle
             {
                 radius: height* 0.5
-                color: Kirigami.Theme.backgroundColor
+                color: _leftHandle.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
             }
 
-            onClicked: _listView.decrementCurrentIndex()
+            onClicked: _listView.contentX= _listView.contentX-300
 
             contentItem: Item
             {
@@ -74,7 +75,6 @@ z: _listView.z +1
         {
             id: _listView
             Layout.fillWidth: true
-//            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
             cacheBuffer: contentWidth
             implicitHeight: 220
@@ -83,7 +83,14 @@ z: _listView.z +1
             //        horizontalScrollBarPolicy: ScrollBar.AlwaysOff
             snapMode: ListView.SnapToItem
             //        verticalScrollBarPolicy: ScrollBar.AlwaysOff
-
+            boundsMovement: Flickable.StopAtBounds
+//            boundsBehavior: Flickable.DragAndOvershootBounds
+//            transform: Rotation {
+//                axis { x: 0; y: 1; z: 0 }
+//                origin.x: _listView.width / 2
+//                origin.y: _listView.height / 2
+//                angle: Math.min(30, Math.max(-30, _listView.horizontalOvershoot))
+//            }
             model: Maui.BaseModel
             {
                 list: NX.Store
@@ -96,14 +103,13 @@ z: _listView.z +1
             {
                 images: _app.images
 
-                width: Math.min(ListView.view.width, 320)
+                width: Math.min(ListView.view.width* 0.6, 320)
                 height: ListView.view.height * 0.9
                 //            margins: Maui.Style.space.tiny
                 label1.text: model.name
                 label2.text: model.typename
-                //            label3.text: model.totaldownloads
-                //            label4.text: model.personid
-
+imageSource: model.preview
+label3.text: model.score
                 NX.App
                 {
                     id: _app
@@ -117,26 +123,23 @@ z: _listView.z +1
                     control.appClicked(_appsList.app)
                 }
             }
-
-
-
         }
 
         AbstractButton
         {
             id: _rightHandle
-//            visible: !_listView.atXEnd && _listView.contentWidth > _listView.width
-            implicitHeight: Maui.Style.iconSizes.big
+visible: !Maui.Handy.isTouch
+implicitHeight: Maui.Style.iconSizes.big
             implicitWidth: height
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-
+enabled: !_listView.atXEnd
             background: Rectangle
             {
                 radius: height* 0.5
-                color: Kirigami.Theme.backgroundColor
+                color: _rightHandle.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
             }
 
-            onClicked: _listView.incrementCurrentIndex()
+            onClicked: _listView.contentX= _listView.contentX+300
 
             contentItem: Item
             {

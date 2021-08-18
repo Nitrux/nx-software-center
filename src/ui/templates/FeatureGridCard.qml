@@ -1,23 +1,52 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
+import QtQuick.Layouts 1.3
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
-Maui.GalleryRollItem
+Maui.ItemDelegate
 {
     id: control
-    isCurrentItem: GridView.isCurrentItem
-    cache: true
-    orientation: Qt.Vertical
-//    template.labelSizeHint: 64
-    label1.horizontalAlignment: Qt.AlignLeft
-    label2.horizontalAlignment: Qt.AlignLeft
+    property bool isCurrentItem: GridView.isCurrentItem
 
-    cb : function(model)
+    property alias header : _header
+    property alias template : _template
+    property alias label1 : _template.label1
+    property alias label2 : _template.label2
+    property alias label3 : _template.label3
+    property alias label4 : _template.label4
+    property alias images : _header.images
+    property alias imageSource: _template.imageSource
+
+
+    ColumnLayout
     {
-        return model.pic
-    }
+        anchors.fill: parent
+        spacing: Maui.Style.space.medium
 
-    background: null
- }
+        Maui.GalleryRollTemplate
+        {
+            id: _header
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            cache: true
+            orientation: Qt.Vertical
+            radius: control.radius
+
+            cb : function(model)
+            {
+                return model.pic
+            }
+        }
+
+        Maui.ListItemTemplate
+        {
+            id: _template
+            //        Layout.fillHeight: true
+            Layout.fillWidth: true
+            isCurrentItem: control.isCurrentItem
+            iconSource: "package"
+            iconSizeHint: 22
+        }
+    }
+}
