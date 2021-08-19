@@ -38,24 +38,24 @@ Kirigami.ShadowedRectangle
     Item
     {
         anchors.fill: parent
-opacity: 0.3
-            clip: true
-            Image
-            {
-                id: _bannerImage
+        opacity: 0.3
+        clip: true
+        Image
+        {
+            id: _bannerImage
 
-                anchors.centerIn: parent
-                width: parent.width *3
-                height: parent.height * 3
-                sourceSize.height: 64
-                sourceSize.width: 64
-                source: _featuredListview.currentItem.imageSource
-                fillMode: Image.PreserveAspectCrop
-                antialiasing: false
-                smooth: false
-                asynchronous: true
-                rotation: 150
-            }
+            anchors.centerIn: parent
+            width: parent.width *3
+            height: parent.height * 3
+            sourceSize.height: 64
+            sourceSize.width: 64
+            source: _featuredListview.currentItem.imageSource
+            fillMode: Image.PreserveAspectCrop
+            antialiasing: false
+            smooth: false
+            asynchronous: true
+            rotation: 150
+        }
 
 
         FastBlur
@@ -103,11 +103,10 @@ opacity: 0.3
             {
                 id: _featureListBanner
                 category: _categoriesList.baseCategory()
-                                            pageSize: 4
+                pageSize: 4
                 sort: NX.Store.HIGHEST_RATED
             }
         }
-
 
         Timer
         {
@@ -172,7 +171,7 @@ opacity: 0.3
                 leftLabels.data: Button
                 {
                     text: i18n("View")
-z: 999
+                    z: 999
                     onClicked:
                     {
                         _featuredListview.currentIndex = index

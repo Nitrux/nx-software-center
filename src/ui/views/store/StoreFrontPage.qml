@@ -21,6 +21,7 @@ Maui.Page
     Kirigami.Theme.inherit: false
 
     headBar.visible: true
+    headBar.forceCenterMiddleContent: isWide
     headBar.middleContent: Maui.TextField
     {
         Layout.fillWidth: true
@@ -58,7 +59,7 @@ Maui.Page
                 anchors.margins: Maui.Style.space.medium
 
                 images: _app.images
-                imageSource: model.preview
+                imageSource: model.smallpic
                 label1.text: model.name
                 label2.text: model.typename
                 label3.text: model.totaldownloads
@@ -82,7 +83,7 @@ Maui.Page
         flickable.header: ColumnLayout
         {
             width: _featureGridView.flickable.width
-            spacing: Maui.Style.space.big
+            spacing: Maui.Style.space.huge
 
             FeatureHeader
             {
@@ -97,21 +98,14 @@ Maui.Page
                 }
             }
 
-            ListView
+            FeatureStrip
             {
                 id: _categoriesListView
-                spacing: Maui.Style.space.medium
                 Layout.fillWidth: true
-                Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
-                implicitHeight: 100
-
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
-//                snapMode: ListView.SnapOneItem
-                orientation: Qt.Horizontal
-//                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-//                verticalScrollBarPolicy:  ScrollBar.AlwaysOff
-
+//                Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
+                listView.implicitHeight: 64
+title.text: i18n("Categories")
+subtitle.text: i18n("Filter by categories")
                 model: Maui.BaseModel
                 {
                     id: _categoriesModel
@@ -120,13 +114,13 @@ Maui.Page
 
                 delegate: Maui.ListBrowserDelegate
                 {
-                    isCurrentItem: ListView.isCurrentItem
-                    width: 200
-                    height: 64
+                    width: template.implicitWidth + iconSizeHint
+                    height: ListView.view.height
+
                     iconVisible: true
                     iconSource: model.icon
                     iconSizeHint: Maui.Style.iconSizes.medium
-
+template.headerSizeHint: iconSizeHint * 2
                     label1.text: model.title
                     label1.font.bold: true
                     label1.font.weight: Font.Bold
@@ -134,10 +128,15 @@ Maui.Page
 
                     onClicked:
                     {
-                        _categoriesListView.currentIndex = index
                         control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
                     }
                 }
+            }
+
+            Kirigami.Separator
+            {
+                Layout.fillWidth: true
+                implicitHeight: 0.5
             }
 
             FeatureStrip
@@ -151,7 +150,6 @@ Maui.Page
                 sort: NX.Store.MOST_DOWNLOADED
                 list.tags: ["mauikit"]
 
-                listView.implicitHeight: 320
                 onAppClicked:
                 {
                     control.itemClicked(app)
@@ -164,23 +162,20 @@ Maui.Page
 
                 Layout.fillWidth: true
                 title.text: i18n("Newest")
-                subtitle.text: i18n("Most newest additions to our collection.")
+                subtitle.text: i18n("Most recent packages.")
                 category: _categoriesList.baseCategory()
                 pageSize: 6
                 sort: NX.Store.NEWEST
-                listView.implicitHeight: 120
+                listView.implicitHeight: 80
 
                 delegate: FloatingCardDelegate
                 {
                     width: Math.min(ListView.view.width * 0.9, implicitWidth)
-                    height: 100
+                    height: ListView.view.height
 
                     label1.text: model.name
                     label2.text: model.typename
-                    label3.text: model.version
-
                     iconSource: model.smallpic
-                    iconSizeHint: Maui.Style.iconSizes.huge
 
                     onClicked:
                     {
@@ -207,12 +202,11 @@ Maui.Page
                 }
             }
 
-
             FeatureStrip
             {
                 id: _popularAudioList
                 Layout.fillWidth: true
-                listView.implicitHeight: 120
+                listView.implicitHeight: 80
 
                 title.text: i18n("Popular in Audio")
                 subtitle.text: i18n("Most popular Audio packages in our collection.")
@@ -224,14 +218,10 @@ Maui.Page
                 delegate: FloatingCardDelegate
                 {
                     width: Math.min(ListView.view.width * 0.9, implicitWidth)
-                    height: 100
-
+                    height: ListView.view.height
                     label1.text: model.name
                     label2.text: model.typename
-                    label3.text: model.version
-
                     iconSource: model.smallpic
-                    iconSizeHint: Maui.Style.iconSizes.huge
 
                     onClicked:
                     {

@@ -10,9 +10,9 @@ Maui.ListItemTemplate
     Layout.fillWidth: true
     Layout.margins: Maui.Style.space.medium
     implicitHeight: leftLabels.implicitHeight
-    label1.font.pointSize: Maui.Style.fontSizes.enormous
+    label1.font.pointSize: Maui.Style.fontSizes.huge
     label1.font.bold: true
     label1.font.weight: Font.Bold
-    label2.font.pointSize: Maui.Style.fontSizes.huge
+    label2.font.pointSize: Maui.Style.fontSizes.big
 }
 

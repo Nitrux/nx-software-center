@@ -8,9 +8,11 @@ import QtGraphicalEffects 1.0
 Maui.ListBrowserDelegate
 {
     id: control
+    implicitHeight: 80
 
-    implicitWidth: Math.max(350, template.implicitWidth)
-
+    implicitWidth: Math.max(350, template.implicitWidth+iconSizeHint)
+    iconSizeHint: 48
+    iconSource: "package"
     label1.font.pointSize: Maui.Style.fontSizes.huge
     label1.font.weight: Font.Bold
     label1.font.bold: true
@@ -24,7 +26,6 @@ Maui.ListBrowserDelegate
     background: Kirigami.ShadowedRectangle
     {
         color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-
         corners
         {
             topLeftRadius: control.radius
@@ -36,12 +37,12 @@ Maui.ListBrowserDelegate
         shadow.xOffset: 0
         shadow.yOffset: 0
         shadow.color: Qt.rgba(0, 0, 0, 0.3)
-        shadow.size: 10
+        shadow.size: 6
 
         Item
         {
             id: _iconRec
-            opacity: 0.5
+            opacity: 0.2
             anchors.fill: parent
             clip: true
 

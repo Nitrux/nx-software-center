@@ -95,6 +95,7 @@ Maui.Page
             width: parent.width
             height: visible ? implicitHeight : 0
             visible: _storeList.nameFilter === ""
+            spacing: Maui.Style.space.huge
 
             Maui.ListBrowser
             {
@@ -210,6 +211,12 @@ Maui.Page
                 }
             }
 
+            Maui.Separator
+            {
+                Layout.fillWidth: true
+                 edge: Qt.BottomEdge
+            }
+
             FeatureStrip
             {
                 id: _popularListView
@@ -235,7 +242,7 @@ Maui.Page
                 title.text: i18n("Newest in %1 ", control.category.displayName)
                 subtitle.text: i18n("Most newest additions to our collection.")
 
-                listView.implicitHeight: 120
+                listView.implicitHeight: 80
 
                 category: control.category
                 pageSize: 4
@@ -244,7 +251,7 @@ Maui.Page
                 delegate: FloatingCardDelegate
                 {
                     width: Math.min(ListView.view.width * 0.9, 350)
-                    height: 100
+                    height: ListView.view.height
 
                     label1.text: model.name
                     label2.text: model.typename

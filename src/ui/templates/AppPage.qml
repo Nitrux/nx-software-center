@@ -209,6 +209,7 @@ Maui.Page
                                 implicitHeight: 64
                                 iconSource: "rating"
                                 iconSizeHint: Maui.Style.iconSizes.medium
+                                labelSizeHint: 22
                                 label1.text: appInfo.score
                                 label1.font.bold: true
                                 label1.font.weight: Font.Bold
@@ -222,6 +223,7 @@ Maui.Page
                                 implicitHeight: 64
                                 iconSource: "download"
                                 iconSizeHint: Maui.Style.iconSizes.medium
+                                labelSizeHint: 22
                                 label1.text: appInfo.totaldownloads
                                 label1.font.bold: true
                                 label1.font.weight: Font.Bold
@@ -237,6 +239,7 @@ Maui.Page
 
                                 iconSource: "license"
                                 iconSizeHint: Maui.Style.iconSizes.medium
+                                labelSizeHint: 22
                                 label1.text: appInfo.license || i18n("Unkown")
                             }
                         }
@@ -361,6 +364,7 @@ Maui.Page
 
                     Layout.fillWidth: true
                     Layout.preferredHeight: 500
+                    Layout.margins: Maui.Style.space.medium
                     model: control.imagesInfo
                     spacing: 0
                     orientation: ListView.Horizontal
@@ -371,6 +375,37 @@ Maui.Page
                     highlightRangeMode: ListView.StrictlyEnforceRange
                     keyNavigationEnabled: true
                     keyNavigationWraps : true
+
+                    Timer
+                    {
+                        id: _screenshotsSectionTimer
+                        interval: 8000
+                        repeat: true
+                        running: true
+                        onTriggered: _screenshotsSection.cycleSlideForward()
+                    }
+
+                    Row
+                    {
+                        spacing: Maui.Style.space.medium
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.bottom: parent.bottom
+                        anchors.margins: Maui.Style.space.big
+
+                        Repeater
+                        {
+                            model: _screenshotsSection.count
+
+                            Rectangle
+                            {
+                                width: Maui.Style.iconSizes.tiny
+                                height: width
+                                radius: width
+                                color: Kirigami.Theme.textColor
+                                opacity: index === _screenshotsSection.currentIndex ? 1 : 0.5
+                            }
+                        }
+                    }
 
                     delegate: MouseArea
                     {
@@ -392,6 +427,26 @@ Maui.Page
 
                             verticalAlignment: Qt.AlignVCenter
                             horizontalAlignment: Qt.AlignHCenter
+                        }
+                    }
+
+                    function cycleSlideForward() {
+                        _screenshotsSectionTimer.restart();
+
+                        if (_screenshotsSection.currentIndex === _screenshotsSection.count - 1) {
+                            _screenshotsSection.currentIndex = 0;
+                        } else {
+                            _screenshotsSection.incrementCurrentIndex();
+                        }
+                    }
+
+                    function cycleSlideBackward() {
+                        _screenshotsSectionTimer.restart();
+
+                        if (_screenshotsSection.currentIndex === 0) {
+                            _screenshotsSection.currentIndex = _screenshotsSection.count - 1;
+                        } else {
+                            _screenshotsSection.decrementCurrentIndex();
                         }
                     }
                 }
