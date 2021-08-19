@@ -10,7 +10,7 @@ Maui.ListBrowserDelegate
     id: control
     implicitHeight: 80
 
-    implicitWidth: Math.max(350, template.implicitWidth+iconSizeHint)
+    implicitWidth: Math.max(250, template.implicitWidth)
     iconSizeHint: 48
     iconSource: "package"
     label1.font.pointSize: Maui.Style.fontSizes.huge

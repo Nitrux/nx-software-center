@@ -61,7 +61,7 @@ ColumnLayout
         {
             images: _app.images
 
-            width: Math.min(ListView.view.width* 0.7, 320)
+            width: Math.min(ListView.view.width* 0.6, 320)
             height: ListView.view.height
             //            margins: Maui.Style.space.tiny
             label1.text: model.name
