@@ -14,19 +14,23 @@ Maui.Page
 
     property alias list : _appsList
 
-    Maui.Dialog {
+    Maui.Dialog
+    {
         id: appLaunchErrorDialog
 
         title: i18n("Error")
         message: i18n("Error launching application")
         rejectButton.visible: false
 
-        acceptButton.onClicked: {
+        acceptButton.onClicked:
+        {
             appLaunchErrorDialog.visible = false;
         }
 
-        function showDialog(fileName, errCode) {
-            switch (errCode) {
+        function showDialog(fileName, errCode)
+        {
+            switch (errCode)
+            {
             case 0:
                 message = "Error launching application <b>" + fileName + "</b>. Please check if you have correct permission"
                 break;
@@ -40,7 +44,8 @@ Maui.Page
         }
     }
 
-    Maui.Dialog {
+    Maui.Dialog
+    {
 
         id: appRemoveDialog
 
@@ -50,7 +55,8 @@ Maui.Page
         message: i18n("Are you sure you want to remove this application?")
         template.iconSource: "emblem-warning"
 
-        onAccepted: {
+        onAccepted:
+        {
             _appsList.removeApp(index);
         }
     }
@@ -94,6 +100,7 @@ Maui.Page
 
     Maui.Holder
     {
+        anchors.fill: parent
         title: i18n("Oops!")
         body: i18n("No apps found")
         visible: _appsListView.count === 0

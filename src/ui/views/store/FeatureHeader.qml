@@ -8,7 +8,7 @@ import org.mauikit.controls 1.2 as Maui
 
 import NXModels 1.0 as NX
 
-Kirigami.ShadowedRectangle
+ListView
 {
     id: control
 
@@ -19,197 +19,194 @@ Kirigami.ShadowedRectangle
     Kirigami.Theme.backgroundColor: "#333"
     Kirigami.Theme.textColor: "#fafafa"
     implicitHeight: 250
+    spacing: Maui.Style.space.big
 
-    color: Qt.darker(Kirigami.Theme.backgroundColor)
+    orientation: ListView.Horizontal
+    snapMode: ListView.SnapOneItem
+    clip: true
+    highlightMoveDuration: 1000
+    highlightMoveVelocity: -1
 
-    corners
+    onMovementEnded: currentIndex = indexAt(contentX, contentY)
+
+    model: Maui.BaseModel
     {
-        topLeftRadius: radius
-        topRightRadius: radius
-        bottomLeftRadius: radius
-        bottomRightRadius: radius
+        list: NX.Store
+        {
+            id: _featureListBanner
+            category: _categoriesList.baseCategory()
+            pageSize: 4
+            sort: NX.Store.HIGHEST_RATED
+        }
     }
 
-    shadow.xOffset: 0
-    shadow.yOffset: 0
-    shadow.color: Qt.rgba(0, 0, 0, 0.3)
-    shadow.size: 8
-
-    Item
+    Timer
     {
-        anchors.fill: parent
-        opacity: 0.3
-        clip: true
-        Image
-        {
-            id: _bannerImage
+        id: _featuredListviewTimer
+        interval: 8000
+        repeat: true
+        running: !_featureHover.hovered
+        onTriggered: control.cycleSlideForward()
+    }
 
-            anchors.centerIn: parent
-            width: parent.width *3
-            height: parent.height * 3
-            sourceSize.height: 64
-            sourceSize.width: 64
-            source: _featuredListview.currentItem.imageSource
-            fillMode: Image.PreserveAspectCrop
-            antialiasing: false
-            smooth: false
-            asynchronous: true
-            rotation: 150
+    Row
+    {
+        spacing: Maui.Style.space.medium
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.margins: Maui.Style.space.big
+
+        Repeater
+        {
+            model: _featureListBanner.count
+
+            Rectangle
+            {
+                width: Maui.Style.iconSizes.tiny
+                height: width
+                radius: width
+                color: Kirigami.Theme.textColor
+                opacity: index === control.currentIndex ? 1 : 0.5
+            }
+        }
+    }
+
+    delegate: Kirigami.ShadowedRectangle
+    {
+
+        width: Math.min(ListView.view.width , 600)
+        height: ListView.view.height
+
+        color: Qt.darker(Kirigami.Theme.backgroundColor)
+
+        corners
+        {
+            topLeftRadius: control.radius
+            topRightRadius: control.radius
+            bottomLeftRadius: control.radius
+            bottomRightRadius: control.radius
         }
 
+        shadow.xOffset: 0
+        shadow.yOffset: 0
+        shadow.color: Qt.rgba(0, 0, 0, 0.3)
+        shadow.size: 8
 
-        FastBlur
+        Item
         {
-            id: fastBlur
             anchors.fill: parent
-            source: _bannerImage
-            radius: 64
-            transparentBorder: false
-            cached: true
-        }
-
-        layer.enabled: true
-        layer.effect: OpacityMask
-        {
-            maskSource: Item
+            opacity: 0.3
+            clip: true
+            Image
             {
-                width: control.width
-                height: control.height
+                id: _bannerImage
 
-                Rectangle
-                {
-                    anchors.fill: parent
-                    radius: control.radius
-                }
-            }
-        }
-    }
-
-    ListView
-    {
-        id: _featuredListview
-        anchors.fill: parent
-        orientation: ListView.Horizontal
-        snapMode: ListView.SnapOneItem
-        clip: true
-        highlightMoveDuration: 1000
-        highlightMoveVelocity: -1
-
-        onMovementEnded: currentIndex = indexAt(contentX, contentY)
-
-        model: Maui.BaseModel
-        {
-            list: NX.Store
-            {
-                id: _featureListBanner
-                category: _categoriesList.baseCategory()
-                pageSize: 4
-                sort: NX.Store.HIGHEST_RATED
-            }
-        }
-
-        Timer
-        {
-            id: _featuredListviewTimer
-            interval: 8000
-            repeat: true
-            running: !_featureHover.hovered
-            onTriggered: _featuredListview.cycleSlideForward()
-        }
-
-        Row
-        {
-            spacing: Maui.Style.space.medium
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.margins: Maui.Style.space.big
-
-            Repeater
-            {
-                model: _featureListBanner.count
-
-                Rectangle
-                {
-                    width: Maui.Style.iconSizes.tiny
-                    height: width
-                    radius: width
-                    color: Kirigami.Theme.textColor
-                    opacity: index === _featuredListview.currentIndex ? 1 : 0.5
-                }
-            }
-        }
-
-        delegate: Maui.ItemDelegate
-        {
-            property url imageSource: model.preview
-            height: ListView.view.height
-            width: ListView.view.width
-
-
-            Maui.ListItemTemplate
-            {
-                //                            anchors.fill: parent
                 anchors.centerIn: parent
-                width: Math.min(parent.width*0.8, parent.width)
-                //                            anchors.margins: Maui.Style.space.huge
+                width: parent.width *3
+                height: parent.height * 3
+                sourceSize.height: 64
+                sourceSize.width: 64
+                source: model.smallpic
+                fillMode: Image.PreserveAspectCrop
+                antialiasing: false
+                smooth: false
+                asynchronous: true
+                rotation: 150
+            }
 
-                label1.font.pointSize: Maui.Style.fontSizes.enormous * 2
-                label1.font.bold: true
-                label1.font.weight: Font.Bold
-                label1.verticalAlignment: Qt.AlignVCenter
+            FastBlur
+            {
+                id: fastBlur
+                anchors.fill: parent
+                source: _bannerImage
+                radius: 64
+                transparentBorder: false
+                cached: true
+            }
 
-                label1.text: model.name
-                label2.text:  model.typename + " - " + model.personid
-                //                            label2.wrapMode: Text.WordWrap
-                //                            label2.verticalAlignment: Qt.AlignTop
-
-                iconVisible: isWide
-                imageSizeHint: Maui.Style.iconSizes.huge
-                headerSizeHint: imageSizeHint * 1.5
-                imageSource: model.preview
-                leftLabels.spacing: Maui.Style.space.medium
-                leftLabels.data: Button
+            layer.enabled: true
+            layer.effect: OpacityMask
+            {
+                maskSource: Item
                 {
-                    text: i18n("View")
-                    z: 999
-                    onClicked:
+                    width: control.width
+                    height: control.height
+
+                    Rectangle
                     {
-                        _featuredListview.currentIndex = index
-                        _featureListBanner.setApp(model.id)
-                        control.appClicked(_featureListBanner.app)
+                        anchors.fill: parent
+                        radius: control.radius
                     }
                 }
-
-                fillMode: Image.PreserveAspectFit
-
             }
         }
 
-        HoverHandler
+        Maui.ListItemTemplate
         {
-            id: _featureHover
-            target: _featuredListview
+            //                            anchors.fill: parent
+            anchors.centerIn: parent
+            width: Math.min(parent.width*0.8, parent.width)
+            //                            anchors.margins: Maui.Style.space.huge
+
+            label1.font.pointSize: Maui.Style.fontSizes.enormous * 2
+            label1.font.bold: true
+            label1.font.weight: Font.Bold
+            label1.verticalAlignment: Qt.AlignVCenter
+
+            label1.text: model.name
+            label2.text:  model.typename + " - " + model.personid
+            //                            label2.wrapMode: Text.WordWrap
+            //                            label2.verticalAlignment: Qt.AlignTop
+
+            iconVisible: isWide
+            imageSizeHint: Maui.Style.iconSizes.huge
+            headerSizeHint: imageSizeHint * 1.5
+            imageSource: model.preview
+            leftLabels.spacing: Maui.Style.space.medium
+            leftLabels.data: Button
+            {
+                text: i18n("View")
+                z: 999
+                onClicked:
+                {
+                    control.currentIndex = index
+                    _featureListBanner.setApp(model.id)
+                    control.appClicked(_featureListBanner.app)
+                }
+            }
+
+            fillMode: Image.PreserveAspectFit
+
         }
 
 
-        function cycleSlideForward() {
-            _featuredListviewTimer.restart();
 
-            if (_featuredListview.currentIndex === _featuredListview.count - 1) {
-                _featuredListview.currentIndex = 0;
-            } else {
-                _featuredListview.incrementCurrentIndex();
-            }
+
+
+    }
+
+    HoverHandler
+    {
+        id: _featureHover
+        target: control
+    }
+    function cycleSlideForward() {
+        _featuredListviewTimer.restart();
+
+        if (control.currentIndex === control.count - 1) {
+            control.currentIndex = 0;
+        } else {
+            control.incrementCurrentIndex();
         }
+    }
 
-        function cycleSlideBackward() {
-            _featuredListviewTimer.restart();
+    function cycleSlideBackward() {
+        _featuredListviewTimer.restart();
 
-            if (_featuredListview.currentIndex === 0) {
-                _featuredListview.currentIndex = _featuredListview.count - 1;
-            } else {
-                _featuredListview.decrementCurrentIndex();
-            }
+        if (control.currentIndex === 0) {
+            control.currentIndex = control.count - 1;
+        } else {
+            control.decrementCurrentIndex();
         }
     }
 }
