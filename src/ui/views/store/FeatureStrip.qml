@@ -49,6 +49,12 @@ ColumnLayout
         snapMode: ListView.SnapToItem
         boundsMovement: Flickable.StopAtBounds
 
+        BusyIndicator
+        {
+            anchors.centerIn: parent
+            running: _listView.count === 0
+        }
+
         model: Maui.BaseModel
         {
             list: NX.Store

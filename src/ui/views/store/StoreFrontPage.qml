@@ -103,7 +103,7 @@ Maui.Page
                 id: _categoriesListView
                 Layout.fillWidth: true
 //                Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
-                listView.implicitHeight: 64
+                listView.implicitHeight: 60
 title.text: i18n("Categories")
 subtitle.text: i18n("Filter by categories")
                 model: Maui.BaseModel

@@ -12,8 +12,8 @@ Maui.Page
 
     property bool isActive: true
     property alias manager : _progressManager
-
-    headBar.visible: false
+title: i18n("Downloading")
+    headBar.visible: true
 
     NX.ProgressManager
     {
@@ -23,6 +23,7 @@ Maui.Page
 
     Maui.Holder
     {
+        anchors.fill: parent
         body: qsTr("Downloads in progress will appear here")
         visible: _listView.count === 0
         emoji: "qrc:/download.svg"

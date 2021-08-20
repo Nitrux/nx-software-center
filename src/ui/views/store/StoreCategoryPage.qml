@@ -1,7 +1,6 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
@@ -13,14 +12,15 @@ import "../../templates"
 Maui.Page
 {
     id: control
+    title: _storeList.categoryName
 
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorGroup: Kirigami.Theme.View
+
     property var category
 
     signal itemClicked(var app)
 
-    //    headBar.visible: true
     headBar.middleContent: [
         Maui.TextField
         {

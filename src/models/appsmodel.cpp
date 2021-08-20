@@ -21,7 +21,8 @@ AppsModel::AppsModel(QObject *parent) : MauiList(parent)
     m_watcher->addPath(QUrl(FMStatic::HomePath+"/Applications").toLocalFile());
 }
 
-void AppsModel::componentComplete() {
+void AppsModel::componentComplete()
+{
    setList();
 }
 
@@ -30,7 +31,7 @@ const FMH::MODEL_LIST &AppsModel::items() const { return this->m_list; }
 void AppsModel::launchApp(const int &index) {
 
     const auto url = this->get(index).value("url").toUrl();
-
+qDebug() << "try to launch appimage" << url;
     FMStatic::openUrl(url);
 
 //    {
@@ -65,9 +66,7 @@ void AppsModel::resfresh()
 
 void AppsModel::setList()
 {
-    emit preListChanged();
-    this->m_list.clear();
-    emit postListChanged();
+   this->clear();
 
     FMH::FileLoader *fileLoader = new FMH::FileLoader;
     fileLoader->informer = &FMStatic::getFileInfoModel;
@@ -79,6 +78,7 @@ void AppsModel::setList()
         this->m_list << items;
 
         emit this->postItemAppended();
+        emit this->countChanged();
 
     });
 
@@ -101,5 +101,13 @@ void AppsModel::unintegrate(const QUrl &url)
     connect(appProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
         qDebug() << "UNINTEGRATE QPROCESS FINISHED" << exitCode << exitStatus;
     });
+}
+
+void AppsModel::clear()
+{
+    emit this->preListChanged();
+    this->m_list.clear();
+    emit this->postListChanged();
+    emit this->countChanged();
 }
 

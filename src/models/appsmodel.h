@@ -41,6 +41,7 @@ private:
     void setList();
 
     void unintegrate(const QUrl &url);
+    void clear();
 };
 
 #endif // APPSMODEL_H

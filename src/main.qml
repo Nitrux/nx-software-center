@@ -18,41 +18,54 @@ Maui.ApplicationWindow
 {
     id: root
     altHeader: Kirigami.Settings.isMobile
-    readonly property var views: ({store: 0, apps: 1, progress: 2})
-    property int currentView: views.store
     headBar.visible: false
 
-    StackView
+    StoreView
     {
-        id: _stackView
+        id: _storeView
         anchors.fill: parent
 
-        initialItem: StoreView
-        {
-            id: _storeView
-
-            frontPage.headBar.rightContent: ToolButton
+        frontPage.headBar.rightContent: [
+            ToolButton
             {
+                icon.name: "package"
+                onClicked: _storeView.push(_appsView)
+            },
+            ToolButton
+            {
+                id: _progressViewButton
                 icon.name: "download"
-                onClicked: _stackView.push(_appsView)
+                onClicked: _storeView.push(_progressView)
             }
-        }
+        ]
 
         AppsView
         {
             id: _appsView
-           visible: StackView.status === StackView.Active
-           headBar.farLeftContent: ToolButton
-           {
-               icon.name: "go-previous"
-               onClicked: _stackView.pop()
-           }
+            visible: StackView.status === StackView.Active
+            headBar.farLeftContent: ToolButton
+            {
+                icon.name: "go-previous"
+                onClicked: _storeView.pop()
+                text: _storeView.get(_appsView.StackView.index-1, StackView.DontLoad).title
+                display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+            }
         }
 
         ProgressView
         {
             id: _progressView
             visible: StackView.status === StackView.Active
+            headBar.farLeftContent: ToolButton
+            {
+                icon.name: "go-previous"
+                onClicked: _storeView.pop()
+                text: _storeView.get(_progressView.StackView.index-1, StackView.DontLoad).title
+                display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+            }
         }
     }
+
+
+
 }

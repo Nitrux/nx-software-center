@@ -1,10 +1,8 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
-import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 
 import NXModels 1.0 as NX
 
@@ -30,7 +28,15 @@ StackView
         AppPage
         {
             id: _appPage
-            onExit: control.pop()
+            onGoBackTriggered: control.pop()
+
+            headBar.leftContent: ToolButton
+            {
+                icon.name: "go-previous"
+                onClicked: control.pop()
+                text: control.get(_appPage.StackView.index-1, StackView.DontLoad).title
+                display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+            }
 
             onPackageClicked:
             {
@@ -90,10 +96,16 @@ StackView
 
         StoreCategoryPage
         {
+            id: _categoryPage
+            showTitle: false
             category : currentCategory
+            onGoBackTriggered: control.pop()
+
             headBar.farLeftContent: ToolButton
             {
                 icon.name: "go-previous"
+                text: control.get(_categoryPage.StackView.index-1, StackView.DontLoad).title
+                display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
                 onClicked: control.pop()
             }
 
@@ -108,6 +120,8 @@ StackView
     initialItem: StoreFrontPage
     {
         id: _frontPage
+        title: i18n("Store")
+        showTitle: false
 
         onItemClicked:
         {

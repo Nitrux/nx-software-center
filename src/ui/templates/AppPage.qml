@@ -14,6 +14,8 @@ import NXModels 1.0 as NX
 Maui.Page
 {
     id: control
+    title: appInfo.name
+
     property alias appInfo : _appHandler.info
     property alias imagesInfo : _appHandler.images
     property alias downloadsInfo : _appHandler.downloads
@@ -40,7 +42,6 @@ Maui.Page
         Comments
     }
 
-    signal exit()
     signal packageClicked(int index)
 
     function scrollTo(section) {
@@ -70,7 +71,6 @@ Maui.Page
         scrollAnimationResetTimer.start()
     }
 
-    onGoBackTriggered: control.exit()
 
     Timer {
         id: scrollAnimationResetTimer
@@ -84,13 +84,6 @@ Maui.Page
     NX.App
     {
         id: _appHandler
-    }
-
-    title: appInfo.name
-    headBar.leftContent: ToolButton
-    {
-        icon.name: "go-previous"
-        onClicked: control.exit()
     }
 
     ScrollView
@@ -354,7 +347,6 @@ Maui.Page
                     }
                 }
 
-
                 ListView
                 {
                     id: _screenshotsSection
@@ -487,7 +479,7 @@ Maui.Page
         {
             id: _aniX
             running: false
-            from: _aniImg.x; to: _aniImg.endPos.x + _swipeView.actionGroup.width - (_aniImg.width)
+            from: _aniImg.x; to: control.width - _aniImg.endPos.x
             duration: Kirigami.Units.longDuration * 2
             loops: 1
             easing.type: Easing.OutQuad
@@ -515,14 +507,14 @@ Maui.Page
 
     function goToProgressView()
     {
-        _swipeView.currentIndex = root.views.progress
+        _storeView.push(_progressView)
     }
 
     function animate(pos, icon)
     {
         _aniImg.source = icon
 
-        _aniImg.endPos = _swipeView.actionGroup.mapToItem(control, 0, 0)
+        _aniImg.endPos =_progressViewButton.mapToItem(control, 0, 0)
 
         _aniImg.x = pos.x
         _aniImg.y = pos.y
