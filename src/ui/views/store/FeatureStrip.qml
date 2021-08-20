@@ -46,7 +46,7 @@ ColumnLayout
         implicitHeight: isWide ? 260 : 180
         orientation: Qt.Horizontal
         spacing: Maui.Style.space.big
-        snapMode: ListView.SnapToItem
+        snapMode: ListView.NoSnap
         boundsMovement: Flickable.StopAtBounds
 
         BusyIndicator
