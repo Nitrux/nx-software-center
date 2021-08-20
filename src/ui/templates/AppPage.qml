@@ -33,7 +33,8 @@ Maui.Page
     //    headerPositioning: ListView.PullBackHeader
     //    headerBackground.color: "transparent"
 
-    enum Sections {
+    enum Sections
+    {
         Description,
         Details,
         Packages,
@@ -44,7 +45,8 @@ Maui.Page
 
     signal packageClicked(int index)
 
-    function scrollTo(section) {
+    function scrollTo(section)
+    {
         shouldAnimateScroll = true;
 
         switch (section) {
@@ -72,7 +74,8 @@ Maui.Page
     }
 
 
-    Timer {
+    Timer
+    {
         id: scrollAnimationResetTimer
         interval: scrollAnimationDuration
         repeat: false
@@ -96,19 +99,23 @@ Maui.Page
 
         Flickable
         {
-            Behavior on contentX {
+            Behavior on contentX
+            {
                 enabled: shouldAnimateScroll
 
-                NumberAnimation {
+                NumberAnimation
+                {
                     duration: scrollAnimationDuration
                     easing.type: Easing.InOutQuad
                 }
             }
 
-            Behavior on contentY {
+            Behavior on contentY
+            {
                 enabled: shouldAnimateScroll
 
-                NumberAnimation {
+                NumberAnimation
+                {
                     duration: scrollAnimationDuration
                     easing.type: Easing.InOutQuad
                 }
@@ -165,6 +172,7 @@ Maui.Page
                         //                    anchors.fill: parent
                         anchors.centerIn: parent
                         wide: root.isWide
+                        iconSource: "package"
                         iconSizeHint: Maui.Style.iconSizes.huge
                         imageSource: _bannerImage.source
                         label1.text: appInfo.name
@@ -178,7 +186,6 @@ Maui.Page
                         rowSpacing: Maui.Style.space.big
                         template.spacing: Maui.Style.space.huge
                         //                    label3.text: appInfo.personid
-
 
                         template.leftLabels.data: Row
                         {
@@ -264,27 +271,30 @@ Maui.Page
                     label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
 
-                Maui.ListBrowser
+                ListView
                 {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Maui.Style.toolBarHeight* 1.5
                     Layout.margins: Maui.Style.space.medium
-
-                    verticalScrollBarPolicy: ScrollBar.AlwaysOff
-                    horizontalScrollBarPolicy: ScrollBar.AlwaysOff
 
                     spacing: Maui.Style.space.big
 
                     orientation: ListView.Horizontal
                     model: String(appInfo.tags).split(",")
 
+
+                    BusyIndicator
+                    {
+                        anchors.centerIn: parent
+                        running: parent.count === 0
+                    }
+
                     delegate: Maui.Chip
                     {
                         showCloseButton: false
                         width: implicitWidth
                         label.text: modelData
-                        iconSource: "tag"
-                        //                        radius: Maui.Style.radiusV
+                        iconSource: "tag"                       
                     }
                 }
 
@@ -301,16 +311,15 @@ Maui.Page
                     label2.text: i18n("Avaliable packages to download")
                 }
 
-                Maui.GridView
+                GridView
                 {
                     id: _packagesGrid
+                    implicitHeight: contentHeight
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
                     Layout.margins: Maui.Style.space.medium
                     model: control.downloadsInfo
-                    adaptContent: true
-                    itemSize: 360
-                    itemHeight: 100
+                    cellWidth: 360
+                    cellHeight: 100
 
                     delegate: Item
                     {
@@ -323,9 +332,8 @@ Maui.Page
                         {
                             id: _delegate
 
-                            anchors.centerIn: parent
-                            width: _packagesGrid.itemSize - Maui.Style.space.medium
-                            height: _packagesGrid.itemHeight  - Maui.Style.space.medium
+                            anchors.fill: parent
+                            anchors.margins: Maui.Style.space.medium
 
                             label1.text: info.name
                             label1.font.pointSize: Maui.Style.fontSizes.huge
@@ -366,7 +374,13 @@ Maui.Page
                     snapMode: ListView.SnapOneItem
                     highlightRangeMode: ListView.StrictlyEnforceRange
                     keyNavigationEnabled: true
-                    keyNavigationWraps : true
+                    keyNavigationWraps : true                    
+
+                    BusyIndicator
+                    {
+                        anchors.centerIn: parent
+                        running: _screenshotsSection.count === 0
+                    }
 
                     Timer
                     {
@@ -410,8 +424,15 @@ Maui.Page
                             _imageViewerDialog.open()
                         }
 
+                        BusyIndicator
+                        {
+                            anchors.centerIn: parent
+                            running: _img.status === Image.Loading
+                        }
+
                         Image
                         {
+                            id: _img
                             anchors.fill: parent
                             fillMode: Image.PreserveAspectFit
 

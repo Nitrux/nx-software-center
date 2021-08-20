@@ -150,6 +150,7 @@ ColumnLayout
                 //                            label2.verticalAlignment: Qt.AlignTop
 
                 iconVisible: isWide
+                iconSource: "package"
                 imageSizeHint: Maui.Style.iconSizes.huge
                 headerSizeHint: imageSizeHint * 1.5
                 imageSource: model.preview

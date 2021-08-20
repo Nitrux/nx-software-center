@@ -1,8 +1,8 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.3
+
 import org.kde.kirigami 2.7 as Kirigami
-import org.mauikit.controls 1.0 as Maui
+import org.mauikit.controls 1.3 as Maui
 import NXModels 1.0 as NX
 import "../../templates"
 
@@ -19,6 +19,11 @@ title: i18n("Downloading")
     {
         id: _progressManager
         onWarning: notify("package-x-generic", "Oops", message)
+    }
+
+    Maui.Notify
+    {
+        id: _packageReady
     }
 
     Maui.Holder
