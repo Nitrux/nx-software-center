@@ -90,6 +90,12 @@ Maui.Page
             }
         }
 
+        BusyIndicator
+        {
+            anchors.centerIn: parent
+            running: _listView.count === 0
+        }
+
         flickable.header: ColumnLayout
         {
             width: parent.width
