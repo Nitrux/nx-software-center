@@ -18,7 +18,7 @@ Maui.ItemDelegate
     property alias images : _header.images
     property alias imageSource: _template.imageSource
 
-background: Item{}
+    background: Item{}
 
     ColumnLayout
     {

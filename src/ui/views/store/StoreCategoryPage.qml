@@ -157,10 +157,23 @@ Maui.Page
                             label1.font.weight: Font.Bold
                         }
 
+                        onDoubleClicked:
+                        {
+                            _categoriesListView.currentIndex = -1
+                            if(!Maui.Handy.singleClick)
+                            {
+                                control.category = currentCategory
+                            }
+                        }
+
                         onClicked:
                         {
                             _categoriesListView.currentIndex = -1
-                            control.category = currentCategory
+
+                            if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                            {
+                                control.category = currentCategory
+                            }
                         }
                     }
                 }
@@ -208,11 +221,23 @@ Maui.Page
                         label1.font.weight: Font.Bold
                     }
 
+                    onDoubleClicked:
+                    {
+                        _categoriesListView.currentIndex = index
+                        if(!Maui.Handy.singleClick)
+                        {
+                            control.category = _subCategories.getCategory(_categoriesModel.get(_categoriesListView.currentIndex).id)
+                        }
+                    }
+
                     onClicked:
                     {
-                        console.log("Category id", model.id)
                         _categoriesListView.currentIndex = index
-                        control.category = _subCategories.getCategory(_categoriesModel.get(_categoriesListView.currentIndex).id)
+
+                        if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                        {
+                            control.category = _subCategories.getCategory(_categoriesModel.get(_categoriesListView.currentIndex).id)
+                        }
                     }
                 }
             }
@@ -266,11 +291,24 @@ Maui.Page
                     iconSource: model.smallpic
                     iconSizeHint: Maui.Style.iconSizes.huge
 
+                    onDoubleClicked:
+                    {
+                        _newestListView.currentIndex = index
+                        if(!Maui.Handy.singleClick)
+                        {
+                            _newestListView.list.setApp(model.id)
+                            control.itemClicked(_newestListView.list.app)
+                        }
+                    }
+
                     onClicked:
                     {
                         _newestListView.currentIndex = index
-                        _newestListView.list.setApp(model.id)
-                        control.itemClicked(_newestListView.list.app)
+                        if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                        {
+                            _newestListView.list.setApp(model.id)
+                            control.itemClicked(_newestListView.list.app)
+                        }
                     }
                 }
             }

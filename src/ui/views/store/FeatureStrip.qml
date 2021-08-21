@@ -74,17 +74,32 @@ ColumnLayout
             label2.text: model.typename
             imageSource: model.preview
             label3.text: model.score
+
             NX.App
             {
                 id: _app
                 data: _appsList.application(model.id)
             }
 
+            onDoubleClicked:
+            {
+                _listView.currentIndex = index
+                if(!Maui.Handy.singleClick)
+                {
+                    _appsList.setApp(model.id)
+                    control.appClicked(_appsList.app)
+                }
+            }
+
             onClicked:
             {
                 _listView.currentIndex = index
-                _appsList.setApp(model.id)
-                control.appClicked(_appsList.app)
+
+                if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                {
+                    _appsList.setApp(model.id)
+                    control.appClicked(_appsList.app)
+                }
             }
         }
 
@@ -148,9 +163,5 @@ ColumnLayout
                 }
             }
         }
-
-
     }
-
-
 }

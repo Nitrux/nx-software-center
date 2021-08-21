@@ -334,7 +334,7 @@ Maui.Page
 
                             anchors.fill: parent
                             anchors.margins: Maui.Style.space.medium
-
+                            isCurrentItem: parent.GridView.isCurrentItem
                             label1.text: info.name
                             label1.font.pointSize: Maui.Style.fontSizes.huge
                             label1.font.weight: Font.Bold
@@ -346,10 +346,25 @@ Maui.Page
                             iconSource: FB.FM.iconName(info.name)
                             iconSizeHint: Maui.Style.iconSizes.large
 
+                            onClicked:
+                            {
+                                _packagesGrid.currentIndex = index
+
+                                if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                                {
+                                    animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
+                                    control.packageClicked(index)
+                                }
+                            }
+
                             onDoubleClicked:
                             {
-                                animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
-                                control.packageClicked(index)
+                                _packagesGrid.currentIndex = index
+                                if(!Maui.Handy.singleClick)
+                                {
+                                    animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
+                                    control.packageClicked(index)
+                                }
                             }
                         }
                     }
@@ -418,10 +433,22 @@ Maui.Page
                         height: ListView.view.height
                         width: ListView.view.width
 
+                        onClicked:
+                        {
+                            if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                            {
+                                _imageViewerDialog.source = modelData.pic
+                                _imageViewerDialog.open()
+                            }
+                        }
+
                         onDoubleClicked:
                         {
-                            _imageViewerDialog.source = modelData.pic
-                            _imageViewerDialog.open()
+                            if(!Maui.Handy.singleClick)
+                            {
+                                _imageViewerDialog.source = modelData.pic
+                                _imageViewerDialog.open()
+                            }
                         }
 
                         BusyIndicator
@@ -548,20 +575,33 @@ Maui.Page
     Popup
     {
         id: _imageViewerDialog
-        parent: root
-        background: null
+        parent: control
+        background: Rectangle
+        {
+            color: "#333"
+            opacity: 0.5
+        }
+
         modal: true
 
         property alias source :_imageViewer.source
-        height: root.height
-        width: root.width
+        height: control.height
+        width: control.width
 
         IT.ImageViewer
         {
             id: _imageViewer
 
             anchors.fill: parent
-            anchors.margins: Maui.Style.space.huge
+        }        
+
+        Maui.CloseButton
+        {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.margins: Maui.Style.space.big
+
+            onClicked: _imageViewerDialog.close()
         }
     }
 }
