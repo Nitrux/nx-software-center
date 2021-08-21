@@ -316,34 +316,15 @@ Maui.Page
             label1.font.bold: true
             label1.font.weight: Font.Bold
             label2.text: model.typename
-            //                    label4.text: model.score + qsTr(" Points")
+            label3.text: model.score
+            label3.font.bold: true
+            label3.font.weight: Font.Black
+            label3.font.pointSize: 16
+                                label4.text:i18n("Score")
             iconSource: model.smallpic
             iconVisible: true
             iconSizeHint:  Maui.Style.iconSizes.large
 
-            Maui.GridItemTemplate
-            {
-                implicitWidth: 64
-                implicitHeight: 48
-                iconComponent: Rectangle
-                {
-                    Layout.preferredWidth: 48
-                    radius: Maui.Style.radiusV
-                    color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
-
-                    Label
-                    {
-                        anchors.fill: parent
-                        horizontalAlignment: Qt.AlignHCenter
-                        text: model.score
-                        font.bold: true
-                        font.weight: Font.Black
-                        font.pointSize: 16
-                    }
-                }
-
-                label1.text: i18n("Score")
-            }
 
             onClicked:
             {

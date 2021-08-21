@@ -43,7 +43,7 @@ ColumnLayout
         leftMargin: Maui.Style.space.medium
         rightMargin: Maui.Style.space.medium
         cacheBuffer: contentWidth
-        implicitHeight: isWide ? 260 : 180
+        implicitHeight: isWide && !Kirigami.Settings.isMobile ? 260 : 180
         orientation: Qt.Horizontal
         spacing: Maui.Style.space.big
         snapMode: ListView.NoSnap
