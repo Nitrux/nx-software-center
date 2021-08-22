@@ -363,7 +363,6 @@ Maui.Page
             iconVisible: true
             iconSizeHint:  Maui.Style.iconSizes.large
 
-
             onClicked:
             {
                 _listView.currentIndex = index
