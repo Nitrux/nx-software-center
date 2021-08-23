@@ -1,13 +1,7 @@
 #include "appsmodel.h"
 
 #include <QDebug>
-#include <QRegularExpression>
-#include <QPixmap>
 #include <QProcess>
-#include <KIO/ListJob>
-#include <KIO/PreviewJob>
-#include <KIO/DeleteJob>
-#include <KFileItem>
 
 #include <MauiKit/FileBrowsing/fmstatic.h>
 #include <MauiKit/FileBrowsing/fileloader.h>

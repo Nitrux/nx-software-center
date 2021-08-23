@@ -8,8 +8,6 @@ import QtGraphicalEffects 1.0
 
 import "ui/views/apps"
 import "ui/views/store"
-import "ui/views/system"
-import "ui/views/search"
 import "ui/views/progress"
 import "ui/templates"
 import "ui"

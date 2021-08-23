@@ -31,6 +31,7 @@ set(nx_HDRS
 
 set(nx_RSRCS
     assets/nx-assets.qrc
+    data/data.qrc
     qml.qrc
     )
 
@@ -40,7 +41,6 @@ set(nx_STORES_SRCS
     stores/ResponseDTO/category.cpp
     stores/ResponseDTO/application.cpp
     )
-
 
 set(nx_STORES_HDRS
     stores/store.h
@@ -70,18 +70,17 @@ else()
         ${nx_STORES_HDRS})
 endif()
 
-
 if (ANDROID)
     target_link_libraries(${PROJECT_NAME} Qt5::AndroidExtras)
-#     kde_source_files_enable_exceptions(pix src/pix.cpp)
 else()
-    target_link_libraries(${PROJECT_NAME} KF5::ConfigCore KF5::Notifications KF5::KIOCore KF5::I18n KF5::KIOWidgets KF5::KIOFileWidgets)
+    target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 endif()
 
-target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Qml Qt5::Svg Qt5::WebEngine Qt5::Sql)
+target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Qml KF5::I18n KF5::CoreAddons)
 
 if(UNIX AND NOT APPLE AND NOT ANDROID)
     install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
     install(FILES org.nx.softwarecenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
     install(FILES assets/nx-software-center.svg DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor/scalable/apps)
+    install(FILES data/org.nx.softwarecenter.notifyrc DESTINATION ${KNOTIFYRC_INSTALL_DIR})
 endif()

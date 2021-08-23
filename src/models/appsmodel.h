@@ -2,9 +2,7 @@
 #define APPSMODEL_H
 
 #include <QObject>
-#include <QProcess>
 
-#include <MauiKit/Core/fmh.h>
 #include <MauiKit/Core/mauilist.h>
 
 class QFileSystemWatcher;

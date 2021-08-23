@@ -3,9 +3,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 
-set(NX_SC_VERSION 2.0.0)
+set(NX_SC_VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -39,14 +39,13 @@ include(ECMSourceVersionControl)
 include(FeatureSummary)
 include(ECMQMLModules)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml Quick Sql Svg  WebEngine QuickControls2 Concurrent)
-
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml Quick)
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
 
 if (ANDROID)
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
 else()
-    find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config KIO)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets)
 endif()
 
 find_package(MauiKit REQUIRED)

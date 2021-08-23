@@ -191,7 +191,7 @@ template.headerSizeHint: iconSizeHint * 2
 
                     label1.text: model.name
                     label2.text: model.typename
-                    iconSource: model.smallpic
+                    imageSource: model.preview
 
                     onDoubleClicked:
                     {

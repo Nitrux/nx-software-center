@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/knotifications5">
+        <file>org.nx.softwarecenter.notifyrc</file>
+    </qresource>
+</RCC>

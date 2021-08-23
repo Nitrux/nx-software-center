@@ -1,20 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>ui/znx/DevicesPage.qml</file>
-        <file>ui/znx/DevicePage.qml</file>
         <file>ui/views/store/StoreView.qml</file>
-        <file>ui/views/system/SystemView.qml</file>
-        <file>ui/views/search/SearchView.qml</file>
         <file>ui/views/progress/ProgressView.qml</file>
         <file>ui/views/apps/AppsView.qml</file>
-        <file>ui/CategoriesSidebar.qml</file>
-        <file>ui/templates/CardDelegate.qml</file>
         <file>ui/templates/AppPage.qml</file>
         <file>ui/views/progress/PackageDelegate.qml</file>
         <file>ui/views/store/StoreFrontPage.qml</file>
         <file>ui/views/store/StoreCategoryPage.qml</file>
-        <file>ui/templates/GridItemCard.qml</file>
         <file>ui/templates/FeatureGridCard.qml</file>
         <file>ui/templates/FloatingCardDelegate.qml</file>
         <file>ui/templates/SectionTitle.qml</file>
