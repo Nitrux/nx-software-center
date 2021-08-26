@@ -67,11 +67,9 @@ void AppsModel::setList()
 
     connect(fileLoader, &FMH::FileLoader::finished, [=](FMH::MODEL_LIST items, QList<QUrl>) {
 
-        emit this->preItemsAppended(items.size());
-
+        emit this->preListChanged();
         this->m_list << items;
-
-        emit this->postItemAppended();
+        emit this->postListChanged();
         emit this->countChanged();
 
     });

@@ -5,6 +5,7 @@
 #include <QProcess>
 
 #include <MauiKit/FileBrowsing/fmstatic.h>
+#include <MauiKit/FileBrowsing/downloader.h>
 
 bool ProgressManager::contains(const App &app, const int &packageIndex) const
 {
@@ -135,7 +136,7 @@ void Package::setPackageIndex(const int &index)
     this->m_package = this->m_downloads.at(this->m_packageIndex).toMap();
 
     emit this->linkChanged(this->m_link);
-    this->packageChanged(this->m_package);
+    emit this->packageChanged(this->m_package);
     emit this->packagedIndexChanged(this->m_packageIndex);
 }
 
@@ -224,6 +225,8 @@ void Package::installPackage()
 {
     const auto package =   this->m_data->downloads.at(this->m_packageIndex);
     auto downloader = new FMH::Downloader;
+
+    qDebug() << "TRY TO DOWNLOAD LINK" << this->m_link;
 
     auto appimagePath = NX::AppsPath.toString()+("/")+package->name;
 
