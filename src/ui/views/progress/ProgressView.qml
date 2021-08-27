@@ -12,21 +12,8 @@ Maui.Page
 
     property bool isActive: true
     property alias manager : _progressManager
-    title: i18n("Downloading")
 
-    headBar.leftContent: ToolButton
-    {
-        icon.name: "love"
-        onClicked:
-        {
-            _packageError.title= i18n("Ops!")
-            _packageError.message = "message"
-            _packageError.iconName = "emblem-warning"
-            _packageError.send()
-        }
-    }
-
-    headBar.visible: true
+    headBar.visible: false
 
     NX.ProgressManager
     {

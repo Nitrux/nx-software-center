@@ -16,51 +16,32 @@ Maui.ApplicationWindow
 {
     id: root
     altHeader: Kirigami.Settings.isMobile
-    headBar.visible: false
+    readonly property var views: ({store: 0, apps: 1, progress: 2})
 
-    StoreView
+    Maui.AppViews
     {
-        id: _storeView
+        id: _swipeView
         anchors.fill: parent
 
-        frontPage.headBar.rightContent: [
-            ToolButton
-            {
-                icon.name: "package"
-                onClicked: _storeView.push(_appsView)
-            },
-            ToolButton
-            {
-                id: _progressViewButton
-                icon.name: "download"
-                onClicked: _storeView.push(_progressView)
-            }
-        ]
+        StoreView
+        {
+            id: _storeView
+            Maui.AppView.iconName: "nx-software-center"
+            Maui.AppView.title: i18n("Store")
+        }
 
         AppsView
         {
             id: _appsView
-            visible: StackView.status === StackView.Active
-            headBar.farLeftContent: ToolButton
-            {
-                icon.name: "go-previous"
-                onClicked: _storeView.pop()
-                text: _storeView.get(_appsView.StackView.index-1, StackView.DontLoad).title
-                display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
-            }
+            Maui.AppView.iconName: "appimage-store"
+            Maui.AppView.title: i18n("Apps")
         }
 
         ProgressView
         {
             id: _progressView
-            visible: StackView.status === StackView.Active
-            headBar.farLeftContent: ToolButton
-            {
-                icon.name: "go-previous"
-                onClicked: _storeView.pop()
-                text: _storeView.get(_progressView.StackView.index-1, StackView.DontLoad).title
-                display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
-            }
+            Maui.AppView.iconName: "document-download"
+            Maui.AppView.title: i18n("Progress")
         }
     }
 }

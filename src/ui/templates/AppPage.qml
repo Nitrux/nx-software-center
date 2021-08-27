@@ -294,7 +294,7 @@ Maui.Page
                         showCloseButton: false
                         width: implicitWidth
                         label.text: modelData
-                        iconSource: "tag"                       
+                        iconSource: "tag"
                     }
                 }
 
@@ -334,7 +334,6 @@ Maui.Page
 
                             anchors.fill: parent
                             anchors.margins: Maui.Style.space.medium
-                            isCurrentItem: parent.GridView.isCurrentItem
                             label1.text: info.name
                             label1.font.pointSize: Maui.Style.fontSizes.huge
                             label1.font.weight: Font.Bold
@@ -363,7 +362,7 @@ Maui.Page
                                 if(!Maui.Handy.singleClick)
                                 {
                                     animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
-                                    control.packageClicked(index)
+//                                    control.packageClicked(index)
                                 }
                             }
                         }
@@ -389,7 +388,7 @@ Maui.Page
                     snapMode: ListView.SnapOneItem
                     highlightRangeMode: ListView.StrictlyEnforceRange
                     keyNavigationEnabled: true
-                    keyNavigationWraps : true                    
+                    keyNavigationWraps : true
 
                     BusyIndicator
                     {
@@ -491,7 +490,6 @@ Maui.Page
                     }
                 }
 
-
             }
         }
     }
@@ -510,7 +508,7 @@ Maui.Page
         NumberAnimation on height
         {
             running: _aniY.running
-            from: 120
+            from: 200
             to: Maui.Style.iconSizes.medium
             duration: _aniY.duration
         }
@@ -518,7 +516,7 @@ Maui.Page
         NumberAnimation on width
         {
             running: _aniY.running
-            from: 120
+            from: 200
             to: Maui.Style.iconSizes.medium
             duration: _aniY.duration
         }
@@ -527,8 +525,8 @@ Maui.Page
         {
             id: _aniX
             running: false
-            from: _aniImg.x; to: control.width - _aniImg.endPos.x
-            duration: Kirigami.Units.longDuration * 2
+            from: _aniImg.x; to: _aniImg.endPos.x + (_swipeView.width/2) + (_aniImg.width)
+            duration: Kirigami.Units.longDuration * 10
             loops: 1
             easing.type: Easing.OutQuad
         }
@@ -539,7 +537,7 @@ Maui.Page
             running: false
             easing.type: Easing.OutQuad
             from: _aniImg.y; to: _aniImg.endPos.y + _aniImg.height
-            duration:  Kirigami.Units.longDuration * 2.5
+            duration:  Kirigami.Units.longDuration * 10
             loops: 1
         }
 
@@ -555,14 +553,14 @@ Maui.Page
 
     function goToProgressView()
     {
-        _storeView.push(_progressView)
+        _swipeView.currentIndex = root.views.progress
     }
 
     function animate(pos, icon)
     {
         _aniImg.source = icon
 
-        _aniImg.endPos =_progressViewButton.mapToItem(control, 0, 0)
+        _aniImg.endPos = Qt.point(0,0)
 
         _aniImg.x = pos.x
         _aniImg.y = pos.y
@@ -593,7 +591,7 @@ Maui.Page
             id: _imageViewer
 
             anchors.fill: parent
-        }        
+        }
 
         Maui.CloseButton
         {
