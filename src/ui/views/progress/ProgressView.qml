@@ -12,18 +12,57 @@ Maui.Page
 
     property bool isActive: true
     property alias manager : _progressManager
-title: i18n("Downloading")
+    title: i18n("Downloading")
+
+    headBar.leftContent: ToolButton
+    {
+        icon.name: "love"
+        onClicked:
+        {
+            _packageError.title= i18n("Ops!")
+            _packageError.message = "message"
+            _packageError.iconName = "emblem-warning"
+            _packageError.send()
+        }
+    }
+
     headBar.visible: true
 
     NX.ProgressManager
     {
         id: _progressManager
-        onWarning: notify("package-x-generic", "Oops", message)
+        onWarning:
+        {
+            notify("package-x-generic", "Oops", message)
+            _packageError.title= i18n("Ops!")
+            _packageError.message = message
+            _packageError.iconName = "emblem-warning"
+            _packageError.send()
+        }
+    }
+
+    Maui.NotifyAction
+    {
+        id: _launchPackageAction
+        text: i18n("Open")
+        onTriggered:
+        {
+            console.log("Launch package?". notify.urls[0])
+        }
     }
 
     Maui.Notify
     {
         id: _packageReady
+        componentName: "org.nx.softwarecenter"
+        eventId: "packageReady"
+    }
+
+    Maui.Notify
+    {
+        id: _packageError
+        componentName: "org.nx.softwarecenter"
+        eventId: "packageError"
     }
 
     Maui.Holder
@@ -56,10 +95,13 @@ title: i18n("Downloading")
                 function onProgressFinished()
                 {
                     _appsView.list.resfresh()
-                    root.notify(model.item.images[0].pic, model.item.info.name, i18n("Your package is ready."),  goToApps, 3500, i18n("Check"))
+                    root.notify(target.images[0].pic, target.info.name, i18n("Your package is ready."),  goToApps, 3500, i18n("Check"))
 
-//                    _progressManager.removePackage()
-
+                    _packageReady.title= target.info.name
+                    _packageReady.message = i18n("Your package is ready.")
+                    _packageReady.defaultAction = _launchPackageAction
+                    _packageReady.imageSource = "emblem-warning"
+                    _packageReady.send()
                 }
             }
 

@@ -26,7 +26,7 @@
 
 #include "../nx_sc_version.h"
 
-#define NX_URI "org.nitrux.nxsc"
+#define NX_URI "org.nx.softwarecenter"
 
 int main(int argc, char *argv[])
 {

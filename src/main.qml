@@ -63,7 +63,4 @@ Maui.ApplicationWindow
             }
         }
     }
-
-
-
 }
