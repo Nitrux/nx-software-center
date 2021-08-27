@@ -361,8 +361,8 @@ Maui.Page
                                 _packagesGrid.currentIndex = index
                                 if(!Maui.Handy.singleClick)
                                 {
-                                    animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
-//                                    control.packageClicked(index)
+                                    animate(_delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
+                                    control.packageClicked(index)
                                 }
                             }
                         }
@@ -500,10 +500,8 @@ Maui.Page
         visible: _aniX.running
         parent: ApplicationWindow.overlay
         source: imagesInfo[0].pic
-        height: 60
-        width: 60
-
-        property point endPos
+        height: 200
+        width: 200
 
         NumberAnimation on height
         {
@@ -525,8 +523,8 @@ Maui.Page
         {
             id: _aniX
             running: false
-            from: _aniImg.x; to: _aniImg.endPos.x + (_swipeView.width/2) + (_aniImg.width)
-            duration: Kirigami.Units.longDuration * 10
+            from: _aniImg.x; to: (_swipeView.width/2)
+            duration: Kirigami.Units.longDuration * 15
             loops: 1
             easing.type: Easing.OutQuad
         }
@@ -536,8 +534,8 @@ Maui.Page
             id: _aniY
             running: false
             easing.type: Easing.OutQuad
-            from: _aniImg.y; to: _aniImg.endPos.y + _aniImg.height
-            duration:  Kirigami.Units.longDuration * 10
+            from: _aniImg.y; to: 0
+            duration: Kirigami.Units.longDuration * 15
             loops: 1
         }
 
@@ -559,8 +557,6 @@ Maui.Page
     function animate(pos, icon)
     {
         _aniImg.source = icon
-
-        _aniImg.endPos = Qt.point(0,0)
 
         _aniImg.x = pos.x
         _aniImg.y = pos.y
