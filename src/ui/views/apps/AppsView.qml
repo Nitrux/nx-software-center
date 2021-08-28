@@ -54,7 +54,9 @@ Maui.Page
         title: i18n("Remove")
         message: i18n("Are you sure you want to remove this application?")
         template.iconSource: "emblem-warning"
-
+        page.margins: Maui.Style.space.big
+        spacing: Maui.Style.space.medium
+        onRejected: appRemoveDialog.close()
         onAccepted:
         {
             _appsList.removeApp(index);

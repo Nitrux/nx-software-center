@@ -18,6 +18,28 @@ Maui.ApplicationWindow
     altHeader: Kirigami.Settings.isMobile
     readonly property var views: ({store: 0, apps: 1, progress: 2})
 
+    headBar.leftContent: Maui.ToolButtonMenu
+    {
+        icon.name: "application-menu"
+
+        MenuItem
+        {
+            text: i18n("Settings")
+            icon.name: "settings-configure"
+            onTriggered:
+            {
+            }
+        }
+
+        MenuItem
+        {
+            text: i18n("About")
+            icon.name: "documentinfo"
+            onTriggered: root.about()
+        }
+    }
+
+
     Maui.AppViews
     {
         id: _swipeView
