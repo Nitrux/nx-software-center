@@ -157,7 +157,7 @@ ColumnLayout
                 leftLabels.spacing: Maui.Style.space.medium
                 leftLabels.data: Button
                 {
-                    text: i18n("Download")
+                    text: i18n("Get")
                     onClicked:
                     {
                         _listView.currentIndex = index

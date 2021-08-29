@@ -67,6 +67,7 @@ void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
     break;
   }
 
+//  query.addQueryItem("packagetype", "appimage");
   query.addQueryItem("page", page);
   query.addQueryItem("pagesize", pageSize);
 

@@ -44,35 +44,7 @@ Maui.Page
     }
 
     signal packageClicked(int index)
-
-    function scrollTo(section)
-    {
-        shouldAnimateScroll = true;
-
-        switch (section) {
-        case AppPage.Sections.Description:
-            _scrollablePage.flickable.contentY = _div1.y;
-            break;
-        case AppPage.Sections.Details:
-            _scrollablePage.flickable.contentY = _div2.y;
-            break;
-        case AppPage.Sections.Packages:
-            _scrollablePage.flickable.contentY = _div2.y;
-            break;
-        case AppPage.Sections.Screenshots:
-            _scrollablePage.flickable.contentY = _screenshotsSection.y;
-            break;
-        case AppPage.Sections.Changelog:
-            _scrollablePage.flickable.contentY = _div5.y;
-            break;
-        case AppPage.Sections.Comments:
-            _scrollablePage.flickable.contentY = _div6.y;
-            break;
-        }
-
-        scrollAnimationResetTimer.start()
-    }
-
+    signal tagClicked(string tag)
 
     Timer
     {
@@ -295,6 +267,7 @@ Maui.Page
                         width: implicitWidth
                         label.text: modelData
                         iconSource: "tag"
+                        onClicked: control.tagClicked(modelData)
                     }
                 }
 
@@ -308,7 +281,7 @@ Maui.Page
                 {
                     id: _div2
                     label1.text: i18n("Packages")
-                    label2.text: i18n("Avaliable packages to download")
+                    label2.text: i18n("Avaliable packages to download.")
                 }
 
                 GridView
@@ -318,7 +291,7 @@ Maui.Page
                     Layout.fillWidth: true
                     Layout.margins: Maui.Style.space.medium
                     model: control.downloadsInfo
-                    cellWidth: 360
+                    cellWidth: Math.min(360, width * 0.5)
                     cellHeight: 100
 
                     delegate: Item
@@ -335,11 +308,9 @@ Maui.Page
                             anchors.fill: parent
                             anchors.margins: Maui.Style.space.medium
                             label1.text: info.name
-                            label1.font.pointSize: Maui.Style.fontSizes.huge
+                            label1.font.pointSize: Maui.Style.fontSizes.big
                             label1.font.weight: Font.Bold
                             label1.font.bold: true
-                            label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                            //                        label2.text: info.tags
                             label3.text: info.packageArch
                             label2.text: info.size
                             iconSource: FB.FM.iconName(info.name)
@@ -367,6 +338,13 @@ Maui.Page
                             }
                         }
                     }
+                }
+
+                SectionTitle
+                {
+                    id: _div3
+                    label1.text: i18n("Screenshots")
+                    label2.text: i18n("Previews of the package running.")
                 }
 
                 ListView
@@ -549,23 +527,6 @@ Maui.Page
         }
     }
 
-    function goToProgressView()
-    {
-        _swipeView.currentIndex = root.views.progress
-    }
-
-    function animate(pos, icon)
-    {
-        _aniImg.source = icon
-
-        _aniImg.x = pos.x
-        _aniImg.y = pos.y
-
-        _aniX.start()
-        _aniY.start()
-    }
-
-
     Popup
     {
         id: _imageViewerDialog
@@ -597,5 +558,50 @@ Maui.Page
 
             onClicked: _imageViewerDialog.close()
         }
+    }
+
+
+    function goToProgressView()
+    {
+        _swipeView.currentIndex = root.views.progress
+    }
+
+    function animate(pos, icon)
+    {
+        _aniImg.source = icon
+
+        _aniImg.x = pos.x
+        _aniImg.y = pos.y
+
+        _aniX.start()
+        _aniY.start()
+    }
+
+    function scrollTo(section)
+    {
+        shouldAnimateScroll = true;
+
+        switch (section) {
+        case AppPage.Sections.Description:
+            _scrollablePage.contentItem.contentY = _div1.y;
+            break;
+        case AppPage.Sections.Details:
+            _scrollablePage.contentItem.contentY = _div2.y;
+            break;
+        case AppPage.Sections.Packages:
+            _scrollablePage.contentItem.contentY = _div2.y;
+            break;
+        case AppPage.Sections.Screenshots:
+            _scrollablePage.contentItem.contentY = _screenshotsSection.y;
+            break;
+        case AppPage.Sections.Changelog:
+            _scrollablePage.contentItem.contentY = _div5.y;
+            break;
+        case AppPage.Sections.Comments:
+            _scrollablePage.contentItem.contentY = _div6.y;
+            break;
+        }
+
+        scrollAnimationResetTimer.start()
     }
 }

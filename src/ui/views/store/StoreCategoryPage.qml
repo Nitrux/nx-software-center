@@ -18,6 +18,7 @@ Maui.Page
     Kirigami.Theme.colorGroup: Kirigami.Theme.View
 
     property var category
+    property var tags
 
     signal itemClicked(var app)
 
@@ -25,6 +26,7 @@ Maui.Page
         Maui.TextField
         {
             id: _searchField
+            visible: control.tags.length === 0
             Layout.fillWidth: true
             Layout.maximumWidth: 500
             placeholderText: i18n("Search package in %1", _storeList.categoryName )
@@ -100,7 +102,8 @@ Maui.Page
         {
             width: parent.width
             height: visible ? implicitHeight : 0
-            visible: _storeList.nameFilter === ""
+            visible: _storeList.nameFilter === "" && control.tags.length === 0
+
             spacing: Maui.Style.space.huge
 
             Maui.ListBrowser
@@ -245,7 +248,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                 edge: Qt.BottomEdge
+                edge: Qt.BottomEdge
             }
 
             FeatureStrip
@@ -287,9 +290,10 @@ Maui.Page
                     label1.text: model.name
                     label2.text: model.typename
                     label3.text: model.version
-
-                    iconSource: model.smallpic
-                    iconSizeHint: Maui.Style.iconSizes.huge
+                    iconSource: "package"
+                    imageSource: model.smallpic
+                    template.imageSizeHint: Maui.Style.iconSizes.huge
+                    iconSizeHint: Maui.Style.iconSizes.medium
 
                     onDoubleClicked:
                     {
@@ -316,7 +320,7 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                 edge: Qt.BottomEdge
+                edge: Qt.BottomEdge
             }
 
             SectionTitle
@@ -339,6 +343,7 @@ Maui.Page
             {
                 id: _storeList
                 category: control.category
+                tags: control.tags
                 sort: NX.Store.ALPHABETICAL
             }
         }
@@ -358,10 +363,12 @@ Maui.Page
             label3.font.bold: true
             label3.font.weight: Font.Black
             label3.font.pointSize: 16
-                                label4.text:i18n("Score")
-            iconSource: model.smallpic
+            label4.text:i18n("Score")
+            imageSource: model.smallpic
             iconVisible: true
-            iconSizeHint:  Maui.Style.iconSizes.large
+            template.imageSizeHint: Maui.Style.iconSizes.huge
+            iconSource: "package"
+            iconSizeHint:  Maui.Style.iconSizes.medium
 
             onClicked:
             {

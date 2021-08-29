@@ -140,7 +140,6 @@ Maui.Page
 
         delegate: Maui.SwipeBrowserDelegate
         {
-            id: _delegate
             height: 64
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
@@ -149,13 +148,32 @@ Maui.Page
             imageSource: "image://thumbnailer/" + model.path
             iconSizeHint: height * 0.7
 
-            onClicked: console.log("JAJAJAJ")
+            onClicked:
+            {
+                _appsListView.currentIndex = index;
+
+                if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                {
+                    _appsList.launchApp(index);
+                }
+            }
+
+            onDoubleClicked:
+            {
+                _appsListView.currentIndex = index;
+
+                if(!Maui.Handy.singleClick)
+                {
+                    _appsList.launchApp(index);
+                }
+            }
 
             quickActions: [
                 Action
                 {
                     icon.name: "media-playback-start"
-                    onTriggered: {
+                    onTriggered:
+                    {
                         _appsListView.currentIndex = index;
                         _appsList.launchApp(index);
                     }
@@ -163,7 +181,8 @@ Maui.Page
                 Action
                 {
                     icon.name: "entry-delete"
-                    onTriggered: {
+                    onTriggered:
+                    {
                         _appsListView.currentIndex = index;
                         appRemoveDialog.index = index
                         appRemoveDialog.open()
@@ -173,7 +192,8 @@ Maui.Page
         }
     }
 
-    Connections {
+    Connections
+    {
         target: _appsList
 
         function onAppLaunchError(err) {

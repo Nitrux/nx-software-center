@@ -32,21 +32,27 @@ for(const auto data : this->m_data->previewUrls)
 qDebug()<< m_images;
 
 for(const auto &data : this->m_data->downloads)
-  this->m_downloads << QVariantMap {
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_ARCH], data->packageArch},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_TYPE], data->packageType},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::GPG_SIGNATURE], data->gpgSignature},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::GPG_FINGERPRINT], data->gpgFingerprint},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::LINK], data->link},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], data->name},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_NAME], data->packageName},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::PRICE], data->price},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::REPOSITORY], data->repository},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::PRICE], data->price},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::SIZE], data->size},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], data->type},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::WAY], data->way},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::TAGS], data->tags}};
+{
+    if(data->name.endsWith(".AppImage"))
+    {
+        this->m_downloads << QVariantMap {
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_ARCH], data->packageArch},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_TYPE], data->packageType},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::GPG_SIGNATURE], data->gpgSignature},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::GPG_FINGERPRINT], data->gpgFingerprint},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::LINK], data->link},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], data->name},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_NAME], data->packageName},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::PRICE], data->price},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::REPOSITORY], data->repository},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::PRICE], data->price},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::SIZE], data->size},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], data->type},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::WAY], data->way},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::TAGS], data->tags}};
+}
+}
+
 emit this->downloadsChanged(this->m_downloads);
 
 this->m_info = FMH::toMap(FMH::MODEL{

@@ -22,7 +22,7 @@ void StoreModel::requestApps()
 
     const auto categoryId = this->m_category->id == "0" ? "" : this->m_category->id;
 
-    this->m_store->getApplicationsByArch({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), this->m_tags, this->m_arch);
+    this->m_store->getApplicationsByArch({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), QStringList() << this->m_tags << "appimage", this->m_arch);
 }
 
 void StoreModel::componentComplete()

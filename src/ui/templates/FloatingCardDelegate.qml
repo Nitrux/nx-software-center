@@ -27,6 +27,7 @@ Maui.ListBrowserDelegate
     background: Kirigami.ShadowedRectangle
     {
         color: control.hovered || control.highlighted ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+
         corners
         {
             topLeftRadius: control.radius

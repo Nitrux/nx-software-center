@@ -250,7 +250,7 @@ template.headerSizeHint: iconSizeHint * 2
                     height: ListView.view.height
                     label1.text: model.name
                     label2.text: model.typename
-                    iconSource: model.smallpic
+                    imageSource: model.smallpic
 
                     onDoubleClicked:
                     {

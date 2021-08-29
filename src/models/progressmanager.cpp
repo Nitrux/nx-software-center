@@ -57,6 +57,7 @@ Package *ProgressManager::appendPackage(App *app, const int &packageIndex, const
         emit this->warning(tr("Package is already in the Progress List"));
         return new Package;
     }
+
     const auto package = new Package(*app, this);
     package->setPackageIndex(packageIndex);
     package->setMode(static_cast<Package::MODE>(mode));

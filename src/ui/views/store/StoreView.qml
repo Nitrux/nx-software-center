@@ -12,8 +12,8 @@ StackView
 {
     id: control
 
-    property NX.Category currentCategory : null
-
+    property NX.Category currentCategory : _categoriesList.baseCategory()
+property var tags : []
     readonly property alias frontPage : _frontPage
 
     NX.Categories
@@ -38,6 +38,13 @@ StackView
                 display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
             }
 
+            onTagClicked:
+            {
+                control.tags = [tag]
+                control.currentCategory = _categoriesList.baseCategory()
+                control.push(_categoryPageComponent)
+            }
+
             onPackageClicked:
             {
                 console.log("trying to append package app ", app.id)
@@ -48,7 +55,7 @@ StackView
 
                 Button
                 {
-                    text: qsTr("Download")
+                    text: qsTr("Get")
                     visible: !app.isInstalled
                     Kirigami.Theme.textColor: "#fafafa"
                     Kirigami.Theme.backgroundColor: "#26c6da"
@@ -99,6 +106,7 @@ StackView
             id: _categoryPage
             showTitle: false
             category : currentCategory
+            tags: control.tags
             onGoBackTriggered: control.pop()
 
             headBar.farLeftContent: ToolButton
@@ -132,12 +140,14 @@ StackView
         onCategoryClicked:
         {
             currentCategory = category
+            control.tags = []
             control.push(_categoryPageComponent)
         }
 
         onSearchFor:
         {
             currentCategory = _categoriesList.baseCategory()
+            control.tags = []
             control.push(_categoryPageComponent)
             control.currentItem.search(query)
         }
