@@ -155,7 +155,8 @@ Maui.Page
             height: 64
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
-            label1.text: model.name
+            label1.text: model.label
+            label2.text: model.name
             imageSource: "image://thumbnailer/" + model.path
             iconSizeHint: Maui.Style.iconSizes.medium
             iconSource: "package"

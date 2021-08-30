@@ -8,6 +8,8 @@
 
 #include <QFileSystemWatcher>
 
+#include "utils/appimagetools.h"
+
 AppsModel::AppsModel(QObject *parent) : MauiList(parent)
   , m_watcher(new QFileSystemWatcher(this))
 {
@@ -63,7 +65,7 @@ void AppsModel::setList()
    this->clear();
 
     FMH::FileLoader *fileLoader = new FMH::FileLoader;
-    fileLoader->informer = &FMStatic::getFileInfoModel;
+    fileLoader->informer = &AppImageTools::desktopData;
 
     connect(fileLoader, &FMH::FileLoader::finished, [=](FMH::MODEL_LIST items, QList<QUrl>) {
 

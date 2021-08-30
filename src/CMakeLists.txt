@@ -18,6 +18,7 @@ set(nx_SRCS
     models/categoriesmodel.cpp
     models/app.cpp
     models/progressmanager.cpp
+    utils/appimagetools.cpp
     )
 
 set(nx_HDRS
@@ -27,6 +28,7 @@ set(nx_HDRS
     models/categoriesmodel.h
     models/app.h
     models/progressmanager.h
+    utils/appimagetools.h
     )
 
 set(nx_RSRCS
@@ -70,13 +72,15 @@ else()
         ${nx_STORES_HDRS})
 endif()
 
+kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp)
+
 if (ANDROID)
     target_link_libraries(${PROJECT_NAME} Qt5::AndroidExtras)
 else()
     target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 endif()
 
-target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Qml KF5::I18n KF5::CoreAddons)
+target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Qml KF5::I18n KF5::CoreAddons libappimage)
 
 if(UNIX AND NOT APPLE AND NOT ANDROID)
     install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

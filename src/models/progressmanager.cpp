@@ -2,10 +2,10 @@
 #include "ResponseDTO/application.h"
 #include "nx.h"
 
-#include <QProcess>
-
 #include <MauiKit/FileBrowsing/fmstatic.h>
 #include <MauiKit/FileBrowsing/downloader.h>
+
+#include "utils/appimagetools.h"
 
 bool ProgressManager::contains(const App &app, const int &packageIndex) const
 {
@@ -198,18 +198,7 @@ void Package::integratePackage(const QString &path)
         return;
     qDebug() << "integrate this appimage" << path << m_path;
 
-    QProcess *appProcess = new QProcess(this);
-    appProcess->start("ail-cli", {"integrate", m_path.toLocalFile()});
-
-    connect(appProcess, &QProcess::errorOccurred, [=](QProcess::ProcessError err) {
-        qDebug() << "QPROCESS ERROR" << err;
-        emit this->progressFinished();
-
-    });
-    connect(appProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
-        qDebug() << "QPROCESS FINISHED" << exitCode << exitStatus;
-        emit this->progressFinished();
-    });
+    AppImageTools::integrate(m_path);
 }
 
 void Package::updatePackage()
