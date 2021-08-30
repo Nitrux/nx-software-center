@@ -82,6 +82,8 @@ Maui.Page
                 text: i18n("Name")
                 checkable: true
                 autoExclusive: true
+                checked: _appsModel.sort === "label"
+                onTriggered: _appsModel.sort = "label"
             }
 
             MenuItem
@@ -89,6 +91,9 @@ Maui.Page
                 text: i18n("Size")
                 checkable: true
                 autoExclusive: true
+                checked: _appsModel.sort === "size"
+                onTriggered: _appsModel.sort = "size"
+
             }
 
             MenuItem
@@ -96,6 +101,8 @@ Maui.Page
                 text: i18n("Date")
                 checkable: true
                 autoExclusive: true
+                checked: _appsModel.sort === "date"
+                onTriggered: _appsModel.sort = "date"
             }
         }
     ]
@@ -132,6 +139,11 @@ Maui.Page
         model: Maui.BaseModel
         {
             id: _appsModel
+            sort: "label"
+            sortOrder: Qt.AscendingOrder
+            recursiveFilteringEnabled: true
+            sortCaseSensitivity: Qt.CaseInsensitive
+            filterCaseSensitivity: Qt.CaseInsensitive
             list: NX.Apps
             {
                 id: _appsList

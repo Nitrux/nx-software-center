@@ -9,7 +9,8 @@ class QFileSystemWatcher;
 
 class Store;
 class Application;
-class AppsModel : public MauiList {
+class AppsModel : public MauiList
+{
     Q_OBJECT
 
 public:

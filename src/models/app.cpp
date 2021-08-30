@@ -21,9 +21,16 @@ void App::setModels()
 
     //the models
     for(const auto &data : this->m_data->previewPics)
-        this->m_images << QVariantMap {
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::PIC], data->pic},
-    {FMH::MODEL_NAME[FMH::MODEL_KEY::SMALL_PIC], data->pic}};
+    {
+        this->m_images << QVariantMap {{FMH::MODEL_NAME[FMH::MODEL_KEY::PIC], data->pic},
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::SMALL_PIC], data->pic}};
+}
+
+if(m_images.size() > 1) //first image is just the icon again so lets remove that for making previews look better
+{
+    m_images.removeFirst();
+}
+
 emit this->imagesChanged(this->m_images);
 
 for(const auto data : this->m_data->previewUrls)
