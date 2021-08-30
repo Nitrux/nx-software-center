@@ -1,3 +1,9 @@
+nx-software-center (0.0.5+1.0.0+git) nitrux; urgency=medium
+
+  * Add build dependency.
+
+ -- Uri Hererra <uri_herrera@nxos.org>  Mon, 20 Aug 2021 18:08:00 -0500
+
 nx-software-center (0.0.4+1.0.0+git) nitrux; urgency=medium
 
   * Release for version 1.0.0.
