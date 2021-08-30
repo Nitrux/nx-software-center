@@ -58,7 +58,7 @@ private:
     QVariantMap m_package; //the actual package from the app to perform action upon
 
     QUrl m_link; //download link of the actual package
-    int m_progress = 60; //percent from 0 to 100 on the current action(mode) being performed on the package
+    int m_progress = 0; //percent from 0 to 100 on the current action(mode) being performed on the package
     int m_packageIndex; //the index of the actual package from the app
 
     Package::MODE m_mode = MODE::NONE;

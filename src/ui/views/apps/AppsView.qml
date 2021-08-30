@@ -166,7 +166,7 @@ Maui.Page
 
                 if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
                 {
-                    _appsList.launchApp(index);
+                    _appsList.launchApp(_appsModel.mappedToSource(index));
                 }
             }
 
@@ -176,7 +176,7 @@ Maui.Page
 
                 if(!Maui.Handy.singleClick)
                 {
-                    _appsList.launchApp(index);
+                    _appsList.launchApp(_appsModel.mappedToSource(index));
                 }
             }
 
@@ -187,7 +187,7 @@ Maui.Page
                     onTriggered:
                     {
                         _appsListView.currentIndex = index;
-                        _appsList.launchApp(index);
+                        _appsList.launchApp(_appsModel.mappedToSource(index));
                     }
                 },
                 Action
@@ -196,7 +196,7 @@ Maui.Page
                     onTriggered:
                     {
                         _appsListView.currentIndex = index;
-                        appRemoveDialog.index = index
+                        appRemoveDialog.index = _appsModel.mappedToSource(index)
                         appRemoveDialog.open()
                     }
                 }
