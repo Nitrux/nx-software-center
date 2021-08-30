@@ -1,6 +1,7 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.5
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.0 as Maui
 
@@ -23,6 +24,8 @@ Maui.ItemDelegate
             label2.wrapMode: Text.WrapAnywhere
             label2.text:  model.item.package.name
             imageSource: model.item.images[0].pic
+            iconSource: "package"
+            iconSizeHint: Maui.Style.iconSizes.medium
 
             ToolButton
             {

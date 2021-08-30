@@ -34,7 +34,8 @@ Maui.Page
         text: i18n("Open")
         onTriggered:
         {
-            console.log("Launch package?". notify.urls[0])
+//            console.log("Launch package?". notify.urls[0])
+            control.goToApps()
         }
     }
 
@@ -82,7 +83,7 @@ Maui.Page
                 function onProgressFinished()
                 {
                     _appsView.list.resfresh()
-                    root.notify(target.images[0].pic, target.info.name, i18n("Your package is ready."),  goToApps, 3500, i18n("Check"))
+                    root.notify(target.images[0].pic, target.info.name, i18n("Your package is ready."),  goToApps, 9500, i18n("Check"))
 
                     _packageReady.title= target.info.name
                     _packageReady.message = i18n("Your package is ready.")
@@ -91,12 +92,12 @@ Maui.Page
                     _packageReady.send()
                 }
             }
-
-            function goToApps()
-            {
-                _stackView.pop()
-            }
         }
+    }
+
+    function goToApps()
+    {
+        _swipeView.currentIndex = views.apps
     }
 }
 

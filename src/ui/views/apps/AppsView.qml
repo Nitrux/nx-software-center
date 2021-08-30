@@ -46,7 +46,6 @@ Maui.Page
 
     Maui.Dialog
     {
-
         id: appRemoveDialog
 
         property int index : -1
@@ -63,6 +62,7 @@ Maui.Page
         }
     }
 
+    headBar.forceCenterMiddleContent: isWide
     headBar.middleContent: Maui.TextField
     {
         id: _filterBar
@@ -156,9 +156,9 @@ Maui.Page
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             label1.text: model.name
-//            iconSource: model.icon
             imageSource: "image://thumbnailer/" + model.path
-            iconSizeHint: height * 0.7
+            iconSizeHint: Maui.Style.iconSizes.medium
+            iconSource: "package"
 
             onClicked:
             {
