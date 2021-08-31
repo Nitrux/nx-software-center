@@ -82,7 +82,7 @@ Maui.Page
                 target: model.item
                 function onProgressFinished()
                 {
-                    root.notify(target.info.smallpic, target.info.name, i18n("Your package is ready."),  goToApps, 9500, i18n("Dismiss"))
+                    root.notify(target.info.smallpic, target.info.name, i18n("Your app is ready."),  goToApps, 9500, i18n("Dismiss"))
 
                     _packageReady.title= target.info.name
                     _packageReady.message = i18n("Your app is ready.")
@@ -93,7 +93,7 @@ Maui.Page
 
                 function onProgressError(error)
                 {
-                    root.notify(target.info.smallpic, target.info.name, i18n("Your package is ready."),  goToApps, 9500, i18n("Check"))
+                    root.notify(target.info.smallpic, target.info.name, i18n("Downloading has failed."),  goToApps, 9500, i18n("Check"))
 
                     _packageError.title= target.info.name
                     _packageError.message = error
