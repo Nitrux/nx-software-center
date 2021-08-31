@@ -20,8 +20,8 @@ Maui.Page
         id: _progressManager
         onWarning:
         {
-            notify("package-x-generic", "Oops", message)
-            _packageError.title= i18n("Ops!")
+            notify("package-x-generic", "Whoops.", message)
+            _packageError.title= i18n("Whoops!.")
             _packageError.message = message
             _packageError.iconName = "emblem-warning"
             _packageError.send()
@@ -83,10 +83,10 @@ Maui.Page
                 function onProgressFinished()
                 {
                     _appsView.list.resfresh()
-                    root.notify(target.images[0].pic, target.info.name, i18n("Your package is ready."),  goToApps, 9500, i18n("Check"))
+                    root.notify(target.images[0].pic, target.info.name, i18n("Your app is ready."),  goToApps, 9500, i18n("Dismiss"))
 
                     _packageReady.title= target.info.name
-                    _packageReady.message = i18n("Your package is ready.")
+                    _packageReady.message = i18n("Your app is ready.")
                     _packageReady.defaultAction = _launchPackageAction
                     _packageReady.imageSource = "emblem-warning"
                     _packageReady.send()
