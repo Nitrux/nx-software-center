@@ -1,8 +1,9 @@
+#include <QApplication>
+#include <QCommandLineParser>
+
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QIcon>
-#include <QCommandLineParser>
-#include <QDebug>
 
 #include "utils/nx.h"
 #include "models/appsmodel.h"
@@ -13,11 +14,6 @@
 #include "ResponseDTO/application.h"
 #include "ResponseDTO/category.h"
 
-#ifdef Q_OS_ANDROID
-#include <QGuiApplication>
-#else
-#include <QApplication>
-#endif
 
 #include <MauiKit/Core/mauiapp.h>
 #include <MauiKit/FileBrowsing/fmstatic.h>
@@ -33,13 +29,7 @@ int main(int argc, char *argv[])
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-#ifdef Q_OS_ANDROID
-	QGuiApplication app(argc, argv);
-	if (!MAUIAndroid::checkRunTimePermissions({"android.permission.WRITE_EXTERNAL_STORAGE"}))
-		return -1;
-#else
 	QApplication app(argc, argv);
-#endif
 
     app.setOrganizationName(QStringLiteral("Nitrux"));
 	app.setWindowIcon(QIcon(":/nx-software-center.svg"));
