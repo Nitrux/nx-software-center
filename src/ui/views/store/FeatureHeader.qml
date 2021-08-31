@@ -167,7 +167,6 @@ ColumnLayout
                 }
 
                 fillMode: Image.PreserveAspectFit
-
             }
         }
 

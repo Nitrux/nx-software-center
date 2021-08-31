@@ -89,7 +89,7 @@ Maui.Page
             {
                 id: _featureHeader
                 Layout.fillWidth: true
-                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
+//                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
 
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 onAppClicked:
