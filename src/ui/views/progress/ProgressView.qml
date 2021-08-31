@@ -82,14 +82,23 @@ Maui.Page
                 target: model.item
                 function onProgressFinished()
                 {
-                    _appsView.list.resfresh()
-                    root.notify(target.images[0].pic, target.info.name, i18n("Your app is ready."),  goToApps, 9500, i18n("Dismiss"))
+                    root.notify(target.info.smallpic, target.info.name, i18n("Your package is ready."),  goToApps, 9500, i18n("Dismiss"))
 
                     _packageReady.title= target.info.name
                     _packageReady.message = i18n("Your app is ready.")
                     _packageReady.defaultAction = _launchPackageAction
-                    _packageReady.imageSource = "emblem-warning"
+                    _packageReady.imageSource = target.info.smallpic
                     _packageReady.send()
+                }
+
+                function onProgressError(error)
+                {
+                    root.notify(target.info.smallpic, target.info.name, i18n("Your package is ready."),  goToApps, 9500, i18n("Check"))
+
+                    _packageError.title= target.info.name
+                    _packageError.message = error
+                    _packageError.iconSource = "emblem-warning"
+                    _packageError.send()
                 }
             }
         }

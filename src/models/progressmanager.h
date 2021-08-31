@@ -75,6 +75,7 @@ signals:
     void modeLabelChanged(QString modeLabel);
     void modeChanged(MODE mode);
     void progressFinished();
+    void progressError(QString error);
     void pathChanged(QUrl path);
 };
 

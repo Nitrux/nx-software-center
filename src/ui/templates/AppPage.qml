@@ -112,7 +112,7 @@ Maui.Page
                         anchors.centerIn: parent
                         height: parent.height * 2
                         width: parent.width * 2
-                        source: imagesInfo[0].pic
+                        source: control.app.info.smallpic
                         sourceSize.height: 100
                         sourceSize.width: 100
                         fillMode: Image.PreserveAspectCrop

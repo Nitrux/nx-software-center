@@ -26,9 +26,10 @@ void App::setModels()
         {FMH::MODEL_NAME[FMH::MODEL_KEY::SMALL_PIC], data->pic}};
 }
 
+QString preview;
 if(m_images.size() > 1) //first image is just the icon again so lets remove that for making previews look better
 {
-    m_images.removeFirst();
+    preview = m_images.takeFirst().toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::SMALL_PIC]).toString();
 }
 
 emit this->imagesChanged(this->m_images);
@@ -71,6 +72,7 @@ this->m_info = FMH::toMap(FMH::MODEL{
                               {FMH::MODEL_KEY::DETAILS, m_data->details},
                               {FMH::MODEL_KEY::GHNS_EXCLUDED, m_data->ghnsExcluded},
                               {FMH::MODEL_KEY::ID, m_data->id},
+                              {FMH::MODEL_KEY::SMALL_PIC, preview},
                               {FMH::MODEL_KEY::LANGUAGE, m_data->language},
                               {FMH::MODEL_KEY::NAME, m_data->name},
                               {FMH::MODEL_KEY::PERSON_ID, m_data->personId},

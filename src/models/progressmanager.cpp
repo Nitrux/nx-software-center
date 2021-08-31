@@ -224,6 +224,13 @@ void Package::installPackage()
     connect(downloader, &FMH::Downloader::done, [this, downloader, appimagePath]()
     {
         this->integratePackage(appimagePath);
+        emit this->progressFinished();
+        downloader->deleteLater();
+    });
+
+    connect(downloader, &FMH::Downloader::warning, [this, downloader](QString warning)
+    {
+        emit this->progressError(warning);
         downloader->deleteLater();
     });
 

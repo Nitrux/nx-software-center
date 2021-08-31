@@ -23,7 +23,7 @@ Maui.ItemDelegate
             label1.text: model.item.info.name
             label2.wrapMode: Text.WrapAnywhere
             label2.text:  model.item.package.name
-            imageSource: model.item.images[0].pic
+            imageSource: model.item.info.smallpic
             iconSource: "package"
             iconSizeHint: Maui.Style.iconSizes.medium
 
