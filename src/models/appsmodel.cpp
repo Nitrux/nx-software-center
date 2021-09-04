@@ -1,7 +1,6 @@
 #include "appsmodel.h"
 
 #include <QDebug>
-#include <QProcess>
 
 #include <MauiKit/FileBrowsing/fmstatic.h>
 #include <MauiKit/FileBrowsing/fileloader.h>
@@ -85,16 +84,7 @@ void AppsModel::unintegrate(const QUrl &url)
         return;
     qDebug() << "unintegrate this appimage" << url;
 
-    QProcess *appProcess = new QProcess(this);
-    appProcess->start("ail-cli", {"unintegrate", url.toLocalFile()});
-
-    connect(appProcess, &QProcess::errorOccurred, [=](QProcess::ProcessError err) {
-        qDebug() << "UNINTEGRATE QPROCESS ERROR" << err;
-
-    });
-    connect(appProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
-        qDebug() << "UNINTEGRATE QPROCESS FINISHED" << exitCode << exitStatus;
-    });
+    AppImageTools::unintegrate(url);
 }
 
 void AppsModel::clear()

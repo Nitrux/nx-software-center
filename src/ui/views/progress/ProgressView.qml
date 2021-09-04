@@ -34,7 +34,7 @@ Maui.Page
         text: i18n("Open")
         onTriggered:
         {
-//            console.log("Launch package?". notify.urls[0])
+            //            console.log("Launch package?". notify.urls[0])
             control.goToApps()
         }
     }
@@ -76,7 +76,15 @@ Maui.Page
             width: ListView.view.width
 
             onClicked:  model.item.launchPackage()
+            onRemoveClicked:
+            {
+                _progressManager.removePackage(model.item, index)
+            }
 
+            onStopClicked:
+            {
+                _progressManager.removePackage(model.item, index)
+            }
             Connections
             {
                 target: model.item

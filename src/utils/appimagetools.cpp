@@ -20,12 +20,26 @@ void AppImageTools::integrate(const QUrl &url)
     try {
         appimage::core::AppImage app(url.toLocalFile().toUtf8().constData()) ;
         appimage::desktop_integration::IntegrationManager manager;
-        if(manager.isARegisteredAppImage(url.toLocalFile().toUtf8().constData()))
+        if(!manager.isARegisteredAppImage(url.toLocalFile().toUtf8().constData()))
         {
             if(manager.shallAppImageBeRegistered(app))
             {
                 manager.registerAppImage(app);
             }
+        }
+
+    } catch (...) {
+        qDebug() << "could not integrate appimage";
+    }
+}
+
+void AppImageTools::unintegrate(const QUrl &url)
+{
+    try {
+        appimage::desktop_integration::IntegrationManager manager;
+        if(manager.isARegisteredAppImage(url.toLocalFile().toUtf8().constData()))
+        {
+            manager.unregisterAppImage(url.toLocalFile().toUtf8().constData());
         }
 
     } catch (...) {

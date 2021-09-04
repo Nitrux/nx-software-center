@@ -115,6 +115,7 @@ signals:
 public slots:
     Package * appendPackage(App * app, const int &packageIndex, const uint &mode);
     void removePackage(App * app, const int &packageIndex);
+    void stopPackage(App * app, const int &packageIndex);
     Package *takePackage(App * app, const int &packageIndex);
 };
 

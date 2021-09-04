@@ -11,6 +11,9 @@ Maui.ItemDelegate
     readonly property color altColor : Kirigami.Theme.textColor
     implicitHeight: _layout.implicitHeight
 
+    signal removeClicked()
+    signal stopClicked()
+
     ColumnLayout
     {
         id: _layout
@@ -31,15 +34,15 @@ Maui.ItemDelegate
             {
                 icon.name: "process-stop"
                 visible: model.item.progress < 100
+                onClicked: control.stopClicked()
+
             }
 
             ToolButton
             {
                 icon.name: "tab-close"
                 visible: model.item.progress === 100
-                onClicked: {
-
-                }
+                onClicked: control.removeClicked()
             }
         }
 

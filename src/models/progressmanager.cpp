@@ -66,8 +66,6 @@ Package *ProgressManager::appendPackage(App *app, const int &packageIndex, const
 
     this->m_packages[package->getLink().toString()] = package;
     this->m_list << package;
-    this->m_count = this->m_list.size();
-    emit this->countChanged(this->m_count);
 
     switch (static_cast<Package::MODE>(mode))
     {
@@ -87,6 +85,8 @@ Package *ProgressManager::appendPackage(App *app, const int &packageIndex, const
     }
 
     endInsertRows();
+    this->m_count = this->m_list.size();
+    emit this->countChanged(this->m_count);
 
     return package;
 }
@@ -95,13 +95,26 @@ void ProgressManager::removePackage(App *app, const int &packageIndex)
 {
     if(contains(*app, packageIndex))
     {
+        beginRemoveRows(QModelIndex(), packageIndex, packageIndex);
         auto package =  this->m_packages[app->getData()->downloads.at(packageIndex)->link];
         package->stop();
         package->deleteLater();
 
         this->m_packages.remove(app->getData()->downloads.at(packageIndex)->link);
+        this->m_list.removeAt(packageIndex);
         this->m_count = this->m_packages.size();
         emit this->countChanged(this->m_count);
+        endRemoveRows();
+    }
+}
+
+void ProgressManager::stopPackage(App *app, const int &packageIndex)
+{
+    if(contains(*app, packageIndex))
+    {
+        auto package =  this->m_packages[app->getData()->downloads.at(packageIndex)->link];
+        package->stop();
+        package->deleteLater();
     }
 }
 

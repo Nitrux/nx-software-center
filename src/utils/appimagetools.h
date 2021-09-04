@@ -11,7 +11,8 @@ class AppImageTools : public QObject
 public:
     explicit AppImageTools(QObject *parent = nullptr);
 
-   static void integrate(const QUrl &url);
+    static void integrate(const QUrl &url);
+    static void unintegrate(const QUrl &url);
    static const FMH::MODEL desktopData(const QUrl &url);
 
 signals:
