@@ -364,7 +364,7 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
       download->way =
           parsedJson["downloads"].toObject()[key].toObject()["way"].toString();
       download->size =
-          parsedJson["downloads"].toObject()[key].toObject()["size"].toString();
+          QString::number((qint64)parsedJson["downloads"].toObject()[key].toObject()["size"].toDouble());
       download->tags =
           parsedJson["downloads"].toObject()[key].toObject()["tags"].toString();
       download->type =
