@@ -24,15 +24,15 @@ static const QHash<QString, QString> iconName =
 static const QHash<QString, QString> cardColor =
 {
     {"All","appimage-store"},
-    {"Programming","qrc:/applications-development.svg"},
-    {"System & Tools", "qrc:/applications-utilities.svg"},
-    {"Audio", "qrc:/applications-multimedia.svg"},
-    {"Office", "qrc:/applications-office.svg"},
-    {"Video", "qrc:/applications-multimedia.svg"},
-    {"Internet", "qrc:/applications-internet.svg"},
-    {"Graphics", "qrc:/applications-graphics.svg"},
-    {"Education", "qrc:/applications-other.svg"},
-    {"Games", "qrc:/applications-games.svg"},
+    {"Programming","#311b92"},
+    {"System & Tools", "#536dfe"},
+    {"Audio", "#ff4081"},
+    {"Office", "#00b0ff"},
+    {"Video", "#1de9b6"},
+    {"Internet", "#ffff00"},
+    {"Graphics", "#ff6e40"},
+    {"Education", "#455a64"},
+    {"Games", "#c6ff00"},
 };
 
 void CategoriesModel::componentComplete()
@@ -55,9 +55,6 @@ void CategoriesModel::setList()
 {
     this->clear();
 
-    qDebug() << "Setting SUBCATEGORIES list" << m_category;
-
-
     if(m_category)
     {
         emit this->preListChanged();
@@ -70,6 +67,7 @@ void CategoriesModel::setList()
             this->m_list << FMH::MODEL { {FMH::MODEL_KEY::ID, c->id},
             {FMH::MODEL_KEY::NAME, c->name},
             {FMH::MODEL_KEY::ICON, iconName[c->name]},
+            {FMH::MODEL_KEY::COLOR, cardColor[c->name]},
             {FMH::MODEL_KEY::CATEGORY, tr("Apps")},
             {FMH::MODEL_KEY::TITLE, c->displayName},
             {FMH::MODEL_KEY::PARENT_ID, c->parentId},
@@ -110,6 +108,7 @@ connect(this->m_store, &Store::categoriesResponseReady, [=](CategoryResponseDTO 
         this->m_list << FMH::MODEL { {FMH::MODEL_KEY::ID, c->id},
         {FMH::MODEL_KEY::NAME, c->name},
         {FMH::MODEL_KEY::ICON, iconName[c->name]},
+        {FMH::MODEL_KEY::COLOR, cardColor[c->name]},
         {FMH::MODEL_KEY::CATEGORY, tr("Apps")},
         {FMH::MODEL_KEY::TITLE, c->displayName},
         {FMH::MODEL_KEY::PARENT_ID, c->parentId},

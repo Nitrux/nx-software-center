@@ -22,11 +22,11 @@ Maui.ItemDelegate
         Maui.ListItemTemplate
         {
             Layout.fillWidth: true
-
-            label1.text: model.item.info.name
+            implicitHeight: Maui.Style.rowHeight
+            label1.text: model.item.appSource.info.name
             label2.wrapMode: Text.WrapAnywhere
             label2.text:  model.item.package.name
-            imageSource: model.item.info.smallpic
+            imageSource: model.item.appSource.info.smallpic
             iconSource: "package"
             iconSizeHint: Maui.Style.iconSizes.medium
 
@@ -35,7 +35,6 @@ Maui.ItemDelegate
                 icon.name: "process-stop"
                 visible: model.item.progress < 100
                 onClicked: control.stopClicked()
-
             }
 
             ToolButton

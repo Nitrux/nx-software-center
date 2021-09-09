@@ -78,13 +78,14 @@ Maui.Page
             onClicked:  model.item.launchPackage()
             onRemoveClicked:
             {
-                _progressManager.removePackage(model.item, index)
+                _progressManager.removePackage(index)
             }
 
             onStopClicked:
             {
-                _progressManager.removePackage(model.item, index)
+                _progressManager.removePackage(index)
             }
+
             Connections
             {
                 target: model.item

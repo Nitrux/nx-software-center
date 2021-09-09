@@ -1,11 +1,9 @@
 #include "progressmanager.h"
+
 #include "ResponseDTO/application.h"
-#include "nx.h"
 
 #include <MauiKit/FileBrowsing/fmstatic.h>
-#include <MauiKit/FileBrowsing/downloader.h>
 
-#include "utils/appimagetools.h"
 
 bool ProgressManager::contains(const App &app, const int &packageIndex) const
 {
@@ -19,7 +17,6 @@ QHash<int, QByteArray> ProgressManager::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[ROLES::ITEM] = "item";
-    roles[ROLES::MODE] = "mode";
     return roles;
 }
 
@@ -42,233 +39,83 @@ QVariant ProgressManager::data(const QModelIndex &index, int role) const
     {
     case ROLES::ITEM:
         return QVariant::fromValue(item);
-    case ROLES::MODE:
-        qDebug()<< "REQUESTING MODE <<" << item->getModelLabel();
-        return item->getModelLabel();
     default:
         return QVariant();
     }
 }
 
-Package *ProgressManager::appendPackage(App *app, const int &packageIndex, const uint &mode)
+Package *ProgressManager::appendPackage(App *app, const int &packageIndex)
 {
     if(this->contains(*app, packageIndex))
     {
         emit this->warning(tr("Package is already in the Progress List"));
-        return new Package;
+        return nullptr;
     }
 
-    const auto package = new Package(*app, this);
+    const auto package = new Package(app, this);
     package->setPackageIndex(packageIndex);
-    package->setMode(static_cast<Package::MODE>(mode));
 
     beginInsertRows(QModelIndex(), this->m_list.size(), this->m_list.size());
 
     this->m_packages[package->getLink().toString()] = package;
     this->m_list << package;
-
-    switch (static_cast<Package::MODE>(mode))
-    {
-    case Package::MODE::DOWNLOAD:
-        package->installPackage();
-        break;
-    case Package::MODE::UPDATE:
-        package->updatePackage();
-        break;
-    case Package::MODE::REMOVE:
-        package->removePackage();
-        break;
-    case Package::MODE::LAUNCH:
-        package->launchPackage();
-        break;
-    default: return package;
-    }
+    package->installPackage();
 
     endInsertRows();
+
     this->m_count = this->m_list.size();
     emit this->countChanged(this->m_count);
 
     return package;
 }
 
-void ProgressManager::removePackage(App *app, const int &packageIndex)
+void ProgressManager::removePackage(const int &packageIndex)
 {
-    if(contains(*app, packageIndex))
+    if(packageIndex >= this->m_list.size() || packageIndex < 0)
     {
-        beginRemoveRows(QModelIndex(), packageIndex, packageIndex);
-        auto package =  this->m_packages[app->getData()->downloads.at(packageIndex)->link];
-        package->stop();
-        package->deleteLater();
-
-        this->m_packages.remove(app->getData()->downloads.at(packageIndex)->link);
-        this->m_list.removeAt(packageIndex);
-        this->m_count = this->m_packages.size();
-        emit this->countChanged(this->m_count);
-        endRemoveRows();
-    }
-}
-
-void ProgressManager::stopPackage(App *app, const int &packageIndex)
-{
-    if(contains(*app, packageIndex))
-    {
-        auto package =  this->m_packages[app->getData()->downloads.at(packageIndex)->link];
-        package->stop();
-        package->deleteLater();
-    }
-}
-
-Package *ProgressManager::takePackage(App *app, const int &packageIndex)
-{
-    if(contains(*app, packageIndex))
-    {
-        auto package =  this->m_packages[app->getData()->downloads.at(packageIndex)->link];
-        package->stop();
-
-        this->m_packages.remove(app->getData()->downloads.at(packageIndex)->link);
-        this->m_count = this->m_packages.size();
-        emit this->countChanged(this->m_count);
-
-        return std::move(package);
-    }
-
-    return new Package;
-}
-
-void Package::stop()
-{
-
-}
-
-void Package::setPackageIndex(const int &index)
-{
-    if(index > this->getData()->downloads.size() || index < 0)
         return;
-
-    this->m_packageIndex = index;
-    this->m_link = this->getData()->downloads.at(this->m_packageIndex)->link;
-    this->m_package = this->m_downloads.at(this->m_packageIndex).toMap();
-
-    emit this->linkChanged(this->m_link);
-    emit this->packageChanged(this->m_package);
-    emit this->packagedIndexChanged(this->m_packageIndex);
-}
-
-static const QHash<Package::MODE, QString> MODE_MAP = {
-    {Package::MODE::DOWNLOAD, "Download"},
-    {Package::MODE::LAUNCH, "Launch"},
-    {Package::MODE::REMOVE, "Remove"},
-    {Package::MODE::UPDATE, "Update"}
-};
-
-void Package::setMode(const Package::MODE &mode)
-{
-    this->m_mode = mode;
-    emit this->modeChanged(this->m_mode);
-
-    this->m_modeLabel = MODE_MAP[this->m_mode];
-    emit this->modeLabelChanged(this->m_modeLabel);
-    qDebug()<< "Setting mode"<<  m_modeLabel;
-
-}
-
-void Package::setProgress(const int &progress)
-{
-    this->m_progress = progress;
-    emit this->progressChanged(this->m_progress);
-}
-
-int Package::getPackageIndex() const
-{
-    return m_packageIndex;
-}
-
-QString Package::getModelLabel() const
-{
-    return this->m_modeLabel;
-}
-
-QUrl Package::getLink() const
-{
-    return m_link;
-}
-
-QVariantMap Package::getPackage() const
-{
-    return m_package;
-}
-
-QUrl Package::getPath() const
-{
-    return m_path;
-}
-
-void Package::integratePackage(const QString &path)
-{
-    this->setPath(path);
-
-    if(!FMH::fileExists(m_path))
-        return;
-    qDebug() << "integrate this appimage" << path << m_path;
-
-    AppImageTools::integrate(m_path);
-}
-
-void Package::updatePackage()
-{
-
-}
-
-void Package::removePackage()
-{
-
-}
-
-void Package::installPackage()
-{
-    const auto package =   this->m_data->downloads.at(this->m_packageIndex);
-    auto downloader = new FMH::Downloader;
-
-    qDebug() << "TRY TO DOWNLOAD LINK" << this->m_link;
-
-    auto appimagePath = NX::AppsPath.toString()+("/")+package->name;
-
-    connect(downloader, &FMH::Downloader::progress, this, &Package::setProgress);
-    connect(downloader, &FMH::Downloader::done, [this, downloader, appimagePath]()
-    {
-        this->integratePackage(appimagePath);
-        emit this->progressFinished();
-        downloader->deleteLater();
-    });
-
-    connect(downloader, &FMH::Downloader::warning, [this, downloader](QString warning)
-    {
-        emit this->progressError(warning);
-        downloader->deleteLater();
-    });
-
-    downloader->downloadFile(this->m_link, appimagePath);
-}
-
-void Package::launchPackage()
-{
-    qDebug() << "launch the package if it is locally avaliable" << m_path;
-    if(FMH::fileExists(m_path))
-    {
-        qDebug() << "launch the package if it is locally avaliable EXISTS" << m_path;
-
-        FMStatic::openUrl(m_path);
     }
+
+    beginRemoveRows(QModelIndex(), packageIndex, packageIndex);
+    auto link = this->m_list.at(packageIndex)->getLink().toString();
+    auto package =  this->m_packages[link];  
+
+    this->m_packages.remove(link);
+    this->m_list.removeAt(packageIndex);
+
+    package->stop();
+    package->deleteLater();
+
+    this->m_count = this->m_packages.size();
+    emit this->countChanged(this->m_count);
+    endRemoveRows();
 }
 
-void Package::buyPackage()
+void ProgressManager::stopPackage(const int &packageIndex)
 {
-
+    if(packageIndex >= this->m_list.size() || packageIndex < 0)
+    {
+        return;
+    }
+    auto link = this->m_list.at(packageIndex)->getLink().toString();
+    this->m_packages[link]->stop();
 }
 
-void Package::setPath(const QString &path)
+Package *ProgressManager::takePackage(const int &packageIndex)
 {
-    m_path = QUrl(path);
-    emit pathChanged(m_path);
+    if(packageIndex >= this->m_list.size() || packageIndex < 0)
+    {
+        return nullptr;
+    }
+    auto link = this->m_list.at(packageIndex)->getLink().toString();
 
+    auto package =  this->m_packages[link];
+    package->stop();
+
+    this->m_packages.remove(link);
+    this->m_count = this->m_packages.size();
+    emit this->countChanged(this->m_count);
+
+    return std::move(package);
 }
+

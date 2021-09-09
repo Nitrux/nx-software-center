@@ -69,6 +69,8 @@ Maui.Page
         Layout.fillWidth: true
         Layout.maximumWidth: 500
         placeholderText: i18n("Filter %1 installed apps", _appsList.count)
+        onAccepted: _appsModel.filter = text
+        onCleared:  _appsModel.filter = ""
     }
 
     headBar.rightContent: [
@@ -104,6 +106,15 @@ Maui.Page
                 checked: _appsModel.sort === "date"
                 onTriggered: _appsModel.sort = "date"
             }
+
+            MenuItem
+            {
+                text: i18n("Category")
+                checkable: true
+                autoExclusive: true
+                checked: _appsModel.sort === "category"
+                onTriggered: _appsModel.sort = "category"
+            }
         }
     ]
 
@@ -123,15 +134,15 @@ Maui.Page
         anchors.fill: parent
         orientation: ListView.Vertical
         spacing: Maui.Style.space.medium
-        section.property: "category"
-        section.criteria: ViewSection.FullString
+        section.property: _appsModel.sort
+        section.criteria:  _appsModel.sort === "label" ? ViewSection.FirstCharacter : ViewSection.FullString
         section.delegate: Maui.LabelDelegate
         {
             id: delegate
-            label: section
-            labelTxt.font.pointSize: Maui.Style.fontSizes.big
+            label: _appsModel.sort === "date" ?  Qt.formatDateTime(new Date(section), "d MMM yyyy") : ( _appsModel.sort === "size" ?  Maui.Handy.formatSize(String(section)) :  String(section).toUpperCase())
+
             isSection: true
-            labelTxt.font.bold: true
+
             height: Maui.Style.toolBarHeightAlt
             width: parent.width
         }

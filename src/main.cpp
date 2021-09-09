@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 	qmlRegisterType<App>("NXModels", 1, 0, "App");
 	qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
 	qmlRegisterType<ProgressManager>("NXModels", 1, 0, "ProgressManager");
-	qmlRegisterType<Package>("NXModels", 1, 0, "Package");
+    qmlRegisterAnonymousType<Package>("NXModels", 1);
     qmlRegisterAnonymousType<Application>("NXModels", 1);
     qmlRegisterType<Category>("NXModels", 1, 0, "Category");
 	qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");

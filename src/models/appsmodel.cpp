@@ -23,7 +23,8 @@ void AppsModel::componentComplete()
 
 const FMH::MODEL_LIST &AppsModel::items() const { return this->m_list; }
 
-void AppsModel::launchApp(const int &index) {
+void AppsModel::launchApp(const int &index)
+{
 
     const auto url = this->get(index).value("url").toUrl();
 qDebug() << "try to launch appimage" << url;

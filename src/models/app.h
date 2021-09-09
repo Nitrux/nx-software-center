@@ -26,7 +26,6 @@ public:
 
     Application * getData() const;
 
-protected:
     Application * m_data;
 
     QVariantMap m_info;

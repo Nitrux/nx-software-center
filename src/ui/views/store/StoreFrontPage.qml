@@ -89,7 +89,7 @@ Maui.Page
             {
                 id: _featureHeader
                 Layout.fillWidth: true
-//                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
+                //                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
 
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 onAppClicked:
@@ -102,10 +102,10 @@ Maui.Page
             {
                 id: _categoriesListView
                 Layout.fillWidth: true
-//                Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
+                //                Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
                 listView.implicitHeight: 60
-title.text: i18n("Categories")
-subtitle.text: i18n("Filter by categories")
+                title.text: i18n("Categories")
+                subtitle.text: i18n("Filter by categories")
                 model: Maui.BaseModel
                 {
                     id: _categoriesModel
@@ -114,18 +114,19 @@ subtitle.text: i18n("Filter by categories")
 
                 delegate: Maui.ListBrowserDelegate
                 {
+                    id: _categoryDelegate
                     width: template.implicitWidth + iconSizeHint
                     height: ListView.view.height
-
+                    property color tagColor : model.color
                     iconVisible: true
                     iconSource: model.icon
                     iconSizeHint: Maui.Style.iconSizes.medium
-template.headerSizeHint: iconSizeHint * 2
+                    template.headerSizeHint: iconSizeHint * 2
                     label1.text: model.title
                     label1.font.bold: true
                     label1.font.weight: Font.Bold
                     label1.font.pointSize: Maui.Style.fontSizes.big
-
+                    template.leftMargin:_tagColor.width
                     onDoubleClicked:
                     {
                         _categoriesListView.currentIndex = index
@@ -144,6 +145,33 @@ template.headerSizeHint: iconSizeHint * 2
                         {
                             control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
 
+                        }
+                    }
+
+                    background: Rectangle
+                    {
+                        readonly property color m_color : Qt.tint(Qt.lighter(Kirigami.Theme.textColor), Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
+
+                        color: _categoryDelegate.hovered || _categoryDelegate.containsPress ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
+                        radius: Maui.Style.radiusV
+
+                        Kirigami.ShadowedRectangle
+                        {
+                            id: _tagColor
+                            visible: model.color
+                            color: model.color
+                            anchors.left: parent.left
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            width: visible ? 12 : 0
+
+                            corners
+                            {
+                                topLeftRadius:  Maui.Style.radiusV
+                                topRightRadius: 0
+                                bottomLeftRadius:  Maui.Style.radiusV
+                                bottomRightRadius: 0
+                            }
                         }
                     }
                 }

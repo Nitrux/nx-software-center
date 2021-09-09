@@ -13,7 +13,7 @@ StackView
     id: control
 
     property NX.Category currentCategory : _categoriesList.baseCategory()
-property var tags : []
+    property var tags : []
     readonly property alias frontPage : _frontPage
 
     NX.Categories
@@ -48,7 +48,7 @@ property var tags : []
             onPackageClicked:
             {
                 console.log("trying to append package app ", app.id)
-                _progressView.manager.appendPackage(app, index, NX.Package.DOWNLOAD)
+                _progressView.manager.appendPackage(app, index)
             }
 
             buttonActions: [
@@ -59,7 +59,8 @@ property var tags : []
                     visible: !app.isInstalled
                     Kirigami.Theme.textColor: "#fafafa"
                     Kirigami.Theme.backgroundColor: "#26c6da"
-                    onClicked: {
+                    onClicked:
+                    {
                         _appPage.scrollTo(AppPage.Sections.Packages)
                     }
                 },
