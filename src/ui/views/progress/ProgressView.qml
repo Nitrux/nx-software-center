@@ -83,7 +83,7 @@ Maui.Page
 
             onStopClicked:
             {
-                _progressManager.removePackage(index)
+                _progressManager.stopPackage(index)
             }
 
             Connections
@@ -91,20 +91,20 @@ Maui.Page
                 target: model.item
                 function onProgressFinished()
                 {
-                    root.notify(target.info.smallpic, target.info.name, i18n("Your app is ready."),  goToApps, 9500, i18n("Dismiss"))
+                    root.notify(target.appSource.info.smallpic, target.appSource.info.name, i18n("Your app is ready."),  goToApps, 9500, i18n("Dismiss"))
 
-                    _packageReady.title= target.info.name
+                    _packageReady.title= target.appSource.info.name
                     _packageReady.message = i18n("Your app is ready.")
                     _packageReady.defaultAction = _launchPackageAction
-                    _packageReady.imageSource = target.info.smallpic
+                    _packageReady.imageSource = target.appSource.info.smallpic
                     _packageReady.send()
                 }
 
                 function onProgressError(error)
                 {
-                    root.notify(target.info.smallpic, target.info.name, i18n("Downloading has failed."),  goToApps, 9500, i18n("Check"))
+                    root.notify(target.appSource.info.smallpic, target.appSource.info.name, error,  goToApps, 9500)
 
-                    _packageError.title= target.info.name
+                    _packageError.title= target.appSource.info.name
                     _packageError.message = error
                     _packageError.iconSource = "emblem-warning"
                     _packageError.send()

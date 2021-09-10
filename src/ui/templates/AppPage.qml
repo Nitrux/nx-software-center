@@ -312,7 +312,7 @@ Maui.Page
                             label1.font.weight: Font.Bold
                             label1.font.bold: true
                             label3.text: info.packageArch
-                            label2.text: info.size
+                            label2.text: Maui.Handy.formatSize(info.size)
                             iconSource: FB.FM.iconName(info.name)
                             iconSizeHint: Maui.Style.iconSizes.large
 

@@ -17,12 +17,12 @@ Maui.ItemDelegate
     ColumnLayout
     {
         id: _layout
-        width: parent.width
+        anchors.fill: parent
 
         Maui.ListItemTemplate
         {
+            id: meh
             Layout.fillWidth: true
-            implicitHeight: Maui.Style.rowHeight
             label1.text: model.item.appSource.info.name
             label2.wrapMode: Text.WrapAnywhere
             label2.text:  model.item.package.name
@@ -33,14 +33,14 @@ Maui.ItemDelegate
             ToolButton
             {
                 icon.name: "process-stop"
-                visible: model.item.progress < 100
+                visible: model.item.running
                 onClicked: control.stopClicked()
             }
 
             ToolButton
             {
                 icon.name: "tab-close"
-                visible: model.item.progress === 100
+                visible: model.item.finished
                 onClicked: control.removeClicked()
             }
         }
@@ -49,7 +49,7 @@ Maui.ItemDelegate
         {
             Layout.fillWidth: true
             value: model.item.progress
-            visible: model.item.progress < 100
+            visible: model.item.running
             from: 0
             to: 100
         }

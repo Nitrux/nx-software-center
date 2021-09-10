@@ -15,6 +15,8 @@ class Package : public QObject
     Q_PROPERTY(QUrl path READ getPath NOTIFY pathChanged FINAL)
     Q_PROPERTY(QVariantMap package READ getPackage NOTIFY packageChanged FINAL)
     Q_PROPERTY(int progress MEMBER m_progress NOTIFY progressChanged)
+    Q_PROPERTY(bool running READ isRunning NOTIFY isRunningChanged FINAL)
+    Q_PROPERTY(bool finished READ isFinished NOTIFY isFinishedChanged FINAL)
     Q_PROPERTY(int packageIndex READ getPackageIndex NOTIFY packagedIndexChanged FINAL)
     Q_PROPERTY(App *appSource READ appSource FINAL CONSTANT)
 
@@ -40,6 +42,8 @@ public slots:
     void installPackage();
     void launchPackage();
     void buyPackage();
+    bool isRunning() const;
+    bool isFinished() const;
 
 private:
     QVariantMap m_package; //the actual package from the app to perform action upon
@@ -63,6 +67,8 @@ signals:
     void progressFinished();
     void progressError(QString error);
     void pathChanged(QUrl path);
+    void isRunningChanged();
+    void isFinishedChanged();
 };
 
 

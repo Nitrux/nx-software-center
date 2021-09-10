@@ -12,17 +12,28 @@ Package::Package(App *appSource, QObject *parent) : QObject(parent)
     {
         this->integratePackage(path);
         emit this->progressFinished();
+        emit this->isRunningChanged();
+        emit this->isFinishedChanged();
     });
 
     connect(m_downloader, &FMH::Downloader::warning, [this](QString warning)
     {
         emit this->progressError(warning);
+        emit this->isRunningChanged();
+        emit this->isFinishedChanged();
     });
 }
 
 void Package::stop()
 {
-    m_downloader->stop();
+    if(this->isRunning())
+    {
+        m_downloader->stop();
+        emit this->progressError("Package download has been aborted.");
+        setProgress(0);
+        emit this->isRunningChanged();
+        emit this->isFinishedChanged();
+    }
 }
 
 void Package::setPackageIndex(const int &index)
@@ -116,6 +127,16 @@ void Package::launchPackage()
 void Package::buyPackage()
 {
 
+}
+
+bool Package::isRunning() const
+{
+    return m_downloader->isRunning();
+}
+
+bool Package::isFinished() const
+{
+    return m_downloader->isFinished();
 }
 
 void Package::setPath(const QString &path)

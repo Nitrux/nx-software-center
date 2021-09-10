@@ -1,6 +1,7 @@
 #include "appsmodel.h"
 
 #include <QDebug>
+#include <QTimer>
 
 #include <MauiKit/FileBrowsing/fmstatic.h>
 #include <MauiKit/FileBrowsing/fileloader.h>
@@ -12,13 +13,23 @@
 AppsModel::AppsModel(QObject *parent) : MauiList(parent)
   , m_watcher(new QFileSystemWatcher(this))
 {
-    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &AppsModel::setList);
+    auto timer = new  QTimer (this);
+
+    timer->setSingleShot(true);
+    timer->setInterval(1000);
+
+    connect(timer, &QTimer::timeout, this, &AppsModel::setList);
+    connect(m_watcher, &QFileSystemWatcher::directoryChanged, [this, timer](QString )
+    {
+        timer->start();
+    });
+
     m_watcher->addPath(QUrl(FMStatic::HomePath+"/Applications").toLocalFile());
 }
 
 void AppsModel::componentComplete()
 {
-   setList();
+    setList();
 }
 
 const FMH::MODEL_LIST &AppsModel::items() const { return this->m_list; }
@@ -27,23 +38,15 @@ void AppsModel::launchApp(const int &index)
 {
 
     const auto url = this->get(index).value("url").toUrl();
-qDebug() << "try to launch appimage" << url;
+    qDebug() << "try to launch appimage" << url;
     FMStatic::openUrl(url);
-
-//    {
-//        emit appLaunchSuccess();
-
-//    }else
-//    {
-//        emit appLaunchError(0);
-//    }
 }
 
 void AppsModel::removeApp(const int &index) {
 
     const auto url = this->get(index).value("url").toUrl();
 
-//    emit preItemRemoved(index);
+    //    emit preItemRemoved(index);
 
     if(FMStatic::removeFiles({url}))
     {
@@ -52,7 +55,7 @@ void AppsModel::removeApp(const int &index) {
         emit appDeleteSuccess();
     }
 
-//    emit postItemRemoved();
+    //    emit postItemRemoved();
 }
 
 void AppsModel::resfresh()
@@ -62,7 +65,7 @@ void AppsModel::resfresh()
 
 void AppsModel::setList()
 {
-   this->clear();
+    this->clear();
 
     FMH::FileLoader *fileLoader = new FMH::FileLoader;
     fileLoader->informer = &AppImageTools::desktopData;

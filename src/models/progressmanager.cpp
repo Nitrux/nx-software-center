@@ -76,14 +76,19 @@ void ProgressManager::removePackage(const int &packageIndex)
         return;
     }
 
-    beginRemoveRows(QModelIndex(), packageIndex, packageIndex);
     auto link = this->m_list.at(packageIndex)->getLink().toString();
-    auto package =  this->m_packages[link];  
+    auto package =  this->m_packages[link];
+
+    if(package->isRunning())
+    {
+        return;
+    }
+
+    beginRemoveRows(QModelIndex(), packageIndex, packageIndex);
 
     this->m_packages.remove(link);
     this->m_list.removeAt(packageIndex);
 
-    package->stop();
     package->deleteLater();
 
     this->m_count = this->m_packages.size();
@@ -98,6 +103,7 @@ void ProgressManager::stopPackage(const int &packageIndex)
         return;
     }
     auto link = this->m_list.at(packageIndex)->getLink().toString();
+    qDebug()<< link;
     this->m_packages[link]->stop();
 }
 
