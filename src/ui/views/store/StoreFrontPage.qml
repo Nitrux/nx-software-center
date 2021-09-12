@@ -155,6 +155,7 @@ Maui.Page
                         color: _categoryDelegate.hovered || _categoryDelegate.containsPress ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
                         radius: Maui.Style.radiusV
 
+
                         Kirigami.ShadowedRectangle
                         {
                             id: _tagColor

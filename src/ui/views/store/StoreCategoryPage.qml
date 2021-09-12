@@ -106,31 +106,27 @@ Maui.Page
 
             spacing: Maui.Style.space.huge
 
-            Maui.ListBrowser
+            FeatureStrip
             {
                 id: _categoriesListView
 
                 visible: count > 0
                 currentIndex: -1
                 Layout.fillWidth: true
-                implicitHeight: 80
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                Layout.margins: isWide ? Maui.Style.space.big : Maui.Style.space.small
-                snapMode: ListView.SnapOneItem
-                orientation: Qt.Horizontal
-                horizontalScrollBarPolicy: ScrollBar.AlwaysOff
-                verticalScrollBarPolicy:  ScrollBar.AlwaysOff
+                title.text: i18n("Subcategories")
+                subtitle.text: i18n("Filter the results by using a subcategory.")
+                listView.implicitHeight: 60
 
-                flickable.header: Item
+                listView.header: Item
                 {
                     width : 180
-                    height: 64
+                    height: ListView.view.height
 
                     Maui.ItemDelegate
                     {
                         isCurrentItem: _categoriesListView.currentIndex === -1
                         width: 160
-                        height: 64
+                        height: parent.height
 
                         anchors.centerIn: parent
 
@@ -140,13 +136,23 @@ Maui.Page
                             color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
                             radius: Maui.Style.radiusV
 
-                            Rectangle
+
+                            Kirigami.ShadowedRectangle
                             {
                                 visible: _categoriesListView.currentIndex === -1
-                                width: parent.width
-                                height: 8
                                 color: Kirigami.Theme.textColor
+                                anchors.left: parent.left
+                                anchors.right: parent.right
                                 anchors.bottom: parent.bottom
+                                height: 8
+
+                                corners
+                                {
+                                    topLeftRadius: 0
+                                    topRightRadius: 0
+                                    bottomLeftRadius:  Maui.Style.radiusV
+                                    bottomRightRadius: Maui.Style.radiusV
+                                }
                             }
                         }
 
@@ -195,7 +201,7 @@ Maui.Page
                 {
                     isCurrentItem: ListView.isCurrentItem
                     width: Math.max(160, _template.implicitWidth)
-                    height: 64
+                    height: parent.height
 
                     background: Rectangle
                     {
@@ -203,13 +209,22 @@ Maui.Page
                         color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
                         radius: Maui.Style.radiusV
 
-                        Rectangle
+                        Kirigami.ShadowedRectangle
                         {
                             visible: hovered || isCurrentItem
-                            width: parent.width
-                            height: 8
                             color: Kirigami.Theme.textColor
+                            anchors.left: parent.left
+                            anchors.right: parent.right
                             anchors.bottom: parent.bottom
+                            height: 8
+
+                            corners
+                            {
+                                topLeftRadius: 0
+                                topRightRadius: 0
+                                bottomLeftRadius:  Maui.Style.radiusV
+                                bottomRightRadius: Maui.Style.radiusV
+                            }
                         }
                     }
 
