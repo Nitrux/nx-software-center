@@ -16,10 +16,10 @@ jobs:
         run: sudo apt-get -y install curl wget
       - name: Add required repo list
         run: |
-          echo "deb http://archive.neon.kde.org/user focal main" > /etc/apt/sources.list.d/neon.list
-          curl 'http://archive.neon.kde.org/public.key' | apt-key add -
-          echo "deb https://packagecloud.io/nitrux/repo/debian/ trixie main" > /etc/apt/sources.list.d/nitrux-repo.list
-          curl -L https://packagecloud.io/nitrux/repo/gpgkey | apt-key add -
+          sudo echo "deb http://archive.neon.kde.org/user focal main" > /etc/apt/sources.list.d/neon.list
+          sudo curl 'http://archive.neon.kde.org/public.key' | apt-key add -
+          sudo echo "deb https://packagecloud.io/nitrux/repo/debian/ trixie main" > /etc/apt/sources.list.d/nitrux-repo.list
+          sudo curl -L https://packagecloud.io/nitrux/repo/gpgkey | apt-key add -
           sudo apt-get update
       - name: Install appimagetool
         run: |
