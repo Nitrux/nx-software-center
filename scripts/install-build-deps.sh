@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ "$EUID" -ne 0 ]; then
+    APT_COMMAND="sudo apt-get"
+else
+    APT_COMMAND="apt-get"
+fi
+
+$APT_COMMAND update -q
+$APT_COMMAND install -qy --no-install-recommends \
+    build-essential \
+    cmake \
+    curl \
+    git \
+    gtk-update-icon-cache \
+    extra-cmake-modules \
+    qtbase5-dev \
+    qtdeclarative5-dev \
+    qtmultimedia5-dev \
+    qtquickcontrols2-5-dev \
+    libkf5coreaddons-dev \
+    libkf5i18n-dev \
+    gettext \
+    libappimage-dev \
+    libqt5svg5-dev \
+    libkf5config-dev \
+    libkf5notifications-dev \
+    qtpositioning5-dev \
+    libexiv2-dev \
+    kquickimageeditor-dev \
+    libkf5kio-dev
