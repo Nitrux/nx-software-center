@@ -32,6 +32,7 @@ jobs:
           cd /opt/
           sudo ./appimagetool --appimage-extract
           sudo mv squashfs-root/ appimagetool.AppDir
+          sudo rm /usr/bin/appimagetool
           sudo ln -s /opt/appimagetool.AppDir/AppRun /usr/bin/appimagetool
       - name: Install AppImage Builder
         run: sudo pip3 install appimage-builder
