@@ -1,0 +1,23 @@
+name: Nitrux Software Center AppImage
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-appimage:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build AppImage
+        uses: AppImageCrafters/build-appimage-action@master
+        env:
+          UPDATE_INFO: gh-releases-zsync|Nitrux|nx-software-center|latest|*x86_64.AppImage.zsync
+        with:
+          recipe: nx-software-center-appimage.yml
+      - uses: actions/upload-artifact@v2
+        with:
+          name: nx-software-center-appimage
+          path: './*.AppImage*'

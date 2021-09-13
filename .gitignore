@@ -62,3 +62,4 @@ appimage-builder-cache
 AppDir
 *.AppImage
 !scripts/*.sh
+!.github/workflows/*.yml
