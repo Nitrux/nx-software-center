@@ -13,14 +13,14 @@ jobs:
 
     steps:
       - name: Install basic packages
-        run: apt-get -y install curl wget
+        run: sudo apt-get -y install curl wget
       - name: Add required repo list
         run: |
           echo "deb http://archive.neon.kde.org/user focal main" > /etc/apt/sources.list.d/neon.list
           curl 'http://archive.neon.kde.org/public.key' | apt-key add -
           echo "deb https://packagecloud.io/nitrux/repo/debian/ trixie main" > /etc/apt/sources.list.d/nitrux-repo.list
           curl -L https://packagecloud.io/nitrux/repo/gpgkey | apt-key add -
-          apt-get update
+          sudo apt-get update
       - name: Install appimagetool
         run: |
           wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/bin/appimagetool
