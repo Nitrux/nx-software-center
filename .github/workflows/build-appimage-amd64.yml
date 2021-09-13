@@ -9,7 +9,7 @@ on:
 jobs:
   build-appimage:
 
-    # runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     container: appimagecrafters/appimage-builder
 
