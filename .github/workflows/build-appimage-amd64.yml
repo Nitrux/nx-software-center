@@ -11,28 +11,28 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: appimagecrafters/appimage-builder
-
     steps:
+      - name: Install basic packages
+        run: apt-get -y install curl wget
+      - name: Add required repo list
+        run: |
+          echo "deb http://archive.neon.kde.org/user focal main" > /etc/apt/sources.list.d/neon.list
+          curl 'http://archive.neon.kde.org/public.key' | apt-key add -
+          echo "deb https://packagecloud.io/nitrux/repo/debian/ trixie main" > /etc/apt/sources.list.d/nitrux-repo.list
+          curl -L https://packagecloud.io/nitrux/repo/gpgkey | apt-key add -
+          apt-get update
+      - name: Install appimagetool
+        run: |
+          wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/bin/appimagetool
+          chmod +x /usr/bin/appimagetool
+          cp /usr/bin/appimagetool /opt/
+          cd /opt/
+          ./appimagetool --appimage-extract
+          mv squashfs-root/ appimagetool.AppDir
+          ln -s /opt/appimagetool.AppDir/AppRun /usr/bin/appimagetool
+      - name: Install AppImage Builder
+        run: pip3 install appimage-builder
       - uses: actions/checkout@v2
-      # - name: Build AppImage
-      #   uses: AppImageCrafters/build-appimage-action@master
-      #   env:
-      #     UPDATE_INFO: gh-releases-zsync|Nitrux|nx-software-center|latest|*x86_64.AppImage.zsync
-      #   with:
-      #     recipe: nx-software-center-appimage.yml
-      - name: Install packages
-        run: apt-get install curl
-      - name: Add neon repo list
-        run: echo "deb http://archive.neon.kde.org/user focal main" > /etc/apt/sources.list.d/neon.list
-      - name: Add neon key
-        run: curl 'http://archive.neon.kde.org/public.key' | apt-key add -
-      - name: Add nitrux repo list
-        run: echo "deb https://packagecloud.io/nitrux/repo/debian/ trixie main" > /etc/apt/sources.list.d/nitrux-repo.list
-      - name: Add nitrux key
-        run: curl -L https://packagecloud.io/nitrux/repo/gpgkey | apt-key add -
-      - name: Run apt-get update
-        run: apt-get update
       - name: Build AppImage
         run: appimage-builder --skip-tests --recipe nx-software-center-appimage.yml
       - uses: actions/upload-artifact@v2
