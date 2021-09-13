@@ -3,6 +3,8 @@ name: Nitrux Software Center AppImage
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build-appimage:
@@ -12,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build AppImage
-        uses: AppImageCrafters/build-appimage-action@master
+        uses: AppImageCrafters/build-appimage@master
         env:
           UPDATE_INFO: gh-releases-zsync|Nitrux|nx-software-center|latest|*x86_64.AppImage.zsync
         with:
