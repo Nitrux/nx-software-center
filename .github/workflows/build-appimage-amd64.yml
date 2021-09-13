@@ -21,6 +21,8 @@ jobs:
       #     UPDATE_INFO: gh-releases-zsync|Nitrux|nx-software-center|latest|*x86_64.AppImage.zsync
       #   with:
       #     recipe: nx-software-center-appimage.yml
+      - name: Install packages
+        run: apt-get install curl
       - name: Add neon repo list
         run: echo "deb http://archive.neon.kde.org/user focal main" > /etc/apt/sources.list.d/neon.list
       - name: Add neon key
