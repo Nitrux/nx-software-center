@@ -26,18 +26,18 @@ jobs:
           sudo apt-get update
       - name: Install appimagetool
         run: |
-          wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/bin/appimagetool
-          chmod +x /usr/bin/appimagetool
-          cp /usr/bin/appimagetool /opt/
+          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/bin/appimagetool
+          sudo chmod +x /usr/bin/appimagetool
+          sudo cp /usr/bin/appimagetool /opt/
           cd /opt/
-          ./appimagetool --appimage-extract
-          mv squashfs-root/ appimagetool.AppDir
-          ln -s /opt/appimagetool.AppDir/AppRun /usr/bin/appimagetool
+          sudo ./appimagetool --appimage-extract
+          sudo mv squashfs-root/ appimagetool.AppDir
+          sudo ln -s /opt/appimagetool.AppDir/AppRun /usr/bin/appimagetool
       - name: Install AppImage Builder
-        run: pip3 install appimage-builder
+        run: sudo pip3 install appimage-builder
       - uses: actions/checkout@v2
       - name: Build AppImage
-        run: appimage-builder --skip-tests --recipe nx-software-center-appimage.yml
+        run: sudo appimage-builder --skip-tests --recipe nx-software-center-appimage.yml
       - uses: actions/upload-artifact@v2
         with:
           name: nx-software-center-appimage
