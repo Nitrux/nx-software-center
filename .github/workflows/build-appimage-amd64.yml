@@ -2,7 +2,7 @@ name: Nitrux Software Center AppImage
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build-appimage:
