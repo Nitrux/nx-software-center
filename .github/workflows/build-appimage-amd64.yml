@@ -26,13 +26,12 @@ jobs:
           sudo apt-get update
       - name: Install appimagetool
         run: |
-          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/bin/appimagetool
-          sudo chmod +x /usr/bin/appimagetool
-          sudo cp /usr/bin/appimagetool /opt/
+          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /tmp/appimagetool
+          sudo chmod +x /tmp/appimagetool
+          sudo cp /tmp/appimagetool /opt/
           cd /opt/
           sudo ./appimagetool --appimage-extract
           sudo mv squashfs-root/ appimagetool.AppDir
-          sudo rm /usr/bin/appimagetool
           sudo ln -s /opt/appimagetool.AppDir/AppRun /usr/bin/appimagetool
       - name: Install AppImage Builder
         run: sudo pip3 install appimage-builder
