@@ -1,0 +1,54 @@
+name: Nitrux Software Center AppImage
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-appimage:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install basic packages
+        run: sudo apt-get -y install curl wget
+
+      - name: Add required repo list
+        run: |
+          sudo touch /etc/apt/sources.list.d/neon.list
+          echo "deb http://archive.neon.kde.org/user focal main" | sudo tee -a /etc/apt/sources.list.d/neon.list
+          curl 'http://archive.neon.kde.org/public.key' | sudo apt-key add -
+          
+          sudo touch /etc/apt/sources.list.d/nitrux-repo.list
+          echo "deb https://packagecloud.io/nitrux/repo/debian/ trixie main" | sudo tee -a /etc/apt/sources.list.d/nitrux-repo.list
+          curl -L https://packagecloud.io/nitrux/repo/gpgkey | sudo apt-key add -
+          
+          sudo apt-get update -q
+      
+      - name: Install appimagetool
+        run: |
+          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /tmp/appimagetool
+          sudo chmod +x /tmp/appimagetool
+          sudo cp /tmp/appimagetool /opt/
+          cd /opt/
+          sudo ./appimagetool --appimage-extract
+          sudo mv squashfs-root/ appimagetool.AppDir
+          sudo ln -s /opt/appimagetool.AppDir/AppRun /usr/bin/appimagetool
+
+      - name: Install AppImage Builder
+        run: sudo pip3 install appimage-builder
+
+      - uses: actions/checkout@v2
+      - name: Build AppImage
+        run: sudo appimage-builder --skip-tests --recipe nx-software-center-appimage.yml
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "continuous"
+          files: |
+            *.AppImage
