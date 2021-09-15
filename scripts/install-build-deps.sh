@@ -28,4 +28,7 @@ $APT_COMMAND install -qy --no-install-recommends \
     qtpositioning5-dev \
     libexiv2-dev \
     kquickimageeditor-dev \
-    libkf5kio-dev
+    libkf5kio-dev \
+    libqt5x11extras5-dev \
+    libxcb-shape0-dev \
+    libxcb-icccm4-dev
