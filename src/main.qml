@@ -20,7 +20,7 @@ Maui.ApplicationWindow
     {
         id: _swipeView
         anchors.fill: parent
-
+        showCSDControls: true
         altHeader: Kirigami.Settings.isMobile
 
         headBar.leftContent: Maui.ToolButtonMenu
