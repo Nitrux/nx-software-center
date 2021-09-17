@@ -14,35 +14,13 @@ Maui.ApplicationWindow
 {
     id: root
     readonly property var views: ({store: 0, apps: 1, progress: 2})
-    headBar.visible: false
+    page.showCSDControls: true
+    altHeader: Kirigami.Settings.isMobile
 
     Maui.AppViews
     {
         id: _swipeView
-        anchors.fill: parent
-        showCSDControls: true
-        altHeader: Kirigami.Settings.isMobile
-
-        headBar.leftContent: Maui.ToolButtonMenu
-        {
-            icon.name: "application-menu"
-
-            MenuItem
-            {
-                text: i18n("Settings")
-                icon.name: "settings-configure"
-                onTriggered:
-                {
-                }
-            }
-
-            MenuItem
-            {
-                text: i18n("About")
-                icon.name: "documentinfo"
-                onTriggered: root.about()
-            }
-        }
+        anchors.fill: parent       
 
         StoreView
         {
