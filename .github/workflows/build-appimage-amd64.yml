@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Install basic packages
-        run: sudo apt-get -y install curl wget
+        run: sudo apt-get -qy install curl wget
 
       - name: Add required repo list
         run: |
@@ -27,14 +27,9 @@ jobs:
       
       - name: Install appimagetool
         run: |
-          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /tmp/appimagetool
-          sudo chmod +x /tmp/appimagetool
-          sudo cp /tmp/appimagetool /opt/
-          cd /opt/
-          sudo ./appimagetool --appimage-extract
-          sudo mv squashfs-root/ appimagetool.AppDir
-          sudo ln -s /opt/appimagetool.AppDir/AppRun /usr/bin/appimagetool
-
+          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/bin/appimagetool
+          sudo chmod +x /usr/bin/appimagetool
+          
       - name: Install AppImage Builder
         run: sudo pip3 install appimage-builder
 
@@ -49,4 +44,4 @@ jobs:
           prerelease: true
           title: "continuous"
           files: |
-            *.AppImage
+            ./*.AppImage*

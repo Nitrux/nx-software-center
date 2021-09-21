@@ -61,5 +61,6 @@ build
 appimage-builder-cache
 AppDir
 *.AppImage
+*.AppImage.zsync
 !scripts/*.sh
 !.github/workflows/*.yml
