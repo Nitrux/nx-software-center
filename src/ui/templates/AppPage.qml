@@ -501,7 +501,7 @@ Maui.Page
             id: _aniX
             running: false
             from: _aniImg.x; to: (_swipeView.width/2)
-            duration: Kirigami.Units.longDuration * 15
+            duration: Kirigami.Units.longDuration * 5
             loops: 1
             easing.type: Easing.OutQuad
         }
@@ -512,7 +512,7 @@ Maui.Page
             running: false
             easing.type: Easing.OutQuad
             from: _aniImg.y; to: 0
-            duration: Kirigami.Units.longDuration * 15
+            duration: Kirigami.Units.longDuration * 5
             loops: 1
         }
 
@@ -558,7 +558,6 @@ Maui.Page
             onClicked: _imageViewerDialog.close()
         }
     }
-
 
     function goToProgressView()
     {

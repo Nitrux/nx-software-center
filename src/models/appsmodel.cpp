@@ -19,7 +19,7 @@ AppsModel::AppsModel(QObject *parent) : MauiList(parent)
     timer->setInterval(1000);
 
     connect(timer, &QTimer::timeout, this, &AppsModel::setList);
-    connect(m_watcher, &QFileSystemWatcher::directoryChanged, [this, timer](QString )
+    connect(m_watcher, &QFileSystemWatcher::directoryChanged, [timer](QString )
     {
         timer->start();
     });

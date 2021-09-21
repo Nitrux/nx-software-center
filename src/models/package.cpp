@@ -3,6 +3,8 @@
 #include "ResponseDTO/application.h"
 #include "nx.h"
 
+//#include <QFile>
+
 Package::Package(App *appSource, QObject *parent) : QObject(parent)
   ,m_appSource(appSource)
   ,m_downloader (new FMH::Downloader(this))
@@ -11,9 +13,10 @@ Package::Package(App *appSource, QObject *parent) : QObject(parent)
     connect(m_downloader, &FMH::Downloader::fileSaved, [this](QString path)
     {
         this->integratePackage(path);
-        emit this->progressFinished();
         emit this->isRunningChanged();
         emit this->isFinishedChanged();
+      emit this->progressFinished();
+
     });
 
     connect(m_downloader, &FMH::Downloader::warning, [this](QString warning)
@@ -83,11 +86,13 @@ App *Package::appSource() const
 
 void Package::integratePackage(const QString &path)
 {
-    this->setPath(path);
+    this->setPath(path); //adds local file scheme to the path file:// path ->m_path
 
     if(!FMH::fileExists(m_path))
         return;
     qDebug() << "integrate this appimage" << path << m_path;
+
+//    QFile::setPermissions (m_path.toLocalFile (), {QFileDevice::ExeUser | QFileDevice::ExeOwner | QFileDevice::ExeGroup});
 
     AppImageTools::integrate(m_path);
 }
@@ -141,7 +146,7 @@ bool Package::isFinished() const
 
 void Package::setPath(const QString &path)
 {
-    m_path = QUrl(path);
+    m_path = QUrl::fromUserInput(path);
     emit pathChanged(m_path);
 
 }
