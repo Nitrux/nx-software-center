@@ -13,8 +13,13 @@ The AppImages displayed are fetched from:
 
 ![Screenshot_20210922_003304](https://user-images.githubusercontent.com/3053525/134288548-a8cdb968-51ca-4b75-a192-72f1be9158be.png)
 
+ # Download
 
-# Install
+ The NX Software Center is available as an AppImage. Click the button below to download it or head over to the _Releases_ tab.
+
+ [![appimage-button](https://github.com/UriHerrera/appimage-buttons/blob/main/buttons/appimage-btn-dark.svg)](https://github.com/Nitrux/nx-software-center/releases)
+
+# Build
 
 ### Requirements
 
@@ -45,7 +50,7 @@ The AppImages displayed are fetched from:
  qtwebengine5-dev
 ```
 
-### Build
+### Compile source
  1. `git clone https://github.com/Nitrux/nx-software-center.git` 
  2. `mkdir build`
  3. `cd build`
