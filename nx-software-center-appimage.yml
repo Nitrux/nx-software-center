@@ -8,7 +8,6 @@ script:
   - mkdir -p build
   - cd build
   - ../scripts/deploy-mauikit.sh
-  - ../scripts/deploy-mauikit-imagetools.sh
   - ../scripts/deploy-mauikit-filebrowsing.sh
   - ../scripts/deploy-nx-software-center.sh
   - ../scripts/install-icon-theme.sh
@@ -26,6 +25,7 @@ AppDir:
     env:
       PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
       APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib/x86_64-linux-gnu"
+      QT_QUICK_CONTROLS_STYLE: "maui-style"
   after_bundle:
     - cd $APPDIR/bin/ && ln -sf bash sh
   apt:
@@ -45,65 +45,52 @@ AppDir:
     include:
     # CORE DEPENDENCIES
     - bash
-    - coreutils
-    - gettext
     
     # BASIC QT DEPENDENCIES
-    - libqt5svg5
     - libqt5sql5-sqlite
-    - qt5-image-formats-plugins
-    - qtwayland5
     
     # QT QUICK DEPENDENCIES
-    - qml-module-qtquick-controls
     - qml-module-qtquick-controls2
-    - qml-module-qtquick-dialogs
-    - qml-module-qtquick-layouts
     - qml-module-qtquick-shapes
     - qml-module-qtquick2
-    - qml-module-qtqml-models2
-    - qml-module-qtqml-statemachine
-    - qml-module-qtqml-workerscript2
-    - qml-module-qt-labs-platform
-    - qml-module-qt-labs-settings
     
     # KF5 DEPENDENCIES
-    - libkf5i18n5
     - libkf5notifications5
-    - libkf5configcore5
-    - libkf5configgui5
-    - libkf5configwidgets5
     - libkf5kiofilewidgets5
-    - libkf5syntaxhighlighting5
-    - libkdecorations2-5v5
-    - libkdecorations2private7
-    - libkf5plasma5
-    - libkf5plasmaquick5
-    - kio
-    - kio-extras
-    - kinit
+    - libkf5kiocore5
 
     # Other
-    - libtag1v5
-    - librsvg2-common
-    - libgdk-pixbuf2.0-0
     - libappimage1.0
-    # - qml-module-org-kde-mauikit
-    # - qml-module-org-mauikit-imagetools
-    # - qml-module-org-mauikit-filebrowsing
     - qml-module-org-kde-kirigami2
-    - qml-module-org-kde-kquickimageeditor
 
-   
+    exclude:
+    - "*dbgsym*"
+    - "*-dev"
+    - sound-theme-freedesktop
+    - systemd
+    - systemd-*
+    - perl
+    - perl-*
+    - gnupg
+    - libstdc++6
+
   files:
     include:
     - /usr/bin/which
     exclude:
+    - usr/include
     - usr/share/man
+    - usr/share/doc
     - usr/share/doc/*/README.*
     - usr/share/doc/*/changelog.*
     - usr/share/doc/*/NEWS.*
     - usr/share/doc/*/TODO.*
+    - lib/systemd
+    - etc/systemd
+    - usr/bin/systemd*
+    - usr/bin/dpkg*
+    - usr/bin/*-linux-gnu-*
+    - usr/share/locale
 
   test:
     fedora-30:

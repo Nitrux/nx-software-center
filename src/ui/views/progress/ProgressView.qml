@@ -56,7 +56,8 @@ Maui.Page
     Maui.Holder
     {
         anchors.fill: parent
-        body: qsTr("Downloads in progress will appear here")
+        title: i18n("Oops!")
+        body: i18n("No apps queued")
         visible: _listView.count === 0
         emoji: "qrc:/download.svg"
         emojiSize: Maui.Style.iconSizes.huge
