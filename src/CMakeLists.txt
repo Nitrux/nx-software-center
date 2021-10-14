@@ -36,7 +36,6 @@ set(nx_HDRS
 set(nx_RSRCS
     assets/nx-assets.qrc
     data/data.qrc
-    qml.qrc
     )
 
 set(nx_STORES_SRCS
@@ -56,10 +55,17 @@ set(nx_STORES_HDRS
     stores/ResponseDTO/application.h
     stores/ResponseDTO/applicationresponsedto.h)
 
+if(QUICK_COMPILER)
+        qtquick_compiler_add_resources(nx_QML_QRC qml.qrc)
+else()
+        qt5_add_resources(nx_QML_QRC qml.qrc)
+endif()
+
 add_executable(${PROJECT_NAME}
     ${nx_SRCS}
     ${nx_HDRS}
     ${nx_RSRCS}
+    ${nx_QML_QRC}
 
     ${nx_STORES_SRCS}
     ${nx_STORES_HDRS})

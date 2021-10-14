@@ -4,7 +4,6 @@
 
 #include <MauiKit/FileBrowsing/fmstatic.h>
 
-
 bool ProgressManager::contains(const App &app, const int &packageIndex) const
 {
     if(packageIndex > app.getData()->downloads.size() || packageIndex < 0)
@@ -23,7 +22,6 @@ QHash<int, QByteArray> ProgressManager::roleNames() const
 ProgressManager::ProgressManager(QObject *parent) : QAbstractListModel(parent),
     m_count(0)
 {
-    emit this->countChanged(this->m_count);
 }
 
 int ProgressManager::rowCount(const QModelIndex &) const

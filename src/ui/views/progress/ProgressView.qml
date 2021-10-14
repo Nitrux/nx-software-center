@@ -3,7 +3,7 @@ import QtQuick.Controls 2.5
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.3 as Maui
-import NXModels 1.0 as NX
+
 import "../../templates"
 
 Maui.Page
@@ -11,22 +11,8 @@ Maui.Page
     id: control
 
     property bool isActive: true
-    property alias manager : _progressManager
 
     headBar.visible: false
-
-    NX.ProgressManager
-    {
-        id: _progressManager
-        onWarning:
-        {
-            notify("package-x-generic", "Whoops.", message)
-            _packageError.title= i18n("Whoops!.")
-            _packageError.message = message
-            _packageError.iconName = "emblem-warning"
-            _packageError.send()
-        }
-    }
 
     Maui.NotifyAction
     {

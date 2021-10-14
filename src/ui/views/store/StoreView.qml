@@ -48,7 +48,7 @@ StackView
             onPackageClicked:
             {
                 console.log("trying to append package app ", app.id)
-                _progressView.manager.appendPackage(app, index)
+                _progressManager.appendPackage(app, index)
             }
 
             buttonActions: [

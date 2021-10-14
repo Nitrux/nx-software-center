@@ -79,7 +79,7 @@ SpaceAfterTemplateKeyword: false
 AlwaysBreakTemplateDeclarations: true
 
 # macros for which the opening brace stays attached.
-ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMARK, QBENCHMARK_ONCE ]
+ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMARK, QBENCHMARK_ONCE , wl_resource_for_each, wl_resource_for_each_safe ]
 
 # keep lambda formatting multi-line if not empty
 AllowShortLambdasOnASingleLine: Empty

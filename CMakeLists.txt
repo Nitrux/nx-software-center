@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-set(NX_SC_VERSION 1.0.1)
+set(NX_SC_VERSION 1.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,6 +21,8 @@ project(nx-software-center VERSION ${NX_SC_VERSION})
 
 set(REQUIRED_QT_VERSION 5.14.0)
 set(REQUIRED_KF5_VERSION 5.40.0)
+
+option(QUICK_COMPILER "Use QtQuick compiler to improve performance" TRUE)
 
 find_package(ECM ${REQUIRED_KF5_VERSION} NO_MODULE)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${ECM_MODULE_PATH})
@@ -42,6 +44,14 @@ find_package(libappimage REQUIRED)
 
 find_package(MauiKit REQUIRED)
 find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
+
+if(QUICK_COMPILER)
+        find_package(Qt5QuickCompiler)
+        set_package_properties(Qt5QuickCompiler PROPERTIES
+                DESCRIPTION "Compile QML at build time"
+                TYPE OPTIONAL
+        )
+endif()
 
 if(${ECM_SOURCE_UNDER_VERSION_CONTROL})
     execute_process(
