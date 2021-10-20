@@ -40,6 +40,7 @@ include(ECMQMLModules)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Qml Quick)
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
+find_package(QAppImageUpdate)
 find_package(libappimage REQUIRED)
 
 find_package(MauiKit REQUIRED)
@@ -83,5 +84,5 @@ ecm_setup_version(${NX_SC_VERSION}
     )
 
 add_subdirectory(src)
-
+        
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

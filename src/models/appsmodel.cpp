@@ -42,6 +42,25 @@ void AppsModel::launchApp(const int &index)
     FMStatic::openUrl(url);
 }
 
+void AppsModel::updateApp(const int &index)
+{
+
+    const auto url = this->get(index).value("url").toUrl();
+    qDebug() << "try to update appimage" << url;
+
+    QString appImagePath = QString(url.toLocalFile());
+    qDebug() << appImagePath;
+
+    updater = new QAppImageUpdate(appImagePath, /*singleThreaded=*/false, /*parent=*/this);
+    
+    connect(updater, &QAppImageUpdate::error, this, &AppsModel::handleError);
+    connect(updater, &QAppImageUpdate::finished, this, &AppsModel::handleFinished);
+
+    updater->setShowLog(false);
+    
+    updater->start(QAppImageUpdate::Action::CheckForUpdate); /* Check for update. */
+}
+
 void AppsModel::removeApp(const int &index) {
 
     const auto url = this->get(index).value("url").toUrl();
@@ -99,3 +118,34 @@ void AppsModel::clear()
     emit this->countChanged();
 }
 
+void AppsModel::handleError(short errorCode, short action)
+{
+    if(action == QAppImageUpdate::Action::Update) {
+        qInfo() << "AppsModel::handleError # " << QAppImageUpdate::errorCodeToString(errorCode);
+        emit appUpdateError("AppImage update error.\n\nError Message:"+QAppImageUpdate::errorCodeToString(errorCode));
+    } else if ( action == QAppImageUpdate::Action::CheckForUpdate ) {
+        qInfo() << "AppsModel::handleError # " << QAppImageUpdate::errorCodeToString(errorCode);
+        emit appUpdateError("AppImage check for update error.\n\nError Message:"+QAppImageUpdate::errorCodeToString(errorCode));
+    }
+
+    return;
+}
+
+void AppsModel::handleFinished(QJsonObject info, short action)
+{
+    if(action == QAppImageUpdate::Action::Update) {
+        qInfo() << "AppsModel::handleFinished # Update:: " << info;
+        emit appUpdateSuccess("AppImage updated successfully.");
+    } else if(action == QAppImageUpdate::Action::CheckForUpdate) {
+        qInfo() << "AppsModel::handleFinished # CheckForUpdate:: " << info;
+
+        if ( info.value("UpdateAvailable") == true ) {
+            updater->start(QAppImageUpdate::Action::Update); /* Start the update. */
+        } else {
+            qInfo() << "AppsModel::handleFinished # AppImage is already updated and latest";
+            emit appUpdateError("AppImage is already updated and latest.");
+        }
+    }
+
+    return;
+}

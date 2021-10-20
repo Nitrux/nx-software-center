@@ -46,6 +46,27 @@ Maui.Page
 
     Maui.Dialog
     {
+        id: appUpdateDialog
+
+        title: i18n("AppImage Update")
+        message: i18n("Please wait...")
+        rejectButton.visible: false
+
+        acceptButton.onClicked:
+        {
+            appUpdateDialog.visible = false;
+        }
+
+        function showDialog(fileName, status)
+        {
+            message = status
+
+            appUpdateDialog.visible = true;
+        }
+    }
+
+    Maui.Dialog
+    {
         id: appRemoveDialog
 
         property int index : -1
@@ -204,6 +225,16 @@ Maui.Page
                 },
                 Action
                 {
+                    icon.name: "download"
+                    // enabled: _appsList.isUpdatable
+                    onTriggered:
+                    {
+                        _appsListView.currentIndex = index;
+                        _appsList.updateApp(_appsModel.mappedToSource(index));
+                    }
+                },
+                Action
+                {
                     icon.name: "entry-delete"
                     onTriggered:
                     {
@@ -232,6 +263,19 @@ Maui.Page
 
         function onAppDeleteSuccess() {
             appRemoveDialog.visible = false;
+        }
+
+        function onAppUpdateSuccess(msg) {
+            console.log("AppImage updated successfully.");
+            
+            appUpdateDialog.showDialog(_appsListView.model.get(_appsListView.currentIndex).path.split("/").pop(), 
+                msg);
+        }
+
+        function onAppUpdateError(err) {
+            console.log("AppImage update error.");
+            appUpdateDialog.showDialog(_appsListView.model.get(_appsListView.currentIndex).path.split("/").pop(),
+                err);
         }
     }
 }
