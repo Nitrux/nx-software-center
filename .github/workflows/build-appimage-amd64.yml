@@ -19,9 +19,9 @@ jobs:
           echo "deb http://archive.neon.kde.org/user focal main" | sudo tee -a /etc/apt/sources.list.d/neon.list
           curl 'http://archive.neon.kde.org/public.key' | sudo apt-key add -
           
-          sudo touch /etc/apt/sources.list.d/nitrux-repo.list
-          echo "deb https://packagecloud.io/nitrux/repo/debian/ trixie main" | sudo tee -a /etc/apt/sources.list.d/nitrux-repo.list
-          curl -L https://packagecloud.io/nitrux/repo/gpgkey | sudo apt-key add -
+          # sudo touch /etc/apt/sources.list.d/nitrux-repo.list
+          # echo "deb https://packagecloud.io/nitrux/repo/debian/ trixie main" | sudo tee -a /etc/apt/sources.list.d/nitrux-repo.list
+          # curl -L https://packagecloud.io/nitrux/repo/gpgkey | sudo apt-key add -
           
           sudo apt-get update -q
       
