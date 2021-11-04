@@ -19,6 +19,7 @@
 #include <MauiKit/FileBrowsing/fmstatic.h>
 
 #include <KI18n/KLocalizedString>
+#include <services/TaskManager.h>
 
 #include "../nx_sc_version.h"
 
@@ -76,7 +77,28 @@ int main(int argc, char *argv[])
 	qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
 	qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
 
-	engine.load(url);
+	auto taskManager = new TaskManager(&app);
+    QQmlContext *rootContext = engine.rootContext();
+    rootContext->setContextProperty("taskManager", taskManager);
+    qmlRegisterUncreatableType<Task>("NXModels", 1, 0, "Task", "Tasks can only be created from the Task Manager");
 
-	return app.exec();
+    // add some mock data
+    auto firstTask = taskManager->create("First Task", "A quite long notification description", "qrc:/download.svg", 10, 2);
+    firstTask->addCancelAction("Cancel", "dialog-cancel");
+
+    auto secondTask = taskManager->create("Second Task", "A quite long notification description", "qrc:/download.svg", 10, 4);
+    auto secondTaskAction = secondTask->addAction("test", "Destroy", "run-build");
+    QObject::connect(secondTaskAction, &TaskAction::triggered, [taskManager, secondTask]() {
+        qDebug() << "second notification action triggered";
+        taskManager->destroy(secondTask);
+    });
+
+    taskManager->create("Third Task", "A quite long notification description", "qrc:/download.svg", 10, 6);
+
+    firstTask->setStatus(Task::Status::COMPLETED);
+    secondTask->setStatus(Task::Status::ACTIVE);
+
+    engine.load(url);
+
+    return app.exec();
 }
