@@ -20,6 +20,9 @@ set(nx_SRCS
     models/package.cpp
     models/progressmanager.cpp
     utils/appimagetools.cpp
+    services/TaskManager.cpp
+    services/Task.cpp
+    services/TaskAction.cpp
     )
 
 set(nx_HDRS

@@ -55,48 +55,12 @@ Maui.Page
         anchors.fill: parent
         orientation: ListView.Vertical
         spacing: Maui.Style.space.medium
-        model: _progressManager
+        model: taskManager.tasks
 
-        delegate: PackageDelegate
+        delegate: TaskDelegate
         {
             id: _delegate
             width: ListView.view.width
-
-            onClicked:  model.item.launchPackage()
-            onRemoveClicked:
-            {
-                _progressManager.removePackage(index)
-            }
-
-            onStopClicked:
-            {
-                _progressManager.stopPackage(index)
-            }
-
-            Connections
-            {
-                target: model.item
-                function onProgressFinished()
-                {
-                    root.notify(target.appSource.info.smallpic, target.appSource.info.name, i18n("Your app is ready."),  goToApps, 9500, i18n("Dismiss"))
-
-                    _packageReady.title= target.appSource.info.name
-                    _packageReady.message = i18n("Your app is ready.")
-                    _packageReady.defaultAction = _launchPackageAction
-                    _packageReady.imageSource = target.appSource.info.smallpic
-                    _packageReady.send()
-                }
-
-                function onProgressError(error)
-                {
-                    root.notify(target.appSource.info.smallpic, target.appSource.info.name, error,  goToApps, 9500)
-
-                    _packageError.title= target.appSource.info.name
-                    _packageError.message = error
-                    _packageError.iconSource = "emblem-warning"
-                    _packageError.send()
-                }
-            }
         }
     }
 
