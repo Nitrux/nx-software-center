@@ -55,7 +55,7 @@ Maui.Page
         anchors.fill: parent
         orientation: ListView.Vertical
         spacing: Maui.Style.space.medium
-        model: taskManager.tasks
+        model: taskManagerCtx.tasks
 
         delegate: TaskDelegate
         {

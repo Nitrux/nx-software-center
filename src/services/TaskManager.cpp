@@ -14,7 +14,7 @@ TaskManager::TaskManager(QObject *parent)
 {
 }
 
-Task *TaskManager::create(QString title, QString subtitle, QString icon, int progressTotal = -1, int progress = -1)
+Task *TaskManager::create(QString title, QString subtitle, QString icon, int progressTotal, int progress)
 {
     QString id = QUuid::createUuid().toString();
     auto task = new Task(id, std::move(title), std::move(subtitle), std::move(icon), progressTotal, progress);

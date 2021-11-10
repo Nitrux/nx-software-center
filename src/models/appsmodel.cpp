@@ -44,12 +44,16 @@ void AppsModel::launchApp(const int &index)
 
 void AppsModel::updateApp(const int &index)
 {
-
+    const auto name = this->get(index).value("name").toString();
     const auto url = this->get(index).value("url").toUrl();
     qDebug() << "try to update appimage" << url;
 
     QString appImagePath = QString(url.toLocalFile());
     qDebug() << appImagePath;
+
+    updateTask = taskManager->create(name, "Please wait while app is being updated...!!", "qrc:/download.svg");
+    updateTask->addCancelAction("Cancel", "dialog-cancel");
+    updateTask->setStatus(Task::Status::ACTIVE);
 
     updater = new QAppImageUpdate(appImagePath, /*singleThreaded=*/false, /*parent=*/this);
     
@@ -57,7 +61,7 @@ void AppsModel::updateApp(const int &index)
     connect(updater, &QAppImageUpdate::finished, this, &AppsModel::handleFinished);
 
     updater->setShowLog(false);
-    
+
     updater->start(QAppImageUpdate::Action::CheckForUpdate); /* Check for update. */
 }
 
@@ -122,7 +126,11 @@ void AppsModel::handleError(short errorCode, short action)
 {
     if(action == QAppImageUpdate::Action::Update) {
         qInfo() << "AppsModel::handleError # " << QAppImageUpdate::errorCodeToString(errorCode);
-        emit appUpdateError("AppImage update error.\n\nError Message:"+QAppImageUpdate::errorCodeToString(errorCode));
+
+        updateTask->setSubtitle("App update failed...!!");
+        updateTask->setStatus(Task::Status::FAILED);
+        
+        //emit appUpdateError("AppImage update error.\n\nError Message:"+QAppImageUpdate::errorCodeToString(errorCode));
     } else if ( action == QAppImageUpdate::Action::CheckForUpdate ) {
         qInfo() << "AppsModel::handleError # " << QAppImageUpdate::errorCodeToString(errorCode);
         emit appUpdateError("AppImage check for update error.\n\nError Message:"+QAppImageUpdate::errorCodeToString(errorCode));
@@ -135,7 +143,11 @@ void AppsModel::handleFinished(QJsonObject info, short action)
 {
     if(action == QAppImageUpdate::Action::Update) {
         qInfo() << "AppsModel::handleFinished # Update:: " << info;
-        emit appUpdateSuccess("AppImage updated successfully.");
+
+        updateTask->setSubtitle("App updated successfully...!!");
+        updateTask->setStatus(Task::Status::COMPLETED);
+        
+        //emit appUpdateSuccess("AppImage updated successfully.");
     } else if(action == QAppImageUpdate::Action::CheckForUpdate) {
         qInfo() << "AppsModel::handleFinished # CheckForUpdate:: " << info;
 

@@ -22,7 +22,7 @@ public:
     QVariant getTasks() const;
     Q_SIGNAL void tasksChanged(QVariant);
 
-    Q_SCRIPTABLE Task *create(QString title, QString subtitle, QString icon, int progressTotal, int progress);
+    Q_SCRIPTABLE Task *create(QString title, QString subtitle, QString icon, int progressTotal = -1, int progress = -1);
     Q_SCRIPTABLE void destroy(Task *task);
 
 private:

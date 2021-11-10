@@ -7,6 +7,8 @@
 
 #include <QAppImageUpdate>
 
+#include <services/TaskManager.h>
+
 class QFileSystemWatcher;
 
 class Store;
@@ -16,6 +18,7 @@ class AppsModel : public MauiList
     Q_OBJECT
 
     // Q_PROPERTY(bool isUpdatable MEMBER m_isUpdatable NOTIFY isUpdatableChanged)
+    Q_PROPERTY(TaskManager* taskManager MEMBER taskManager NOTIFY taskManagerChanged)
 
 public:
     // bool m_isUpdatable = false;
@@ -35,6 +38,7 @@ signals:
     void appUpdateError(QString msg);
 
     // void isUpdatableChanged(bool isUpdatable);
+    void taskManagerChanged();
 
 public slots:
     void launchApp(const int &index);
@@ -48,6 +52,8 @@ private:
     Store *m_store;
     QFileSystemWatcher * m_watcher;
     QAppImageUpdate *updater;
+    TaskManager *taskManager;
+    Task *updateTask;
 
     void setList();
 
