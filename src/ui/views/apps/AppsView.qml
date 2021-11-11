@@ -231,8 +231,7 @@ Maui.Page
                     // enabled: _appsList.isUpdatable
                     onTriggered:
                     {
-                        _appsListView.currentIndex = index;
-                        _appsList.updateApp(_appsModel.mappedToSource(index));
+                        taskManagerCtx.doUpdate(model.url, model.name);
                     }
                 },
                 Action

@@ -42,7 +42,6 @@ signals:
 
 public slots:
     void launchApp(const int &index);
-    void updateApp(const int &index);
     void removeApp(const int &index);
     void resfresh();
 

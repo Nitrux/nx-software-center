@@ -111,3 +111,15 @@ void Task::removeAction(TaskAction *action)
         emit actionsChanged(getActions());
     }
 }
+void Task::setActions(QList<TaskAction *> actions)
+{
+    for (auto action : _actions)
+        action->deleteLater();
+
+    _actions = std::move(actions);
+    emit actionsChanged(getActions());
+}
+void Task::start()
+{
+    setStatus(Task::Status::ACTIVE);
+}

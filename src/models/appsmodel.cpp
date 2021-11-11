@@ -42,29 +42,6 @@ void AppsModel::launchApp(const int &index)
     FMStatic::openUrl(url);
 }
 
-void AppsModel::updateApp(const int &index)
-{
-    const auto name = this->get(index).value("name").toString();
-    const auto url = this->get(index).value("url").toUrl();
-    qDebug() << "try to update appimage" << url;
-
-    QString appImagePath = QString(url.toLocalFile());
-    qDebug() << appImagePath;
-
-    updateTask = taskManager->create(name, "Please wait while app is being updated...!!", "qrc:/download.svg");
-    updateTask->addCancelAction("Cancel", "dialog-cancel");
-    updateTask->setStatus(Task::Status::ACTIVE);
-
-    updater = new QAppImageUpdate(appImagePath, /*singleThreaded=*/false, /*parent=*/this);
-    
-    connect(updater, &QAppImageUpdate::error, this, &AppsModel::handleError);
-    connect(updater, &QAppImageUpdate::finished, this, &AppsModel::handleFinished);
-
-    updater->setShowLog(false);
-
-    updater->start(QAppImageUpdate::Action::CheckForUpdate); /* Check for update. */
-}
-
 void AppsModel::removeApp(const int &index) {
 
     const auto url = this->get(index).value("url").toUrl();

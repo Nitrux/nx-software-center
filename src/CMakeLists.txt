@@ -23,6 +23,7 @@ set(nx_SRCS
     services/TaskManager.cpp
     services/Task.cpp
     services/TaskAction.cpp
+    services/UpdateTask.cpp
     )
 
 set(nx_HDRS

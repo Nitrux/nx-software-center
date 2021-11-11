@@ -59,9 +59,13 @@ public:
     void setStatus(Status status);
 
     QVariant getActions();
+    Q_SCRIPTABLE void setActions(QList<TaskAction *> actions);
+
     Q_SCRIPTABLE TaskAction *addAction(const QString &id, const QString &label, const QString &icon);
     Q_SCRIPTABLE TaskAction *addCancelAction(const QString &label = "Cancel", const QString &icon = "dialog-close");
     Q_SCRIPTABLE void removeAction(TaskAction *action);
+
+    Q_SCRIPTABLE void start();
 
 private:
     QString _id;
