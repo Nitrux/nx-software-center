@@ -30,14 +30,20 @@ void UpdateTask::onWorkerStarted(short)
     setSubtitle("Looking for new releases");
 }
 
-void UpdateTask::onWorkerFinished(QJsonObject, short)
+void UpdateTask::onWorkerFinished(QJsonObject output, short)
 {
+    auto newFilePath = QUrl(output.value("NewVersionPath").toString());
+    auto newFileName = newFilePath.fileName();
+
     setStatus(Task::Status::COMPLETED);
+    setTitle(newFileName);
     setSubtitle("Update completed");
     setActions({});
 }
-void UpdateTask::onWorkerProgress(int progressPercent, qint64, qint64, double, QString, short)
+void UpdateTask::onWorkerProgress(int progressPercent, qint64, qint64, double speedValue, QString speedMeasurementUnit, short)
 {
+    QString progressMessage = "Downloading Update: " + QString::number(speedValue) + " " + speedMeasurementUnit;
+    setSubtitle(progressMessage);
     setProgress(progressPercent);
 }
 void UpdateTask::onWorkerError(short, short)

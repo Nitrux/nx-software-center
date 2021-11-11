@@ -21,10 +21,7 @@ public:
     QVariant getTasks() const;
     Q_SIGNAL void tasksChanged(QVariant);
 
-    Q_SCRIPTABLE Task *create(QString title, QString subtitle, QString icon, int progressTotal = -1, int progress = -1);
-    Q_SCRIPTABLE void destroy(Task *task);
-
-    Q_SCRIPTABLE Task *doUpdate(QString appImagePath, const QString appName);
+    Q_SCRIPTABLE Task *doUpdate(QString appImagePath, const QString& appName);
 
 private:
     // tasks ids used as keys
