@@ -40,5 +40,7 @@ Task *TaskManager::doUpdate(QString appImagePath, const QString &appName)
 
 Task *TaskManager::doDownload(QUrl appImageUrl)
 {
+    Q_UNUSED(appImageUrl);
+
     return nullptr;
 }

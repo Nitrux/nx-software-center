@@ -13,7 +13,6 @@ Maui.Page
     id: control
 
     property alias list : _appsList
-    required property var taskManager
 
     Maui.Dialog
     {
@@ -180,7 +179,6 @@ Maui.Page
             list: NX.Apps
             {
                 id: _appsList
-                taskManager: control.taskManager
             }
         }
 

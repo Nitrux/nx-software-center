@@ -49,9 +49,7 @@ Maui.ApplicationWindow
             Maui.AppView.iconName: "appimage-store"
             Maui.AppView.title: i18n("Apps")
 
-            AppsView {
-                taskManager: taskManagerCtx
-            }
+            AppsView {}
         }
 
         Maui.AppViewLoader
