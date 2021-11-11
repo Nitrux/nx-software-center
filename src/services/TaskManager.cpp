@@ -22,7 +22,7 @@ QString TaskManager::createTaskId() const
     return id;
 }
 
-Task *TaskManager::doUpdate(QString appImagePath, const QString& appName)
+Task *TaskManager::doUpdate(QString appImagePath, const QString &appName)
 {
     // remove url prefix
     if (appImagePath.startsWith("file://"))
@@ -36,4 +36,9 @@ Task *TaskManager::doUpdate(QString appImagePath, const QString& appName)
 
     task->start();
     return task;
+}
+
+Task *TaskManager::doDownload(QUrl appImageUrl)
+{
+    return nullptr;
 }
