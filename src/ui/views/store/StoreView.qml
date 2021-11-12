@@ -47,8 +47,9 @@ StackView
 
             onPackageClicked:
             {
-                console.log("trying to append package app ", app.id)
-                _progressManager.appendPackage(app, index)
+                console.log("trying to append package app ", app.downloads[index].link)
+                // _progressManager.appendPackage(app, index)
+                taskManagerCtx.doDownload(app.downloads[index].link, app.downloads[index].name);
             }
 
             buttonActions: [
