@@ -1,5 +1,6 @@
 #include "TaskManager.h"
 #include "UpdateTask.h"
+#include "DownloadTask.h"
 
 #include <QAppImageUpdate>
 #include <QRandomGenerator>
@@ -38,9 +39,14 @@ Task *TaskManager::doUpdate(QString appImagePath, const QString &appName)
     return task;
 }
 
-Task *TaskManager::doDownload(QUrl appImageUrl)
+Task *TaskManager::doDownload(QUrl appDownloadUrl, QString appName)
 {
-    Q_UNUSED(appImageUrl);
+    QString id = createTaskId();
+    auto task = new DownloadTask(id, appName, appDownloadUrl, this);
+    _tasks.push_front(task);
 
-    return nullptr;
+    emit tasksChanged(getTasks());
+
+    task->start();
+    return task;
 }

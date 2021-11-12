@@ -22,7 +22,7 @@ public:
     Q_SIGNAL void tasksChanged(QVariant);
 
     Q_SCRIPTABLE Task *doUpdate(QString appImagePath, const QString& appName);
-    Q_SCRIPTABLE Task *doDownload(QUrl appImageUrl);
+    Q_SCRIPTABLE Task *doDownload(QUrl appDownloadUrl, QString appName);
 
 private:
     // tasks ids used as keys
