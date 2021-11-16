@@ -23,6 +23,7 @@ public:
 
     Q_SCRIPTABLE Task *doUpdate(QString appImagePath, const QString& appName);
     Q_SCRIPTABLE Task *doDownload(QUrl appDownloadUrl, QString appName);
+    Q_SCRIPTABLE Task *doCheckUpdate(QString appImagePath, const QString& appName);
 
 private:
     // tasks ids used as keys

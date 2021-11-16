@@ -1,6 +1,7 @@
 #include "TaskManager.h"
 #include "UpdateTask.h"
 #include "DownloadTask.h"
+#include "CheckUpdateTask.h"
 
 #include <QAppImageUpdate>
 #include <QRandomGenerator>
@@ -43,6 +44,22 @@ Task *TaskManager::doDownload(QUrl appDownloadUrl, QString appName)
 {
     QString id = createTaskId();
     auto task = new DownloadTask(id, appName, appDownloadUrl, this);
+    _tasks.push_front(task);
+
+    emit tasksChanged(getTasks());
+
+    task->start();
+    return task;
+}
+
+Task *TaskManager::doCheckUpdate(QString appImagePath, const QString &appName)
+{
+    // remove url prefix
+    if (appImagePath.startsWith("file://"))
+        appImagePath = appImagePath.right(appImagePath.length() - 7);
+
+    QString id = createTaskId();
+    auto task = new CheckUpdateTask(id, appImagePath, appName, this);
     _tasks.push_front(task);
 
     emit tasksChanged(getTasks());
