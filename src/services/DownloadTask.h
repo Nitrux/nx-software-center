@@ -8,7 +8,7 @@
 // local
 #include "TaskManager.h"
 #include "nx.h"
-// #include "utils/appimagetools.h"
+#include "utils/appimagetools.h"
 
 namespace FMH {
     class Downloader;

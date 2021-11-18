@@ -15,7 +15,7 @@ DownloadTask::DownloadTask(const QString &id, const QString &appName, const QUrl
         _worker->stop();
 
         setStatus(Task::Status::FAILED);
-        setSubtitle("Update aborted");
+        setSubtitle("Download aborted");
         setActions({});
     });
 
@@ -39,20 +39,20 @@ void DownloadTask::onWorkerFinished(QString path)
     qDebug() << "DownloadTask::onWorkerFinished" << path;
 
     setStatus(Task::Status::COMPLETED);
-    setSubtitle("Update completed");
+    setSubtitle("Download completed");
     setActions({});
 
     // Integrate AppImage
-    // if(!FMH::fileExists(path))
-    //     return;
+    if(!FMH::fileExists(QUrl::fromLocalFile(path)))
+        return;
 
-    // AppImageTools::integrate(QUrl("file://"+path).toLocalFile());
+    AppImageTools::integrate(QUrl::fromLocalFile(path));
 }
 void DownloadTask::onWorkerProgress(const int &progress)
 {
     qDebug() << "DownloadTask::onWorkerProgress" << progress;
 
-    QString progressMessage = "Downloading Update: " + QString::number(progress) + "%";
+    QString progressMessage = "Downloading: " + QString::number(progress) + "%";
     setSubtitle(progressMessage);
     setProgress(progress);
 }
@@ -60,6 +60,6 @@ void DownloadTask::onWorkerError(QString warning)
 {
     qDebug() << "DownloadTask::onWorkerError" << warning;
     setStatus(Task::Status::FAILED);
-    setSubtitle("Update failed");
+    setSubtitle("Download failed");
     setActions({});
 }
