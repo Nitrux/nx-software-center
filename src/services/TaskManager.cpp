@@ -75,3 +75,15 @@ Task *TaskManager::doCheckUpdate(AppsModel *appsModel)
 
     return nullptr;
 }
+
+void TaskManager::destroy(Task *task)
+{
+    auto idx = _tasks.indexOf(task);
+    if (idx >= 0) {
+        _tasks.removeAt(idx);
+        // schedule task for destruction
+        task->deleteLater();
+
+        emit tasksChanged(getTasks());
+    }
+}
