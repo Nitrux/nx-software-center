@@ -28,6 +28,7 @@ public:
     Q_SCRIPTABLE Task *doDownload(QUrl appDownloadUrl, QString appName);
     Q_SCRIPTABLE Task *doCheckUpdate(AppsModel *appsModel);
 
+    Q_SCRIPTABLE void destroy(Task *task);
 private:
     // tasks ids used as keys
     QList<Task *> _tasks;

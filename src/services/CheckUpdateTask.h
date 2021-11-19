@@ -26,4 +26,5 @@ private:
     QString _appName;
 
     QAppImageUpdate *_worker;
+    TaskManager *_taskManager;
 };

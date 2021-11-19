@@ -4,6 +4,7 @@ CheckUpdateTask::CheckUpdateTask(const QString &id, const QString &appImagePath,
     : Task(id, appName, QString(), "qrc:/download.svg", -1, -1, parent)
     , _appName(appName)
     , _worker(nullptr)
+    , _taskManager(dynamic_cast<TaskManager*>(parent))
 {
     qDebug() << appImagePath << "  " << appName;
     _worker = new QAppImageUpdate(appImagePath, false, this);
@@ -42,6 +43,8 @@ void CheckUpdateTask::onWorkerFinished(QJsonObject output, short, AppsModel *app
         appsModel->setAppUpdatable(index);
     } else {
         setSubtitle("App is already updated and latest");
+
+        _taskManager->destroy(this);
     }
     setActions({});
 }
@@ -54,4 +57,6 @@ void CheckUpdateTask::onWorkerError(short errorCode, short)
     setStatus(Task::Status::FAILED);
     setSubtitle(QAppImageUpdate::errorCodeToString(errorCode));
     setActions({});
+    
+    _taskManager->destroy(this);
 }
