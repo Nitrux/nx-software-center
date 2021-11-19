@@ -51,18 +51,26 @@ Task *TaskManager::doDownload(QUrl appDownloadUrl, QString appName)
     return task;
 }
 
-Task *TaskManager::doCheckUpdate(QString appImagePath, const QString &appName)
+Task *TaskManager::doCheckUpdate(AppsModel *appsModel)
 {
-    // remove url prefix
-    if (appImagePath.startsWith("file://"))
-        appImagePath = appImagePath.right(appImagePath.length() - 7);
+    FMH::MODEL_LIST items = appsModel->getItems();
 
-    QString id = createTaskId();
-    auto task = new CheckUpdateTask(id, appImagePath, appName, this);
-    _tasks.push_front(task);
+    for (int i = 0; i < items.size(); i++) {
+        QString appImagePath = items[i][FMH::MODEL_KEY::PATH];
+        QString appName = items[i][FMH::MODEL_KEY::NAME];
 
-    emit tasksChanged(getTasks());
+        // remove url prefix
+        if (appImagePath.startsWith("file://"))
+            appImagePath = appImagePath.right(appImagePath.length() - 7);
 
-    task->start();
-    return task;
+        QString id = createTaskId();
+        auto task = new CheckUpdateTask(id, appImagePath, appName, appsModel, i, this);
+        _tasks.push_front(task);
+
+        emit tasksChanged(getTasks());
+
+        task->start();
+    }
+
+    return nullptr;
 }

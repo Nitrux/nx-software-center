@@ -9,6 +9,9 @@
 
 // local
 #include "Task.h"
+#include "models/appsmodel.h"
+
+class AppsModel;
 
 class TaskManager : public QObject
 {
@@ -23,7 +26,7 @@ public:
 
     Q_SCRIPTABLE Task *doUpdate(QString appImagePath, const QString& appName);
     Q_SCRIPTABLE Task *doDownload(QUrl appDownloadUrl, QString appName);
-    Q_SCRIPTABLE Task *doCheckUpdate(QString appImagePath, const QString& appName);
+    Q_SCRIPTABLE Task *doCheckUpdate(AppsModel *appsModel);
 
 private:
     // tasks ids used as keys

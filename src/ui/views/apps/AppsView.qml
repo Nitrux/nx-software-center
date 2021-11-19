@@ -95,6 +95,16 @@ Maui.Page
     }
 
     headBar.rightContent: [
+        Button
+        {
+            text: qsTr("Check for Update")
+            Kirigami.Theme.textColor: "#fafafa"
+            Kirigami.Theme.backgroundColor: "#3471eb"
+            onClicked:
+            {
+                taskManagerCtx.doCheckUpdate(_appsList);
+            }
+        },
 
         Maui.ToolButtonMenu
         {
@@ -217,6 +227,7 @@ Maui.Page
                 Action
                 {
                     icon.name: "media-playback-start"
+                    text: "Run"
                     onTriggered:
                     {
                         _appsListView.currentIndex = index;
@@ -226,7 +237,9 @@ Maui.Page
                 Action
                 {
                     icon.name: "download"
+                    text: "Update"
                     // enabled: _appsList.isUpdatable
+                    enabled: _appsList.isAppUpdatable!=null && _appsList.isAppUpdatable[_appsModel.mappedToSource(index)]!=null && _appsList.isAppUpdatable[_appsModel.mappedToSource(index)]
                     onTriggered:
                     {
                         taskManagerCtx.doUpdate(model.url, model.name);
@@ -235,6 +248,7 @@ Maui.Page
                 Action
                 {
                     icon.name: "entry-delete"
+                    text: "Remove"
                     onTriggered:
                     {
                         _appsListView.currentIndex = index;
