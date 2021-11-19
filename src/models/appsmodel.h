@@ -16,7 +16,8 @@ class AppsModel : public MauiList
     Q_OBJECT
 
     // Q_PROPERTY(bool isUpdatable MEMBER m_isUpdatable NOTIFY isUpdatableChanged)
-    Q_PROPERTY(TaskManager* taskManager MEMBER taskManager NOTIFY taskManagerChanged)
+    // Q_PROPERTY(TaskManager* taskManager MEMBER taskManager NOTIFY taskManagerChanged)
+    Q_PROPERTY(QVector<bool> isAppUpdatable MEMBER m_isAppUpdatable NOTIFY isAppUpdatableChanged)
 
 public:
     // bool m_isUpdatable = false;
@@ -28,6 +29,9 @@ public:
 
     const FMH::MODEL_LIST &items() const override final;
 
+    void setAppUpdatable(int index);
+    FMH::MODEL_LIST getItems();
+
 signals:
     void appLaunchSuccess();
     void appLaunchError(int err);
@@ -36,7 +40,8 @@ signals:
     void appUpdateError(QString msg);
 
     // void isUpdatableChanged(bool isUpdatable);
-    void taskManagerChanged();
+    void isAppUpdatableChanged();
+    // void taskManagerChanged();
 
 public slots:
     void launchApp(const int &index);
@@ -48,8 +53,10 @@ private:
     QHash<QString, Application *> m_app;
     Store *m_store;
     QFileSystemWatcher * m_watcher;
-    TaskManager *taskManager;
+    QAppImageUpdate *updater;
+    // TaskManager *taskManager;
     Task *updateTask;
+    QVector<bool> m_isAppUpdatable;
 
     void setList();
 

@@ -32,6 +32,16 @@ void AppsModel::componentComplete()
     setList();
 }
 
+void AppsModel::setAppUpdatable(int index) {
+    this->m_isAppUpdatable[index] = true;
+
+    emit isAppUpdatableChanged();
+}
+
+FMH::MODEL_LIST AppsModel::getItems() {
+    return this->m_list;
+}
+
 const FMH::MODEL_LIST &AppsModel::items() const { return this->m_list; }
 
 void AppsModel::launchApp(const int &index)
@@ -74,6 +84,13 @@ void AppsModel::setList()
 
         emit this->preListChanged();
         this->m_list << items;
+
+        // Clear the isAppUpdatable and reinitialize the vector each item for the installed apps with default false
+        this->m_isAppUpdatable.clear();
+        for (int i = 0; i < items.size(); i++) {
+            this->m_isAppUpdatable << false;
+        }
+
         emit this->postListChanged();
         emit this->countChanged();
 
