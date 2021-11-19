@@ -1,6 +1,6 @@
 #include "CheckUpdateTask.h"
 
-CheckUpdateTask::CheckUpdateTask(const QString &id, const QString &appImagePath, const QString &appName, QObject *parent)
+CheckUpdateTask::CheckUpdateTask(const QString &id, const QString &appImagePath, const QString &appName, AppsModel *appsModel, int index, QObject *parent)
     : Task(id, appName, QString(), "qrc:/download.svg", -1, -1, parent)
     , _appName(appName)
     , _worker(nullptr)
@@ -13,7 +13,9 @@ CheckUpdateTask::CheckUpdateTask(const QString &id, const QString &appImagePath,
     connect(cancelAction, &TaskAction::triggered, _worker, &QAppImageUpdate::cancel);
 
     connect(_worker, &QAppImageUpdate::started, this, &CheckUpdateTask::onWorkerStarted);
-    connect(_worker, &QAppImageUpdate::finished, this, &CheckUpdateTask::onWorkerFinished);
+    connect(_worker, &QAppImageUpdate::finished, this, [=](QJsonObject output, short action){
+        onWorkerFinished(output, action, appsModel, index);
+    });
     connect(_worker, &QAppImageUpdate::progress, this, &CheckUpdateTask::onWorkerProgress);
     connect(_worker, &QAppImageUpdate::error, this, &CheckUpdateTask::onWorkerError);
 }
@@ -30,13 +32,14 @@ void CheckUpdateTask::onWorkerStarted(short)
     setSubtitle("Checking for update");
 }
 
-void CheckUpdateTask::onWorkerFinished(QJsonObject output, short)
+void CheckUpdateTask::onWorkerFinished(QJsonObject output, short, AppsModel *appsModel, int index)
 {
     auto isUpdateAvailable = output.value("UpdateAvailable");
 
     setStatus(Task::Status::COMPLETED);
     if ( isUpdateAvailable == true ) {
         setSubtitle("New update available");
+        appsModel->setAppUpdatable(index);
     } else {
         setSubtitle("App is already updated and latest");
     }
