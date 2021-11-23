@@ -5,8 +5,6 @@
 
 #include <MauiKit/Core/mauilist.h>
 
-#include <QAppImageUpdate>
-
 #include <services/TaskManager.h>
 
 class QFileSystemWatcher;
@@ -50,7 +48,6 @@ private:
     QHash<QString, Application *> m_app;
     Store *m_store;
     QFileSystemWatcher * m_watcher;
-    QAppImageUpdate *updater;
     TaskManager *taskManager;
     Task *updateTask;
 

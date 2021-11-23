@@ -6,49 +6,76 @@ UpdateTask::UpdateTask(const QString &id, const QString &appImagePath, const QSt
     , _worker(nullptr)
 {
     qDebug() << appImagePath << "  " << appName;
-    _worker = new QAppImageUpdate(appImagePath, false, this);
-    _worker->setAppImage(appImagePath);
+    _worker = new Updater(appImagePath.toStdString());
 
-    auto cancelAction = this->addCancelAction("Cancel", "dialog-cancel");
-    connect(cancelAction, &TaskAction::triggered, _worker, &QAppImageUpdate::cancel);
-
-    connect(_worker, &QAppImageUpdate::started, this, &UpdateTask::onWorkerStarted);
-    connect(_worker, &QAppImageUpdate::finished, this, &UpdateTask::onWorkerFinished);
-    connect(_worker, &QAppImageUpdate::progress, this, &UpdateTask::onWorkerProgress);
-    connect(_worker, &QAppImageUpdate::error, this, &UpdateTask::onWorkerError);
+    // auto cancelAction = this->addCancelAction("Cancel", "dialog-cancel");
+    // connect(cancelAction, &TaskAction::triggered, _worker, [=](){
+    //     setStatus(Task::Status::FAILED);
+    //     setSubtitle("Download aborted");
+    //     setActions({});
+    // });
 }
 void UpdateTask::start()
 {
-    _worker->start(QAppImageUpdate::Action::Update);
     setProgressTotal(100);
-
     Task::start();
+
+    std::thread processUpdateThread(&UpdateTask::processUpdate, this);
+    processUpdateThread.detach();
 }
 
-void UpdateTask::onWorkerStarted(short)
-{
-    setSubtitle("Looking for new releases");
-}
+void UpdateTask::processUpdate() {
+    bool updateAvailable;
+    if (!_worker->checkForChanges(updateAvailable)) {
+        setStatus(Task::Status::FAILED);
+        setSubtitle("Update not available");
+        setActions({});
 
-void UpdateTask::onWorkerFinished(QJsonObject output, short)
-{
-    auto newFilePath = QUrl(output.value("NewVersionPath").toString());
-    auto newFileName = newFilePath.fileName();
+        return ;
+    }
 
-    setStatus(Task::Status::COMPLETED);
-    setTitle(newFileName);
-    setSubtitle("Update completed");
-    setActions({});
-}
-void UpdateTask::onWorkerProgress(int progressPercent, qint64, qint64, double speedValue, QString speedMeasurementUnit, short)
-{
-    QString progressMessage = "Downloading Update: " + QString::number(speedValue) + " " + speedMeasurementUnit;
-    setSubtitle(progressMessage);
-    setProgress(progressPercent);
-}
-void UpdateTask::onWorkerError(short, short)
-{
-    setStatus(Task::Status::FAILED);
-    setSubtitle("Update failed");
-    setActions({});
+    if (updateAvailable) {
+        _worker->start();
+
+        while (!_worker->isDone()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+            double progress;
+            if (!_worker->progress(progress)) {
+                qDebug() << "Call to progress() failed";
+
+                setStatus(Task::Status::FAILED);
+                setSubtitle("Could not track download progress");
+                setActions({});
+
+                return ;
+            }
+
+            QString progressMessage = "Downloading Update...";
+            setSubtitle(progressMessage);
+            setProgress(progress * 100);
+        }
+
+        if (_worker->hasError()) {
+            setStatus(Task::Status::FAILED);
+            setSubtitle("Update failed");
+            setActions({});
+        } else {
+            string pathToUpdatedFile;
+            if (!_worker->pathToNewFile(pathToUpdatedFile))
+            
+            setTitle(QString::fromStdString(pathToUpdatedFile.substr(pathToUpdatedFile.find_last_of("\\/") + 1)));
+            setStatus(Task::Status::COMPLETED);
+            setSubtitle("Update completed");
+            setActions({});
+        }
+    } else {
+        qDebug() << "Update not available for app";
+
+        setStatus(Task::Status::FAILED);
+        setSubtitle("Update not available");
+        setActions({});
+
+        return ;
+    }
 }

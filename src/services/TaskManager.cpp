@@ -1,7 +1,6 @@
 #include "TaskManager.h"
 #include "UpdateTask.h"
 
-#include <QAppImageUpdate>
 #include <QRandomGenerator>
 #include <QUuid>
 #include <utility>
