@@ -40,11 +40,15 @@ include(ECMQMLModules)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Qml Quick)
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
-find_package(QAppImageUpdate)
 find_package(libappimage REQUIRED)
 
 find_package(MauiKit REQUIRED)
 find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
+
+find_library (
+    APPIMAGEUPDATE_LIB
+    NAMES appimageupdate
+)
 
 if(QUICK_COMPILER)
         find_package(Qt5QuickCompiler)
