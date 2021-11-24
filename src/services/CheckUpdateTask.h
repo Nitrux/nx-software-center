@@ -1,13 +1,18 @@
 #pragma once
 // system
+#include <chrono>
+#include <thread>
 
 // libraries
-#include <QAppImageUpdate>
+#include <appimage/update.h>
 #include <QObject>
 
 // local
 #include "TaskManager.h"
 #include "models/appsmodel.h"
+
+using namespace appimage::update;
+using namespace std;
 
 class CheckUpdateTask : public Task
 {
@@ -16,15 +21,13 @@ public:
     CheckUpdateTask(const QString &id, const QString &appImagePath, const QString &appName, AppsModel *appsModel, int index, QObject *parent);
     Q_SCRIPTABLE void start();
 
-protected:
-    Q_SLOT void onWorkerStarted(short);
-    Q_SLOT void onWorkerFinished(QJsonObject info, short, AppsModel *appsModel, int index);
-    Q_SLOT void onWorkerProgress(int, qint64, qint64, double, QString, short);
-    Q_SLOT void onWorkerError(short, short);
-
 private:
     QString _appName;
 
-    QAppImageUpdate *_worker;
+    Updater *_worker;
     TaskManager *_taskManager;
+    AppsModel *_appsModel;
+    int _index;
+
+    void processUpdate(AppsModel *appsModel, int index);
 };
