@@ -53,8 +53,6 @@ private:
     QHash<QString, Application *> m_app;
     Store *m_store;
     QFileSystemWatcher * m_watcher;
-    QAppImageUpdate *updater;
-    // TaskManager *taskManager;
     Task *updateTask;
     QVector<bool> m_isAppUpdatable;
 
