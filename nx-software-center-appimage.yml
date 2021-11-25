@@ -9,6 +9,7 @@ script:
   - cd build
   - ../scripts/deploy-mauikit.sh
   - ../scripts/deploy-mauikit-filebrowsing.sh
+  - ../scripts/deploy-appimageupdate.sh
   - ../scripts/deploy-nx-software-center.sh
   - ../scripts/install-icon-theme.sh
 

@@ -98,8 +98,6 @@ Maui.Page
         Button
         {
             text: qsTr("Check for Update")
-            Kirigami.Theme.textColor: "#fafafa"
-            Kirigami.Theme.backgroundColor: "#3471eb"
             onClicked:
             {
                 taskManagerCtx.doCheckUpdate(_appsList);
@@ -199,6 +197,7 @@ Maui.Page
             anchors.horizontalCenter: parent.horizontalCenter
             label1.text: model.label
             label2.text: model.name
+            label3.text: _appsList.isAppUpdatable[_appsModel.mappedToSource(index)]?"New update available":null
             imageSource: "image://thumbnailer/" + model.path
             iconSizeHint: Maui.Style.iconSizes.medium
             iconSource: "package"

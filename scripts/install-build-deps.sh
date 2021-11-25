@@ -31,4 +31,12 @@ $APT_COMMAND install -qy --no-install-recommends \
     libkf5kio-dev \
     libqt5x11extras5-dev \
     libxcb-shape0-dev \
-    libxcb-icccm4-dev
+    libxcb-icccm4-dev \
+    libssl-dev \
+    automake \
+    libtool \
+    xxd \
+    desktop-file-utils \
+    libfuse-dev \
+    libcurl4-openssl-dev \
+    libkf5completion-dev
