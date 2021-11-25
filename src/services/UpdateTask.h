@@ -25,5 +25,6 @@ private:
 
     Updater  *_worker;
 
+    bool checkIfUpdateAvailable();
     void processUpdate();
 };

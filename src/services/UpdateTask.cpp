@@ -25,16 +25,8 @@ void UpdateTask::start()
 }
 
 void UpdateTask::processUpdate() {
-    bool updateAvailable;
-    if (!_worker->checkForChanges(updateAvailable)) {
-        setStatus(Task::Status::FAILED);
-        setSubtitle("Update not available");
-        setActions({});
-
-        return ;
-    }
-
-    if (updateAvailable) {
+    
+    if (checkIfUpdateAvailable()) {
         _worker->start();
 
         while (!_worker->isDone()) {
@@ -69,13 +61,36 @@ void UpdateTask::processUpdate() {
             setSubtitle("Update completed");
             setActions({});
         }
-    } else {
+    }
+}
+
+bool UpdateTask::checkIfUpdateAvailable() {
+    if ( _worker->updateInformation().empty() ) {
+        setStatus(Task::Status::FAILED);
+        setSubtitle("Update information empty");
+        setActions({});
+
+        return false;
+    }
+
+    bool updateAvailable;
+    if (!_worker->checkForChanges(updateAvailable)) {
+        setStatus(Task::Status::FAILED);
+        setSubtitle("Update not available");
+        setActions({});
+
+        return false;
+    }
+
+    if ( !updateAvailable ) {
         qDebug() << "Update not available for app";
 
         setStatus(Task::Status::FAILED);
         setSubtitle("Update not available");
         setActions({});
 
-        return ;
+        return false;
     }
+
+    return true;
 }
