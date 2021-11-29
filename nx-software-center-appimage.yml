@@ -7,9 +7,9 @@ script:
   - scripts/install-build-deps.sh
   - mkdir -p build
   - cd build
+  - ../scripts/deploy-appimageupdate.sh
   - ../scripts/deploy-mauikit.sh
   - ../scripts/deploy-mauikit-filebrowsing.sh
-  - ../scripts/deploy-appimageupdate.sh
   - ../scripts/deploy-nx-software-center.sh
   - ../scripts/install-icon-theme.sh
 
@@ -25,7 +25,7 @@ AppDir:
   runtime:
     env:
       PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
-      APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib/x86_64-linux-gnu"
+      APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib:$APPDIR/usr/lib/x86_64-linux-gnu"
       QT_QUICK_CONTROLS_STYLE: "maui-style"
   after_bundle:
     - cd $APPDIR/bin/ && ln -sf bash sh
@@ -59,6 +59,7 @@ AppDir:
     - libkf5notifications5
     - libkf5kiofilewidgets5
     - libkf5kiocore5
+    - kio
 
     # Other
     - libappimage1.0
