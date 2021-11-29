@@ -9,6 +9,7 @@
 
 // local
 #include "TaskManager.h"
+#include "utils/appimagetools.h"
 
 using namespace appimage::update;
 using namespace std;

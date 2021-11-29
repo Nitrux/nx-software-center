@@ -56,6 +56,12 @@ void UpdateTask::processUpdate() {
             string pathToUpdatedFile;
             if (!_worker->pathToNewFile(pathToUpdatedFile))
             
+            // Integrate AppImage
+            if(!FMH::fileExists(QUrl::fromLocalFile(QString::fromStdString(pathToUpdatedFile))))
+                return;
+
+            AppImageTools::integrate(QUrl::fromLocalFile(QString::fromStdString(pathToUpdatedFile)));
+
             setTitle(QString::fromStdString(pathToUpdatedFile.substr(pathToUpdatedFile.find_last_of("\\/") + 1)));
             setStatus(Task::Status::COMPLETED);
             setSubtitle("Update completed");
