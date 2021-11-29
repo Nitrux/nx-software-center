@@ -23,11 +23,21 @@ void CheckUpdateTask::start()
     setProgressTotal(100);
     Task::start();
 
-    std::thread processCheckUpdateThread(&CheckUpdateTask::processUpdate, this, _appsModel, _index);
+    std::thread processCheckUpdateThread(&CheckUpdateTask::checkIfUpdateAvailable, this, _appsModel, _index);
     processCheckUpdateThread.detach();
 }
 
-void CheckUpdateTask::processUpdate(AppsModel *appsModel, int index) {
+void CheckUpdateTask::checkIfUpdateAvailable(AppsModel *appsModel, int index) {
+    if ( _worker->updateInformation().empty() ) {
+        setStatus(Task::Status::FAILED);
+        setSubtitle("Update information not available");
+        setActions({});
+
+        _taskManager->destroy(this);
+
+        return ;
+    }
+
     bool updateAvailable;
     if (!_worker->checkForChanges(updateAvailable)) {
         setStatus(Task::Status::FAILED);

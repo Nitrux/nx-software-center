@@ -29,5 +29,5 @@ private:
     AppsModel *_appsModel;
     int _index;
 
-    void processUpdate(AppsModel *appsModel, int index);
+    void checkIfUpdateAvailable(AppsModel *appsModel, int index);
 };
