@@ -31,4 +31,7 @@ private:
     QString _label;
     QString _icon;
     bool _isActive;
+
+public:
+    void setIsActive(bool isActive);
 };

@@ -19,7 +19,7 @@ class UpdateTask : public Task
     Q_OBJECT
 public:
     UpdateTask(const QString &id, const QString &appImagePath, const QString &appName, QObject *parent);
-    Q_SCRIPTABLE void start();
+    Q_SCRIPTABLE void start() override;
 
 private:
     QString _appName;

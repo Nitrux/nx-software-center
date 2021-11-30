@@ -27,3 +27,7 @@ bool TaskAction::isIsActive() const
 {
     return _isActive;
 }
+void TaskAction::setIsActive(bool isActive)
+{
+    _isActive = isActive;
+}

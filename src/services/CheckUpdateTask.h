@@ -19,7 +19,7 @@ class CheckUpdateTask : public Task
     Q_OBJECT
 public:
     CheckUpdateTask(const QString &id, const QString &appImagePath, const QString &appName, AppsModel *appsModel, int index, QObject *parent);
-    Q_SCRIPTABLE void start();
+    Q_SCRIPTABLE void start() override;
 
 private:
     QString _appName;

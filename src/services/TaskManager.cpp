@@ -1,7 +1,8 @@
 #include "TaskManager.h"
-#include "UpdateTask.h"
-#include "DownloadTask.h"
+#include "CheckUpdateBulkTask.h"
 #include "CheckUpdateTask.h"
+#include "DownloadTask.h"
+#include "UpdateTask.h"
 
 #include <QRandomGenerator>
 #include <QUuid>
@@ -53,26 +54,14 @@ Task *TaskManager::doDownload(QUrl appDownloadUrl, QString appName)
 
 Task *TaskManager::doCheckUpdate(AppsModel *appsModel)
 {
-    FMH::MODEL_LIST items = appsModel->getItems();
+    QString id = createTaskId();
+    auto task = new CheckUpdateBulkTask(id, appsModel, this);
+    _tasks.push_front(task);
 
-    for (int i = 0; i < items.size(); i++) {
-        QString appImagePath = items[i][FMH::MODEL_KEY::PATH];
-        QString appName = items[i][FMH::MODEL_KEY::NAME];
+    emit tasksChanged(getTasks());
 
-        // remove url prefix
-        if (appImagePath.startsWith("file://"))
-            appImagePath = appImagePath.right(appImagePath.length() - 7);
-
-        QString id = createTaskId();
-        auto task = new CheckUpdateTask(id, appImagePath, appName, appsModel, i, this);
-        _tasks.push_front(task);
-
-        emit tasksChanged(getTasks());
-
-        task->start();
-    }
-
-    return nullptr;
+    task->start();
+    return task;
 }
 
 void TaskManager::destroy(Task *task)

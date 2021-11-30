@@ -65,7 +65,7 @@ public:
     Q_SCRIPTABLE TaskAction *addCancelAction(const QString &label = "Cancel", const QString &icon = "dialog-close");
     Q_SCRIPTABLE void removeAction(TaskAction *action);
 
-    Q_SCRIPTABLE void start();
+    Q_SCRIPTABLE virtual void start();
 
 private:
     QString _id;

@@ -19,7 +19,7 @@ class DownloadTask : public Task
     Q_OBJECT
 public:
     DownloadTask(const QString &id, const QString &appName, const QUrl &appDownloadUrl, QObject *parent);
-    Q_SCRIPTABLE void start();
+    Q_SCRIPTABLE void start() override;
 
 protected:
     // Q_SLOT void onWorkerStarted(short);
