@@ -18,13 +18,14 @@ class UpdateTask : public Task
 {
     Q_OBJECT
 public:
-    UpdateTask(const QString &id, const QString &appImagePath, const QString &appName, QObject *parent);
+    UpdateTask(const QString &id, const QString &appImagePath, const QString &appName, TaskManager *taskManager);
     Q_SCRIPTABLE void start() override;
 
 private:
     QString _appName;
 
     Updater  *_worker;
+    TaskManager *_taskManager;
 
     bool checkIfUpdateAvailable();
     void processUpdate();

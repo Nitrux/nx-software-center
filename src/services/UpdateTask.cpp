@@ -1,9 +1,10 @@
 #include "UpdateTask.h"
 
-UpdateTask::UpdateTask(const QString &id, const QString &appImagePath, const QString &appName, QObject *parent)
-    : Task(id, appName, QString(), "qrc:/download.svg", -1, -1, parent)
+UpdateTask::UpdateTask(const QString &id, const QString &appImagePath, const QString &appName, TaskManager *taskManager)
+    : Task(id, appName, QString(), "qrc:/download.svg", -1, -1, taskManager)
     , _appName(appName)
     , _worker(nullptr)
+    , _taskManager(taskManager)
 {
     qDebug() << appImagePath << "  " << appName;
     _worker = new Updater(appImagePath.toStdString());
@@ -66,6 +67,12 @@ void UpdateTask::processUpdate() {
             setStatus(Task::Status::COMPLETED);
             setSubtitle("Update completed");
             setActions({});
+
+            auto action = addAction("dismiss", "Dismiss", "user-trash");
+            action->setIsActive(true);
+            connect(action, &TaskAction::triggered, [=]() {
+                _taskManager->destroy(this);
+            });
         }
     }
 }

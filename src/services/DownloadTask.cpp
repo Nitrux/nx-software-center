@@ -1,10 +1,11 @@
 #include "DownloadTask.h"
 
-DownloadTask::DownloadTask(const QString &id, const QString &appName, const QUrl &appDownloadUrl, QObject *parent)
-    : Task(id, appName, QString(), "qrc:/download.svg", -1, -1, parent)
+DownloadTask::DownloadTask(const QString &id, const QString &appName, const QUrl &appDownloadUrl, TaskManager *taskManager)
+    : Task(id, appName, QString(), "qrc:/download.svg", -1, -1, taskManager)
     , _appName(appName)
     , _appDownloadUrl(appDownloadUrl)
     , _worker(nullptr)
+    , _taskManager(taskManager)
 {
     qDebug() << appName << "  " << appDownloadUrl.toString();
 
@@ -47,6 +48,12 @@ void DownloadTask::onWorkerFinished(QString path)
         return;
 
     AppImageTools::integrate(QUrl::fromLocalFile(path));
+
+    auto action = addAction("dismiss", "Dismiss", "user-trash");
+    action->setIsActive(true);
+    connect(action, &TaskAction::triggered, [=]() {
+        _taskManager->destroy(this);
+    });
 }
 void DownloadTask::onWorkerProgress(const int &progress)
 {

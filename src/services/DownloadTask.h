@@ -18,7 +18,7 @@ class DownloadTask : public Task
 {
     Q_OBJECT
 public:
-    DownloadTask(const QString &id, const QString &appName, const QUrl &appDownloadUrl, QObject *parent);
+    DownloadTask(const QString &id, const QString &appName, const QUrl &appDownloadUrl, TaskManager *taskManager);
     Q_SCRIPTABLE void start() override;
 
 protected:
@@ -32,4 +32,5 @@ private:
     QUrl _appDownloadUrl;
 
     FMH::Downloader *_worker;
+    TaskManager *_taskManager;
 };
