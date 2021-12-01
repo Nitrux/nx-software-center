@@ -17,7 +17,6 @@ class AppsModel : public MauiList
 
     // Q_PROPERTY(bool isUpdatable MEMBER m_isUpdatable NOTIFY isUpdatableChanged)
     // Q_PROPERTY(TaskManager* taskManager MEMBER taskManager NOTIFY taskManagerChanged)
-    Q_PROPERTY(QVector<bool> isAppUpdatable MEMBER m_isAppUpdatable NOTIFY isAppUpdatableChanged)
 
 public:
     // bool m_isUpdatable = false;
@@ -40,7 +39,6 @@ signals:
     void appUpdateError(QString msg);
 
     // void isUpdatableChanged(bool isUpdatable);
-    void isAppUpdatableChanged();
     // void taskManagerChanged();
 
 public slots:
@@ -54,7 +52,6 @@ private:
     Store *m_store;
     QFileSystemWatcher * m_watcher;
     Task *updateTask;
-    QVector<bool> m_isAppUpdatable;
 
     void setList();
 

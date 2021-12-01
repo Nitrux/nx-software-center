@@ -33,9 +33,11 @@ void AppsModel::componentComplete()
 }
 
 void AppsModel::setAppUpdatable(int index) {
-    this->m_isAppUpdatable[index] = true;
+    emit this->preListChanged();
 
-    emit isAppUpdatableChanged();
+    this->m_list[index].insert(FMH::MODEL_KEY::UPDATABLE, "true");
+
+    emit this->postListChanged();
 }
 
 FMH::MODEL_LIST AppsModel::getItems() {
@@ -85,15 +87,8 @@ void AppsModel::setList()
         emit this->preListChanged();
         this->m_list << items;
 
-        // Clear the isAppUpdatable and reinitialize the vector each item for the installed apps with default false
-        this->m_isAppUpdatable.clear();
-        for (int i = 0; i < items.size(); i++) {
-            this->m_isAppUpdatable << false;
-        }
-
         emit this->postListChanged();
         emit this->countChanged();
-
     });
 
     fileLoader->requestPath({FMStatic::HomePath+"/Applications"}, false, {"*.appimage"});

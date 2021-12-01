@@ -197,7 +197,7 @@ Maui.Page
             anchors.horizontalCenter: parent.horizontalCenter
             label1.text: model.label
             label2.text: model.name
-            label3.text: _appsList.isAppUpdatable[_appsModel.mappedToSource(index)]?"New update available":null
+            label3.text: model.updatable==="true"?"New update available":null;
             imageSource: "image://thumbnailer/" + model.path
             iconSizeHint: Maui.Style.iconSizes.medium
             iconSource: "package"
@@ -237,8 +237,7 @@ Maui.Page
                 {
                     icon.name: "download"
                     text: "Update"
-                    // enabled: _appsList.isUpdatable
-                    enabled: _appsList.isAppUpdatable!=null && _appsList.isAppUpdatable[_appsModel.mappedToSource(index)]!=null && _appsList.isAppUpdatable[_appsModel.mappedToSource(index)]
+                    enabled: model.updatable==="true"
                     onTriggered:
                     {
                         taskManagerCtx.doUpdate(model.url, model.name);
