@@ -79,7 +79,7 @@ add_executable(${PROJECT_NAME}
 
 kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp)
 
-target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Widgets Qt5::Qml KF5::I18n KF5::CoreAddons libappimage ${APPIMAGEUPDATE_LIB})
+target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Widgets Qt5::Qml KF5::I18n KF5::CoreAddons AppImageUpdate::libappimageupdate libappimage)
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES org.nx.softwarecenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
