@@ -97,7 +97,7 @@ Maui.Page
     headBar.rightContent: [
         Button
         {
-            text: qsTr("Check for Update")
+            text: qsTr("Check for Updates")
             visible: !_appsList.isUpdateAvailable
             onClicked:
             {
