@@ -22,8 +22,10 @@ void CheckUpdateBulkTask::start()
         setTitle("Update lockup completed");
         if (updatable.empty())
             setSubtitle(QString("No updates were found."));
-        else
+        else {
             setSubtitle(QString("%1 updates are available").arg(updatable.size()));
+            _appsModel->setIsUpdateAvailable(true);
+        }
     });
 
     connect(_worker, &QThread::finished, this, &CheckUpdateBulkTask::onCheckCompleted);

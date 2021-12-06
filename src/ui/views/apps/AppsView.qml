@@ -98,6 +98,7 @@ Maui.Page
         Button
         {
             text: qsTr("Check for Update")
+            visible: !_appsList.isUpdateAvailable
             onClicked:
             {
                 taskManagerCtx.doCheckUpdate(_appsList);
@@ -107,6 +108,7 @@ Maui.Page
         Button
         {
             text: qsTr("Update All")
+            visible: _appsList.isUpdateAvailable
             onClicked:
             {
                 taskManagerCtx.doUpdateAll(_appsList);

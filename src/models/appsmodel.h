@@ -15,11 +15,10 @@ class AppsModel : public MauiList
 {
     Q_OBJECT
 
-    // Q_PROPERTY(bool isUpdatable MEMBER m_isUpdatable NOTIFY isUpdatableChanged)
-    // Q_PROPERTY(TaskManager* taskManager MEMBER taskManager NOTIFY taskManagerChanged)
+    Q_PROPERTY(bool isUpdateAvailable MEMBER m_isUpdateAvailable NOTIFY isUpdateAvailableChanged)
 
 public:
-    // bool m_isUpdatable = false;
+    bool m_isUpdateAvailable = false;
 
     explicit AppsModel(QObject *parent = nullptr);
 
@@ -29,6 +28,7 @@ public:
     const FMH::MODEL_LIST &items() const override final;
 
     void setAppUpdatable(int index);
+    void setIsUpdateAvailable(bool isUpdateAvailable);
     FMH::MODEL_LIST getItems();
 
 signals:
@@ -38,8 +38,7 @@ signals:
     void appUpdateSuccess(QString msg);
     void appUpdateError(QString msg);
 
-    // void isUpdatableChanged(bool isUpdatable);
-    // void taskManagerChanged();
+    void isUpdateAvailableChanged();
 
 public slots:
     void launchApp(const int &index);

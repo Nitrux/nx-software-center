@@ -23,6 +23,8 @@ void UpdateAllTask::start()
             setSubtitle(QString("%1 apps updated").arg(totalAppsUpdated));
         else
             setSubtitle(QString("No apps updated."));
+
+        _appsModel->setIsUpdateAvailable(false);
     });
 
     connect(_worker, &QThread::finished, this, &UpdateAllTask::onUpdateCompleted);

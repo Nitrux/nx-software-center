@@ -110,3 +110,11 @@ void AppsModel::clear()
     emit this->postListChanged();
     emit this->countChanged();
 }
+
+void AppsModel::setIsUpdateAvailable(bool isUpdateAvailable) {
+    if ( this->m_isUpdateAvailable != isUpdateAvailable ) {
+        this->m_isUpdateAvailable = isUpdateAvailable;
+
+        emit isUpdateAvailableChanged();
+    }
+}
