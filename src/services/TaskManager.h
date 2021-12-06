@@ -27,6 +27,7 @@ public:
     Q_SCRIPTABLE Task *doUpdate(QString appImagePath, const QString& appName);
     Q_SCRIPTABLE Task *doDownload(QUrl appDownloadUrl, QString appName);
     Q_SCRIPTABLE Task *doCheckUpdate(AppsModel *appsModel);
+    Q_SCRIPTABLE Task *doUpdateAll(AppsModel *appsModel);
 
     Q_SCRIPTABLE void destroy(Task *task);
 private:

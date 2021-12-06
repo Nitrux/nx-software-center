@@ -104,6 +104,15 @@ Maui.Page
             }
         },
 
+        Button
+        {
+            text: qsTr("Update All")
+            onClicked:
+            {
+                taskManagerCtx.doUpdateAll(_appsList);
+            }
+        },
+
         Maui.ToolButtonMenu
         {
             icon.name: "view-sort"

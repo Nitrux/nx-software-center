@@ -27,6 +27,7 @@ set(nx_SRCS
     services/DownloadTask.cpp
     services/CheckUpdateTask.cpp
     services/CheckUpdateBulkTask.cpp
+    services/UpdateAllTask.cpp
     )
 
 set(nx_HDRS

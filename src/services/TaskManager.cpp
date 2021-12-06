@@ -3,6 +3,7 @@
 #include "CheckUpdateTask.h"
 #include "DownloadTask.h"
 #include "UpdateTask.h"
+#include "UpdateAllTask.h"
 
 #include <QRandomGenerator>
 #include <QUuid>
@@ -56,6 +57,18 @@ Task *TaskManager::doCheckUpdate(AppsModel *appsModel)
 {
     QString id = createTaskId();
     auto task = new CheckUpdateBulkTask(id, appsModel, this);
+    _tasks.push_front(task);
+
+    emit tasksChanged(getTasks());
+
+    task->start();
+    return task;
+}
+
+Task *TaskManager::doUpdateAll(AppsModel *appsModel)
+{
+    QString id = createTaskId();
+    auto task = new UpdateAllTask(id, appsModel, this);
     _tasks.push_front(task);
 
     emit tasksChanged(getTasks());
