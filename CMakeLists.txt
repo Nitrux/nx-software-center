@@ -45,10 +45,8 @@ find_package(libappimage REQUIRED)
 find_package(MauiKit REQUIRED)
 find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
 
-find_library (
-    APPIMAGEUPDATE_LIB
-    NAMES appimageupdate
-)
+include(include-AppImageUpdate.cmake)
+
 
 if(QUICK_COMPILER)
         find_package(Qt5QuickCompiler)
