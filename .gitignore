@@ -4,6 +4,9 @@ mauikit/
 3rdparty/breeze-icons
 .directory
 
+# CLion IDE
+.idea/
+
 *.*~
 #~*.*
 #~.*
