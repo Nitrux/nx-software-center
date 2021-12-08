@@ -9,11 +9,13 @@
 // local
 
 class ApplicationData;
-class ApplicationBundle : public QObject
+Q_DECLARE_OPAQUE_POINTER(ApplicationData);
+
+class ApplicationBundle
 {
-    Q_OBJECT
 public:
-    explicit ApplicationBundle(const QString &path, ApplicationData *data = nullptr);
+    ApplicationBundle();
+    explicit ApplicationBundle(QString path, ApplicationData *data = nullptr);
     bool operator==(const ApplicationBundle &rhs) const;
     bool operator!=(const ApplicationBundle &rhs) const;
 

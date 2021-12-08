@@ -4,7 +4,6 @@
 // libraries
 #include <QMap>
 #include <QObject>
-#include <QPixmap>
 #include <QUrl>
 #include <QVariant>
 
@@ -18,7 +17,8 @@ class ApplicationData
 {
 public:
     ApplicationData();
-    ApplicationData(ApplicationBundle *bundle);
+    explicit ApplicationData(QVariantMap data);
+    explicit ApplicationData(const ApplicationBundle &bundle);
 
     QString getId() const;
     void setId(const QString &id);
@@ -41,15 +41,17 @@ public:
     QStringList getXdgCategories() const;
     void setXdgCategories(const QStringList &xdgCategories);
 
-    QList<QSharedPointer<ApplicationBundle>> getBundles() const;
-    void setBundles(const QList<QSharedPointer<ApplicationBundle>> &bundles);
+    QList<ApplicationBundle> getBundles() const;
+    void setBundles(QList<ApplicationBundle> bundles);
 
     // add the bundle to the list and updates the current data if the bundle as a higher version
-    void addBundle(ApplicationBundle *bundle);
-    void addBundle(const QSharedPointer<ApplicationBundle> &bundle);
+    void addBundle(const ApplicationBundle &bundle);
+
+    // removes a bundle from the list and updates the current data if the bundle is the one with the higher version
+    void removeBundle(const ApplicationBundle &bundle);
 
     // copies application data from bundle
-    void copyBundleData(const QSharedPointer<ApplicationBundle> &bundle);
+    void copyApplicationData(const ApplicationBundle &bundle);
 
     void setEntry(const QString &id, const QVariant &value);
     QVariant getEntry(const QString &id);
@@ -57,15 +59,13 @@ public:
     bool operator==(const ApplicationData &rhs) const;
     bool operator!=(const ApplicationData &rhs) const;
 
-    // removes a bundle from the list and updates the current data if the bundle is the one with the higher version
-    void removeBundle(ApplicationBundle *bundle);
-    void removeBundle(const QSharedPointer<ApplicationBundle> &bundle);
-
 private:
     // find the insert index for a new bundle with <version>
     int findInsertIndex(const QString &version);
 
     QVariantMap _data;
 
-    QList<QSharedPointer<ApplicationBundle>> _bundles;
+    QList<ApplicationBundle> _bundles;
 };
+
+Q_DECLARE_METATYPE(ApplicationData)

@@ -2,6 +2,7 @@
 // system
 
 // libraries
+#include <ApplicationsRegistry.h>
 #include <QObject>
 #include <QtTest/QtTest>
 
@@ -16,5 +17,15 @@ private slots:
 
     void addBundle();
 
+    void updateApplicationOnUpgrade();
+    void updateApplicationOnDowngrade();
+
+    void removeApplication();
+
     void cleanupTestCase();
+
+private:
+    ApplicationsRegistry *registry;
+    ApplicationBundle *b1;
+    ApplicationBundle *b2;
 };

@@ -2,13 +2,15 @@
 #include "ApplicationBundle.h"
 
 #include <QDebug>
-#include <QPixmap>
 #include <QVariant>
 #include <QVersionNumber>
 
 ApplicationData::ApplicationData() = default;
 
-ApplicationData::ApplicationData(ApplicationBundle *bundle)
+ApplicationData::ApplicationData(QVariantMap data)
+    : _data(std::move(data)){};
+
+ApplicationData::ApplicationData(const ApplicationBundle &bundle)
 {
     addBundle(bundle);
 }
@@ -108,41 +110,36 @@ QVariant ApplicationData::getEntry(const QString &id)
 {
     return _data.value(id);
 }
-QList<QSharedPointer<ApplicationBundle>> ApplicationData::getBundles() const
+QList<ApplicationBundle> ApplicationData::getBundles() const
 {
     return _bundles;
 }
-void ApplicationData::setBundles(const QList<QSharedPointer<ApplicationBundle>> &bundles)
+void ApplicationData::setBundles(QList<ApplicationBundle> bundles)
 {
     _bundles = bundles;
 }
-void ApplicationData::addBundle(ApplicationBundle *bundle)
+void ApplicationData::addBundle(const ApplicationBundle &bundle)
 {
-    this->addBundle(QSharedPointer<ApplicationBundle>(bundle));
-}
-
-void ApplicationData::addBundle(const QSharedPointer<ApplicationBundle> &bundle)
-{
-    int insertIndex = findInsertIndex(bundle->app->getVersion());
+    int insertIndex = findInsertIndex(bundle.app->getVersion());
     _bundles.insert(insertIndex, bundle);
 
-    if (!bundle->app.isNull()) {
-        if (insertIndex == 0)
-            copyBundleData(bundle);
-    }
+    if (bundle.app && insertIndex == 0)
+        copyApplicationData(bundle);
 }
 
-void ApplicationData::copyBundleData(const QSharedPointer<ApplicationBundle> &bundle)
+void ApplicationData::copyApplicationData(const ApplicationBundle &bundle)
 {
-    if (!bundle->app.isNull()) {
-        const auto &new_data = bundle->app->_data;
+    if (bundle.app) {
+        const auto &new_data = bundle.app->_data;
         const auto keys = new_data.keys();
         for (const auto &key : keys)
             _data.insert(key, new_data.value(key));
+    } else {
+        qWarning() << "Coping data from an incomplete bundle" << bundle.path;
     }
 }
 
-void ApplicationData::removeBundle(const QSharedPointer<ApplicationBundle> &bundle)
+void ApplicationData::removeBundle(const ApplicationBundle &bundle)
 {
     if (_bundles.empty()) {
         qWarning() << "Trying to remove a bundle from an empty application";
@@ -151,16 +148,11 @@ void ApplicationData::removeBundle(const QSharedPointer<ApplicationBundle> &bund
         int idx = _bundles.indexOf(bundle);
         if (idx == 0 && _bundles.length() > 1) {
             // the newest bundle is being removed we need to reset the data to the previous one
-            copyBundleData(_bundles[1]);
+            copyApplicationData(_bundles[1]);
         }
 
         _bundles.removeAt(idx);
     }
-}
-
-void ApplicationData::removeBundle(ApplicationBundle *bundle)
-{
-    removeBundle(QSharedPointer<ApplicationBundle>(bundle));
 }
 
 int ApplicationData::findInsertIndex(const QString &version)
@@ -172,7 +164,7 @@ int ApplicationData::findInsertIndex(const QString &version)
         auto versionNumber = QVersionNumber::fromString(version);
 
         for (const auto &bundle : _bundles) {
-            auto bundleVersionNumber = QVersionNumber::fromString(bundle->app->getVersion());
+            auto bundleVersionNumber = QVersionNumber::fromString(bundle.app->getVersion());
             if (versionNumber > bundleVersionNumber)
                 return idx;
 

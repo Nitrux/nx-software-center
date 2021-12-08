@@ -17,7 +17,7 @@ add_executable(
 target_include_directories(test_applications_registry PRIVATE ../src/services/)
 target_link_libraries(test_applications_registry PRIVATE Qt5::Widgets Qt5::Test)
 
-add_test(NAME testAppsRegistry COMMAND test_applications_registry)
+add_test(NAME testApplicationsRegistry COMMAND test_applications_registry)
 
 add_executable(
     test_applications_data
