@@ -20,6 +20,9 @@ set(nx_SRCS
     models/package.cpp
     models/progressmanager.cpp
     utils/appimagetools.cpp
+    services/ApplicationsRegistry.cpp
+    services/ApplicationData.cpp
+    services/ApplicationBundle.cpp
     services/TaskManager.cpp
     services/Task.cpp
     services/TaskAction.cpp

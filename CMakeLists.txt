@@ -85,6 +85,7 @@ ecm_setup_version(${NX_SC_VERSION}
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/nx_sc_version.h"
     )
 
+add_subdirectory(tests)
 add_subdirectory(src)
-        
+
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
