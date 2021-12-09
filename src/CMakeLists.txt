@@ -82,7 +82,7 @@ add_executable(${PROJECT_NAME}
     ${nx_STORES_SRCS}
     ${nx_STORES_HDRS})
 
-kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp)
+kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp )
 
 target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Widgets Qt5::Qml KF5::I18n KF5::CoreAddons AppImageUpdate::libappimageupdate libappimage)
 
