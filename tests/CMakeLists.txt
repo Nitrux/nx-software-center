@@ -30,3 +30,15 @@ target_include_directories(test_applications_data PRIVATE ../src/services/)
 target_link_libraries(test_applications_data PRIVATE Qt5::Widgets Qt5::Test)
 
 add_test(NAME testApplicationsData COMMAND test_applications_data)
+
+
+add_executable(
+    test_applications_dirs_watcher
+
+    ../src/services/ApplicationsDirsWatcher.cpp
+    TestApplicationsDirsWatcher.cpp
+)
+target_include_directories(test_applications_dirs_watcher PRIVATE ../src/services/)
+target_link_libraries(test_applications_dirs_watcher PRIVATE Qt5::Widgets Qt5::Test)
+
+add_test(NAME testApplicationsDirsWatcher COMMAND test_applications_dirs_watcher)

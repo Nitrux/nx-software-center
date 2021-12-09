@@ -23,6 +23,7 @@ set(nx_SRCS
     services/ApplicationsRegistry.cpp
     services/ApplicationData.cpp
     services/ApplicationBundle.cpp
+    services/ApplicationsDirsWatcher.cpp
     services/TaskManager.cpp
     services/Task.cpp
     services/TaskAction.cpp
