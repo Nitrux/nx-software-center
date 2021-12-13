@@ -14,5 +14,6 @@ class TestApplicationData : public QObject
 
 private:
     Q_SLOT void testAddBundle();
+    Q_SLOT void testReplaceBundle();
     Q_SLOT void createFromBundle();
 };

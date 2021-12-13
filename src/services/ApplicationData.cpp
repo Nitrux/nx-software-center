@@ -121,6 +121,10 @@ void ApplicationData::setBundles(QList<ApplicationBundle> bundles)
 void ApplicationData::addBundle(const ApplicationBundle &bundle)
 {
     int insertIndex = findInsertIndex(bundle.app->getVersion());
+    // replace bundle if the paths match
+    if (_bundles.length() > insertIndex && bundle.path == _bundles[insertIndex].path)
+        _bundles.removeAt(insertIndex);
+
     _bundles.insert(insertIndex, bundle);
 
     if (bundle.app && insertIndex == 0)
