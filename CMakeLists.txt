@@ -38,7 +38,7 @@ include(ECMSourceVersionControl)
 include(FeatureSummary)
 include(ECMQMLModules)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Qml Quick)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Qml Quick Sql)
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
 find_package(libappimage REQUIRED)
 
