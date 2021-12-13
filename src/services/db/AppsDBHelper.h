@@ -16,7 +16,6 @@
 #include <QtSql/QSqlError>
 
 // local
-#include "services/db/dto/AppDTO.h"
 #include "utils/nx.h"
 #include "services/ApplicationData.h"
 
