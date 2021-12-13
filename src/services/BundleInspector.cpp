@@ -2,48 +2,62 @@
 #include "ApplicationData.h"
 
 #include <QDebug>
+#include <QFileInfo>
 #include <QSettings>
+#include <QStandardPaths>
 #include <QTemporaryFile>
 
-#include <QStandardPaths>
+#include <QCryptographicHash>
 #include <appimage/core/AppImage.h>
 #include <appimage/utils/ResourcesExtractor.h>
 
-ApplicationBundle BundleInspector::inspect(const QString &path)
+BundleInspector::BundleInspector(const QString &filePath)
+    : _fileInfo(filePath)
+    , _bundle(filePath)
 {
-    ApplicationBundle bundle(path);
-
-    appimage::core::AppImage app(path.toStdString());
-    appimage::utils::ResourcesExtractor extractor(app);
-
-    extractDesktopEntryData(bundle, extractor);
-
-    extractIcon(bundle, extractor);
-
-    return bundle;
 }
-void BundleInspector::extractIcon(ApplicationBundle &bundle, const appimage::utils::ResourcesExtractor &extractor)
+
+ApplicationBundle BundleInspector::getData()
 {
-    QString iconPath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/icons/" + bundle.app->getId();
+    _bundle.lastModified = _fileInfo.lastModified();
+    try {
+        appimage::core::AppImage app(_bundle.path.toStdString());
+        appimage::utils::ResourcesExtractor extractor(app);
+        extractDesktopEntryData(extractor);
+        extractIcon(extractor);
+
+        _bundle.bundleType = ApplicationBundle::AppImage;
+        _bundle.hashSumMD5 = getMd5Checksum();
+    } catch (std::runtime_error &error) {
+        // ignore appimage opening error and report this as an unknown type bundle
+    }
+
+    return _bundle;
+}
+
+void BundleInspector::extractIcon(const appimage::utils::ResourcesExtractor &extractor)
+{
+    QString iconPath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/icons/" + _bundle.app->getId();
     extractor.extractTo({{".DirIcon", iconPath.toStdString()}});
     if (QFile::exists(iconPath))
-        bundle.app->setIcon(iconPath);
+        _bundle.app->setIcon(iconPath);
 }
-void BundleInspector::extractDesktopEntryData(ApplicationBundle &bundle, const appimage::utils::ResourcesExtractor &extractor)
+void BundleInspector::extractDesktopEntryData(const appimage::utils::ResourcesExtractor &extractor)
 {
     auto desktopEntryPath = extractor.getDesktopEntryPath();
-    bundle.app->setId(QString::fromStdString(desktopEntryPath.substr(0, desktopEntryPath.size() - 8)));
+    _bundle.app->setId(QString::fromStdString(desktopEntryPath.substr(0, desktopEntryPath.size() - 8)));
 
     QTemporaryFile temp;
     if (temp.open()) {
         extractor.extractTo({{desktopEntryPath, temp.fileName().toStdString()}});
         QSettings desktopEntry(temp.fileName(), QSettings::IniFormat);
 
-        bundle.app->setName(desktopEntry.value("Desktop Entry/Name").toString());
-        bundle.app->setDescription(desktopEntry.value("Desktop Entry/Comment").toString());
+        _bundle.app->setName(desktopEntry.value("Desktop Entry/Name").toString());
+        _bundle.app->setDescription(desktopEntry.value("Desktop Entry/Comment").toString());
+        _bundle.app->setVersion(desktopEntry.value("Desktop Entry/X-AppImage-Version", QString()).toString());
 
         QStringList xdgCategories = extractXdgCategories(desktopEntry);
-        bundle.app->setXdgCategories(xdgCategories);
+        _bundle.app->setXdgCategories(xdgCategories);
 
         temp.close();
     } else {
@@ -59,4 +73,29 @@ QStringList BundleInspector::extractXdgCategories(const QSettings &desktopEntry)
             xdgCategories.push_back(cat);
     }
     return xdgCategories;
+}
+
+QDateTime BundleInspector::getLastModified()
+{
+    return _fileInfo.lastModified();
+}
+
+QByteArray BundleInspector::getMd5Checksum()
+{
+    if (!_bundle.hashSumMD5.isEmpty())
+        return _bundle.hashSumMD5;
+
+    QFile file(_bundle.path);
+    if (!file.open(QIODevice::ReadOnly))
+        return {};
+
+    QCryptographicHash hash(QCryptographicHash::Md5);
+    hash.addData(&file);
+
+    _bundle.hashSumMD5 = hash.result();
+    return _bundle.hashSumMD5;
+}
+QString BundleInspector::getPath()
+{
+    return _bundle.path;
 }

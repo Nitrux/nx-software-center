@@ -2,22 +2,30 @@
 // system
 
 // libraries
+#include <QFileInfo>
 #include <QObject>
+#include <QQueue>
+#include <QSemaphore>
 #include <QSettings>
 #include <appimage/utils/ResourcesExtractor.h>
 
 // local
 #include "ApplicationBundle.h"
 
-class BundleInspector : public QObject
+class BundleInspector
 {
-    Q_OBJECT
-
 public:
-    static ApplicationBundle inspect(const QString &path);
+    BundleInspector(const QString &filePath);
+    QString getPath();
+    ApplicationBundle getData();
+    QDateTime getLastModified();
+    QByteArray getMd5Checksum();
 
 private:
-    static void extractDesktopEntryData(ApplicationBundle &bundle, const appimage::utils::ResourcesExtractor &extractor);
+    QFileInfo _fileInfo;
+    ApplicationBundle _bundle;
+
+    void extractDesktopEntryData(const appimage::utils::ResourcesExtractor &extractor);
     static QStringList extractXdgCategories(const QSettings &desktopEntry);
-    static void extractIcon(ApplicationBundle &bundle, const appimage::utils::ResourcesExtractor &extractor);
+    void extractIcon(const appimage::utils::ResourcesExtractor &extractor);
 };

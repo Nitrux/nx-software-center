@@ -5,6 +5,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt5Test REQUIRED)
 
+set(APPIMAGE_TOOL_PATH ${CMAKE_CURRENT_BINARY_DIR}/data/appimagetool-x86_64.AppImage)
+if (NOT EXISTS ${APPIMAGE_TOOL_PATH})
+    set(APPIMAGE_TOOL_URL https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage)
+    file(DOWNLOAD ${APPIMAGE_TOOL_URL} ${APPIMAGE_TOOL_PATH})
+endif (NOT EXISTS ${APPIMAGE_TOOL_PATH})
+
 
 add_executable(
     test_applications_registry
@@ -33,21 +39,21 @@ add_test(NAME testApplicationsData COMMAND test_applications_data)
 
 
 add_executable(
-    test_applications_dirs_watcher
+    test_bundles_dirs_watcher
 
-    ../src/services/ApplicationsDirsWatcher.cpp
-    TestApplicationsDirsWatcher.cpp
+    ../src/services/BundlesDirsWatcher.cpp
+    ../src/services/BundleInspector.cpp
+    ../src/services/ApplicationData.cpp
+    ../src/services/ApplicationBundle.cpp
+    TestBundlesDirsWatcher.cpp
 )
-target_include_directories(test_applications_dirs_watcher PRIVATE ../src/services/)
-target_link_libraries(test_applications_dirs_watcher PRIVATE Qt5::Widgets Qt5::Test)
 
-add_test(NAME testApplicationsDirsWatcher COMMAND test_applications_dirs_watcher)
+kde_source_files_enable_exceptions(test_bundles_dirs_watcher ../src/services/BundlesDirsWatcher.cpp)
+target_include_directories(test_bundles_dirs_watcher PRIVATE ../src/services/)
+target_link_libraries(test_bundles_dirs_watcher PRIVATE Qt5::Widgets Qt5::Test libappimage)
+target_compile_definitions(test_bundles_dirs_watcher PRIVATE SAMPLE_APPIMAGE_PATH="${APPIMAGE_TOOL_PATH}")
 
-set(APPIMAGE_TOOL_PATH ${CMAKE_CURRENT_BINARY_DIR}/data/appimagetool-x86_64.AppImage)
-if (NOT EXISTS ${APPIMAGE_TOOL_PATH})
-    set(APPIMAGE_TOOL_URL https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage)
-    file(DOWNLOAD ${APPIMAGE_TOOL_URL} ${APPIMAGE_TOOL_PATH})
-endif (NOT EXISTS ${APPIMAGE_TOOL_PATH})
+add_test(NAME testBundlesDirsWatcher COMMAND test_bundles_dirs_watcher)
 
 add_executable(
     test_bundle_inspector
