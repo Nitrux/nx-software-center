@@ -58,7 +58,7 @@ void TestApplicationsRegistry::updateApplicationOnUpgrade()
 void TestApplicationsRegistry::updateApplicationOnDowngrade()
 {
     QSignalSpy spy(registry, SIGNAL(applicationUpdated(ApplicationData)));
-    registry->removeBundle(b2->path);
+    registry->removeBundleByPath(b2->path);
 
     QCOMPARE(spy.count(), 1);
 

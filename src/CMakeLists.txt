@@ -13,6 +13,7 @@ include_directories(
 
 set(nx_SRCS
     main.cpp
+    NxSCApp.cpp
     models/appsmodel.cpp
     models/storemodel.cpp
     models/categoriesmodel.cpp

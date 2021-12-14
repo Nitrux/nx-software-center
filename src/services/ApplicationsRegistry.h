@@ -9,6 +9,7 @@
 // local
 #include "ApplicationBundle.h"
 #include "ApplicationData.h"
+#include "BundlesDirsWatcher.h"
 
 /**
  * Stores data of the applications available to the user
@@ -16,18 +17,20 @@
 class ApplicationsRegistry : public QObject
 {
     Q_OBJECT
+
 public:
     explicit ApplicationsRegistry(QStringList appDirs);
 
+    const QStringList &getAppDirs();
     bool applicationExist(const QString &appId) const;
     ApplicationData getApplication(const QString &appId) const;
 
     // Add an AppImage file to the registry and updates or create the related Application data
-    void addBundle(const ApplicationBundle& bundle);
+    Q_SLOT void addBundle(const ApplicationBundle &bundle);
 
     // removes an AppImage file from the registry update the related Application data
-    void removeBundle(const ApplicationBundle &bundle);
-    void removeBundle(const QString &path);
+    Q_SLOT void removeBundle(const ApplicationBundle &bundle);
+    Q_SLOT void removeBundleByPath(const QString &path);
 
 public:
     Q_SIGNAL void applicationAdded(ApplicationData);

@@ -27,7 +27,7 @@ ApplicationData ApplicationsRegistry::getApplication(const QString &appId) const
 {
     return _applications.value(appId);
 }
-void ApplicationsRegistry::removeBundle(const QString &path)
+void ApplicationsRegistry::removeBundleByPath(const QString &path)
 {
     ApplicationBundle targetBundle;
 
@@ -72,4 +72,8 @@ void ApplicationsRegistry::removeBundle(const ApplicationBundle &bundle)
 bool ApplicationsRegistry::applicationExist(const QString &appId) const
 {
     return _applications.contains(appId);
+}
+const QStringList &ApplicationsRegistry::getAppDirs()
+{
+    return _appDirs;
 }
