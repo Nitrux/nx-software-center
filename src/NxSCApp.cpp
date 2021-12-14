@@ -114,3 +114,8 @@ void NxSCApp::setupApplicationsRegistry()
     _bundleDirsWatcher->moveToThread(&_bundleDirsWatcherThread);
     _bundleDirsWatcherThread.start();
 }
+NxSCApp::~NxSCApp()
+{
+    _bundleDirsWatcherThread.exit();
+    _bundleDirsWatcherThread.wait(10);
+}

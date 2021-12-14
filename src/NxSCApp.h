@@ -21,6 +21,7 @@ public:
     void parseCommands();
     void setupQMLEngine();
     void setupApplicationsRegistry();
+    virtual ~NxSCApp();
 
 protected:
     Q_SLOT void onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl);
