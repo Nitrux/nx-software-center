@@ -9,7 +9,6 @@
 // local
 #include "ApplicationBundle.h"
 #include "ApplicationData.h"
-#include "BundlesDirsWatcher.h"
 
 /**
  * Stores data of the applications available to the user
@@ -24,6 +23,9 @@ public:
     const QStringList &getAppDirs();
     bool applicationExist(const QString &appId) const;
     ApplicationData getApplication(const QString &appId) const;
+
+    QList<ApplicationData> getApplications() const;
+    int getApplicationsCount() const;
 
     // Add an AppImage file to the registry and updates or create the related Application data
     Q_SLOT void addBundle(const ApplicationBundle &bundle);

@@ -77,3 +77,13 @@ const QStringList &ApplicationsRegistry::getAppDirs()
 {
     return _appDirs;
 }
+
+QList<ApplicationData> ApplicationsRegistry::getApplications() const
+{
+    return _applications.values();
+}
+
+int ApplicationsRegistry::getApplicationsCount() const
+{
+    return _applications.size();
+}

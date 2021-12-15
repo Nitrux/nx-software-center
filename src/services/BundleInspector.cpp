@@ -24,12 +24,13 @@ ApplicationBundle BundleInspector::getData()
         appimage::core::AppImage app(_bundle.path.toStdString());
         appimage::utils::ResourcesExtractor extractor(app);
         extractDesktopEntryData(extractor);
-        extractIcon(extractor);
+//        extractIcon(extractor);
 
         _bundle.bundleType = ApplicationBundle::AppImage;
         _bundle.hashSumMD5 = getMd5Checksum();
     } catch (std::runtime_error &error) {
-        // ignore appimage opening error and report this as an unknown type bundle
+        // report this as an unknown type bundle in case of error
+        _bundle.bundleType = ApplicationBundle::Unknown;
     }
 
     return _bundle;

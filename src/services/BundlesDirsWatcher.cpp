@@ -13,13 +13,13 @@ BundlesDirsWatcher::BundlesDirsWatcher(const QStringList &paths, QObject *parent
     : QObject(parent)
     , _watcher()
 {
-    connect(&_watcher, &QFileSystemWatcher::directoryChanged, this, &BundlesDirsWatcher::onDirChanged);
+    connect(&_watcher, &QFileSystemWatcher::directoryChanged, this, &BundlesDirsWatcher::checkDirChanges);
 
     // paths need to be added after connection is made to avoid missing signals
     _watcher.addPaths(paths);
 }
 
-void BundlesDirsWatcher::onDirChanged(const QString &dirPath)
+void BundlesDirsWatcher::checkDirChanges(const QString &dirPath)
 {
     checkCreationsAndUpdates(dirPath);
     checkDeletions(dirPath);
@@ -62,4 +62,9 @@ void BundlesDirsWatcher::checkDeletions(const QString &dirPath)
             emit(bundleRemoved(path));
         }
     }
+}
+void BundlesDirsWatcher::checkAllDirs()
+{
+    for (const auto &path : _watcher.directories())
+        checkDirChanges(path);
 }

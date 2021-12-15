@@ -22,8 +22,10 @@ public:
     Q_SIGNAL void bundleUpdated(ApplicationBundle bundle);
     Q_SIGNAL void bundleRemoved(QString path);
 
+    Q_SLOT void checkAllDirs();
+
 private:
-    Q_SLOT void onDirChanged(const QString &dirPath);
+    Q_SLOT void checkDirChanges(const QString &dirPath);
 
     QFileSystemWatcher _watcher;
 
@@ -31,5 +33,4 @@ private:
     QMap<QString, QDateTime> _fileCache;
     void checkCreationsAndUpdates(const QString &dirPath);
     void checkDeletions(const QString &path);
-    void checkNewFile(BundleInspector &inspector);
 };

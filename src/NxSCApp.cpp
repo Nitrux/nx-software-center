@@ -9,21 +9,23 @@
 #include <QQmlContext>
 
 // local
-#include <ResponseDTO/category.h>
-#include <mauiapp.h>
-#include <models/app.h>
-#include <models/appsmodel.h>
-#include <models/categoriesmodel.h>
-#include <models/package.h>
-#include <models/progressmanager.h>
-#include <models/storemodel.h>
-#include <nx.h>
+#include "ResponseDTO/category.h"
+#include "mauiapp.h"
+#include "models/ApplicationsRegistryModel.h"
+#include "models/app.h"
+#include "models/appsmodel.h"
+#include "models/categoriesmodel.h"
+#include "models/package.h"
+#include "models/progressmanager.h"
+#include "models/storemodel.h"
+#include "nx.h"
 
 NxSCApp::NxSCApp(int &argc, char **argv)
     : QGuiApplication(argc, argv)
     , _qml_main(QStringLiteral("qrc:/main.qml"))
     , _taskManager(this)
     , _applicationsRegistry({NX::AppsPath.toLocalFile()})
+    , _applicationsRegistryModel(&_applicationsRegistry, this)
 {
     setAttribute(Qt::AA_EnableHighDpiScaling);
     setAttribute(Qt::AA_UseHighDpiPixmaps, true);
@@ -79,6 +81,8 @@ void NxSCApp::setupQMLEngine()
 
     QQmlContext *rootContext = _engine.rootContext();
     rootContext->setContextProperty("taskManagerCtx", &_taskManager);
+    rootContext->setContextProperty("applicationsRegistry", &_applicationsRegistryModel);
+
     qmlRegisterUncreatableType<Task>("NXModels", 1, 0, "Task", "Tasks can only be created from the Task Manager");
 
     _engine.load(_qml_main);
@@ -91,28 +95,18 @@ void NxSCApp::onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl)
 }
 void NxSCApp::setupApplicationsRegistry()
 {
+    qRegisterMetaType<ApplicationData>("ApplicationData");
+    qRegisterMetaType<ApplicationBundle>("ApplicationBundle");
+
     _bundleDirsWatcher = QPointer<BundlesDirsWatcher>(new BundlesDirsWatcher(_applicationsRegistry.getAppDirs()));
-    QObject::connect(_bundleDirsWatcher.data(),
-                     &BundlesDirsWatcher::bundleAdded,
-                     &_applicationsRegistry,
-                     &ApplicationsRegistry::addBundle,
-                     Qt::QueuedConnection);
-
-    QObject::connect(_bundleDirsWatcher.data(),
-                     &BundlesDirsWatcher::bundleUpdated,
-                     &_applicationsRegistry,
-                     &ApplicationsRegistry::addBundle,
-                     Qt::QueuedConnection);
-
-    QObject::connect(_bundleDirsWatcher.data(),
-                     &BundlesDirsWatcher::bundleRemoved,
-                     &_applicationsRegistry,
-                     &ApplicationsRegistry::removeBundleByPath,
-                     Qt::QueuedConnection);
+    connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleAdded, &_applicationsRegistry, &ApplicationsRegistry::addBundle);
+    connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleUpdated, &_applicationsRegistry, &ApplicationsRegistry::addBundle);
+    connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleRemoved, &_applicationsRegistry, &ApplicationsRegistry::removeBundleByPath);
 
     // run watcher in a different thread to avoid affecting UI performance
     _bundleDirsWatcher->moveToThread(&_bundleDirsWatcherThread);
     _bundleDirsWatcherThread.start();
+    QMetaObject::invokeMethod(_bundleDirsWatcher.data(), &BundlesDirsWatcher::checkAllDirs, Qt::QueuedConnection);
 }
 NxSCApp::~NxSCApp()
 {

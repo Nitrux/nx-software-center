@@ -7,6 +7,7 @@
 #include <QPointer>
 #include <QQmlApplicationEngine>
 #include <QThread>
+#include <models/ApplicationsRegistryModel.h>
 
 // local
 #include "services/ApplicationsRegistry.h"
@@ -21,7 +22,7 @@ public:
     void parseCommands();
     void setupQMLEngine();
     void setupApplicationsRegistry();
-    virtual ~NxSCApp();
+    ~NxSCApp() override;
 
 protected:
     Q_SLOT void onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl);
@@ -30,6 +31,7 @@ private:
     QUrl _qml_main;
     TaskManager _taskManager;
     ApplicationsRegistry _applicationsRegistry;
+    ApplicationsRegistryModel _applicationsRegistryModel;
     QPointer<BundlesDirsWatcher> _bundleDirsWatcher;
     QThread _bundleDirsWatcherThread;
     KAboutData _aboutData;
