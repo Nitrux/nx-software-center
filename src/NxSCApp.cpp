@@ -7,6 +7,7 @@
 #include <QDate>
 #include <QIcon>
 #include <QQmlContext>
+#include <thumbnailer.h>
 
 // local
 #include "ResponseDTO/category.h"
@@ -84,6 +85,9 @@ void NxSCApp::setupQMLEngine()
     rootContext->setContextProperty("applicationsRegistry", &_applicationsRegistryModel);
 
     qmlRegisterUncreatableType<Task>("NXModels", 1, 0, "Task", "Tasks can only be created from the Task Manager");
+
+    auto thumbnailer = new Thumbnailer();
+    _engine.addImageProvider("thumbnailer", thumbnailer);
 
     _engine.load(_qml_main);
 }
