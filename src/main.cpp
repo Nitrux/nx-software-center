@@ -14,6 +14,10 @@
 
 int main(int argc, char *argv[])
 {
+    // Attribute Qt::AA_EnableHighDpiScaling must be set before QCoreApplication is created
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     QScopedPointer<NxSCApp> app(new NxSCApp(argc, argv));
     app->parseCommands();
     app->setupQMLEngine();

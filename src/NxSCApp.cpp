@@ -28,9 +28,6 @@ NxSCApp::NxSCApp(int &argc, char **argv)
     , _applicationsRegistry({NX::AppsPath.toLocalFile()})
     , _applicationsRegistryModel(&_applicationsRegistry, this)
 {
-    setAttribute(Qt::AA_EnableHighDpiScaling);
-    setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-
     setOrganizationName(QStringLiteral("Nitrux"));
     setWindowIcon(QIcon(":/nx-software-center.svg"));
     MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
@@ -82,9 +79,15 @@ void NxSCApp::setupQMLEngine()
 
     QQmlContext *rootContext = _engine.rootContext();
     rootContext->setContextProperty("taskManagerCtx", &_taskManager);
-    rootContext->setContextProperty("applicationsRegistry", &_applicationsRegistryModel);
-
     qmlRegisterUncreatableType<Task>("NXModels", 1, 0, "Task", "Tasks can only be created from the Task Manager");
+
+    _applicationsRegistryModelProxy.setSourceModel(&_applicationsRegistryModel);
+    _applicationsRegistryModelProxy.setFilterRole(ApplicationsRegistryModel::Name);
+    _applicationsRegistryModelProxy.setSortRole(ApplicationsRegistryModel::XdgCategories);
+    _applicationsRegistryModelProxy.setDynamicSortFilter(true);
+
+    qmlRegisterUncreatableType<ApplicationsRegistryModel>("org.maui.nxsc", 1, 0, "ApplicationRegistryRoles", "Registry can only be accessed by the singleton");
+    qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "ApplicationsRegistry", &_applicationsRegistryModelProxy);
 
     auto thumbnailer = new Thumbnailer();
     _engine.addImageProvider("thumbnailer", thumbnailer);

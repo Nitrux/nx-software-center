@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
+import org.maui.nxsc 1.0
 import NXModels 1.0 as NX
 import "../../templates"
 
@@ -87,9 +88,9 @@ Maui.Page
         id: _filterBar
         Layout.fillWidth: true
         Layout.maximumWidth: 500
-        placeholderText: i18n("Filter %1 installed apps", _appsList.count)
-        onAccepted: _appsModel.filter = text
-        onCleared:  _appsModel.filter = ""
+        placeholderText: i18n("Filter %1 installed apps", ApplicationsRegistry.rowCount())
+        onAccepted: ApplicationsRegistry.filterRegExp = RegExp(text)
+        onCleared:  ApplicationsRegistry.filterRegExp = ""
     }
 
     headBar.rightContent: [
@@ -122,27 +123,8 @@ Maui.Page
                 text: i18n("Name")
                 checkable: true
                 autoExclusive: true
-                checked: _appsModel.sort === "label"
-                onTriggered: _appsModel.sort = "label"
-            }
-
-            MenuItem
-            {
-                text: i18n("Size")
-                checkable: true
-                autoExclusive: true
-                checked: _appsModel.sort === "size"
-                onTriggered: _appsModel.sort = "size"
-
-            }
-
-            MenuItem
-            {
-                text: i18n("Date")
-                checkable: true
-                autoExclusive: true
-                checked: _appsModel.sort === "date"
-                onTriggered: _appsModel.sort = "date"
+                checked: ApplicationsRegistry.sortRole === ApplicationRegistryRoles.Name
+                onTriggered: ApplicationsRegistry.sortRole = ApplicationRegistryRoles.Name
             }
 
             MenuItem
@@ -150,8 +132,8 @@ Maui.Page
                 text: i18n("Category")
                 checkable: true
                 autoExclusive: true
-                checked: _appsModel.sort === "category"
-                onTriggered: _appsModel.sort = "category"
+                checked: ApplicationsRegistry.sortRole === ApplicationRegistryRoles.XdgCategories
+                onTriggered: ApplicationsRegistry.sortRole = ApplicationRegistryRoles.XdgCategories
             }
         }
     ]
@@ -172,12 +154,12 @@ Maui.Page
         anchors.fill: parent
         orientation: ListView.Vertical
         spacing: Maui.Style.space.medium
-        section.property: _appsModel.sort
-        section.criteria:  _appsModel.sort === "label" ? ViewSection.FirstCharacter : ViewSection.FullString
+        section.property: ApplicationsRegistry.sortRoleName
+        section.criteria:  ApplicationsRegistry.sortRole === ApplicationRegistryRoles.Name ? ViewSection.FirstCharacter : ViewSection.FullString
         section.delegate: Maui.LabelDelegate
         {
             id: delegate
-            label: _appsModel.sort === "date" ?  Qt.formatDateTime(new Date(section), "d MMM yyyy") : ( _appsModel.sort === "size" ?  Maui.Handy.formatSize(String(section)) :  String(section).toUpperCase())
+            label:   String(section)
 
             isSection: true
 
@@ -185,7 +167,7 @@ Maui.Page
             width: parent.width
         }
 
-        model: applicationsRegistry
+        model: ApplicationsRegistry
 
         delegate: Maui.SwipeBrowserDelegate
         {
@@ -193,7 +175,7 @@ Maui.Page
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             label1.text: model.name
-            label2.text: model.xdg_categories
+            label2.text: model.description
             label3.text: model.version
             label4.text: Maui.Handy.formatSize(model.latest_bundle_size)
             imageSource: "image://thumbnailer/" + model.latest_bundle_path

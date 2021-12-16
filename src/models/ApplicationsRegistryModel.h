@@ -27,6 +27,8 @@ public:
         LatestBundleSize,
     };
 
+    Q_ENUM(ApplicationRoles)
+
     explicit ApplicationsRegistryModel(ApplicationsRegistry *registry, QObject *parent = nullptr);
 
     // Basic functionality:
@@ -49,3 +51,4 @@ private:
     QModelIndex _root;
     QHash<int, QByteArray> _roles;
 };
+

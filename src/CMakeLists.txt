@@ -21,6 +21,7 @@ set(nx_SRCS
     models/package.cpp
     models/progressmanager.cpp
     models/ApplicationsRegistryModel.cpp
+    models/ApplicationsRegistryProxyModel.cpp
     utils/appimagetools.cpp
     services/ApplicationsRegistry.cpp
     services/ApplicationData.cpp

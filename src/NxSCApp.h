@@ -7,9 +7,10 @@
 #include <QPointer>
 #include <QQmlApplicationEngine>
 #include <QThread>
-#include <models/ApplicationsRegistryModel.h>
 
 // local
+#include "models/ApplicationsRegistryModel.h"
+#include "models/ApplicationsRegistryProxyModel.h"
 #include "services/ApplicationsRegistry.h"
 #include "services/BundlesDirsWatcher.h"
 #include "services/TaskManager.h"
@@ -32,6 +33,7 @@ private:
     TaskManager _taskManager;
     ApplicationsRegistry _applicationsRegistry;
     ApplicationsRegistryModel _applicationsRegistryModel;
+    ApplicationsRegistryProxyModel _applicationsRegistryModelProxy;
     QPointer<BundlesDirsWatcher> _bundleDirsWatcher;
     QThread _bundleDirsWatcherThread;
     KAboutData _aboutData;
