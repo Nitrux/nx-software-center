@@ -12,8 +12,6 @@ Maui.Page
 {
     id: control
 
-    property alias list : _appsList
-
     Maui.Dialog
     {
         id: appLaunchErrorDialog
@@ -187,31 +185,20 @@ Maui.Page
             width: parent.width
         }
 
-        model: Maui.BaseModel
-        {
-            id: _appsModel
-            sort: "label"
-            sortOrder: Qt.AscendingOrder
-            recursiveFilteringEnabled: true
-            sortCaseSensitivity: Qt.CaseInsensitive
-            filterCaseSensitivity: Qt.CaseInsensitive
-            list: NX.Apps
-            {
-                id: _appsList
-            }
-        }
+        model: applicationsRegistry
 
         delegate: Maui.SwipeBrowserDelegate
         {
             height: 64
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
-            label1.text: model.label
-            label2.text: model.name
-            label3.text: model.updatable==="true"?"New update available":null;
-            imageSource: "image://thumbnailer/" + model.path
-            iconSizeHint: Maui.Style.iconSizes.medium
-            iconSource: "package"
+            label1.text: model.name
+            label2.text: model.xdg_categories
+            label3.text: model.version
+            label4.text: Maui.Handy.formatSize(model.latest_bundle_size)
+            imageSource: "image://thumbnailer/" + model.latest_bundle_path
+            iconSizeHint: Maui.Style.iconSizes.large
+            iconSource: "application-vnd.appimage"
 
             onClicked:
             {
