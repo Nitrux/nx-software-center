@@ -1,6 +1,6 @@
 #include "ApplicationsRegistryProxyModel.h"
 
-#include <QMetaEnum>
+#include <QDebug>
 
 ApplicationsRegistryProxyModel::ApplicationsRegistryProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
@@ -32,4 +32,17 @@ void ApplicationsRegistryProxyModel::onSortRoleChanged(int)
 
     const auto &sortRoleName = getSortRoleName();
     emit(sortRoleNameChanged(sortRoleName));
+}
+
+bool ApplicationsRegistryProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    const auto &modelIndex = sourceModel()->index(source_row, 0, source_parent);
+
+    const auto &name = sourceModel()->data(modelIndex, ApplicationsRegistryModel::Name).toString();
+    const auto &description = sourceModel()->data(modelIndex, ApplicationsRegistryModel::Description).toString();
+
+    auto regExp = filterRegExp();
+    regExp.setCaseSensitivity(Qt::CaseInsensitive);
+
+    return name.contains(regExp) || description.contains(regExp);
 }

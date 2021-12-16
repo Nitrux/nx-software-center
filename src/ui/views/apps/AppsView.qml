@@ -88,8 +88,8 @@ Maui.Page
         id: _filterBar
         Layout.fillWidth: true
         Layout.maximumWidth: 500
-        placeholderText: i18n("Filter %1 installed apps", ApplicationsRegistry.rowCount())
-        onAccepted: ApplicationsRegistry.filterRegExp = RegExp(text)
+        placeholderText: i18n("Filter installed apps")
+        onTextChanged: ApplicationsRegistry.filterRegExp = RegExp(text)
         onCleared:  ApplicationsRegistry.filterRegExp = ""
     }
 

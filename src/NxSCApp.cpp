@@ -84,7 +84,6 @@ void NxSCApp::setupQMLEngine()
     _applicationsRegistryModelProxy.setSourceModel(&_applicationsRegistryModel);
     _applicationsRegistryModelProxy.setFilterRole(ApplicationsRegistryModel::Name);
     _applicationsRegistryModelProxy.setSortRole(ApplicationsRegistryModel::XdgCategories);
-    _applicationsRegistryModelProxy.setDynamicSortFilter(true);
 
     qmlRegisterUncreatableType<ApplicationsRegistryModel>("org.maui.nxsc", 1, 0, "ApplicationRegistryRoles", "Registry can only be accessed by the singleton");
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "ApplicationsRegistry", &_applicationsRegistryModelProxy);
