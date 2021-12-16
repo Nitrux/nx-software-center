@@ -31,6 +31,7 @@ void ApplicationsRegistryModel::initRoles()
     _roles[XdgCategories] = "xdg_categories";
     _roles[Bundles] = "bundles";
     _roles[LatestBundlePath] = "latest_bundle_path";
+    _roles[LatestBundleSize] = "latest_bundle_size";
 }
 
 int ApplicationsRegistryModel::rowCount(const QModelIndex &parent) const
@@ -64,6 +65,8 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
             return app.getXdgCategories();
         case LatestBundlePath:
             return app.getBundles().first().path;
+        case LatestBundleSize:
+            return app.getBundles().first().size;
         default:
             return {};
         }

@@ -23,6 +23,7 @@ public:
     bool operator!=(const ApplicationBundle &rhs) const;
 
     QString path;
+    qint64 size;
     QDateTime lastModified;
     QByteArray hashSumMD5;
     Type bundleType;

@@ -24,6 +24,7 @@ public:
         XdgCategories,
         Bundles,
         LatestBundlePath,
+        LatestBundleSize,
     };
 
     explicit ApplicationsRegistryModel(ApplicationsRegistry *registry, QObject *parent = nullptr);
