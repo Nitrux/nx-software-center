@@ -182,25 +182,6 @@ Maui.Page
             iconSizeHint: Maui.Style.iconSizes.large
             iconSource: "application-vnd.appimage"
 
-            onClicked:
-            {
-                _appsListView.currentIndex = index;
-
-                if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
-                {
-                    _appsList.launchApp(_appsModel.mappedToSource(index));
-                }
-            }
-
-            onDoubleClicked:
-            {
-                _appsListView.currentIndex = index;
-
-                if(!Maui.Handy.singleClick)
-                {
-                    _appsList.launchApp(_appsModel.mappedToSource(index));
-                }
-            }
 
             quickActions: [
                 Action

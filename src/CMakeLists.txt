@@ -9,11 +9,11 @@ include_directories(
 
     ${CMAKE_CURRENT_SOURCE_DIR}/utils
     ${CMAKE_CURRENT_BINARY_DIR}/utils
-    )
+)
 
 set(nx_SRCS
     main.cpp
-    NxSCApp.cpp
+    NXSCApp.cpp
     models/appsmodel.cpp
     models/storemodel.cpp
     models/categoriesmodel.cpp
@@ -36,6 +36,10 @@ set(nx_SRCS
     services/CheckUpdateTask.cpp
     services/CheckUpdateBulkTask.cpp
     services/UpdateAllTask.cpp
+    services/update/UpdateService.cpp
+    services/update/UpdateCheckData.cpp
+    services/update/UpdatesWorker.cpp
+    services/TaskChangeBuilder.cpp
     services/db/AppsDBHelper.cpp
     )
 
@@ -72,11 +76,11 @@ set(nx_STORES_HDRS
     stores/ResponseDTO/application.h
     stores/ResponseDTO/applicationresponsedto.h)
 
-if(QUICK_COMPILER)
-        qtquick_compiler_add_resources(nx_QML_QRC qml.qrc)
-else()
-        qt5_add_resources(nx_QML_QRC qml.qrc)
-endif()
+if (QUICK_COMPILER)
+    qtquick_compiler_add_resources(nx_QML_QRC qml.qrc)
+else ()
+    qt5_add_resources(nx_QML_QRC qml.qrc)
+endif ()
 
 add_executable(${PROJECT_NAME}
     ${nx_SRCS}

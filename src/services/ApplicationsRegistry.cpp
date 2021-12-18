@@ -6,6 +6,8 @@
 ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs)
     : _appDirs(std::move(appDirs))
 {
+    qRegisterMetaType<ApplicationData>();
+    qRegisterMetaType<ApplicationBundle>();
 }
 void ApplicationsRegistry::addBundle(const ApplicationBundle &bundle)
 {

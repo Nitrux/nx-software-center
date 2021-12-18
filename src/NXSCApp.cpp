@@ -1,13 +1,13 @@
-#include "NxSCApp.h"
+#include "NXSCApp.h"
 #include "../nx_sc_version.h"
 
 // libraries
 #include <KLocalizedString>
+#include <MauiKit/FileBrowsing/thumbnailer.h>
 #include <QCommandLineParser>
 #include <QDate>
 #include <QIcon>
 #include <QQmlContext>
-#include <thumbnailer.h>
 
 // local
 #include "ResponseDTO/category.h"
@@ -21,12 +21,13 @@
 #include "models/storemodel.h"
 #include "nx.h"
 
-NxSCApp::NxSCApp(int &argc, char **argv)
+NXSCApp::NXSCApp(int &argc, char **argv)
     : QGuiApplication(argc, argv)
     , _qml_main(QStringLiteral("qrc:/main.qml"))
     , _taskManager(this)
     , _applicationsRegistry({NX::AppsPath.toLocalFile()})
     , _applicationsRegistryModel(&_applicationsRegistry, this)
+    , _updateService(this)
 {
     setOrganizationName(QStringLiteral("Nitrux"));
     setWindowIcon(QIcon(":/nx-software-center.svg"));
@@ -35,7 +36,12 @@ NxSCApp::NxSCApp(int &argc, char **argv)
     setKDEApplicationData();
 }
 
-void NxSCApp::setKDEApplicationData()
+NXSCApp::~NXSCApp()
+{
+    _bundleDirsWatcherThread.exit();
+    _bundleDirsWatcherThread.wait(10);
+}
+void NXSCApp::setKDEApplicationData()
 {
     KLocalizedString::setApplicationDomain("nx-software-center");
     _aboutData.setComponentName(QStringLiteral("nx-software-center"));
@@ -56,7 +62,7 @@ void NxSCApp::setKDEApplicationData()
 
     KAboutData::setApplicationData(_aboutData);
 }
-void NxSCApp::parseCommands()
+void NXSCApp::parseCommands()
 {
     QCommandLineParser parser;
     parser.process(arguments());
@@ -64,9 +70,9 @@ void NxSCApp::parseCommands()
     _aboutData.setupCommandLine(&parser);
     _aboutData.processCommandLine(&parser);
 }
-void NxSCApp::setupQMLEngine()
+void NXSCApp::setupQMLEngine()
 {
-    QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this, &NxSCApp::onQMLEngineObjectCreated, Qt::QueuedConnection);
+    QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this, &NXSCApp::onQMLEngineObjectCreated, Qt::QueuedConnection);
 
     qmlRegisterType<App>("NXModels", 1, 0, "App");
     qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
@@ -81,25 +87,34 @@ void NxSCApp::setupQMLEngine()
     rootContext->setContextProperty("taskManagerCtx", &_taskManager);
     qmlRegisterUncreatableType<Task>("NXModels", 1, 0, "Task", "Tasks can only be created from the Task Manager");
 
+    registerApplicationsRegistryService();
+    registerUpdateService();
+
+    registerThumbnailer();
+
+    _engine.load(_qml_main);
+}
+void NXSCApp::registerThumbnailer()
+{
+    auto thumbnailer = new Thumbnailer();
+    _engine.addImageProvider("thumbnailer", thumbnailer);
+}
+void NXSCApp::registerApplicationsRegistryService()
+{
     _applicationsRegistryModelProxy.setSourceModel(&_applicationsRegistryModel);
     _applicationsRegistryModelProxy.setFilterRole(ApplicationsRegistryModel::Name);
     _applicationsRegistryModelProxy.setSortRole(ApplicationsRegistryModel::XdgCategories);
 
     qmlRegisterUncreatableType<ApplicationsRegistryModel>("org.maui.nxsc", 1, 0, "ApplicationRegistryRoles", "Registry can only be accessed by the singleton");
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "ApplicationsRegistry", &_applicationsRegistryModelProxy);
-
-    auto thumbnailer = new Thumbnailer();
-    _engine.addImageProvider("thumbnailer", thumbnailer);
-
-    _engine.load(_qml_main);
 }
-void NxSCApp::onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl)
+void NXSCApp::onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl)
 {
     // terminate application in case of errors
     if (!obj && _qml_main == objUrl)
         QCoreApplication::exit(-1);
 }
-void NxSCApp::setupApplicationsRegistry()
+void NXSCApp::setupApplicationsRegistry()
 {
     qRegisterMetaType<ApplicationData>("ApplicationData");
     qRegisterMetaType<ApplicationBundle>("ApplicationBundle");
@@ -114,8 +129,8 @@ void NxSCApp::setupApplicationsRegistry()
     _bundleDirsWatcherThread.start();
     QMetaObject::invokeMethod(_bundleDirsWatcher.data(), &BundlesDirsWatcher::checkAllDirs, Qt::QueuedConnection);
 }
-NxSCApp::~NxSCApp()
+
+void NXSCApp::registerUpdateService()
 {
-    _bundleDirsWatcherThread.exit();
-    _bundleDirsWatcherThread.wait(10);
+    qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "UpdateService", &_updateService);
 }

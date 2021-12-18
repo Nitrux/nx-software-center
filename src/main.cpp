@@ -3,7 +3,7 @@
 
 #include <QQmlContext>
 
-#include "NxSCApp.h"
+#include "NXSCApp.h"
 #include "ResponseDTO/application.h"
 #include "ResponseDTO/category.h"
 #include "models/progressmanager.h"
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-    QScopedPointer<NxSCApp> app(new NxSCApp(argc, argv));
+    QScopedPointer<NXSCApp> app(new NXSCApp(argc, argv));
     app->parseCommands();
     app->setupQMLEngine();
     app->setupApplicationsRegistry();

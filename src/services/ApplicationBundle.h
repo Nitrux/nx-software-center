@@ -30,3 +30,5 @@ public:
 
     QSharedPointer<ApplicationData> app;
 };
+
+Q_DECLARE_METATYPE(ApplicationBundle)
