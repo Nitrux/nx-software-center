@@ -201,7 +201,7 @@ Maui.Page
                 {
                     isCurrentItem: ListView.isCurrentItem
                     width: Math.max(160, _template.implicitWidth)
-                    height: parent.height
+                    height: ListView.view.height
 
                     background: Rectangle
                     {
