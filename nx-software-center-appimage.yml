@@ -58,6 +58,7 @@ AppDir:
     - libkf5notifications5
     - libkf5kiofilewidgets5
     - libkf5kiocore5
+    - kio
 
     # Other
     - libappimage1.0
