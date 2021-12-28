@@ -115,7 +115,7 @@ Maui.Page
                 delegate: Maui.ListBrowserDelegate
                 {
                     id: _categoryDelegate
-                    width: template.implicitWidth + iconSizeHint
+                    width: Math.min(ListView.view.width * 0.1, 200)
                     height: ListView.view.height
                     property color tagColor : model.color
                     iconVisible: true
@@ -126,7 +126,7 @@ Maui.Page
                     label1.font.bold: true
                     label1.font.weight: Font.Bold
                     label1.font.pointSize: Maui.Style.fontSizes.big
-                    template.leftMargin:_tagColor.width
+                    template.leftPadding:_tagColor.width
                     onDoubleClicked:
                     {
                         _categoriesListView.currentIndex = index
