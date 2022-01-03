@@ -17,11 +17,12 @@ add_executable(
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
     ../src/services/ApplicationsRegistry.cpp
+    ../src/services/db/AppsDBHelper.cpp
 
     TestApplicationsRegistry.cpp
 )
 target_include_directories(test_applications_registry PRIVATE ../src/services/)
-target_link_libraries(test_applications_registry PRIVATE Qt5::Widgets Qt5::Test)
+target_link_libraries(test_applications_registry PRIVATE MauiKit MauiKit::FileBrowsing Qt5::Sql Qt5::Widgets Qt5::Test)
 
 add_test(NAME testApplicationsRegistry COMMAND test_applications_registry)
 
