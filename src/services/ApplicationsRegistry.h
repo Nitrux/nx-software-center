@@ -9,6 +9,7 @@
 // local
 #include "ApplicationBundle.h"
 #include "ApplicationData.h"
+#include "db/AppsDBHelper.h"
 
 /**
  * Stores data of the applications available to the user
@@ -44,4 +45,8 @@ public:
 private:
     // directories to look for AppImages
     QStringList _appDirs;
+
+    AppsDBHelper *_appsDBHelper;
+
+    void initApplicationsList();
 };
