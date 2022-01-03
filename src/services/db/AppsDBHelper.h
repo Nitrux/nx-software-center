@@ -16,8 +16,8 @@
 #include <QtSql/QSqlError>
 
 // local
-#include "utils/nx.h"
-#include "services/ApplicationData.h"
+#include "../../utils/nx.h"
+#include "../services/ApplicationData.h"
 
 class AppsDBHelper {
     public:
@@ -27,8 +27,8 @@ class AppsDBHelper {
         QList<ApplicationData> getApps();
         ApplicationData *getAppById(QString id);
         ApplicationData *getAppByName(QString name);
-        bool saveOrUpdateApp(ApplicationData app);
-        bool deleteApp(ApplicationData app);
+        bool saveOrUpdateApp(ApplicationData *app);
+        bool deleteApp(ApplicationData *app);
 
     private:
         AppsDBHelper();
