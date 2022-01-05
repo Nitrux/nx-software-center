@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 MAUIKIT_VERSION=$([ -z $BRANCH_MAUIKIT ] && echo "master" || echo $BRANCH_MAUIKIT)
 

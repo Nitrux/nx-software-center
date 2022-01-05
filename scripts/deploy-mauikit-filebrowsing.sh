@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 MAUIKIT_FILEBROWSING_VERSION=$([ -z $BRANCH_MAUIKIT_FILEBROWSING ] && echo "master" || echo $BRANCH_MAUIKIT_FILEBROWSING)
 
