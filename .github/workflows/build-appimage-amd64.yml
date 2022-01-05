@@ -37,9 +37,6 @@ jobs:
       - name: Install AppImage Builder
         run: sudo pip3 install appimage-builder
 
-      - name: Print env
-        run: env
-
       - uses: actions/checkout@v2
       - name: Build AppImage
         run: sudo appimage-builder --skip-tests --recipe nx-software-center-appimage.yml

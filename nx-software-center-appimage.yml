@@ -4,6 +4,8 @@ version: 1
 script:
   - rm -rf ./AppDir || true
   - export DESTDIR=$PWD/AppDir
+  - export BRANCH_MAUIKIT=$BRANCH_MAUIKIT
+  - export BRANCH_MAUIKIT_FILEBROWSING=$BRANCH_MAUIKIT_FILEBROWSING
   - scripts/install-build-deps.sh
   - mkdir -p build
   - cd build
@@ -26,8 +28,6 @@ AppDir:
       PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
       APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib/x86_64-linux-gnu"
       QT_QUICK_CONTROLS_STYLE: "maui-style"
-      BRANCH_MAUIKIT: "${BRANCH_MAUIKIT}"
-      BRANCH_MAUIKIT_FILEBROWSING: "${BRANCH_MAUIKIT_FILEBROWSING}"
   after_bundle:
     - cd $APPDIR/bin/ && ln -sf bash sh
   apt:
