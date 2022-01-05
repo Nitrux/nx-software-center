@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+env
+
 MAUIKIT_VERSION=$([ -z $BRANCH_MAUIKIT ] && echo "master" || echo $BRANCH_MAUIKIT)
 
 echo "Cloning Mauikit from branch $MAUIKIT_VERSION"
