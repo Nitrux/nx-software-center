@@ -9,6 +9,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      BRANCH_MAUIKIT: v2.1
+      BRANCH_MAUIKIT_FILEBROWSING: v2.1
+
     steps:
       - name: Install basic packages
         run: sudo apt-get -qy install curl wget
