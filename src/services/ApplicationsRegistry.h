@@ -18,7 +18,7 @@ class ApplicationsRegistry : public QObject
     Q_OBJECT
 
 public:
-    explicit ApplicationsRegistry(QStringList appDirs);
+    explicit ApplicationsRegistry(QStringList appDirs, QMap<QString, ApplicationData> applications);
 
     const QStringList &getAppDirs();
     bool applicationExist(const QString &appId) const;

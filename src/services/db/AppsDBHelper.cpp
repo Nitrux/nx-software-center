@@ -99,6 +99,19 @@ QList<ApplicationData> AppsDBHelper::getApps() {
     return apps;
 }
 
+QMap<QString, ApplicationData> AppsDBHelper::getAppsMap()
+{
+    QList<ApplicationData> _apps = this->getApps();
+    QMap<QString, ApplicationData> _applications;
+
+    foreach (ApplicationData app, _apps) {
+        QString appId = app.getId();
+        _applications.insert(appId, app);
+	}
+
+    return _applications;
+} 
+
 ApplicationData *AppsDBHelper::getAppById(QString appId) {
     ApplicationData *app;
 
@@ -178,15 +191,15 @@ ApplicationData *AppsDBHelper::getAppByName(QString appName) {
     return nullptr;
 }
 
-bool AppsDBHelper::saveOrUpdateApp(ApplicationData app) {
+bool AppsDBHelper::saveOrUpdateApp(ApplicationData *app) {
     bool success = false;
 
-    QJsonArray snapshotsJsonArray = QJsonArray::fromStringList(this->toStringList(app.getSnapshots()));
+    QJsonArray snapshotsJsonArray = QJsonArray::fromStringList(this->toStringList(app->getSnapshots()));
     QJsonDocument snapshotsDoc;
     snapshotsDoc.setArray(snapshotsJsonArray);
     QString snapshots(snapshotsDoc.toJson(QJsonDocument::Compact));
 
-    QJsonArray categoriesJsonArray = QJsonArray::fromStringList(app.getXdgCategories());
+    QJsonArray categoriesJsonArray = QJsonArray::fromStringList(app->getXdgCategories());
     QJsonDocument categoriesDoc;
     categoriesDoc.setArray(categoriesJsonArray);
     QString categories(categoriesDoc.toJson(QJsonDocument::Compact));
@@ -194,24 +207,24 @@ bool AppsDBHelper::saveOrUpdateApp(ApplicationData app) {
     // Check if app already exists.
     QSqlQuery query(this->_appsDB);
 
-    if ( this->getAppById(app.getId()) == nullptr ) {
+    if ( this->getAppById(app->getId()) == nullptr ) {
         query.prepare(QUERY_INSERT_APPLICATION_DATA);
-        query.bindValue(":id",          app.getId());
-        query.bindValue(":version",     app.getVersion());
-        query.bindValue(":name",        app.getName());
-        query.bindValue(":icon",        app.getIcon());
-        query.bindValue(":description", app.getDescription());
+        query.bindValue(":id",          app->getId());
+        query.bindValue(":version",     app->getVersion());
+        query.bindValue(":name",        app->getName());
+        query.bindValue(":icon",        app->getIcon());
+        query.bindValue(":description", app->getDescription());
         query.bindValue(":snapshots",   snapshots);
         query.bindValue(":categories",  categories);
     } else {
         query.prepare(QUERY_UPDATE_APPLICATION_DATA);
-        query.bindValue(":version",     app.getVersion());
-        query.bindValue(":name",        app.getName());
-        query.bindValue(":icon",        app.getIcon());
-        query.bindValue(":description", app.getDescription());
+        query.bindValue(":version",     app->getVersion());
+        query.bindValue(":name",        app->getName());
+        query.bindValue(":icon",        app->getIcon());
+        query.bindValue(":description", app->getDescription());
         query.bindValue(":snapshots",   snapshots);
         query.bindValue(":categories",  categories);
-        query.bindValue(":id",          app.getId());
+        query.bindValue(":id",          app->getId());
     }
 
     if ( query.exec() ) {
@@ -223,12 +236,12 @@ bool AppsDBHelper::saveOrUpdateApp(ApplicationData app) {
     return success;
 }
 
-bool AppsDBHelper::deleteApp(ApplicationData app) {
+bool AppsDBHelper::deleteApp(ApplicationData *app) {
     bool success = false;
 
     QSqlQuery query(this->_appsDB);
     query.prepare(QUERY_DELETE_APPLICATION_DATA);
-    query.bindValue(":appId", app.getId());
+    query.bindValue(":appId", app->getId());
 
     if ( query.exec() ) {
         success = true;

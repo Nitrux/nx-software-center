@@ -3,8 +3,9 @@
 
 #include "ApplicationsRegistry.h"
 
-ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs)
-    : _appDirs(std::move(appDirs))
+ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs, QMap<QString, ApplicationData> applications)
+    : _applications(applications)
+    , _appDirs(std::move(appDirs))
 {
     qRegisterMetaType<ApplicationData>();
     qRegisterMetaType<ApplicationBundle>();
@@ -63,6 +64,7 @@ void ApplicationsRegistry::removeBundle(const ApplicationBundle &bundle)
 
         if (app.getBundles().length() == 0) {
             auto deletedApp = _applications.take(appId);
+
             emit(applicationRemoved(deletedApp));
         } else {
             emit(applicationUpdated(app));
