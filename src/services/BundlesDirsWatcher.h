@@ -16,7 +16,7 @@ class BundlesDirsWatcher : public QObject
 {
     Q_OBJECT
 public:
-    explicit BundlesDirsWatcher(const QStringList &paths, QObject *parent = nullptr);
+    explicit BundlesDirsWatcher(const QStringList &paths, QMap<QString, QDateTime> fileCache = {}, QObject *parent = nullptr);
 
     Q_SIGNAL void bundleAdded(ApplicationBundle bundle);
     Q_SIGNAL void bundleUpdated(ApplicationBundle bundle);

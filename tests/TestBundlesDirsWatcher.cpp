@@ -12,7 +12,12 @@ void TestBundlesDirsWatcher::initTestCase()
     dirToWatch.mkpath(FAKE_APPLICATIONS_DIR);
     dirToWatch.setPath(FAKE_APPLICATIONS_DIR);
 
-    watcher = new BundlesDirsWatcher({dirToWatch.path()});
+    QString existentAppimagePath = FAKE_APPLICATIONS_DIR "/existent.AppImage";
+    copyAppImage(existentAppimagePath);
+    QFileInfo existentAppImageInfo(existentAppimagePath);
+    QMap<QString, QDateTime> fileCache = {{existentAppimagePath, existentAppImageInfo.lastModified()}};
+
+    watcher = new BundlesDirsWatcher({dirToWatch.path()}, fileCache);
     qRegisterMetaType<ApplicationBundle>("ApplicationBundle");
     watcher->moveToThread(&_workerThread);
     _workerThread.start();
@@ -27,6 +32,15 @@ void TestBundlesDirsWatcher::copyAppImage(const QString &path)
 {
     QFile appimage(SAMPLE_APPIMAGE_PATH);
     appimage.copy(path);
+}
+
+void TestBundlesDirsWatcher::testWatchBundleCacheInitialization()
+{
+    QSignalSpy spyAppImageAdded(watcher, SIGNAL(bundleAdded(ApplicationBundle)));
+    watcher->checkAllDirs();
+    QTest::qWait(100);
+
+    QCOMPARE(spyAppImageAdded.count(), 0);
 }
 
 void TestBundlesDirsWatcher::testWatchBundleAdded()

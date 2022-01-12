@@ -5,13 +5,12 @@
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
-
 #include <QThread>
-#include <appimage/core/AppImage.h>
 
-BundlesDirsWatcher::BundlesDirsWatcher(const QStringList &paths, QObject *parent)
+BundlesDirsWatcher::BundlesDirsWatcher(const QStringList &paths, QMap<QString, QDateTime> fileCache, QObject *parent)
     : QObject(parent)
     , _watcher()
+    , _fileCache(std::move(fileCache))
 {
     connect(&_watcher, &QFileSystemWatcher::directoryChanged, this, &BundlesDirsWatcher::checkDirChanges);
 
