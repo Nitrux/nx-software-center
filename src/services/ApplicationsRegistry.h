@@ -9,7 +9,6 @@
 // local
 #include "ApplicationBundle.h"
 #include "ApplicationData.h"
-#include "db/AppsDBHelper.h"
 
 /**
  * Stores data of the applications available to the user
@@ -19,7 +18,7 @@ class ApplicationsRegistry : public QObject
     Q_OBJECT
 
 public:
-    explicit ApplicationsRegistry(QStringList appDirs);
+    explicit ApplicationsRegistry(QStringList appDirs, QMap<QString, ApplicationData> applications);
 
     const QStringList &getAppDirs();
     bool applicationExist(const QString &appId) const;
@@ -45,8 +44,4 @@ public:
 private:
     // directories to look for AppImages
     QStringList _appDirs;
-
-    AppsDBHelper *_appsDBHelper;
-
-    void initApplicationsList();
 };

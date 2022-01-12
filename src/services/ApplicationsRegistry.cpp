@@ -3,14 +3,12 @@
 
 #include "ApplicationsRegistry.h"
 
-ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs)
-    : _appDirs(std::move(appDirs))
-    , _appsDBHelper(_appsDBHelper->getInstance())
+ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs, QMap<QString, ApplicationData> applications)
+    : _applications(applications)
+    , _appDirs(std::move(appDirs))
 {
     qRegisterMetaType<ApplicationData>();
     qRegisterMetaType<ApplicationBundle>();
-
-    initApplicationsList();
 }
 void ApplicationsRegistry::addBundle(const ApplicationBundle &bundle)
 {
@@ -19,17 +17,11 @@ void ApplicationsRegistry::addBundle(const ApplicationBundle &bundle)
         auto &app = _applications[appId];
         app.addBundle(bundle);
 
-        // Update app to db cache
-        _appsDBHelper->saveOrUpdateApp(&app);
-
         emit(applicationUpdated(app));
     } else {
         ApplicationData data;
         data.addBundle(bundle);
         _applications.insert(appId, data);
-
-        // Insert app to db cache
-        _appsDBHelper->saveOrUpdateApp(&data);
 
         emit(applicationAdded(data));
     }
@@ -73,14 +65,8 @@ void ApplicationsRegistry::removeBundle(const ApplicationBundle &bundle)
         if (app.getBundles().length() == 0) {
             auto deletedApp = _applications.take(appId);
 
-            // Delete app from db cache
-            _appsDBHelper->deleteApp(&deletedApp);
-
             emit(applicationRemoved(deletedApp));
         } else {
-            // Update app to db cache
-            _appsDBHelper->saveOrUpdateApp(&app);
-
             emit(applicationUpdated(app));
         }
     } else {
@@ -104,14 +90,4 @@ QList<ApplicationData> ApplicationsRegistry::getApplications() const
 int ApplicationsRegistry::getApplicationsCount() const
 {
     return _applications.size();
-}
-
-void ApplicationsRegistry::initApplicationsList()
-{
-    QList<ApplicationData> _apps = _appsDBHelper->getApps();
-
-    foreach (ApplicationData app, _apps) {
-        QString appId = app.getId();
-        _applications.insert(appId, app);
-	}
 }
