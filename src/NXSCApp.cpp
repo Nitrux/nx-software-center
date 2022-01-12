@@ -137,14 +137,9 @@ void NXSCApp::registerUpdateService()
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "UpdateService", &_updateService);
 }
 
-void NXSCApp::setupApplicationDBUpdateCache() {
-    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationAdded, _appsDBHelper, [=](ApplicationData app) {
-        _appsDBHelper->saveOrUpdateApp(&app);
-    });
-    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, _appsDBHelper, [=](ApplicationData app) {
-        _appsDBHelper->saveOrUpdateApp(&app);
-    });
-    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationRemoved, _appsDBHelper, [=](ApplicationData app) {
-        _appsDBHelper->deleteApp(&app);
-    });
+void NXSCApp::setupApplicationDBUpdateCache()
+{
+    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationAdded, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
+    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
+    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationRemoved, _appsDBHelper, &AppsDBHelper::deleteApp);
 }

@@ -30,8 +30,8 @@ class AppsDBHelper : public QObject {
         QMap<QString, ApplicationData> getAppsMap();
         ApplicationData *getAppById(QString id);
         ApplicationData *getAppByName(QString name);
-        Q_SLOT bool saveOrUpdateApp(ApplicationData *app);
-        Q_SLOT bool deleteApp(ApplicationData *app);
+        Q_SLOT bool saveOrUpdateApp(const ApplicationData &app);
+        Q_SLOT bool deleteApp(const ApplicationData &app);
 
     private:
         AppsDBHelper();
