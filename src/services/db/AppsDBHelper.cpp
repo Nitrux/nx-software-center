@@ -99,6 +99,19 @@ QList<ApplicationData> AppsDBHelper::getApps() {
     return apps;
 }
 
+QMap<QString, ApplicationData> AppsDBHelper::getAppsMap()
+{
+    QList<ApplicationData> _apps = this->getApps();
+    QMap<QString, ApplicationData> _applications;
+
+    foreach (ApplicationData app, _apps) {
+        QString appId = app.getId();
+        _applications.insert(appId, app);
+	}
+
+    return _applications;
+} 
+
 ApplicationData *AppsDBHelper::getAppById(QString appId) {
     ApplicationData *app;
 

@@ -19,16 +19,19 @@
 #include "../../utils/nx.h"
 #include "../services/ApplicationData.h"
 
-class AppsDBHelper {
+class AppsDBHelper : public QObject {
+    Q_OBJECT
+
     public:
         static AppsDBHelper *getInstance();
         ~AppsDBHelper();
 
         QList<ApplicationData> getApps();
+        QMap<QString, ApplicationData> getAppsMap();
         ApplicationData *getAppById(QString id);
         ApplicationData *getAppByName(QString name);
-        bool saveOrUpdateApp(ApplicationData *app);
-        bool deleteApp(ApplicationData *app);
+        Q_SLOT bool saveOrUpdateApp(ApplicationData *app);
+        Q_SLOT bool deleteApp(ApplicationData *app);
 
     private:
         AppsDBHelper();
