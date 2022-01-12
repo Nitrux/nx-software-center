@@ -21,11 +21,11 @@ public:
     explicit ApplicationsRegistry(QStringList appDirs, QMap<QString, ApplicationData> applications);
 
     const QStringList &getAppDirs();
-    bool applicationExist(const QString &appId) const;
-    ApplicationData getApplication(const QString &appId) const;
+    [[nodiscard]] bool applicationExist(const QString &appId) const;
+    [[nodiscard]] ApplicationData getApplication(const QString &appId) const;
 
-    QList<ApplicationData> getApplications() const;
-    int getApplicationsCount() const;
+    [[nodiscard]] QList<ApplicationData> getApplications() const;
+    [[nodiscard]] int getApplicationsCount() const;
 
     // Add an AppImage file to the registry and updates or create the related Application data
     Q_SLOT void addBundle(const ApplicationBundle &bundle);
