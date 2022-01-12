@@ -50,6 +50,7 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
 
     if (index.row() >= 0 && index.row() < _applications.length()) {
         const auto &app = _applications.at(index.row());
+        const auto &appBundles = app.getBundles();
         switch (role) {
         case Id:
             return app.getId();
@@ -64,9 +65,15 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
         case XdgCategories:
             return app.getXdgCategories();
         case LatestBundlePath:
-            return app.getBundles().first().path;
+            if (!appBundles.empty())
+                return app.getBundles().first().path;
+            else
+                return {};
         case LatestBundleSize:
-            return app.getBundles().first().size;
+            if (!appBundles.empty())
+                return appBundles.first().size;
+            else
+                return {};
         default:
             return {};
         }
