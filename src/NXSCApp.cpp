@@ -25,7 +25,8 @@ NXSCApp::NXSCApp(int &argc, char **argv)
     : QGuiApplication(argc, argv)
     , _qml_main(QStringLiteral("qrc:/main.qml"))
     , _taskManager(this)
-    , _applicationsRegistry({NX::AppsPath.toLocalFile()})
+    , _appsDBHelper(_appsDBHelper->getInstance())
+    , _applicationsRegistry({NX::AppsPath.toLocalFile()}, _appsDBHelper->getAppsMap())
     , _applicationsRegistryModel(&_applicationsRegistry, this)
     , _updateService(this)
 {
@@ -89,6 +90,7 @@ void NXSCApp::setupQMLEngine()
 
     registerApplicationsRegistryService();
     registerUpdateService();
+    setupApplicationDBUpdateCache();
 
     registerThumbnailer();
 
@@ -133,4 +135,16 @@ void NXSCApp::setupApplicationsRegistry()
 void NXSCApp::registerUpdateService()
 {
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "UpdateService", &_updateService);
+}
+
+void NXSCApp::setupApplicationDBUpdateCache() {
+    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationAdded, _appsDBHelper, [=](ApplicationData app) {
+        _appsDBHelper->saveOrUpdateApp(&app);
+    });
+    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, _appsDBHelper, [=](ApplicationData app) {
+        _appsDBHelper->saveOrUpdateApp(&app);
+    });
+    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationRemoved, _appsDBHelper, [=](ApplicationData app) {
+        _appsDBHelper->deleteApp(&app);
+    });
 }

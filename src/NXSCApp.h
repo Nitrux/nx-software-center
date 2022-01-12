@@ -15,6 +15,7 @@
 #include "services/BundlesDirsWatcher.h"
 #include "services/TaskManager.h"
 #include "services/update/UpdateService.h"
+#include "services/db/AppsDBHelper.h"
 
 class NXSCApp : public QGuiApplication
 {
@@ -32,6 +33,7 @@ private:
 
     QUrl _qml_main;
     TaskManager _taskManager;
+    AppsDBHelper *_appsDBHelper;
     ApplicationsRegistry _applicationsRegistry;
     ApplicationsRegistryModel _applicationsRegistryModel;
     ApplicationsRegistryProxyModel _applicationsRegistryModelProxy;
@@ -44,4 +46,5 @@ private:
     void registerApplicationsRegistryService();
     void registerUpdateService();
     void registerThumbnailer();
+    void setupApplicationDBUpdateCache();
 };
