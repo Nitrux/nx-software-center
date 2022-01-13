@@ -23,7 +23,7 @@ class AppsDBHelper : public QObject {
     Q_OBJECT
 
     public:
-        static AppsDBHelper *getInstance();
+        AppsDBHelper();
         ~AppsDBHelper();
 
         QList<ApplicationData> getApps();
@@ -34,7 +34,6 @@ class AppsDBHelper : public QObject {
         Q_SLOT bool deleteApp(const ApplicationData &app);
 
     private:
-        AppsDBHelper();
         
         void initDB();
         void prepareAppsDB();

@@ -1,17 +1,7 @@
 #include "AppsDBHelper.h"
 
-AppsDBHelper *AppsDBHelper::appsDBHelper = 0;
-
 AppsDBHelper::AppsDBHelper() {
     initDB();
-}
-
-AppsDBHelper *AppsDBHelper::getInstance() {
-    if (!appsDBHelper) {
-        appsDBHelper = new AppsDBHelper();
-    }
-
-    return appsDBHelper;
 }
 
 void AppsDBHelper::initDB() {
