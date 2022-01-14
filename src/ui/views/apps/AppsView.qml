@@ -83,11 +83,12 @@ Maui.Page
     }
 
     headBar.forceCenterMiddleContent: isWide
-    headBar.middleContent: Maui.TextField
+    headBar.middleContent: Maui.SearchField
     {
         id: _filterBar
         Layout.fillWidth: true
         Layout.maximumWidth: 500
+        Layout.alignment: Qt.AlignCenter
         placeholderText: i18n("Filter installed apps")
         onTextChanged: ApplicationsRegistry.filterRegExp = RegExp(text)
         onCleared:  ApplicationsRegistry.filterRegExp = ""

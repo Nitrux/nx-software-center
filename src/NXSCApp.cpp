@@ -22,7 +22,7 @@
 #include "nx.h"
 
 NXSCApp::NXSCApp(int &argc, char **argv)
-    : QGuiApplication(argc, argv)
+    : QApplication(argc, argv)
     , _qml_main(QStringLiteral("qrc:/main.qml"))
     , _taskManager(this)
     , _appsDBHelper(_appsDBHelper->getInstance())
