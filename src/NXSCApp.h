@@ -4,6 +4,7 @@
 // libraries
 #include <KAboutData>
 #include <QGuiApplication>
+#include <QApplication>
 #include <QPointer>
 #include <QQmlApplicationEngine>
 #include <QThread>
@@ -17,7 +18,7 @@
 #include "services/update/UpdateService.h"
 #include "services/db/AppsDBHelper.h"
 
-class NXSCApp : public QGuiApplication
+class NXSCApp : public QApplication
 {
     Q_OBJECT
 public:

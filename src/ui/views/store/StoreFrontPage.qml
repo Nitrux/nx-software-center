@@ -3,7 +3,7 @@ import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 
 import NXModels 1.0 as NX
 
@@ -22,10 +22,11 @@ Maui.Page
 
     headBar.visible: true
     headBar.forceCenterMiddleContent: isWide
-    headBar.middleContent: Maui.TextField
+    headBar.middleContent: Maui.SearchField
     {
         Layout.fillWidth: true
         Layout.maximumWidth: 500
+        Layout.alignment: Qt.AlignCenter
         placeholderText: i18n ("Search your app package...")
         onAccepted: control.searchFor(text)
     }
@@ -115,13 +116,15 @@ Maui.Page
                 delegate: Maui.ListBrowserDelegate
                 {
                     id: _categoryDelegate
-                    width: template.implicitWidth + iconSizeHint
+                    width: 200
                     height: ListView.view.height
                     property color tagColor : model.color
+                    template.isMask: true
                     iconVisible: true
                     iconSource: model.icon
                     iconSizeHint: Maui.Style.iconSizes.medium
                     template.headerSizeHint: iconSizeHint * 2
+                    label1.horizontalAlignment: Qt.AlignHCenter
                     label1.text: model.title
                     label1.font.bold: true
                     label1.font.weight: Font.Bold
