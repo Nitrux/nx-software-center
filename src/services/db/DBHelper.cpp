@@ -16,14 +16,12 @@ void DBHelper::initDB() {
         QDir appDataLocation_dir(appDataLocation);
         if (!appDataLocation_dir.exists())
             appDataLocation_dir.mkpath(".");
-
-        openDB(QUuid::createUuid().toString(), appDBPath);
-        prepareAppsDB();
     } else {
         qDebug() << "Apps DB already available. Establishing connection.";
-
-        openDB(QUuid::createUuid().toString(), appDBPath);
     }
+
+    openDB(QUuid::createUuid().toString(), appDBPath);
+    prepareAppsDB();
 }
 
 void DBHelper::openDB(const QString &name, const QString &appDBPath)
@@ -47,16 +45,28 @@ void DBHelper::prepareAppsDB() {
 
     QSqlQuery createTableQuery(this->_appsDB);
     
-    if ( !createTableQuery.exec(QUERY_CREATE_APPLICATION_DATA) ) {
-        qCritical("%s", createTableQuery.lastError().text().toLocal8Bit().data());
+    // Check if table APPLICATION_DATA already exists
+    if ( !this->_appsDB.tables().contains(TABLE_NAME_APPLICATION_DATA) ) {
+        qDebug() << "Table APPLICATION_DATA does not exists. Creating table...";
 
-        return ;
+        // Create table APPLICATION_DATA
+        if ( !createTableQuery.exec(QUERY_CREATE_APPLICATION_DATA) ) {
+            qCritical("%s", createTableQuery.lastError().text().toLocal8Bit().data());
+
+            return ;
+        }
     }
 
-    if ( !createTableQuery.exec(QUERY_CREATE_APPLICATION_BUNDLE) ) {
-        qCritical("%s", createTableQuery.lastError().text().toLocal8Bit().data());
+    // Check if table APPLICATION_BUNDLE already exists
+    if ( !this->_appsDB.tables().contains(TABLE_NAME_APPLICATION_BUNDLE) ) {
+        qDebug() << "Table APPLICATION_BUNDLE does not exists. Creating table...";
 
-        return ;
+        // Create table APPLICATION_BUNDLE
+        if ( !createTableQuery.exec(QUERY_CREATE_APPLICATION_BUNDLE) ) {
+            qCritical("%s", createTableQuery.lastError().text().toLocal8Bit().data());
+
+            return ;
+        }
     }
 }
 
