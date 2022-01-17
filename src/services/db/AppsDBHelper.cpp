@@ -34,7 +34,7 @@ void AppsDBHelper::openDB(const QString &name, const QString &appDBPath)
 
     if (!this->_appsDB.isOpen()) {
         if (!this->_appsDB.open()) {
-            qDebug() << "ERROR OPENING DB" << this->_appsDB.lastError().text() << _appsDB.connectionName();
+            qCritical() << "ERROR OPENING DB" << this->_appsDB.lastError().text() << _appsDB.connectionName();
         } else {
             qDebug() << "DB connection established.";
         }
@@ -45,10 +45,15 @@ void AppsDBHelper::prepareAppsDB() {
     qDebug() << "Preparing DB";
 
     QSqlQuery createTableQuery(this->_appsDB);
-    createTableQuery.prepare(QUERY_CREATE_APPLICATION_DATA);
     
-    if ( !createTableQuery.exec() ) {
-        qWarning("%s", createTableQuery.lastError().text().toLocal8Bit().data());
+    if ( !createTableQuery.exec(QUERY_CREATE_APPLICATION_DATA) ) {
+        qCritical("%s", createTableQuery.lastError().text().toLocal8Bit().data());
+
+        return ;
+    }
+
+    if ( !createTableQuery.exec(QUERY_CREATE_APPLICATION_BUNDLE) ) {
+        qCritical("%s", createTableQuery.lastError().text().toLocal8Bit().data());
 
         return ;
     }
@@ -83,6 +88,8 @@ QList<ApplicationData> AppsDBHelper::getApps() {
         app.setSnapshots(this->snapshotsFromJsonArray(snapshotsJson));
         app.setXdgCategories(this->categoriesFromJsonArray(categoriesJson));
         
+        app.setBundles(this->getBundlesByApp(app.getId()));
+
         apps << app;
     }
 
@@ -134,6 +141,8 @@ ApplicationData *AppsDBHelper::getAppById(QString appId) {
             app->setSnapshots(this->snapshotsFromJsonArray(snapshotsJson));
             app->setXdgCategories(this->categoriesFromJsonArray(categoriesJson));
 
+            app->setBundles(this->getBundlesByApp(app->getId()));
+
             return app;
         }
     }
@@ -174,11 +183,51 @@ ApplicationData *AppsDBHelper::getAppByName(QString appName) {
             app->setSnapshots(this->snapshotsFromJsonArray(snapshotsJson));
             app->setXdgCategories(this->categoriesFromJsonArray(categoriesJson));
 
+            app->setBundles(this->getBundlesByApp(app->getId()));
+
             return app;
         }
     }
 
     return nullptr;
+}
+
+QList<ApplicationBundle> AppsDBHelper::getBundlesByApp(QString id)
+{
+    QList<ApplicationBundle> bundles;
+
+    QSqlQuery query(this->_appsDB);
+    query.prepare(QUERY_SELECT_APPLICATION_BUNDLES_BY_ID);
+    query.bindValue(":application_id", id);
+
+    if ( query.exec() ) {
+        int bundlePath = query.record().indexOf("PATH");
+        int bundleSize = query.record().indexOf("SIZE");
+        int bundleLastModified = query.record().indexOf("LAST_MODOFIED");
+        int bundleHashSumMd5 = query.record().indexOf("HASH_SUM_MD5");
+        int bundleType = query.record().indexOf("BUNDLE_TYPE");
+        
+        while (query.next()) {
+            ApplicationBundle bundle;
+            bundle.path             = query.value(bundlePath).toString();
+            bundle.size             = query.value(bundleSize).toInt();
+            bundle.lastModified     = QDateTime::fromString(query.value(bundleLastModified).toString(), AppsDBHelper::DATE_FORMAT);
+            bundle.hashSumMD5       = query.value(bundleHashSumMd5).toByteArray();
+            
+            int _bundleType = query.value(bundleType).toInt();
+            if ( _bundleType == ApplicationBundle::AppImage ) {
+                bundle.bundleType   = ApplicationBundle::AppImage;
+            } else {
+                bundle.bundleType   = ApplicationBundle::Unknown;
+            }
+
+            bundles << bundle;
+        }
+    } else {
+        qCritical() << "Error executing select application bundles query";
+    }
+
+    return bundles;
 }
 
 bool AppsDBHelper::saveOrUpdateApp(const ApplicationData &app)
@@ -218,6 +267,9 @@ bool AppsDBHelper::saveOrUpdateApp(const ApplicationData &app)
         query.bindValue(":id", app.getId());
     }
 
+    // Save the bundles
+    this->saveOrUpdateBundles(app.getId(), app.getBundles());
+
     if (query.exec()) {
         success = true;
     } else {
@@ -225,6 +277,42 @@ bool AppsDBHelper::saveOrUpdateApp(const ApplicationData &app)
     }
 
     return success;
+}
+
+bool AppsDBHelper::saveOrUpdateBundles(const QString id, const QList<ApplicationBundle> &bundles)
+{
+    QList<ApplicationBundle> _bundles = this->getBundlesByApp(id);
+
+    foreach (ApplicationBundle _bundle, bundles) {
+        // Check if app already exists.
+        QSqlQuery query(this->_appsDB);
+
+        if ( _bundles.contains(_bundle) ) {
+            // Bundle already exists in DB. Update bundle
+            query.prepare(QUERY_UPDATE_APPLICATION_BUNDLE);
+            query.bindValue(":size", _bundle.size);
+            query.bindValue(":last_modified", _bundle.lastModified.toString(AppsDBHelper::DATE_FORMAT));
+            query.bindValue(":hash_sum_md5", QString(_bundle.hashSumMD5));
+            query.bindValue(":bundle_type", _bundle.bundleType);
+            query.bindValue(":application_id", id);
+            query.bindValue(":path", _bundle.path);
+        } else {
+            // Bundle does not exists in DB. Insert bundle
+            query.prepare(QUERY_INSERT_APPLICATION_BUNDLE);
+            query.bindValue(":application_id", id);
+            query.bindValue(":path", _bundle.path);
+            query.bindValue(":size", _bundle.size);
+            query.bindValue(":last_modified", _bundle.lastModified.toString(AppsDBHelper::DATE_FORMAT));
+            query.bindValue(":hash_sum_md5", QString(_bundle.hashSumMD5));
+            query.bindValue(":bundle_type", _bundle.bundleType);
+        }
+
+        if (!query.exec()) {
+            qWarning() << "Error saving bundle to DB. " << query.lastError();
+        }
+	}
+
+    return true;
 }
 
 bool AppsDBHelper::deleteApp(const ApplicationData &app)
