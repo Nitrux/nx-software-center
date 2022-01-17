@@ -40,7 +40,9 @@ set(nx_SRCS
     services/update/UpdateCheckData.cpp
     services/update/UpdatesWorker.cpp
     services/TaskChangeBuilder.cpp
+    services/db/DBHelper.cpp
     services/db/AppsDBHelper.cpp
+    services/db/BundlesDBHelper.cpp
     )
 
 set(nx_HDRS
