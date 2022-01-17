@@ -10,7 +10,7 @@ void AppsDBHelper::initDB() {
     QString appDBPath = appDataLocation + appDBName;
 
     if (!FMH::fileExists(QUrl::fromUserInput(appDBPath))) {
-        qDebug() << "Apps DB not available. Trying to create db ";
+        qWarning() << "Apps DB not available. Trying to create db ";
 
         QDir appDataLocation_dir(appDataLocation);
         if (!appDataLocation_dir.exists())
@@ -273,7 +273,7 @@ bool AppsDBHelper::saveOrUpdateApp(const ApplicationData &app)
     if (query.exec()) {
         success = true;
     } else {
-        qDebug() << "Error saving app to DB. " << query.lastError();
+        qCritical() << "Error saving app to DB. " << query.lastError();
     }
 
     return success;
@@ -308,7 +308,7 @@ bool AppsDBHelper::saveOrUpdateBundles(const QString id, const QList<Application
         }
 
         if (!query.exec()) {
-            qWarning() << "Error saving bundle to DB. " << query.lastError();
+            qCritical() << "Error saving bundle to DB. " << query.lastError();
         }
 	}
 
@@ -326,7 +326,7 @@ bool AppsDBHelper::deleteApp(const ApplicationData &app)
     if (query.exec()) {
         success = true;
     } else {
-        qDebug() << "Error deleting app from DB. " << query.lastError();
+        qCritical() << "Error deleting app from DB. " << query.lastError();
     }
 
     return success;
