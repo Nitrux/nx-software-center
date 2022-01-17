@@ -15,7 +15,7 @@ Q_DECLARE_OPAQUE_POINTER(ApplicationData);
 class ApplicationBundle
 {
 public:
-    enum Type { Unknown, AppImage };
+    enum Type { Unknown = 0, AppImage = 1 };
 
     ApplicationBundle();
     explicit ApplicationBundle(QString path, ApplicationData *data = nullptr);
