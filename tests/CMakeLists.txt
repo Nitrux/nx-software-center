@@ -17,7 +17,9 @@ add_executable(
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
     ../src/services/ApplicationsRegistry.cpp
+    ../src/services/db/DBHelper.cpp
     ../src/services/db/AppsDBHelper.cpp
+    ../src/services/db/BundlesDBHelper.cpp
 
     TestApplicationsRegistry.cpp
 )
