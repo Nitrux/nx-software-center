@@ -296,6 +296,8 @@ bool AppsDBHelper::saveOrUpdateBundles(const QString id, const QList<Application
             query.bindValue(":bundle_type", _bundle.bundleType);
             query.bindValue(":application_id", id);
             query.bindValue(":path", _bundle.path);
+
+            _bundles.removeOne(_bundle);
         } else {
             // Bundle does not exists in DB. Insert bundle
             query.prepare(QUERY_INSERT_APPLICATION_BUNDLE);
@@ -306,6 +308,10 @@ bool AppsDBHelper::saveOrUpdateBundles(const QString id, const QList<Application
             query.bindValue(":hash_sum_md5", QString(_bundle.hashSumMD5));
             query.bindValue(":bundle_type", _bundle.bundleType);
         }
+
+        /*  The entries left in _bundles are the entries not available originally.
+            Remove these entries from the APPLICATION_BUNDLE table */
+        this->deleteBundles(id, _bundles);
 
         if (!query.exec()) {
             qCritical() << "Error saving bundle to DB. " << query.lastError();
@@ -327,6 +333,31 @@ bool AppsDBHelper::deleteApp(const ApplicationData &app)
         success = true;
     } else {
         qCritical() << "Error deleting app from DB. " << query.lastError();
+    }
+
+    return success;
+}
+
+bool AppsDBHelper::deleteBundles(const QString id, const QList<ApplicationBundle> &bundles)
+{
+    bool success = false;
+
+    QVariantList appIds;
+    QVariantList bundlePaths;
+    foreach (ApplicationBundle _bundle, bundles) {
+        appIds << id;
+        bundlePaths << _bundle.path;
+	}
+
+    QSqlQuery query(this->_appsDB);
+    query.prepare(QUERY_DELETE_APPLICATION_BUNDLE);
+    query.addBindValue(appIds);
+    query.addBindValue(bundlePaths);
+
+    if (query.execBatch()) {
+        success = true;
+    } else {
+        qCritical() << "Error deleting bundles from DB. " << query.lastError();
     }
 
     return success;
