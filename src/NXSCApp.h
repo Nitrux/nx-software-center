@@ -48,4 +48,5 @@ private:
     void registerUpdateService();
     void registerThumbnailer();
     void setupApplicationDBUpdateCache();
+    QMap<QString, QDateTime> generateFileCache();
 };

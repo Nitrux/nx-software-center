@@ -121,7 +121,7 @@ void NXSCApp::setupApplicationsRegistry()
     qRegisterMetaType<ApplicationData>("ApplicationData");
     qRegisterMetaType<ApplicationBundle>("ApplicationBundle");
 
-    _bundleDirsWatcher = QPointer<BundlesDirsWatcher>(new BundlesDirsWatcher(_applicationsRegistry.getAppDirs(), {}));
+    _bundleDirsWatcher = QPointer<BundlesDirsWatcher>(new BundlesDirsWatcher(_applicationsRegistry.getAppDirs(), generateFileCache()));
     connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleAdded, &_applicationsRegistry, &ApplicationsRegistry::addBundle);
     connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleUpdated, &_applicationsRegistry, &ApplicationsRegistry::addBundle);
     connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleRemoved, &_applicationsRegistry, &ApplicationsRegistry::removeBundleByPath);
@@ -142,4 +142,24 @@ void NXSCApp::setupApplicationDBUpdateCache()
     connect(&_applicationsRegistry, &ApplicationsRegistry::applicationAdded, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
     connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
     connect(&_applicationsRegistry, &ApplicationsRegistry::applicationRemoved, _appsDBHelper, &AppsDBHelper::deleteApp);
+}
+
+/**
+ * Generate file cache for bundle dir watcher
+ */
+QMap<QString, QDateTime> NXSCApp::generateFileCache()
+{
+    QMap<QString, QDateTime> fileCache;
+
+    QList<ApplicationData> _apps = _appsDBHelper->getApps();
+	
+    foreach (ApplicationData _app, _apps) {
+        QList<ApplicationBundle> _bundles = _app.getBundles();
+
+        foreach (ApplicationBundle _bundle, _bundles) {
+            fileCache.insert(_bundle.path, _bundle.lastModified);
+	    }
+	}
+
+    return fileCache;
 }
