@@ -81,7 +81,6 @@ add_executable(
     ../src/services/update/UpdatesWorker.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
-    ../src/services/TaskChangeBuilder.cpp
 
     TestUpdateService.cpp
 )

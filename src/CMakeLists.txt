@@ -32,7 +32,7 @@ set(nx_SRCS
     services/update/UpdateService.cpp
     services/update/UpdateInformation.cpp
     services/update/UpdatesWorker.cpp
-    services/TaskChangeBuilder.cpp
+    services/ProgressNotification.cpp
     services/db/AppsDBHelper.cpp
     )
 

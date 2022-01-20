@@ -40,8 +40,8 @@ void UpdatesWorker::checkApplicationUpdates(const ApplicationData &application)
     if (!application_bundles.isEmpty()) {
         qDebug() << "Checking updates of" << application.getName();
 
-        TaskChangeBuilder taskUpdate(this);
-        notifyCheckStart(taskUpdate, application);
+        ProgressNotification progress;
+        notifyCheckStart(progress, application);
 
         const auto &bundle = application_bundles.first();
         auto updater = QScopedPointer<appimage::update::Updater>(new appimage::update::Updater(bundle.path.toStdString()));
@@ -49,15 +49,15 @@ void UpdatesWorker::checkApplicationUpdates(const ApplicationData &application)
         UpdateInformation result(application);
         result.source = QString::fromStdString(updater->updateInformation());
         if (result.source.isEmpty()) {
-            notifyMissingUpdateInformation(taskUpdate);
+            notifyMissingUpdateInformation(progress);
         } else {
             bool checkSucceed = updater->checkForChanges(result.updateAvailable);
             if (checkSucceed) {
-                notifyCheckResult(taskUpdate, result);
+                notifyCheckResult(progress, result);
                 if (result.updateAvailable)
                     emit(updateFound(result));
             } else {
-                notifyCheckError(taskUpdate);
+                notifyCheckError(progress);
             }
         }
     }
@@ -75,19 +75,19 @@ void UpdatesWorker::processNextUpdate()
         const auto &bundle = applicationBundles.first();
         qDebug() << "UpdatesWorker::processNextUpdate " << bundle.path;
 
-        TaskChangeBuilder taskChangeBuilder(this);
+        ProgressNotification progress;
         UpdateInformation result(application);
 
-        notifyCheckStart(taskChangeBuilder, application);
+        notifyCheckStart(progress, application);
 
         appimage::update::Updater updater(bundle.path.toStdString());
         result.source = QString::fromStdString(updater.updateInformation());
         if (!result.source.isEmpty()) {
             bool startSucceed = updater.start();
-            taskChangeBuilder.set(TaskChangeBuilder::TITLE, "Downloading " + application.getName() + " updates");
+            progress.title = "Downloading " + application.getName() + " updates";
 
             if (startSucceed) {
-                watchUpdateProgress(taskChangeBuilder, &updater);
+                watchUpdateProgress(progress, &updater);
 
                 std::string newBundlePath;
                 updater.pathToNewFile(newBundlePath);
@@ -95,7 +95,7 @@ void UpdatesWorker::processNextUpdate()
                 if (updater.hasError() || newBundlePath.empty()) {
                     qDebug() << "UpdatesWorker::processNextUpdate"
                              << "update error";
-                    notifyUpdateError(taskChangeBuilder);
+                    notifyUpdateError(progress);
                 } else {
                     ApplicationBundle newBundle(QString::fromStdString(newBundlePath));
                     newBundle.app->setId(application.getId());
@@ -103,87 +103,87 @@ void UpdatesWorker::processNextUpdate()
                     qDebug() << "UpdatesWorker::processNextUpdate"
                              << "update completed" << newBundle.path;
 
-                    notifyUpdateSucceed(taskChangeBuilder);
+                    notifyUpdateSucceed(progress);
                     emit(updateCompleted(newBundle));
                 }
             }
         } else {
             qDebug() << "UpdatesWorker::processNextUpdate"
                      << "missing update information";
-            notifyMissingUpdateInformation(taskChangeBuilder);
+            notifyMissingUpdateInformation(progress);
         }
     }
 
     QMetaObject::invokeMethod(this, &UpdatesWorker::processNextUpdate, Qt::QueuedConnection);
 }
-void UpdatesWorker::watchUpdateProgress(TaskChangeBuilder &taskChangeBuilder, appimage::update::Updater *updater)
+void UpdatesWorker::watchUpdateProgress(ProgressNotification &progress, appimage::update::Updater *updater)
 {
     while (!updater->isDone()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-        double progress;
-        if (!updater->progress(progress)) {
-            notifyProgressError(taskChangeBuilder);
+        double current_progress;
+        if (!updater->progress(current_progress)) {
+            notifyProgressError(progress);
             break;
         }
 
-        notifyUpdateProgress(taskChangeBuilder, progress);
+        notifyUpdateProgress(progress, current_progress);
     }
 }
-void UpdatesWorker::notifyUpdateProgress(TaskChangeBuilder &builder, double progress)
+void UpdatesWorker::notifyUpdateProgress(ProgressNotification &progress, double current_progress)
 {
-    builder.set(TaskChangeBuilder::CURRENT_PROGRESS, trunc(progress * 100));
-    emit(taskUpdate(builder.build()));
+    progress.current_progress = (long)std::round(current_progress * 100);
+    emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyProgressError(TaskChangeBuilder &builder)
+void UpdatesWorker::notifyProgressError(ProgressNotification &progress)
 {
-    builder.set(TaskChangeBuilder::STATUS, TaskChangeBuilder::FAILED);
-    builder.set(TaskChangeBuilder::SUBTITLE, "Something went wrong while trying to update.");
+    progress.status = ProgressNotification::FAILED;
+    progress.subTitle = "Something went wrong while trying to update.";
 
-    emit(taskUpdate(builder.build()));
+    emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyCheckResult(TaskChangeBuilder &builder, const UpdateInformation &updateInformation)
+void UpdatesWorker::notifyCheckResult(ProgressNotification &progress, const UpdateInformation &updateInformation)
 {
     auto resultText = updateInformation.updateAvailable ? "New update available" : "Update not available";
-    builder.set(TaskChangeBuilder::STATUS, TaskChangeBuilder::SUCCEED);
-    builder.set(TaskChangeBuilder::SUBTITLE, resultText);
+    progress.status = ProgressNotification::SUCCEED;
+    progress.subTitle = resultText;
 
-    emit(builder.build());
+    emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyCheckError(TaskChangeBuilder &builder)
+void UpdatesWorker::notifyCheckError(ProgressNotification &progress)
 {
-    builder.set(TaskChangeBuilder::STATUS, TaskChangeBuilder::FAILED);
-    builder.set(TaskChangeBuilder::SUBTITLE, "Something went wrong while trying to resolve the update information.");
+    progress.status = ProgressNotification::FAILED;
+    progress.subTitle = "Something went wrong while trying to resolve the update information.";
 
-    emit(taskUpdate(builder.build()));
+    emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyMissingUpdateInformation(TaskChangeBuilder &builder)
+void UpdatesWorker::notifyMissingUpdateInformation(ProgressNotification &progress)
 {
-    builder.set(TaskChangeBuilder::STATUS, TaskChangeBuilder::FAILED);
-    builder.set(TaskChangeBuilder::SUBTITLE, "Update information not available");
+    progress.status = ProgressNotification::FAILED;
+    progress.subTitle = "Update information not available";
 
-    emit(builder.build());
+    emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyCheckStart(TaskChangeBuilder &builder, const ApplicationData &application)
+void UpdatesWorker::notifyCheckStart(ProgressNotification &builder, const ApplicationData &application)
 {
-    builder.set(TaskChangeBuilder::TARGET_APP_ID, application.getId());
-    builder.set(TaskChangeBuilder::TOTAL_PROGRESS, 100);
-    builder.set(TaskChangeBuilder::STATUS, TaskChangeBuilder::RUNNING);
-    builder.set(TaskChangeBuilder::TITLE, "Checking " + application.getName() + " updates");
+    builder.related_app_id = application.getId();
+    builder.total_progress = 100;
+    builder.status = ProgressNotification::RUNNING;
+    builder.title = "Checking " + application.getName() + " updates";
 
-    emit(taskUpdate(builder.build()));
+    emit(progressNotification(builder));
 }
-void UpdatesWorker::notifyUpdateError(TaskChangeBuilder &builder)
+void UpdatesWorker::notifyUpdateError(ProgressNotification &progress)
 {
-    builder.set(TaskChangeBuilder::STATUS, TaskChangeBuilder::FAILED);
-    builder.set(TaskChangeBuilder::SUBTITLE, "Something went wrong while trying to update.");
+    progress.status = ProgressNotification::FAILED;
+    progress.subTitle = "Something went wrong while trying to update.";
 
-    emit(taskUpdate(builder.build()));
+    emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyUpdateSucceed(TaskChangeBuilder &builder)
+void UpdatesWorker::notifyUpdateSucceed(ProgressNotification &progress)
 {
-    builder.set(TaskChangeBuilder::STATUS, TaskChangeBuilder::SUCCEED);
-    builder.set(TaskChangeBuilder::SUBTITLE, "Update downloaded successfully");
+    progress.status = ProgressNotification::SUCCEED;
+    progress.subTitle = "Update downloaded successfully";
 
-    emit(taskUpdate(builder.build()));
+    emit(progressNotification(progress));
 }

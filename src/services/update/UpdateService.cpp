@@ -14,7 +14,7 @@ UpdateService::UpdateService(QObject *parent)
     _checkUpdatesWorker.moveToThread(&_workerThread);
     _workerThread.start();
 
-    connect(&_checkUpdatesWorker, &UpdatesWorker::taskUpdate, this, &UpdateService::taskUpdate, Qt::QueuedConnection);
+    connect(&_checkUpdatesWorker, &UpdatesWorker::progressNotification, this, &UpdateService::progressNotification, Qt::QueuedConnection);
     connect(&_checkUpdatesWorker, &UpdatesWorker::updateFound, this, &UpdateService::handleUpdateFound, Qt::QueuedConnection);
     connect(&_checkUpdatesWorker, &UpdatesWorker::updateCompleted, this, &UpdateService::updateDownloaded, Qt::QueuedConnection);
     connect(&_checkUpdatesWorker, &UpdatesWorker::queueCompleted, this, &UpdateService::handleQueueCompleted, Qt::QueuedConnection);

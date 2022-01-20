@@ -5,7 +5,7 @@
 #include <QList>
 #include <QObject>
 #include <QPointer>
-#include <services/TaskChangeBuilder.h>
+#include <services/ProgressNotification.h>
 
 // local
 #include "UpdateInformation.h"
@@ -26,9 +26,9 @@ public:
     Q_SLOT void queueUpdate(const QList<ApplicationData> &applications);
 
     Q_SIGNAL void updateFound(UpdateInformation updateInformation);
-    Q_SIGNAL void taskUpdate(QVariantMap update);
     Q_SIGNAL void updateCompleted(ApplicationBundle bundle);
     Q_SIGNAL void queueCompleted();
+    Q_SIGNAL void progressNotification(const ProgressNotification &update);
 
 private:
     Q_SLOT void processNextCheck();
@@ -37,14 +37,14 @@ private:
     QList<ApplicationData> _checkQueue;
     QList<ApplicationData> _updateQueue;
 
-    void notifyCheckStart(TaskChangeBuilder &builder, const ApplicationData &application);
-    void notifyMissingUpdateInformation(TaskChangeBuilder &builder);
-    void notifyCheckError(TaskChangeBuilder &builder);
-    void notifyCheckResult(TaskChangeBuilder &builder, const UpdateInformation &updateInformation);
-    void notifyProgressError(TaskChangeBuilder &builder);
-    void notifyUpdateError(TaskChangeBuilder &builder);
-    void notifyUpdateSucceed(TaskChangeBuilder &builder);
-    void notifyUpdateProgress(TaskChangeBuilder &builder, double progress);
-    void watchUpdateProgress(TaskChangeBuilder &taskChangeBuilder, appimage::update::Updater *updater);
+    void notifyCheckStart(ProgressNotification &builder, const ApplicationData &application);
+    void notifyMissingUpdateInformation(ProgressNotification &progress);
+    void notifyCheckError(ProgressNotification &progress);
+    void notifyCheckResult(ProgressNotification &progress, const UpdateInformation &updateInformation);
+    void notifyProgressError(ProgressNotification &progress);
+    void notifyUpdateError(ProgressNotification &progress);
+    void notifyUpdateSucceed(ProgressNotification &progress);
+    void notifyUpdateProgress(ProgressNotification &progress, double current_progress);
+    void watchUpdateProgress(ProgressNotification &progress, appimage::update::Updater *updater);
     void checkApplicationUpdates(const ApplicationData &application);
 };

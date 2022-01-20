@@ -11,6 +11,7 @@
 // local
 #include "UpdateInformation.h"
 #include "UpdatesWorker.h"
+#include "services/ProgressNotification.h"
 
 class UpdateService : public QObject
 {
@@ -34,7 +35,7 @@ public:
     Q_SIGNAL void updateDownloaded(const ApplicationBundle &bundle);
 
     // use it to forward tasks updates
-    Q_SIGNAL void taskUpdate(QVariantMap update);
+    Q_SIGNAL void progressNotification(const ProgressNotification &update);
 
     // notifies when the performing some back ground task
     bool isBusy();
