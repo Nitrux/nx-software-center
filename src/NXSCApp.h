@@ -14,7 +14,6 @@
 #include "models/ApplicationsRegistryProxyModel.h"
 #include "services/ApplicationsRegistry.h"
 #include "services/BundlesDirsWatcher.h"
-#include "services/TaskManager.h"
 #include "services/update/UpdateService.h"
 #include "services/db/AppsDBHelper.h"
 
@@ -33,7 +32,6 @@ private:
     Q_SLOT void onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl);
 
     QUrl _qml_main;
-    TaskManager _taskManager;
     AppsDBHelper *_appsDBHelper;
     ApplicationsRegistry _applicationsRegistry;
     ApplicationsRegistryModel _applicationsRegistryModel;

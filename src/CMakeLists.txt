@@ -22,20 +22,13 @@ set(nx_SRCS
     models/progressmanager.cpp
     models/ApplicationsRegistryModel.cpp
     models/ApplicationsRegistryProxyModel.cpp
+    models/TasksListModel.cpp
     utils/appimagetools.cpp
     services/ApplicationsRegistry.cpp
     services/ApplicationData.cpp
     services/ApplicationBundle.cpp
     services/BundlesDirsWatcher.cpp
     services/BundleInspector.cpp
-    services/TaskManager.cpp
-    services/Task.cpp
-    services/TaskAction.cpp
-    services/UpdateTask.cpp
-    services/DownloadTask.cpp
-    services/CheckUpdateTask.cpp
-    services/CheckUpdateBulkTask.cpp
-    services/UpdateAllTask.cpp
     services/update/UpdateService.cpp
     services/update/UpdateInformation.cpp
     services/update/UpdatesWorker.cpp

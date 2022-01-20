@@ -24,7 +24,6 @@
 NXSCApp::NXSCApp(int &argc, char **argv)
     : QApplication(argc, argv)
     , _qml_main(QStringLiteral("qrc:/main.qml"))
-    , _taskManager(this)
     , _appsDBHelper(_appsDBHelper->getInstance())
     , _applicationsRegistry({NX::AppsPath.toLocalFile()}, _appsDBHelper->getAppsMap())
     , _applicationsRegistryModel(&_applicationsRegistry, this)
@@ -84,10 +83,6 @@ void NXSCApp::setupQMLEngine()
     qmlRegisterType<Category>("NXModels", 1, 0, "Category");
     qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
     qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
-
-    QQmlContext *rootContext = _engine.rootContext();
-    rootContext->setContextProperty("taskManagerCtx", &_taskManager);
-    qmlRegisterUncreatableType<Task>("NXModels", 1, 0, "Task", "Tasks can only be created from the Task Manager");
 
     registerApplicationsRegistryService();
     registerUpdateService();
