@@ -40,7 +40,7 @@ void UpdatesWorker::checkApplicationUpdates(const ApplicationData &application)
     if (!application_bundles.isEmpty()) {
         qDebug() << "Checking updates of" << application.getName();
 
-        ProgressNotification progress;
+        TaskData progress;
         notifyCheckStart(progress, application);
 
         const auto &bundle = application_bundles.first();
@@ -75,7 +75,7 @@ void UpdatesWorker::processNextUpdate()
         const auto &bundle = applicationBundles.first();
         qDebug() << "UpdatesWorker::processNextUpdate " << bundle.path;
 
-        ProgressNotification progress;
+        TaskData progress;
         UpdateInformation result(application);
 
         notifyCheckStart(progress, application);
@@ -116,7 +116,7 @@ void UpdatesWorker::processNextUpdate()
 
     QMetaObject::invokeMethod(this, &UpdatesWorker::processNextUpdate, Qt::QueuedConnection);
 }
-void UpdatesWorker::watchUpdateProgress(ProgressNotification &progress, appimage::update::Updater *updater)
+void UpdatesWorker::watchUpdateProgress(TaskData &progress, appimage::update::Updater *updater)
 {
     while (!updater->isDone()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -130,59 +130,59 @@ void UpdatesWorker::watchUpdateProgress(ProgressNotification &progress, appimage
         notifyUpdateProgress(progress, current_progress);
     }
 }
-void UpdatesWorker::notifyUpdateProgress(ProgressNotification &progress, double current_progress)
+void UpdatesWorker::notifyUpdateProgress(TaskData &progress, double current_progress)
 {
     progress.current_progress = (long)std::round(current_progress * 100);
     emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyProgressError(ProgressNotification &progress)
+void UpdatesWorker::notifyProgressError(TaskData &progress)
 {
-    progress.status = ProgressNotification::FAILED;
+    progress.status = TaskData::FAILED;
     progress.subTitle = "Something went wrong while trying to update.";
 
     emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyCheckResult(ProgressNotification &progress, const UpdateInformation &updateInformation)
+void UpdatesWorker::notifyCheckResult(TaskData &progress, const UpdateInformation &updateInformation)
 {
     auto resultText = updateInformation.updateAvailable ? "New update available" : "Update not available";
-    progress.status = ProgressNotification::SUCCEED;
+    progress.status = TaskData::SUCCEED;
     progress.subTitle = resultText;
 
     emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyCheckError(ProgressNotification &progress)
+void UpdatesWorker::notifyCheckError(TaskData &progress)
 {
-    progress.status = ProgressNotification::FAILED;
+    progress.status = TaskData::FAILED;
     progress.subTitle = "Something went wrong while trying to resolve the update information.";
 
     emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyMissingUpdateInformation(ProgressNotification &progress)
+void UpdatesWorker::notifyMissingUpdateInformation(TaskData &progress)
 {
-    progress.status = ProgressNotification::FAILED;
+    progress.status = TaskData::FAILED;
     progress.subTitle = "Update information not available";
 
     emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyCheckStart(ProgressNotification &builder, const ApplicationData &application)
+void UpdatesWorker::notifyCheckStart(TaskData &builder, const ApplicationData &application)
 {
     builder.related_app_id = application.getId();
     builder.total_progress = 100;
-    builder.status = ProgressNotification::RUNNING;
+    builder.status = TaskData::RUNNING;
     builder.title = "Checking " + application.getName() + " updates";
 
     emit(progressNotification(builder));
 }
-void UpdatesWorker::notifyUpdateError(ProgressNotification &progress)
+void UpdatesWorker::notifyUpdateError(TaskData &progress)
 {
-    progress.status = ProgressNotification::FAILED;
+    progress.status = TaskData::FAILED;
     progress.subTitle = "Something went wrong while trying to update.";
 
     emit(progressNotification(progress));
 }
-void UpdatesWorker::notifyUpdateSucceed(ProgressNotification &progress)
+void UpdatesWorker::notifyUpdateSucceed(TaskData &progress)
 {
-    progress.status = ProgressNotification::SUCCEED;
+    progress.status = TaskData::SUCCEED;
     progress.subTitle = "Update downloaded successfully";
 
     emit(progressNotification(progress));

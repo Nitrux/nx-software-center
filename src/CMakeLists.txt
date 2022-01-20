@@ -32,8 +32,9 @@ set(nx_SRCS
     services/update/UpdateService.cpp
     services/update/UpdateInformation.cpp
     services/update/UpdatesWorker.cpp
-    services/ProgressNotification.cpp
+    services/TaskData.cpp
     services/db/AppsDBHelper.cpp
+    ../tests/DummyProgressNotificationSource.cpp
     )
 
 set(nx_HDRS

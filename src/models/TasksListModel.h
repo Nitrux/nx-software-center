@@ -1,7 +1,11 @@
-#ifndef TASKSLISTMODEL_H
-#define TASKSLISTMODEL_H
+#pragma once
+// system
 
+// libraries
 #include <QAbstractListModel>
+
+// local
+#include <services/TaskData.h>
 
 class TasksListModel : public QAbstractListModel
 {
@@ -15,6 +19,7 @@ class TasksListModel : public QAbstractListModel
         ICON,
         CURRENT_PROGRESS,
         TOTAL_PROGRESS,
+        ACTIONS,
         APP_ID,
     };
 
@@ -24,15 +29,16 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
     // Basic functionality:
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    [[nodiscard]] int rowCount(const QModelIndex &parent) const override;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
-    Q_SLOT void handleTaskUpdate(const QVariantMap &taskUpdate);
+    Q_SLOT void handleTaskUpdate(const TaskData &notification);
 
 private:
     QHash<int, QByteArray> _roleNames;
-    QVariantList _tasks;
-};
+    QList<TaskData> _tasks;
 
-#endif // TASKSLISTMODEL_H
+    int taskIndex(const TaskData &notification);
+    QVariantList getTackActionsVariantList(const TaskData &task) const;
+};

@@ -28,12 +28,18 @@ NXSCApp::NXSCApp(int &argc, char **argv)
     , _applicationsRegistry({NX::AppsPath.toLocalFile()}, _appsDBHelper->getAppsMap())
     , _applicationsRegistryModel(&_applicationsRegistry, this)
     , _updateService(this)
+    , _tasksListModel(this)
 {
     setOrganizationName(QStringLiteral("Nitrux"));
     setWindowIcon(QIcon(":/nx-software-center.svg"));
     MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
 
     QObject::connect(&_updateService, &UpdateService::updateFound, &_applicationsRegistryModel, &ApplicationsRegistryModel::handleUpdateInformation);
+    QObject::connect(&_updateService, &UpdateService::progressNotification, &_tasksListModel, &TasksListModel::handleTaskUpdate);
+    QObject::connect(&dummyProgressNotificationSource,
+                     &DummyProgressNotificationSource::progressNotification,
+                     &_tasksListModel,
+                     &TasksListModel::handleTaskUpdate);
     setKDEApplicationData();
 }
 
@@ -83,6 +89,9 @@ void NXSCApp::setupQMLEngine()
     qmlRegisterType<Category>("NXModels", 1, 0, "Category");
     qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
     qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
+
+    qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "TasksModel", &_tasksListModel);
+//    qmlRegisterUncreatableType<TaskActionData>("org.maui.nxsc", 1, 0, "TaskActionData", "Unable to create TaskActionData");
 
     registerApplicationsRegistryService();
     registerUpdateService();

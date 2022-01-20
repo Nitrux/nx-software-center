@@ -3,19 +3,21 @@
 
 // libraries
 #include <KAboutData>
-#include <QGuiApplication>
 #include <QApplication>
+#include <QGuiApplication>
 #include <QPointer>
 #include <QQmlApplicationEngine>
 #include <QThread>
 
 // local
+#include "../tests/DummyProgressNotificationSource.h"
 #include "models/ApplicationsRegistryModel.h"
 #include "models/ApplicationsRegistryProxyModel.h"
+#include "models/TasksListModel.h"
 #include "services/ApplicationsRegistry.h"
 #include "services/BundlesDirsWatcher.h"
-#include "services/update/UpdateService.h"
 #include "services/db/AppsDBHelper.h"
+#include "services/update/UpdateService.h"
 
 class NXSCApp : public QApplication
 {
@@ -37,10 +39,12 @@ private:
     ApplicationsRegistryModel _applicationsRegistryModel;
     ApplicationsRegistryProxyModel _applicationsRegistryModelProxy;
     UpdateService _updateService;
+    TasksListModel _tasksListModel;
     QPointer<BundlesDirsWatcher> _bundleDirsWatcher;
     QThread _bundleDirsWatcherThread;
     KAboutData _aboutData;
     QQmlApplicationEngine _engine;
+    DummyProgressNotificationSource dummyProgressNotificationSource;
     void setKDEApplicationData();
     void registerApplicationsRegistryService();
     void registerUpdateService();

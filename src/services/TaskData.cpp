@@ -1,8 +1,8 @@
-#include "ProgressNotification.h"
+#include "TaskData.h"
 
 #include <QUuid>
 
-ProgressNotification::ProgressNotification()
+TaskData::TaskData()
     : id(QUuid::createUuid().toString())
     , status(CREATED)
 {

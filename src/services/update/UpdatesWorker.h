@@ -5,7 +5,7 @@
 #include <QList>
 #include <QObject>
 #include <QPointer>
-#include <services/ProgressNotification.h>
+#include <services/TaskData.h>
 
 // local
 #include "UpdateInformation.h"
@@ -28,7 +28,7 @@ public:
     Q_SIGNAL void updateFound(UpdateInformation updateInformation);
     Q_SIGNAL void updateCompleted(ApplicationBundle bundle);
     Q_SIGNAL void queueCompleted();
-    Q_SIGNAL void progressNotification(const ProgressNotification &update);
+    Q_SIGNAL void progressNotification(const TaskData &update);
 
 private:
     Q_SLOT void processNextCheck();
@@ -37,14 +37,14 @@ private:
     QList<ApplicationData> _checkQueue;
     QList<ApplicationData> _updateQueue;
 
-    void notifyCheckStart(ProgressNotification &builder, const ApplicationData &application);
-    void notifyMissingUpdateInformation(ProgressNotification &progress);
-    void notifyCheckError(ProgressNotification &progress);
-    void notifyCheckResult(ProgressNotification &progress, const UpdateInformation &updateInformation);
-    void notifyProgressError(ProgressNotification &progress);
-    void notifyUpdateError(ProgressNotification &progress);
-    void notifyUpdateSucceed(ProgressNotification &progress);
-    void notifyUpdateProgress(ProgressNotification &progress, double current_progress);
-    void watchUpdateProgress(ProgressNotification &progress, appimage::update::Updater *updater);
+    void notifyCheckStart(TaskData &builder, const ApplicationData &application);
+    void notifyMissingUpdateInformation(TaskData &progress);
+    void notifyCheckError(TaskData &progress);
+    void notifyCheckResult(TaskData &progress, const UpdateInformation &updateInformation);
+    void notifyProgressError(TaskData &progress);
+    void notifyUpdateError(TaskData &progress);
+    void notifyUpdateSucceed(TaskData &progress);
+    void notifyUpdateProgress(TaskData &progress, double current_progress);
+    void watchUpdateProgress(TaskData &progress, appimage::update::Updater *updater);
     void checkApplicationUpdates(const ApplicationData &application);
 };

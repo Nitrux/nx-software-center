@@ -2,16 +2,26 @@
 // system
 
 // libraries
+#include <QList>
 #include <QMetaType>
 #include <QString>
 
 // local
 
-class ProgressNotification
+class TaskActionData
+{
+public:
+    QString id;
+    QString label;
+    QString icon;
+    bool active;
+};
+
+class TaskData
 {
 public:
     enum Status { CREATED = 1, RUNNING, FAILED, SUCCEED };
-    ProgressNotification();
+    TaskData();
 
     QString id;
 
@@ -20,11 +30,13 @@ public:
     QString title;
     QString subTitle;
     QString iconPath;
-    long current_progress;
-    long total_progress;
+    qlonglong current_progress;
+    qlonglong total_progress;
 
     // related app id
     QString related_app_id;
+    QList<TaskActionData> actions;
 };
 
-Q_DECLARE_METATYPE(ProgressNotification)
+Q_DECLARE_METATYPE(TaskData)
+Q_DECLARE_METATYPE(TaskActionData)

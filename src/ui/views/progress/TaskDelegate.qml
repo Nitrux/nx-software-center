@@ -11,7 +11,7 @@ Maui.ItemDelegate
     id: control
     readonly property color altColor : Kirigami.Theme.textColor
     implicitHeight: _layout.implicitHeight
-    visible: modelData.status != NX.Task.DRAFT
+    property var taskModel: model
 
     ColumnLayout
     {
@@ -20,33 +20,34 @@ Maui.ItemDelegate
 
         Maui.ListItemTemplate
         {
-            id: meh
             Layout.fillWidth: true
-            label1.text: modelData.title
+            label1.text: model.title
             label2.wrapMode: Text.WrapAnywhere
-            label2.text:  modelData.subtitle
-            imageSource: modelData.icon
+            label2.text:  model.subtitle
+            imageSource: model.icon
             iconSource: "package"
             iconSizeHint: Maui.Style.iconSizes.medium
 
             Repeater {
-                model: modelData.actions
+                model: taskModel.actions
                 delegate: ToolButton {
-                    icon.name: modelData.icon
-                    text: modelData.label
-                    onClicked: modelData.trigger()
-                    enabled: modelData.isActive
+                    icon.name: model.icon
+                    text: model.label
+                    onClicked: model.trigger()
+                    enabled: model.isActive
+
+                    Component.onCompleted: {console.log(model)}
                 }
+
             }
         }
 
         ProgressBar
         {
             Layout.fillWidth: true
-            value: modelData.progress
-            visible: modelData.status == NX.Task.ACTIVE
+            value: model.current_progress
             from: 0
-            to: modelData.progressTotal
+            to: model.total_progress
         }
     }
 }
