@@ -90,18 +90,19 @@ Maui.Page
         Layout.maximumWidth: 500
         Layout.alignment: Qt.AlignCenter
         placeholderText: i18n("Filter installed apps")
-        onTextChanged: ApplicationsRegistry.filterRegExp = RegExp(text)
-        onCleared:  ApplicationsRegistry.filterRegExp = ""
+        onTextChanged: ApplicationsListModel.filterRegExp = RegExp(text)
+        onCleared:  ApplicationsListModel.filterRegExp = ""
     }
 
     headBar.rightContent: [
         Button
         {
             text: qsTr("Check for Updates")
-            visible: !_appsList.isUpdateAvailable
+            enabled: !UpdateService.busy
             onClicked:
             {
-                taskManagerCtx.doCheckUpdate(_appsList);
+                var appList = ApplicationsRegistry.getApplications();
+                UpdateService.checkUpdates(appList);
             }
         },
 
@@ -111,7 +112,7 @@ Maui.Page
             visible: _appsList.isUpdateAvailable
             onClicked:
             {
-                taskManagerCtx.doUpdateAll(_appsList);
+                console.log("Update All clicked")
             }
         },
 
@@ -124,8 +125,8 @@ Maui.Page
                 text: i18n("Name")
                 checkable: true
                 autoExclusive: true
-                checked: ApplicationsRegistry.sortRole === ApplicationRegistryRoles.Name
-                onTriggered: ApplicationsRegistry.sortRole = ApplicationRegistryRoles.Name
+                checked: ApplicationsListModel.sortRole === ApplicationsListModelRoles.Name
+                onTriggered: ApplicationsListModel.sortRole = ApplicationsListModelRoles.Name
             }
 
             MenuItem
@@ -133,8 +134,8 @@ Maui.Page
                 text: i18n("Category")
                 checkable: true
                 autoExclusive: true
-                checked: ApplicationsRegistry.sortRole === ApplicationRegistryRoles.XdgCategories
-                onTriggered: ApplicationsRegistry.sortRole = ApplicationRegistryRoles.XdgCategories
+                checked: ApplicationsListModel.sortRole === ApplicationsListModelRoles.XdgCategories
+                onTriggered: ApplicationsListModel.sortRole = ApplicationsListModelRoles.XdgCategories
             }
         }
     ]
@@ -155,8 +156,8 @@ Maui.Page
         anchors.fill: parent
         orientation: ListView.Vertical
         spacing: Maui.Style.space.medium
-        section.property: ApplicationsRegistry.sortRoleName
-        section.criteria:  ApplicationsRegistry.sortRole === ApplicationRegistryRoles.Name ? ViewSection.FirstCharacter : ViewSection.FullString
+        section.property: ApplicationsListModel.sortRoleName
+        section.criteria:  ApplicationsListModel.sortRole === ApplicationsListModelRoles.Name ? ViewSection.FirstCharacter : ViewSection.FullString
         section.delegate: Maui.LabelDelegate
         {
             id: delegate
@@ -168,7 +169,7 @@ Maui.Page
             width: parent.width
         }
 
-        model: ApplicationsRegistry
+        model: ApplicationsListModel
 
         delegate: Maui.SwipeBrowserDelegate
         {
@@ -183,6 +184,15 @@ Maui.Page
             iconSizeHint: Maui.Style.iconSizes.large
             iconSource: "application-vnd.appimage"
 
+            Rectangle {
+                height: 8;
+                width: 8;
+                radius: 15;
+                color: "blue";
+
+                visible: model.update_available
+                Component.onCompleted: { console.log("model.update_available:", model.update_available)}
+            }
 
             quickActions: [
                 Action
@@ -199,10 +209,10 @@ Maui.Page
                 {
                     icon.name: "download"
                     text: "Update"
-                    enabled: model.updatable==="true"
+//                    enabled: model.update_available
                     onTriggered:
                     {
-                        taskManagerCtx.doUpdate(model.url, model.name);
+                        UpdateService.update(model.data);
                     }
                 },
                 Action

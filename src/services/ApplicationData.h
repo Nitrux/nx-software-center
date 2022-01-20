@@ -10,6 +10,8 @@
 // local
 #include "ApplicationBundle.h"
 
+typedef QList<ApplicationData> ApplicationsList;
+
 /**
  * Contains the information about an Application and the binary bundles related to it.
  */

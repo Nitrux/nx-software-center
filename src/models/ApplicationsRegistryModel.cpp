@@ -32,6 +32,8 @@ void ApplicationsRegistryModel::initRoles()
     _roles[Bundles] = "bundles";
     _roles[LatestBundlePath] = "latest_bundle_path";
     _roles[LatestBundleSize] = "latest_bundle_size";
+    _roles[UpdateAvailable] = "update_available";
+    _roles[Data] = "data";
 }
 
 int ApplicationsRegistryModel::rowCount(const QModelIndex &parent) const
@@ -64,6 +66,10 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
             return app.getDescription();
         case XdgCategories:
             return app.getXdgCategories();
+        case UpdateAvailable:
+            return _updatesAvailable.contains(app.getId());
+        case Data:
+            return QVariant::fromValue(app);
         case LatestBundlePath:
             if (!appBundles.empty())
                 return app.getBundles().first().path;
@@ -105,4 +111,16 @@ void ApplicationsRegistryModel::handleApplicationRemoved(const ApplicationData &
     beginRemoveRows(QModelIndex(), idx, idx);
     _applications.removeAt(idx);
     endRemoveRows();
+}
+
+void ApplicationsRegistryModel::handleUpdateInformation(const UpdateInformation &updateInformation)
+{
+    qDebug() << "Update information received" << updateInformation.application.getId();
+    _updatesAvailable.insert(updateInformation.application.getId(), updateInformation);
+
+    auto row = _applications.indexOf(updateInformation.application);
+    if (row >= 0 && row < _applications.length()) {
+        qDebug() << "Applications Registry Model row changed: " << row;
+        emit(dataChanged(index(row, 0), index(row + 1, 0)));
+    }
 }

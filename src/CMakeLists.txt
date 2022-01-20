@@ -37,7 +37,7 @@ set(nx_SRCS
     services/CheckUpdateBulkTask.cpp
     services/UpdateAllTask.cpp
     services/update/UpdateService.cpp
-    services/update/UpdateCheckData.cpp
+    services/update/UpdateInformation.cpp
     services/update/UpdatesWorker.cpp
     services/TaskChangeBuilder.cpp
     services/db/AppsDBHelper.cpp

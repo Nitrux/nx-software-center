@@ -5,8 +5,6 @@
 #include <appimage/update.h>
 
 // local
-#include "services/TaskChangeBuilder.h"
-#include "services/TaskManager.h"
 
 UpdatesWorker::UpdatesWorker(QObject *parent)
     : QObject(parent)
@@ -26,33 +24,43 @@ void UpdatesWorker::queueUpdate(const QList<ApplicationData> &applications)
 }
 void UpdatesWorker::processNextCheck()
 {
-    if (_checkQueue.isEmpty())
+    if (_checkQueue.isEmpty()) {
+        emit queueCompleted();
         return;
-
-    const auto application = _checkQueue.takeFirst();
-    const auto &bundle = application.getBundles().first();
-
-    TaskChangeBuilder taskUpdate(this);
-    UpdateCheckData result(application, false);
-
-    notifyCheckStart(taskUpdate, application);
-
-    auto updater = QScopedPointer<appimage::update::Updater>(new appimage::update::Updater(bundle.path.toStdString()));
-    result.source = QString::fromStdString(updater->updateInformation());
-    if (result.source.isEmpty()) {
-        notifyMissingUpdateInformation(taskUpdate);
-        emit(updateInformation(result));
-    } else {
-        bool checkSucceed = updater->checkForChanges(result.updateAvailable);
-        if (checkSucceed) {
-            notifyCheckResult(taskUpdate, result);
-            emit(updateInformation(result));
-        } else {
-            notifyCheckError(taskUpdate);
-        }
     }
 
+    const auto application = _checkQueue.takeFirst();
+    checkApplicationUpdates(application);
+
     QMetaObject::invokeMethod(this, &UpdatesWorker::processNextCheck, Qt::QueuedConnection);
+}
+void UpdatesWorker::checkApplicationUpdates(const ApplicationData &application)
+{
+    const auto application_bundles = application.getBundles();
+    if (!application_bundles.isEmpty()) {
+        qDebug() << "Checking updates of" << application.getName();
+
+        TaskChangeBuilder taskUpdate(this);
+        notifyCheckStart(taskUpdate, application);
+
+        const auto &bundle = application_bundles.first();
+        auto updater = QScopedPointer<appimage::update::Updater>(new appimage::update::Updater(bundle.path.toStdString()));
+
+        UpdateInformation result(application);
+        result.source = QString::fromStdString(updater->updateInformation());
+        if (result.source.isEmpty()) {
+            notifyMissingUpdateInformation(taskUpdate);
+        } else {
+            bool checkSucceed = updater->checkForChanges(result.updateAvailable);
+            if (checkSucceed) {
+                notifyCheckResult(taskUpdate, result);
+                if (result.updateAvailable)
+                    emit(updateFound(result));
+            } else {
+                notifyCheckError(taskUpdate);
+            }
+        }
+    }
 }
 void UpdatesWorker::processNextUpdate()
 {
@@ -60,38 +68,49 @@ void UpdatesWorker::processNextUpdate()
         return;
 
     const auto application = _updateQueue.takeFirst();
-    const auto &bundle = application.getBundles().first();
+    qDebug() << "UpdatesWorker::processNextUpdate " << application.getId();
 
-    TaskChangeBuilder taskChangeBuilder(this);
-    UpdateCheckData result(application, false);
+    const auto applicationBundles = application.getBundles();
+    if (!applicationBundles.isEmpty()) {
+        const auto &bundle = applicationBundles.first();
+        qDebug() << "UpdatesWorker::processNextUpdate " << bundle.path;
 
-    notifyCheckStart(taskChangeBuilder, application);
+        TaskChangeBuilder taskChangeBuilder(this);
+        UpdateInformation result(application);
 
-    appimage::update::Updater updater(bundle.path.toStdString());
-    result.source = QString::fromStdString(updater.updateInformation());
+        notifyCheckStart(taskChangeBuilder, application);
 
-    if (result.source.isEmpty()) {
-        notifyMissingUpdateInformation(taskChangeBuilder);
-        emit(updateInformation(result));
-    } else {
-        bool startSucceed = updater.start();
-        taskChangeBuilder.set(TaskChangeBuilder::TITLE, "Downloading " + application.getName() + " updates");
+        appimage::update::Updater updater(bundle.path.toStdString());
+        result.source = QString::fromStdString(updater.updateInformation());
+        if (!result.source.isEmpty()) {
+            bool startSucceed = updater.start();
+            taskChangeBuilder.set(TaskChangeBuilder::TITLE, "Downloading " + application.getName() + " updates");
 
-        if (startSucceed) {
-            watchUpdateProgress(taskChangeBuilder, &updater);
+            if (startSucceed) {
+                watchUpdateProgress(taskChangeBuilder, &updater);
 
-            std::string newBundlePath;
-            updater.pathToNewFile(newBundlePath);
+                std::string newBundlePath;
+                updater.pathToNewFile(newBundlePath);
 
-            if (updater.hasError() || newBundlePath.empty()) {
-                notifyUpdateError(taskChangeBuilder);
-            } else {
-                ApplicationBundle newBundle(QString::fromStdString(newBundlePath));
-                newBundle.app->setId(application.getId());
+                if (updater.hasError() || newBundlePath.empty()) {
+                    qDebug() << "UpdatesWorker::processNextUpdate"
+                             << "update error";
+                    notifyUpdateError(taskChangeBuilder);
+                } else {
+                    ApplicationBundle newBundle(QString::fromStdString(newBundlePath));
+                    newBundle.app->setId(application.getId());
 
-                notifyUpdateSucceed(taskChangeBuilder);
-                emit(updateCompleted(newBundle));
+                    qDebug() << "UpdatesWorker::processNextUpdate"
+                             << "update completed" << newBundle.path;
+
+                    notifyUpdateSucceed(taskChangeBuilder);
+                    emit(updateCompleted(newBundle));
+                }
             }
+        } else {
+            qDebug() << "UpdatesWorker::processNextUpdate"
+                     << "missing update information";
+            notifyMissingUpdateInformation(taskChangeBuilder);
         }
     }
 
@@ -123,7 +142,7 @@ void UpdatesWorker::notifyProgressError(TaskChangeBuilder &builder)
 
     emit(taskUpdate(builder.build()));
 }
-void UpdatesWorker::notifyCheckResult(TaskChangeBuilder &builder, const UpdateCheckData &updateInformation)
+void UpdatesWorker::notifyCheckResult(TaskChangeBuilder &builder, const UpdateInformation &updateInformation)
 {
     auto resultText = updateInformation.updateAvailable ? "New update available" : "Update not available";
     builder.set(TaskChangeBuilder::STATUS, TaskChangeBuilder::SUCCEED);

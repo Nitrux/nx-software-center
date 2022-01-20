@@ -8,7 +8,7 @@
 #include <services/TaskChangeBuilder.h>
 
 // local
-#include "UpdateCheckData.h"
+#include "UpdateInformation.h"
 #include "services/ApplicationData.h"
 
 namespace appimage::update
@@ -25,9 +25,10 @@ public:
     Q_SLOT void queueCheck(const QList<ApplicationData> &applications);
     Q_SLOT void queueUpdate(const QList<ApplicationData> &applications);
 
-    Q_SIGNAL void updateInformation(UpdateCheckData updateInformation);
+    Q_SIGNAL void updateFound(UpdateInformation updateInformation);
     Q_SIGNAL void taskUpdate(QVariantMap update);
     Q_SIGNAL void updateCompleted(ApplicationBundle bundle);
+    Q_SIGNAL void queueCompleted();
 
 private:
     Q_SLOT void processNextCheck();
@@ -39,10 +40,11 @@ private:
     void notifyCheckStart(TaskChangeBuilder &builder, const ApplicationData &application);
     void notifyMissingUpdateInformation(TaskChangeBuilder &builder);
     void notifyCheckError(TaskChangeBuilder &builder);
-    void notifyCheckResult(TaskChangeBuilder &builder, const UpdateCheckData &updateInformation);
+    void notifyCheckResult(TaskChangeBuilder &builder, const UpdateInformation &updateInformation);
     void notifyProgressError(TaskChangeBuilder &builder);
     void notifyUpdateError(TaskChangeBuilder &builder);
     void notifyUpdateSucceed(TaskChangeBuilder &builder);
     void notifyUpdateProgress(TaskChangeBuilder &builder, double progress);
     void watchUpdateProgress(TaskChangeBuilder &taskChangeBuilder, appimage::update::Updater *updater);
+    void checkApplicationUpdates(const ApplicationData &application);
 };

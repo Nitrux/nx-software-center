@@ -4,6 +4,7 @@
 // libraries
 #include <QAbstractItemModel>
 #include <QModelIndex>
+#include <services/update/UpdateInformation.h>
 
 // local
 #include "services/ApplicationsRegistry.h"
@@ -25,6 +26,8 @@ public:
         Bundles,
         LatestBundlePath,
         LatestBundleSize,
+        UpdateAvailable,
+        Data,
     };
 
     Q_ENUM(ApplicationRoles)
@@ -32,15 +35,16 @@ public:
     explicit ApplicationsRegistryModel(ApplicationsRegistry *registry, QObject *parent = nullptr);
 
     // Basic functionality:
-    QHash<int, QByteArray> roleNames() const override;
+    [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    [[nodiscard]] int rowCount(const QModelIndex &parent) const override;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     Q_SLOT void handleApplicationAdded(const ApplicationData &application);
     Q_SLOT void handleApplicationUpdated(const ApplicationData &application);
     Q_SLOT void handleApplicationRemoved(const ApplicationData &application);
+    Q_SLOT void handleUpdateInformation(const UpdateInformation &updateInformation);
 
 private:
     void initRoles();
@@ -48,7 +52,9 @@ private:
     ApplicationsRegistry *_registry;
     QList<ApplicationData> _applications;
 
+    // app id -> update information map, map used to speed up queries
+    QMap<QString, UpdateInformation> _updatesAvailable;
+
     QModelIndex _root;
     QHash<int, QByteArray> _roles;
 };
-

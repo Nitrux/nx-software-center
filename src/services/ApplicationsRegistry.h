@@ -24,8 +24,8 @@ public:
     [[nodiscard]] bool applicationExist(const QString &appId) const;
     [[nodiscard]] ApplicationData getApplication(const QString &appId) const;
 
-    [[nodiscard]] QList<ApplicationData> getApplications() const;
-    [[nodiscard]] int getApplicationsCount() const;
+    [[nodiscard]] Q_SCRIPTABLE ApplicationsList getApplications() const;
+    [[nodiscard]] Q_SCRIPTABLE int getApplicationsCount() const;
 
     // Add an AppImage file to the registry and updates or create the related Application data
     Q_SLOT void addBundle(const ApplicationBundle &bundle);

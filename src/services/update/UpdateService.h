@@ -9,25 +9,26 @@
 #include <QThread>
 
 // local
-#include "UpdateCheckData.h"
+#include "UpdateInformation.h"
 #include "UpdatesWorker.h"
-#include "services/TaskManager.h"
 
 class UpdateService : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int updatesAvailable READ getUpdatesAvailable NOTIFY updatesAvailableChanged)
+    Q_PROPERTY(int updatesAvailableCount READ getUpdatesAvailableCounter NOTIFY updatesAvailableCounterChanged)
+    Q_PROPERTY(bool busy READ isBusy NOTIFY isBusyChanged)
 
 public:
-    explicit UpdateService(QObject *parent);
+    explicit UpdateService(QObject *parent = nullptr);
     ~UpdateService() override;
 
-    Q_SLOT int getUpdatesAvailable() const;
-    Q_SIGNAL void updatesAvailableChanged(int updatesAvailable);
+    Q_SCRIPTABLE [[nodiscard]] int getUpdatesAvailableCounter() const;
+    Q_SIGNAL void updatesAvailableCounterChanged(int updatesAvailable);
 
-    void checkUpdates(const QList<ApplicationData> &applications);
+    Q_SCRIPTABLE void checkUpdate(const QVariant &applicationVariant);
+    Q_SCRIPTABLE void checkUpdates(const ApplicationsList &targetApps);
 
-    void update(const QList<ApplicationData> &applications);
+    Q_SCRIPTABLE void update(const QVariant &variant);
 
     // notifies when a new bundle is available
     Q_SIGNAL void updateDownloaded(const ApplicationBundle &bundle);
@@ -35,14 +36,22 @@ public:
     // use it to forward tasks updates
     Q_SIGNAL void taskUpdate(QVariantMap update);
 
-private:
-    Q_SLOT void handleUpdateInformation(const UpdateCheckData &updateInformation);
-    Q_SLOT void handleUpdateCompleted(const ApplicationBundle &bundle);
+    // notifies when the performing some back ground task
+    bool isBusy();
+    Q_SIGNAL void isBusyChanged(bool isBusy);
 
-    void refreshUpdatesAvailable();
+    Q_SIGNAL void updateFound(const UpdateInformation &updateInformation);
+    Q_SIGNAL void updateCompleted(QString appId);
+
+private:
+    Q_SLOT void handleUpdateFound(const UpdateInformation &updateInformation);
+    Q_SLOT void handleUpdateCompleted(const ApplicationBundle &bundle);
+    Q_SLOT void handleQueueCompleted();
+
     int _updatesAvailable;
 
-    QMap<QString, UpdateCheckData> _updatesInformation; // app id - UpdateInformation
+    QMap<QString, UpdateInformation> _updatesInformation; // app id - UpdateInformation
     QThread _workerThread;
     UpdatesWorker _checkUpdatesWorker;
+    bool _busy;
 };

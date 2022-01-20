@@ -72,3 +72,22 @@ target_link_libraries(test_bundle_inspector PRIVATE Qt5::Widgets Qt5::Test libap
 target_compile_definitions(test_bundle_inspector PRIVATE SAMPLE_APPIMAGE_PATH="${APPIMAGE_TOOL_PATH}")
 
 add_test(NAME testBundleInspector COMMAND test_bundle_inspector)
+
+add_executable(
+    test_update_service
+
+    ../src/services/update/UpdateService.cpp
+    ../src/services/update/UpdateInformation.cpp
+    ../src/services/update/UpdatesWorker.cpp
+    ../src/services/ApplicationData.cpp
+    ../src/services/ApplicationBundle.cpp
+    ../src/services/TaskChangeBuilder.cpp
+
+    TestUpdateService.cpp
+)
+
+target_include_directories(test_update_service PRIVATE ../src/)
+target_link_libraries(test_update_service PRIVATE Qt5::Widgets Qt5::Test libappimage AppImageUpdate::libappimageupdate)
+target_compile_definitions(test_update_service PRIVATE SAMPLE_APPIMAGE_PATH="${APPIMAGE_TOOL_PATH}")
+
+add_test(NAME testUpdateService COMMAND test_update_service)

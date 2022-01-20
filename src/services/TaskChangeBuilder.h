@@ -2,12 +2,12 @@
 // system
 
 // libraries
-#include "ApplicationData.h"
 #include <QMetaEnum>
 #include <QObject>
 #include <QVariantMap>
 
 // local
+#include "ApplicationData.h"
 
 /**
  * Creates Tasks updates to be emitted from the different places of the application

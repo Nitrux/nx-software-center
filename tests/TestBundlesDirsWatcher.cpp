@@ -5,14 +5,14 @@
 #include <QRandomGenerator>
 #include <QSignalSpy>
 
-#define FAKE_APPLICATIONS_DIR "/tmp/watched_dir"
+#define APPLICATIONS_DIR_MOCK "/tmp/watched_dir"
 
 void TestBundlesDirsWatcher::initTestCase()
 {
-    dirToWatch.mkpath(FAKE_APPLICATIONS_DIR);
-    dirToWatch.setPath(FAKE_APPLICATIONS_DIR);
+    dirToWatch.mkpath(APPLICATIONS_DIR_MOCK);
+    dirToWatch.setPath(APPLICATIONS_DIR_MOCK);
 
-    QString existentAppimagePath = FAKE_APPLICATIONS_DIR "/existent.AppImage";
+    QString existentAppimagePath = APPLICATIONS_DIR_MOCK "/existent.AppImage";
     copyAppImage(existentAppimagePath);
     QFileInfo existentAppImageInfo(existentAppimagePath);
     QMap<QString, QDateTime> fileCache = {{existentAppimagePath, existentAppImageInfo.lastModified()}};
@@ -47,7 +47,7 @@ void TestBundlesDirsWatcher::testWatchBundleAdded()
 {
     QSignalSpy spyAppImageAdded(watcher, SIGNAL(bundleAdded(ApplicationBundle)));
 
-    QString path = FAKE_APPLICATIONS_DIR "/f1.AppImage";
+    QString path = APPLICATIONS_DIR_MOCK "/f1.AppImage";
     copyAppImage(path);
 
     QTest::qWait(100);
@@ -59,7 +59,7 @@ void TestBundlesDirsWatcher::testWatchBundleChanged()
 {
     QSignalSpy spyAppImageUpdate(watcher, SIGNAL(bundleUpdated(ApplicationBundle)));
 
-    QString path = FAKE_APPLICATIONS_DIR "/f1.AppImage";
+    QString path = APPLICATIONS_DIR_MOCK "/f1.AppImage";
     copyAppImage(path);
 
     QTest::qWait(100);
@@ -70,7 +70,7 @@ void TestBundlesDirsWatcher::testWatchBundleRemoved()
 {
     QSignalSpy spyAppImageRemoved(watcher, SIGNAL(bundleRemoved(QString)));
 
-    QString path = FAKE_APPLICATIONS_DIR "/f1.AppImage";
+    QString path = APPLICATIONS_DIR_MOCK "/f1.AppImage";
     copyAppImage(path);
 
     QFile::remove(path);

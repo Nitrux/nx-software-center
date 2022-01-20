@@ -34,6 +34,7 @@ NXSCApp::NXSCApp(int &argc, char **argv)
     setWindowIcon(QIcon(":/nx-software-center.svg"));
     MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
 
+    QObject::connect(&_updateService, &UpdateService::updateFound, &_applicationsRegistryModel, &ApplicationsRegistryModel::handleUpdateInformation);
     setKDEApplicationData();
 }
 
@@ -107,8 +108,13 @@ void NXSCApp::registerApplicationsRegistryService()
     _applicationsRegistryModelProxy.setFilterRole(ApplicationsRegistryModel::Name);
     _applicationsRegistryModelProxy.setSortRole(ApplicationsRegistryModel::XdgCategories);
 
-    qmlRegisterUncreatableType<ApplicationsRegistryModel>("org.maui.nxsc", 1, 0, "ApplicationRegistryRoles", "Registry can only be accessed by the singleton");
-    qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "ApplicationsRegistry", &_applicationsRegistryModelProxy);
+    qmlRegisterUncreatableType<ApplicationsRegistryModel>("org.maui.nxsc",
+                                                          1,
+                                                          0,
+                                                          "ApplicationsListModelRoles",
+                                                          "Registry can only be accessed by the singleton");
+    qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "ApplicationsListModel", &_applicationsRegistryModelProxy);
+    qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "ApplicationsRegistry", &_applicationsRegistry);
 }
 void NXSCApp::onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl)
 {
@@ -120,6 +126,7 @@ void NXSCApp::setupApplicationsRegistry()
 {
     qRegisterMetaType<ApplicationData>("ApplicationData");
     qRegisterMetaType<ApplicationBundle>("ApplicationBundle");
+    qRegisterMetaType<ApplicationsList>("ApplicationsList");
 
     _bundleDirsWatcher = QPointer<BundlesDirsWatcher>(new BundlesDirsWatcher(_applicationsRegistry.getAppDirs(), {}));
     connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleAdded, &_applicationsRegistry, &ApplicationsRegistry::addBundle);
