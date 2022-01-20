@@ -5,26 +5,30 @@
 DummyProgressNotificationSource::DummyProgressNotificationSource(QObject *parent)
     : QObject(parent)
 {
-    timer.setInterval(500);
     progress.title = "Dummy task";
     progress.subTitle = "Here goes a subtitle";
-    progress.iconPath = "package";
+    progress.iconPath = "qrc:/download.svg";
     progress.status = TaskData::RUNNING;
 
     progress.total_progress = 100;
 
     TaskActionData data;
-    data.id = "zxcasd";
-    data.icon = "cancel";
+    data.id = "cancel-task";
+    data.icon = "qrc:/download.svg";
     data.active = true;
     data.label = "cancel";
     progress.actions.push_back(data);
 
-    connect(&timer, &QTimer::timeout, [this] {
-        this->progress.current_progress = (this->progress.current_progress + 5) % 100;
-        qDebug() << "Dummy Progress" << this->progress.current_progress;
-        emit(progressNotification(progress));
-    });
+    emitProgressNotification();
 
-    timer.start();
+    connect(&timer, &QTimer::timeout, this, &DummyProgressNotificationSource::emitProgressNotification);
+    timer.start(2000);
+}
+void DummyProgressNotificationSource::emitProgressNotification()
+{
+    progress.current_progress = (this->progress.current_progress + 5) % 100;
+    progress.subTitle = "Dummy Progress " + QString::number(this->progress.current_progress);
+
+    qDebug() << progress.subTitle;
+    emit(progressNotification(progress));
 }

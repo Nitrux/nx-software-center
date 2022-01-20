@@ -5,6 +5,7 @@
 #include <QList>
 #include <QMetaType>
 #include <QString>
+#include <QVariantMap>
 
 // local
 
@@ -15,7 +16,11 @@ public:
     QString label;
     QString icon;
     bool active;
+
+    [[nodiscard]] QVariantMap toVariant() const;
 };
+
+typedef QList<TaskActionData> TasksActionDataList;
 
 class TaskData
 {
@@ -35,8 +40,9 @@ public:
 
     // related app id
     QString related_app_id;
-    QList<TaskActionData> actions;
+    TasksActionDataList actions;
 };
 
 Q_DECLARE_METATYPE(TaskData)
 Q_DECLARE_METATYPE(TaskActionData)
+Q_DECLARE_METATYPE(TasksActionDataList)

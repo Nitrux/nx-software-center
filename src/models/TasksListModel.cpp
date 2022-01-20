@@ -34,37 +34,41 @@ QVariant TasksListModel::data(const QModelIndex &index, int role) const
         return {};
 
     const auto &row = index.row();
-    const auto task = _tasks[row];
+    if (row >= 0 && row < _tasks.length()) {
+        const auto task = _tasks[row];
 
-    switch (role) {
-    case TASK_ID:
-        return task.id;
-    case STATUS:
-        return task.status;
-    case TITLE:
-        return task.title;
-    case SUBTITLE:
-        return task.subTitle;
-    case ICON:
-        return task.iconPath;
-    case CURRENT_PROGRESS:
-        return task.current_progress;
-    case TOTAL_PROGRESS:
-        return task.total_progress;
-    case ACTIONS:
-        return getTackActionsVariantList(task);
-    case APP_ID:
-        return task.related_app_id;
-    default:
-        return {};
+        switch (role) {
+        case TASK_ID:
+            return task.id;
+        case STATUS:
+            return task.status;
+        case TITLE:
+            return task.title;
+        case SUBTITLE:
+            return task.subTitle;
+        case ICON:
+            return task.iconPath;
+        case CURRENT_PROGRESS:
+            return task.current_progress;
+        case TOTAL_PROGRESS:
+            return task.total_progress;
+        case ACTIONS:
+            return getTackActionsVariantList(task);
+        case APP_ID:
+            return task.related_app_id;
+        default:
+            return {};
+        }
     }
+
     return {};
 }
-QVariantList TasksListModel::getTackActionsVariantList(const TaskData &task) const
+QVariantList TasksListModel::getTackActionsVariantList(const TaskData &task)
 {
     QVariantList actionsList;
     for (const auto &entry : task.actions)
-        actionsList.push_back(QVariant::fromValue(entry));
+        actionsList.push_back(entry.toVariant());
+
     return actionsList;
 }
 QHash<int, QByteArray> TasksListModel::roleNames() const
@@ -76,7 +80,7 @@ void TasksListModel::handleTaskUpdate(const TaskData &notification)
     auto idx = taskIndex(notification);
     if (idx >= 0 && idx < _tasks.length()) {
         _tasks[idx] = notification;
-        emit(dataChanged(index(idx, 0), index(idx + 1, 0)));
+        emit(dataChanged(index(idx, 0), index(idx, 0)));
     } else {
         beginInsertRows(QModelIndex(), idx, idx);
         _tasks.push_back(notification);

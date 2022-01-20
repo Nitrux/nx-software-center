@@ -11,7 +11,6 @@ Maui.ItemDelegate
     id: control
     readonly property color altColor : Kirigami.Theme.textColor
     implicitHeight: _layout.implicitHeight
-    property var taskModel: model
 
     ColumnLayout
     {
@@ -21,24 +20,20 @@ Maui.ItemDelegate
         Maui.ListItemTemplate
         {
             Layout.fillWidth: true
-            label1.text: model.title
+            label1.text: title
             label2.wrapMode: Text.WrapAnywhere
-            label2.text:  model.subtitle
-            imageSource: model.icon
+            label2.text: subtitle
+            imageSource: icon
             iconSource: "package"
             iconSizeHint: Maui.Style.iconSizes.medium
 
             Repeater {
-                model: taskModel.actions
+                model: actions
                 delegate: ToolButton {
-                    icon.name: model.icon
-                    text: model.label
-                    onClicked: model.trigger()
-                    enabled: model.isActive
-
-                    Component.onCompleted: {console.log(model)}
+                    icon.name: modelData.icon
+                    text: modelData.label
+                    enabled: modelData.active
                 }
-
             }
         }
 

@@ -11,7 +11,9 @@ class DummyProgressNotificationSource : public QObject
 {
     Q_OBJECT
 public:
-    DummyProgressNotificationSource(QObject *parent = nullptr);
+    explicit DummyProgressNotificationSource(QObject *parent = nullptr);
+    Q_SLOT void emitProgressNotification();
+
     Q_SIGNAL void progressNotification(const TaskData &update);
 
     QTimer timer;

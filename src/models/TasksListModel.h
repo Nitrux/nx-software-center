@@ -40,5 +40,5 @@ private:
     QList<TaskData> _tasks;
 
     int taskIndex(const TaskData &notification);
-    QVariantList getTackActionsVariantList(const TaskData &task) const;
+    static QVariantList getTackActionsVariantList(const TaskData &task) ;
 };
