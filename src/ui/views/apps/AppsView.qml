@@ -181,7 +181,6 @@ Maui.Page
                 color: "green";
 
                 visible: model.update_available
-                Component.onCompleted: { console.log("model.update_available:", model.update_available)}
             }
 
             Rectangle {
@@ -191,7 +190,6 @@ Maui.Page
                 color: "blue";
 
                 visible: model.related_task
-                Component.onCompleted: { console.log("model.update_available:", model.update_available)}
             }
 
             quickActions: [
@@ -209,7 +207,7 @@ Maui.Page
                 {
                     icon.name: "download"
                     text: "Update"
-//                    enabled: model.update_available
+                    enabled: model.update_available
                     onTriggered:
                     {
                         UpdateService.update(model.data);
@@ -260,6 +258,11 @@ Maui.Page
             appUpdateDialog.showDialog(_appsListView.model.get(_appsListView.currentIndex).path.split("/").pop(),
                 err);
         }
+    }
+    Component.onCompleted:
+    {
+            var appList = ApplicationsRegistry.getApplications();
+            UpdateService.checkUpdates(appList);
     }
 }
 
