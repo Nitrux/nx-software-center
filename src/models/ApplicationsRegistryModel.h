@@ -4,6 +4,7 @@
 // libraries
 #include <QAbstractItemModel>
 #include <QModelIndex>
+#include <services/TaskData.h>
 #include <services/update/ApplicationUpdateData.h>
 
 // local
@@ -27,6 +28,7 @@ public:
         LatestBundlePath,
         LatestBundleSize,
         UpdateAvailable,
+        RelatedTask,
         Data,
     };
 
@@ -44,17 +46,24 @@ public:
     Q_SLOT void handleApplicationAdded(const ApplicationData &application);
     Q_SLOT void handleApplicationUpdated(const ApplicationData &application);
     Q_SLOT void handleApplicationRemoved(const ApplicationData &application);
-    Q_SLOT void handleUpdateInformation(const ApplicationUpdateData &updateInformation);
+    Q_SLOT void handleUpdateInformation(const ApplicationUpdateData &updateData);
+    Q_SLOT void handleTaskUpdate(const TaskData &notification);
 
 private:
     void initRoles();
+    int findApplicationIndexById(const QString &);
 
     ApplicationsRegistry *_registry;
     ApplicationsList _applications;
 
     // app id -> update information map, map used to speed up queries
-    QMap<QString, ApplicationUpdateData> _updatesAvailable;
+    QMap<QString, ApplicationUpdateData> _appliactionsUpdateData;
+
+    // app id -> related tasks map, map used to speed up queries
+    QMap<QString, TaskData> _applicationsRelatedTasks;
 
     QModelIndex _root;
     QHash<int, QByteArray> _roles;
+    bool resolveUpdateAvailableValue(const ApplicationData &app) const;
+    bool resolveRelatedTask(const ApplicationData &app) const;
 };

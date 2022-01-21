@@ -35,8 +35,11 @@ NXSCApp::NXSCApp(int &argc, char **argv)
     MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
 
     QObject::connect(&_updateService,
-                     &UpdateService::applicationUpdateDataChanged, &_applicationsRegistryModel, &ApplicationsRegistryModel::handleUpdateInformation);
+                     &UpdateService::applicationUpdateDataChanged,
+                     &_applicationsRegistryModel,
+                     &ApplicationsRegistryModel::handleUpdateInformation);
     QObject::connect(&_updateService, &UpdateService::progressNotification, &_tasksListModel, &TasksListModel::handleTaskUpdate);
+    QObject::connect(&_updateService, &UpdateService::progressNotification, &_applicationsRegistryModel, &ApplicationsRegistryModel::handleTaskUpdate);
     QObject::connect(&dummyProgressNotificationSource,
                      &DummyProgressNotificationSource::progressNotification,
                      &_tasksListModel,
@@ -92,7 +95,7 @@ void NXSCApp::setupQMLEngine()
     qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
 
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "TasksModel", &_tasksListModel);
-//    qmlRegisterUncreatableType<TaskActionData>("org.maui.nxsc", 1, 0, "TaskActionData", "Unable to create TaskActionData");
+    //    qmlRegisterUncreatableType<TaskActionData>("org.maui.nxsc", 1, 0, "TaskActionData", "Unable to create TaskActionData");
 
     registerApplicationsRegistryService();
     registerUpdateService();

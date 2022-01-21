@@ -178,9 +178,19 @@ Maui.Page
                 height: 8;
                 width: 8;
                 radius: 15;
-                color: "blue";
+                color: "green";
 
                 visible: model.update_available
+                Component.onCompleted: { console.log("model.update_available:", model.update_available)}
+            }
+
+            Rectangle {
+                height: 8;
+                width: 16;
+                radius: 15;
+                color: "blue";
+
+                visible: model.related_task
                 Component.onCompleted: { console.log("model.update_available:", model.update_available)}
             }
 

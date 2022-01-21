@@ -33,6 +33,7 @@ void ApplicationsRegistryModel::initRoles()
     _roles[LatestBundlePath] = "latest_bundle_path";
     _roles[LatestBundleSize] = "latest_bundle_size";
     _roles[UpdateAvailable] = "update_available";
+    _roles[RelatedTask] = "related_task";
     _roles[Data] = "data";
 }
 
@@ -67,7 +68,9 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
         case XdgCategories:
             return app.getXdgCategories();
         case UpdateAvailable:
-            return _updatesAvailable.contains(app.getId());
+            return resolveUpdateAvailableValue(app);
+        case RelatedTask:
+            return resolveRelatedTask(app);
         case Data:
             return QVariant::fromValue(app);
         case LatestBundlePath:
@@ -85,6 +88,14 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
         }
     }
     return {};
+}
+bool ApplicationsRegistryModel::resolveRelatedTask(const ApplicationData &app) const
+{
+    return _applicationsRelatedTasks.contains(app.getId()) && _applicationsRelatedTasks.value(app.getId()).status == TaskData::RUNNING;
+}
+bool ApplicationsRegistryModel::resolveUpdateAvailableValue(const ApplicationData &app) const
+{
+    return _appliactionsUpdateData.contains(app.getId()) && _appliactionsUpdateData.value(app.getId()).updateAvailable;
 }
 
 void ApplicationsRegistryModel::handleApplicationAdded(const ApplicationData &application)
@@ -113,14 +124,34 @@ void ApplicationsRegistryModel::handleApplicationRemoved(const ApplicationData &
     endRemoveRows();
 }
 
-void ApplicationsRegistryModel::handleUpdateInformation(const ApplicationUpdateData &updateInformation)
+void ApplicationsRegistryModel::handleUpdateInformation(const ApplicationUpdateData &updateData)
 {
-    qDebug() << "Update information received" << updateInformation.application.getId();
-    _updatesAvailable.insert(updateInformation.application.getId(), updateInformation);
+    qDebug() << "Update information received" << updateData.application.getId();
+    _appliactionsUpdateData.insert(updateData.application.getId(), updateData);
 
-    auto row = _applications.indexOf(updateInformation.application);
+    auto row = _applications.indexOf(updateData.application);
     if (row >= 0 && row < _applications.length()) {
         qDebug() << "Applications Registry Model row changed: " << row;
-        emit(dataChanged(index(row, 0), index(row + 1, 0)));
+        emit(dataChanged(index(row, 0), index(row, 0)));
     }
+}
+void ApplicationsRegistryModel::handleTaskUpdate(const TaskData &notification)
+{
+    const auto &appId = notification.related_app_id;
+    if (!appId.isEmpty()) {
+        _applicationsRelatedTasks.insert(appId, notification);
+        int idx = findApplicationIndexById(appId);
+        if (idx >= 0 && idx < _applications.length())
+            emit(dataChanged(index(idx, 0), index(idx, 0)));
+    }
+}
+int ApplicationsRegistryModel::findApplicationIndexById(const QString &applicationId)
+{
+    for (int idx = 0; idx < _applications.length(); idx++) {
+        const auto &application = _applications[idx];
+        if (application.getId() == applicationId)
+            return idx;
+    }
+
+    return -1;
 }
