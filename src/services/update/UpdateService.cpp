@@ -105,3 +105,8 @@ void UpdateService::update(const ApplicationData &application)
     _isUpdateTaskRunning = true;
     emit(updateTaskRunningChanged(_isUpdateTaskRunning));
 }
+void UpdateService::update(const ApplicationsList &targetApps)
+{
+    for (const auto &app : targetApps)
+        update(app);
+}

@@ -97,22 +97,12 @@ Maui.Page
     headBar.rightContent: [
         Button
         {
-            text: qsTr("Check for Updates")
-            enabled: !UpdateService.checkTaskRunning
-            onClicked:
-            {
-                var appList = ApplicationsRegistry.getApplications();
-                UpdateService.checkUpdates(appList);
-            }
-        },
-
-        Button
-        {
             text: qsTr("Update All")
             visible: _appsList.isUpdateAvailable
             onClicked:
             {
-                console.log("Update All clicked")
+                var appList = ApplicationsRegistry.getApplications();
+                UpdateService.update(appList);
             }
         },
 

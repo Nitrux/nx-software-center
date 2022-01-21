@@ -80,7 +80,13 @@ void TasksListModel::handleTaskUpdate(const TaskData &notification)
     auto idx = taskIndex(notification);
     if (idx >= 0 && idx < _tasks.length()) {
         _tasks[idx] = notification;
-        emit(dataChanged(index(idx, 0), index(idx, 0)));
+        if (notification.status == TaskData::SUCCEED || notification.status == TaskData::FAILED) {
+            beginRemoveRows(QModelIndex(), idx, idx);
+            _tasks.removeAt(idx);
+            endRemoveRows();
+        } else {
+            emit(dataChanged(index(idx, 0), index(idx, 0)));
+        }
     } else {
         beginInsertRows(QModelIndex(), idx, idx);
         _tasks.push_back(notification);

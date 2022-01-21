@@ -30,6 +30,7 @@ public:
 
     Q_SCRIPTABLE void update(const QString &appId);
     Q_SCRIPTABLE void update(const ApplicationData &application);
+    Q_SCRIPTABLE void update(const ApplicationsList &targetApps);
 
     Q_SCRIPTABLE void checkUpdates(const ApplicationsList &targetApps);
 
