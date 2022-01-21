@@ -77,8 +77,10 @@ add_executable(
     test_update_service
 
     ../src/services/update/UpdateService.cpp
-    ../src/services/update/UpdateInformation.cpp
-    ../src/services/update/UpdatesWorker.cpp
+    ../src/services/update/ApplicationUpdateData.cpp
+    ../src/services/update/UpdateWorker.cpp
+    ../src/services/update/UpdateCheckWorker.cpp
+    ../src/services/TaskData.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
 

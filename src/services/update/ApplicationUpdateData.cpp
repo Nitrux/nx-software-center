@@ -1,8 +1,8 @@
-#include "UpdateInformation.h"
+#include "ApplicationUpdateData.h"
 
 #include <utility>
 
-UpdateInformation::UpdateInformation(ApplicationData application, QDateTime checkDate)
+ApplicationUpdateData::ApplicationUpdateData(ApplicationData application, QDateTime checkDate)
     : updateAvailable(false)
     , checkDate(std::move(checkDate))
     , application(std::move(application))

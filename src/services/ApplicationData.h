@@ -10,7 +10,7 @@
 // local
 #include "ApplicationBundle.h"
 
-typedef QList<ApplicationData> ApplicationsList;
+typedef QVector<ApplicationData> ApplicationsList;
 
 /**
  * Contains the information about an Application and the binary bundles related to it.
@@ -71,3 +71,4 @@ private:
 };
 
 Q_DECLARE_METATYPE(ApplicationData)
+Q_DECLARE_METATYPE(ApplicationsList)

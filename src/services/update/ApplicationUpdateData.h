@@ -10,18 +10,19 @@
 /**
  * Data transfer object for Applications update information
  */
-class UpdateInformation
+class ApplicationUpdateData
 {
 public:
-    explicit UpdateInformation(ApplicationData application = {}, QDateTime checkDate = QDateTime::currentDateTime());
+    explicit ApplicationUpdateData(ApplicationData application = {}, QDateTime checkDate = QDateTime::currentDateTime());
 
     bool updateAvailable;
     QString source;
     QDateTime checkDate;
+    QDateTime updateDate;
 
     QString version;
     QString changesLog;
     ApplicationData application;
 };
 
-Q_DECLARE_METATYPE(UpdateInformation)
+Q_DECLARE_METATYPE(ApplicationUpdateData)

@@ -30,8 +30,9 @@ set(nx_SRCS
     services/BundlesDirsWatcher.cpp
     services/BundleInspector.cpp
     services/update/UpdateService.cpp
-    services/update/UpdateInformation.cpp
-    services/update/UpdatesWorker.cpp
+    services/update/ApplicationUpdateData.cpp
+    services/update/UpdateWorker.cpp
+    services/update/UpdateCheckWorker.cpp
     services/TaskData.cpp
     services/db/AppsDBHelper.cpp
     ../tests/DummyProgressNotificationSource.cpp

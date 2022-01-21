@@ -4,7 +4,7 @@
 // libraries
 #include <QAbstractItemModel>
 #include <QModelIndex>
-#include <services/update/UpdateInformation.h>
+#include <services/update/ApplicationUpdateData.h>
 
 // local
 #include "services/ApplicationsRegistry.h"
@@ -44,16 +44,16 @@ public:
     Q_SLOT void handleApplicationAdded(const ApplicationData &application);
     Q_SLOT void handleApplicationUpdated(const ApplicationData &application);
     Q_SLOT void handleApplicationRemoved(const ApplicationData &application);
-    Q_SLOT void handleUpdateInformation(const UpdateInformation &updateInformation);
+    Q_SLOT void handleUpdateInformation(const ApplicationUpdateData &updateInformation);
 
 private:
     void initRoles();
 
     ApplicationsRegistry *_registry;
-    QList<ApplicationData> _applications;
+    ApplicationsList _applications;
 
     // app id -> update information map, map used to speed up queries
-    QMap<QString, UpdateInformation> _updatesAvailable;
+    QMap<QString, ApplicationUpdateData> _updatesAvailable;
 
     QModelIndex _root;
     QHash<int, QByteArray> _roles;

@@ -1,61 +1,45 @@
 #include "UpdateService.h"
 
 #include <QDebug>
+#include <QMetaObject>
 
 UpdateService::UpdateService(QObject *parent)
     : QObject(parent)
-    , _updatesAvailable(0)
     , _workerThread(this)
-    , _checkUpdatesWorker(nullptr)
-    , _busy(false)
+    , _checkTaskWorker()
+    , _updateTaskWorker()
+    , _isCheckTaskRunning(false)
+    , _isUpdateTaskRunning(false)
 {
-    qRegisterMetaType<UpdateInformation>();
+    qRegisterMetaType<ApplicationUpdateData>();
 
-    _checkUpdatesWorker.moveToThread(&_workerThread);
+    // move workers to another thread to avoid blocking the main thread
+    _checkTaskWorker.moveToThread(&_workerThread);
+    _updateTaskWorker.moveToThread(&_workerThread);
     _workerThread.start();
 
-    connect(&_checkUpdatesWorker, &UpdatesWorker::progressNotification, this, &UpdateService::progressNotification, Qt::QueuedConnection);
-    connect(&_checkUpdatesWorker, &UpdatesWorker::updateFound, this, &UpdateService::handleUpdateFound, Qt::QueuedConnection);
-    connect(&_checkUpdatesWorker, &UpdatesWorker::updateCompleted, this, &UpdateService::updateDownloaded, Qt::QueuedConnection);
-    connect(&_checkUpdatesWorker, &UpdatesWorker::queueCompleted, this, &UpdateService::handleQueueCompleted, Qt::QueuedConnection);
-}
+    connect(&_checkTaskWorker, &UpdateCheckWorker::updateFound, this, &UpdateService::handleUpdateInformation, Qt::QueuedConnection);
+    connect(&_checkTaskWorker, &UpdateCheckWorker::checkCompleted, this, &UpdateService::handleCheckCompleted, Qt::QueuedConnection);
 
-void UpdateService::checkUpdate(const QVariant &applicationVariant)
-{
-    if (applicationVariant.canConvert<ApplicationData>()) {
-        auto appData = qvariant_cast<ApplicationData>(applicationVariant);
+    connect(&_updateTaskWorker, &UpdateWorker::queueCompleted, this, &UpdateService::handleUpdateQueueCompleted);
+    connect(&_updateTaskWorker, &UpdateWorker::updateCompleted, this, &UpdateService::handleUpdateInformation);
 
-        _busy = true;
-        emit isBusyChanged(_busy);
-
-        _checkUpdatesWorker.queueCheck({appData});
-    }
+    // forward task progress notifications
+    connect(&_checkTaskWorker, &UpdateCheckWorker::progressNotification, this, &UpdateService::progressNotification, Qt::QueuedConnection);
+    connect(&_updateTaskWorker, &UpdateWorker::progressNotification, this, &UpdateService::progressNotification, Qt::QueuedConnection);
 }
 
 void UpdateService::checkUpdates(const ApplicationsList &targetApps)
 {
-    _busy = true;
-    emit isBusyChanged(_busy);
+    _isCheckTaskRunning = true;
+    emit(checkTaskRunningChanged(_isCheckTaskRunning));
+    qDebug() << "Starting update lockup for" << targetApps.length() << " applications";
 
-    _checkUpdatesWorker.queueCheck(targetApps);
+    // invoke using Qt::QueuedConnection to ensure it's executed in the worker thread
+
+    QMetaObject::invokeMethod(&_checkTaskWorker, "checkUpdates", Qt::QueuedConnection, Q_ARG(ApplicationsList, targetApps));
 }
 
-void UpdateService::update(const QVariant &variant)
-{
-    if (variant.canConvert<ApplicationData>()) {
-        auto application = qvariant_cast<ApplicationData>(variant);
-        _checkUpdatesWorker.queueUpdate({application});
-        return;
-    }
-
-    if (variant.canConvert<ApplicationsList>()) {
-        auto applications = qvariant_cast<ApplicationsList>(variant);
-        _checkUpdatesWorker.queueUpdate(applications);
-        return;
-    }
-
-    qWarning() << "UpdateService::update: invalid variant value received";
-}
 int UpdateService::getUpdatesAvailableCounter() const
 {
     return _updatesInformation.size();
@@ -66,38 +50,58 @@ UpdateService::~UpdateService()
     _workerThread.exit();
     _workerThread.wait(10);
 }
-void UpdateService::handleUpdateFound(const UpdateInformation &updateInformation)
-{
-    qDebug() << "Update available " << updateInformation.application.getId();
 
+void UpdateService::handleUpdateInformation(const ApplicationUpdateData &updateInformation)
+{
     const auto &app = updateInformation.application;
     if (updateInformation.updateAvailable) {
         _updatesInformation.insert(app.getId(), updateInformation);
-
         emit(updatesAvailableCounterChanged(_updatesInformation.count()));
-        emit(updateFound(updateInformation));
-    }
-}
-void UpdateService::handleUpdateCompleted(const ApplicationBundle &bundle)
-{
-    const auto &entries = _updatesInformation.values();
-    for (auto &entry : entries) {
-        if (entry.application.getId() == bundle.app->getId()) {
-            auto newEntry = entry;
-            newEntry.checkDate = QDateTime::currentDateTime();
-            newEntry.updateAvailable = false;
-
-            _updatesInformation.insert(newEntry.application.getId(), newEntry);
+    } else {
+        if (_updatesInformation.contains(app.getId())) {
+            _updatesInformation.remove(app.getId());
+            emit(updatesAvailableCounterChanged(_updatesInformation.count()));
         }
     }
+
+    emit(applicationUpdateDataChanged(updateInformation));
 }
-bool UpdateService::isBusy()
+
+bool UpdateService::isCheckTaskRunning() const
 {
-    return _busy;
+    return _isCheckTaskRunning;
 }
-void UpdateService::handleQueueCompleted()
+void UpdateService::handleCheckCompleted()
 {
-    qDebug() << "set busy to false";
-    _busy = false;
-    emit isBusyChanged(_busy);
+    _isCheckTaskRunning = false;
+    emit(checkTaskRunningChanged(_isCheckTaskRunning));
+}
+
+void UpdateService::update(const QString &appId)
+{
+    if (_updatesInformation.contains(appId)) {
+        const auto targetUpdateInformation = _updatesInformation.value(appId);
+        update(targetUpdateInformation.application);
+    } else {
+        qDebug() << "UpdateService::update"
+                 << "no update information for" << appId;
+    }
+}
+bool UpdateService::isUpdateTaskRunning() const
+{
+    return _isUpdateTaskRunning;
+}
+void UpdateService::handleUpdateQueueCompleted()
+{
+    _isUpdateTaskRunning = false;
+    emit(updateTaskRunningChanged(_isCheckTaskRunning));
+}
+
+void UpdateService::update(const ApplicationData &application)
+{
+    // use invoke method to ensure that the method is executed in the target thread
+    QMetaObject::invokeMethod(&_updateTaskWorker, "enqueue", Qt::QueuedConnection, Q_ARG(ApplicationData, application));
+
+    _isUpdateTaskRunning = true;
+    emit(updateTaskRunningChanged(_isUpdateTaskRunning));
 }

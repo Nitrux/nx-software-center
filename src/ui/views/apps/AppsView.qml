@@ -98,7 +98,7 @@ Maui.Page
         Button
         {
             text: qsTr("Check for Updates")
-            enabled: !UpdateService.busy
+            enabled: !UpdateService.checkTaskRunning
             onClicked:
             {
                 var appList = ApplicationsRegistry.getApplications();

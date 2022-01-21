@@ -22,12 +22,12 @@ void TestUpdateService::cleanupTestCase()
 
 void TestUpdateService::testCheckUpdatesOnAppWithoutBundles()
 {
-    QSignalSpy signalSpy(&service, &UpdateService::isBusyChanged);
+    QSignalSpy signalSpy(&service, &UpdateService::checkTaskRunningChanged);
 
     service.checkUpdates({ApplicationData()});
 
     signalSpy.wait();
-    QCOMPARE(service.isBusy(), false);
+    QCOMPARE(service.isCheckTaskRunning(), false);
     QCOMPARE(signalSpy.count(), 2);
     QCOMPARE(service.getUpdatesAvailableCounter(), 0);
 }
@@ -38,7 +38,7 @@ void TestUpdateService::testCheckUpdates()
     const ApplicationData application(bundle);
     ApplicationsList applicationsList = {application};
 
-    QSignalSpy signalSpy(&service, &UpdateService::isBusyChanged);
+    QSignalSpy signalSpy(&service, &UpdateService::checkTaskRunningChanged);
     service.checkUpdates(applicationsList);
 
     signalSpy.wait();
@@ -51,12 +51,37 @@ void TestUpdateService::testCheckUpdate()
     const ApplicationBundle bundle(_outdatedAppImagePath);
     const ApplicationData application(bundle);
 
-    QSignalSpy signalSpy(&service, &UpdateService::isBusyChanged);
+    QSignalSpy signalSpy(&service, &UpdateService::checkTaskRunningChanged);
+    QSignalSpy spyUpdateDataChanged(&service, &UpdateService::applicationUpdateDataChanged);
     service.checkUpdates({application});
 
     signalSpy.wait();
     QCOMPARE(signalSpy.count(), 2);
     QCOMPARE(service.getUpdatesAvailableCounter(), 1);
+
+    QCOMPARE(spyUpdateDataChanged.count(), 1);
+    QList<QVariant> arguments = spyUpdateDataChanged.takeFirst();
+    auto updateData = qvariant_cast<ApplicationUpdateData>(arguments.at(0));
+    QVERIFY(updateData.updateAvailable);
+}
+
+void TestUpdateService::testUpdate()
+{
+    const ApplicationBundle bundle(_outdatedAppImagePath);
+    const ApplicationData application(bundle);
+
+    QSignalSpy spyStatus(&service, &UpdateService::updateTaskRunningChanged);
+    QSignalSpy spyUpdateDataChanged(&service, &UpdateService::applicationUpdateDataChanged);
+    service.update(application);
+
+    spyStatus.wait(60000);
+    QCOMPARE(spyStatus.count(), 2);
+    QCOMPARE(service.getUpdatesAvailableCounter(), 0);
+
+    QCOMPARE(spyUpdateDataChanged.count(), 1);
+    QList<QVariant> arguments = spyUpdateDataChanged.takeFirst();
+    auto updateData = qvariant_cast<ApplicationUpdateData>(arguments.at(0));
+    QVERIFY(updateData.updateAvailable == false);
 }
 
 QTEST_MAIN(TestUpdateService);

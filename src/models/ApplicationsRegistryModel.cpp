@@ -113,7 +113,7 @@ void ApplicationsRegistryModel::handleApplicationRemoved(const ApplicationData &
     endRemoveRows();
 }
 
-void ApplicationsRegistryModel::handleUpdateInformation(const UpdateInformation &updateInformation)
+void ApplicationsRegistryModel::handleUpdateInformation(const ApplicationUpdateData &updateInformation)
 {
     qDebug() << "Update information received" << updateInformation.application.getId();
     _updatesAvailable.insert(updateInformation.application.getId(), updateInformation);

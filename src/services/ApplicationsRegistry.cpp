@@ -1,7 +1,9 @@
-#include <QDebug>
+#include "ApplicationsRegistry.h"
+
 #include <utility>
 
-#include "ApplicationsRegistry.h"
+#include <QDebug>
+#include <QVector>
 
 ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs, QMap<QString, ApplicationData> applications)
     : _applications(applications)
@@ -82,9 +84,9 @@ const QStringList &ApplicationsRegistry::getAppDirs()
     return _appDirs;
 }
 
-QList<ApplicationData> ApplicationsRegistry::getApplications() const
+ApplicationsList ApplicationsRegistry::getApplications() const
 {
-    return _applications.values();
+    return QVector<ApplicationData>::fromList(_applications.values());
 }
 
 int ApplicationsRegistry::getApplicationsCount() const

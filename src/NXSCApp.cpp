@@ -34,7 +34,8 @@ NXSCApp::NXSCApp(int &argc, char **argv)
     setWindowIcon(QIcon(":/nx-software-center.svg"));
     MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
 
-    QObject::connect(&_updateService, &UpdateService::updateFound, &_applicationsRegistryModel, &ApplicationsRegistryModel::handleUpdateInformation);
+    QObject::connect(&_updateService,
+                     &UpdateService::applicationUpdateDataChanged, &_applicationsRegistryModel, &ApplicationsRegistryModel::handleUpdateInformation);
     QObject::connect(&_updateService, &UpdateService::progressNotification, &_tasksListModel, &TasksListModel::handleTaskUpdate);
     QObject::connect(&dummyProgressNotificationSource,
                      &DummyProgressNotificationSource::progressNotification,

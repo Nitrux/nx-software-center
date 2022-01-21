@@ -19,6 +19,7 @@ private:
     Q_SLOT void testCheckUpdatesOnAppWithoutBundles();
     Q_SLOT void testCheckUpdates();
     Q_SLOT void testCheckUpdate();
+    Q_SLOT void testUpdate();
     QString _outdatedAppImagePath;
     QDir _tempdir;
     UpdateService service;
