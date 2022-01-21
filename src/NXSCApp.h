@@ -44,7 +44,6 @@ private:
     QThread _bundleDirsWatcherThread;
     KAboutData _aboutData;
     QQmlApplicationEngine _engine;
-    DummyProgressNotificationSource dummyProgressNotificationSource;
     void setKDEApplicationData();
     void registerApplicationsRegistryService();
     void registerUpdateService();

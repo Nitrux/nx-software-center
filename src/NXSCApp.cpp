@@ -40,10 +40,7 @@ NXSCApp::NXSCApp(int &argc, char **argv)
                      &ApplicationsRegistryModel::handleUpdateInformation);
     QObject::connect(&_updateService, &UpdateService::progressNotification, &_tasksListModel, &TasksListModel::handleTaskUpdate);
     QObject::connect(&_updateService, &UpdateService::progressNotification, &_applicationsRegistryModel, &ApplicationsRegistryModel::handleTaskUpdate);
-    QObject::connect(&dummyProgressNotificationSource,
-                     &DummyProgressNotificationSource::progressNotification,
-                     &_tasksListModel,
-                     &TasksListModel::handleTaskUpdate);
+
     setKDEApplicationData();
 }
 
