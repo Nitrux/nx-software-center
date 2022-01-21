@@ -41,14 +41,19 @@ set(nx_RSRCS
 set(nx_STORES_SRCS
     stores/opendesktopstore.cpp
     stores/appimagehubstore.cpp
+    stores/apprepostore.cpp
     stores/ResponseDTO/category.cpp
     stores/ResponseDTO/application.cpp
+    stores/ResponseDTO/apprepo/apprepogroupresponsedto.cpp
+    stores/ResponseDTO/apprepo/apprepopackageresponsedto.cpp
+    stores/ResponseDTO/apprepo/apprepoversiondto.cpp
     )
 
 set(nx_STORES_HDRS
     stores/store.h
     stores/opendesktopstore.h
     stores/appimagehubstore.h
+    stores/apprepostore.h
 
     stores/ResponseDTO/category.h
     stores/ResponseDTO/categoryresponsedto.h

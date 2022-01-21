@@ -126,7 +126,7 @@ Maui.Page
                     label1.font.bold: true
                     label1.font.weight: Font.Bold
                     label1.font.pointSize: Maui.Style.fontSizes.big
-                    template.leftMargin:_tagColor.width
+                    padding:_tagColor.width
                     onDoubleClicked:
                     {
                         _categoriesListView.currentIndex = index
