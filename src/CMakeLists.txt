@@ -19,7 +19,6 @@ set(nx_SRCS
     models/categoriesmodel.cpp
     models/app.cpp
     models/package.cpp
-    models/progressmanager.cpp
     models/ApplicationsRegistryModel.cpp
     models/ApplicationsRegistryProxyModel.cpp
     models/TasksListModel.cpp
@@ -44,7 +43,6 @@ set(nx_HDRS
     models/categoriesmodel.h
     models/app.h
     models/package.h
-    models/progressmanager.h
     utils/appimagetools.h
     )
 

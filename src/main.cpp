@@ -6,7 +6,6 @@
 #include "NXSCApp.h"
 #include "ResponseDTO/application.h"
 #include "ResponseDTO/category.h"
-#include "models/progressmanager.h"
 #include "models/storemodel.h"
 #include "utils/nx.h"
 

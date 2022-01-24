@@ -17,7 +17,6 @@
 #include "models/appsmodel.h"
 #include "models/categoriesmodel.h"
 #include "models/package.h"
-#include "models/progressmanager.h"
 #include "models/storemodel.h"
 #include "nx.h"
 
@@ -84,7 +83,6 @@ void NXSCApp::setupQMLEngine()
 
     qmlRegisterType<App>("NXModels", 1, 0, "App");
     qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
-    qmlRegisterType<ProgressManager>("NXModels", 1, 0, "ProgressManager");
     qmlRegisterAnonymousType<Package>("NXModels", 1);
     qmlRegisterAnonymousType<Application>("NXModels", 1);
     qmlRegisterType<Category>("NXModels", 1, 0, "Category");
