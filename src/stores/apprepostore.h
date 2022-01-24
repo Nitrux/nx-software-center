@@ -26,28 +26,33 @@ class AppRepoStore : public QObject {
     Q_OBJECT
 
     public:
-        enum SearchPackage {
-            ALL,
-            BY_SLUG,
-            BY_GROUP
-        };
 
         AppRepoStore(QString apiBaseUrl);
 
         const QString name();
         
         void getGroups();
-        void getPackages(SearchPackage criteria, QString value = "");
+        void getPackages();
+        void getPackagesBySlug(QString slug);
+        void getPackagesByGroup(int group);
 
         Q_SIGNAL void groupsResponseReady(QList<AppRepoGroupResponseDTO *> response);
         Q_SIGNAL void packagesResponseReady(QList<AppRepoPackageResponseDTO *> response);
         Q_SIGNAL void error(QNetworkReply::NetworkError error);
     private:
+        enum SearchPackage {
+            ALL,
+            BY_SLUG,
+            BY_GROUP
+        };
+
         QString API_BASEURL;
         QString API_GROUPS_URL;
         QString API_PACKAGES_URL;
         QString API_PACKAGES_BY_SLUG_URL;
         QString API_PACKAGES_BY_GROUP_URL;
+        
+        void getPackages(SearchPackage criteria, QString value = "");
 
         void parseGetGroupsResponseAndReply(QNetworkReply *reply);
         void parseGetPackagesResponseAndReply(QNetworkReply *reply);

@@ -27,6 +27,27 @@ void AppRepoStore::getGroups() {
 	connect(reply, &QNetworkReply::errorOccurred, this, [=](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
+/**
+ * Fetch all packages from AppRepo API
+ */
+void AppRepoStore::getPackages() {
+	this->getPackages(AppRepoStore::SearchPackage::ALL);
+}
+
+/**
+ * Fetch packages by slug from AppRepo API
+ */
+void AppRepoStore::getPackagesBySlug(QString slug) {
+	this->getPackages(AppRepoStore::SearchPackage::BY_SLUG, slug);
+}
+
+/**
+ * Fetch packages by group from AppRepo API
+ */
+void AppRepoStore::getPackagesByGroup(int group) {
+	this->getPackages(AppRepoStore::SearchPackage::BY_GROUP, QString::number(group));
+}
+
 void AppRepoStore::getPackages(SearchPackage criteria, QString value) {
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
