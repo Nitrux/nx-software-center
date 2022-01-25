@@ -1,15 +1,6 @@
-#include <QApplication>
 #include <QCommandLineParser>
 
-#include <QQmlContext>
-
 #include "NXSCApp.h"
-#include "ResponseDTO/application.h"
-#include "ResponseDTO/category.h"
-#include "models/storemodel.h"
-#include "utils/nx.h"
-
-#include <MauiKit/FileBrowsing/fmstatic.h>
 
 int main(int argc, char *argv[])
 {
