@@ -16,7 +16,6 @@
 #include "models/app.h"
 #include "models/appsmodel.h"
 #include "models/categoriesmodel.h"
-#include "models/package.h"
 #include "models/storemodel.h"
 #include "nx.h"
 
@@ -83,14 +82,12 @@ void NXSCApp::setupQMLEngine()
 
     qmlRegisterType<App>("NXModels", 1, 0, "App");
     qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
-    qmlRegisterAnonymousType<Package>("NXModels", 1);
     qmlRegisterAnonymousType<Application>("NXModels", 1);
     qmlRegisterType<Category>("NXModels", 1, 0, "Category");
     qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
     qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
 
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "TasksModel", &_tasksListModel);
-    //    qmlRegisterUncreatableType<TaskActionData>("org.maui.nxsc", 1, 0, "TaskActionData", "Unable to create TaskActionData");
 
     registerApplicationsRegistryService();
     registerUpdateService();

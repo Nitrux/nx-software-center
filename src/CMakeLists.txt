@@ -18,7 +18,6 @@ set(nx_SRCS
     models/storemodel.cpp
     models/categoriesmodel.cpp
     models/app.cpp
-    models/package.cpp
     models/ApplicationsRegistryModel.cpp
     models/ApplicationsRegistryProxyModel.cpp
     models/TasksListModel.cpp
@@ -42,7 +41,6 @@ set(nx_HDRS
     models/storemodel.h
     models/categoriesmodel.h
     models/app.h
-    models/package.h
     utils/appimagetools.h
     )
 
