@@ -163,6 +163,7 @@ Maui.Page
 
         delegate: Maui.SwipeBrowserDelegate
         {
+            id: swipeBrowserDelegateItem
             height: 64
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
@@ -175,21 +176,63 @@ Maui.Page
             iconSource: "application-vnd.appimage"
 
             Rectangle {
-                height: 8;
-                width: 8;
-                radius: 15;
-                color: "green";
+                height: parent.height
+                width: swipeBrowserDelegateItem.iconItem.width
+                color: "transparent"
 
-                visible: model.update_available
-            }
+                Rectangle {
+                    height: 20
+                    width: 20
+                    radius: 20
+                    color: "#43A047"
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    visible: model.update_available
+                    
+                    Rectangle {
+                        height: 14
+                        width: 14
+                        radius: 14
+                        color: "#33ffffff"
+                        anchors.centerIn: parent
+                        
+                        Image {
+                            anchors.fill: parent
+                            source: "qrc:/app-update-available.svg"
+                        }
+                    }
+                }
 
-            Rectangle {
-                height: 8;
-                width: 16;
-                radius: 15;
-                color: "blue";
+                Rectangle {
+                    height: 20
+                    width: 20
+                    radius: 20
+                    color: "#FF9800"
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    visible: model.related_task
+                    
+                    Rectangle {
+                        height: 14
+                        width: 14
+                        radius: 14
+                        color: "#33ffffff"
+                        anchors.centerIn: parent
+                        
+                        Image {
+                            anchors.fill: parent
+                            source: "qrc:/app-update-progress.svg"
+                        }
 
-                visible: model.related_task
+                        RotationAnimation on rotation {
+                            loops: Animation.Infinite
+                            from: 0
+                            to: 360
+                            duration: 1000
+                            running: true
+                        }
+                    }
+                }
             }
 
             quickActions: [
