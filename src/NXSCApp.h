@@ -17,6 +17,7 @@
 #include "services/ApplicationsRegistry.h"
 #include "services/BundlesDirsWatcher.h"
 #include "services/db/AppsDBHelper.h"
+#include "services/install/InstallService.h"
 #include "services/update/UpdateService.h"
 
 class NXSCApp : public QApplication
@@ -39,6 +40,7 @@ private:
     ApplicationsRegistryModel _applicationsRegistryModel;
     ApplicationsRegistryProxyModel _applicationsRegistryModelProxy;
     UpdateService _updateService;
+    InstallService _installService;
     TasksListModel _tasksListModel;
     QPointer<BundlesDirsWatcher> _bundleDirsWatcher;
     QThread _bundleDirsWatcherThread;

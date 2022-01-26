@@ -33,6 +33,8 @@ set(nx_SRCS
     services/update/UpdateCheckWorker.cpp
     services/TaskData.cpp
     services/db/AppsDBHelper.cpp
+    services/install/InstallService.cpp
+    services/install/InstallWorker.cpp
     )
 
 set(nx_HDRS

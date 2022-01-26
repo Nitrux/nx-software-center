@@ -5,6 +5,7 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import NXModels 1.0 as NX
+import org.maui.nxsc 1.0
 
 import "../../templates"
 
@@ -49,7 +50,7 @@ StackView
             {
                 console.log("trying to append package app ", app.downloads[index].link)
                 // _progressManager.appendPackage(app, index)
-                taskManagerCtx.doDownload(app.downloads[index].link, app.downloads[index].name);
+                InstallService.installFromPlingStore(app.downloads[index].link, app.data);
             }
 
             buttonActions: [
