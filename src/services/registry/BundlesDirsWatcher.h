@@ -9,8 +9,8 @@
 #include <QStringList>
 
 // local
-#include "ApplicationBundle.h"
 #include "BundleInspector.h"
+#include "services/ApplicationBundle.h"
 
 class BundlesDirsWatcher : public QObject
 {

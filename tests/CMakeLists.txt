@@ -16,10 +16,10 @@ add_executable(
     test_applications_registry
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
-    ../src/services/ApplicationsRegistry.cpp
+    ../src/services/registry/ApplicationsRegistry.cpp
     ../src/services/db/AppsDBHelper.cpp
 
-    TestApplicationsRegistry.cpp
+    services/registry/TestApplicationsRegistry.cpp
 )
 target_include_directories(test_applications_registry PRIVATE ../src/services/)
 target_link_libraries(test_applications_registry PRIVATE MauiKit MauiKit::FileBrowsing Qt5::Sql Qt5::Widgets Qt5::Test)
@@ -42,14 +42,14 @@ add_test(NAME testApplicationsData COMMAND test_applications_data)
 add_executable(
     test_bundles_dirs_watcher
 
-    ../src/services/BundlesDirsWatcher.cpp
-    ../src/services/BundleInspector.cpp
+    ../src/services/registry/BundlesDirsWatcher.cpp
+    ../src/services/registry/BundleInspector.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
-    TestBundlesDirsWatcher.cpp
+    services/registry/TestBundlesDirsWatcher.cpp
 )
 
-kde_source_files_enable_exceptions(test_bundles_dirs_watcher ../src/services/BundlesDirsWatcher.cpp)
+kde_source_files_enable_exceptions(test_bundles_dirs_watcher ../src/services/registry/BundlesDirsWatcher.cpp)
 target_include_directories(test_bundles_dirs_watcher PRIVATE ../src/services/)
 target_link_libraries(test_bundles_dirs_watcher PRIVATE Qt5::Widgets Qt5::Test libappimage)
 target_compile_definitions(test_bundles_dirs_watcher PRIVATE SAMPLE_APPIMAGE_PATH="${APPIMAGE_TOOL_PATH}")
@@ -59,13 +59,13 @@ add_test(NAME testBundlesDirsWatcher COMMAND test_bundles_dirs_watcher)
 add_executable(
     test_bundle_inspector
 
-    ../src/services/BundleInspector.cpp
+    ../src/services/registry/BundleInspector.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
-    TestBundleInspector.cpp
+    services/registry/TestBundleInspector.cpp
 )
 
-kde_source_files_enable_exceptions(test_bundle_inspector ../src/services/BundleInspector.cpp)
+kde_source_files_enable_exceptions(test_bundle_inspector ../src/services/registry/BundleInspector.cpp)
 
 target_include_directories(test_bundle_inspector PRIVATE ../src/services/)
 target_link_libraries(test_bundle_inspector PRIVATE Qt5::Widgets Qt5::Test libappimage)

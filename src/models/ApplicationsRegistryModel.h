@@ -8,7 +8,7 @@
 #include <services/update/ApplicationUpdateData.h>
 
 // local
-#include "services/ApplicationsRegistry.h"
+#include "services/registry/ApplicationsRegistry.h"
 
 class ApplicationsRegistryModel : public QAbstractListModel
 {

@@ -7,8 +7,8 @@
 #include <QStringList>
 
 // local
-#include "ApplicationBundle.h"
-#include "ApplicationData.h"
+#include "services/ApplicationBundle.h"
+#include "services/ApplicationData.h"
 
 /**
  * Stores data of the applications available to the user

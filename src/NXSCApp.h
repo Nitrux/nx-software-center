@@ -14,10 +14,10 @@
 #include "models/ApplicationsRegistryModel.h"
 #include "models/ApplicationsRegistryProxyModel.h"
 #include "models/TasksListModel.h"
-#include "services/ApplicationsRegistry.h"
-#include "services/BundlesDirsWatcher.h"
 #include "services/db/AppsDBHelper.h"
 #include "services/install/InstallService.h"
+#include "services/registry/ApplicationsRegistry.h"
+#include "services/registry/BundlesDirsWatcher.h"
 #include "services/update/UpdateService.h"
 
 class NXSCApp : public QApplication

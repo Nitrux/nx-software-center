@@ -1,6 +1,6 @@
 #include "TestBundlesDirsWatcher.h"
 #include "ApplicationBundle.h"
-#include "BundlesDirsWatcher.h"
+#include "registry/BundlesDirsWatcher.h"
 
 #include <QRandomGenerator>
 #include <QSignalSpy>

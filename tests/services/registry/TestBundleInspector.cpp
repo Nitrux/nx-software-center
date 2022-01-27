@@ -1,6 +1,6 @@
 #include "TestBundleInspector.h"
 #include "ApplicationData.h"
-#include "BundleInspector.h"
+#include "registry/BundleInspector.h"
 
 #include <QStandardPaths>
 

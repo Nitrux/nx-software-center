@@ -10,7 +10,7 @@
 #include <appimage/utils/ResourcesExtractor.h>
 
 // local
-#include "ApplicationBundle.h"
+#include "services/ApplicationBundle.h"
 
 class BundleInspector
 {

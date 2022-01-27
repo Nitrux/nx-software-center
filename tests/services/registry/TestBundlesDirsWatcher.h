@@ -7,7 +7,7 @@
 #include <QThread>
 
 // local
-#include "BundlesDirsWatcher.h"
+#include "registry/BundlesDirsWatcher.h"
 
 class TestBundlesDirsWatcher : public QObject
 {

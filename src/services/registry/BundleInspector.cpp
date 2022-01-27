@@ -1,5 +1,5 @@
 #include "BundleInspector.h"
-#include "ApplicationData.h"
+#include "services/ApplicationData.h"
 
 #include <QDebug>
 #include <QFileInfo>

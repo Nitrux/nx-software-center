@@ -2,9 +2,9 @@
 // system
 
 // libraries
-#include <ApplicationsRegistry.h>
 #include <QObject>
 #include <QtTest/QtTest>
+#include <registry/ApplicationsRegistry.h>
 
 // local
 

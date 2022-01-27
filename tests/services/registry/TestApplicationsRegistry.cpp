@@ -5,7 +5,7 @@
 #include <QTestAccessibility>
 
 #include "ApplicationData.h"
-#include "ApplicationsRegistry.h"
+#include "registry/ApplicationsRegistry.h"
 
 void TestApplicationsRegistry::initTestCase()
 {

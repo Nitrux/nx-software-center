@@ -22,11 +22,11 @@ set(nx_SRCS
     models/ApplicationsRegistryProxyModel.cpp
     models/TasksListModel.cpp
     utils/appimagetools.cpp
-    services/ApplicationsRegistry.cpp
+    services/registry/ApplicationsRegistry.cpp
     services/ApplicationData.cpp
     services/ApplicationBundle.cpp
-    services/BundlesDirsWatcher.cpp
-    services/BundleInspector.cpp
+    services/registry/BundlesDirsWatcher.cpp
+    services/registry/BundleInspector.cpp
     services/update/UpdateService.cpp
     services/update/ApplicationUpdateData.cpp
     services/update/UpdateWorker.cpp
@@ -83,7 +83,7 @@ add_executable(${PROJECT_NAME}
     ${nx_STORES_SRCS}
     ${nx_STORES_HDRS})
 
-kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp services/BundleInspector.cpp services/ApplicationsRegistry.cpp)
+kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp services/registry/BundleInspector.cpp services/registry/ApplicationsRegistry.cpp)
 
 target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Widgets Qt5::Quick Qt5::Qml Qt5::Sql KF5::I18n KF5::CoreAddons AppImageUpdate::libappimageupdate libappimage)
 
