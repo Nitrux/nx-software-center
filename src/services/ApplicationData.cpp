@@ -122,7 +122,7 @@ void ApplicationData::addBundle(const ApplicationBundle &bundle)
 {
     int insertIndex = findInsertIndex(bundle.app->getVersion());
     // replace bundle if the paths match
-    if (_bundles.length() > insertIndex && bundle.path == _bundles[insertIndex].path)
+    if (_bundles.length() > 0 && _bundles.length() < insertIndex && bundle.path == _bundles[insertIndex].path)
         _bundles.removeAt(insertIndex);
 
     _bundles.insert(insertIndex, bundle);
