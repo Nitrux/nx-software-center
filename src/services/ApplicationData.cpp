@@ -178,3 +178,12 @@ int ApplicationData::findInsertIndex(const QString &version)
         return idx;
     }
 }
+
+bool ApplicationData::requiresTerminal() const
+{
+    return _data.value("xdg-terminal").toBool();
+}
+void ApplicationData::setRequiresTerminal(bool requiresTerminal)
+{
+    _data.insert("xdg-terminal", requiresTerminal);
+}

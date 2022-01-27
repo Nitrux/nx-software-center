@@ -37,6 +37,9 @@ public:
     QString getDescription() const;
     void setDescription(const QString &description);
 
+    bool requiresTerminal() const;
+    void setRequiresTerminal(bool requiresTerminal);
+
     QList<QUrl> getSnapshots() const;
     void setSnapshots(const QList<QUrl> &snapshots);
 
