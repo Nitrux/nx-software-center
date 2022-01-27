@@ -68,17 +68,21 @@ Maui.Page
     {
         id: appRemoveDialog
 
-        property int index : -1
+        property var targetAppName;
+        property var targetAppData;
 
         title: i18n("Remove")
-        message: i18n("Are you sure you want to remove this application?")
+        message: i18n("Are you sure you want to remove " + targetAppName + "?")
         template.iconSource: "emblem-warning"
         page.margins: Maui.Style.space.big
         spacing: Maui.Style.space.medium
         onRejected: appRemoveDialog.close()
-        onAccepted:
-        {
-            _appsList.removeApp(index);
+        onAccepted: {
+            DeleteService.deleteApplication(targetAppData);
+            appRemoveDialog.close()
+
+            targetAppName = "";
+            targetApp = null;
         }
     }
 
@@ -254,7 +258,11 @@ Maui.Page
                 {
                     icon.name: "entry-delete"
                     text: "Remove"
-                    onTriggered: DeleteService.deleteApplication(model.data);
+                    onTriggered:  {
+                        appRemoveDialog.targetAppName = model.name
+                        appRemoveDialog.targetAppData = model.data;
+                        appRemoveDialog.open();
+                    }
                 }
             ]
         }
