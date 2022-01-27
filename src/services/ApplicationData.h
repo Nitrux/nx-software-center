@@ -52,9 +52,6 @@ public:
     // removes a bundle from the list and updates the current data if the bundle is the one with the higher version
     void removeBundle(const ApplicationBundle &bundle);
 
-    // copies application data from bundle
-    void copyApplicationData(const ApplicationBundle &bundle);
-
     void setEntry(const QString &id, const QVariant &value);
     QVariant getEntry(const QString &id);
 
@@ -62,6 +59,9 @@ public:
     bool operator!=(const ApplicationData &rhs) const;
 
 private:
+    // copies application data from bundle
+    void copyApplicationData(const ApplicationBundle &bundle);
+
     // find the insert index for a new bundle with <version>
     int findInsertIndex(const QString &version);
 
