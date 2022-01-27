@@ -60,7 +60,7 @@ void InstallWorker::notifyDownloadStart()
 void InstallWorker::handleDownloadWorkerDone()
 {
     notifyDownloadResult();
-    integrateBundle();
+    verifyBundle();
 }
 
 void InstallWorker::notifyDownloadResult()
@@ -75,13 +75,12 @@ void InstallWorker::notifyDownloadResult()
     }
 }
 
-void InstallWorker::integrateBundle()
+void InstallWorker::verifyBundle()
 {
     QFile tempFile(_tempFilePath);
     if (tempFile.exists())
         tempFile.rename(_targetFilePath);
 
-    AppImageTools::integrate(_targetFilePath);
     notifyInstallCompleted();
 }
 
@@ -93,6 +92,7 @@ void InstallWorker::notifyInstallCompleted()
     _progress.status = TaskData::SUCCEED;
     emit(progressNotification(_progress));
 }
+
 void InstallWorker::handleDownloadWorkerError(const QString &errMsg)
 {
     _progress.current_progress = 0;

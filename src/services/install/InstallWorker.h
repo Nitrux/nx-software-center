@@ -45,6 +45,6 @@ private:
     void startFileDownload();
     void notifyDownloadStart();
     void notifyDownloadResult();
-    void integrateBundle();
+    void verifyBundle();
     void notifyInstallCompleted();
 };

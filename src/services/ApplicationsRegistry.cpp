@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include <QVector>
+#include <appimagetools.h>
 
 ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs, QMap<QString, ApplicationData> applications)
     : _applications(applications)
@@ -20,12 +21,14 @@ void ApplicationsRegistry::addBundle(const ApplicationBundle &bundle)
         app.addBundle(bundle);
 
         emit(applicationUpdated(app));
+        updateDesktopIntegration(app);
     } else {
         ApplicationData data;
         data.addBundle(bundle);
         _applications.insert(appId, data);
 
         emit(applicationAdded(data));
+        updateDesktopIntegration(data);
     }
 }
 ApplicationData ApplicationsRegistry::getApplication(const QString &appId) const
@@ -71,6 +74,12 @@ void ApplicationsRegistry::removeBundle(const ApplicationBundle &bundle)
         } else {
             emit(applicationUpdated(app));
         }
+
+        // remove deleted bundle integration
+        AppImageTools::unintegrate(QUrl::fromLocalFile(bundle.path));
+
+        // integrate remaining bundles if any
+        updateDesktopIntegration(app);
     } else {
         qWarning() << "Unable to remove bundle " << bundle.path << " as it isn't found.";
     }
@@ -92,4 +101,16 @@ ApplicationsList ApplicationsRegistry::getApplications() const
 int ApplicationsRegistry::getApplicationsCount() const
 {
     return _applications.size();
+}
+void ApplicationsRegistry::updateDesktopIntegration(const ApplicationData &applicationData) const
+{
+    const auto &bundles = applicationData.getBundles();
+    if (bundles.length() > 0) {
+        const auto &latestVersion = bundles[0];
+        AppImageTools::integrate(QUrl::fromLocalFile(latestVersion.path));
+
+        // un integrate previous versions
+        for (int i = 1; i < bundles.length(); i++)
+            AppImageTools::unintegrate(QUrl::fromLocalFile(bundles[i].path));
+    }
 }

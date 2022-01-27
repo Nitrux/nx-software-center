@@ -83,7 +83,7 @@ add_executable(${PROJECT_NAME}
     ${nx_STORES_SRCS}
     ${nx_STORES_HDRS})
 
-kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp services/BundleInspector.cpp)
+kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp services/BundleInspector.cpp services/ApplicationsRegistry.cpp)
 
 target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Widgets Qt5::Quick Qt5::Qml Qt5::Sql KF5::I18n KF5::CoreAddons AppImageUpdate::libappimageupdate libappimage)
 

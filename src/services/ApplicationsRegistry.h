@@ -42,6 +42,8 @@ public:
     QMap<QString, ApplicationData> _applications;
 
 private:
+    void updateDesktopIntegration(const ApplicationData &applicationData) const;
+
     // directories to look for AppImages
     QStringList _appDirs;
 };
