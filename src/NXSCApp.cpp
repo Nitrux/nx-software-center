@@ -27,6 +27,7 @@ NXSCApp::NXSCApp(int &argc, char **argv)
     , _applicationsRegistryModel(&_applicationsRegistry, this)
     , _updateService(this)
     , _installService(NX::AppsPath.toLocalFile(), this)
+    , _deleteService(2, this)
     , _tasksListModel(this)
 {
     setOrganizationName(QStringLiteral("Nitrux"));
@@ -88,12 +89,17 @@ void NXSCApp::setupQMLEngine()
     qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
     qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");
 
+    // register services
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "TasksModel", &_tasksListModel);
+
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "LaunchService", &_launchService);
+
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "InstallService", &_installService);
-    qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "DeleteService", &_deleteService);
     QObject::connect(&_installService, &InstallService::progressNotification, &_tasksListModel, &TasksListModel::handleTaskUpdate);
     QObject::connect(&_installService, &InstallService::progressNotification, &_applicationsRegistryModel, &ApplicationsRegistryModel::handleTaskUpdate);
+
+    qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "DeleteService", &_deleteService);
+    QObject::connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, &_deleteService, &DeleteService::onApplicationUpdated);
 
     registerApplicationsRegistryService();
     registerUpdateService();
