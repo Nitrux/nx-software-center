@@ -16,6 +16,7 @@
 #include "models/TasksListModel.h"
 #include "services/db/AppsDBHelper.h"
 #include "services/install/InstallService.h"
+#include "services/launch/LaunchService.h"
 #include "services/registry/ApplicationsRegistry.h"
 #include "services/registry/BundlesDirsWatcher.h"
 #include "services/update/UpdateService.h"
@@ -40,6 +41,7 @@ private:
     ApplicationsRegistryModel _applicationsRegistryModel;
     ApplicationsRegistryProxyModel _applicationsRegistryModelProxy;
     UpdateService _updateService;
+    LaunchService _launchService;
     InstallService _installService;
     TasksListModel _tasksListModel;
     QPointer<BundlesDirsWatcher> _bundleDirsWatcher;

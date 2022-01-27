@@ -242,8 +242,7 @@ Maui.Page
                     text: "Run"
                     onTriggered:
                     {
-                        _appsListView.currentIndex = index;
-                        _appsList.launchApp(_appsModel.mappedToSource(index));
+                        LaunchService.launch(model.data);
                     }
                 },
                 Action
