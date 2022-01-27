@@ -91,6 +91,7 @@ void NXSCApp::setupQMLEngine()
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "TasksModel", &_tasksListModel);
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "LaunchService", &_launchService);
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "InstallService", &_installService);
+    qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "DeleteService", &_deleteService);
     QObject::connect(&_installService, &InstallService::progressNotification, &_tasksListModel, &TasksListModel::handleTaskUpdate);
     QObject::connect(&_installService, &InstallService::progressNotification, &_applicationsRegistryModel, &ApplicationsRegistryModel::handleTaskUpdate);
 

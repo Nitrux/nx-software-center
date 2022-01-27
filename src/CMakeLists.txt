@@ -36,6 +36,7 @@ set(nx_SRCS
     services/install/InstallService.cpp
     services/install/InstallWorker.cpp
     services/launch/LaunchService.cpp
+    services/delete/DeleteService.cpp
     )
 
 set(nx_HDRS

@@ -240,31 +240,21 @@ Maui.Page
                 {
                     icon.name: "media-playback-start"
                     text: "Run"
-                    onTriggered:
-                    {
-                        LaunchService.launch(model.data);
-                    }
+                    onTriggered: LaunchService.launch(model.data);
+
                 },
                 Action
                 {
                     icon.name: "download"
                     text: "Update"
                     enabled: model.update_available
-                    onTriggered:
-                    {
-                        UpdateService.update(model.data);
-                    }
+                    onTriggered: UpdateService.update(model.data);
                 },
                 Action
                 {
                     icon.name: "entry-delete"
                     text: "Remove"
-                    onTriggered:
-                    {
-                        _appsListView.currentIndex = index;
-                        appRemoveDialog.index = _appsModel.mappedToSource(index)
-                        appRemoveDialog.open()
-                    }
+                    onTriggered: DeleteService.deleteApplication(model.data);
                 }
             ]
         }
