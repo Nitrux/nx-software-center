@@ -69,6 +69,8 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
             return app.getXdgCategories();
         case UpdateAvailable:
             return resolveUpdateAvailableValue(app);
+        case Bundles:
+            return listBundlesFileNames(app);
         case RelatedTask:
             return resolveRelatedTask(app);
         case Data:
@@ -154,4 +156,16 @@ int ApplicationsRegistryModel::findApplicationIndexById(const QString &applicati
     }
 
     return -1;
+}
+QStringList ApplicationsRegistryModel::listBundlesFileNames(const ApplicationData &data) const
+{
+    QStringList result;
+    for (const auto &bundle : data.getBundles()) {
+        QUrl bundleUrl = QUrl::fromLocalFile(bundle.path);
+        QString fileName = bundleUrl.fileName();
+        fileName = fileName.remove(".AppImage", Qt::CaseInsensitive);
+        result.append(fileName);
+    }
+
+    return result;
 }

@@ -239,14 +239,25 @@ Maui.Page
                 }
             }
 
-            quickActions: [
-                Action
-                {
-                    icon.name: "media-playback-start"
-                    text: "Run"
-                    onTriggered: LaunchService.launch(model.data);
+            actionRow: Maui.ToolButtonMenu {
+                id: runOptionsMenu
+                property var appData: model.data
+                property var entries: model.bundles
 
-                },
+                visible: entries.length > 1
+                text: "Run"
+                icon.name: "media-playback-start"
+
+                Repeater {
+                    model: runOptionsMenu.entries
+                    MenuItem {
+                        text: modelData
+                        onClicked: LaunchService.launch(runOptionsMenu.appData, index);
+                    }
+                }
+            }
+
+            quickActions: [
                 Action
                 {
                     icon.name: "download"
@@ -265,6 +276,8 @@ Maui.Page
                     }
                 }
             ]
+
+            onClicked: LaunchService.launch(model.data)
         }
     }
 
@@ -278,20 +291,7 @@ Maui.Page
             _appsListView.currentIndex = -1;
         }
 
-        function onAppLaunchSuccess() {
-            _appsListView.currentIndex = -1;
-        }
 
-        function onAppDeleteSuccess() {
-            appRemoveDialog.visible = false;
-        }
-
-        function onAppUpdateSuccess(msg) {
-            console.log("AppImage updated successfully.");
-            
-            appUpdateDialog.showDialog(_appsListView.model.get(_appsListView.currentIndex).path.split("/").pop(), 
-                msg);
-        }
 
         function onAppUpdateError(err) {
             console.log("AppImage update error.");

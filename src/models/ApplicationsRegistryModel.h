@@ -66,4 +66,5 @@ private:
     QHash<int, QByteArray> _roles;
     bool resolveUpdateAvailableValue(const ApplicationData &app) const;
     bool resolveRelatedTask(const ApplicationData &app) const;
+    QStringList listBundlesFileNames(const ApplicationData &data) const;
 };
