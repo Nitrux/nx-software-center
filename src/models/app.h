@@ -4,7 +4,6 @@
 #include <QObject>
 #include <MauiKit/Core/fmh.h>
 
-class Downloader;
 class PlingStoreApplicationData;
 class App : public QObject
 {

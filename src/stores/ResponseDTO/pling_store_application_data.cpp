@@ -50,11 +50,3 @@ QString PlingStoreApplicationData::PreviewPic::toString() {
 QString PlingStoreApplicationData::Download::toString() {
     return "{name: " + name + ", link: " + link + ", ...}";
 }
-
-FMH::Downloader *PlingStoreApplicationData::Download::downloadFile(QUrl filepath) {
-    FMH::Downloader *downloader = new FMH::Downloader();
-
-    downloader->downloadFile(QUrl(link), filepath);
-
-    return downloader;
-}

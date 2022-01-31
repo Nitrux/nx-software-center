@@ -29,7 +29,6 @@ public:
     QString way = "";
 
     QString toString();
-    FMH::Downloader *downloadFile(QUrl filepath);
   };
 
   class PreviewPic {
