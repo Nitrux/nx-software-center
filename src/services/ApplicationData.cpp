@@ -129,6 +129,11 @@ void ApplicationData::addBundle(const ApplicationBundle &bundle)
 
     if (bundle.app && insertIndex == 0)
         copyApplicationData(bundle);
+
+    // adjust main bundle index if required
+    auto mainBundleIndex = getMainBundleIndex();
+    if (mainBundleIndex >= insertIndex || mainBundleIndex != 0)
+        setMainBundleIndex(mainBundleIndex + 1);
 }
 
 void ApplicationData::copyApplicationData(const ApplicationBundle &bundle)
@@ -186,4 +191,20 @@ bool ApplicationData::requiresTerminal() const
 void ApplicationData::setRequiresTerminal(bool requiresTerminal)
 {
     _data.insert("xdg-terminal", requiresTerminal);
+}
+void ApplicationData::setMainBundleIndex(int idx)
+{
+    _data.insert("nxsc-main-bundle", idx);
+}
+int ApplicationData::getMainBundleIndex() const
+{
+    return _data.value("nxsc-main-bundle", 0).toInt();
+}
+ApplicationBundle ApplicationData::getMainBundle() const
+{
+    int mainBundleIdx = getMainBundleIndex();
+    if (mainBundleIdx >= 0 && mainBundleIdx < _bundles.length())
+        return _bundles[getMainBundleIndex()];
+    else
+        return {};
 }

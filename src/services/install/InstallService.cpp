@@ -25,3 +25,30 @@ void InstallService::installFromPlingStore(const QUrl &appimageUrl, Application 
 
     worker->installFromUrl(appimageUrl, applicationData);
 }
+
+void InstallService::handleApplicationAdded(const ApplicationData &application)
+{
+    installMainBundle(application);
+}
+void InstallService::handleApplicationUpdated(const ApplicationData &application)
+{
+    uninstallAllBundles(application);
+    installMainBundle(application);
+}
+
+void InstallService::handleApplicationRemoved(const ApplicationData &application)
+{
+    uninstallAllBundles(application);
+}
+
+void InstallService::uninstallAllBundles(const ApplicationData &applicationData) const
+{
+    for (const auto &bundle : applicationData.getBundles())
+        AppImageTools::unintegrate(QUrl::fromLocalFile(bundle.path));
+}
+void InstallService::installMainBundle(const ApplicationData &applicationData) const
+{
+    const auto &mainBundle = applicationData.getMainBundle();
+    if (!mainBundle.path.isEmpty())
+        AppImageTools::integrate(QUrl::fromLocalFile(mainBundle.path));
+}

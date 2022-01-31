@@ -23,6 +23,7 @@ public:
     const QStringList &getAppDirs();
     [[nodiscard]] bool applicationExist(const QString &appId) const;
     [[nodiscard]] ApplicationData getApplication(const QString &appId) const;
+    Q_SCRIPTABLE void updateApplicationData(const ApplicationData &applicationData);
 
     [[nodiscard]] Q_SCRIPTABLE ApplicationsList getApplications() const;
     [[nodiscard]] Q_SCRIPTABLE int getApplicationsCount() const;
@@ -42,8 +43,6 @@ public:
     QMap<QString, ApplicationData> _applications;
 
 private:
-    void updateDesktopIntegration(const ApplicationData &applicationData) const;
-
     // directories to look for AppImages
     QStringList _appDirs;
 };

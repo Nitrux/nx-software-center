@@ -24,6 +24,7 @@ public:
 
     QString path;
     qint64 size;
+    QString version;
     QDateTime lastModified;
     QByteArray hashSumMD5;
     Type bundleType;

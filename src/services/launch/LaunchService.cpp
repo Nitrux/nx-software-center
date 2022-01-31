@@ -10,6 +10,9 @@
 void LaunchService::launch(const QVariant &applicationVariant, int bundleIdx) const
 {
     const ApplicationData &application = qvariant_cast<ApplicationData>(applicationVariant);
+    if (bundleIdx == -1)
+        bundleIdx = application.getMainBundleIndex();
+
     const auto &bundles = application.getBundles();
     if (bundleIdx >= 0 && bundleIdx < bundles.length()) {
         const auto &bundle = bundles[bundleIdx];

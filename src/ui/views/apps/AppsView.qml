@@ -174,8 +174,8 @@ Maui.Page
             label1.text: model.name
             label2.text: model.description
             label3.text: model.version
-            label4.text: Maui.Handy.formatSize(model.latest_bundle_size)
-            imageSource: "image://thumbnailer/" + model.latest_bundle_path
+            label4.text: Maui.Handy.formatSize(model.mainBundleSize)
+            imageSource: "image://thumbnailer/" + model.mainBundlePath
             iconSizeHint: Maui.Style.iconSizes.large
             iconSource: "application-vnd.appimage"
 
@@ -192,14 +192,14 @@ Maui.Page
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
                     visible: model.update_available
-                    
+
                     Rectangle {
                         height: 14
                         width: 14
                         radius: 14
                         color: "#33ffffff"
                         anchors.centerIn: parent
-                        
+
                         Image {
                             anchors.fill: parent
                             source: "qrc:/app-update-available.svg"
@@ -215,14 +215,14 @@ Maui.Page
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
                     visible: model.related_task
-                    
+
                     Rectangle {
                         height: 14
                         width: 14
                         radius: 14
                         color: "#33ffffff"
                         anchors.centerIn: parent
-                        
+
                         Image {
                             anchors.fill: parent
                             source: "qrc:/app-update-progress.svg"
@@ -241,18 +241,20 @@ Maui.Page
 
             actionRow: Maui.ToolButtonMenu {
                 id: runOptionsMenu
-                property var appData: model.data
-                property var entries: model.bundles
+                property var appModel: model
 
-                visible: entries.length > 1
-                text: "Run"
-                icon.name: "media-playback-start"
+                visible: appModel.bundles.length > 1
+                text: "Configure"
+                icon.name: "configure"
 
                 Repeater {
-                    model: runOptionsMenu.entries
+                    model: runOptionsMenu.appModel.bundles
                     MenuItem {
                         text: modelData
-                        onClicked: LaunchService.launch(runOptionsMenu.appData, index);
+                        checkable: true
+                        autoExclusive: true
+                        checked: index === runOptionsMenu.appModel.mainBundleIndex
+                        onClicked: {runOptionsMenu.appModel.mainBundleIndex = index}
                     }
                 }
             }
@@ -302,7 +304,7 @@ Maui.Page
     Component.onCompleted:
     {
             var appList = ApplicationsRegistry.getApplications();
-            UpdateService.checkUpdates(appList);
+//            UpdateService.checkUpdates(appList);
     }
 }
 

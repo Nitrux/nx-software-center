@@ -22,10 +22,15 @@ public:
     // use it to forward tasks updates
     Q_SIGNAL void progressNotification(const TaskData &update);
 
-private:
-    Q_SLOT
+    // update desktop integration
+    Q_SLOT void handleApplicationAdded(const ApplicationData &application);
+    Q_SLOT void handleApplicationUpdated(const ApplicationData &application);
+    Q_SLOT void handleApplicationRemoved(const ApplicationData &application);
 
+private:
     QDir _applicationsDir;
     QDir _partialsDir;
     QQueue<QUrl> _installQueue;
+    void installMainBundle(const ApplicationData &applicationData) const;
+    void uninstallAllBundles(const ApplicationData &applicationData) const;
 };

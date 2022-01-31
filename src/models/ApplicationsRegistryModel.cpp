@@ -30,8 +30,9 @@ void ApplicationsRegistryModel::initRoles()
     _roles[Snapshots] = "snapshots";
     _roles[XdgCategories] = "xdg_categories";
     _roles[Bundles] = "bundles";
-    _roles[LatestBundlePath] = "latest_bundle_path";
-    _roles[LatestBundleSize] = "latest_bundle_size";
+    _roles[MainBundleIndex] = "mainBundleIndex";
+    _roles[MainBundlePath] = "mainBundlePath";
+    _roles[MainBundleSize] = "mainBundleSize";
     _roles[UpdateAvailable] = "update_available";
     _roles[RelatedTask] = "related_task";
     _roles[Data] = "data";
@@ -75,16 +76,12 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
             return resolveRelatedTask(app);
         case Data:
             return QVariant::fromValue(app);
-        case LatestBundlePath:
-            if (!appBundles.empty())
-                return app.getBundles().first().path;
-            else
-                return {};
-        case LatestBundleSize:
-            if (!appBundles.empty())
-                return appBundles.first().size;
-            else
-                return {};
+        case MainBundleIndex:
+            return app.getMainBundleIndex();
+        case MainBundlePath:
+            return app.getMainBundle().path;
+        case MainBundleSize:
+            return app.getMainBundle().size;
         default:
             return {};
         }
@@ -162,10 +159,35 @@ QStringList ApplicationsRegistryModel::listBundlesFileNames(const ApplicationDat
     QStringList result;
     for (const auto &bundle : data.getBundles()) {
         QUrl bundleUrl = QUrl::fromLocalFile(bundle.path);
-        QString fileName = bundleUrl.fileName();
-        fileName = fileName.remove(".AppImage", Qt::CaseInsensitive);
-        result.append(fileName);
+        auto bundleAppData = bundle.app;
+        if (!bundleAppData.isNull() && !bundleAppData->getVersion().isEmpty()) {
+            result.append(bundleAppData->getVersion());
+        } else {
+            QString fileName = bundleUrl.fileName();
+            fileName = fileName.remove(".AppImage", Qt::CaseInsensitive);
+            result.append(fileName);
+        }
     }
 
     return result;
+}
+bool ApplicationsRegistryModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (!index.isValid())
+        return {};
+
+    if (index.row() >= 0 && index.row() < _applications.length()) {
+        ApplicationData app = _applications[index.row()];
+        switch (role) {
+        case MainBundleIndex:
+            app.setMainBundleIndex(value.toInt());
+            _registry->updateApplicationData(app);
+            emit(dataChanged(index, index, {role}));
+            return true;
+        default:
+            return false;
+        }
+    }
+
+    return false;
 }

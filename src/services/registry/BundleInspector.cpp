@@ -27,8 +27,8 @@ ApplicationBundle BundleInspector::getData()
         extractDesktopEntryData(extractor);
 
         _bundle.bundleType = ApplicationBundle::AppImage;
-//        extractIcon(extractor);
-//        _bundle.hashSumMD5 = getMd5Checksum();
+        //        extractIcon(extractor);
+        //        _bundle.hashSumMD5 = getMd5Checksum();
     } catch (std::runtime_error &error) {
         // report this as an unknown type bundle in case of error
         _bundle.bundleType = ApplicationBundle::Unknown;
@@ -56,7 +56,8 @@ void BundleInspector::extractDesktopEntryData(const appimage::utils::ResourcesEx
 
         _bundle.app->setName(desktopEntry.value("Desktop Entry/Name").toString());
         _bundle.app->setDescription(desktopEntry.value("Desktop Entry/Comment").toString());
-        _bundle.app->setVersion(desktopEntry.value("Desktop Entry/X-AppImage-Version", QString()).toString());
+        _bundle.version = desktopEntry.value("Desktop Entry/X-AppImage-Version", QString()).toString();
+        _bundle.app->setVersion(_bundle.version);
         _bundle.app->setRequiresTerminal(desktopEntry.value("Desktop Entry/Terminal", false).toBool());
 
         QStringList xdgCategories = extractXdgCategories(desktopEntry);

@@ -58,6 +58,12 @@ public:
     void setEntry(const QString &id, const QVariant &value);
     QVariant getEntry(const QString &id);
 
+    // define the main bundle for this application
+    void setMainBundleIndex(int idx);
+    int getMainBundleIndex() const;
+    ApplicationBundle getMainBundle() const;
+
+
     bool operator==(const ApplicationData &rhs) const;
     bool operator!=(const ApplicationData &rhs) const;
 

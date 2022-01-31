@@ -25,8 +25,9 @@ public:
         Snapshots,
         XdgCategories,
         Bundles,
-        LatestBundlePath,
-        LatestBundleSize,
+        MainBundleIndex,
+        MainBundlePath,
+        MainBundleSize,
         UpdateAvailable,
         RelatedTask,
         Data,
@@ -42,6 +43,8 @@ public:
     [[nodiscard]] int rowCount(const QModelIndex &parent) const override;
 
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
+
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
     Q_SLOT void handleApplicationAdded(const ApplicationData &application);
     Q_SLOT void handleApplicationUpdated(const ApplicationData &application);
