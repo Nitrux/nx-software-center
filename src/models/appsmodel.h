@@ -9,7 +9,7 @@
 class QFileSystemWatcher;
 
 class Store;
-class Application;
+class PlingStoreApplicationData;
 class AppsModel : public MauiList
 {
     Q_OBJECT
@@ -46,7 +46,7 @@ public slots:
 
 private:
     FMH::MODEL_LIST m_list;
-    QHash<QString, Application *> m_app;
+    QHash<QString, PlingStoreApplicationData *> m_app;
     Store *m_store;
     QFileSystemWatcher * m_watcher;
 

@@ -4,7 +4,7 @@
 #include <QList>
 #include <QObject>
 
-#include "application.h"
+#include "pling_store_application_data.h"
 
 class ApplicationResponseDTO : public QObject {
   Q_OBJECT
@@ -12,7 +12,7 @@ class ApplicationResponseDTO : public QObject {
 public:
   ApplicationResponseDTO(QObject *parent = nullptr) : QObject(parent) {}
 
-  QList<Application *> applications;
+  QList<PlingStoreApplicationData *> applications;
   QString message;
   QString status;
   QString totalItems;
@@ -26,7 +26,7 @@ public:
                 ", statusCode: " + QString::number(statusCode) +
                 ", totalItems: " + totalItems + "}\n";
 
-    for (Application *a : applications) {
+    for (PlingStoreApplicationData *a : applications) {
       r.append("      - " + a->toString() + "\n");
     }
 

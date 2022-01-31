@@ -57,7 +57,7 @@ set(nx_STORES_SRCS
     stores/opendesktopstore.cpp
     stores/appimagehubstore.cpp
     stores/ResponseDTO/category.cpp
-    stores/ResponseDTO/application.cpp
+    stores/ResponseDTO/pling_store_application_data.cpp
     )
 
 set(nx_STORES_HDRS
@@ -67,7 +67,7 @@ set(nx_STORES_HDRS
 
     stores/ResponseDTO/category.h
     stores/ResponseDTO/categoryresponsedto.h
-    stores/ResponseDTO/application.h
+    stores/ResponseDTO/pling_store_application_data.h
     stores/ResponseDTO/applicationresponsedto.h)
 
 if (QUICK_COMPILER)

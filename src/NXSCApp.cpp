@@ -84,7 +84,7 @@ void NXSCApp::setupQMLEngine()
 
     qmlRegisterType<App>("NXModels", 1, 0, "App");
     qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
-    qmlRegisterAnonymousType<Application>("NXModels", 1);
+    qmlRegisterAnonymousType<PlingStoreApplicationData>("NXModels", 1);
     qmlRegisterType<Category>("NXModels", 1, 0, "Category");
     qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
     qmlRegisterType<CategoriesModel>("NXModels", 1, 0, "Categories");

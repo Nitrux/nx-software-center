@@ -3,9 +3,9 @@
 #include "app.h"
 
 StoreModel::StoreModel(QObject *parent) : MauiList(parent),
-    m_store(new AppImageHubStore(this)), m_app(new Application(this)),  m_category(new Category(this))
+    m_store(new AppImageHubStore(this)), m_app(new PlingStoreApplicationData(this)),  m_category(new Category(this))
 {
-    qRegisterMetaType<Application *>("Application *");
+    qRegisterMetaType<PlingStoreApplicationData *>("Application *");
 }
 
 void StoreModel::requestApps()
@@ -92,7 +92,7 @@ int StoreModel::getPage() const
     return m_page;
 }
 
-Application *StoreModel::getApp() const
+PlingStoreApplicationData *StoreModel::getApp() const
 {
     return m_app;
 }
@@ -152,12 +152,12 @@ void StoreModel::setApp(const QString &id)
     if(app)
         this->m_app = app;
     else
-        this->m_app = new Application(this);
+        this->m_app = new PlingStoreApplicationData(this);
 
     emit this->appChanged(this->m_app);
 }
 
-Application * StoreModel::application(const QString & id)
+PlingStoreApplicationData * StoreModel::application(const QString & id)
 {
     const auto app = this->m_appMap[id];
 

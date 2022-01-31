@@ -13,7 +13,7 @@ InstallService::InstallService(const QString &applicationsDir, QObject *parent)
         _partialsDir.mkpath(".");
 }
 
-void InstallService::installFromPlingStore(const QUrl &appimageUrl, Application *plingStoreApplicationData)
+void InstallService::installFromPlingStore(const QUrl &appimageUrl, PlingStoreApplicationData *plingStoreApplicationData)
 {
     ApplicationData applicationData;
     applicationData.setName(plingStoreApplicationData->name);

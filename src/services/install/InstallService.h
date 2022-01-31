@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QQueue>
 #include <QUrl>
-#include <ResponseDTO/application.h>
+#include <ResponseDTO/pling_store_application_data.h>
 
 // local
 #include "services/ApplicationData.h"
@@ -17,7 +17,7 @@ class InstallService : public QObject
     Q_OBJECT
 public:
     explicit InstallService(const QString &applicationsDir, QObject *parent = nullptr);
-    Q_SCRIPTABLE void installFromPlingStore(const QUrl &appimageUrl, Application *plingStoreApplicationData);
+    Q_SCRIPTABLE void installFromPlingStore(const QUrl &appimageUrl, PlingStoreApplicationData *plingStoreApplicationData);
 
     // use it to forward tasks updates
     Q_SIGNAL void progressNotification(const TaskData &update);

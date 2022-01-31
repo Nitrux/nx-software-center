@@ -1,9 +1,9 @@
-#include "application.h"
+#include "pling_store_application_data.h"
 
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
-QString Application::toString(bool verbose) {
+QString PlingStoreApplicationData::toString(bool verbose) {
   QString q;
   if (!verbose) {
     q = "{name: " + name + ", ...}";
@@ -41,17 +41,17 @@ QString Application::toString(bool verbose) {
   return q;
 }
 
-QString Application::PreviewUrl::toString() { return "{preview: " + preview + "}"; }
+QString PlingStoreApplicationData::PreviewUrl::toString() { return "{preview: " + preview + "}"; }
 
-QString Application::PreviewPic::toString() {
+QString PlingStoreApplicationData::PreviewPic::toString() {
     return "{pic: " + pic + ", smallpic: " + smallPic + "}";
 }
 
-QString Application::Download::toString() {
+QString PlingStoreApplicationData::Download::toString() {
     return "{name: " + name + ", link: " + link + ", ...}";
 }
 
-FMH::Downloader *Application::Download::downloadFile(QUrl filepath) {
+FMH::Downloader *PlingStoreApplicationData::Download::downloadFile(QUrl filepath) {
     FMH::Downloader *downloader = new FMH::Downloader();
 
     downloader->downloadFile(QUrl(link), filepath);

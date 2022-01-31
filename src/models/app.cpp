@@ -1,7 +1,7 @@
 #include "app.h"
-#include "ResponseDTO/application.h"
+#include "ResponseDTO/pling_store_application_data.h"
 
-App::App(QObject *parent) : QObject(parent), m_data(new Application(this)) {}
+App::App(QObject *parent) : QObject(parent), m_data(new PlingStoreApplicationData(this)) {}
 
 App::App(const App &other, QObject *parent) : QObject(parent), m_data(other.m_data),
     m_info(other.m_info), m_downloads(other.m_downloads), m_images(other.m_images), m_urls(other.m_urls), m_id(other.m_id), m_isInstalled(other.m_isInstalled), m_isUpdatable(other.m_isUpdatable)
@@ -9,7 +9,7 @@ App::App(const App &other, QObject *parent) : QObject(parent), m_data(other.m_da
     qDebug()<< "COPYING APP";
 }
 
-Application *App::getData() const
+PlingStoreApplicationData *App::getData() const
 {
     return m_data;
 }
@@ -87,7 +87,7 @@ this->m_info = FMH::toMap(FMH::MODEL{
 emit this->infoChanged(this->m_info);
 }
 
-void App::setData(Application *data)
+void App::setData(PlingStoreApplicationData *data)
 {
     if (m_data == data || !data)
         return;
