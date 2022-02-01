@@ -7,6 +7,7 @@
 #include <MauiKit/Core/mauilist.h>
 
 #include "ResponseDTO/category.h"
+#include "categorymanager.h"
 
 class Store;
 class CategoriesModel : public MauiList
@@ -31,6 +32,7 @@ private:
     Store *m_store;
 
     Category * m_category;
+    CategoryManager *m_categoryManager;
 
     void setList();
 

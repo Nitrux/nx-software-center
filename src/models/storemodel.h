@@ -5,6 +5,7 @@
 #include <MauiKit/Core/mauilist.h>
 
 #include "store.h"
+#include "applicationmanager.h"
 
 class Category;
 class Application;
@@ -98,6 +99,8 @@ private:
     QString m_nameFilter;
     QStringList m_tags;
     SORT m_sort = SORT::NEWEST;    
+
+    ApplicationManager *m_applicationManager;
 
 #if defined Q_PROCESSOR_ARM && defined Q_OS_LINUX
     Store::Arch m_arch = Store::Arch::arm64;

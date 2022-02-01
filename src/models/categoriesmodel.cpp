@@ -3,7 +3,8 @@
 #include "appimagehubstore.h"
 
 CategoriesModel::CategoriesModel(QObject *parent) : MauiList(parent),
-    m_store(new AppImageHubStore(this)), m_category(nullptr)
+    m_store(new AppImageHubStore(this)), m_category(nullptr),
+    m_categoryManager(new CategoryManager())
 {
 }
 
@@ -89,8 +90,8 @@ void CategoriesModel::setList()
 
 }else
 {
-this->m_store->getCategories();
-connect(this->m_store, &Store::categoriesResponseReady, [=](CategoryResponseDTO *response)
+this->m_categoryManager->getCategories();
+connect(this->m_categoryManager, &CategoryManager::categoriesResponseReady, [=](CategoryResponseDTO *response)
 {
     if(m_category)
         return;
@@ -124,6 +125,7 @@ connect(this->m_store, &Store::categoriesResponseReady, [=](CategoryResponseDTO 
         cat->displayName = c->displayName;
         cat->xdgType = c->xdgType;
         cat->categories = c->categories;
+        cat->categoryStore = c->categoryStore;
 //        qDebug() << "requesting category" << _cat->categories.size();
 
     this->m_categoryMap.insert(c->id, cat);
