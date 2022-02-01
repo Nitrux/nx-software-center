@@ -15,6 +15,8 @@ set(nx_SRCS
     main.cpp
     models/appsmodel.cpp
     models/storemodel.cpp
+    models/categorymanager.cpp
+    models/applicationmanager.cpp
     models/categoriesmodel.cpp
     models/app.cpp
     models/package.cpp
@@ -26,6 +28,8 @@ set(nx_HDRS
     utils/nx.h
     models/appsmodel.h
     models/storemodel.h
+    models/categorymanager.h
+    models/applicationmanager.h
     models/categoriesmodel.h
     models/app.h
     models/package.h
