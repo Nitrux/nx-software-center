@@ -41,7 +41,7 @@ qDebug()<< m_images;
 
 for(const auto &data : this->m_data->downloads)
 {
-    if(data->name.endsWith(".AppImage"))
+    if(data->name.endsWith(".AppImage") || data->link.endsWith(".AppImage"))
     {
         this->m_downloads << QVariantMap {
         {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_ARCH], data->packageArch},
