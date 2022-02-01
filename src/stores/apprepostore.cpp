@@ -97,7 +97,7 @@ void AppRepoStore::parseGetGroupsResponseAndReply(QNetworkReply *reply) {
 		response << categoryItem;
     }
 
-    emit groupsResponseReady(response);
+    emit groupsResponseReady(generateGroupResponse(response));
 }
 
 void AppRepoStore::parseGetPackagesResponseAndReply(QNetworkReply *reply) {
@@ -119,7 +119,7 @@ void AppRepoStore::parseGetPackagesResponseAndReply(QNetworkReply *reply) {
 		response << createPackageResponseDTO(obj);
 	}
 
-    emit packagesResponseReady(response);
+    emit packagesResponseReady(generatePackageResponse(response));
 }
 
 AppRepoPackageResponseDTO *AppRepoStore::createPackageResponseDTO(QJsonObject obj) {
@@ -179,4 +179,52 @@ AppRepoPackageResponseDTO *AppRepoStore::createPackageResponseDTO(QJsonObject ob
 	packageItem->setImages(images);
 
 	return packageItem;
+}
+
+CategoryResponseDTO *AppRepoStore::generateGroupResponse(QList<AppRepoGroupResponseDTO *> response) {
+	CategoryResponseDTO *categoryResponse = new CategoryResponseDTO();
+
+	foreach(AppRepoGroupResponseDTO *responseItem, response) {
+		Category *category = new Category();
+		category->id = QString::number(responseItem->getUnique());
+		category->name = "AppRepo: " + responseItem->getName();
+		category->displayName = "AppRepo: " + responseItem->getName();
+		category->categoryStore = Category::CategoryStore::APPREPO;
+
+		categoryResponse->categories.append(category);
+	}
+
+	return categoryResponse;
+}
+
+ApplicationResponseDTO *AppRepoStore::generatePackageResponse(QList<AppRepoPackageResponseDTO *> response) {
+	ApplicationResponseDTO *applicationResponse = new ApplicationResponseDTO();
+
+	foreach(AppRepoPackageResponseDTO *responseItem, response) {
+		Application *application = new Application();
+		application->id = responseItem->getSlug();
+		application->name = responseItem->getName();
+		application->description = responseItem->getDescription();
+		application->version = responseItem->getVersion();
+		application->tags = "app,appimage,apprepo";
+
+		foreach(AppRepoVersionDTO version, responseItem->getVersions()) {
+			Application::Download *download = new Application::Download();
+			download->name = version.getName();
+			download->link = version.getFile().toString();
+
+			application->downloads.append(download);
+		}
+
+		foreach(QString image, responseItem->getImages()) {
+			Application::PreviewPic *previewPic = new Application::PreviewPic();
+			previewPic->pic = image;
+
+			application->previewPics.append(previewPic);
+		}
+
+		applicationResponse->applications.append(application);
+	}
+
+	return applicationResponse;
 }

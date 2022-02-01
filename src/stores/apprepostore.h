@@ -21,6 +21,10 @@
 #include "store.h"
 #include "ResponseDTO/apprepo/apprepogroupresponsedto.h"
 #include "ResponseDTO/apprepo/apprepopackageresponsedto.h"
+#include "ResponseDTO/categoryresponsedto.h"
+#include "ResponseDTO/category.h"
+#include "ResponseDTO/applicationresponsedto.h"
+#include "ResponseDTO/application.h"
 
 class AppRepoStore : public QObject {
     Q_OBJECT
@@ -36,8 +40,8 @@ class AppRepoStore : public QObject {
         void getPackagesBySlug(QString slug);
         void getPackagesByGroup(int group);
 
-        Q_SIGNAL void groupsResponseReady(QList<AppRepoGroupResponseDTO *> response);
-        Q_SIGNAL void packagesResponseReady(QList<AppRepoPackageResponseDTO *> response);
+        Q_SIGNAL void groupsResponseReady(CategoryResponseDTO *response);
+        Q_SIGNAL void packagesResponseReady(ApplicationResponseDTO *response);
         Q_SIGNAL void error(QNetworkReply::NetworkError error);
     private:
         enum SearchPackage {
@@ -56,6 +60,9 @@ class AppRepoStore : public QObject {
 
         void parseGetGroupsResponseAndReply(QNetworkReply *reply);
         void parseGetPackagesResponseAndReply(QNetworkReply *reply);
+
+        CategoryResponseDTO *generateGroupResponse(QList<AppRepoGroupResponseDTO *> response);
+        ApplicationResponseDTO *generatePackageResponse(QList<AppRepoPackageResponseDTO *> response);
 
         AppRepoPackageResponseDTO *createPackageResponseDTO(QJsonObject obj);
 };
