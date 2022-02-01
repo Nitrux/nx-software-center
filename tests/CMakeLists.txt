@@ -14,20 +14,24 @@ endif (NOT EXISTS ${APPIMAGE_TOOL_PATH})
 
 add_executable(
     test_applications_registry
+    ../src/services/Application.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
     ../src/services/registry/ApplicationsRegistry.cpp
-    ../src/services/db/AppsDBHelper.cpp
+    ../src/utils/appimagetools.cpp
 
     services/registry/TestApplicationsRegistry.cpp
 )
-target_include_directories(test_applications_registry PRIVATE ../src/services/)
-target_link_libraries(test_applications_registry PRIVATE MauiKit MauiKit::FileBrowsing Qt5::Sql Qt5::Widgets Qt5::Test)
+
+kde_source_files_enable_exceptions(test_applications_registry ../src/utils/appimagetools.cpp)
+target_include_directories(test_applications_registry PRIVATE ../src/)
+target_link_libraries(test_applications_registry PRIVATE MauiKit MauiKit::FileBrowsing Qt5::Sql Qt5::Widgets Qt5::Test libappimage)
 
 add_test(NAME testApplicationsRegistry COMMAND test_applications_registry)
 
 add_executable(
     test_applications_data
+    ../src/services/Application.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
 
@@ -44,6 +48,7 @@ add_executable(
 
     ../src/services/registry/BundlesDirsWatcher.cpp
     ../src/services/registry/BundleInspector.cpp
+    ../src/services/Application.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
     services/registry/TestBundlesDirsWatcher.cpp
@@ -60,6 +65,7 @@ add_executable(
     test_bundle_inspector
 
     ../src/services/registry/BundleInspector.cpp
+    ../src/services/Application.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
     services/registry/TestBundleInspector.cpp
@@ -81,6 +87,7 @@ add_executable(
     ../src/services/update/UpdateWorker.cpp
     ../src/services/update/UpdateCheckWorker.cpp
     ../src/services/TaskData.cpp
+    ../src/services/Application.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
 

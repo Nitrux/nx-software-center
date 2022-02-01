@@ -8,9 +8,7 @@
 #include <QString>
 
 // local
-
-class ApplicationData;
-Q_DECLARE_OPAQUE_POINTER(ApplicationData);
+#include "ApplicationData.h"
 
 class ApplicationBundle
 {
@@ -18,9 +16,11 @@ public:
     enum Type { Unknown, AppImage };
 
     ApplicationBundle();
-    explicit ApplicationBundle(QString path, ApplicationData *data = nullptr);
+    explicit ApplicationBundle(QString path, ApplicationData data = {});
     bool operator==(const ApplicationBundle &rhs) const;
     bool operator!=(const ApplicationBundle &rhs) const;
+    bool operator<(const ApplicationBundle &rhs) const;
+    bool operator>(const ApplicationBundle &rhs) const;
 
     QString path;
     qint64 size;
@@ -29,7 +29,7 @@ public:
     QByteArray hashSumMD5;
     Type bundleType;
 
-    QSharedPointer<ApplicationData> app;
+    ApplicationData data;
 };
 
 Q_DECLARE_METATYPE(ApplicationBundle)

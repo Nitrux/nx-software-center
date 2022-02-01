@@ -29,7 +29,7 @@ public:
     Q_SIGNAL void updatesAvailableCounterChanged(int updatesAvailable);
 
     Q_SCRIPTABLE void update(const QString &appId);
-    Q_SCRIPTABLE void update(const ApplicationData &application);
+    Q_SCRIPTABLE void update(const Application &application);
     Q_SCRIPTABLE void update(const ApplicationsList &targetApps);
 
     Q_SCRIPTABLE void checkUpdates(const ApplicationsList &targetApps);

@@ -4,7 +4,7 @@
 #include <QFile>
 
 // local
-#include <services/ApplicationData.h>
+#include <services/Application.h>
 
 DeleteService::DeleteService(int appBundlesLimit, QObject *parent)
     : QObject(parent)
@@ -13,7 +13,7 @@ DeleteService::DeleteService(int appBundlesLimit, QObject *parent)
 }
 void DeleteService::deleteApplication(const QVariant &variant)
 {
-    const ApplicationData &application = qvariant_cast<ApplicationData>(variant);
+    const Application &application = qvariant_cast<Application>(variant);
     const auto &bundles = application.getBundles();
     for (const auto &bundle : bundles)
         removeApplicationBundle(variant, bundle);
@@ -24,7 +24,7 @@ void DeleteService::removeApplicationBundle(const QVariant &variant, const Appli
     if (!deleted)
         emit(deleteError(variant, "Unable to remove file: " + bundle.path));
 }
-void DeleteService::onApplicationUpdated(const ApplicationData &applicationData)
+void DeleteService::onApplicationUpdated(const Application &applicationData)
 {
     const auto &bundles = applicationData.getBundles();
     if (bundles.length() > _appBundlesLimit)

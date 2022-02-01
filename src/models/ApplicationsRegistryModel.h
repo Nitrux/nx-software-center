@@ -46,9 +46,9 @@ public:
 
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-    Q_SLOT void handleApplicationAdded(const ApplicationData &application);
-    Q_SLOT void handleApplicationUpdated(const ApplicationData &application);
-    Q_SLOT void handleApplicationRemoved(const ApplicationData &application);
+    Q_SLOT void handleApplicationAdded(const Application &application);
+    Q_SLOT void handleApplicationUpdated(const Application &application);
+    Q_SLOT void handleApplicationRemoved(const Application &application);
     Q_SLOT void handleUpdateInformation(const ApplicationUpdateData &updateData);
     Q_SLOT void handleTaskUpdate(const TaskData &notification);
 
@@ -67,7 +67,7 @@ private:
 
     QModelIndex _root;
     QHash<int, QByteArray> _roles;
-    bool resolveUpdateAvailableValue(const ApplicationData &app) const;
-    bool resolveRelatedTask(const ApplicationData &app) const;
-    QStringList listBundlesFileNames(const ApplicationData &data) const;
+    bool resolveUpdateAvailableValue(const Application &app) const;
+    bool resolveRelatedTask(const Application &app) const;
+    QStringList listBundlesFileNames(const Application &data) const;
 };

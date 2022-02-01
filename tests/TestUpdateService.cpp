@@ -24,7 +24,7 @@ void TestUpdateService::testCheckUpdatesOnAppWithoutBundles()
 {
     QSignalSpy signalSpy(&service, &UpdateService::checkTaskRunningChanged);
 
-    service.checkUpdates({ApplicationData()});
+    service.checkUpdates({Application()});
 
     signalSpy.wait();
     QCOMPARE(service.isCheckTaskRunning(), false);
@@ -35,7 +35,7 @@ void TestUpdateService::testCheckUpdatesOnAppWithoutBundles()
 void TestUpdateService::testCheckUpdates()
 {
     const ApplicationBundle bundle(_outdatedAppImagePath);
-    const ApplicationData application(bundle);
+    const Application application(bundle);
     ApplicationsList applicationsList = {application};
 
     QSignalSpy signalSpy(&service, &UpdateService::checkTaskRunningChanged);
@@ -49,7 +49,7 @@ void TestUpdateService::testCheckUpdates()
 void TestUpdateService::testCheckUpdate()
 {
     const ApplicationBundle bundle(_outdatedAppImagePath);
-    const ApplicationData application(bundle);
+    const Application application(bundle);
 
     QSignalSpy signalSpy(&service, &UpdateService::checkTaskRunningChanged);
     QSignalSpy spyUpdateDataChanged(&service, &UpdateService::applicationUpdateDataChanged);
@@ -68,7 +68,7 @@ void TestUpdateService::testCheckUpdate()
 void TestUpdateService::testUpdate()
 {
     const ApplicationBundle bundle(_outdatedAppImagePath);
-    const ApplicationData application(bundle);
+    const Application application(bundle);
 
     QSignalSpy spyStatus(&service, &UpdateService::updateTaskRunningChanged);
     QSignalSpy spyUpdateDataChanged(&service, &UpdateService::applicationUpdateDataChanged);

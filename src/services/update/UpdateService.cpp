@@ -97,10 +97,10 @@ void UpdateService::handleUpdateQueueCompleted()
     emit(updateTaskRunningChanged(_isCheckTaskRunning));
 }
 
-void UpdateService::update(const ApplicationData &application)
+void UpdateService::update(const Application &application)
 {
     // use invoke method to ensure that the method is executed in the target thread
-    QMetaObject::invokeMethod(&_updateTaskWorker, "enqueue", Qt::QueuedConnection, Q_ARG(ApplicationData, application));
+    QMetaObject::invokeMethod(&_updateTaskWorker, "enqueue", Qt::QueuedConnection, Q_ARG(Application, application));
 
     _isUpdateTaskRunning = true;
     emit(updateTaskRunningChanged(_isUpdateTaskRunning));

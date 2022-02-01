@@ -5,7 +5,7 @@
 
 // local
 
-#include "services/ApplicationData.h"
+#include "services/Application.h"
 
 /**
  * Data transfer object for Applications update information
@@ -13,7 +13,7 @@
 class ApplicationUpdateData
 {
 public:
-    explicit ApplicationUpdateData(ApplicationData application = {}, QDateTime checkDate = QDateTime::currentDateTime());
+    explicit ApplicationUpdateData(Application application = {}, QDateTime checkDate = QDateTime::currentDateTime());
 
     bool updateAvailable;
     QString source;
@@ -22,7 +22,7 @@ public:
 
     QString version;
     QString changesLog;
-    ApplicationData application;
+    Application application;
 };
 
 Q_DECLARE_METATYPE(ApplicationUpdateData)

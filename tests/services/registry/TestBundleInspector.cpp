@@ -1,5 +1,5 @@
 #include "TestBundleInspector.h"
-#include "ApplicationData.h"
+#include "Application.h"
 #include "registry/BundleInspector.h"
 
 #include <QStandardPaths>
@@ -16,14 +16,14 @@ void TestBundleInspector::inspectBundle()
     auto bundle = inspector.getData();
 
     QCOMPARE(bundle.path, QString(SAMPLE_APPIMAGE_PATH));
-    QCOMPARE(bundle.app->getId(), QString("appimagetool"));
-    QCOMPARE(bundle.app->getName(), QString("appimagetool"));
-    QCOMPARE(bundle.app->getDescription(), QString("Tool to generate AppImages from AppDirs"));
-    QCOMPARE(bundle.app->getXdgCategories(), QStringList({"Development"}));
+    QCOMPARE(bundle.data.getId(), QString("appimagetool"));
+    QCOMPARE(bundle.data.getName(), QString("appimagetool"));
+    QCOMPARE(bundle.data.getDescription(), QString("Tool to generate AppImages from AppDirs"));
+    QCOMPARE(bundle.data.getXdgCategories(), QStringList({"Development"}));
     QVERIFY(!bundle.hashSumMD5.isEmpty());
 
     QString expectedIconPath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/icons/appimagetool";
-    QCOMPARE(bundle.app->getIcon(), expectedIconPath);
+    QCOMPARE(bundle.data.getIcon(), expectedIconPath);
     QVERIFY(QFile::exists(expectedIconPath));
 }
 

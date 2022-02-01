@@ -10,7 +10,7 @@
 
 // local
 #include "BundleInspector.h"
-#include "services/ApplicationBundle.h"
+#include "../ApplicationBundle.h"
 
 class BundlesDirsWatcher : public QObject
 {

@@ -7,8 +7,8 @@
 #include <QStringList>
 
 // local
-#include "services/ApplicationBundle.h"
-#include "services/ApplicationData.h"
+#include "../Application.h"
+#include "../ApplicationBundle.h"
 
 /**
  * Stores data of the applications available to the user
@@ -18,12 +18,12 @@ class ApplicationsRegistry : public QObject
     Q_OBJECT
 
 public:
-    explicit ApplicationsRegistry(QStringList appDirs, QMap<QString, ApplicationData> applications);
+    explicit ApplicationsRegistry(QStringList appDirs, QMap<QString, Application> applications);
 
     const QStringList &getAppDirs();
     [[nodiscard]] bool applicationExist(const QString &appId) const;
-    [[nodiscard]] ApplicationData getApplication(const QString &appId) const;
-    Q_SCRIPTABLE void updateApplicationData(const ApplicationData &applicationData);
+    [[nodiscard]] Application getApplication(const QString &appId) const;
+    Q_SCRIPTABLE void updateApplicationData(const Application &applicationData);
 
     [[nodiscard]] Q_SCRIPTABLE ApplicationsList getApplications() const;
     [[nodiscard]] Q_SCRIPTABLE int getApplicationsCount() const;
@@ -35,12 +35,11 @@ public:
     Q_SLOT void removeBundle(const ApplicationBundle &bundle);
     Q_SLOT void removeBundleByPath(const QString &path);
 
-public:
-    Q_SIGNAL void applicationAdded(ApplicationData);
-    Q_SIGNAL void applicationRemoved(ApplicationData);
-    Q_SIGNAL void applicationUpdated(ApplicationData);
+    Q_SIGNAL void applicationAdded(Application);
+    Q_SIGNAL void applicationRemoved(Application);
+    Q_SIGNAL void applicationUpdated(Application);
 
-    QMap<QString, ApplicationData> _applications;
+    QMap<QString, Application> _applications;
 
 private:
     // directories to look for AppImages

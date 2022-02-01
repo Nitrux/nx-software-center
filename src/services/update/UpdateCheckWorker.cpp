@@ -25,7 +25,8 @@ void UpdateCheckWorker::checkUpdates(const ApplicationsList &applications)
 
         for (const auto &application : applications) {
             _progress.current_progress++;
-            _progress.subTitle = application.getName();
+            const auto &applicationData = application.getData();
+            _progress.subTitle = applicationData.getName();
             emit(progressNotification(_progress));
 
             checkApplicationUpdates(application);
@@ -65,11 +66,12 @@ void UpdateCheckWorker::notifyCompletion()
     emit(progressNotification(_progress));
 }
 
-void UpdateCheckWorker::checkApplicationUpdates(const ApplicationData &application)
+void UpdateCheckWorker::checkApplicationUpdates(const Application &application)
 {
     const auto application_bundles = application.getBundles();
     if (!application_bundles.isEmpty()) {
-        qDebug() << "Checking updates of" << application.getName();
+        const auto &applicationData = application.getData();
+        qDebug() << "Checking updates of" << applicationData.getName();
 
         const auto &bundle = application_bundles.first();
         auto updater = QScopedPointer<appimage::update::Updater>(new appimage::update::Updater(bundle.path.toStdString()));

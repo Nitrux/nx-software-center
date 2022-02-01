@@ -9,7 +9,7 @@
 
 // local
 #include "ApplicationUpdateData.h"
-#include "services/ApplicationData.h"
+#include "services/Application.h"
 
 namespace appimage::update
 {
@@ -35,7 +35,7 @@ private:
     int _update_check_error_count;
     int _update_available_count;
 
-    void checkApplicationUpdates(const ApplicationData &application);
+    void checkApplicationUpdates(const Application &application);
     void notifyStart(const ApplicationsList &applications);
     void notifyCompletion();
     void resetCounters();

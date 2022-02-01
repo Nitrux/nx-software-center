@@ -15,38 +15,38 @@ InstallService::InstallService(const QString &applicationsDir, QObject *parent)
 
 void InstallService::installFromPlingStore(const QUrl &appimageUrl, PlingStoreApplicationData *plingStoreApplicationData)
 {
-    ApplicationData applicationData;
-    applicationData.setName(plingStoreApplicationData->name);
     if (!plingStoreApplicationData->previewPics.isEmpty())
         plingStoreApplicationData->previewPics.first()->smallPic;
 
     auto worker = new InstallWorker(_applicationsDir, _partialsDir, this);
     connect(worker, &InstallWorker::progressNotification, this, &InstallService::progressNotification);
 
-    worker->installFromUrl(appimageUrl, applicationData);
+    ApplicationData appData;
+    appData.setName(plingStoreApplicationData->name);
+    worker->installFromUrl(appimageUrl, Application(appData));
 }
 
-void InstallService::handleApplicationAdded(const ApplicationData &application)
+void InstallService::handleApplicationAdded(const Application &application)
 {
     installMainBundle(application);
 }
-void InstallService::handleApplicationUpdated(const ApplicationData &application)
+void InstallService::handleApplicationUpdated(const Application &application)
 {
     uninstallAllBundles(application);
     installMainBundle(application);
 }
 
-void InstallService::handleApplicationRemoved(const ApplicationData &application)
+void InstallService::handleApplicationRemoved(const Application &application)
 {
     uninstallAllBundles(application);
 }
 
-void InstallService::uninstallAllBundles(const ApplicationData &applicationData) const
+void InstallService::uninstallAllBundles(const Application &applicationData) const
 {
     for (const auto &bundle : applicationData.getBundles())
         AppImageTools::unintegrate(QUrl::fromLocalFile(bundle.path));
 }
-void InstallService::installMainBundle(const ApplicationData &applicationData) const
+void InstallService::installMainBundle(const Application &applicationData) const
 {
     const auto &mainBundle = applicationData.getMainBundle();
     if (!mainBundle.path.isEmpty())

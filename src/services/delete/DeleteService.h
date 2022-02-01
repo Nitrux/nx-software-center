@@ -5,7 +5,7 @@
 #include <QObject>
 
 // local
-#include <services/ApplicationData.h>
+#include <services/Application.h>
 
 class DeleteService : public QObject
 {
@@ -16,7 +16,7 @@ public:
     Q_SIGNAL void deleteError(const QVariant &variant, const QString &what);
 
     // keep up to <appBundlesLimit> bundles for a given application
-    Q_SLOT void onApplicationUpdated(const ApplicationData &applicationData);
+    Q_SLOT void onApplicationUpdated(const Application &applicationData);
 
 private:
     void removeApplicationBundle(const QVariant &variant, const ApplicationBundle &bundle);

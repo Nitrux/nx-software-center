@@ -4,9 +4,9 @@
 // libraries
 #include <QObject>
 #include <QtTest/QtTest>
-#include <registry/ApplicationsRegistry.h>
 
 // local
+#include "services/registry/ApplicationsRegistry.h"
 
 class TestApplicationsRegistry : public QObject
 {

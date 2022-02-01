@@ -37,7 +37,7 @@ private:
     Q_SLOT void onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl);
 
     QUrl _qml_main;
-    AppsDBHelper *_appsDBHelper;
+//    AppsDBHelper *_appsDBHelper;
     ApplicationsRegistry _applicationsRegistry;
     ApplicationsRegistryModel _applicationsRegistryModel;
     ApplicationsRegistryProxyModel _applicationsRegistryModelProxy;

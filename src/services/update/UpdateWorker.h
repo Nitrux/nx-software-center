@@ -9,7 +9,7 @@
 
 // local
 #include "ApplicationUpdateData.h"
-#include "services/ApplicationData.h"
+#include "services/Application.h"
 
 namespace appimage::update
 {
@@ -24,8 +24,8 @@ public:
     explicit UpdateWorker(QObject *parent = nullptr);
 
     // add applications to the work queue
-    Q_SLOT void enqueue(const QList<ApplicationData> &applications);
-    Q_SLOT void enqueue(const ApplicationData &application);
+    Q_SLOT void enqueue(const QList<Application> &applications);
+    Q_SLOT void enqueue(const Application &application);
 
     Q_SIGNAL void updateCompleted(ApplicationUpdateData updateData);
     Q_SIGNAL void progressNotification(const TaskData &update);
@@ -33,12 +33,12 @@ public:
 
 private:
     bool _running;
-    QList<ApplicationData> _updateQueue;
+    QList<Application> _updateQueue;
     Q_SLOT void processNextApp();
     void runUpdate(appimage::update::Updater &updater, TaskData &progress, ApplicationUpdateData updateData);
     void watchUpdaterProgress(TaskData &progress, appimage::update::Updater *updater);
 
-    void notifyCheck(TaskData &_progress, const ApplicationData &application);
+    void notifyCheck(TaskData &_progress, const Application &application);
     void notifyMissingUpdateInformation(TaskData &progress);
     void notifyProgressError(TaskData &progress);
     void notifyUpdateError(TaskData &progress);

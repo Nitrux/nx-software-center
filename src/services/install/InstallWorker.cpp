@@ -8,13 +8,14 @@ InstallWorker::InstallWorker(const QDir &applicationsDir, const QDir &partialsDi
     , _applicationsDir(applicationsDir)
     , _partialsDir(partialsDir)
     , _downloadWorker(this)
+    , _application()
 {
     connect(&_downloadWorker, &FMH::Downloader::progress, this, &InstallWorker::handleDownloadWorkerProgress);
     connect(&_downloadWorker, &FMH::Downloader::done, this, &InstallWorker::handleDownloadWorkerDone);
     connect(&_downloadWorker, &FMH::Downloader::warning, this, &InstallWorker::handleDownloadWorkerError);
 }
 
-void InstallWorker::installFromUrl(const QUrl &bundleUrl, const ApplicationData &applicationData)
+void InstallWorker::installFromUrl(const QUrl &bundleUrl, const Application &app)
 {
     if (_busy) {
         qWarning() << "InstallWorker::install unable to start another task while busy";
@@ -25,11 +26,13 @@ void InstallWorker::installFromUrl(const QUrl &bundleUrl, const ApplicationData 
     _bundleUrl = bundleUrl;
     _targetFilePath = _applicationsDir.absoluteFilePath(_bundleUrl.fileName());
     _tempFilePath = _partialsDir.path() + "/" + _bundleUrl.fileName();
-    _application = applicationData;
+    _application = app;
 
     _progress = TaskData();
-    _progress.iconPath = applicationData.getIcon();
-    _progress.title = "Installing " + _application.getName();
+
+    const auto &appData = app.getData();
+    _progress.iconPath = appData.getIcon();
+    _progress.title = "Installing " + appData.getName();
 
     startFileDownload();
 }

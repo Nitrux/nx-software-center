@@ -5,11 +5,11 @@
 #include <QProcess>
 
 // local
-#include <services/ApplicationData.h>
+#include <services/Application.h>
 
 void LaunchService::launch(const QVariant &applicationVariant, int bundleIdx) const
 {
-    const ApplicationData &application = qvariant_cast<ApplicationData>(applicationVariant);
+    const Application &application = qvariant_cast<Application>(applicationVariant);
     if (bundleIdx == -1)
         bundleIdx = application.getMainBundleIndex();
 
@@ -17,7 +17,8 @@ void LaunchService::launch(const QVariant &applicationVariant, int bundleIdx) co
     if (bundleIdx >= 0 && bundleIdx < bundles.length()) {
         const auto &bundle = bundles[bundleIdx];
 
-        QProcess *process = application.requiresTerminal() ? createCLIProcess(bundle) : createGUIProcess(bundle);
+        const auto &appData = application.getData();
+        QProcess *process = appData.requiresTerminal() ? createCLIProcess(bundle) : createGUIProcess(bundle);
 
         bool startSucceed = process->startDetached();
         if (!startSucceed) {
@@ -43,7 +44,7 @@ QProcess *LaunchService::createGUIProcess(const ApplicationBundle &bundle) const
 QVariantList LaunchService::listInstalledBundles(const QVariant &applicationVariant)
 {
     QVariantList result;
-    const ApplicationData &application = qvariant_cast<ApplicationData>(applicationVariant);
+    const Application &application = qvariant_cast<Application>(applicationVariant);
     const auto &bundles = application.getBundles();
     for (const auto &bundle : bundles) {
         const auto pathUrl = QUrl::fromLocalFile(bundle.path);

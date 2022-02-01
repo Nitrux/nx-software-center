@@ -54,20 +54,21 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
 
     if (index.row() >= 0 && index.row() < _applications.length()) {
         const auto &app = _applications.at(index.row());
+        const auto &appData = app.getData();
         const auto &appBundles = app.getBundles();
         switch (role) {
         case Id:
             return app.getId();
         case Name:
-            return app.getName();
+            return appData.getName();
         case Version:
-            return app.getVersion();
+            return appData.getVersion();
         case Icon:
-            return app.getIcon();
+            return appData.getIcon();
         case Description:
-            return app.getDescription();
+            return appData.getDescription();
         case XdgCategories:
-            return app.getXdgCategories();
+            return appData.getXdgCategories();
         case UpdateAvailable:
             return resolveUpdateAvailableValue(app);
         case Bundles:
@@ -88,16 +89,16 @@ QVariant ApplicationsRegistryModel::data(const QModelIndex &index, int role) con
     }
     return {};
 }
-bool ApplicationsRegistryModel::resolveRelatedTask(const ApplicationData &app) const
+bool ApplicationsRegistryModel::resolveRelatedTask(const Application &app) const
 {
     return _applicationsRelatedTasks.contains(app.getId()) && _applicationsRelatedTasks.value(app.getId()).status == TaskData::RUNNING;
 }
-bool ApplicationsRegistryModel::resolveUpdateAvailableValue(const ApplicationData &app) const
+bool ApplicationsRegistryModel::resolveUpdateAvailableValue(const Application &app) const
 {
     return _appliactionsUpdateData.contains(app.getId()) && _appliactionsUpdateData.value(app.getId()).updateAvailable;
 }
 
-void ApplicationsRegistryModel::handleApplicationAdded(const ApplicationData &application)
+void ApplicationsRegistryModel::handleApplicationAdded(const Application &application)
 {
     int length = _applications.length();
     beginInsertRows(QModelIndex(), length, length);
@@ -105,7 +106,7 @@ void ApplicationsRegistryModel::handleApplicationAdded(const ApplicationData &ap
     endInsertRows();
 }
 
-void ApplicationsRegistryModel::handleApplicationUpdated(const ApplicationData &application)
+void ApplicationsRegistryModel::handleApplicationUpdated(const Application &application)
 {
     auto row = _applications.indexOf(application);
     _applications[row] = application;
@@ -114,7 +115,7 @@ void ApplicationsRegistryModel::handleApplicationUpdated(const ApplicationData &
         emit(dataChanged(index(row, 0), index(row + 1, 0)));
 }
 
-void ApplicationsRegistryModel::handleApplicationRemoved(const ApplicationData &application)
+void ApplicationsRegistryModel::handleApplicationRemoved(const Application &application)
 {
     auto idx = _applications.indexOf(application);
 
@@ -154,14 +155,14 @@ int ApplicationsRegistryModel::findApplicationIndexById(const QString &applicati
 
     return -1;
 }
-QStringList ApplicationsRegistryModel::listBundlesFileNames(const ApplicationData &data) const
+QStringList ApplicationsRegistryModel::listBundlesFileNames(const Application &data) const
 {
     QStringList result;
     for (const auto &bundle : data.getBundles()) {
         QUrl bundleUrl = QUrl::fromLocalFile(bundle.path);
-        auto bundleAppData = bundle.app;
-        if (!bundleAppData.isNull() && !bundleAppData->getVersion().isEmpty()) {
-            result.append(bundleAppData->getVersion());
+        auto bundleAppData = bundle.data;
+        if (!bundleAppData.getVersion().isEmpty()) {
+            result.append(bundleAppData.getVersion());
         } else {
             QString fileName = bundleUrl.fileName();
             fileName = fileName.remove(".AppImage", Qt::CaseInsensitive);
@@ -177,7 +178,7 @@ bool ApplicationsRegistryModel::setData(const QModelIndex &index, const QVariant
         return {};
 
     if (index.row() >= 0 && index.row() < _applications.length()) {
-        ApplicationData app = _applications[index.row()];
+        Application app = _applications[index.row()];
         switch (role) {
         case MainBundleIndex:
             app.setMainBundleIndex(value.toInt());

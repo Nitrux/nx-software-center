@@ -8,7 +8,7 @@
 // local
 #include <QDir>
 #include <appimagetools.h>
-#include <services/ApplicationData.h>
+#include <services/Application.h>
 #include <services/TaskData.h>
 
 /**
@@ -21,7 +21,7 @@ class InstallWorker : public QObject
 
 public:
     InstallWorker(const QDir &applicationsDir, const QDir &partialsDir, QObject *parent = nullptr);
-    void installFromUrl(const QUrl &bundleUrl, const ApplicationData &applicationData);
+    void installFromUrl(const QUrl &bundleUrl, const Application &app);
 
     Q_SIGNAL void progressNotification(const TaskData &update);
 
@@ -40,7 +40,7 @@ private:
 
     FMH::Downloader _downloadWorker;
     TaskData _progress;
-    ApplicationData _application;
+    Application _application;
 
     void startFileDownload();
     void notifyDownloadStart();

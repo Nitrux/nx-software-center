@@ -12,13 +12,13 @@ UpdateWorker::UpdateWorker(QObject *parent)
 {
 }
 
-void UpdateWorker::enqueue(const QList<ApplicationData> &applications)
+void UpdateWorker::enqueue(const QList<Application> &applications)
 {
     for (const auto &app : applications)
         enqueue(app);
 }
 
-void UpdateWorker::enqueue(const ApplicationData &application)
+void UpdateWorker::enqueue(const Application &application)
 {
     if (!_updateQueue.contains(application))
         _updateQueue.push_back(application);
@@ -59,7 +59,8 @@ void UpdateWorker::processNextApp()
 void UpdateWorker::runUpdate(appimage::update::Updater &updater, TaskData &progress, ApplicationUpdateData updateData)
 {
     bool startSucceed = updater.start();
-    progress.title = "Downloading " + updateData.application.getName() + " updates";
+    const auto &applicationData = updateData.application.getData();
+    progress.title = "Downloading " + applicationData.getName() + " updates";
 
     if (!startSucceed) {
         notifyUpdateError(progress);
@@ -119,12 +120,13 @@ void UpdateWorker::notifyMissingUpdateInformation(TaskData &progress)
 
     emit(progressNotification(progress));
 }
-void UpdateWorker::notifyCheck(TaskData &_progress, const ApplicationData &application)
+void UpdateWorker::notifyCheck(TaskData &_progress, const Application &application)
 {
     _progress.related_app_id = application.getId();
     _progress.current_progress = -1;
     _progress.status = TaskData::RUNNING;
-    _progress.subTitle = "Checking " + application.getName() + " updates";
+    const auto &applicationData = application.getData();
+    _progress.subTitle = "Checking " + applicationData.getName() + " updates";
 
     emit(progressNotification(_progress));
 }

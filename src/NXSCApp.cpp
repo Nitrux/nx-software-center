@@ -22,8 +22,8 @@
 NXSCApp::NXSCApp(int &argc, char **argv)
     : QApplication(argc, argv)
     , _qml_main(QStringLiteral("qrc:/main.qml"))
-    , _appsDBHelper(_appsDBHelper->getInstance())
-    , _applicationsRegistry({NX::AppsPath.toLocalFile()}, _appsDBHelper->getAppsMap())
+//    , _appsDBHelper(_appsDBHelper->getInstance())
+    , _applicationsRegistry({NX::AppsPath.toLocalFile()}, {})
     , _applicationsRegistryModel(&_applicationsRegistry, this)
     , _updateService(this)
     , _installService(NX::AppsPath.toLocalFile(), this)
@@ -139,7 +139,7 @@ void NXSCApp::onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl)
 }
 void NXSCApp::setupApplicationsRegistry()
 {
-    qRegisterMetaType<ApplicationData>("ApplicationData");
+    qRegisterMetaType<Application>("ApplicationData");
     qRegisterMetaType<ApplicationBundle>("ApplicationBundle");
     qRegisterMetaType<ApplicationsList>("ApplicationsList");
 
@@ -161,7 +161,7 @@ void NXSCApp::registerUpdateService()
 
 void NXSCApp::setupApplicationDBUpdateCache()
 {
-    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationAdded, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
-    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
-    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationRemoved, _appsDBHelper, &AppsDBHelper::deleteApp);
+//    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationAdded, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
+//    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
+//    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationRemoved, _appsDBHelper, &AppsDBHelper::deleteApp);
 }

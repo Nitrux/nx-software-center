@@ -1,5 +1,5 @@
 #include "BundleInspector.h"
-#include "services/ApplicationData.h"
+#include "../Application.h"
 
 #include <QDebug>
 #include <QFileInfo>
@@ -27,8 +27,8 @@ ApplicationBundle BundleInspector::getData()
         extractDesktopEntryData(extractor);
 
         _bundle.bundleType = ApplicationBundle::AppImage;
-        //        extractIcon(extractor);
-        //        _bundle.hashSumMD5 = getMd5Checksum();
+        extractIcon(extractor);
+        _bundle.hashSumMD5 = getMd5Checksum();
     } catch (std::runtime_error &error) {
         // report this as an unknown type bundle in case of error
         _bundle.bundleType = ApplicationBundle::Unknown;
@@ -39,29 +39,29 @@ ApplicationBundle BundleInspector::getData()
 
 void BundleInspector::extractIcon(const appimage::utils::ResourcesExtractor &extractor)
 {
-    QString iconPath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/icons/" + _bundle.app->getId();
+    QString iconPath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/icons/" + _bundle.data.getId();
     extractor.extractTo({{".DirIcon", iconPath.toStdString()}});
     if (QFile::exists(iconPath))
-        _bundle.app->setIcon(iconPath);
+        _bundle.data.setIcon(iconPath);
 }
 void BundleInspector::extractDesktopEntryData(const appimage::utils::ResourcesExtractor &extractor)
 {
     auto desktopEntryPath = extractor.getDesktopEntryPath();
-    _bundle.app->setId(QString::fromStdString(desktopEntryPath.substr(0, desktopEntryPath.size() - 8)));
+    _bundle.data.setId(QString::fromStdString(desktopEntryPath.substr(0, desktopEntryPath.size() - 8)));
 
     QTemporaryFile temp;
     if (temp.open()) {
         extractor.extractTo({{desktopEntryPath, temp.fileName().toStdString()}});
         QSettings desktopEntry(temp.fileName(), QSettings::IniFormat);
 
-        _bundle.app->setName(desktopEntry.value("Desktop Entry/Name").toString());
-        _bundle.app->setDescription(desktopEntry.value("Desktop Entry/Comment").toString());
+        _bundle.data.setName(desktopEntry.value("Desktop Entry/Name").toString());
+        _bundle.data.setDescription(desktopEntry.value("Desktop Entry/Comment").toString());
         _bundle.version = desktopEntry.value("Desktop Entry/X-AppImage-Version", QString()).toString();
-        _bundle.app->setVersion(_bundle.version);
-        _bundle.app->setRequiresTerminal(desktopEntry.value("Desktop Entry/Terminal", false).toBool());
+        _bundle.data.setVersion(_bundle.version);
+        _bundle.data.setRequiresTerminal(desktopEntry.value("Desktop Entry/Terminal", false).toBool());
 
         QStringList xdgCategories = extractXdgCategories(desktopEntry);
-        _bundle.app->setXdgCategories(xdgCategories);
+        _bundle.data.setXdgCategories(xdgCategories);
 
         temp.close();
     } else {

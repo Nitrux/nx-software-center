@@ -24,6 +24,7 @@ set(nx_SRCS
     utils/appimagetools.cpp
     services/registry/ApplicationsRegistry.cpp
     services/ApplicationData.cpp
+    services/Application.cpp
     services/ApplicationBundle.cpp
     services/registry/BundlesDirsWatcher.cpp
     services/registry/BundleInspector.cpp
@@ -32,7 +33,6 @@ set(nx_SRCS
     services/update/UpdateWorker.cpp
     services/update/UpdateCheckWorker.cpp
     services/TaskData.cpp
-    services/db/AppsDBHelper.cpp
     services/install/InstallService.cpp
     services/install/InstallWorker.cpp
     services/launch/LaunchService.cpp

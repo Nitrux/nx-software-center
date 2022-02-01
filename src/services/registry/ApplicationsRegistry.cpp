@@ -1,35 +1,36 @@
 #include "ApplicationsRegistry.h"
 
-#include <utility>
-
+// libraries
 #include <QDebug>
 #include <QVector>
-#include <appimagetools.h>
 
-ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs, QMap<QString, ApplicationData> applications)
+// local
+#include "utils/appimagetools.h"
+
+ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs, QMap<QString, Application> applications)
     : _applications(applications)
     , _appDirs(std::move(appDirs))
 {
-    qRegisterMetaType<ApplicationData>();
+    qRegisterMetaType<Application>();
     qRegisterMetaType<ApplicationBundle>();
 }
 void ApplicationsRegistry::addBundle(const ApplicationBundle &bundle)
 {
-    auto appId = bundle.app->getId();
+    auto appId = bundle.data.getId();
     if (_applications.contains(appId)) {
         auto &app = _applications[appId];
         app.addBundle(bundle);
 
         emit(applicationUpdated(app));
     } else {
-        ApplicationData data;
-        data.addBundle(bundle);
-        _applications.insert(appId, data);
+        Application app;
+        app.addBundle(bundle);
+        _applications.insert(appId, app);
 
-        emit(applicationAdded(data));
+        emit(applicationAdded(app));
     }
 }
-ApplicationData ApplicationsRegistry::getApplication(const QString &appId) const
+Application ApplicationsRegistry::getApplication(const QString &appId) const
 {
     return _applications.value(appId);
 }
@@ -55,12 +56,7 @@ void ApplicationsRegistry::removeBundleByPath(const QString &path)
 }
 void ApplicationsRegistry::removeBundle(const ApplicationBundle &bundle)
 {
-    if (bundle.app.isNull()) {
-        qWarning() << "Unable to remove bundle " << bundle.path << " as it doesn't contain application data.";
-        return;
-    }
-
-    auto appId = bundle.app->getId();
+    auto appId = bundle.data.getId();
     if (_applications.contains(appId)) {
         auto &app = _applications[appId];
         app.removeBundle(bundle);
@@ -90,14 +86,14 @@ const QStringList &ApplicationsRegistry::getAppDirs()
 
 ApplicationsList ApplicationsRegistry::getApplications() const
 {
-    return QVector<ApplicationData>::fromList(_applications.values());
+    return QVector<Application>::fromList(_applications.values());
 }
 
 int ApplicationsRegistry::getApplicationsCount() const
 {
     return _applications.size();
 }
-void ApplicationsRegistry::updateApplicationData(const ApplicationData &applicationData)
+void ApplicationsRegistry::updateApplicationData(const Application &applicationData)
 {
     const auto &appId = applicationData.getId();
     if (_applications.contains(appId)) {
