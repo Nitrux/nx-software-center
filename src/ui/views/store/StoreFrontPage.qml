@@ -203,6 +203,24 @@ Maui.Page
 
             FeatureStrip
             {
+                id: _apprepoapps
+                Layout.fillWidth: true
+                title.text: i18n("AppRepo Apps")
+                subtitle.text: i18n("Applications from AppRepo.de")
+
+                category: _categoriesList.baseCategory()
+                pageSize: 6
+                // sort: NX.Store.MOST_DOWNLOADED
+                list.tags: ["apprepo"]
+
+                onAppClicked:
+                {
+                    control.itemClicked(app)
+                }
+            }
+
+            FeatureStrip
+            {
                 id: _newestListView
 
                 Layout.fillWidth: true
