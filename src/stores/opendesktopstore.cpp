@@ -174,7 +174,8 @@ void OpenDesktopStore::parseGetCategoriesResponseAndReply(
       c->name = obj["name"].toString();
       c->displayName = obj["display_name"].toString();
       c->xdgType = obj["xdg_type"].toString();
-
+      c->categoryStore = Category::CategoryStore::APPIMAGEHUB;
+      
       childList.append(c);
     }
 
@@ -186,6 +187,7 @@ void OpenDesktopStore::parseGetCategoriesResponseAndReply(
     c->name = parentObj["name"].toString();
     c->displayName = parentObj["display_name"].toString();
     c->xdgType = parentObj["xdg_type"].toString();
+    c->categoryStore = Category::CategoryStore::APPIMAGEHUB;
     c->categories = childList;
 
     list.append(c);
