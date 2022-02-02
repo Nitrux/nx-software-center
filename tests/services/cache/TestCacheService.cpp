@@ -5,29 +5,28 @@
 
 // local
 #include "services/Application.h"
-#include "services/ApplicationBundle.h"
-#include "services/cache/CacheService.h"
 
 void TestCacheService::initTestCase()
 {
-    _cacheFile = _cacheDir.path() + "/cache.db";
+//    _cacheFile = _cacheDir.path() + "/cache.db";
+    _cacheFile = "/tmp/test-nxsc/cache.db";
+    _service = new CacheService(_cacheFile);
 }
 
 void TestCacheService::cleanupTestCase()
 {
     _cacheDir.remove();
+    delete _service;
 }
 
 void TestCacheService::testInitDB()
 {
-    CacheService helper(_cacheFile);
-    QVERIFY(helper.isOperational());
+    QVERIFY(_service->isOperational());
 }
 void TestCacheService::testSaveApplication()
 {
     const Application application;
-    CacheService service(_cacheFile);
-    service.saveApplication(application);
+    _service->saveApplication(application);
 }
 
 QTEST_GUILESS_MAIN(TestCacheService);

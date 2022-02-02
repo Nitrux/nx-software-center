@@ -11,14 +11,14 @@ CacheService::CacheService(QString path)
     : _path(std::move(path))
     , _database(QSqlDatabase::addDatabase("QSQLITE"))
     , _applicationsORM(_database)
-    , _bundlesORM(_database)
-
 {
     ensureCacheDbParentDirExists();
 
     _database.setDatabaseName(_path);
     bool openSucceed = _database.open();
-    if (!openSucceed)
+    if (openSucceed) {
+        _applicationsORM.init();
+    } else
         qWarning() << "Unable to create/open cache database at:" << _path;
 }
 
@@ -39,14 +39,14 @@ CacheService::~CacheService()
 }
 bool CacheService::isOperational() const
 {
-    return _database.isOpen() && _bundlesORM.isReady();
+    return _database.isOpen() && _applicationsORM.applicationTableExists();
 }
 void CacheService::saveApplication(const Application &application)
 {
 }
 ApplicationsList CacheService::listApplications()
 {
-    return ApplicationsList();
+    return {};
 }
 void CacheService::deleteApplication(const Application &application)
 {

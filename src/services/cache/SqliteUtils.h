@@ -1,6 +1,9 @@
 #ifndef NX_SOFTWARE_CENTER_SQLITEUTILS_H
 #define NX_SOFTWARE_CENTER_SQLITEUTILS_H
 
+#define APPLICATIONS_TABLE_NAME "Applications"
+#define APPLICATION_BUNDLES_TABLE_NAME "ApplicationBundles"
+
 #define SQLITE_DATE_TIME_FORMAT "yyyy-MM-dd HH:mm:ss.zzz"
 #define SQLITE_CHECK_TABLE_EXIST_QUERY "SELECT name FROM sqlite_master WHERE type='table' AND name='%1';"
 
