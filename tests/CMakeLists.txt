@@ -99,3 +99,5 @@ target_link_libraries(test_update_service PRIVATE Qt5::Widgets Qt5::Test libappi
 target_compile_definitions(test_update_service PRIVATE SAMPLE_APPIMAGE_PATH="${APPIMAGE_TOOL_PATH}")
 
 add_test(NAME testUpdateService COMMAND test_update_service)
+
+add_subdirectory(services/cache)

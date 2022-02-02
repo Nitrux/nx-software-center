@@ -14,7 +14,7 @@
 #include "models/ApplicationsRegistryModel.h"
 #include "models/ApplicationsRegistryProxyModel.h"
 #include "models/TasksListModel.h"
-#include "services/db/AppsDBHelper.h"
+#include "services/cache/CacheService.h"
 #include "services/delete/DeleteService.h"
 #include "services/install/InstallService.h"
 #include "services/launch/LaunchService.h"

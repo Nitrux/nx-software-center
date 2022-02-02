@@ -37,6 +37,10 @@ set(nx_SRCS
     services/install/InstallWorker.cpp
     services/launch/LaunchService.cpp
     services/delete/DeleteService.cpp
+    services/cache/CacheService.cpp
+    services/cache/ApplicationORM.cpp
+    services/cache/ApplicationDataORM.cpp
+    services/cache/ApplicationBundleORM.cpp
     )
 
 set(nx_HDRS

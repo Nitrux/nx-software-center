@@ -1,6 +1,10 @@
+// libraries
+#include <MauiKit/FileBrowsing/fmstatic.h>
 #include <QCommandLineParser>
 
+// local
 #include "NXSCApp.h"
+#include "nx.h"
 
 int main(int argc, char *argv[])
 {
