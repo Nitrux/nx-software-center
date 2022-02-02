@@ -21,8 +21,13 @@ public:
     bool applicationTableExists() const;
     void createApplicationTable();
 
+    void createOrUpdateApplication(const Application &application);
+
+    ApplicationsList listApplications();
+
 private:
     QSqlDatabase _database;
 //    ApplicationDataORM *_dataORM;
 //    ApplicationBundleORM *_bundleORM;
+    void createApplication(const Application &application) const;
 };

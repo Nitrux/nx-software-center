@@ -4,7 +4,14 @@
 
 // libraries
 #include <QDebug>
+#include <QJsonDocument>
 #include <QVersionNumber>
+#include <utility>
+
+ApplicationData::ApplicationData(QVariantMap data)
+    : _data(std::move(data))
+{
+}
 
 QString ApplicationData::getId() const
 {
@@ -35,11 +42,11 @@ void ApplicationData::setName(const QString &name)
 {
     _data.insert("xdg-name", name);
 }
-
 QString ApplicationData::getIcon() const
 {
     return _data.value("xdg-icon").toString();
 }
+
 void ApplicationData::setIcon(const QString &icon)
 {
     _data.insert("xdg-icon", icon);
@@ -49,11 +56,11 @@ QString ApplicationData::getDescription() const
 {
     return _data.value("xdg-description").toString();
 }
-
 void ApplicationData::setDescription(const QString &description)
 {
     _data.insert("xdg-description", description);
 }
+
 QList<QUrl> ApplicationData::getSnapshots() const
 {
     auto variantList = _data.value("xdg-snapshots").toList();
@@ -88,7 +95,6 @@ void ApplicationData::setEntry(const QString &id, const QVariant &value)
 {
     _data.insert(id, value);
 }
-
 void ApplicationData::setRequiresTerminal(bool requiresTerminal)
 {
     _data.insert("xdg-terminal", requiresTerminal);
@@ -105,9 +111,21 @@ QStringList ApplicationData::entries() const
 {
     return _data.keys();
 }
+
 void ApplicationData::copy(const ApplicationData &data)
 {
     const auto keys = data.entries();
     for (const auto &key : keys)
         _data.insert(key, data.getEntry(key));
+}
+QByteArray ApplicationData::toJson() const
+{
+    const auto json = QJsonDocument::fromVariant(_data);
+    return json.toJson();
+}
+ApplicationData ApplicationData::fromJson(const QByteArray &jsonData)
+{
+    const auto json = QJsonDocument::fromJson(jsonData);
+    const auto dataVariant = json.toVariant().toMap();
+    return ApplicationData(dataVariant);
 }

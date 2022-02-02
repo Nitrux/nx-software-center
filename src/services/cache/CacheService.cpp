@@ -43,10 +43,11 @@ bool CacheService::isOperational() const
 }
 void CacheService::saveApplication(const Application &application)
 {
+    _applicationsORM.createOrUpdateApplication(application);
 }
 ApplicationsList CacheService::listApplications()
 {
-    return {};
+    return _applicationsORM.listApplications();
 }
 void CacheService::deleteApplication(const Application &application)
 {

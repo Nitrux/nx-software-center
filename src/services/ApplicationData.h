@@ -15,6 +15,8 @@ class ApplicationBundle;
 class ApplicationData
 {
 public:
+    explicit ApplicationData(QVariantMap data = {});
+
     [[nodiscard]] QString getId() const;
     void setId(const QString &id);
 
@@ -45,6 +47,10 @@ public:
 
     // copies application data without removing unmodified fields
     void copy(const ApplicationData &data);
+
+    QByteArray toJson() const;
+
+    static ApplicationData fromJson(const QByteArray &jsonData);
 
 private:
     QVariantMap _data;

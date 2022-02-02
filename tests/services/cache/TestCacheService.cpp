@@ -8,9 +8,13 @@
 
 void TestCacheService::initTestCase()
 {
-//    _cacheFile = _cacheDir.path() + "/cache.db";
+    //    _cacheFile = _cacheDir.path() + "/cache.db";
     _cacheFile = "/tmp/test-nxsc/cache.db";
     _service = new CacheService(_cacheFile);
+
+    _demoAppData.setId("org.nxos.nxsc.demoapp");
+    _demoAppData.setName("Demo App");
+    _demoAppData.setVersion("1.0.0");
 }
 
 void TestCacheService::cleanupTestCase()
@@ -23,10 +27,18 @@ void TestCacheService::testInitDB()
 {
     QVERIFY(_service->isOperational());
 }
-void TestCacheService::testSaveApplication()
+void TestCacheService::testSaveApplicationWithoutBundles()
 {
-    const Application application;
-    _service->saveApplication(application);
+    _service->saveApplication(Application(_demoAppData));
+}
+void TestCacheService::testListOneApplication()
+{
+    const auto result = _service->listApplications();
+    QCOMPARE(result.length(), 1);
+
+    const auto &first = result.first();
+    QCOMPARE(first.getId(), _demoAppData.getId());
+    QCOMPARE(first.getData().toJson(), _demoAppData.toJson());
 }
 
 QTEST_GUILESS_MAIN(TestCacheService);
