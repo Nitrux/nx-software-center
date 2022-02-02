@@ -14,18 +14,14 @@ void CategoryManager::getCategories() {
     // Invoke appimagehub api
     m_appimagehubStore->getCategories();
 
-    // Invoke apprepo api
-    m_apprepoStore->getGroups();
-
     connect(m_appimagehubStore, &Store::categoriesResponseReady, [=](CategoryResponseDTO *appimagehubResponse) {
-        m_response->categories.append(appimagehubResponse->categories);
+        // Invoke apprepo api
+        m_apprepoStore->getGroups(appimagehubResponse);
 
-        emit categoriesResponseReady(m_response);
-    });
+        connect(m_apprepoStore, &AppRepoStore::groupsResponseReady, [=](CategoryResponseDTO *apprepoResponse) {
+            m_response->categories.append(apprepoResponse->categories);
 
-    connect(m_apprepoStore, &AppRepoStore::groupsResponseReady, [=](CategoryResponseDTO *apprepoResponse) {
-        m_response->categories.append(apprepoResponse->categories);
-
-        emit categoriesResponseReady(m_response);
+            emit categoriesResponseReady(m_response);
+        });
     });
 }

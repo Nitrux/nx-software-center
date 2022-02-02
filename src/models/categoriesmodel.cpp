@@ -82,6 +82,7 @@ void CategoriesModel::setList()
         cat->displayName = c->displayName;
         cat->xdgType = c->xdgType;
         cat->categories = c->categories;
+        cat->categoryStore = c->categoryStore;
 
         this->m_categoryMap.insert(c->id, cat);
     }

@@ -13,7 +13,7 @@ const QString AppRepoStore::name() { return "AppRepo"; }
 /**
  * Fetch categories (groups) from AppRepo API
  */
-void AppRepoStore::getGroups() {
+void AppRepoStore::getGroups(CategoryResponseDTO *appimagehubResponse) {
 	QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
 	QUrlQuery query;
@@ -23,7 +23,10 @@ void AppRepoStore::getGroups() {
 
 	QNetworkReply *reply = manager->get(QNetworkRequest(url));
 
-	connect(manager, &QNetworkAccessManager::finished, this, &AppRepoStore::parseGetGroupsResponseAndReply);
+	connect(manager, &QNetworkAccessManager::finished, this, [=](QNetworkReply *reply) {
+		parseGetGroupsResponseAndReply(reply, appimagehubResponse);
+	});
+
 	connect(reply, &QNetworkReply::errorOccurred, this, [=](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
@@ -79,7 +82,7 @@ void AppRepoStore::getPackages(SearchPackage criteria, QString value) {
     connect(reply, &QNetworkReply::errorOccurred, this, [=](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
-void AppRepoStore::parseGetGroupsResponseAndReply(QNetworkReply *reply) {
+void AppRepoStore::parseGetGroupsResponseAndReply(QNetworkReply *reply, CategoryResponseDTO *appimagehubResponse) {
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
     QJsonArray root = doc.array();
 
@@ -97,7 +100,48 @@ void AppRepoStore::parseGetGroupsResponseAndReply(QNetworkReply *reply) {
 		response << categoryItem;
     }
 
-    emit groupsResponseReady(generateGroupResponse(response));
+	// This is done in order to display the apprepo categories as sub categories
+	// of top level categories
+	mapCategoryToSubcategory(appimagehubResponse, response);
+
+    emit groupsResponseReady(appimagehubResponse);
+}
+
+void AppRepoStore::mapCategoryToSubcategory(CategoryResponseDTO *appimagehubResponse, QList<AppRepoGroupResponseDTO *> apprepoResponse) {
+
+	foreach(AppRepoGroupResponseDTO *responseItem, apprepoResponse) {
+		if ( audioCategories.contains(responseItem->getName()) ) {
+			populateCategoryToSubcategory("Audio", appimagehubResponse, responseItem);
+		} else if ( educationCategories.contains(responseItem->getName()) ) {
+			populateCategoryToSubcategory("Education", appimagehubResponse, responseItem);
+		} else if ( graphicsCategories.contains(responseItem->getName()) ) {
+			populateCategoryToSubcategory("Graphics", appimagehubResponse, responseItem);
+		} else if ( internetCategories.contains(responseItem->getName()) ) {
+			populateCategoryToSubcategory("Internet", appimagehubResponse, responseItem);
+		} else if ( officeCategories.contains(responseItem->getName()) ) {
+			populateCategoryToSubcategory("Office", appimagehubResponse, responseItem);
+		} else if ( programmingCategories.contains(responseItem->getName()) ) {
+			populateCategoryToSubcategory("Programming", appimagehubResponse, responseItem);
+		} else if ( systemAndToolsCategories.contains(responseItem->getName()) ) {
+			populateCategoryToSubcategory("System & Tools", appimagehubResponse, responseItem);
+		} else if ( videoCategories.contains(responseItem->getName()) ) {
+			populateCategoryToSubcategory("Video", appimagehubResponse, responseItem);
+		}
+	}
+}
+
+void AppRepoStore::populateCategoryToSubcategory(QString categoryType, CategoryResponseDTO *appimagehubResponse, AppRepoGroupResponseDTO *responseItem) {
+	foreach(Category *item, appimagehubResponse->categories) {
+		if ( item->name == categoryType ) {
+			Category *category = new Category();
+			category->id = QString::number(responseItem->getUnique());
+			category->name = "AppRepo: " + responseItem->getName();
+			category->displayName = "AppRepo: " + responseItem->getName();
+			category->categoryStore = Category::CategoryStore::APPREPO;
+
+			item->categories.append(category);
+		}
+	}
 }
 
 void AppRepoStore::parseGetPackagesResponseAndReply(QNetworkReply *reply) {
@@ -179,22 +223,6 @@ AppRepoPackageResponseDTO *AppRepoStore::createPackageResponseDTO(QJsonObject ob
 	packageItem->setImages(images);
 
 	return packageItem;
-}
-
-CategoryResponseDTO *AppRepoStore::generateGroupResponse(QList<AppRepoGroupResponseDTO *> response) {
-	CategoryResponseDTO *categoryResponse = new CategoryResponseDTO();
-
-	foreach(AppRepoGroupResponseDTO *responseItem, response) {
-		Category *category = new Category();
-		category->id = QString::number(responseItem->getUnique());
-		category->name = "AppRepo: " + responseItem->getName();
-		category->displayName = "AppRepo: " + responseItem->getName();
-		category->categoryStore = Category::CategoryStore::APPREPO;
-
-		categoryResponse->categories.append(category);
-	}
-
-	return categoryResponse;
 }
 
 ApplicationResponseDTO *AppRepoStore::generatePackageResponse(QList<AppRepoPackageResponseDTO *> response) {

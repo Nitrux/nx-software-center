@@ -35,7 +35,7 @@ class AppRepoStore : public QObject {
 
         const QString name();
         
-        void getGroups();
+        void getGroups(CategoryResponseDTO *appimagehubResponse);
         void getPackages();
         void getPackagesBySlug(QString slug);
         void getPackagesByGroup(int group);
@@ -55,14 +55,25 @@ class AppRepoStore : public QObject {
         QString API_PACKAGES_URL;
         QString API_PACKAGES_BY_SLUG_URL;
         QString API_PACKAGES_BY_GROUP_URL;
+
+        const QList<QString> audioCategories = {"Audio editors", "Audio recording software", "Audio players"};
+	    const QList<QString> educationCategories = {"Education", "Science", "eBook readers"};
+        const QList<QString> graphicsCategories = {"Graphic", "Diagrams", "3D Editors", "Image viewers", "Multimedia"};
+        const QList<QString> internetCategories = {"Browsers", "Internet", "Messengers", "Email", "Cloud storage"};
+        const QList<QString> officeCategories = {"Office"};
+        const QList<QString> programmingCategories = {"Development", "Database managers", "IDE", "API clients", "LaTeX editors"};
+        const QList<QString> systemAndToolsCategories = {"Utilites", "Command line applications", "Disk Utility", "Text editors", "PDF toos", "Maps and navigation", "File managers", "3D Printing", "Scanning", "Screenshots", "RDP / VNC", "Notes", "Privacy"};
+        const QList<QString> videoCategories = {"Video"};
         
         void getPackages(SearchPackage criteria, QString value = "");
 
-        void parseGetGroupsResponseAndReply(QNetworkReply *reply);
+        void parseGetGroupsResponseAndReply(QNetworkReply *reply, CategoryResponseDTO *appimagehubResponse);
         void parseGetPackagesResponseAndReply(QNetworkReply *reply);
 
-        CategoryResponseDTO *generateGroupResponse(QList<AppRepoGroupResponseDTO *> response);
         ApplicationResponseDTO *generatePackageResponse(QList<AppRepoPackageResponseDTO *> response);
 
         AppRepoPackageResponseDTO *createPackageResponseDTO(QJsonObject obj);
+
+        void mapCategoryToSubcategory(CategoryResponseDTO *appimagehubResponse, QList<AppRepoGroupResponseDTO *> response);
+        void populateCategoryToSubcategory(QString categoryType, CategoryResponseDTO *appimagehubResponse, AppRepoGroupResponseDTO *responseItem);
 };
