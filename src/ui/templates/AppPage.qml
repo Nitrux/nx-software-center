@@ -167,6 +167,21 @@ Maui.Page
                             Layout.preferredHeight: implicitHeight
                         }
 
+                        Rectangle {
+                            width: 80
+                            height: 20
+                            radius: 20
+                            color: "#21be2b"
+                            
+                            Label {
+                                font.pixelSize: 10
+                                font.bold: true
+                                anchors.centerIn: parent
+                                color: "#ddffffff"
+                                text: appInfo.server
+                            }
+                        }
+
                         RowLayout
                         {
                             Layout.fillWidth: true
