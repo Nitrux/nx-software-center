@@ -437,6 +437,7 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
     app->downloads = downloads;
     app->previewPics = previewPics;
     app->previewUrls = previewUrls;
+    app->applicationStore = Category::CategoryStore::APPIMAGEHUB;
     response->applications.append(app);
   }
 

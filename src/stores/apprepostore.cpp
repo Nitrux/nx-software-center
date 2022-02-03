@@ -235,6 +235,7 @@ ApplicationResponseDTO *AppRepoStore::generatePackageResponse(QList<AppRepoPacka
 		application->description = responseItem->getDescription();
 		application->version = responseItem->getVersion();
 		application->tags = "app,appimage,apprepo";
+		application->applicationStore = Category::CategoryStore::APPREPO;
 
 		foreach(AppRepoVersionDTO version, responseItem->getVersions()) {
 			Application::Download *download = new Application::Download();
