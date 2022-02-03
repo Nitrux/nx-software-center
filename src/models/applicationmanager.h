@@ -22,6 +22,4 @@ class ApplicationManager : public QObject {
     private:
         Store *m_appimagehubStore;
         AppRepoStore *m_apprepoStore;
-
-        ApplicationResponseDTO *m_response;
 };
