@@ -110,7 +110,6 @@ Maui.Page
             {
                 id: _categoriesListView
 
-                visible: currentCategory.categoryStore != NX.Category.APPREPO
                 currentIndex: -1
                 Layout.fillWidth: true
                 title.text: i18n("Subcategories")
@@ -264,7 +263,7 @@ Maui.Page
             {
                 Layout.fillWidth: true
                 edge: Qt.BottomEdge
-                visible: currentCategory.categoryStore != NX.Category.APPREPO
+                visible: control.category.categoryStore != NX.Category.APPREPO
             }
 
             FeatureStrip
@@ -273,7 +272,7 @@ Maui.Page
                 Layout.fillWidth: true
                 title.text: i18n("Favorite in %1 ", control.category.displayName)
                 subtitle.text: i18n("Hightest rated app packages.")
-                visible: currentCategory.categoryStore != NX.Category.APPREPO
+                visible: control.category.categoryStore != NX.Category.APPREPO
 
                 category: control.category
                 pageSize: 4
@@ -292,7 +291,7 @@ Maui.Page
                 Layout.fillWidth: true
                 title.text: i18n("Newest in %1 ", control.category.displayName)
                 subtitle.text: i18n("Most newest additions to our collection.")
-                visible: currentCategory.categoryStore != NX.Category.APPREPO
+                visible: control.category.categoryStore != NX.Category.APPREPO
 
                 listView.implicitHeight: 80
 
@@ -339,7 +338,7 @@ Maui.Page
             {
                 Layout.fillWidth: true
                 edge: Qt.BottomEdge
-                visible: currentCategory.categoryStore != NX.Category.APPREPO
+                visible: control.category.categoryStore != NX.Category.APPREPO
             }
 
             SectionTitle
