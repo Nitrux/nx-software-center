@@ -215,6 +215,11 @@ AppRepoPackageResponseDTO *AppRepoStore::createPackageResponseDTO(QJsonObject ob
 	// images
 	QStringList images;
 	QJsonArray imagesArr = obj.value("images").toArray();
+	
+	if ( obj.value("icon").toString() != "" ) {
+		images << obj.value("icon").toString();
+	}
+	
 	foreach(const QJsonValue &value, imagesArr) {
 		QJsonObject obj = value.toObject();
 
@@ -248,6 +253,7 @@ ApplicationResponseDTO *AppRepoStore::generatePackageResponse(QList<AppRepoPacka
 		foreach(QString image, responseItem->getImages()) {
 			Application::PreviewPic *previewPic = new Application::PreviewPic();
 			previewPic->pic = image;
+			previewPic->smallPic = image;
 
 			application->previewPics.append(previewPic);
 		}
