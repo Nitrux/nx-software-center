@@ -14,7 +14,6 @@ include_directories(
 set(nx_SRCS
     main.cpp
     NXSCApp.cpp
-    models/appsmodel.cpp
     models/storemodel.cpp
     models/categoriesmodel.cpp
     models/app.cpp
@@ -44,7 +43,6 @@ set(nx_SRCS
 
 set(nx_HDRS
     utils/nx.h
-    models/appsmodel.h
     models/storemodel.h
     models/categoriesmodel.h
     models/app.h

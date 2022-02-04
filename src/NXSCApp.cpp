@@ -14,7 +14,6 @@
 #include "mauiapp.h"
 #include "models/ApplicationsRegistryModel.h"
 #include "models/app.h"
-#include "models/appsmodel.h"
 #include "models/categoriesmodel.h"
 #include "models/storemodel.h"
 #include "nx.h"
@@ -88,7 +87,6 @@ void NXSCApp::setup()
     qRegisterMetaType<ApplicationsList>("ApplicationsList");
 
     qmlRegisterType<App>("NXModels", 1, 0, "App");
-    qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
     qmlRegisterAnonymousType<PlingStoreApplicationData>("NXModels", 1);
     qmlRegisterType<Category>("NXModels", 1, 0, "Category");
     qmlRegisterType<StoreModel>("NXModels", 1, 0, "Store");
