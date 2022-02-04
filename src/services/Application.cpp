@@ -18,6 +18,7 @@ Application::Application(ApplicationData data)
 
 Application::Application(const ApplicationBundle &bundle)
     : _id(bundle.data.getId())
+    , _data(bundle.data)
     , _mainBundle(bundle)
     , _bundles({bundle})
 {
@@ -75,13 +76,23 @@ QList<ApplicationBundle> Application::getBundles() const
 {
     return _bundles;
 }
-void Application::setBundles(QList<ApplicationBundle> bundles)
+void Application::setBundles(QList<ApplicationBundle> bundles, int mainBundleIdx)
 {
-    _bundles = std::move(bundles);
+    if (!bundles.empty()) {
+        _bundles = std::move(bundles);
+        std::sort(_bundles.begin(), _bundles.end());
 
-    // update main bundle and data
-    const auto &mainBundle = getMainBundle();
-    _data.copy(mainBundle.data);
+        // fix mainBundleIdx
+        if (mainBundleIdx < 0 || mainBundleIdx >= _bundles.length()) {
+            qWarning() << __FUNCTION__ << " invalid main bundle index. Reset to default";
+            mainBundleIdx = 0;
+        }
+
+        // update main bundle and data
+        const auto &mainBundle = _bundles[mainBundleIdx];
+        _data.copy(mainBundle.data);
+        _id = _data.getId();
+    }
 }
 void Application::setMainBundle(const ApplicationBundle &bundle)
 {

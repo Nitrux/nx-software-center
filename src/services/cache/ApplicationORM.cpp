@@ -8,13 +8,10 @@
 
 // local
 #include "ApplicationBundleORM.h"
-#include "ApplicationDataORM.h"
 #include "SqliteUtils.h"
 
 ApplicationORM::ApplicationORM(const QSqlDatabase &database)
     : _database(database)
-//    , _dataORM(new ApplicationDataORM(database))
-//    , _bundleORM(new ApplicationBundleORM(database))
 {
 }
 
@@ -29,18 +26,20 @@ void ApplicationORM::init()
     if (!applicationTableExists())
         createApplicationTable();
 }
+
 void ApplicationORM::createApplicationTable()
 {
     qDebug() << "ApplicationORM: Creating table";
     QSqlQuery query("CREATE TABLE " APPLICATIONS_TABLE_NAME
                     " ( "
                     "id text NOT NULL"
+                    ", mainBundleIdx int"
                     ", data text"
                     ");",
                     _database);
     const auto &error = query.lastError();
     if (error.isValid())
-        qDebug() << "ApplicationORM:" << error;
+        qDebug() << __FUNCTION__ << error;
 }
 bool ApplicationORM::applicationTableExists() const
 {
@@ -48,42 +47,75 @@ bool ApplicationORM::applicationTableExists() const
     QSqlQuery query(checkTableExistsQueryTemplate.arg(APPLICATIONS_TABLE_NAME), _database);
     const auto &error = query.lastError();
     if (error.isValid())
-        qDebug() << "ApplicationORM:" << error;
+        qDebug() << __FUNCTION__ << error;
 
-    query.next();
-    return query.value(0).toString() == QString(APPLICATIONS_TABLE_NAME);
+    bool hasData = query.next();
+    return hasData && query.value(0).toString() == QString(APPLICATIONS_TABLE_NAME);
 }
-void ApplicationORM::createOrUpdateApplication(const Application &application)
-{
-    createApplication(application);
-}
-void ApplicationORM::createApplication(const Application &application) const
+
+void ApplicationORM::create(const Application &application) const
 {
     QSqlQuery query(_database);
-    query.prepare("INSERT INTO Applications (id, data) VALUES (:id, :data);");
+    query.prepare("INSERT INTO " APPLICATIONS_TABLE_NAME " (id, mainBundleIdx, data) VALUES (:id, :mainBundleIdx, :data);");
     query.bindValue(":id", application.getId());
+    query.bindValue(":mainBundleIdx", application.getMainBundleIndex());
 
     const auto &appdata = application.getData();
-    auto appDataJson = appdata.toJson();
-    query.bindValue(":data", appDataJson);
+    query.bindValue(":data", appdata.toJson());
 
     query.exec();
     const auto &error = query.lastError();
     if (error.isValid())
-        qDebug() << "ApplicationORM:" << error;
+        qDebug() << __FUNCTION__ << error;
 }
-ApplicationsList ApplicationORM::listApplications()
+
+ApplicationsList ApplicationORM::retrieve()
 {
     ApplicationsList results;
-    QSqlQuery query("SELECT data FROM " APPLICATIONS_TABLE_NAME ";", _database);
+    QSqlQuery query("SELECT mainBundleIdx, data FROM " APPLICATIONS_TABLE_NAME ";", _database);
     const auto &error = query.lastError();
     if (error.isValid())
-        qDebug() << "ApplicationORM:listApplications " << error;
+        qDebug() << __FUNCTION__ << error;
 
     while (query.next()) {
-        const auto &applicationDataJson = query.value(0).toByteArray();
+        const auto &applicationDataJson = query.value(1).toByteArray();
         ApplicationData appData = ApplicationData::fromJson(applicationDataJson);
         results << Application(appData);
     }
     return results;
+}
+Application ApplicationORM::retrieveById(const QString &id)
+{
+    QString queryTemplate("SELECT id, data FROM %1 WHERE id = '%2';");
+    QSqlQuery query(queryTemplate.arg(APPLICATIONS_TABLE_NAME, id), _database);
+    const auto &error = query.lastError();
+    if (error.isValid())
+        qDebug() << __FUNCTION__ << error;
+
+    while (query.next()) {
+        const auto &applicationDataJson = query.value(1).toByteArray();
+        ApplicationData appData = ApplicationData::fromJson(applicationDataJson);
+        return Application(appData);
+    }
+
+    return {};
+}
+void ApplicationORM::update(const Application &application)
+{
+    QString queryTemplate = "UPDATE " APPLICATIONS_TABLE_NAME " SET data = '%1' WHERE id = '%2'";
+    const auto &dataJson = application.getData().toJson();
+    QSqlQuery query(queryTemplate.arg(dataJson, application.getId()), _database);
+
+    const auto &error = query.lastError();
+    if (error.isValid())
+        qDebug() << __FUNCTION__ << error;
+}
+void ApplicationORM::removeById(const QString &id)
+{
+    QString queryTemplate = "DELETE FROM " APPLICATIONS_TABLE_NAME " WHERE id = '%1';";
+    QSqlQuery query(queryTemplate.arg(id), _database);
+
+    const auto &error = query.lastError();
+    if (error.isValid())
+        qDebug() << __FUNCTION__ << error;
 }

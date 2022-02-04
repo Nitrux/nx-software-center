@@ -16,9 +16,10 @@ private slots:
     void initTestCase();
 
     void testInitDB();
-
-    void testSaveApplicationWithoutBundles();
-    void testListOneApplication();
+    void testSaveApplications();
+    void testListApplication();
+    void testModifyApplication();
+    void testRemoveApplication();
 
     void cleanupTestCase();
 
@@ -27,5 +28,7 @@ private:
     QTemporaryDir _cacheDir;
     QString _cacheFile;
 
-    ApplicationData _demoAppData;
+    ApplicationBundle _demoAppBundles[2];
+    ApplicationBundle _otherAppBundles[2];
+    void fillBundleData(int version, const QString &appName, ApplicationBundle &bundle) const;
 };

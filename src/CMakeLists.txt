@@ -39,7 +39,6 @@ set(nx_SRCS
     services/delete/DeleteService.cpp
     services/cache/CacheService.cpp
     services/cache/ApplicationORM.cpp
-    services/cache/ApplicationDataORM.cpp
     services/cache/ApplicationBundleORM.cpp
     )
 

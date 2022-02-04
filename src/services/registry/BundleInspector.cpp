@@ -56,8 +56,7 @@ void BundleInspector::extractDesktopEntryData(const appimage::utils::ResourcesEx
 
         _bundle.data.setName(desktopEntry.value("Desktop Entry/Name").toString());
         _bundle.data.setDescription(desktopEntry.value("Desktop Entry/Comment").toString());
-        _bundle.version = desktopEntry.value("Desktop Entry/X-AppImage-Version", QString()).toString();
-        _bundle.data.setVersion(_bundle.version);
+        _bundle.data.setVersion(desktopEntry.value("Desktop Entry/X-AppImage-Version", QString()).toString());
         _bundle.data.setRequiresTerminal(desktopEntry.value("Desktop Entry/Terminal", false).toBool());
 
         QStringList xdgCategories = extractXdgCategories(desktopEntry);

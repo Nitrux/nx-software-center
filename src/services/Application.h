@@ -26,7 +26,7 @@ public:
     const ApplicationData &getData() const;
 
     [[nodiscard]] QList<ApplicationBundle> getBundles() const;
-    void setBundles(QList<ApplicationBundle> bundles);
+    void setBundles(QList<ApplicationBundle> bundles, int mainBundleIdx);
 
     // add the bundle to the list and updates the current data if the bundle as a higher version
     void addBundle(const ApplicationBundle &bundle);
@@ -43,8 +43,6 @@ public:
 
     bool operator==(const Application &rhs) const;
     bool operator!=(const Application &rhs) const;
-
-
 
 private:
     // find the insert index for a new bundle using the version for comparing

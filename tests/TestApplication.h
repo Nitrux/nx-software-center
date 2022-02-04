@@ -8,7 +8,7 @@
 
 // local
 
-class TestApplicationData : public QObject
+class TestApplication : public QObject
 {
     Q_OBJECT
 

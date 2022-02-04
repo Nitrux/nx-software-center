@@ -6,9 +6,7 @@
 
 // local
 #include "../Application.h"
-
-class ApplicationBundleORM;
-class ApplicationDataORM;
+#include "ApplicationBundleORM.h"
 
 class ApplicationORM
 {
@@ -18,16 +16,16 @@ public:
 
     void init();
 
-    bool applicationTableExists() const;
+    [[nodiscard]] bool applicationTableExists() const;
     void createApplicationTable();
 
-    void createOrUpdateApplication(const Application &application);
+    Application retrieveById(const QString &id);
+    void create(const Application &application) const;
+    void update(const Application &application);
+    void removeById(const QString &id);
 
-    ApplicationsList listApplications();
+    ApplicationsList retrieve();
 
 private:
     QSqlDatabase _database;
-//    ApplicationDataORM *_dataORM;
-//    ApplicationBundleORM *_bundleORM;
-    void createApplication(const Application &application) const;
 };

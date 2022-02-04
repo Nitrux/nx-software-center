@@ -25,7 +25,12 @@ bool ApplicationBundle::operator==(const ApplicationBundle &rhs) const
     QVersionNumber v1 = QVersionNumber::fromString(data.getVersion());
     QVersionNumber v2 = QVersionNumber::fromString(rhs.data.getVersion());
 
-    return path == rhs.path && v1 == v2;
+    return path == rhs.path && v1 == v2
+        && lastModified == rhs.lastModified
+        && size == rhs.size
+        && hashSumMD5 == rhs.hashSumMD5
+        && bundleType == rhs.bundleType
+        && data.toJson() == rhs.data.toJson();
 }
 bool ApplicationBundle::operator!=(const ApplicationBundle &rhs) const
 {

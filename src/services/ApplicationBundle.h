@@ -13,7 +13,7 @@
 class ApplicationBundle
 {
 public:
-    enum Type { Unknown, AppImage };
+    enum Type { Unknown = 0, AppImage };
 
     ApplicationBundle();
     explicit ApplicationBundle(QString path, ApplicationData data = {});
@@ -24,7 +24,6 @@ public:
 
     QString path;
     qint64 size;
-    QString version;
     QDateTime lastModified;
     QByteArray hashSumMD5;
     Type bundleType;

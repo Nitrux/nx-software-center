@@ -15,7 +15,8 @@ class ApplicationBundle;
 class ApplicationData
 {
 public:
-    explicit ApplicationData(QVariantMap data = {});
+    ApplicationData();
+    explicit ApplicationData(QVariantMap data);
 
     [[nodiscard]] QString getId() const;
     void setId(const QString &id);

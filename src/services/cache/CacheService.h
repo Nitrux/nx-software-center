@@ -6,6 +6,7 @@
 
 // local
 #include "../ApplicationBundle.h"
+#include "ApplicationBundleORM.h"
 #include "ApplicationORM.h"
 
 class CacheService : public QObject
@@ -20,12 +21,13 @@ public:
 
     ApplicationsList listApplications();
     Q_SLOT void saveApplication(const Application &application);
-    Q_SLOT void deleteApplication(const Application &application);
+    Q_SLOT void removeApplication(const Application &application);
 
 private:
     QString _path;
     QSqlDatabase _database;
     ApplicationORM _applicationsORM;
+    ApplicationBundleORM _applicationBundleORM;
 
     void ensureCacheDbParentDirExists() const;
 };

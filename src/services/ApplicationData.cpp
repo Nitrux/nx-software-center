@@ -8,6 +8,10 @@
 #include <QVersionNumber>
 #include <utility>
 
+ApplicationData::ApplicationData()
+    : _data()
+{
+}
 ApplicationData::ApplicationData(QVariantMap data)
     : _data(std::move(data))
 {
@@ -121,7 +125,7 @@ void ApplicationData::copy(const ApplicationData &data)
 QByteArray ApplicationData::toJson() const
 {
     const auto json = QJsonDocument::fromVariant(_data);
-    return json.toJson();
+    return json.toJson(QJsonDocument::Compact);
 }
 ApplicationData ApplicationData::fromJson(const QByteArray &jsonData)
 {

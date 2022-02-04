@@ -30,17 +30,17 @@ target_link_libraries(test_applications_registry PRIVATE MauiKit MauiKit::FileBr
 add_test(NAME testApplicationsRegistry COMMAND test_applications_registry)
 
 add_executable(
-    test_applications_data
+    test_application
     ../src/services/Application.cpp
     ../src/services/ApplicationData.cpp
     ../src/services/ApplicationBundle.cpp
 
-    TestApplicationData.cpp
+    TestApplication.cpp
 )
-target_include_directories(test_applications_data PRIVATE ../src/services/)
-target_link_libraries(test_applications_data PRIVATE Qt5::Widgets Qt5::Test)
+target_include_directories(test_application PRIVATE ../src/)
+target_link_libraries(test_application PRIVATE Qt5::Widgets Qt5::Test)
 
-add_test(NAME testApplicationsData COMMAND test_applications_data)
+add_test(NAME testApplication COMMAND test_application)
 
 
 add_executable(
