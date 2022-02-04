@@ -6,16 +6,13 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QThread>
+#include <utility>
 
-BundlesDirsWatcher::BundlesDirsWatcher(const QStringList &paths, QMap<QString, QDateTime> fileCache, QObject *parent)
+BundlesDirsWatcher::BundlesDirsWatcher(QObject *parent)
     : QObject(parent)
     , _watcher()
-    , _fileCache(std::move(fileCache))
 {
     connect(&_watcher, &QFileSystemWatcher::directoryChanged, this, &BundlesDirsWatcher::checkDirChanges);
-
-    // paths need to be added after connection is made to avoid missing signals
-    _watcher.addPaths(paths);
 }
 
 void BundlesDirsWatcher::checkDirChanges(const QString &dirPath)
@@ -66,4 +63,14 @@ void BundlesDirsWatcher::checkAllDirs()
 {
     for (const auto &path : _watcher.directories())
         checkDirChanges(path);
+}
+void BundlesDirsWatcher::watchPaths(const QStringList &paths)
+{
+    for (const auto &path : paths)
+        _watcher.addPath(path);
+}
+
+void BundlesDirsWatcher::setFileCache(QMap<QString, QDateTime> fileCache)
+{
+    _fileCache = std::move(fileCache);
 }

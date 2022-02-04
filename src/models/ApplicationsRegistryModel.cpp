@@ -2,17 +2,20 @@
 
 #include <QDebug>
 
-ApplicationsRegistryModel::ApplicationsRegistryModel(ApplicationsRegistry *registry, QObject *parent)
+ApplicationsRegistryModel::ApplicationsRegistryModel(QObject *parent)
     : QAbstractListModel(parent)
-    , _registry(registry)
+    , _registry(nullptr)
 {
+    initRoles();
+}
+void ApplicationsRegistryModel::setRegistry(ApplicationsRegistry *registry)
+{
+    _registry = registry;
     _applications = registry->getApplications();
 
     connect(_registry, &ApplicationsRegistry::applicationAdded, this, &ApplicationsRegistryModel::handleApplicationAdded, Qt::QueuedConnection);
     connect(_registry, &ApplicationsRegistry::applicationUpdated, this, &ApplicationsRegistryModel::handleApplicationUpdated, Qt::QueuedConnection);
     connect(_registry, &ApplicationsRegistry::applicationRemoved, this, &ApplicationsRegistryModel::handleApplicationRemoved, Qt::QueuedConnection);
-
-    initRoles();
 }
 
 QHash<int, QByteArray> ApplicationsRegistryModel::roleNames() const
@@ -109,19 +112,21 @@ void ApplicationsRegistryModel::handleApplicationAdded(const Application &applic
 void ApplicationsRegistryModel::handleApplicationUpdated(const Application &application)
 {
     auto row = _applications.indexOf(application);
-    _applications[row] = application;
 
-    if (row >= 0 && row < _applications.length())
+    if (row >= 0 && row < _applications.length()) {
+        _applications[row] = application;
         emit(dataChanged(index(row, 0), index(row + 1, 0)));
+    }
 }
 
 void ApplicationsRegistryModel::handleApplicationRemoved(const Application &application)
 {
     auto idx = _applications.indexOf(application);
-
-    beginRemoveRows(QModelIndex(), idx, idx);
-    _applications.removeAt(idx);
-    endRemoveRows();
+    if (idx >= 0 && idx < _applications.length()) {
+        beginRemoveRows(QModelIndex(), idx, idx);
+        _applications.removeAt(idx);
+        endRemoveRows();
+    }
 }
 
 void ApplicationsRegistryModel::handleUpdateInformation(const ApplicationUpdateData &updateData)
@@ -182,7 +187,7 @@ bool ApplicationsRegistryModel::setData(const QModelIndex &index, const QVariant
         switch (role) {
         case MainBundleIndex:
             app.setMainBundleIndex(value.toInt());
-            _registry->updateApplicationData(app);
+            _registry->updateApplication(app);
             emit(dataChanged(index, index, {role}));
             return true;
         default:

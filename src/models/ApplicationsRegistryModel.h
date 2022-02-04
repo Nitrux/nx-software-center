@@ -35,7 +35,8 @@ public:
 
     Q_ENUM(ApplicationRoles)
 
-    explicit ApplicationsRegistryModel(ApplicationsRegistry *registry, QObject *parent = nullptr);
+    explicit ApplicationsRegistryModel(QObject *parent);
+    void setRegistry(ApplicationsRegistry *registry);
 
     // Basic functionality:
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;

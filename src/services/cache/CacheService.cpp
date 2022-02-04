@@ -71,4 +71,5 @@ ApplicationsList CacheService::listApplications()
 void CacheService::removeApplication(const Application &application)
 {
     _applicationsORM.removeById(application.getId());
+    _applicationBundleORM.retrieveApplicationBundles(application.getId());
 }

@@ -9,7 +9,7 @@
 
 void TestApplicationsRegistry::initTestCase()
 {
-    registry = new ApplicationsRegistry({}, {});
+    registry = new ApplicationsRegistry({});
     qRegisterMetaType<Application>("Application");
 
     b1 = new ApplicationBundle("/tmp/fake_bundle_1.AppImage");

@@ -18,15 +18,15 @@ class ApplicationsRegistry : public QObject
     Q_OBJECT
 
 public:
-    explicit ApplicationsRegistry(QStringList appDirs, QMap<QString, Application> applications);
+    explicit ApplicationsRegistry(QStringList appDirs);
 
-    const QStringList &getAppDirs();
     [[nodiscard]] bool applicationExist(const QString &appId) const;
     [[nodiscard]] Application getApplication(const QString &appId) const;
-    Q_SCRIPTABLE void updateApplicationData(const Application &applicationData);
+    Q_SCRIPTABLE void updateApplication(const Application &application);
 
     [[nodiscard]] Q_SCRIPTABLE ApplicationsList getApplications() const;
-    [[nodiscard]] Q_SCRIPTABLE int getApplicationsCount() const;
+    void setApplications(const QVector<Application> &applications);
+    int countApplications();
 
     // Add an AppImage file to the registry and updates or create the related Application data
     Q_SLOT void addBundle(const ApplicationBundle &bundle);

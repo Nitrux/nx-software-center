@@ -6,12 +6,9 @@
 #include <MauiKit/FileBrowsing/fmstatic.h>
 #include <MauiKit/FileBrowsing/fileloader.h>
 
-#include <QFileSystemWatcher>
-
 #include "utils/appimagetools.h"
 
 AppsModel::AppsModel(QObject *parent) : MauiList(parent)
-  , m_watcher(new QFileSystemWatcher(this))
 {
     auto timer = new  QTimer (this);
 
@@ -19,12 +16,6 @@ AppsModel::AppsModel(QObject *parent) : MauiList(parent)
     timer->setInterval(1000);
 
     connect(timer, &QTimer::timeout, this, &AppsModel::setList);
-    connect(m_watcher, &QFileSystemWatcher::directoryChanged, [timer](QString )
-    {
-        timer->start();
-    });
-
-    m_watcher->addPath(QUrl(FMStatic::HomePath+"/Applications").toLocalFile());
 }
 
 void AppsModel::componentComplete()

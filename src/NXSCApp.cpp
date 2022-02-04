@@ -22,13 +22,14 @@
 NXSCApp::NXSCApp(int &argc, char **argv)
     : QApplication(argc, argv)
     , _qml_main(QStringLiteral("qrc:/main.qml"))
-//    , _appsDBHelper(_appsDBHelper->getInstance())
-    , _applicationsRegistry({NX::AppsPath.toLocalFile()}, {})
-    , _applicationsRegistryModel(&_applicationsRegistry, this)
+    , _applicationsRegistry({NX::AppsPath.toLocalFile()})
+    , _applicationsRegistryModel(this)
     , _updateService(this)
     , _installService(NX::AppsPath.toLocalFile(), this)
     , _deleteService(2, this)
+    , _cacheService(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath(NX::appDBName))
     , _tasksListModel(this)
+    , _bundleDirsWatcher(nullptr /* will be moved to another thread later */)
 {
     setOrganizationName(QStringLiteral("Nitrux"));
     setWindowIcon(QIcon(":/nx-software-center.svg"));
@@ -78,9 +79,13 @@ void NXSCApp::parseCommands()
     _aboutData.setupCommandLine(&parser);
     _aboutData.processCommandLine(&parser);
 }
-void NXSCApp::setupQMLEngine()
+void NXSCApp::setup()
 {
     QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this, &NXSCApp::onQMLEngineObjectCreated, Qt::QueuedConnection);
+
+    qRegisterMetaType<Application>("ApplicationData");
+    qRegisterMetaType<ApplicationBundle>("ApplicationBundle");
+    qRegisterMetaType<ApplicationsList>("ApplicationsList");
 
     qmlRegisterType<App>("NXModels", 1, 0, "App");
     qmlRegisterType<AppsModel>("NXModels", 1, 0, "Apps");
@@ -104,9 +109,10 @@ void NXSCApp::setupQMLEngine()
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "DeleteService", &_deleteService);
     QObject::connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, &_deleteService, &DeleteService::onApplicationUpdated);
 
-    registerApplicationsRegistryService();
     registerUpdateService();
-    setupApplicationDBUpdateCache();
+    setupCacheService();
+    setupBundlesDirsWatcher();
+    registerApplicationsRegistryService();
 
     registerThumbnailer();
 
@@ -119,15 +125,13 @@ void NXSCApp::registerThumbnailer()
 }
 void NXSCApp::registerApplicationsRegistryService()
 {
+    _applicationsRegistryModel.setRegistry(&_applicationsRegistry);
+
     _applicationsRegistryModelProxy.setSourceModel(&_applicationsRegistryModel);
     _applicationsRegistryModelProxy.setFilterRole(ApplicationsRegistryModel::Name);
     _applicationsRegistryModelProxy.setSortRole(ApplicationsRegistryModel::XdgCategories);
 
-    qmlRegisterUncreatableType<ApplicationsRegistryModel>("org.maui.nxsc",
-                                                          1,
-                                                          0,
-                                                          "ApplicationsListModelRoles",
-                                                          "Registry can only be accessed by the singleton");
+    qmlRegisterUncreatableType<ApplicationsRegistryModel>("org.maui.nxsc", 1, 0, "ApplicationModelRole", "Registry can only be accessed by the singleton");
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "ApplicationsListModel", &_applicationsRegistryModelProxy);
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "ApplicationsRegistry", &_applicationsRegistry);
 }
@@ -137,21 +141,20 @@ void NXSCApp::onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl)
     if (!obj && _qml_main == objUrl)
         QCoreApplication::exit(-1);
 }
-void NXSCApp::setupApplicationsRegistry()
-{
-    qRegisterMetaType<Application>("ApplicationData");
-    qRegisterMetaType<ApplicationBundle>("ApplicationBundle");
-    qRegisterMetaType<ApplicationsList>("ApplicationsList");
 
-    _bundleDirsWatcher = QPointer<BundlesDirsWatcher>(new BundlesDirsWatcher(_applicationsRegistry.getAppDirs(), {}));
-    connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleAdded, &_applicationsRegistry, &ApplicationsRegistry::addBundle);
-    connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleUpdated, &_applicationsRegistry, &ApplicationsRegistry::addBundle);
-    connect(_bundleDirsWatcher.data(), &BundlesDirsWatcher::bundleRemoved, &_applicationsRegistry, &ApplicationsRegistry::removeBundleByPath);
+void NXSCApp::setupBundlesDirsWatcher()
+{
+    connect(&_bundleDirsWatcher, &BundlesDirsWatcher::bundleAdded, &_applicationsRegistry, &ApplicationsRegistry::addBundle);
+    connect(&_bundleDirsWatcher, &BundlesDirsWatcher::bundleUpdated, &_applicationsRegistry, &ApplicationsRegistry::addBundle);
+    connect(&_bundleDirsWatcher, &BundlesDirsWatcher::bundleRemoved, &_applicationsRegistry, &ApplicationsRegistry::removeBundleByPath);
+
+    _bundleDirsWatcher.watchPaths({NX::AppsPath.toLocalFile()});
 
     // run watcher in a different thread to avoid affecting UI performance
-    _bundleDirsWatcher->moveToThread(&_bundleDirsWatcherThread);
+    _bundleDirsWatcher.moveToThread(&_bundleDirsWatcherThread);
     _bundleDirsWatcherThread.start();
-    QMetaObject::invokeMethod(_bundleDirsWatcher.data(), &BundlesDirsWatcher::checkAllDirs, Qt::QueuedConnection);
+
+    QMetaObject::invokeMethod(&_bundleDirsWatcher, &BundlesDirsWatcher::checkAllDirs, Qt::QueuedConnection);
 }
 
 void NXSCApp::registerUpdateService()
@@ -159,9 +162,22 @@ void NXSCApp::registerUpdateService()
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "UpdateService", &_updateService);
 }
 
-void NXSCApp::setupApplicationDBUpdateCache()
+void NXSCApp::setupCacheService()
 {
-//    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationAdded, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
-//    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, _appsDBHelper, &AppsDBHelper::saveOrUpdateApp);
-//    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationRemoved, _appsDBHelper, &AppsDBHelper::deleteApp);
+    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationAdded, &_cacheService, &CacheService::saveApplication);
+    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, &_cacheService, &CacheService::saveApplication);
+    connect(&_applicationsRegistry, &ApplicationsRegistry::applicationRemoved, &_cacheService, &CacheService::removeApplication);
+
+    // init registry cache
+    auto applicationsCache = _cacheService.listApplications();
+    _applicationsRegistry.setApplications(applicationsCache);
+
+    // init dir watcher cache
+    QMap<QString, QDateTime> fileCache;
+    for (const auto &app : applicationsCache) {
+        for (const auto &bundle : app.getBundles()) {
+            fileCache[bundle.path] = bundle.lastModified;
+        }
+    }
+    _bundleDirsWatcher.setFileCache(fileCache);
 }

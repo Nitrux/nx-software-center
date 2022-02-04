@@ -89,9 +89,7 @@ void Application::setBundles(QList<ApplicationBundle> bundles, int mainBundleIdx
         }
 
         // update main bundle and data
-        const auto &mainBundle = _bundles[mainBundleIdx];
-        _data.copy(mainBundle.data);
-        _id = _data.getId();
+        setMainBundle(_bundles[mainBundleIdx]);
     }
 }
 void Application::setMainBundle(const ApplicationBundle &bundle)

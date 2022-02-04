@@ -30,14 +30,12 @@ public:
     ~NXSCApp() override;
 
     void parseCommands();
-    void setupQMLEngine();
-    void setupApplicationsRegistry();
+    void setup();
 
 private:
     Q_SLOT void onQMLEngineObjectCreated(QObject *obj, const QUrl &objUrl);
 
     QUrl _qml_main;
-//    AppsDBHelper *_appsDBHelper;
     ApplicationsRegistry _applicationsRegistry;
     ApplicationsRegistryModel _applicationsRegistryModel;
     ApplicationsRegistryProxyModel _applicationsRegistryModelProxy;
@@ -45,8 +43,9 @@ private:
     LaunchService _launchService;
     InstallService _installService;
     DeleteService _deleteService;
+    CacheService _cacheService;
     TasksListModel _tasksListModel;
-    QPointer<BundlesDirsWatcher> _bundleDirsWatcher;
+    BundlesDirsWatcher _bundleDirsWatcher;
     QThread _bundleDirsWatcherThread;
     KAboutData _aboutData;
     QQmlApplicationEngine _engine;
@@ -54,5 +53,6 @@ private:
     void registerApplicationsRegistryService();
     void registerUpdateService();
     void registerThumbnailer();
-    void setupApplicationDBUpdateCache();
+    void setupCacheService();
+    void setupBundlesDirsWatcher();
 };

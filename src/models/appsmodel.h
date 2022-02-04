@@ -5,9 +5,6 @@
 
 #include <MauiKit/Core/mauilist.h>
 
-
-class QFileSystemWatcher;
-
 class Store;
 class PlingStoreApplicationData;
 class AppsModel : public MauiList
@@ -48,7 +45,7 @@ private:
     FMH::MODEL_LIST m_list;
     QHash<QString, PlingStoreApplicationData *> m_app;
     Store *m_store;
-    QFileSystemWatcher * m_watcher;
+
 
     void setList();
 

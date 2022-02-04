@@ -119,8 +119,8 @@ Maui.Page
                 text: i18n("Name")
                 checkable: true
                 autoExclusive: true
-                checked: ApplicationsListModel.sortRole === ApplicationsListModelRoles.Name
-                onTriggered: ApplicationsListModel.sortRole = ApplicationsListModelRoles.Name
+                checked: ApplicationsListModel.sortRole === ApplicationModelRole.Name
+                onTriggered: ApplicationsListModel.sortRole = ApplicationModelRole.Name
             }
 
             MenuItem
@@ -128,8 +128,8 @@ Maui.Page
                 text: i18n("Category")
                 checkable: true
                 autoExclusive: true
-                checked: ApplicationsListModel.sortRole === ApplicationsListModelRoles.XdgCategories
-                onTriggered: ApplicationsListModel.sortRole = ApplicationsListModelRoles.XdgCategories
+                checked: ApplicationsListModel.sortRole === ApplicationModelRole.XdgCategories
+                onTriggered: ApplicationsListModel.sortRole = ApplicationModelRole.XdgCategories
             }
         }
     ]
@@ -151,7 +151,7 @@ Maui.Page
         orientation: ListView.Vertical
         spacing: Maui.Style.space.medium
         section.property: ApplicationsListModel.sortRoleName
-        section.criteria:  ApplicationsListModel.sortRole === ApplicationsListModelRoles.Name ? ViewSection.FirstCharacter : ViewSection.FullString
+        section.criteria:  ApplicationsListModel.sortRole === ApplicationModelRole.Name ? ViewSection.FirstCharacter : ViewSection.FullString
         section.delegate: Maui.LabelDelegate
         {
             id: delegate

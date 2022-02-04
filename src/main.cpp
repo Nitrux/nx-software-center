@@ -14,8 +14,7 @@ int main(int argc, char *argv[])
 
     QScopedPointer<NXSCApp> app(new NXSCApp(argc, argv));
     app->parseCommands();
-    app->setupQMLEngine();
-    app->setupApplicationsRegistry();
+    app->setup();
 
     FMStatic::createDir(NX::AppsPath, QString());
 

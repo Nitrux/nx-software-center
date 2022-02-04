@@ -7,9 +7,8 @@
 // local
 #include "utils/appimagetools.h"
 
-ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs, QMap<QString, Application> applications)
-    : _applications(applications)
-    , _appDirs(std::move(appDirs))
+ApplicationsRegistry::ApplicationsRegistry(QStringList appDirs)
+    : _appDirs(std::move(appDirs))
 {
     qRegisterMetaType<Application>();
     qRegisterMetaType<ApplicationBundle>();
@@ -79,25 +78,26 @@ bool ApplicationsRegistry::applicationExist(const QString &appId) const
 {
     return _applications.contains(appId);
 }
-const QStringList &ApplicationsRegistry::getAppDirs()
-{
-    return _appDirs;
-}
 
 ApplicationsList ApplicationsRegistry::getApplications() const
 {
     return QVector<Application>::fromList(_applications.values());
 }
 
-int ApplicationsRegistry::getApplicationsCount() const
+void ApplicationsRegistry::setApplications(const QVector<Application> &applications)
+{
+    for (const auto &app : applications)
+        _applications[app.getId()] = app;
+}
+void ApplicationsRegistry::updateApplication(const Application &application)
+{
+    const auto &appId = application.getId();
+    if (_applications.contains(appId)) {
+        _applications[appId] = application;
+        emit(applicationUpdated(application));
+    }
+}
+int ApplicationsRegistry::countApplications()
 {
     return _applications.size();
-}
-void ApplicationsRegistry::updateApplicationData(const Application &applicationData)
-{
-    const auto &appId = applicationData.getId();
-    if (_applications.contains(appId)) {
-        _applications[appId] = applicationData;
-        emit(applicationUpdated(applicationData));
-    }
 }

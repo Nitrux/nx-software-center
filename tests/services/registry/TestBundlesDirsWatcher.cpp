@@ -17,7 +17,9 @@ void TestBundlesDirsWatcher::initTestCase()
     QFileInfo existentAppImageInfo(existentAppimagePath);
     QMap<QString, QDateTime> fileCache = {{existentAppimagePath, existentAppImageInfo.lastModified()}};
 
-    watcher = new BundlesDirsWatcher({dirToWatch.path()}, fileCache);
+    watcher = new BundlesDirsWatcher(nullptr);
+    watcher->setFileCache(fileCache);
+    watcher->watchPaths({dirToWatch.path()});
     qRegisterMetaType<ApplicationBundle>("ApplicationBundle");
     watcher->moveToThread(&_workerThread);
     _workerThread.start();
