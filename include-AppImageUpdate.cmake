@@ -13,6 +13,7 @@ if ("${APPIMAGEUPDATE_IMPORTED_LOCATION}" STREQUAL "APPIMAGEUPDATE_IMPORTED_LOCA
         CONFIGURE_HANDLED_BY_BUILD ON
         UPDATE_DISCONNECTED ON
         BUILD_BYPRODUCTS "${AppImageUpdate_ROOT}/lib/libappimageupdate.so"
+        INSTALL_COMMAND make DESTDIR= install
     )
 
     file(MAKE_DIRECTORY ${AppImageUpdate_ROOT}/include)  # avoid race condition
