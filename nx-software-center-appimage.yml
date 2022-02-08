@@ -54,6 +54,7 @@ AppDir:
     - qml-module-qtquick-controls2
     - qml-module-qtquick-shapes
     - qml-module-qtquick2
+    - qml-module-qt-labs-settings
     
     # KF5 DEPENDENCIES
     - libkf5notifications5
