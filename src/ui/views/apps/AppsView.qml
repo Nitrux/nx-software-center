@@ -175,7 +175,7 @@ Maui.Page
             label2.text: model.description
             label3.text: model.version
             label4.text: Maui.Handy.formatSize(model.mainBundleSize)
-            imageSource: "image://thumbnailer/" + model.mainBundlePath
+            imageSource: "file://" + model.icon
             iconSizeHint: Maui.Style.iconSizes.large
             iconSource: "application-vnd.appimage"
 
