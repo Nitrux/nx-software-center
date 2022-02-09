@@ -45,8 +45,10 @@ find_package(libappimage REQUIRED)
 find_package(MauiKit REQUIRED)
 find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
 
-include(include-AppImageUpdate.cmake)
-
+find_package(AppImageUpdate QUIET)
+if (NOT AppImageUpdate_FOUND)
+    include(include-AppImageUpdate.cmake)
+endif()
 
 if(QUICK_COMPILER)
         find_package(Qt5QuickCompiler)
