@@ -7,6 +7,7 @@
 #include "store.h"
 #include "applicationmanager.h"
 
+class QTimer;
 class Category;
 class Application;
 class StoreModel : public MauiList
@@ -101,7 +102,7 @@ private:
     SORT m_sort = SORT::NEWEST;    
 
     ApplicationManager *m_applicationManager;
-
+    QTimer * m_timer;
 #if defined Q_PROCESSOR_ARM && defined Q_OS_LINUX
     Store::Arch m_arch = Store::Arch::arm64;
 #else

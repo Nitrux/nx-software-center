@@ -2,11 +2,19 @@
 #include "appimagehubstore.h"
 #include "app.h"
 
+#include <QTimer>
+
 StoreModel::StoreModel(QObject *parent) : MauiList(parent),
     m_store(new AppImageHubStore(this)), m_app(new Application(this)),  m_category(new Category(this))
     , m_applicationManager(new ApplicationManager())
+  ,m_timer(new QTimer(this))
 {
     qRegisterMetaType<Application *>("Application *");
+
+    m_timer->setInterval(900);
+    m_timer->setSingleShot(true);
+
+    connect(m_timer, &QTimer::timeout, this, &StoreModel::requestApps);
 }
 
 void StoreModel::requestApps()
@@ -14,7 +22,7 @@ void StoreModel::requestApps()
     if(!m_category)
         return;
 
-    qDebug() << "@REQUEST APPS FOR CATEGORY" << m_nameFilter << m_category->name << m_category->id << m_pageSize << m_page;
+    qDebug() << "@REQUEST APPS FOR ::::" << m_nameFilter << m_category->name << m_category->id << m_pageSize << m_page;
 
     if(m_category->id.isEmpty ())
     {
@@ -66,16 +74,40 @@ void StoreModel::componentComplete()
         }
 
         emit countChanged();
-
     });
 
-    connect(this, &StoreModel::pageChanged, this , &StoreModel::requestApps);
-    connect(this, &StoreModel::pageSizeChanged, this , &StoreModel::requestApps);
-    connect(this, &StoreModel::sortChanged, this , &StoreModel::requestApps);
-    connect(this, &StoreModel::tagsChanged, this , &StoreModel::requestApps);
-    connect(this, &StoreModel::nameFilterChanged, this , &StoreModel::requestApps);
+    connect(this, &StoreModel::pageChanged, this, [this](int)
+    {
+         m_timer->start();
+    });
 
-    requestApps();
+    connect(this, &StoreModel::pageSizeChanged, this, [this](int)
+    {
+         m_timer->start();
+    });
+
+    connect(this, &StoreModel::sortChanged, this, [this](StoreModel::SORT)
+    {
+         m_timer->start();
+    });
+
+    connect(this, &StoreModel::tagsChanged,  this, [this](QStringList)
+    {
+         m_timer->start();
+    });
+
+    connect(this, &StoreModel::nameFilterChanged,  this, [this](QString)
+    {
+         m_timer->start();
+    });
+
+//    connect(this, &StoreModel::categoryChanged,  this, [this](Category*)
+//    {
+//         m_timer->start();
+//    });
+
+//    requestApps();
+    m_timer->start();
 }
 
 const FMH::MODEL_LIST &StoreModel::items() const
@@ -125,7 +157,6 @@ QString StoreModel::getCategoryName() const
 
 void StoreModel::setCategory(Category * category)
 {
-
     if (m_category == category)
         return;
 
@@ -136,7 +167,7 @@ void StoreModel::setCategory(Category * category)
     this->clear();
     this->setPage(0);
     emit categoryChanged(m_category);
-    emit categoryNameChanged (m_category->name);
+    emit categoryNameChanged(m_category->name);
 }
 
 void StoreModel::clear()
@@ -170,8 +201,8 @@ Application * StoreModel::application(const QString & id)
 
 void StoreModel::setPage(int page)
 {
-    //    if (m_page == page)
-    //        return;
+//    if (m_page == page)
+//        return;
 
     m_page = page;
     emit pageChanged(m_page);
