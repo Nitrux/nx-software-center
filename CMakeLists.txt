@@ -7,9 +7,9 @@ cmake_minimum_required(VERSION 3.16)
 
 set(NX_SC_VERSION 1.1.0)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -38,12 +38,17 @@ include(ECMSourceVersionControl)
 include(FeatureSummary)
 include(ECMQMLModules)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Qml Quick)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Qml Quick Sql)
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
 find_package(libappimage REQUIRED)
 
 find_package(MauiKit REQUIRED)
 find_package(MauiKit REQUIRED COMPONENTS FileBrowsing)
+
+find_package(AppImageUpdate QUIET)
+if (NOT AppImageUpdate_FOUND)
+    include(include-AppImageUpdate.cmake)
+endif()
 
 if(QUICK_COMPILER)
         find_package(Qt5QuickCompiler)
@@ -82,6 +87,7 @@ ecm_setup_version(${NX_SC_VERSION}
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/nx_sc_version.h"
     )
 
+add_subdirectory(tests)
 add_subdirectory(src)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

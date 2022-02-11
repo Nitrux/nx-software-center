@@ -18,7 +18,6 @@ Maui.ItemDelegate
     property alias images : _header.images
     property alias imageSource: _template.imageSource
 
-
     ColumnLayout
     {
         anchors.fill: parent
@@ -44,6 +43,8 @@ Maui.ItemDelegate
             id: _template
             //        Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.leftMargin: Maui.Style.space.small
+            Layout.rightMargin: Maui.Style.space.small
             Layout.preferredHeight: 52
             isCurrentItem: control.isCurrentItem
             iconSource: "package"

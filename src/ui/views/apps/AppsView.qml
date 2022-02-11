@@ -5,14 +5,13 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
+import org.maui.nxsc 1.0
 import NXModels 1.0 as NX
 import "../../templates"
 
 Maui.Page
 {
     id: control
-
-    property alias list : _appsList
 
     Maui.Dialog
     {
@@ -46,34 +45,70 @@ Maui.Page
 
     Maui.Dialog
     {
+        id: appUpdateDialog
+
+        title: i18n("AppImage Update")
+        message: i18n("Please wait...")
+        rejectButton.visible: false
+
+        acceptButton.onClicked:
+        {
+            appUpdateDialog.visible = false;
+        }
+
+        function showDialog(fileName, status)
+        {
+            message = status
+
+            appUpdateDialog.visible = true;
+        }
+    }
+
+    Maui.Dialog
+    {
         id: appRemoveDialog
 
-        property int index : -1
+        property var targetAppName;
+        property var targetAppData;
 
         title: i18n("Remove")
-        message: i18n("Are you sure you want to remove this application?")
+        message: i18n("Are you sure you want to remove " + targetAppName + "?")
         template.iconSource: "emblem-warning"
         page.margins: Maui.Style.space.big
         spacing: Maui.Style.space.medium
         onRejected: appRemoveDialog.close()
-        onAccepted:
-        {
-            _appsList.removeApp(index);
+        onAccepted: {
+            DeleteService.deleteApplication(targetAppData);
+            appRemoveDialog.close()
+
+            targetAppName = "";
+            targetApp = null;
         }
     }
 
     headBar.forceCenterMiddleContent: isWide
-    headBar.middleContent: Maui.TextField
+    headBar.middleContent: Maui.SearchField
     {
         id: _filterBar
         Layout.fillWidth: true
         Layout.maximumWidth: 500
-        placeholderText: i18n("Filter %1 installed apps", _appsList.count)
-        onAccepted: _appsModel.filter = text
-        onCleared:  _appsModel.filter = ""
+        Layout.alignment: Qt.AlignCenter
+        placeholderText: i18n("Filter installed apps")
+        onTextChanged: ApplicationsListModel.filterRegExp = RegExp(text)
+        onCleared:  ApplicationsListModel.filterRegExp = ""
     }
 
     headBar.rightContent: [
+        Button
+        {
+            text: qsTr("Update All")
+            visible: _appsList.isUpdateAvailable
+            onClicked:
+            {
+                var appList = ApplicationsRegistry.getApplications();
+                UpdateService.update(appList);
+            }
+        },
 
         Maui.ToolButtonMenu
         {
@@ -84,27 +119,8 @@ Maui.Page
                 text: i18n("Name")
                 checkable: true
                 autoExclusive: true
-                checked: _appsModel.sort === "label"
-                onTriggered: _appsModel.sort = "label"
-            }
-
-            MenuItem
-            {
-                text: i18n("Size")
-                checkable: true
-                autoExclusive: true
-                checked: _appsModel.sort === "size"
-                onTriggered: _appsModel.sort = "size"
-
-            }
-
-            MenuItem
-            {
-                text: i18n("Date")
-                checkable: true
-                autoExclusive: true
-                checked: _appsModel.sort === "date"
-                onTriggered: _appsModel.sort = "date"
+                checked: ApplicationsListModel.sortRole === ApplicationModelRole.Name
+                onTriggered: ApplicationsListModel.sortRole = ApplicationModelRole.Name
             }
 
             MenuItem
@@ -112,8 +128,8 @@ Maui.Page
                 text: i18n("Category")
                 checkable: true
                 autoExclusive: true
-                checked: _appsModel.sort === "category"
-                onTriggered: _appsModel.sort = "category"
+                checked: ApplicationsListModel.sortRole === ApplicationModelRole.XdgCategories
+                onTriggered: ApplicationsListModel.sortRole = ApplicationModelRole.XdgCategories
             }
         }
     ]
@@ -134,12 +150,12 @@ Maui.Page
         anchors.fill: parent
         orientation: ListView.Vertical
         spacing: Maui.Style.space.medium
-        section.property: _appsModel.sort
-        section.criteria:  _appsModel.sort === "label" ? ViewSection.FirstCharacter : ViewSection.FullString
+        section.property: ApplicationsListModel.sortRoleName
+        section.criteria:  ApplicationsListModel.sortRole === ApplicationModelRole.Name ? ViewSection.FirstCharacter : ViewSection.FullString
         section.delegate: Maui.LabelDelegate
         {
             id: delegate
-            label: _appsModel.sort === "date" ?  Qt.formatDateTime(new Date(section), "d MMM yyyy") : ( _appsModel.sort === "size" ?  Maui.Handy.formatSize(String(section)) :  String(section).toUpperCase())
+            label:   String(section)
 
             isSection: true
 
@@ -147,72 +163,123 @@ Maui.Page
             width: parent.width
         }
 
-        model: Maui.BaseModel
-        {
-            id: _appsModel
-            sort: "label"
-            sortOrder: Qt.AscendingOrder
-            recursiveFilteringEnabled: true
-            sortCaseSensitivity: Qt.CaseInsensitive
-            filterCaseSensitivity: Qt.CaseInsensitive
-            list: NX.Apps
-            {
-                id: _appsList
-            }
-        }
+        model: ApplicationsListModel
 
         delegate: Maui.SwipeBrowserDelegate
         {
+            id: swipeBrowserDelegateItem
             height: 64
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
-            label1.text: model.label
-            label2.text: model.name
-            imageSource: "image://thumbnailer/" + model.path
-            iconSizeHint: Maui.Style.iconSizes.medium
-            iconSource: "package"
+            label1.text: model.name
+            label2.text: model.description
+            label3.text: model.version
+            label4.text: Maui.Handy.formatSize(model.mainBundleSize)
+            imageSource: "file://" + model.icon
+            iconSizeHint: Maui.Style.iconSizes.large
+            iconSource: "application-vnd.appimage"
 
-            onClicked:
-            {
-                _appsListView.currentIndex = index;
+            Rectangle {
+                height: parent.height
+                width: swipeBrowserDelegateItem.iconItem.width
+                color: "transparent"
 
-                if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
-                {
-                    _appsList.launchApp(_appsModel.mappedToSource(index));
+                Rectangle {
+                    height: 20
+                    width: 20
+                    radius: 20
+                    color: "#43A047"
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    visible: model.update_available
+
+                    Rectangle {
+                        height: 14
+                        width: 14
+                        radius: 14
+                        color: "#33ffffff"
+                        anchors.centerIn: parent
+
+                        Image {
+                            anchors.fill: parent
+                            source: "qrc:/app-update-available.svg"
+                        }
+                    }
+                }
+
+                Rectangle {
+                    height: 20
+                    width: 20
+                    radius: 20
+                    color: "#FF9800"
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    visible: model.related_task
+
+                    Rectangle {
+                        height: 14
+                        width: 14
+                        radius: 14
+                        color: "#33ffffff"
+                        anchors.centerIn: parent
+
+                        Image {
+                            anchors.fill: parent
+                            source: "qrc:/app-update-progress.svg"
+                        }
+
+                        RotationAnimation on rotation {
+                            loops: Animation.Infinite
+                            from: 0
+                            to: 360
+                            duration: 1000
+                            running: true
+                        }
+                    }
                 }
             }
 
-            onDoubleClicked:
-            {
-                _appsListView.currentIndex = index;
+            actionRow: Maui.ToolButtonMenu {
+                id: runOptionsMenu
+                property var appModel: model
 
-                if(!Maui.Handy.singleClick)
-                {
-                    _appsList.launchApp(_appsModel.mappedToSource(index));
+                visible: appModel.bundles.length > 1
+                text: "Configure"
+                icon.name: "configure"
+
+                Repeater {
+                    model: runOptionsMenu.appModel.bundles
+                    MenuItem {
+                        text: modelData
+                        checkable: true
+                        autoExclusive: true
+                        checked: index === runOptionsMenu.appModel.mainBundleIndex
+                        onClicked: {runOptionsMenu.appModel.mainBundleIndex = index}
+                    }
                 }
             }
 
             quickActions: [
                 Action
                 {
-                    icon.name: "media-playback-start"
-                    onTriggered:
-                    {
-                        _appsListView.currentIndex = index;
-                        _appsList.launchApp(_appsModel.mappedToSource(index));
-                    }
+                    icon.name: "download"
+                    text: "Update"
+                    enabled: model.update_available
+                    onTriggered: UpdateService.update(model.data);
                 },
                 Action
                 {
                     icon.name: "entry-delete"
-                    onTriggered:
-                    {
-                        _appsListView.currentIndex = index;
-                        appRemoveDialog.index = _appsModel.mappedToSource(index)
-                        appRemoveDialog.open()
+                    text: "Remove"
+                    onTriggered:  {
+                        appRemoveDialog.targetAppName = model.name
+                        appRemoveDialog.targetAppData = model.data;
+                        appRemoveDialog.open();
                     }
                 }
             ]
+
+            onClicked: LaunchService.launch(model.data)
         }
     }
 
@@ -226,13 +293,18 @@ Maui.Page
             _appsListView.currentIndex = -1;
         }
 
-        function onAppLaunchSuccess() {
-            _appsListView.currentIndex = -1;
-        }
 
-        function onAppDeleteSuccess() {
-            appRemoveDialog.visible = false;
+
+        function onAppUpdateError(err) {
+            console.log("AppImage update error.");
+            appUpdateDialog.showDialog(_appsListView.model.get(_appsListView.currentIndex).path.split("/").pop(),
+                err);
         }
+    }
+    Component.onCompleted:
+    {
+            var appList = ApplicationsRegistry.getApplications();
+//            UpdateService.checkUpdates(appList);
     }
 }
 

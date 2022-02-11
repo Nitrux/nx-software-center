@@ -235,7 +235,7 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
 
   for (int i = 0; i < arr.size(); i++) {
     QJsonObject obj = arr[i].toObject();
-    Application *app = new Application(this);
+    PlingStoreApplicationData *app = new PlingStoreApplicationData(this);
 
     app->id = obj["id"].toString();
     app->name = obj["name"].toString();
@@ -352,10 +352,10 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
       }
     }
 
-    QList<Application::Download *> downloads;
+    QList<PlingStoreApplicationData::Download *> downloads;
 
     for (QString key : parsedJson["downloads"].toObject().keys()) {
-      Application::Download *download = new Application::Download();
+        PlingStoreApplicationData::Download *download = new PlingStoreApplicationData::Download();
 
       download->name =
           parsedJson["downloads"].toObject()[key].toObject()["name"].toString();
@@ -401,10 +401,10 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
       downloads.append(download);
     }
 
-    QList<Application::PreviewPic *> previewPics;
+    QList<PlingStoreApplicationData::PreviewPic *> previewPics;
 
     for (QString key : parsedJson["previewPics"].toObject().keys()) {
-      Application::PreviewPic *previewPic = new Application::PreviewPic();
+        PlingStoreApplicationData::PreviewPic *previewPic = new PlingStoreApplicationData::PreviewPic();
 
       previewPic->pic = parsedJson["previewPics"]
                             .toObject()[key]
@@ -419,10 +419,10 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
       previewPics.append(previewPic);
     }
 
-    QList<Application::PreviewUrl *> previewUrls;
+    QList<PlingStoreApplicationData::PreviewUrl *> previewUrls;
 
     for (QString key : parsedJson["previewUrls"].toObject().keys()) {
-      Application::PreviewUrl *previewUrl = new Application::PreviewUrl();
+        PlingStoreApplicationData::PreviewUrl *previewUrl = new PlingStoreApplicationData::PreviewUrl();
 
       previewUrl->preview = parsedJson["previewUrls"]
                                 .toObject()[key]

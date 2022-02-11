@@ -4,12 +4,11 @@
 #include <QObject>
 #include <MauiKit/Core/fmh.h>
 
-class Downloader;
-class Application;
+class PlingStoreApplicationData;
 class App : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Application * data WRITE setData READ getData NOTIFY dataChanged)
+    Q_PROPERTY(PlingStoreApplicationData * data WRITE setData READ getData NOTIFY dataChanged)
     Q_PROPERTY(QVariantMap info MEMBER m_info NOTIFY infoChanged)
     Q_PROPERTY(QVariantList downloads MEMBER m_downloads NOTIFY downloadsChanged)
     Q_PROPERTY(QVariantList images MEMBER m_images NOTIFY imagesChanged)
@@ -24,9 +23,9 @@ public:
     explicit App(QObject *parent = nullptr);
     App(const App &other, QObject *parent = nullptr);
 
-    Application * getData() const;
+    PlingStoreApplicationData * getData() const;
 
-    Application * m_data;
+    PlingStoreApplicationData * m_data;
 
     QVariantMap m_info;
     QVariantList m_downloads;
@@ -49,14 +48,14 @@ signals:
     void urlsChanged(QVariantList urls);
     void isInstalledChanged(bool isInstalled);
     void isUpdatableChanged(bool isUpdatable);
-    void dataChanged(Application * data);
+    void dataChanged(PlingStoreApplicationData * data);
 
     void idChanged(QString id);
 
     void localPathChanged(QString localPath);
 
 public slots:
-    void setData(Application * data);
+    void setData(PlingStoreApplicationData * data);
 };
 
 #endif // APP_H

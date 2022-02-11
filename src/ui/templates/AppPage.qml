@@ -140,6 +140,7 @@ Maui.Page
                     {
                         id: _bannerInfo
                         width: parent.width
+                        padding: Maui.Style.space.medium
                         //                    anchors.fill: parent
                         anchors.centerIn: parent
                         wide: root.isWide

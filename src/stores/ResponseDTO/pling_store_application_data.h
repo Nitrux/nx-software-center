@@ -8,7 +8,7 @@
 
 #include <MauiKit/FileBrowsing/downloader.h>
 
-class Application : public QObject {
+class PlingStoreApplicationData : public QObject {
   Q_OBJECT
 
 public:
@@ -29,7 +29,6 @@ public:
     QString way = "";
 
     QString toString();
-    FMH::Downloader *downloadFile(QUrl filepath);
   };
 
   class PreviewPic {
@@ -46,7 +45,7 @@ public:
     QString toString();
   };
 
-  Application(QObject *parent = nullptr) : QObject(parent) {}
+  PlingStoreApplicationData(QObject *parent = nullptr) : QObject(parent) {}
 
   QString id = "";
   QString name = "";

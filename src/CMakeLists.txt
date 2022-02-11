@@ -9,27 +9,43 @@ include_directories(
 
     ${CMAKE_CURRENT_SOURCE_DIR}/utils
     ${CMAKE_CURRENT_BINARY_DIR}/utils
-    )
+)
 
 set(nx_SRCS
     main.cpp
-    models/appsmodel.cpp
+    NXSCApp.cpp
     models/storemodel.cpp
     models/categoriesmodel.cpp
     models/app.cpp
-    models/package.cpp
-    models/progressmanager.cpp
+    models/ApplicationsRegistryModel.cpp
+    models/ApplicationsRegistryProxyModel.cpp
+    models/TasksListModel.cpp
     utils/appimagetools.cpp
+    services/registry/ApplicationsRegistry.cpp
+    services/ApplicationData.cpp
+    services/Application.cpp
+    services/ApplicationBundle.cpp
+    services/registry/BundlesDirsWatcher.cpp
+    services/registry/BundleInspector.cpp
+    services/update/UpdateService.cpp
+    services/update/ApplicationUpdateData.cpp
+    services/update/UpdateWorker.cpp
+    services/update/UpdateCheckWorker.cpp
+    services/TaskData.cpp
+    services/install/InstallService.cpp
+    services/install/InstallWorker.cpp
+    services/launch/LaunchService.cpp
+    services/delete/DeleteService.cpp
+    services/cache/CacheService.cpp
+    services/cache/ApplicationORM.cpp
+    services/cache/ApplicationBundleORM.cpp
     )
 
 set(nx_HDRS
     utils/nx.h
-    models/appsmodel.h
     models/storemodel.h
     models/categoriesmodel.h
     models/app.h
-    models/package.h
-    models/progressmanager.h
     utils/appimagetools.h
     )
 
@@ -42,7 +58,7 @@ set(nx_STORES_SRCS
     stores/opendesktopstore.cpp
     stores/appimagehubstore.cpp
     stores/ResponseDTO/category.cpp
-    stores/ResponseDTO/application.cpp
+    stores/ResponseDTO/pling_store_application_data.cpp
     )
 
 set(nx_STORES_HDRS
@@ -52,14 +68,14 @@ set(nx_STORES_HDRS
 
     stores/ResponseDTO/category.h
     stores/ResponseDTO/categoryresponsedto.h
-    stores/ResponseDTO/application.h
+    stores/ResponseDTO/pling_store_application_data.h
     stores/ResponseDTO/applicationresponsedto.h)
 
-if(QUICK_COMPILER)
-        qtquick_compiler_add_resources(nx_QML_QRC qml.qrc)
-else()
-        qt5_add_resources(nx_QML_QRC qml.qrc)
-endif()
+if (QUICK_COMPILER)
+    qtquick_compiler_add_resources(nx_QML_QRC qml.qrc)
+else ()
+    qt5_add_resources(nx_QML_QRC qml.qrc)
+endif ()
 
 add_executable(${PROJECT_NAME}
     ${nx_SRCS}
@@ -70,9 +86,9 @@ add_executable(${PROJECT_NAME}
     ${nx_STORES_SRCS}
     ${nx_STORES_HDRS})
 
-kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp)
+kde_source_files_enable_exceptions(${PROJECT_NAME} utils/appimagetools.cpp services/registry/BundleInspector.cpp services/registry/ApplicationsRegistry.cpp)
 
-target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Widgets Qt5::Qml KF5::I18n KF5::CoreAddons libappimage)
+target_link_libraries(${PROJECT_NAME} MauiKit MauiKit::FileBrowsing Qt5::Widgets Qt5::Quick Qt5::Qml Qt5::Sql KF5::I18n KF5::CoreAddons libappimageupdate libappimage)
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES org.nx.softwarecenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
