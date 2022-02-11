@@ -40,4 +40,5 @@ $APT_COMMAND install -qy --no-install-recommends \
     libfuse-dev \
     libcurl4-openssl-dev \
     libkf5completion-dev \
-    argagg-dev
+    argagg-dev \
+    libgcrypt20-dev
