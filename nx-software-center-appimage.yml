@@ -39,8 +39,8 @@ AppDir:
     - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse
     - sourceline: deb http://archive.neon.kde.org/user focal main
       key_url: 'http://archive.neon.kde.org/public.key'
-    - sourceline: deb https://packagecloud.io/nitrux/repo/debian/ trixie main
-      key_url: 'https://packagecloud.io/nitrux/repo/gpgkey'
+    # - sourceline: deb https://packagecloud.io/nitrux/repo/debian/ trixie main
+    #   key_url: 'https://packagecloud.io/nitrux/repo/gpgkey'
 
 
     include:

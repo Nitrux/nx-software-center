@@ -116,7 +116,7 @@ Maui.Page
                 delegate: Maui.ListBrowserDelegate
                 {
                     id: _categoryDelegate
-                    width: 200
+                    width: Math.min(ListView.view.width * 0.1, 200)
                     height: ListView.view.height
                     property color tagColor : model.color
                     template.isMask: true
