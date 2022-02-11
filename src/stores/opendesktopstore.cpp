@@ -441,5 +441,7 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
     response->applications.append(app);
   }
 
+  qDebug() << "OPENSTORE RESPONSE" << response->applications.count();
+
   emit applicationsResponseReady(response);
 }

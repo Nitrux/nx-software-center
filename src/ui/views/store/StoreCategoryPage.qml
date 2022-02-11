@@ -412,7 +412,11 @@ Maui.Page
 
     function search(query)
     {
-        _searchField.text = query
+        if(_searchField.text.length === 0)
+        {
+            _searchField.text = query
+        }
+
         _storeList.nameFilter = query
     }
 }

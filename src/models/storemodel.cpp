@@ -6,7 +6,7 @@
 
 StoreModel::StoreModel(QObject *parent) : MauiList(parent),
     m_store(new AppImageHubStore(this)), m_app(new Application(this)),  m_category(new Category(this))
-    , m_applicationManager(new ApplicationManager())
+    , m_applicationManager(new ApplicationManager(this))
   ,m_timer(new QTimer(this))
 {
     qRegisterMetaType<Application *>("Application *");
@@ -40,6 +40,9 @@ void StoreModel::componentComplete()
             [=](ApplicationResponseDTO *response) {
         for (const auto &app :response->applications)
         {
+
+            qDebug() << "APPS RESPONSES ::" << app->name;
+
             //preview pics
             emit this->preItemAppended();
 
@@ -247,9 +250,8 @@ void StoreModel::setNameFilter(QString nameFilter)
         return;
 
     m_nameFilter = nameFilter;
-    m_page = 0;
-
     this->clear();
+    this->setPage(0);
     emit nameFilterChanged(m_nameFilter);
 }
 

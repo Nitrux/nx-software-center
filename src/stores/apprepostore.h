@@ -31,7 +31,7 @@ class AppRepoStore : public QObject {
 
     public:
 
-        AppRepoStore(QString apiBaseUrl);
+        AppRepoStore(QString apiBaseUrl, QObject * parent = nullptr);
 
         const QString name();
         

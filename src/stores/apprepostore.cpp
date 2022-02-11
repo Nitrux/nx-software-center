@@ -1,6 +1,6 @@
 #include "apprepostore.h"
 
-AppRepoStore::AppRepoStore(QString apiBaseUrl) {
+AppRepoStore::AppRepoStore(QString apiBaseUrl, QObject *parent) : QObject(parent) {
 	API_BASEURL = apiBaseUrl;
 	API_GROUPS_URL = API_BASEURL + "/package/groups/";
 	API_PACKAGES_URL = API_BASEURL + "/package/";

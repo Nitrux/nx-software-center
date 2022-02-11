@@ -9,7 +9,7 @@ class ApplicationManager : public QObject {
     Q_OBJECT
 
     public:
-        ApplicationManager();
+        ApplicationManager(QObject * parent = nullptr);
 
         void getApplications(QList<QString> categoriesFilter, QString nameFilter = "",
                              Store::SORT_MODE sortMode = Store::SORT_MODE::MODE_NEWEST, QString page = "",
