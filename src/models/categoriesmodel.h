@@ -8,6 +8,7 @@
 
 #include "ResponseDTO/category.h"
 #include "categorymanager.h"
+#include "storemanager/storemanagerservice.h"
 
 class Store;
 class CategoriesModel : public MauiList
@@ -33,6 +34,7 @@ private:
 
     Category * m_category;
     CategoryManager *m_categoryManager;
+    StoreManagerService *m_storeManagerService;
 
     void setList();
 

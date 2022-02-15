@@ -21,6 +21,9 @@ set(nx_SRCS
     models/app.cpp
     models/package.cpp
     models/progressmanager.cpp
+    models/storemanager/storemanagerservice.cpp
+    models/storemanager/apprepostoremanager.cpp
+    models/storemanager/appimagehubstoremanager.cpp
     utils/appimagetools.cpp
     )
 
@@ -34,6 +37,7 @@ set(nx_HDRS
     models/app.h
     models/package.h
     models/progressmanager.h
+    models/storemanager/storemanager.h
     utils/appimagetools.h
     )
 

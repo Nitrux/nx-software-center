@@ -4,7 +4,8 @@
 
 CategoriesModel::CategoriesModel(QObject *parent) : MauiList(parent),
     m_store(new AppImageHubStore(this)), m_category(nullptr),
-    m_categoryManager(new CategoryManager())
+    m_categoryManager(new CategoryManager()),
+    m_storeManagerService(new StoreManagerService(this))
 {
 }
 
@@ -91,8 +92,8 @@ void CategoriesModel::setList()
 
 }else
 {
-this->m_categoryManager->getCategories();
-connect(this->m_categoryManager, &CategoryManager::categoriesResponseReady, [=](CategoryResponseDTO *response)
+this->m_storeManagerService->getCategories();
+connect(this->m_storeManagerService, &StoreManagerService::categoriesResponseReady, [=](CategoryResponseDTO *response)
 {
     if(m_category)
         return;
