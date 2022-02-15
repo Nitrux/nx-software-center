@@ -30,10 +30,8 @@ public:
 private:
     FMH::MODEL_LIST m_list;
     QHash<QString, Category *> m_categoryMap; //id,app
-    Store *m_store;
 
     Category * m_category;
-    CategoryManager *m_categoryManager;
     StoreManagerService *m_storeManagerService;
 
     void setList();

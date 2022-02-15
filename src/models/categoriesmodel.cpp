@@ -3,8 +3,7 @@
 #include "appimagehubstore.h"
 
 CategoriesModel::CategoriesModel(QObject *parent) : MauiList(parent),
-    m_store(new AppImageHubStore(this)), m_category(nullptr),
-    m_categoryManager(new CategoryManager()),
+    m_category(nullptr),
     m_storeManagerService(new StoreManagerService(this))
 {
 }
