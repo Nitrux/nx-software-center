@@ -7,10 +7,8 @@
 #include <MauiKit/Core/mauilist.h>
 
 #include "ResponseDTO/category.h"
-#include "categorymanager.h"
 #include "storemanager/storemanagerservice.h"
 
-class Store;
 class CategoriesModel : public MauiList
 {
     Q_OBJECT

@@ -1,6 +1,4 @@
 #include "categoriesmodel.h"
-#include "store.h"
-#include "appimagehubstore.h"
 
 CategoriesModel::CategoriesModel(QObject *parent) : MauiList(parent),
     m_category(nullptr),
