@@ -5,9 +5,9 @@
 #include <QTimer>
 
 StoreModel::StoreModel(QObject *parent) : MauiList(parent),
-    m_store(new AppImageHubStore(this)), m_app(new Application(this)),  m_category(new Category(this))
-    , m_applicationManager(new ApplicationManager(this))
-  ,m_timer(new QTimer(this))
+    m_app(new Application(this)),  m_category(new Category(this))
+    , m_storeManagerService(new StoreManagerService(this))
+    ,m_timer(new QTimer(this))
 {
     qRegisterMetaType<Application *>("Application *");
 
@@ -31,12 +31,12 @@ void StoreModel::requestApps()
 
     const auto categoryId = this->m_category->id == "0" ? "" : this->m_category->id;
 
-    this->m_applicationManager->getApplications({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), QStringList() << this->m_tags << "appimage", this->m_arch, m_category);
+    this->m_storeManagerService->getApplications({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), QStringList() << this->m_tags << "appimage", this->m_arch, m_category);
 }
 
 void StoreModel::componentComplete()
 {
-    connect(this->m_applicationManager, &ApplicationManager::applicationsResponseReady,
+    connect(this->m_storeManagerService, &StoreManagerService::applicationsResponseReady,
             [=](ApplicationResponseDTO *response) {
         for (const auto &app :response->applications)
         {

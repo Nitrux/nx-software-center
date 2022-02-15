@@ -5,19 +5,26 @@ ApprepoStoreManager::ApprepoStoreManager(QObject *parent)
 
 }
 
-void ApprepoStoreManager::setCategory(CategoryResponseDTO *appimagehubCategory) {
-    _appimagehubCategory = appimagehubCategory;
+void ApprepoStoreManager::setTopCategory(CategoryResponseDTO *topCategory) {
+    _topCategory = topCategory;
+}
+
+void ApprepoStoreManager::setPackageGroupFilter(int packageGroup) {
+    _packageGroup = packageGroup;
 }
 
 void ApprepoStoreManager::getCategories() {
     initStore();
 
     // Invoke apprepo api
-    m_apprepoStore->getGroups(_appimagehubCategory);
+    m_apprepoStore->getGroups(_topCategory);
 }
 
 void ApprepoStoreManager::getApplications() {
     initStore();
+
+    // Invoke apprepo api
+    m_apprepoStore->getPackagesByGroup(_packageGroup);
 }
 
 void ApprepoStoreManager::initStore() {
@@ -25,5 +32,6 @@ void ApprepoStoreManager::initStore() {
         m_apprepoStore = new AppRepoStore("https://apprepo.de/rest/api");
 
         connect(m_apprepoStore, &AppRepoStore::groupsResponseReady, this, &ApprepoStoreManager::categoriesResponseReady);
+        connect(m_apprepoStore, &AppRepoStore::packagesResponseReady, this, &ApprepoStoreManager::applicationsResponseReady);
     }
 }
