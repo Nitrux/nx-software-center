@@ -32,7 +32,7 @@ void OpenDesktopStore::getCategories() {
   QNetworkReply *reply = manager->get(QNetworkRequest(url));
   connect(
       reply, &QNetworkReply::errorOccurred,
-      this, [=](QNetworkReply::NetworkError err) { emit error(err); });
+      this, [this](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
 void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
@@ -79,7 +79,7 @@ void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
   QNetworkReply *reply = manager->get(QNetworkRequest(url));
   connect(
       reply, &QNetworkReply::errorOccurred,
-      this, [=](QNetworkReply::NetworkError err) { emit error(err); });
+      this, [this](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
 void OpenDesktopStore::getApplicationsByArch(QList<QString> categoriesFilter, QString nameFilter,
