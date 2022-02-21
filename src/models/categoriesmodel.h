@@ -7,7 +7,7 @@
 #include <MauiKit/Core/mauilist.h>
 
 #include "ResponseDTO/category.h"
-#include "storemanager/storemanagerservice.h"
+#include "../services/storemanager/storemanagerservice.h"
 
 class CategoriesModel : public MauiList
 {

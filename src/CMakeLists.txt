@@ -20,9 +20,9 @@ set(nx_SRCS
     models/ApplicationsRegistryModel.cpp
     models/ApplicationsRegistryProxyModel.cpp
     models/TasksListModel.cpp
-    models/storemanager/storemanagerservice.cpp
-    models/storemanager/apprepostoremanager.cpp
-    models/storemanager/appimagehubstoremanager.cpp
+    services/storemanager/storemanagerservice.cpp
+    services/storemanager/apprepostoremanager.cpp
+    services/storemanager/appimagehubstoremanager.cpp
     utils/appimagetools.cpp
     services/registry/ApplicationsRegistry.cpp
     services/ApplicationData.cpp
@@ -49,7 +49,7 @@ set(nx_HDRS
     models/storemodel.h
     models/categoriesmodel.h
     models/app.h
-    models/storemanager/storemanager.h
+    services/storemanager/storemanager.h
     utils/appimagetools.h
     )
 

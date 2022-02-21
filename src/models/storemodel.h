@@ -5,7 +5,7 @@
 #include <MauiKit/Core/mauilist.h>
 
 #include "store.h"
-#include "storemanager/storemanagerservice.h"
+#include "../services/storemanager/storemanagerservice.h"
 
 class QTimer;
 class Category;
