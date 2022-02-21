@@ -8,6 +8,7 @@
 namespace NX
 {
 static const QUrl AppsPath = FMStatic::HomePath+QStringLiteral("/Applications");
+static const QString appDBName = "cache.db";
 }
 
 

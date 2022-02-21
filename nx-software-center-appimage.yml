@@ -7,6 +7,7 @@ script:
   - scripts/install-build-deps.sh
   - mkdir -p build
   - cd build
+  - ../scripts/deploy-appimageupdate.sh
   - ../scripts/deploy-mauikit.sh
   - ../scripts/deploy-mauikit-filebrowsing.sh
   - ../scripts/deploy-nx-software-center.sh
@@ -24,7 +25,7 @@ AppDir:
   runtime:
     env:
       PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
-      APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib/x86_64-linux-gnu"
+      APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib:$APPDIR/usr/lib/x86_64-linux-gnu"
       QT_QUICK_CONTROLS_STYLE: "maui-style"
   after_bundle:
     - cd $APPDIR/bin/ && ln -sf bash sh
@@ -53,6 +54,7 @@ AppDir:
     - qml-module-qtquick-controls2
     - qml-module-qtquick-shapes
     - qml-module-qtquick2
+    - qml-module-qt-labs-settings
     
     # KF5 DEPENDENCIES
     - libkf5notifications5

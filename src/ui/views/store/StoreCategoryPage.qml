@@ -3,7 +3,7 @@ import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 
 import NXModels 1.0 as NX
 
@@ -23,12 +23,13 @@ Maui.Page
     signal itemClicked(var app)
 
     headBar.middleContent: [
-        Maui.TextField
+        Maui.SearchField
         {
             id: _searchField
             visible: control.tags.length === 0
             Layout.fillWidth: true
             Layout.maximumWidth: 500
+            Layout.alignment: Qt.AlignHCenter
             placeholderText: i18n("Search package in %1", _storeList.categoryName )
             onAccepted: search(text)
             onCleared: search("")
@@ -121,13 +122,16 @@ Maui.Page
                     width : 180
                     height: ListView.view.height
 
-                    Maui.ItemDelegate
+                    Maui.ListBrowserDelegate
                     {
                         isCurrentItem: _categoriesListView.currentIndex === -1
                         width: 160
                         height: parent.height
-
-                        anchors.centerIn: parent
+                        label1.text: currentCategory.name
+                        label1.horizontalAlignment: Qt.AlignHCenter
+                        label1.font.pointSize: Maui.Style.fontSizes.big
+                        label1.font.bold: true
+                        label1.font.weight: Font.Bold
 
                         background: Rectangle
                         {
@@ -155,15 +159,6 @@ Maui.Page
                             }
                         }
 
-                        Maui.ListItemTemplate
-                        {
-                            anchors.fill: parent
-                            label1.text: currentCategory.name
-                            label1.horizontalAlignment: Qt.AlignHCenter
-                            label1.font.pointSize: Maui.Style.fontSizes.big
-                            label1.font.bold: true
-                            label1.font.weight: Font.Bold
-                        }
 
                         onDoubleClicked:
                         {
@@ -196,11 +191,16 @@ Maui.Page
                     }
                 }
 
-                delegate: Maui.ItemDelegate
+                delegate: Maui.ListBrowserDelegate
                 {
                     isCurrentItem: ListView.isCurrentItem
-                    width: Math.max(160, _template.implicitWidth)
+                    width: Math.max(160, template.layout.implicitWidth)
                     height: ListView.view.height
+                    label1.text: model.title
+                    label1.horizontalAlignment: Qt.AlignHCenter
+                    label1.font.pointSize: Maui.Style.fontSizes.big
+                    label1.font.bold: true
+                    label1.font.weight: Font.Bold
 
                     background: Rectangle
                     {
@@ -225,17 +225,6 @@ Maui.Page
                                 bottomRightRadius: Maui.Style.radiusV
                             }
                         }
-                    }
-
-                    Maui.ListItemTemplate
-                    {
-                        id: _template
-                        anchors.fill: parent
-                        label1.text: model.title
-                        label1.horizontalAlignment: Qt.AlignHCenter
-                        label1.font.pointSize: Maui.Style.fontSizes.big
-                        label1.font.bold: true
-                        label1.font.weight: Font.Bold
                     }
 
                     onDoubleClicked:

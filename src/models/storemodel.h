@@ -9,7 +9,7 @@
 
 class QTimer;
 class Category;
-class Application;
+class PlingStoreApplicationData;
 class StoreModel : public MauiList
 {
     Q_OBJECT
@@ -17,7 +17,7 @@ class StoreModel : public MauiList
     Q_PROPERTY(QString categoryName READ getCategoryName NOTIFY categoryNameChanged)
     Q_PROPERTY(int page READ getPage WRITE setPage NOTIFY pageChanged)
     Q_PROPERTY(int pageSize READ getPageSize WRITE setPageSize NOTIFY pageSizeChanged)
-    Q_PROPERTY(Application * app READ getApp NOTIFY appChanged)
+    Q_PROPERTY(PlingStoreApplicationData * app READ getApp NOTIFY appChanged)
     Q_PROPERTY(StoreModel::SORT sort READ getSort WRITE setSort NOTIFY sortChanged)
     Q_PROPERTY(QStringList tags READ getTags WRITE setTags NOTIFY tagsChanged)
     Q_PROPERTY(QString nameFilter READ getNameFilter WRITE setNameFilter NOTIFY nameFilterChanged)
@@ -44,7 +44,7 @@ public:
 
     int getPage() const;
 
-    Application * getApp() const;
+    PlingStoreApplicationData * getApp() const;
 
     int getPageSize() const;
 
@@ -60,7 +60,7 @@ public slots:
     void setCategory(Category *category);
     void clear();
     void setApp(const QString &id);
-    Application * application(const QString &id);
+    PlingStoreApplicationData * application(const QString &id);
 
     void setPage(int page);
 
@@ -75,7 +75,7 @@ signals:
 
     void pageChanged(int page);
 
-    void appChanged(Application * app);
+    void appChanged(PlingStoreApplicationData * app);
 
     void pageSizeChanged(int pageSize);
 
@@ -89,8 +89,8 @@ signals:
 
 private:
     FMH::MODEL_LIST m_list;
-    QHash<QString, Application *> m_appMap; //id,app
-    Application * m_app;
+    QHash<QString, PlingStoreApplicationData *> m_appMap; //id,app
+    PlingStoreApplicationData * m_app;
 
     Category * m_category;
 

@@ -24,7 +24,7 @@
 #include "ResponseDTO/categoryresponsedto.h"
 #include "ResponseDTO/category.h"
 #include "ResponseDTO/applicationresponsedto.h"
-#include "ResponseDTO/application.h"
+#include "ResponseDTO/pling_store_application_data.h"
 
 class AppRepoStore : public QObject {
     Q_OBJECT

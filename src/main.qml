@@ -16,18 +16,6 @@ Maui.ApplicationWindow
     readonly property var views: ({store: 0, apps: 1, progress: 2})
     headBar.visible: false
 
-    NX.ProgressManager
-    {
-        id: _progressManager
-        onWarning:
-        {
-            notify("package-x-generic", "Whoops.", message)
-            _packageError.title= i18n("Whoops!.")
-            _packageError.message = message
-            _packageError.iconName = "emblem-warning"
-            _packageError.send()
-        }
-    }
 
     Maui.AppViews
     {

@@ -16,5 +16,7 @@
         <file>applications-education.svg</file>
         <file>applications-education-mathematics.svg</file>
         <file>applications-development.svg</file>
+        <file>app-update-available.svg</file>
+        <file>app-update-progress.svg</file>
     </qresource>
 </RCC>

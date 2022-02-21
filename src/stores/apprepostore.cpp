@@ -23,11 +23,11 @@ void AppRepoStore::getGroups(CategoryResponseDTO *appimagehubResponse) {
 
 	QNetworkReply *reply = manager->get(QNetworkRequest(url));
 
-	connect(manager, &QNetworkAccessManager::finished, this, [=](QNetworkReply *reply) {
+	connect(manager, &QNetworkAccessManager::finished, this, [this, appimagehubResponse](QNetworkReply *reply) {
 		parseGetGroupsResponseAndReply(reply, appimagehubResponse);
 	});
 
-	connect(reply, &QNetworkReply::errorOccurred, this, [=](QNetworkReply::NetworkError err) { emit error(err); });
+	connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
 /**
@@ -79,7 +79,7 @@ void AppRepoStore::getPackages(SearchPackage criteria, QString value) {
     QNetworkReply *reply = manager->get(QNetworkRequest(url));
 
     connect(manager, &QNetworkAccessManager::finished, this, &AppRepoStore::parseGetPackagesResponseAndReply);
-    connect(reply, &QNetworkReply::errorOccurred, this, [=](QNetworkReply::NetworkError err) { emit error(err); });
+    connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
 void AppRepoStore::parseGetGroupsResponseAndReply(QNetworkReply *reply, CategoryResponseDTO *appimagehubResponse) {
@@ -234,7 +234,7 @@ ApplicationResponseDTO *AppRepoStore::generatePackageResponse(QList<AppRepoPacka
 	ApplicationResponseDTO *applicationResponse = new ApplicationResponseDTO();
 
 	foreach(AppRepoPackageResponseDTO *responseItem, response) {
-		Application *application = new Application();
+		PlingStoreApplicationData *application = new PlingStoreApplicationData();
 		application->id = responseItem->getSlug();
 		application->name = responseItem->getName();
 		application->description = responseItem->getDescription();
@@ -243,7 +243,7 @@ ApplicationResponseDTO *AppRepoStore::generatePackageResponse(QList<AppRepoPacka
 		application->applicationStore = Category::CategoryStore::APPREPO;
 
 		foreach(AppRepoVersionDTO version, responseItem->getVersions()) {
-			Application::Download *download = new Application::Download();
+			PlingStoreApplicationData::Download *download = new PlingStoreApplicationData::Download();
 			download->name = version.getName();
 			download->link = version.getFile().toString();
 
@@ -251,7 +251,7 @@ ApplicationResponseDTO *AppRepoStore::generatePackageResponse(QList<AppRepoPacka
 		}
 
 		foreach(QString image, responseItem->getImages()) {
-			Application::PreviewPic *previewPic = new Application::PreviewPic();
+			PlingStoreApplicationData::PreviewPic *previewPic = new PlingStoreApplicationData::PreviewPic();
 			previewPic->pic = image;
 			previewPic->smallPic = image;
 
