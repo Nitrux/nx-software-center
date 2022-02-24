@@ -21,10 +21,10 @@ void TestStoreManagerService::testGetCategories()
 
     QCOMPARE(spyGetCategories.length(), 1);
     
-    QList<QVariant> arguments = spyGetCategories.takeFirst();
-    CategoryResponseDTO *result = qvariant_cast<CategoryResponseDTO*>(arguments.at(0));
+    auto arguments = spyGetCategories.takeFirst();
+    const auto &categoryResult = qvariant_cast<CategoryResponseDTO*>(arguments.at(0));
 
-    QVERIFY(result->categories.size() > 0);
+    QVERIFY(categoryResult->categories.size() > 0);
 }
 
 void TestStoreManagerService::testGetApplications()
@@ -39,11 +39,11 @@ void TestStoreManagerService::testGetApplications()
 
     QCOMPARE(spyGetApplications.length(), 1);
 
-    QList<QVariant> arguments = spyGetApplications.takeFirst();
-    ApplicationResponseDTO *result = qvariant_cast<ApplicationResponseDTO*>(arguments.at(0));
+    auto arguments = spyGetApplications.takeFirst();
+    const auto &applicationResult = qvariant_cast<ApplicationResponseDTO*>(arguments.at(0));
 
-    QVERIFY(result->applications.size() > 0);
-    QVERIFY(result->applications.size() <= 10);
+    QVERIFY(applicationResult->applications.size() > 0);
+    QVERIFY(applicationResult->applications.size() <= 10);
 }
 
 void TestStoreManagerService::cleanupTestCase()
