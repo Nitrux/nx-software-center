@@ -13,12 +13,14 @@ class ApprepoStoreManager : public StoreManager {
         void getCategories() override final;
         void getApplications() override final;
 
-        void setTopCategory(CategoryResponseDTO *appimagehubCategory);
-        void setPackageGroupFilter(int packageGroup);
+        void setCategoryFilter(CategoryResponseDTO *appimagehubCategory);
+        void setPackageFilter(int packageGroup, QString nameFilter);
     private:
         void initStore();
 
         AppRepoStore *m_apprepoStore = nullptr;
         CategoryResponseDTO *_topCategory;
+        
         int _packageGroup;
+        QString _nameFilter;
 };

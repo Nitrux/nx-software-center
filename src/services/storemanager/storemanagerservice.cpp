@@ -24,13 +24,21 @@ void StoreManagerService::getApplications(QList<QString> categoriesFilter, QStri
     } else if ( category->categoryStore == Category::CategoryStore::APPREPO ) {
         // Invoke apprepo api
         if ( page=="0" || page=="" ) {
-            _apprepoStoreManager->setPackageGroupFilter(category->id.toInt());
+            _apprepoStoreManager->setPackageFilter(category->id.toInt(), nameFilter);
             _apprepoStoreManager->getApplications();
         }
     } else {
         // Invoke appimagehub api
         _appimagehubStoreManager->setApplicationSearchFilter(categoriesFilter, nameFilter, sortMode, page, pageSize, tags, arch);
         _appimagehubStoreManager->getApplications();
+
+        if ( nameFilter.size() > 0 ) {
+            // Invoke apprepo api
+            if ( page=="0" || page=="" ) {
+                _apprepoStoreManager->setPackageFilter(category->id.toInt(), nameFilter);
+                _apprepoStoreManager->getApplications();
+            }
+        }
     }
 }
 
@@ -56,7 +64,7 @@ void StoreManagerService::getApprepoCategories(CategoryResponseDTO *appimagehubR
     initStoreManagers();
 
     // Set the app image hub category so that the apprepo categories can be added as subcategories
-    _apprepoStoreManager->setTopCategory(appimagehubResponse);
+    _apprepoStoreManager->setCategoryFilter(appimagehubResponse);
         
     _apprepoStoreManager->getCategories();
 }

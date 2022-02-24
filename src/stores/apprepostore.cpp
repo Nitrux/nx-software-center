@@ -51,6 +51,13 @@ void AppRepoStore::getPackagesByGroup(int group) {
 	this->getPackages(AppRepoStore::SearchPackage::BY_GROUP, QString::number(group));
 }
 
+/**
+ * Fetch packages by search filter
+ */
+void AppRepoStore::searchPackages(QString filter) {
+	this->getPackages(AppRepoStore::SearchPackage::BY_SEARCH_FILTER, filter);
+}
+
 void AppRepoStore::getPackages(SearchPackage criteria, QString value) {
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
@@ -70,6 +77,10 @@ void AppRepoStore::getPackages(SearchPackage criteria, QString value) {
 		case BY_GROUP:
 			url = QUrl::fromUserInput(QString(API_PACKAGES_BY_GROUP_URL).arg(value));
 			break;
+
+		case BY_SEARCH_FILTER:
+			url = QUrl::fromUserInput(QString(API_PACKAGES_URL));
+			break;
 	}
 
     url.setQuery(query);
@@ -78,7 +89,9 @@ void AppRepoStore::getPackages(SearchPackage criteria, QString value) {
 
     QNetworkReply *reply = manager->get(QNetworkRequest(url));
 
-    connect(manager, &QNetworkAccessManager::finished, this, &AppRepoStore::parseGetPackagesResponseAndReply);
+    connect(manager, &QNetworkAccessManager::finished, [this, criteria, value](QNetworkReply *reply) {
+		parseGetPackagesResponseAndReply(reply, criteria, value);
+	});
     connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
@@ -144,7 +157,7 @@ void AppRepoStore::populateCategoryToSubcategory(QString categoryType, CategoryR
 	}
 }
 
-void AppRepoStore::parseGetPackagesResponseAndReply(QNetworkReply *reply) {
+void AppRepoStore::parseGetPackagesResponseAndReply(QNetworkReply *reply, SearchPackage criteria, QString filter) {
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
 	
 	QList<AppRepoPackageResponseDTO *> response;
@@ -155,7 +168,20 @@ void AppRepoStore::parseGetPackagesResponseAndReply(QNetworkReply *reply) {
 		foreach (const QJsonValue &value, root) {
 			QJsonObject obj = value.toObject();
 
-			response << createPackageResponseDTO(obj);
+			QString objName = obj.value("name").toString();
+			QString objSlug = obj.value("slug").toString();
+			QString objDescription = obj.value("description").toString();
+
+			if (criteria == SearchPackage::BY_SEARCH_FILTER) {
+					if ( objName.contains(filter, Qt::CaseInsensitive) 
+							|| objSlug.contains(filter, Qt::CaseInsensitive) 
+							|| objDescription.contains(filter, Qt::CaseInsensitive) ) {
+
+						response << createPackageResponseDTO(obj);
+					}
+			} else {
+				response << createPackageResponseDTO(obj);
+			}
 		}
 	} else if ( doc.isObject() ) {
 		QJsonObject obj = doc.object();

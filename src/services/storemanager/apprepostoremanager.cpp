@@ -5,12 +5,13 @@ ApprepoStoreManager::ApprepoStoreManager(QObject *parent)
 
 }
 
-void ApprepoStoreManager::setTopCategory(CategoryResponseDTO *topCategory) {
+void ApprepoStoreManager::setCategoryFilter(CategoryResponseDTO *topCategory) {
     _topCategory = topCategory;
 }
 
-void ApprepoStoreManager::setPackageGroupFilter(int packageGroup) {
+void ApprepoStoreManager::setPackageFilter(int packageGroup, QString nameFilter) {
     _packageGroup = packageGroup;
+    _nameFilter = nameFilter;
 }
 
 void ApprepoStoreManager::getCategories() {
@@ -24,7 +25,11 @@ void ApprepoStoreManager::getApplications() {
     initStore();
 
     // Invoke apprepo api
-    m_apprepoStore->getPackagesByGroup(_packageGroup);
+    if ( _nameFilter.size() > 0 ) {
+        m_apprepoStore->searchPackages(_nameFilter);
+    } else {
+        m_apprepoStore->getPackagesByGroup(_packageGroup);
+    }
 }
 
 void ApprepoStoreManager::initStore() {

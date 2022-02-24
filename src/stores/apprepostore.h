@@ -39,6 +39,7 @@ class AppRepoStore : public QObject {
         void getPackages();
         void getPackagesBySlug(QString slug);
         void getPackagesByGroup(int group);
+        void searchPackages(QString filter);
 
         Q_SIGNAL void groupsResponseReady(CategoryResponseDTO *response);
         Q_SIGNAL void packagesResponseReady(ApplicationResponseDTO *response);
@@ -47,7 +48,8 @@ class AppRepoStore : public QObject {
         enum SearchPackage {
             ALL,
             BY_SLUG,
-            BY_GROUP
+            BY_GROUP,
+            BY_SEARCH_FILTER
         };
 
         QString API_BASEURL;
@@ -68,7 +70,7 @@ class AppRepoStore : public QObject {
         void getPackages(SearchPackage criteria, QString value = "");
 
         void parseGetGroupsResponseAndReply(QNetworkReply *reply, CategoryResponseDTO *appimagehubResponse);
-        void parseGetPackagesResponseAndReply(QNetworkReply *reply);
+        void parseGetPackagesResponseAndReply(QNetworkReply *reply, SearchPackage criteria, QString value);
 
         ApplicationResponseDTO *generatePackageResponse(QList<AppRepoPackageResponseDTO *> response);
 
