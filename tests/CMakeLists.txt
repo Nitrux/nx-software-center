@@ -101,3 +101,4 @@ target_compile_definitions(test_update_service PRIVATE SAMPLE_APPIMAGE_PATH="${A
 add_test(NAME testUpdateService COMMAND test_update_service)
 
 add_subdirectory(services/cache)
+add_subdirectory(services/storemanager)
