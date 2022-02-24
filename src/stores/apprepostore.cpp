@@ -14,6 +14,8 @@ const QString AppRepoStore::name() { return "AppRepo"; }
  * Fetch categories (groups) from AppRepo API
  */
 void AppRepoStore::getGroups(CategoryResponseDTO *appimagehubResponse) {
+	_appimagehubResponse = appimagehubResponse;
+
 	QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
 	QUrlQuery query;
@@ -23,9 +25,7 @@ void AppRepoStore::getGroups(CategoryResponseDTO *appimagehubResponse) {
 
 	QNetworkReply *reply = manager->get(QNetworkRequest(url));
 
-	connect(manager, &QNetworkAccessManager::finished, this, [this, appimagehubResponse](QNetworkReply *reply) {
-		parseGetGroupsResponseAndReply(reply, appimagehubResponse);
-	});
+	connect(manager, &QNetworkAccessManager::finished, this, &AppRepoStore::parseGetGroupsResponseAndReply);
 
 	connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError err) { emit error(err); });
 }
@@ -59,6 +59,9 @@ void AppRepoStore::searchPackages(QString filter) {
 }
 
 void AppRepoStore::getPackages(SearchPackage criteria, QString value) {
+	_searchPackageCriteria = criteria;
+	_searchPackageFilter = value;
+
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
 	QUrl url;
@@ -89,13 +92,11 @@ void AppRepoStore::getPackages(SearchPackage criteria, QString value) {
 
     QNetworkReply *reply = manager->get(QNetworkRequest(url));
 
-    connect(manager, &QNetworkAccessManager::finished, [this, criteria, value](QNetworkReply *reply) {
-		parseGetPackagesResponseAndReply(reply, criteria, value);
-	});
+    connect(manager, &QNetworkAccessManager::finished, this, &AppRepoStore::parseGetPackagesResponseAndReply);
     connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
-void AppRepoStore::parseGetGroupsResponseAndReply(QNetworkReply *reply, CategoryResponseDTO *appimagehubResponse) {
+void AppRepoStore::parseGetGroupsResponseAndReply(QNetworkReply *reply) {
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
     QJsonArray root = doc.array();
 
@@ -115,9 +116,9 @@ void AppRepoStore::parseGetGroupsResponseAndReply(QNetworkReply *reply, Category
 
 	// This is done in order to display the apprepo categories as sub categories
 	// of top level categories
-	mapCategoryToSubcategory(appimagehubResponse, response);
+	mapCategoryToSubcategory(_appimagehubResponse, response);
 
-    emit groupsResponseReady(appimagehubResponse);
+    emit groupsResponseReady(_appimagehubResponse);
 }
 
 void AppRepoStore::mapCategoryToSubcategory(CategoryResponseDTO *appimagehubResponse, QList<AppRepoGroupResponseDTO *> apprepoResponse) {
@@ -157,7 +158,7 @@ void AppRepoStore::populateCategoryToSubcategory(QString categoryType, CategoryR
 	}
 }
 
-void AppRepoStore::parseGetPackagesResponseAndReply(QNetworkReply *reply, SearchPackage criteria, QString filter) {
+void AppRepoStore::parseGetPackagesResponseAndReply(QNetworkReply *reply) {
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
 	
 	QList<AppRepoPackageResponseDTO *> response;
@@ -172,10 +173,10 @@ void AppRepoStore::parseGetPackagesResponseAndReply(QNetworkReply *reply, Search
 			QString objSlug = obj.value("slug").toString();
 			QString objDescription = obj.value("description").toString();
 
-			if (criteria == SearchPackage::BY_SEARCH_FILTER) {
-					if ( objName.contains(filter, Qt::CaseInsensitive) 
-							|| objSlug.contains(filter, Qt::CaseInsensitive) 
-							|| objDescription.contains(filter, Qt::CaseInsensitive) ) {
+			if (_searchPackageCriteria == SearchPackage::BY_SEARCH_FILTER) {
+					if ( objName.contains(_searchPackageFilter, Qt::CaseInsensitive) 
+							|| objSlug.contains(_searchPackageFilter, Qt::CaseInsensitive) 
+							|| objDescription.contains(_searchPackageFilter, Qt::CaseInsensitive) ) {
 
 						response << createPackageResponseDTO(obj);
 					}

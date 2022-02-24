@@ -67,10 +67,14 @@ class AppRepoStore : public QObject {
         const QList<QString> systemAndToolsCategories = {"Utilites", "Command line applications", "Disk Utility", "Text editors", "PDF toos", "Maps and navigation", "File managers", "3D Printing", "Scanning", "Screenshots", "RDP / VNC", "Notes", "Privacy"};
         const QList<QString> videoCategories = {"Video"};
         
+        CategoryResponseDTO *_appimagehubResponse;
+        SearchPackage _searchPackageCriteria;
+        QString _searchPackageFilter;
+
         void getPackages(SearchPackage criteria, QString value = "");
 
-        void parseGetGroupsResponseAndReply(QNetworkReply *reply, CategoryResponseDTO *appimagehubResponse);
-        void parseGetPackagesResponseAndReply(QNetworkReply *reply, SearchPackage criteria, QString value);
+        void parseGetGroupsResponseAndReply(QNetworkReply *reply);
+        void parseGetPackagesResponseAndReply(QNetworkReply *reply);
 
         ApplicationResponseDTO *generatePackageResponse(QList<AppRepoPackageResponseDTO *> response);
 
