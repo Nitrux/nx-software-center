@@ -76,6 +76,8 @@ AppDir:
     - perl-*
     - gnupg
     - libstdc++6
+    - libkf5guiaddons-dev
+    - libkf5guiaddons5
 
   files:
     include:
