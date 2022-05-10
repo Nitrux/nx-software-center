@@ -25,7 +25,7 @@ AppDir:
   runtime:
     env:
       PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
-      # APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib:$APPDIR/usr/lib/x86_64-linux-gnu"
+      APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib:$APPDIR/usr/lib/x86_64-linux-gnu"
       QT_QUICK_CONTROLS_STYLE: "maui-style"
   after_bundle:
     - cd $APPDIR/bin/ && ln -sf bash sh
@@ -76,8 +76,6 @@ AppDir:
     - perl-*
     - gnupg
     - libstdc++6
-    - libkf5guiaddons-dev
-    - libkf5guiaddons5
 
   files:
     include:
