@@ -8,6 +8,8 @@
 
 #include <MauiKit/FileBrowsing/downloader.h>
 
+#include "category.h"
+
 class PlingStoreApplicationData : public QObject {
   Q_OBJECT
 
@@ -69,6 +71,8 @@ public:
   QList<PreviewPic *> previewPics = QList<PreviewPic *>();
   QList<PreviewUrl *> previewUrls = QList<PreviewUrl *>();
   QList<Download *> downloads = QList<Download *>();
+
+  Category::CategoryStore applicationStore;
 
   QString toString(bool verbose = false);
 };

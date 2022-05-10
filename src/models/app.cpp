@@ -41,7 +41,7 @@ qDebug()<< m_images;
 
 for(const auto &data : this->m_data->downloads)
 {
-    if(data->name.endsWith(".AppImage"))
+    if(data->name.endsWith(".AppImage") || data->link.endsWith(".AppImage"))
     {
         this->m_downloads << QVariantMap {
         {FMH::MODEL_NAME[FMH::MODEL_KEY::PACKAGE_ARCH], data->packageArch},
@@ -83,7 +83,8 @@ this->m_info = FMH::toMap(FMH::MODEL{
                               {FMH::MODEL_KEY::TYPE_ID, m_data->typeId},
                               {FMH::MODEL_KEY::TYPE_NAME, m_data->typeName},
                               {FMH::MODEL_KEY::VERSION, m_data->version},
-                              {FMH::MODEL_KEY::XDG_TYPE, m_data->xdgType}});
+                              {FMH::MODEL_KEY::XDG_TYPE, m_data->xdgType},
+                              {FMH::MODEL_KEY::SERVER, (m_data->applicationStore==Category::CategoryStore::APPIMAGEHUB)?"AppImage Hub":(m_data->applicationStore==Category::CategoryStore::APPREPO)?"AppRepo":"**"}});
 emit this->infoChanged(this->m_info);
 }
 

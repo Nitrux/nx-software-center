@@ -5,7 +5,9 @@
 #include <MauiKit/Core/mauilist.h>
 
 #include "store.h"
+#include "../services/storemanager/storemanagerservice.h"
 
+class QTimer;
 class Category;
 class PlingStoreApplicationData;
 class StoreModel : public MauiList
@@ -88,7 +90,6 @@ signals:
 private:
     FMH::MODEL_LIST m_list;
     QHash<QString, PlingStoreApplicationData *> m_appMap; //id,app
-    Store *m_store;
     PlingStoreApplicationData * m_app;
 
     Category * m_category;
@@ -99,6 +100,8 @@ private:
     QStringList m_tags;
     SORT m_sort = SORT::NEWEST;    
 
+    StoreManagerService *m_storeManagerService;
+    QTimer * m_timer;
 #if defined Q_PROCESSOR_ARM && defined Q_OS_LINUX
     Store::Arch m_arch = Store::Arch::arm64;
 #else

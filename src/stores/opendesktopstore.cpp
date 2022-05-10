@@ -32,7 +32,7 @@ void OpenDesktopStore::getCategories() {
   QNetworkReply *reply = manager->get(QNetworkRequest(url));
   connect(
       reply, &QNetworkReply::errorOccurred,
-      this, [=](QNetworkReply::NetworkError err) { emit error(err); });
+      this, [this](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
 void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
@@ -79,7 +79,7 @@ void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
   QNetworkReply *reply = manager->get(QNetworkRequest(url));
   connect(
       reply, &QNetworkReply::errorOccurred,
-      this, [=](QNetworkReply::NetworkError err) { emit error(err); });
+      this, [this](QNetworkReply::NetworkError err) { emit error(err); });
 }
 
 void OpenDesktopStore::getApplicationsByArch(QList<QString> categoriesFilter, QString nameFilter,
@@ -174,7 +174,8 @@ void OpenDesktopStore::parseGetCategoriesResponseAndReply(
       c->name = obj["name"].toString();
       c->displayName = obj["display_name"].toString();
       c->xdgType = obj["xdg_type"].toString();
-
+      c->categoryStore = Category::CategoryStore::APPIMAGEHUB;
+      
       childList.append(c);
     }
 
@@ -186,6 +187,7 @@ void OpenDesktopStore::parseGetCategoriesResponseAndReply(
     c->name = parentObj["name"].toString();
     c->displayName = parentObj["display_name"].toString();
     c->xdgType = parentObj["xdg_type"].toString();
+    c->categoryStore = Category::CategoryStore::APPIMAGEHUB;
     c->categories = childList;
 
     list.append(c);
@@ -435,8 +437,11 @@ void OpenDesktopStore::parseGetApplicationsResponseAndReply(
     app->downloads = downloads;
     app->previewPics = previewPics;
     app->previewUrls = previewUrls;
+    app->applicationStore = Category::CategoryStore::APPIMAGEHUB;
     response->applications.append(app);
   }
+
+  qDebug() << "OPENSTORE RESPONSE" << response->applications.count();
 
   emit applicationsResponseReady(response);
 }

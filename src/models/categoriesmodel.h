@@ -7,8 +7,8 @@
 #include <MauiKit/Core/mauilist.h>
 
 #include "ResponseDTO/category.h"
+#include "../services/storemanager/storemanagerservice.h"
 
-class Store;
 class CategoriesModel : public MauiList
 {
     Q_OBJECT
@@ -28,9 +28,9 @@ public:
 private:
     FMH::MODEL_LIST m_list;
     QHash<QString, Category *> m_categoryMap; //id,app
-    Store *m_store;
 
     Category * m_category;
+    StoreManagerService *m_storeManagerService;
 
     void setList();
 
