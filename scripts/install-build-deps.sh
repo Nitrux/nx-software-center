@@ -41,4 +41,15 @@ $APT_COMMAND install -qy --no-install-recommends \
     libcurl4-openssl-dev \
     libkf5completion-dev \
     argagg-dev \
-    libgcrypt20-dev
+    libgcrypt20-dev \
+    libkf5service-dev \
+    libkf5bookmarks-dev \
+    libkf5widgetsaddons-dev \
+    libkf5itemviews-dev \
+    libkf5jobwidgets-dev \
+    libkf5solid-dev \
+    libkf5xmlgui-dev \
+    libkf5configwidgets-dev \
+    libkf5auth-dev \
+    libkf5codecs-dev \
+    libkf5windowsystem-dev
