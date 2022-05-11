@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Install basic packages
-        run: sudo apt-get -qy install curl wget
+        run: apt-get install sudo && sudo apt-get -qy install curl wget
 
       - name: Add required repo list
         run: |
