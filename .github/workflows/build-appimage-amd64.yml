@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Install basic packages
-        run: apt-get update -q && apt-get -qy install sudo && DEBIAN_FRONTEND=noninteractive apt-get -qy install curl wget gnupg python3-pip
+        run: DEBIAN_FRONTEND=noninteractive apt-get update -q && apt-get -qy install sudo && apt-get -qy install curl wget gnupg python3-pip
 
       - name: Add required repo list
         run: |
