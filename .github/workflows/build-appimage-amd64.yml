@@ -6,6 +6,8 @@ on:
 
 jobs:
   build-appimage:
+    runs-on: ubuntu-20.04
+
     container: ubuntu:focal
 
     env:
