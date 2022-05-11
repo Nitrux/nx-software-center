@@ -8,18 +8,18 @@ jobs:
   build-appimage:
     runs-on: ubuntu-20.04
 
-    container: ubuntu:focal
+    container:
+      image: ubuntu:focal
+      env:
+        DEBIAN_FRONTEND: noninteractive
 
     env:
           BRANCH_MAUIKIT: v2.1
           BRANCH_MAUIKIT_FILEBROWSING: v2.1
 
     steps:
-      - name: Install sudo
-        run: apt-get update -q && apt-get -qy install sudo
-
-      - name: Install basic package
-        run: DEBIAN_FRONTEND=noninteractive apt-get -qy install curl wget gnupg python3-pip
+      - name: Install basic packages
+        run: apt-get update -q && apt-get -qy install sudo && apt-get -qy install curl wget gnupg python3-pip
 
       - name: Add required repo list
         run: |
