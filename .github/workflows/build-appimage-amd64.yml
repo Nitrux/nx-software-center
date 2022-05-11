@@ -15,8 +15,11 @@ jobs:
           BRANCH_MAUIKIT_FILEBROWSING: v2.1
 
     steps:
-      - name: Install basic packages
-        run: DEBIAN_FRONTEND=noninteractive apt-get update -q && apt-get -qy install sudo && apt-get -qy install curl wget gnupg python3-pip
+      - name: Install sudo
+        run: apt-get update -q && apt-get -qy install sudo
+
+      - name: Install basic package
+        run: DEBIAN_FRONTEND=noninteractive apt-get -qy install curl wget gnupg python3-pip
 
       - name: Add required repo list
         run: |
