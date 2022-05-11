@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Install basic packages
-        run: apt-get update -q && apt-get -qy install sudo && sudo apt-get -qy install curl wget
+        run: apt-get update -q && apt-get -qy install sudo && sudo apt-get -qy install curl wget gnupg
 
       - name: Add required repo list
         run: |
