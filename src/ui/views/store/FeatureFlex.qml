@@ -16,9 +16,9 @@ ColumnLayout
     property int radius:  Maui.Style.radiusV * 2
     signal appClicked(var app)
 
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.backgroundColor: "#333"
-    Kirigami.Theme.textColor: "#fafafa"
+    Maui.Theme.inherit: false
+    Maui.Theme.backgroundColor: "#333"
+    Maui.Theme.textColor: "#fafafa"
 
     spacing: Maui.Style.space.medium
 
@@ -81,7 +81,7 @@ ColumnLayout
                width: itemWidth(index)
                height: itemHeight(index)
 
-                color: Qt.darker(Kirigami.Theme.backgroundColor)
+                color: Qt.darker(Maui.Theme.backgroundColor)
 
                 corners
                 {

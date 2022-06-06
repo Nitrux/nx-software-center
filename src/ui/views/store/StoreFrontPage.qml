@@ -17,8 +17,8 @@ Maui.Page
     signal categoryClicked(var category)
     signal searchFor(var query)
 
-    Kirigami.Theme.colorSet: Kirigami.Theme.View
-    Kirigami.Theme.inherit: false
+    Maui.Theme.colorSet: Maui.Theme.View
+    Maui.Theme.inherit: false
 
     headBar.visible: true
     headBar.forceCenterMiddleContent: isWide
@@ -153,9 +153,9 @@ Maui.Page
 
                     background: Rectangle
                     {
-                        readonly property color m_color : Qt.tint(Qt.lighter(Kirigami.Theme.textColor), Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
+                        readonly property color m_color : Qt.tint(Qt.lighter(Maui.Theme.textColor), Qt.rgba(Maui.Theme.backgroundColor.r, Maui.Theme.backgroundColor.g, Maui.Theme.backgroundColor.b, 0.9))
 
-                        color: _categoryDelegate.hovered || _categoryDelegate.containsPress ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
+                        color: _categoryDelegate.hovered || _categoryDelegate.containsPress ? Qt.rgba(Maui.Theme.highlightColor.r, Maui.Theme.highlightColor.g, Maui.Theme.highlightColor.b, 0.2) : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
                         radius: Maui.Style.radiusV
 
 
@@ -181,7 +181,7 @@ Maui.Page
                 }
             }
 
-            Kirigami.Separator
+            Maui.Separator
             {
                 Layout.fillWidth: true
                 implicitHeight: 0.5

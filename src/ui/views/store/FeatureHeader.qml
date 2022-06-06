@@ -23,9 +23,9 @@ ColumnLayout
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        Kirigami.Theme.inherit: false
-        Kirigami.Theme.backgroundColor: "#333"
-        Kirigami.Theme.textColor: "#fafafa"
+        Maui.Theme.inherit: false
+        Maui.Theme.backgroundColor: "#333"
+        Maui.Theme.textColor: "#fafafa"
         implicitHeight: 250
         spacing: Maui.Style.space.big
 
@@ -67,7 +67,7 @@ ColumnLayout
             width: Math.min(ListView.view.width, 600)
             height: ListView.view.height
 
-            color: Qt.darker(Kirigami.Theme.backgroundColor)
+            color: Qt.darker(Maui.Theme.backgroundColor)
 
             corners
             {
@@ -196,7 +196,7 @@ ColumnLayout
                     width: Maui.Style.iconSizes.tiny
                     height: width
                     radius: width
-                    color: Kirigami.Theme.textColor
+                    color: Maui.Theme.textColor
                     opacity: index === _listView.currentIndex ? 1 : 0.5
                 }
             }

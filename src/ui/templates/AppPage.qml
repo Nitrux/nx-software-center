@@ -132,7 +132,7 @@ Maui.Page
                     Rectangle
                     {
                         anchors.fill: parent
-                        color: control.Kirigami.Theme.backgroundColor
+                        color: Maui.Theme.backgroundColor
                         opacity: 0.9
                     }
 
@@ -234,7 +234,6 @@ Maui.Page
 
                     Maui.Separator
                     {
-                        edge: Qt.BottomEdge
                         anchors.bottom: parent.bottom
                         anchors.left: parent.left
                         anchors.right: parent.right
@@ -289,7 +288,6 @@ Maui.Page
                 Maui.Separator
                 {
                     Layout.fillWidth: true
-                    edge: Qt.BottomEdge
                 }
 
                 SectionTitle
@@ -366,8 +364,8 @@ Maui.Page
                 {
                     id: _screenshotsSection
 
-                    Kirigami.Theme.colorSet: Kirigami.Theme.Window
-                    Kirigami.Theme.inherit: false
+                    Maui.Theme.colorSet: Maui.Theme.Window
+                    Maui.Theme.inherit: false
 
                     Layout.fillWidth: true
                     Layout.preferredHeight: 500
@@ -414,7 +412,7 @@ Maui.Page
                                 width: Maui.Style.iconSizes.tiny
                                 height: width
                                 radius: width
-                                color: Kirigami.Theme.textColor
+                                color: Maui.Theme.textColor
                                 opacity: index === _screenshotsSection.currentIndex ? 1 : 0.5
                             }
                         }
@@ -517,7 +515,7 @@ Maui.Page
             id: _aniX
             running: false
             from: _aniImg.x; to: (_swipeView.width/2)
-            duration: Kirigami.Units.longDuration * 5
+            duration: Maui.Style.units.longDuration * 5
             loops: 1
             easing.type: Easing.OutQuad
         }
@@ -528,7 +526,7 @@ Maui.Page
             running: false
             easing.type: Easing.OutQuad
             from: _aniImg.y; to: 0
-            duration: Kirigami.Units.longDuration * 5
+            duration: Maui.Style.units.longDuration * 5
             loops: 1
         }
 

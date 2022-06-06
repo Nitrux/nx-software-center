@@ -43,7 +43,7 @@ ColumnLayout
         leftMargin: Maui.Style.space.medium
         rightMargin: Maui.Style.space.medium
         cacheBuffer: contentWidth
-        implicitHeight: isWide && !Kirigami.Settings.isMobile ? 260 : 180
+        implicitHeight: isWide && !Maui.Handy.isMobile ? 260 : 180
         orientation: Qt.Horizontal
         spacing: Maui.Style.space.big
         snapMode: ListView.NoSnap
@@ -117,7 +117,7 @@ ColumnLayout
             background: Rectangle
             {
                 radius: height* 0.5
-                color: _rightHandle.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+                color: _rightHandle.pressed ? Maui.Theme.highlightColor : Maui.Theme.backgroundColor
             }
 
             onClicked: _listView.contentX= _listView.contentX+300
@@ -147,7 +147,7 @@ ColumnLayout
             background: Rectangle
             {
                 radius: height* 0.5
-                color: _leftHandle.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+                color: _leftHandle.pressed ? Maui.Theme.highlightColor : Maui.Theme.backgroundColor
             }
 
             onClicked: _listView.contentX= _listView.contentX-300

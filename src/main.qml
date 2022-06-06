@@ -22,7 +22,7 @@ Maui.ApplicationWindow
         id: _swipeView
         anchors.fill: parent
         showCSDControls: true
-        altHeader: Kirigami.Settings.isMobile
+        altHeader: Maui.Handy.isMobile
 
         Maui.AppViewLoader
         {

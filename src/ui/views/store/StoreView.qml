@@ -1,7 +1,6 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import NXModels 1.0 as NX
@@ -59,8 +58,8 @@ StackView
                 {
                     text: qsTr("Get")
                     visible: !app.isInstalled
-                    Kirigami.Theme.textColor: "#fafafa"
-                    Kirigami.Theme.backgroundColor: "#26c6da"
+                    Maui.Theme.textColor: "#fafafa"
+                    Maui.Theme.backgroundColor: "#26c6da"
                     onClicked:
                     {
                         _appPage.scrollTo(AppPage.Sections.Packages)
@@ -72,8 +71,8 @@ StackView
                     text: qsTr("Run")
                     visible: app.isInstalled
                     onClicked: app.launchApp()
-                    Kirigami.Theme.textColor: "#37474F"
-                    Kirigami.Theme.backgroundColor: Qt.rgba("#546E7A".r, "#546E7A".g, "#546E7A".b, 0.2)
+                    Maui.Theme.textColor: "#37474F"
+                    Maui.Theme.backgroundColor: Qt.rgba("#546E7A".r, "#546E7A".g, "#546E7A".b, 0.2)
 
                 },
 
@@ -82,8 +81,8 @@ StackView
                     text: qsTr("Update")
                     visible: app.isInstalled && app.isUpdatable
                     onClicked: app.updateApp()
-                    Kirigami.Theme.textColor: Kirigami.Theme.positiveTextColor
-                    Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.positiveTextColor.r, Kirigami.Theme.positiveTextColor.g, Kirigami.Theme.positiveTextColor.b, 0.2)
+                    Maui.Theme.textColor: Maui.Theme.positiveTextColor
+                    Maui.Theme.backgroundColor: Qt.rgba(Maui.Theme.positiveTextColor.r, Maui.Theme.positiveTextColor.g, Maui.Theme.positiveTextColor.b, 0.2)
 
                 },
 
@@ -92,8 +91,8 @@ StackView
                     text: qsTr("Remove")
                     visible: app.isInstalled
                     onClicked: app.removeApp()
-                    Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
-                    Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.negativeTextColor.r, Kirigami.Theme.negativeTextColor.g, Kirigami.Theme.negativeTextColor.b, 0.2)
+                    Maui.Theme.textColor: Maui.Theme.negativeTextColor
+                    Maui.Theme.backgroundColor: Qt.rgba(Maui.Theme.negativeTextColor.r, Maui.Theme.negativeTextColor.g, Maui.Theme.negativeTextColor.b, 0.2)
 
                 }
             ]

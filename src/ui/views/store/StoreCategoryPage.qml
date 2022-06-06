@@ -14,8 +14,8 @@ Maui.Page
     id: control
     title: _storeList.categoryName
 
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorGroup: Kirigami.Theme.View
+    Maui.Theme.inherit: false
+    Maui.Theme.colorGroup: Maui.Theme.View
 
     property var category
     property var tags
@@ -136,14 +136,14 @@ Maui.Page
                         background: Rectangle
                         {
                             opacity: 0.5
-                            color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                            color: Qt.tint(control.Maui.Theme.textColor, Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
                             radius: Maui.Style.radiusV
 
 
                             Kirigami.ShadowedRectangle
                             {
                                 visible: _categoriesListView.currentIndex === -1
-                                color: Kirigami.Theme.textColor
+                                color: Maui.Theme.textColor
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 anchors.bottom: parent.bottom
@@ -205,13 +205,13 @@ Maui.Page
                     background: Rectangle
                     {
                         opacity: 0.5
-                        color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                        color: Qt.tint(control.Maui.Theme.textColor, Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
                         radius: Maui.Style.radiusV
 
                         Kirigami.ShadowedRectangle
                         {
                             visible: hovered || isCurrentItem
-                            color: Kirigami.Theme.textColor
+                            color: Maui.Theme.textColor
                             anchors.left: parent.left
                             anchors.right: parent.right
                             anchors.bottom: parent.bottom
@@ -251,7 +251,6 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                edge: Qt.BottomEdge
                 visible: control.category.categoryStore != NX.Category.APPREPO
             }
 
@@ -326,7 +325,6 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                edge: Qt.BottomEdge
                 visible: control.category.categoryStore != NX.Category.APPREPO
             }
 
