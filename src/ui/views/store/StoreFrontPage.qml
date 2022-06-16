@@ -2,7 +2,6 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import NXModels 1.0 as NX
@@ -16,9 +15,6 @@ Maui.Page
     signal itemClicked(var app)
     signal categoryClicked(var category)
     signal searchFor(var query)
-
-    Maui.Theme.colorSet: Maui.Theme.View
-    Maui.Theme.inherit: false
 
     headBar.visible: true
     headBar.forceCenterMiddleContent: isWide
@@ -37,6 +33,7 @@ Maui.Page
         anchors.fill: parent
         itemSize: Math.floor(Math.min(320, Math.max(200, control.width * 0.3)))
         itemHeight: 200
+        padding: Maui.Handy.isMobile ? Maui.Style.space.medium : Maui.Style.space.big
 
         model: Maui.BaseModel
         {
@@ -84,7 +81,7 @@ Maui.Page
         flickable.header: ColumnLayout
         {
             width: _featureGridView.flickable.width
-            spacing: Maui.Style.space.huge
+            spacing: Maui.Style.space.huge *2
 
             FeatureHeader
             {
@@ -99,82 +96,92 @@ Maui.Page
                 }
             }
 
-            FeatureStrip
+            SectionTitle
             {
                 id: _categoriesListView
                 Layout.fillWidth: true
                 //                Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
-                listView.implicitHeight: 60
-                title.text: i18n("Categories")
-                subtitle.text: i18n("Filter by categories")
-                model: Maui.BaseModel
+                title: i18n("Categories")
+                description: i18n("Filter by categories")
+
+                Flow
                 {
-                    id: _categoriesModel
-                    list: _categoriesList
-                }
+                    Layout.fillWidth: true
+                    spacing: Maui.Style.space.big
 
-                delegate: Maui.ListBrowserDelegate
-                {
-                    id: _categoryDelegate
-                    width: Math.min(ListView.view.width * 0.1, 200)
-                    height: ListView.view.height
-                    property color tagColor : model.color
-                    template.isMask: true
-                    iconVisible: true
-                    iconSource: model.icon
-                    iconSizeHint: Maui.Style.iconSizes.medium
-                    template.headerSizeHint: iconSizeHint * 2
-                    label1.horizontalAlignment: Qt.AlignHCenter
-                    label1.text: model.title
-                    label1.font.bold: true
-                    label1.font.weight: Font.Bold
-                    label1.font.pointSize: Maui.Style.fontSizes.big
-                    leftPadding:_tagColor.width
-                    onDoubleClicked:
+                    Repeater
                     {
-                        _categoriesListView.currentIndex = index
-                        if(!Maui.Handy.singleClick)
+                        model: Maui.BaseModel
                         {
-                            control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
-
+                            id: _categoriesModel
+                            list: _categoriesList
                         }
-                    }
 
-                    onClicked:
-                    {
-                        _categoriesListView.currentIndex = index
-
-                        if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                        delegate: Maui.ListBrowserDelegate
                         {
-                            control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
-
-                        }
-                    }
-
-                    background: Rectangle
-                    {
-                        readonly property color m_color : Qt.tint(Qt.lighter(Maui.Theme.textColor), Qt.rgba(Maui.Theme.backgroundColor.r, Maui.Theme.backgroundColor.g, Maui.Theme.backgroundColor.b, 0.9))
-
-                        color: _categoryDelegate.hovered || _categoryDelegate.containsPress ? Qt.rgba(Maui.Theme.highlightColor.r, Maui.Theme.highlightColor.g, Maui.Theme.highlightColor.b, 0.2) : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
-                        radius: Maui.Style.radiusV
-
-
-                        Kirigami.ShadowedRectangle
-                        {
-                            id: _tagColor
-                            visible: model.color
-                            color: model.color
-                            anchors.left: parent.left
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            width: visible ? 12 : 0
-
-                            corners
+                            id: _categoryDelegate
+                            implicitWidth: template.layout.implicitWidth + leftPadding + rightPadding
+                            height: 60
+                            property color tagColor : model.color
+                            template.isMask: true
+                            iconVisible: true
+                            iconSource: model.icon
+                            iconSizeHint: Maui.Style.iconSizes.medium
+                            template.headerSizeHint: iconSizeHint * 2
+                            label1.horizontalAlignment: Qt.AlignHCenter
+                            label1.text: model.title
+                            label1.font.bold: true
+                            label1.font.weight: Font.Bold
+                            label1.font.pointSize: Maui.Style.fontSizes.big
+                            leftPadding:_tagColor.width
+                            rightPadding: leftPadding
+                            onDoubleClicked:
                             {
-                                topLeftRadius:  Maui.Style.radiusV
-                                topRightRadius: 0
-                                bottomLeftRadius:  Maui.Style.radiusV
-                                bottomRightRadius: 0
+                                _categoriesListView.currentIndex = index
+                                if(!Maui.Handy.singleClick)
+                                {
+                                    control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
+
+                                }
+                            }
+
+                            onClicked:
+                            {
+                                _categoriesListView.currentIndex = index
+
+                                if(Maui.Handy.singleClick || Maui.handy.hasTransientTouchInput)
+                                {
+                                    control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
+
+                                }
+                            }
+
+                            background: Rectangle
+                            {
+                                readonly property color m_color : Qt.tint(Qt.lighter(Maui.Theme.textColor), Qt.rgba(Maui.Theme.backgroundColor.r, Maui.Theme.backgroundColor.g, Maui.Theme.backgroundColor.b, 0.9))
+
+                                color: _categoryDelegate.hovered || _categoryDelegate.containsPress ? Qt.rgba(Maui.Theme.highlightColor.r, Maui.Theme.highlightColor.g, Maui.Theme.highlightColor.b, 0.2) : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
+                                radius: Maui.Style.radiusV
+
+
+                                Maui.ShadowedRectangle
+                                {
+                                    id: _tagColor
+                                    visible: model.color
+                                    color: model.color
+                                    anchors.left: parent.left
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+                                    width: visible ? 12 : 0
+
+                                    corners
+                                    {
+                                        topLeftRadius:  Maui.Style.radiusV
+                                        topRightRadius: 0
+                                        bottomLeftRadius:  Maui.Style.radiusV
+                                        bottomRightRadius: 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -190,8 +197,8 @@ Maui.Page
             FeatureStrip
             {
                 Layout.fillWidth: true
-                title.text: i18n("Maui Apps")
-                subtitle.text: i18n("Convergent applications for desktop and mobile computers made with MauiKit.")
+                title: i18n("Maui Apps")
+                subtitle: i18n("Convergent applications for desktop and mobile computers made with MauiKit.")
 
                 category: _categoriesList.baseCategory()
                 pageSize: 6
@@ -209,8 +216,8 @@ Maui.Page
                 id: _newestListView
 
                 Layout.fillWidth: true
-                title.text: i18n("Newest")
-                subtitle.text: i18n("Most recent packages.")
+                title: i18n("Newest")
+                subtitle: i18n("Most recent packages.")
                 category: _categoriesList.baseCategory()
                 pageSize: 6
                 sort: NX.Store.NEWEST
@@ -238,7 +245,7 @@ Maui.Page
                     onClicked:
                     {
                         _newestListView.currentIndex = index
-                        if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                        if(Maui.Handy.singleClick || Maui.Handy.hasTransientTouchInput)
                         {
                             _newestListView.list.setApp(model.id)
                             control.itemClicked(_newestListView.list.app)
@@ -250,8 +257,8 @@ Maui.Page
             FeatureStrip
             {
                 Layout.fillWidth: true
-                title.text: i18n("Popular in Games")
-                subtitle.text: i18n("Most popular Games packages in our collection.")
+                title: i18n("Popular in Games")
+                subtitle: i18n("Most popular Games packages in our collection.")
 
                 category: _categoriesList.gamesCategory()
                 pageSize: 6
@@ -269,8 +276,8 @@ Maui.Page
                 Layout.fillWidth: true
                 listView.implicitHeight: 80
 
-                title.text: i18n("Popular in Audio")
-                subtitle.text: i18n("Most popular Audio packages in our collection.")
+                title: i18n("Popular in Audio")
+                subtitle: i18n("Most popular Audio packages in our collection.")
 
                 category: _categoriesList.audioCategory()
                 pageSize: 6
@@ -298,7 +305,7 @@ Maui.Page
                     {
                         _popularAudioList.currentIndex = index
 
-                        if(Maui.Handy.singleClick|| Kirigami.Settings.hasTransientTouchInput)
+                        if(Maui.Handy.singleClick|| Maui.Handy.hasTransientTouchInput)
                         {
                             _popularAudioList.list.setApp(model.id)
                             control.itemClicked(_popularAudioList.list.app)
@@ -309,8 +316,8 @@ Maui.Page
 
             SectionTitle
             {
-                label1.text: i18n("Most Popular")
-                label2.text: i18n("Most downloaded packages.")
+                title: i18n("Most Popular")
+                description: i18n("Most downloaded packages.")
             }
         }
     }

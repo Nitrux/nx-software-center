@@ -1,8 +1,8 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+
+import org.mauikit.controls 1.3 as Maui
 import QtGraphicalEffects 1.0
 
 Maui.ListBrowserDelegate
@@ -24,9 +24,9 @@ Maui.ListBrowserDelegate
 
     rightLabels.visible: true
 
-    background: Kirigami.ShadowedRectangle
+    background: Maui.ShadowedRectangle
     {
-        color: control.hovered || control.highlighted ? Qt.rgba(Maui.Theme.highlightColor.r, Maui.Theme.highlightColor.g, Maui.Theme.highlightColor.b, 0.2) : Qt.tint(control.Maui.Theme.textColor, Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
+        color: control.hovered || control.highlighted ? Maui.Theme.highlightColor : Qt.tint(control.Maui.Theme.textColor, Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
 
         corners
         {
