@@ -13,7 +13,6 @@ Maui.ApplicationWindow
 {
     id: root
     readonly property var views: ({store: 0, apps: 1, progress: 2})
-    headBar.visible: false
 
 
     Maui.AppViews
