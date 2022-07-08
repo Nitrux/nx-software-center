@@ -53,4 +53,5 @@ $APT_COMMAND install -qy --no-install-recommends \
     libkf5configwidgets-dev \
     libkf5auth-dev \
     libkf5codecs-dev \
-    libkf5windowsystem-dev
+    libkf5windowsystem-dev \
+    nlohmann-json3-dev
