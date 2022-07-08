@@ -22,7 +22,8 @@ jobs:
           sudo touch /etc/apt/sources.list.d/neon.list
           echo "deb http://archive.neon.kde.org/user focal main" | sudo tee -a /etc/apt/sources.list.d/neon.list
           curl 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D' | sudo apt-key add -
-
+      
+      - uses: actions/checkout@v2
       - name: Install build dependencies
         run: ./scripts/install-build-deps.sh
 
