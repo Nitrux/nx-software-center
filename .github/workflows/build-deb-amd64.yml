@@ -34,5 +34,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: deb-package
-          path: ./*.deb
+          path: ./build/*.deb
           retention-days: 1
