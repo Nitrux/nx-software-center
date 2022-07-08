@@ -1,0 +1,34 @@
+name: Nitrux Software Center AppImage
+
+on:
+  push:
+    branches: [ build-deb-actions ]
+
+jobs:
+  build-deb:
+    runs-on: ubuntu-20.04
+
+    container:
+      image: ubuntu:focal
+      env:
+        DEBIAN_FRONTEND: noninteractive
+
+    steps:
+      - name: Install basic packages
+        run: apt-get update -q && apt-get -qy install sudo && apt-get -qy install curl wget gnupg python3-pip patchelf
+
+      - name: Add required repo list
+        run: |
+          sudo touch /etc/apt/sources.list.d/neon.list
+          echo "deb http://archive.neon.kde.org/user focal main" | sudo tee -a /etc/apt/sources.list.d/neon.list
+          curl 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D' | sudo apt-key add -
+
+      - name: Install build dependencies
+        run: ./scripts/install-build-deps.sh
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: deb-package
+          path: *.deb
+          retention-days: 1
