@@ -12,6 +12,7 @@ jobs:
       image: ubuntu:focal
       env:
         DEBIAN_FRONTEND: noninteractive
+        PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
     env:
           BRANCH_MAUIKIT: v2.1
