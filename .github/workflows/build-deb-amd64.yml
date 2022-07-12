@@ -12,6 +12,10 @@ on:
         - repo
         - testing
         - compat
+      packageVersion:
+        description: 'Package Version'
+        required: true
+        type: string
 
 jobs:
   build-deb:
@@ -22,9 +26,6 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
         PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
-
-    # env:
-      # PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
     steps:
       - name: Install basic packages
@@ -45,6 +46,8 @@ jobs:
 
       - name: Generate deb
         run: ./scripts/build-deb.sh
+        env:
+          PACKAGE_VERSION: ${{ inputs.packageVersion }}
 
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
@@ -52,6 +55,6 @@ jobs:
           name: deb-package
           path: ./build/*.deb
           retention-days: 1
-
+      
       - name: Upload package to Package Cloud
         run: package_cloud push nitrux/${{ inputs.packageCloudRepo }}/debian/trixie ./build/*.deb
