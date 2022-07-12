@@ -21,6 +21,10 @@ jobs:
       image: ubuntu:focal
       env:
         DEBIAN_FRONTEND: noninteractive
+        PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
+
+    # env:
+      # PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
     steps:
       - name: Install basic packages
@@ -50,4 +54,4 @@ jobs:
           retention-days: 1
 
       - name: Upload package to Package Cloud
-        run: package_cloud --verbose push nitrux/${{ inputs.packageCloudRepo }}/debian/trixie ./build/*.deb
+        run: package_cloud push nitrux/${{ inputs.packageCloudRepo }}/debian/trixie ./build/*.deb

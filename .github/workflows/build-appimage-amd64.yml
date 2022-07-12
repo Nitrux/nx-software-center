@@ -16,7 +16,6 @@ jobs:
     env:
           BRANCH_MAUIKIT: v2.1
           BRANCH_MAUIKIT_FILEBROWSING: v2.1
-          PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
     steps:
       - name: Install basic packages
