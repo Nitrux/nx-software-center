@@ -50,4 +50,4 @@ jobs:
           retention-days: 1
 
       - name: Upload package to Package Cloud
-        run: package_cloud push nitrux/${{ inputs.packageCloudRepo }}/debian/trixie *.deb
+        run: package_cloud push nitrux/${{ inputs.packageCloudRepo }}/debian/trixie ./build/*.deb
