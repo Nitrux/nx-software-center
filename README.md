@@ -17,7 +17,7 @@ The AppImages displayed are fetched from:
 
  The NX Software Center is available as an AppImage. Click the button below to download it or head over to the _Releases_ tab.
 
- [![appimage-button](https://github.com/UriHerrera/appimage-buttons/blob/main/buttons/appimage-btn-dark.svg)](https://github.com/Nitrux/nx-software-center/releases)
+ [![appimage-button](https://github.com/UriHerrera/appimage-buttons/blob/main/buttons/appimage-btn-dark.svg)](https://github.com/Nitrux/nx-software-center/releases/download/latest/nx-software-center-latest-x86_64.AppImage)
 
 # Build
 
