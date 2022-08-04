@@ -136,8 +136,8 @@ Maui.Page
     Maui.Holder
     {
         anchors.fill: parent
-        title: i18n("No apps :(")
-        body: i18n("Your AppImages will be listed here")
+        title: i18n("Get started")
+        body: i18n("Your download AppImages will be listed here")
         visible: _appsListView.count === 0
         emoji: "qrc:/store.svg"
         emojiSize: Maui.Style.iconSizes.huge
