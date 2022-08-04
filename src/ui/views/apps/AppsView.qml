@@ -137,7 +137,7 @@ Maui.Page
     {
         anchors.fill: parent
         title: i18n("Get started")
-        body: i18n("Your download AppImages will be listed here")
+        body: i18n("Your installed AppImages will appear here")
         visible: _appsListView.count === 0
         emoji: "qrc:/store.svg"
         emojiSize: Maui.Style.iconSizes.huge
