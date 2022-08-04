@@ -8,50 +8,50 @@ fi
 
 $APT_COMMAND update -q
 $APT_COMMAND install -qy --no-install-recommends \
+    argagg-dev \
+    automake \
     build-essential \
+    checkinstall \
     cmake \
     curl \
+    desktop-file-utils \
+    extra-cmake-modules \
+    gettext \
     git \
     gtk-update-icon-cache \
-    extra-cmake-modules \
-    checkinstall \
+    kquickimageeditor-dev \
+    libappimage-dev \
+    libcurl4-openssl-dev \
+    libexiv2-dev \
+    libfuse-dev \
+    libgcrypt20-dev \
+    libkf5auth-dev \
+    libkf5bookmarks-dev \
+    libkf5codecs-dev \
+    libkf5completion-dev \
+    libkf5config-dev \
+    libkf5configwidgets-dev \
+    libkf5coreaddons-dev \
+    libkf5i18n-dev \
+    libkf5itemviews-dev \
+    libkf5jobwidgets-dev \
+    libkf5kio-dev \
+    libkf5notifications-dev \
+    libkf5service-dev \
+    libkf5solid-dev \
+    libkf5widgetsaddons-dev \
+    libkf5windowsystem-dev \
+    libkf5xmlgui-dev \
+    libqt5svg5-dev \
+    libqt5x11extras5-dev \
+    libssl-dev \
+    libtool \
+    libxcb-icccm4-dev \
+    libxcb-shape0-dev \
+    nlohmann-json3-dev \
     qtbase5-dev \
     qtdeclarative5-dev \
     qtmultimedia5-dev \
-    qtquickcontrols2-5-dev \
-    libkf5coreaddons-dev \
-    libkf5i18n-dev \
-    gettext \
-    libappimage-dev \
-    libqt5svg5-dev \
-    libkf5config-dev \
-    libkf5notifications-dev \
     qtpositioning5-dev \
-    libexiv2-dev \
-    kquickimageeditor-dev \
-    libkf5kio-dev \
-    libqt5x11extras5-dev \
-    libxcb-shape0-dev \
-    libxcb-icccm4-dev \
-    libssl-dev \
-    automake \
-    libtool \
-    xxd \
-    desktop-file-utils \
-    libfuse-dev \
-    libcurl4-openssl-dev \
-    libkf5completion-dev \
-    argagg-dev \
-    libgcrypt20-dev \
-    libkf5service-dev \
-    libkf5bookmarks-dev \
-    libkf5widgetsaddons-dev \
-    libkf5itemviews-dev \
-    libkf5jobwidgets-dev \
-    libkf5solid-dev \
-    libkf5xmlgui-dev \
-    libkf5configwidgets-dev \
-    libkf5auth-dev \
-    libkf5codecs-dev \
-    libkf5windowsystem-dev \
-    nlohmann-json3-dev
+    qtquickcontrols2-5-dev \
+    xxd
