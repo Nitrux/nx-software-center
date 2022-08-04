@@ -76,6 +76,7 @@ Maui.Page
     {
         id: _listView
         anchors.fill: parent
+        currentIndex: -1
         orientation: ListView.Vertical
         spacing: Maui.Style.space.big
         padding: Maui.Handy.isMobile ? Maui.Style.space.medium : Maui.Style.space.big
@@ -347,7 +348,6 @@ Maui.Page
         delegate: Maui.ListBrowserDelegate
         {
             id: _delegate
-            height: Math.min(implicitHeight + Maui.Style.space.huge, 100)
             width: ListView.view.width
 
             label1.text: model.name
@@ -362,7 +362,7 @@ Maui.Page
             label4.text:i18n("Score")
             imageSource: model.smallpic
             iconVisible: true
-            template.imageSizeHint: Maui.Style.iconSizes.huge
+            template.imageSizeHint: Maui.Style.iconSizes.big
             iconSource: "package"
             iconSizeHint:  Maui.Style.iconSizes.medium
 

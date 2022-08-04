@@ -26,7 +26,7 @@ Maui.ListBrowserDelegate
 
     background: Maui.ShadowedRectangle
     {
-        color: control.hovered || control.highlighted ? Maui.Theme.highlightColor : Qt.tint(control.Maui.Theme.textColor, Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
+        color: control.hovered ? Maui.Theme.hoverColor : Maui.Theme.alternateBackgroundColor
 
         corners
         {

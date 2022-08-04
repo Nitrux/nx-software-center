@@ -21,12 +21,11 @@ ColumnLayout
         id: _listView
         Layout.fillHeight: true
         Layout.fillWidth: true
-
         Maui.Theme.inherit: false
         Maui.Theme.backgroundColor: "#333"
         Maui.Theme.textColor: "#fafafa"
         implicitHeight: 250
-        spacing: Maui.Style.space.big
+        spacing: Maui.Style.space.huge
 
         orientation: ListView.Horizontal
         snapMode: ListView.SnapOneItem
@@ -78,8 +77,8 @@ ColumnLayout
 
             shadow.xOffset: 0
             shadow.yOffset: 0
-            shadow.color: Qt.rgba(0, 0, 0, 0.3)
-            shadow.size: 8
+            shadow.color: Qt.rgba(0, 0, 0, 0.7)
+            shadow.size: 14
 
             Item
             {

@@ -9,6 +9,7 @@ Maui.SettingsSection
 {
     id: control
     Layout.fillWidth: true
+    Layout.maximumWidth: -1
 //    spacing: Maui.Style.space.big
 
 }

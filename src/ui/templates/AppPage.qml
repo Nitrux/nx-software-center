@@ -9,6 +9,8 @@ import QtGraphicalEffects 1.0
 
 import NXModels 1.0 as NX
 
+import "../views/store"
+
 Maui.Page
 {
     id: control
@@ -115,7 +117,8 @@ Maui.Page
                         wide: root.isWide
                         iconSource: "package"
                         iconSizeHint: Maui.Style.iconSizes.huge
-                        imageSource: _bannerImage.source
+                        imageSource: appInfo.smallpic
+                        template.fillMode: Image.PreserveAspectFit
                         label1.text: appInfo.name
                         label1.elide: Text.ElideMiddle
                         label1.wrapMode: Text.WrapAnywhere
@@ -137,19 +140,13 @@ Maui.Page
                             Layout.preferredHeight: implicitHeight
                         }
 
-                        Rectangle {
-                            width: 80
-                            height: 20
-                            radius: 20
+                        Maui.Chip
+                        {
+
                             color: "#21be2b"
-                            
-                            Label {
-                                font.pixelSize: 10
-                                font.bold: true
-                                anchors.centerIn: parent
-                                color: "#ddffffff"
-                                text: appInfo.server
-                            }
+                            label.text: appInfo.server
+
+
                         }
 
                         RowLayout
@@ -163,6 +160,8 @@ Maui.Page
                                 Layout.fillWidth: true
                                 implicitWidth:  64
                                 implicitHeight: 64
+                                isMask: true
+
                                 iconSource: "rating"
                                 iconSizeHint: Maui.Style.iconSizes.medium
                                 labelSizeHint: 22
@@ -180,6 +179,7 @@ Maui.Page
                                 iconSource: "download"
                                 iconSizeHint: Maui.Style.iconSizes.medium
                                 labelSizeHint: 22
+                                isMask: true
                                 label1.text: appInfo.totaldownloads
                                 label1.font.bold: true
                                 label1.font.weight: Font.Bold
@@ -192,11 +192,16 @@ Maui.Page
 
                                 implicitWidth:  64
                                 implicitHeight: 64
+                                isMask: true
 
                                 iconSource: "license"
                                 iconSizeHint: Maui.Style.iconSizes.medium
                                 labelSizeHint: 22
                                 label1.text: appInfo.license || i18n("Unkown")
+                                label1.font.bold: true
+                                label1.font.weight: Font.Bold
+                                label1.font.pointSize: Maui.Style.fontSizes.big
+
                             }
                         }
                     }
@@ -217,8 +222,6 @@ Maui.Page
                     description: appInfo.description
                     template.label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
-
-
 
                 Flow
                 {
@@ -436,6 +439,19 @@ Maui.Page
                         }
                     }
                 }
+
+//                FeatureStrip
+//                {
+//                    id: _moreLike
+
+//                    title: i18n("More from ") + appInfo.personid
+//                    subtitle: i18n("More packages from this user")
+//                    category: _categoriesList.baseCategory()
+//                    list.tags: [appInfo.personid]
+
+//                    pageSize: 4
+//                    sort: NX.Store.HIGHEST_RATED
+//                }
             }
         }
     }

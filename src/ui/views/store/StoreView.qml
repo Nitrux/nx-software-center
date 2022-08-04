@@ -60,6 +60,8 @@ StackView
                     visible: !app.isInstalled
                     Maui.Theme.textColor: "#fafafa"
                     Maui.Theme.backgroundColor: "#26c6da"
+                    Maui.Theme.hoverColor: "#26c6da"
+                    Maui.Theme.highlightColor: "#26c6da"
                     onClicked:
                     {
                         _appPage.scrollTo(AppPage.Sections.Packages)
@@ -130,8 +132,8 @@ StackView
     initialItem: StoreFrontPage
     {
         id: _frontPage
-        title: i18n("Store")
-        showTitle: false
+//        title: i18n("Store")
+//        showTitle: false
 
         onItemClicked:
         {

@@ -54,7 +54,7 @@ Maui.Page
             FeatureGridCard
             {
                 anchors.fill: parent
-                anchors.margins: Maui.Style.space.medium
+                anchors.margins: Maui.Style.space.big
 
                 images: _app.images
                 imageSource: model.smallpic
@@ -107,7 +107,7 @@ Maui.Page
                 Flow
                 {
                     Layout.fillWidth: true
-                    spacing: Maui.Style.space.big
+                    spacing: Maui.Style.space.huge
 
                     Repeater
                     {
@@ -121,23 +121,22 @@ Maui.Page
                         {
                             id: _categoryDelegate
                             implicitWidth: template.layout.implicitWidth + leftPadding + rightPadding
-                            height: 60
+//                            height: 60
                             property color tagColor : model.color
                             template.isMask: true
                             iconVisible: true
                             iconSource: model.icon
                             iconSizeHint: Maui.Style.iconSizes.medium
-                            template.headerSizeHint: iconSizeHint * 2
+                            template.headerSizeHint: iconSizeHint
                             label1.horizontalAlignment: Qt.AlignHCenter
                             label1.text: model.title
                             label1.font.bold: true
                             label1.font.weight: Font.Bold
                             label1.font.pointSize: Maui.Style.fontSizes.big
-                            leftPadding:_tagColor.width
+                            leftPadding:_tagColor.width + Maui.Style.space.medium
                             rightPadding: leftPadding
                             onDoubleClicked:
                             {
-                                _categoriesListView.currentIndex = index
                                 if(!Maui.Handy.singleClick)
                                 {
                                     control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
@@ -147,8 +146,6 @@ Maui.Page
 
                             onClicked:
                             {
-                                _categoriesListView.currentIndex = index
-
                                 if(Maui.Handy.singleClick || Maui.handy.hasTransientTouchInput)
                                 {
                                     control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))

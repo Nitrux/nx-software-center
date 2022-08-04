@@ -21,6 +21,23 @@ Maui.ApplicationWindow
         anchors.fill: parent
         showCSDControls: true
         altHeader: Maui.Handy.isMobile
+        headBar.leftContent: Maui.ToolButtonMenu
+         {
+             icon.name: "application-menu"
+             MenuItem
+             {
+                 text: i18n("Settings")
+                 icon.name: "settings-configure"
+             }
+
+             MenuItem
+             {
+                 text: i18n("About")
+                 icon.name: "documentinfo"
+                 onTriggered: root.about()
+             }
+         }
+
 
         Maui.AppViewLoader
         {
