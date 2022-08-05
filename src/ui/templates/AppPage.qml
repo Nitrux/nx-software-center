@@ -205,13 +205,6 @@ Maui.Page
                             }
                         }
                     }
-
-                    Maui.Separator
-                    {
-                        anchors.bottom: parent.bottom
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                    }
                 }
 
                 SectionTitle
@@ -221,6 +214,12 @@ Maui.Page
                     title: appInfo.name
                     description: appInfo.description
                     template.label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                }
+
+
+                Maui.Separator
+                {
+                    Layout.fillWidth: true
                 }
 
                 SectionTitle
