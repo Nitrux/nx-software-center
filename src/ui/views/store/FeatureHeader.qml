@@ -29,7 +29,7 @@ ColumnLayout
 
         orientation: ListView.Horizontal
         snapMode: ListView.SnapOneItem
-        clip: true
+        clip: false
         highlightMoveDuration: 1000
         highlightMoveVelocity: -1
         onMovementEnded: currentIndex = indexAt(contentX, contentY)

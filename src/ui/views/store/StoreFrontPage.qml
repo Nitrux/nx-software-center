@@ -8,7 +8,7 @@ import NXModels 1.0 as NX
 
 import "../../templates"
 
-Maui.Page
+Maui.SideBarView
 {
     id: control
 
@@ -16,305 +16,390 @@ Maui.Page
     signal categoryClicked(var category)
     signal searchFor(var query)
 
-    headBar.visible: true
-    headBar.forceCenterMiddleContent: isWide
-    headBar.middleContent: Maui.SearchField
+    sideBar.preferredWidth: Maui.Style.units.gridUnit * 12
+    sideBar.resizeable: false
+    sideBarContent: Pane
     {
-        Layout.fillWidth: true
-        Layout.maximumWidth: 500
-        Layout.alignment: Qt.AlignCenter
-        placeholderText: i18n ("Search your app package...")
-        onAccepted: control.searchFor(text)
-    }
-
-    Maui.GridView
-    {
-        id: _featureGridView
+        Maui.Theme.colorSet: Maui.Theme.Window
         anchors.fill: parent
-        itemSize: Math.floor(Math.min(320, Math.max(200, control.width * 0.3)))
-        itemHeight: 200
-        padding: Maui.Handy.isMobile ? Maui.Style.space.medium : Maui.Style.space.big
 
-        model: Maui.BaseModel
+        padding: Maui.Style.space.medium
+
+        ScrollView
         {
-            list: NX.Store
+            anchors.fill: parent
+
+            Flickable
             {
-                id: _featureList
-                category: _categoriesList.baseCategory()
-                pageSize: 14
-                sort: NX.Store.MOST_DOWNLOADED
-            }
-        }
+                contentHeight: _sideBarLayout.implicitHeight
 
-        delegate: Item
-        {
-            width: GridView.view.cellWidth
-            height: GridView.view.cellHeight
-
-            FeatureGridCard
-            {
-                anchors.fill: parent
-                anchors.margins: Maui.Style.space.big
-
-                images: _app.images
-                imageSource: model.smallpic
-                label1.text: model.name
-                label2.text: model.typename
-                label3.text: model.totaldownloads
-                //            label4.text: model.personid
-
-                NX.App
+                Column
                 {
-                    id: _app
-                    data: _featureList.application(model.id)
-                }
+                    id: _sideBarLayout
+                    width: parent.width
 
-                onClicked:
-                {
-                    _featureGridView.currentIndex = index
-                    _featureList.setApp(model.id)
-                    control.itemClicked(_featureList.app)
-                }
-            }
-        }
+                    spacing: Maui.Style.space.big
 
-        flickable.header: ColumnLayout
-        {
-            width: _featureGridView.flickable.width
-            spacing: Maui.Style.space.huge *2
-
-            FeatureHeader
-            {
-                id: _featureHeader
-                Layout.fillWidth: true
-                //                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
-
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                onAppClicked:
-                {
-                    control.itemClicked(app)
-                }
-            }
-
-            SectionTitle
-            {
-                id: _categoriesListView
-                Layout.fillWidth: true
-                //                Layout.maximumWidth: Math.min( _featureGridView.flickable.width, contentWidth)
-                title: i18n("Categories")
-                description: i18n("Filter by categories")
-
-                Flow
-                {
-                    Layout.fillWidth: true
-                    spacing: Maui.Style.space.huge
-
-                    Repeater
+                    Maui.SettingsSection
                     {
-                        model: Maui.BaseModel
+                        title: i18n("Categories")
+                        width: parent.width
+
+                        GridLayout
                         {
-                            id: _categoriesModel
-                            list: _categoriesList
-                        }
+                            Layout.fillWidth: true
 
-                        delegate: Maui.ListBrowserDelegate
-                        {
-                            id: _categoryDelegate
-                            implicitWidth: template.layout.implicitWidth + leftPadding + rightPadding
-//                            height: 60
-                            property color tagColor : model.color
-                            template.isMask: true
-                            iconVisible: true
-                            iconSource: model.icon
-                            iconSizeHint: Maui.Style.iconSizes.medium
-                            template.headerSizeHint: iconSizeHint
-                            label1.horizontalAlignment: Qt.AlignHCenter
-                            label1.text: model.title
-                            label1.font.bold: true
-                            label1.font.weight: Font.Bold
-                            label1.font.pointSize: Maui.Style.fontSizes.big
-                            leftPadding:_tagColor.width + Maui.Style.space.medium
-                            rightPadding: leftPadding
-                            onDoubleClicked:
+                            columns: 3
+                            columnSpacing: Maui.Style.space.small
+                            rowSpacing: Maui.Style.space.small
+
+                            Repeater
                             {
-                                if(!Maui.Handy.singleClick)
+                                model: Maui.BaseModel
                                 {
-                                    control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
-
+                                    id: _categoriesModel
+                                    list: _categoriesList
                                 }
-                            }
 
-                            onClicked:
-                            {
-                                if(Maui.Handy.singleClick || Maui.handy.hasTransientTouchInput)
+                                delegate:  Item
                                 {
-                                    control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
+                                    Layout.preferredHeight: Math.min(50, width)
+//                                    Layout.preferredWidth: 50
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
 
-                                }
-                            }
-
-                            background: Rectangle
-                            {
-                                readonly property color m_color : Qt.tint(Qt.lighter(Maui.Theme.textColor), Qt.rgba(Maui.Theme.backgroundColor.r, Maui.Theme.backgroundColor.g, Maui.Theme.backgroundColor.b, 0.9))
-
-                                color: _categoryDelegate.hovered || _categoryDelegate.containsPress ? Qt.rgba(Maui.Theme.highlightColor.r, Maui.Theme.highlightColor.g, Maui.Theme.highlightColor.b, 0.2) : Qt.rgba(m_color.r, m_color.g, m_color.b, 0.4)
-                                radius: Maui.Style.radiusV
-
-
-                                Maui.ShadowedRectangle
-                                {
-                                    id: _tagColor
-                                    visible: model.color
-                                    color: model.color
-                                    anchors.left: parent.left
-                                    anchors.top: parent.top
-                                    anchors.bottom: parent.bottom
-                                    width: visible ? 12 : 0
-
-                                    corners
+                                    Maui.GridBrowserDelegate
                                     {
-                                        topLeftRadius:  Maui.Style.radiusV
-                                        topRightRadius: 0
-                                        bottomLeftRadius:  Maui.Style.radiusV
-                                        bottomRightRadius: 0
+                                        id: _categoryDelegate
+                                        anchors.fill: parent
+                                        property color tagColor : model.color
+                                        template.isMask: true
+                                        iconVisible: true
+                                        iconSource: model.icon
+                                        iconSizeHint: Maui.Style.iconSize
+                                        tooltipText: model.title
+
+
+                                        onDoubleClicked:
+                                        {
+                                            if(!Maui.Handy.singleClick)
+                                            {
+                                                control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
+
+                                            }
+                                        }
+
+                                        onClicked:
+                                        {
+                                            if(Maui.Handy.singleClick || Maui.handy.hasTransientTouchInput)
+                                            {
+                                                control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
+
+                                            }
+                                        }
+
+                                        //                                        background: Rectangle
+                                        //                                        {
+                                        //                                            readonly property color m_color : Qt.tint(model.color, Qt.rgba(Maui.Theme.alternateBackgroundColor.r, Maui.Theme.alternateBackgroundColor.g, Maui.Theme.alternateBackgroundColor.b, 0.9))
+
+                                        //                                            color: _categoryDelegate.hovered || _categoryDelegate.containsPress ? Maui.Theme.hoverColor : m_color
+                                        //                                            radius: Maui.Style.radiusV
+
+                                        //                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
-            }
 
-            Maui.Separator
-            {
-                Layout.fillWidth: true
-                implicitHeight: 0.5
-            }
 
-            FeatureStrip
-            {
-                Layout.fillWidth: true
-                title: i18n("Maui Apps")
-                subtitle: i18n("Convergent applications for desktop and mobile computers made with MauiKit.")
-
-                category: _categoriesList.baseCategory()
-                pageSize: 6
-                sort: NX.Store.MOST_DOWNLOADED
-                list.tags: ["mauikit"]
-
-                onAppClicked:
-                {
-                    control.itemClicked(app)
-                }
-            }
-
-            FeatureStrip
-            {
-                id: _newestListView
-
-                Layout.fillWidth: true
-                title: i18n("Newest")
-                subtitle: i18n("Most recent packages.")
-                category: _categoriesList.baseCategory()
-                pageSize: 6
-                sort: NX.Store.NEWEST
-                listView.implicitHeight: 80
-
-                delegate: FloatingCardDelegate
-                {
-                    width: Math.min(ListView.view.width * 0.9, implicitWidth)
-                    height: ListView.view.height
-
-                    label1.text: model.name
-                    label2.text: model.typename
-                    imageSource: model.preview
-
-                    onDoubleClicked:
+                    Column
                     {
-                        _newestListView.currentIndex = index
-                        if(!Maui.Handy.singleClick)
+                        width: parent.width
+                        spacing: Maui.Style.space.medium
+                        Maui.ListBrowserDelegate
                         {
-                            _newestListView.list.setApp(model.id)
-                            control.itemClicked(_newestListView.list.app)
+                            width: parent.width
+                            label1.text: i18n("Newest")
+                            iconSource: "draw-star"
+                            iconSizeHint: Maui.Style.iconSize
+                            template.isMask: true
+                        }
+
+                        Maui.ListBrowserDelegate
+                        {
+                            width: parent.width
+                            label1.text: i18n("Hot")
+                            iconSource: "love"
+                            iconSizeHint: Maui.Style.iconSize
+                            template.isMask: true
+                        }
+
+                        Maui.ListBrowserDelegate
+                        {
+                            width: parent.width
+                            label1.text: i18n("Our picks")
+                            iconSource: "alarm"
+                            iconSizeHint: Maui.Style.iconSize
+                            template.isMask: true
                         }
                     }
 
-                    onClicked:
+                    Maui.SettingsSection
                     {
-                        _newestListView.currentIndex = index
-                        if(Maui.Handy.singleClick || Maui.Handy.hasTransientTouchInput)
+                        title: i18n("Tags")
+//                        description : i18n("Common tags")
+                        width: parent.width
+                        Flow
                         {
-                            _newestListView.list.setApp(model.id)
-                            control.itemClicked(_newestListView.list.app)
+                            id: _tags
+                            Layout.fillWidth: true
+                            Repeater
+                            {
+                                model: ["Convergent", "Mobile", "ARM", "x86", "Maui", "Email", "Android"]
+
+                                delegate: Maui.Chip
+                                {
+
+                                    label.text: modelData
+                                    iconSource: "tag"
+                                }
+                            }
                         }
                     }
                 }
             }
+        }
+    }
 
-            FeatureStrip
+    Maui.Page
+    {
+        anchors.fill: parent
+        //        headBar.background: null
+        //        headBar.visible: control.sideBar.collapsed
+        headBar.leftContent: ToolButton
+        {
+            checked: control.sideBar.visible
+            icon.name: checked ? "sidebar-collapse" : "sidebar-expand"
+            //            text: i18n("Browser")
+            onClicked: control.sideBar.toggle()
+        }
+
+        headBar.visible: true
+        //        headBar.background: null
+        headBar.forceCenterMiddleContent: false
+        headBar.middleContent: Maui.SearchField
+        {
+            Layout.fillWidth: true
+            Layout.maximumWidth: 500
+            Layout.alignment: Qt.AlignCenter
+            placeholderText: i18n ("Search")
+            onAccepted: control.searchFor(text)
+        }
+
+        Maui.GridView
+        {
+            id: _featureGridView
+            clip: false
+            anchors.fill: parent
+            itemSize: Math.floor(Math.min(320, Math.max(200, control.width * 0.3)))
+            itemHeight: 200
+            padding: Maui.Handy.isMobile ? Maui.Style.space.medium : Maui.Style.space.big
+
+            model: Maui.BaseModel
             {
-                Layout.fillWidth: true
-                title: i18n("Popular in Games")
-                subtitle: i18n("Most popular Games packages in our collection.")
-
-                category: _categoriesList.gamesCategory()
-                pageSize: 6
-                sort: NX.Store.MOST_DOWNLOADED
-
-                onAppClicked:
+                list: NX.Store
                 {
-                    control.itemClicked(app)
+                    id: _featureList
+                    category: _categoriesList.baseCategory()
+                    pageSize: 14
+                    sort: NX.Store.MOST_DOWNLOADED
                 }
+
+
             }
 
-            FeatureStrip
+            delegate: Item
             {
-                id: _popularAudioList
-                Layout.fillWidth: true
-                listView.implicitHeight: 80
+                width: GridView.view.cellWidth
+                height: GridView.view.cellHeight
 
-                title: i18n("Popular in Audio")
-                subtitle: i18n("Most popular Audio packages in our collection.")
-
-                category: _categoriesList.audioCategory()
-                pageSize: 6
-                sort: NX.Store.MOST_DOWNLOADED
-
-                delegate: FloatingCardDelegate
+                FeatureGridCard
                 {
-                    width: Math.min(ListView.view.width * 0.9, implicitWidth)
-                    height: ListView.view.height
-                    label1.text: model.name
-                    label2.text: model.typename
+                    anchors.fill: parent
+                    anchors.margins: Maui.Style.space.big
+
+                    images: _app.images
                     imageSource: model.smallpic
+                    label1.text: model.name
+                    label2.text: model.typename
+                    label3.text: model.totaldownloads
+                    //            label4.text: model.personid
 
-                    onDoubleClicked:
+                    NX.App
                     {
-                        _popularAudioList.currentIndex = index
-                        if(!Maui.Handy.singleClick)
-                        {
-                            _popularAudioList.list.setApp(model.id)
-                            control.itemClicked(_popularAudioList.list.app)
-                        }
+                        id: _app
+                        data: _featureList.application(model.id)
                     }
 
                     onClicked:
                     {
-                        _popularAudioList.currentIndex = index
-
-                        if(Maui.Handy.singleClick|| Maui.Handy.hasTransientTouchInput)
-                        {
-                            _popularAudioList.list.setApp(model.id)
-                            control.itemClicked(_popularAudioList.list.app)
-                        }
+                        _featureGridView.currentIndex = index
+                        _featureList.setApp(model.id)
+                        control.itemClicked(_featureList.app)
                     }
                 }
             }
 
-            SectionTitle
+            flickable.header: ColumnLayout
             {
-                title: i18n("Most Popular")
-                description: i18n("Most downloaded packages.")
+                width: _featureGridView.flickable.width
+                spacing: Maui.Style.space.huge *2
+
+                FeatureHeader
+                {
+                    id: _featureHeader
+                    Layout.fillWidth: true
+                    //                Layout.margins: isWide ? Maui.Style.space.huge : Maui.Style.space.small
+
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                    onAppClicked:
+                    {
+                        control.itemClicked(app)
+                    }
+                }
+
+                Maui.Separator
+                {
+                    Layout.fillWidth: true
+                    implicitHeight: 0.5
+                }
+
+                FeatureStrip
+                {
+                    Layout.fillWidth: true
+                    title: i18n("Maui Apps")
+                    subtitle: i18n("Convergent applications for desktop and mobile computers made with MauiKit.")
+
+                    category: _categoriesList.baseCategory()
+                    pageSize: 6
+                    sort: NX.Store.MOST_DOWNLOADED
+                    list.tags: ["mauikit"]
+
+                    onAppClicked:
+                    {
+                        control.itemClicked(app)
+                    }
+                }
+
+                FeatureStrip
+                {
+                    id: _newestListView
+
+                    Layout.fillWidth: true
+                    title: i18n("Newest")
+                    subtitle: i18n("Most recent packages.")
+                    category: _categoriesList.baseCategory()
+                    pageSize: 6
+                    sort: NX.Store.NEWEST
+                    listView.implicitHeight: 80
+
+                    delegate: FloatingCardDelegate
+                    {
+                        width: Math.min(ListView.view.width * 0.9, implicitWidth)
+                        height: ListView.view.height
+
+                        label1.text: model.name
+                        label2.text: model.typename
+                        imageSource: model.preview
+
+                        onDoubleClicked:
+                        {
+                            _newestListView.currentIndex = index
+                            if(!Maui.Handy.singleClick)
+                            {
+                                _newestListView.list.setApp(model.id)
+                                control.itemClicked(_newestListView.list.app)
+                            }
+                        }
+
+                        onClicked:
+                        {
+                            _newestListView.currentIndex = index
+                            if(Maui.Handy.singleClick || Maui.Handy.hasTransientTouchInput)
+                            {
+                                _newestListView.list.setApp(model.id)
+                                control.itemClicked(_newestListView.list.app)
+                            }
+                        }
+                    }
+                }
+
+                FeatureStrip
+                {
+                    Layout.fillWidth: true
+                    title: i18n("Popular in Games")
+                    subtitle: i18n("Most popular Games packages in our collection.")
+
+                    category: _categoriesList.gamesCategory()
+                    pageSize: 6
+                    sort: NX.Store.MOST_DOWNLOADED
+
+                    onAppClicked:
+                    {
+                        control.itemClicked(app)
+                    }
+                }
+
+                FeatureStrip
+                {
+                    id: _popularAudioList
+                    Layout.fillWidth: true
+                    listView.implicitHeight: 80
+
+                    title: i18n("Popular in Audio")
+                    subtitle: i18n("Most popular Audio packages in our collection.")
+
+                    category: _categoriesList.audioCategory()
+                    pageSize: 6
+                    sort: NX.Store.MOST_DOWNLOADED
+
+                    delegate: FloatingCardDelegate
+                    {
+                        width: Math.min(ListView.view.width * 0.9, implicitWidth)
+                        height: ListView.view.height
+                        label1.text: model.name
+                        label2.text: model.typename
+                        imageSource: model.smallpic
+
+                        onDoubleClicked:
+                        {
+                            _popularAudioList.currentIndex = index
+                            if(!Maui.Handy.singleClick)
+                            {
+                                _popularAudioList.list.setApp(model.id)
+                                control.itemClicked(_popularAudioList.list.app)
+                            }
+                        }
+
+                        onClicked:
+                        {
+                            _popularAudioList.currentIndex = index
+
+                            if(Maui.Handy.singleClick|| Maui.Handy.hasTransientTouchInput)
+                            {
+                                _popularAudioList.list.setApp(model.id)
+                                control.itemClicked(_popularAudioList.list.app)
+                            }
+                        }
+                    }
+                }
+
+                SectionTitle
+                {
+                    title: i18n("Most Popular")
+                    description: i18n("Most downloaded packages.")
+                }
             }
         }
     }

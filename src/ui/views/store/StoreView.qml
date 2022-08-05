@@ -150,7 +150,7 @@ StackView
 
         onSearchFor:
         {
-            currentCategory = _categoriesList.baseCategory()
+            control.currentCategory = _categoriesList.baseCategory()
             control.tags = []
             control.push(_categoryPageComponent)
             control.currentItem.search(query)

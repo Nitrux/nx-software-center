@@ -223,37 +223,6 @@ Maui.Page
                     template.label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
 
-                Flow
-                {
-                    Layout.fillWidth: true
-                    //                    Layout.preferredHeight: Maui.Style.toolBarHeight* 1.5
-                    //                    Layout.margins: Maui.Style.space.medium
-
-                    spacing: Maui.Style.space.big
-
-                    Repeater
-                    {
-                        model: String(appInfo.tags).split(",")
-
-                        delegate: Maui.Chip
-                        {
-                            showCloseButton: false
-                            //                            width: implicitWidth
-                            label.text: modelData
-                            iconSource: "tag"
-                            color: "yellow"
-                            onClicked: control.tagClicked(modelData)
-                        }
-                    }
-
-
-                }
-
-                Maui.Separator
-                {
-                    Layout.fillWidth: true
-                }
-
                 SectionTitle
                 {
                     id: _div2
@@ -438,6 +407,33 @@ Maui.Page
                             }
                         }
                     }
+                }
+
+
+                Flow
+                {
+                    Layout.fillWidth: true
+                    //                    Layout.preferredHeight: Maui.Style.toolBarHeight* 1.5
+                    //                    Layout.margins: Maui.Style.space.medium
+
+                    spacing: Maui.Style.space.big
+
+                    Repeater
+                    {
+                        model: String(appInfo.tags).split(",")
+
+                        delegate: Maui.Chip
+                        {
+                            showCloseButton: false
+                            //                            width: implicitWidth
+                            label.text: modelData
+                            iconSource: "tag"
+                            color: "yellow"
+                            onClicked: control.tagClicked(modelData)
+                        }
+                    }
+
+
                 }
 
 //                FeatureStrip
