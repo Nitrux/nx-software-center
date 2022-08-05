@@ -34,10 +34,10 @@ public:
                                QString nameFilter = "",
                                SORT_MODE sortMode = MODE_NEWEST,
                                QString page = "", QString pageSize = "",
-                               QList<QString> tags = {}) = 0;
+                               QList<QString> tags = {}, QString user = "") = 0;
   virtual void getApplicationsByArch(QList<QString> categoriesFilter, QString nameFilter = "",
                              SORT_MODE sortMode = MODE_NEWEST, QString page = "",
-                             QString pageSize = "", QList<QString> tags = {},
+                             QString pageSize = "", QList<QString> tags = {}, QString user = "",
                              Arch arch = Arch::all) = 0;
 
 signals:

@@ -15,7 +15,7 @@ void AppimagehubStoreManager::getApplications() {
     initStore();
 
     // Invoke appimagehub api
-    m_appimagehubStore->getApplicationsByArch(_categoriesFilter, _nameFilter, _sortMode, _page, _pageSize, _tags, _arch);
+    m_appimagehubStore->getApplicationsByArch(_categoriesFilter, _nameFilter, _sortMode, _page, _pageSize, _tags, _user, _arch);
 }
 
 void AppimagehubStoreManager::initStore() {
@@ -33,6 +33,7 @@ void AppimagehubStoreManager::setApplicationSearchFilter(QList<QString> categori
                                                          QString page,
                                                          QString pageSize,
                                                          QList<QString> tags,
+                                                         QString user,
                                                          Store::Arch arch) {
     
     _categoriesFilter = categoriesFilter;
@@ -41,5 +42,6 @@ void AppimagehubStoreManager::setApplicationSearchFilter(QList<QString> categori
     _page = page;
     _pageSize = pageSize;
     _tags = tags;
+    _user = user;
     _arch = arch;
 }

@@ -435,18 +435,18 @@ Maui.Page
 
                 }
 
-//                FeatureStrip
-//                {
-//                    id: _moreLike
+                FeatureStrip
+                {
+                    id: _moreLike
 
-//                    title: i18n("More from ") + appInfo.personid
-//                    subtitle: i18n("More packages from this user")
-//                    category: _categoriesList.baseCategory()
-//                    list.tags: [appInfo.personid]
+                    title: i18n("More from ") + appInfo.personid
+                    subtitle: i18n("More packages from this user")
+                    category: _categoriesList.baseCategory()
+                    list.user: appInfo.personid
 
-//                    pageSize: 4
-//                    sort: NX.Store.HIGHEST_RATED
-//                }
+                    pageSize: 4
+                    sort: NX.Store.HIGHEST_RATED
+                }
             }
         }
     }

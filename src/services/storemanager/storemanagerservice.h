@@ -14,7 +14,7 @@ class StoreManagerService : public QObject {
         void getCategories();
         void getApplications(QList<QString> categoriesFilter, QString nameFilter = "",
                              Store::SORT_MODE sortMode = Store::SORT_MODE::MODE_NEWEST, QString page = "",
-                             QString pageSize = "", QList<QString> tags = {},
+                             QString pageSize = "", QList<QString> tags = {}, QString user = "",
                              Store::Arch arch = Store::Arch::all, Category *category = nullptr);
 
         Q_SIGNAL void categoriesResponseReady(CategoryResponseDTO *response);

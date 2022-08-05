@@ -13,15 +13,11 @@ void StoreManagerService::getCategories() {
 
 void StoreManagerService::getApplications(QList<QString> categoriesFilter, QString nameFilter,
                                           Store::SORT_MODE sortMode, QString page,
-                                          QString pageSize, QList<QString> tags,
+                                          QString pageSize, QList<QString> tags, QString user,
                                           Store::Arch arch, Category *category) {
     initStoreManagers();
 
-    if ( category->categoryStore == Category::CategoryStore::APPIMAGEHUB ) {
-        // Invoke appimagehub api
-        _appimagehubStoreManager->setApplicationSearchFilter(categoriesFilter, nameFilter, sortMode, page, pageSize, tags, arch);
-        _appimagehubStoreManager->getApplications();
-    } else if ( category->categoryStore == Category::CategoryStore::APPREPO ) {
+    if ( category->categoryStore == Category::CategoryStore::APPREPO ) {
         // Invoke apprepo api
         if ( page=="0" || page=="" ) {
             _apprepoStoreManager->setPackageFilter(category->id.toInt(), nameFilter);
@@ -29,7 +25,7 @@ void StoreManagerService::getApplications(QList<QString> categoriesFilter, QStri
         }
     } else {
         // Invoke appimagehub api
-        _appimagehubStoreManager->setApplicationSearchFilter(categoriesFilter, nameFilter, sortMode, page, pageSize, tags, arch);
+        _appimagehubStoreManager->setApplicationSearchFilter(categoriesFilter, nameFilter, sortMode, page, pageSize, tags, user, arch);
         _appimagehubStoreManager->getApplications();
 
         if ( nameFilter.size() > 0 ) {
