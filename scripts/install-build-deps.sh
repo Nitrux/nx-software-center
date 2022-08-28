@@ -25,6 +25,7 @@ $APT_COMMAND install -qy --no-install-recommends \
     libexiv2-dev \
     libfuse-dev \
     libgcrypt20-dev \
+    libgpgme-dev \
     libkf5auth-dev \
     libkf5bookmarks-dev \
     libkf5codecs-dev \
