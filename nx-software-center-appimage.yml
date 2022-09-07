@@ -18,7 +18,7 @@ AppDir:
   path: ./AppDir
   app_info:
     id: nx-software-center
-    name: nx-software-center
+    name: NX Software Center
     icon: nx-software-center
     version: latest
     exec: usr/bin/nx-software-center
@@ -120,4 +120,5 @@ AppDir:
 
 AppImage:
   arch: x86_64
+  file_name: nx-software-center-latest-x86_64.AppImage
   update-information: gh-releases-zsync|Nitrux|nx-software-center|latest|*x86_64.AppImage.zsync
