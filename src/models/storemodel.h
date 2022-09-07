@@ -21,6 +21,7 @@ class StoreModel : public MauiList
     Q_PROPERTY(StoreModel::SORT sort READ getSort WRITE setSort NOTIFY sortChanged)
     Q_PROPERTY(QStringList tags READ getTags WRITE setTags NOTIFY tagsChanged)
     Q_PROPERTY(QString nameFilter READ getNameFilter WRITE setNameFilter NOTIFY nameFilterChanged)
+    Q_PROPERTY(QString user READ user WRITE setUser NOTIFY userChanged)
 
 public:
     enum SORT
@@ -56,6 +57,8 @@ public:
 
     QString getCategoryName() const;
 
+    QString user() const;
+
 public slots:
     void setCategory(Category *category);
     void clear();
@@ -69,6 +72,8 @@ public slots:
     void setTags(QStringList tags);
 
     void setNameFilter(QString nameFilter);
+
+    void setUser(QString user);
 
 signals:
     void categoryChanged(Category * category);
@@ -86,6 +91,8 @@ signals:
     void nameFilterChanged(QString nameFilter);
 
     void categoryNameChanged(QString categoryName);
+
+    void userChanged(QString user);
 
 private:
     FMH::MODEL_LIST m_list;
@@ -108,7 +115,8 @@ private:
    Store::Arch m_arch = Store::Arch::amd64;
 #endif
     //methods
-    void requestApps();
+   void requestApps();
+   QString m_user;
 };
 
 #endif // STOREMODEL_H

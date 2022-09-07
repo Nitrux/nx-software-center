@@ -33,7 +33,7 @@ void TestStoreManagerService::testGetApplications()
 
     const auto categoryId = "0";
     auto *category = new Category();
-    _storeManagerService->getApplications({categoryId}, "", Store::SORT_MODE::MODE_NEWEST, "1", "10", {}, Store::Arch::all, category);
+    _storeManagerService->getApplications({categoryId}, "", Store::SORT_MODE::MODE_NEWEST, "1", "10", {}, "", Store::Arch::all, category);
 
     spyGetApplications.wait();
 
@@ -55,7 +55,7 @@ void TestStoreManagerService::testGetApprepoApplications()
     category->id = "1";
     category->categoryStore = Category::CategoryStore::APPREPO;
 
-    _storeManagerService->getApplications({categoryId}, "", Store::SORT_MODE::MODE_NEWEST, "", "", {}, Store::Arch::all, category);
+    _storeManagerService->getApplications({categoryId}, "", Store::SORT_MODE::MODE_NEWEST, "", "", {}, "", Store::Arch::all, category);
 
     spyGetApprepoApplications.wait();
 
@@ -75,7 +75,7 @@ void TestStoreManagerService::testGetAppimagehubApplications()
     auto *category = new Category();
     category->categoryStore = Category::CategoryStore::APPIMAGEHUB;
 
-    _storeManagerService->getApplications({categoryId}, "", Store::SORT_MODE::MODE_NEWEST, "1", "10", {}, Store::Arch::all, category);
+    _storeManagerService->getApplications({categoryId}, "", Store::SORT_MODE::MODE_NEWEST, "1", "10", {}, "", Store::Arch::all, category);
 
     spyGetAppimagehubApplications.wait();
 

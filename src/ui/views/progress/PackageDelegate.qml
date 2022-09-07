@@ -2,13 +2,12 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
-import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.0 as Maui
 
 Maui.ItemDelegate
 {
     id: control
-    readonly property color altColor : Kirigami.Theme.textColor
+    readonly property color altColor : Maui.Theme.textColor
     implicitHeight: _layout.implicitHeight
 
     signal removeClicked()

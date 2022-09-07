@@ -3,7 +3,6 @@ import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
 import NXModels 1.0 as NX
@@ -16,9 +15,9 @@ ColumnLayout
     property int radius:  Maui.Style.radiusV * 2
     signal appClicked(var app)
 
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.backgroundColor: "#333"
-    Kirigami.Theme.textColor: "#fafafa"
+    Maui.Theme.inherit: false
+    Maui.Theme.backgroundColor: "#333"
+    Maui.Theme.textColor: "#fafafa"
 
     spacing: Maui.Style.space.medium
 
@@ -76,12 +75,12 @@ ColumnLayout
                 }
             }
 
-            delegate: Kirigami.ShadowedRectangle
+            delegate: Maui.ShadowedRectangle
             {
                width: itemWidth(index)
                height: itemHeight(index)
 
-                color: Qt.darker(Kirigami.Theme.backgroundColor)
+                color: Qt.darker(Maui.Theme.backgroundColor)
 
                 corners
                 {

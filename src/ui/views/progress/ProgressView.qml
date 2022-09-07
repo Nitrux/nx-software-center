@@ -1,7 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.5
 
-import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 import org.maui.nxsc 1.0
 
@@ -43,8 +42,8 @@ Maui.Page
     Maui.Holder
     {
         anchors.fill: parent
-        title: i18n("Oops!")
-        body: i18n("No apps queued")
+        title: i18n("Nothing to do")
+        body: i18n("No tasks on the queue")
         visible: _listView.count === 0
         emoji: "qrc:/download.svg"
         emojiSize: Maui.Style.iconSizes.huge

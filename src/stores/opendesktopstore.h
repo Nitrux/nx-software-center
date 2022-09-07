@@ -19,10 +19,10 @@ public:
   void getCategories() override final;
   void getApplications(QList<QString> categoriesFilter, QString nameFilter = "",
                        SORT_MODE sortMode = MODE_NEWEST, QString page = "",
-                       QString pageSize = "", QList<QString> tags = {}) override final;
+                       QString pageSize = "", QList<QString> tags = {}, QString user = "") override final;
   void getApplicationsByArch(QList<QString> categoriesFilter, QString nameFilter = "",
                              SORT_MODE sortMode = MODE_NEWEST, QString page = "",
-                             QString pageSize = "", QList<QString> tags = {},
+                             QString pageSize = "", QList<QString> tags = {}, QString user = "",
                              Arch arch = all) override final;
 
 private:

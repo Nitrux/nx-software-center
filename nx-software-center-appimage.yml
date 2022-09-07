@@ -8,6 +8,7 @@ script:
   - mkdir -p build
   - cd build
   - ../scripts/deploy-appimageupdate.sh
+  - ../scripts/deploy-mauiman.sh
   - ../scripts/deploy-mauikit.sh
   - ../scripts/deploy-mauikit-filebrowsing.sh
   - ../scripts/deploy-nx-software-center.sh

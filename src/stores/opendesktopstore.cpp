@@ -38,7 +38,7 @@ void OpenDesktopStore::getCategories() {
 void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
                                        QString nameFilter,
                                        Store::SORT_MODE sortMode, QString page,
-                                       QString pageSize, QList<QString> tags) {
+                                       QString pageSize, QList<QString> tags, QString user) {
   QNetworkAccessManager *manager = new QNetworkAccessManager(this);
   connect(manager, &QNetworkAccessManager::finished, this,
           &OpenDesktopStore::parseGetApplicationsResponseAndReply);
@@ -48,6 +48,7 @@ void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
   query.addQueryItem("categories", categoriesFilter.join("x"));
   query.addQueryItem("search", nameFilter);
   query.addQueryItem("tags", tags.join(","));
+  query.addQueryItem("user", user);
 
   switch (sortMode) {
   case MODE_NEWEST:
@@ -84,7 +85,7 @@ void OpenDesktopStore::getApplications(QList<QString> categoriesFilter,
 
 void OpenDesktopStore::getApplicationsByArch(QList<QString> categoriesFilter, QString nameFilter,
                                              SORT_MODE sortMode, QString page,
-                                             QString pageSize, QList<QString> tags,
+                                             QString pageSize, QList<QString> tags, QString user,
                                              Arch arch) {
     switch (arch) {
         case Arch::amd64 :
@@ -99,7 +100,7 @@ void OpenDesktopStore::getApplicationsByArch(QList<QString> categoriesFilter, QS
             break;
     }
 
-    getApplications(categoriesFilter, nameFilter, sortMode, page, pageSize, tags);
+    getApplications(categoriesFilter, nameFilter, sortMode, page, pageSize, tags, user);
 }
 
 void OpenDesktopStore::parseGetCategoriesResponseAndReply(

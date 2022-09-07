@@ -2,7 +2,6 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
-import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import NXModels 1.0 as NX
@@ -13,9 +12,6 @@ Maui.Page
 {
     id: control
     title: _storeList.categoryName
-
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorGroup: Kirigami.Theme.View
 
     property var category
     property var tags
@@ -80,8 +76,10 @@ Maui.Page
     {
         id: _listView
         anchors.fill: parent
+        currentIndex: -1
         orientation: ListView.Vertical
         spacing: Maui.Style.space.big
+        padding: Maui.Handy.isMobile ? Maui.Style.space.medium : Maui.Style.space.big
 
         onAtYEndChanged: //TODO if the list is at end beacuse there si not enough items to flick thend o not increase page
         {
@@ -113,8 +111,8 @@ Maui.Page
 
                 currentIndex: -1
                 Layout.fillWidth: true
-                title.text: i18n("Subcategories")
-                subtitle.text: i18n("Filter the results by using a subcategory.")
+                title: i18n("Subcategories")
+                subtitle: i18n("Filter the results by using a subcategory.")
                 listView.implicitHeight: 60
 
                 listView.header: Item
@@ -136,14 +134,14 @@ Maui.Page
                         background: Rectangle
                         {
                             opacity: 0.5
-                            color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                            color: Qt.tint(control.Maui.Theme.textColor, Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
                             radius: Maui.Style.radiusV
 
 
-                            Kirigami.ShadowedRectangle
+                            Maui.ShadowedRectangle
                             {
                                 visible: _categoriesListView.currentIndex === -1
-                                color: Kirigami.Theme.textColor
+                                color: Maui.Theme.textColor
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 anchors.bottom: parent.bottom
@@ -173,7 +171,7 @@ Maui.Page
                         {
                             _categoriesListView.currentIndex = -1
 
-                            if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                            if(Maui.Handy.singleClick || Maui.Handy.hasTransientTouchInput)
                             {
                                 control.category = currentCategory
                             }
@@ -205,13 +203,13 @@ Maui.Page
                     background: Rectangle
                     {
                         opacity: 0.5
-                        color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                        color: Qt.tint(control.Maui.Theme.textColor, Qt.rgba(control.Maui.Theme.backgroundColor.r, control.Maui.Theme.backgroundColor.g, control.Maui.Theme.backgroundColor.b, 0.9))
                         radius: Maui.Style.radiusV
 
-                        Kirigami.ShadowedRectangle
+                        Maui.ShadowedRectangle
                         {
                             visible: hovered || isCurrentItem
-                            color: Kirigami.Theme.textColor
+                            color: Maui.Theme.textColor
                             anchors.left: parent.left
                             anchors.right: parent.right
                             anchors.bottom: parent.bottom
@@ -240,7 +238,7 @@ Maui.Page
                     {
                         _categoriesListView.currentIndex = index
 
-                        if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                        if(Maui.Handy.singleClick || Maui.Handy.hasTransientTouchInput)
                         {
                             control.category = _subCategories.getCategory(_categoriesModel.get(_categoriesListView.currentIndex).id)
                         }
@@ -251,7 +249,6 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                edge: Qt.BottomEdge
                 visible: control.category.categoryStore != NX.Category.APPREPO
             }
 
@@ -259,8 +256,8 @@ Maui.Page
             {
                 id: _popularListView
                 Layout.fillWidth: true
-                title.text: i18n("Favorite in %1 ", control.category.displayName)
-                subtitle.text: i18n("Hightest rated app packages.")
+                title: i18n("Favorite in %1 ", control.category.displayName)
+                subtitle: i18n("Hightest rated app packages.")
                 visible: control.category.categoryStore != NX.Category.APPREPO
 
                 category: control.category
@@ -278,8 +275,8 @@ Maui.Page
                 id: _newestListView
 
                 Layout.fillWidth: true
-                title.text: i18n("Newest in %1 ", control.category.displayName)
-                subtitle.text: i18n("Most newest additions to our collection.")
+                title: i18n("Newest in %1 ", control.category.displayName)
+                subtitle: i18n("Most newest additions to our collection.")
                 visible: control.category.categoryStore != NX.Category.APPREPO
 
                 listView.implicitHeight: 80
@@ -314,7 +311,7 @@ Maui.Page
                     onClicked:
                     {
                         _newestListView.currentIndex = index
-                        if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                        if(Maui.Handy.singleClick || Maui.Handy.hasTransientTouchInput)
                         {
                             _newestListView.list.setApp(model.id)
                             control.itemClicked(_newestListView.list.app)
@@ -326,20 +323,13 @@ Maui.Page
             Maui.Separator
             {
                 Layout.fillWidth: true
-                edge: Qt.BottomEdge
                 visible: control.category.categoryStore != NX.Category.APPREPO
             }
 
             SectionTitle
             {
-                label1.text: i18n("All in %1 ", control.category.displayName)
-                label2.text: i18n("All packages under category.")
-            }
-
-            Item
-            {
-                Layout.fillWidth: true
-                Layout.margins: Maui.Style.space.medium
+                title: i18n("All in %1 ", control.category.displayName)
+                description: i18n("All packages under category.")
             }
         }
 
@@ -358,7 +348,6 @@ Maui.Page
         delegate: Maui.ListBrowserDelegate
         {
             id: _delegate
-            height: Math.min(implicitHeight + Maui.Style.space.huge, 100)
             width: ListView.view.width
 
             label1.text: model.name
@@ -373,7 +362,7 @@ Maui.Page
             label4.text:i18n("Score")
             imageSource: model.smallpic
             iconVisible: true
-            template.imageSizeHint: Maui.Style.iconSizes.huge
+            template.imageSizeHint: Maui.Style.iconSizes.big
             iconSource: "package"
             iconSizeHint:  Maui.Style.iconSizes.medium
 

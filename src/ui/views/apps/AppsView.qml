@@ -2,7 +2,6 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
-import org.kde.kirigami 2.7 as Kirigami
 import org.mauikit.controls 1.3 as Maui
 
 import org.maui.nxsc 1.0
@@ -137,8 +136,8 @@ Maui.Page
     Maui.Holder
     {
         anchors.fill: parent
-        title: i18n("Oops!")
-        body: i18n("No apps found")
+        title: i18n("Get started")
+        body: i18n("Your installed AppImages will appear here")
         visible: _appsListView.count === 0
         emoji: "qrc:/store.svg"
         emojiSize: Maui.Style.iconSizes.huge

@@ -22,7 +22,7 @@ void StoreModel::requestApps()
     if(!m_category)
         return;
 
-    qDebug() << "@REQUEST APPS FOR ::::" << m_nameFilter << m_category->name << m_category->id << m_pageSize << m_page;
+    qDebug() << "@REQUEST APPS FOR ::::" << m_nameFilter << m_category->name << m_category->id << m_pageSize << m_page << m_user;
 
     if(m_category->id.isEmpty ())
     {
@@ -31,7 +31,7 @@ void StoreModel::requestApps()
 
     const auto categoryId = this->m_category->id == "0" ? "" : this->m_category->id;
 
-    this->m_storeManagerService->getApplications({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), QStringList() << this->m_tags << "appimage", this->m_arch, m_category);
+    this->m_storeManagerService->getApplications({categoryId}, this->m_nameFilter, static_cast<Store::SORT_MODE>(this->m_sort), QString::number(this->m_page), QString::number(this->m_pageSize), QStringList() << this->m_tags << "appimage", m_user, this->m_arch, m_category);
 }
 
 void StoreModel::componentComplete()
@@ -104,6 +104,11 @@ void StoreModel::componentComplete()
          m_timer->start();
     });
 
+    connect(this, &StoreModel::userChanged,  this, [this](QString)
+    {
+         m_timer->start();
+    });
+
 //    connect(this, &StoreModel::categoryChanged,  this, [this](Category*)
 //    {
 //         m_timer->start();
@@ -156,6 +161,11 @@ QString StoreModel::getNameFilter() const
 QString StoreModel::getCategoryName() const
 {
     return m_category->name;
+}
+
+QString StoreModel::user() const
+{
+    return m_user;
 }
 
 void StoreModel::setCategory(Category * category)
@@ -253,6 +263,17 @@ void StoreModel::setNameFilter(QString nameFilter)
     this->clear();
     this->setPage(0);
     emit nameFilterChanged(m_nameFilter);
+}
+
+void StoreModel::setUser(QString user)
+{
+    if (m_user == user)
+        return;
+
+    m_user = user;
+    this->clear();
+    this->setPage(0);
+    emit userChanged(m_user);
 }
 
 

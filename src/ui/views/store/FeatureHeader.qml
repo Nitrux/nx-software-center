@@ -4,8 +4,7 @@ import QtQuick.Layouts 1.3
 
 import QtGraphicalEffects 1.0
 
-import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 
 import NXModels 1.0 as NX
 
@@ -22,16 +21,15 @@ ColumnLayout
         id: _listView
         Layout.fillHeight: true
         Layout.fillWidth: true
-
-        Kirigami.Theme.inherit: false
-        Kirigami.Theme.backgroundColor: "#333"
-        Kirigami.Theme.textColor: "#fafafa"
+        Maui.Theme.inherit: false
+        Maui.Theme.backgroundColor: "#333"
+        Maui.Theme.textColor: "#fafafa"
         implicitHeight: 250
-        spacing: Maui.Style.space.big
+        spacing: Maui.Style.space.huge
 
         orientation: ListView.Horizontal
         snapMode: ListView.SnapOneItem
-        clip: true
+        clip: false
         highlightMoveDuration: 1000
         highlightMoveVelocity: -1
         onMovementEnded: currentIndex = indexAt(contentX, contentY)
@@ -62,12 +60,12 @@ ColumnLayout
             onTriggered: control.cycleSlideForward()
         }
 
-        delegate: Kirigami.ShadowedRectangle
+        delegate: Maui.ShadowedRectangle
         {
             width: Math.min(ListView.view.width, 600)
             height: ListView.view.height
 
-            color: Qt.darker(Kirigami.Theme.backgroundColor)
+            color: Qt.darker(Maui.Theme.backgroundColor)
 
             corners
             {
@@ -79,8 +77,8 @@ ColumnLayout
 
             shadow.xOffset: 0
             shadow.yOffset: 0
-            shadow.color: Qt.rgba(0, 0, 0, 0.3)
-            shadow.size: 8
+            shadow.color: Qt.rgba(0, 0, 0, 0.7)
+            shadow.size: 14
 
             Item
             {
@@ -196,7 +194,7 @@ ColumnLayout
                     width: Maui.Style.iconSizes.tiny
                     height: width
                     radius: width
-                    color: Kirigami.Theme.textColor
+                    color: Maui.Theme.textColor
                     opacity: index === _listView.currentIndex ? 1 : 0.5
                 }
             }

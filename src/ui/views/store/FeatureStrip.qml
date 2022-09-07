@@ -3,17 +3,17 @@ import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
-import org.kde.kirigami 2.14 as Kirigami
-import org.mauikit.controls 1.2 as Maui
+import org.mauikit.controls 1.3 as Maui
 
 import NXModels 1.0 as NX
 
 import "../../templates"
 
-ColumnLayout
+
+SectionTitle
 {
     id: control
-    //    visible: list.count > 0
+
     spacing: Maui.Style.space.big
 
     property alias listView : _listView
@@ -22,32 +22,26 @@ ColumnLayout
     property alias category: _appsList.category
     property alias pageSize : _appsList.pageSize
     property alias sort :_appsList.sort
-    property alias title : _section.label1
-    property alias subtitle : _section.label2
+    property alias subtitle : control.description
     property alias delegate : _listView.delegate
 
     property alias currentIndex: _listView.currentIndex
 
     signal appClicked(var app)
 
-    SectionTitle
-    {
-        id: _section
-    }
-
     ListView
     {
         id: _listView
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
-        leftMargin: Maui.Style.space.medium
-        rightMargin: Maui.Style.space.medium
+
         cacheBuffer: contentWidth
-        implicitHeight: isWide && !Kirigami.Settings.isMobile ? 260 : 180
+        implicitHeight: isWide && !Maui.Handy.isMobile ? 260 : 180
         orientation: Qt.Horizontal
-        spacing: Maui.Style.space.big
+        spacing: Maui.Style.space.huge
         snapMode: ListView.NoSnap
         boundsMovement: Flickable.StopAtBounds
+        currentIndex : -1
 
         BusyIndicator
         {
@@ -95,7 +89,7 @@ ColumnLayout
             {
                 _listView.currentIndex = index
 
-                if(Maui.Handy.singleClick || Kirigami.Settings.hasTransientTouchInput)
+                if(Maui.Handy.singleClick || Maui.Handy.hasTransientTouchInput)
                 {
                     _appsList.setApp(model.id)
                     control.appClicked(_appsList.app)
@@ -117,14 +111,14 @@ ColumnLayout
             background: Rectangle
             {
                 radius: height* 0.5
-                color: _rightHandle.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+                color: _rightHandle.pressed ? Maui.Theme.highlightColor : Maui.Theme.backgroundColor
             }
 
             onClicked: _listView.contentX= _listView.contentX+300
 
             contentItem: Item
             {
-                Kirigami.Icon
+                Maui.Icon
                 {
                     anchors.centerIn: parent
                     height: Maui.Style.iconSizes.medium
@@ -147,14 +141,14 @@ ColumnLayout
             background: Rectangle
             {
                 radius: height* 0.5
-                color: _leftHandle.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+                color: _leftHandle.pressed ? Maui.Theme.highlightColor : Maui.Theme.backgroundColor
             }
 
             onClicked: _listView.contentX= _listView.contentX-300
 
             contentItem: Item
             {
-                Kirigami.Icon
+                Maui.Icon
                 {
                     anchors.centerIn: parent
                     height: Maui.Style.iconSizes.medium
@@ -165,3 +159,4 @@ ColumnLayout
         }
     }
 }
+

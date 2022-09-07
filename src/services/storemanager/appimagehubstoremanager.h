@@ -20,7 +20,7 @@ class AppimagehubStoreManager : public StoreManager {
                                         Store::SORT_MODE sortMode,
                                         QString page,
                                         QString pageSize,
-                                        QList<QString> tags,
+                                        QList<QString> tags, QString user,
                                         Store::Arch arch);
     private:
         void initStore();
@@ -34,5 +34,6 @@ class AppimagehubStoreManager : public StoreManager {
         QString _page;
         QString _pageSize;
         QList<QString> _tags;
+        QString _user;
         Store::Arch _arch;
 };
