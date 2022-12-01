@@ -11,7 +11,7 @@ curl -L https://packagecloud.io/nitrux/repo/gpgkey | apt-key add -;
 curl -L https://packagecloud.io/nitrux/compat/gpgkey | apt-key add -;
 curl -L https://packagecloud.io/nitrux/testing/gpgkey | apt-key add -;
 
-apt -qq update
+apt update
 
 ### Install Package Build Dependencies #2
 ### NX Software Center needs ECM > 5.70
