@@ -17,7 +17,7 @@ apt -qq update
 ### NX Software Center needs ECM > 5.70
 ### NX Software Center needs CMake > 3.19
 
-DEBIAN_FRONTEND=noninteractive apt -qq -yy install --no-install-recommends \
+apt -qq -yy install --no-install-recommends \
 	mauikit-accounts-git \
 	mauikit-filebrowsing-git \
 	mauikit-git \
