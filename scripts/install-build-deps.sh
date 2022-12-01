@@ -21,6 +21,10 @@ $APT_COMMAND install -qy --no-install-recommends \
     gtk-update-icon-cache \
     kquickimageeditor-dev \
     libappimage-dev \
+    libboost-program-options-dev \
+    libboost-system-dev \
+    libboost-test-dev \
+    libboost-thread-dev \
     libcurl4-openssl-dev \
     libexiv2-dev \
     libfuse-dev \
