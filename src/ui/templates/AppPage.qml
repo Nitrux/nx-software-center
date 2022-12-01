@@ -197,7 +197,7 @@ Maui.Page
                                 iconSource: "license"
                                 iconSizeHint: Maui.Style.iconSizes.medium
                                 labelSizeHint: 22
-                                label1.text: appInfo.license || i18n("Unkown")
+                                label1.text: appInfo.license || i18n("Unknown")
                                 label1.font.bold: true
                                 label1.font.weight: Font.Bold
                                 label1.font.pointSize: Maui.Style.fontSizes.big

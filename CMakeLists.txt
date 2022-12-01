@@ -90,4 +90,6 @@ ecm_setup_version(${NX_SC_VERSION}
 add_subdirectory(tests)
 add_subdirectory(src)
 
+ki18n_install(po)
+
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
