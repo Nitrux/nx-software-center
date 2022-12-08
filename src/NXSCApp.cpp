@@ -66,6 +66,7 @@ void NXSCApp::setKDEApplicationData()
     _aboutData.setBugAddress("https://github.com/nitrux/issues");
     _aboutData.setOrganizationDomain("org.nx.softwarecenter");
     _aboutData.setProgramLogo(windowIcon());
+    _aboutData.addComponent("AppImageUpdate");	
 
     KAboutData::setApplicationData(_aboutData);
     MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
