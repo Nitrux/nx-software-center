@@ -37,6 +37,7 @@ AppDir:
     sources:
     - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse
     - sourceline: deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
+      key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3B4FE6ACC0B21F32'
     - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse
     - sourceline: deb http://archive.neon.kde.org/user focal main
       key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D'

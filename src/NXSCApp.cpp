@@ -2,7 +2,7 @@
 #include "../nx_sc_version.h"
 
 // libraries
-#include <KLocalizedString>
+#include <KI18n/KLocalizedString>
 #include <MauiKit/FileBrowsing/thumbnailer.h>
 #include <QCommandLineParser>
 #include <QDate>
@@ -32,7 +32,6 @@ NXSCApp::NXSCApp(int &argc, char **argv)
 {
     setOrganizationName(QStringLiteral("Nitrux"));
     setWindowIcon(QIcon(":/nx-software-center.svg"));
-    MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
 
     QObject::connect(&_updateService,
                      &UpdateService::applicationUpdateDataChanged,
@@ -67,8 +66,10 @@ void NXSCApp::setKDEApplicationData()
     _aboutData.setBugAddress("https://github.com/nitrux/issues");
     _aboutData.setOrganizationDomain("org.nx.softwarecenter");
     _aboutData.setProgramLogo(windowIcon());
+    _aboutData.addComponent("AppImageUpdate");	
 
     KAboutData::setApplicationData(_aboutData);
+    MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
 }
 void NXSCApp::parseCommands()
 {
@@ -106,6 +107,8 @@ void NXSCApp::setup()
 
     qmlRegisterSingletonInstance("org.maui.nxsc", 1, 0, "DeleteService", &_deleteService);
     QObject::connect(&_applicationsRegistry, &ApplicationsRegistry::applicationUpdated, &_deleteService, &DeleteService::onApplicationUpdated);
+
+    _engine.rootContext()->setContextObject(new KLocalizedContext(&_engine));
 
     registerUpdateService();
     setupCacheService();

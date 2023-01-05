@@ -19,42 +19,6 @@ The AppImages displayed are fetched from:
 
  [![appimage-button](https://github.com/UriHerrera/appimage-buttons/blob/main/buttons/appimage-btn-dark.svg)](https://github.com/Nitrux/nx-software-center/releases/download/latest/nx-software-center-latest-x86_64.AppImage)
 
-# Build
-
-### Requirements
-
-#### Debian/Ubuntu
-
-```
-libkf5config-dev
-libkf5coreaddons-dev
-libkf5i18n-dev
-libkf5kio-dev
-libkf5notifications-dev
-libkf5service-dev
-libqt5svg5-dev
-libqt5webview5-dev
-libqt5xmlpatterns5-dev
-libfuse-dev
-libappimage-dev
-mauikit
-mauikit-accounts
-mauikit-filebrowsing
-qtbase5-dev
-qtdeclarative5-dev
-qtquickcontrols2-5-dev
-qtwebengine5-dev
-```
-
-### Compile source
- 1. `git clone https://github.com/Nitrux/nx-software-center.git` 
- 2. `mkdir -p sol/build && cd sol/build`
- 3. `cmake -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_BSYMBOLICFUNCTIONS=OFF -DQUICK_COMPILER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_INSTALL_LOCALSTATEDIR=/var -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON -DCMAKE_INSTALL_RUNSTATEDIR=/run "-GUnix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu ..`
- 4. `make`
-
- ### Install
- 1. `make install`
-
 # Issues
 If you find problems with the contents of this repository please create an issue.
 
