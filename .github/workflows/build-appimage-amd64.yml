@@ -54,6 +54,7 @@ jobs:
           cd appimage-builder
           pip install .
           popd
+          
         # Installation of appimage builder from pip is temporarily disabled since
         # the fix related to pydpkg is not yet release and this installing from master to avoid the issue
         # run: sudo pip3 install appimage-builder==1.1.0
