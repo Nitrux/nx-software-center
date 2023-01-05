@@ -62,6 +62,7 @@ vvave
 # AppImage
 build
 appimage-builder-cache
+appimage-build
 AppDir
 *.AppImage
 *.AppImage.zsync

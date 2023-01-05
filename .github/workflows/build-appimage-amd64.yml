@@ -14,9 +14,9 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
 
     env:
-      BRANCH_MAUIMAN: v1.0
-      BRANCH_MAUIKIT: v2.2
-      BRANCH_MAUIKIT_FILEBROWSING: v2.2
+      BRANCH_MAUIMAN: v1.0.1
+      BRANCH_MAUIKIT: v2.2.1
+      BRANCH_MAUIKIT_FILEBROWSING: master
 
     steps:
       - name: Install basic packages
@@ -47,7 +47,16 @@ jobs:
 
           
       - name: Install AppImage Builder
-        run: sudo pip3 install appimage-builder==0.9.2
+        run: |
+          APPIMAGE_BUILDER_TEMP_GIT_DIR=$(mktemp)
+          pushd $APPIMAGE_BUILDER_TEMP_GIT_DIR
+          git clone https://github.com/AppImageCrafters/appimage-builder.git
+          cd appimage-builder
+          pip install .
+          popd
+        # Installation of appimage builder from pip is temporarily disabled since
+        # the fix related to pydpkg is not yet release and this installing from master to avoid the issue
+        # run: sudo pip3 install appimage-builder==1.1.0
 
       - uses: actions/checkout@v2
       - name: Build AppImage
