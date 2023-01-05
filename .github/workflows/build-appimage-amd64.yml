@@ -48,13 +48,11 @@ jobs:
           
       - name: Install AppImage Builder
         run: |
-          APPIMAGE_BUILDER_TEMP_GIT_DIR=$(mktemp)
-          pushd $APPIMAGE_BUILDER_TEMP_GIT_DIR
           git clone https://github.com/AppImageCrafters/appimage-builder.git
           cd appimage-builder
           pip install .
-          popd
-          
+          cd ..
+
         # Installation of appimage builder from pip is temporarily disabled since
         # the fix related to pydpkg is not yet release and this installing from master to avoid the issue
         # run: sudo pip3 install appimage-builder==1.1.0
