@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 import org.mauikit.controls 1.2 as Maui
 
 
-Maui.SettingsSection
+Maui.SectionGroup
 {
     id: control
     Layout.fillWidth: true

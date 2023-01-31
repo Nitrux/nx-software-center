@@ -14,13 +14,8 @@ Maui.ListBrowserDelegate
     iconSizeHint: 48
     template.imageSizeHint: 48
     iconSource: "package"
-    label1.font.pointSize: Maui.Style.fontSizes.huge
-    label1.font.weight: Font.Bold
-    label1.font.bold: true
-    label2.font.pointSize: Maui.Style.fontSizes.big
-    label3.font.pointSize: Maui.Style.fontSizes.huge
-    label3.font.weight: Font.Bold
-    label3.font.bold: true
+    label1.font.pointSize: Maui.Style.fontSizes.big
+    label1.font.weight: Font.DemiBold
 
     rightLabels.visible: true
 

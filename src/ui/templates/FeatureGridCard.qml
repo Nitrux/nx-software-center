@@ -43,8 +43,6 @@ Maui.ItemDelegate
             id: _template
             //        Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.leftMargin: Maui.Style.space.small
-            Layout.rightMargin: Maui.Style.space.small
             Layout.preferredHeight: 52
             isCurrentItem: control.isCurrentItem
             iconSource: "package"

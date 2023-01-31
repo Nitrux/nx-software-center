@@ -40,7 +40,7 @@ Maui.SideBarView
 
                     spacing: Maui.Style.space.big
 
-                    Maui.SettingsSection
+                    Maui.SectionGroup
                     {
                         title: i18n("Categories")
                         width: parent.width
@@ -145,7 +145,7 @@ Maui.SideBarView
                         }
                     }
 
-                    Maui.SettingsSection
+                    Maui.SectionGroup
                     {
                         title: i18n("Tags")
 //                        description : i18n("Common tags")
@@ -197,7 +197,7 @@ Maui.SideBarView
             onAccepted: control.searchFor(text)
         }
 
-        Maui.GridView
+        Maui.GridBrowser
         {
             id: _featureGridView
             clip: false

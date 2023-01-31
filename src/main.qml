@@ -14,6 +14,9 @@ Maui.ApplicationWindow
     id: root
     readonly property var views: ({store: 0, apps: 1, progress: 2})
 
+    width: 1000
+    height: 800
+
 
     Maui.AppViews
     {
