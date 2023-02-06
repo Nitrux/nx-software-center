@@ -18,6 +18,8 @@
 #include "models/storemodel.h"
 #include "nx.h"
 
+#include "server/server.h"
+
 NXSCApp::NXSCApp(int &argc, char **argv)
     : QApplication(argc, argv)
     , _qml_main(QStringLiteral("qrc:/main.qml"))
@@ -66,7 +68,7 @@ void NXSCApp::setKDEApplicationData()
     _aboutData.setBugAddress("https://github.com/nitrux/issues");
     _aboutData.setOrganizationDomain("org.nx.softwarecenter");
     _aboutData.setProgramLogo(windowIcon());
-    _aboutData.addComponent("AppImageUpdate");	
+    _aboutData.addComponent("AppImageUpdate");
 
     KAboutData::setApplicationData(_aboutData);
     MauiApp::instance()->setIconName("qrc:/nx-software-center.svg");
@@ -74,14 +76,104 @@ void NXSCApp::setKDEApplicationData()
 void NXSCApp::parseCommands()
 {
     QCommandLineParser parser;
-    parser.process(arguments());
 
     _aboutData.setupCommandLine(&parser);
+
+
+    QCommandLineOption openApp(QStringList() << "oa" << "open-app",
+                               QCoreApplication::translate("main", "open the store at the given app name"),
+                               QCoreApplication::translate("main", "app"));
+    parser.addOption(openApp);
+
+    QCommandLineOption openCategory(QStringList() << "oc" << "open-category",
+                                    QCoreApplication::translate("main", "open the store at the given category name"),
+                                    QCoreApplication::translate("main", "category"));
+    parser.addOption(openCategory);
+
+    QCommandLineOption openView(QStringList() << "ov" << "open-view",
+                                QCoreApplication::translate("main", "open the store at the given view name"),
+                                QCoreApplication::translate("main", "view"));
+    parser.addOption(openView);
+
+    QCommandLineOption searchFor(QStringList() << "s" << "search",
+                                 QCoreApplication::translate("main", "open the store at the given search query"),
+                                 QCoreApplication::translate("main", "query"));
+    parser.addOption(searchFor);
+
+    parser.process(*QCoreApplication::instance());
     _aboutData.processCommandLine(&parser);
+
+       if (parser.isSet(openApp))
+       {
+           _options.first = openApp.names().first();
+           _options.second = parser.value(openApp);
+           return;
+       }
+
+       if (parser.isSet(openCategory))
+       {
+           _options.first = openCategory.names().first();
+           _options.second = parser.value(openCategory);
+           return;
+       }
+
+
+       if (parser.isSet(openView))
+       {
+           _options.first = openView.names().first();
+           _options.second = parser.value(openView);
+           return;
+       }
+
+
+       if (parser.isSet(searchFor))
+       {
+           _options.first = searchFor.names().first();
+           _options.second = parser.value(searchFor);
+           return;
+       }
+
 }
+
 void NXSCApp::setup()
-{
-    QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this, &NXSCApp::onQMLEngineObjectCreated, Qt::QueuedConnection);
+{        
+
+    if (AppInstance::attachToExistingInstance(_options))
+    {
+        qDebug() << "OPTION GIVEN << " << _options;
+
+        // Successfully attached to existing instance of Nota
+          QCoreApplication::exit(-1);
+          return;
+    }
+
+    AppInstance::registerService();
+
+    auto server = new Server(this);
+    QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this, [this, server](QObject *obj, const QUrl &objUrl)
+    {
+       onQMLEngineObjectCreated(obj, objUrl);
+
+       server->setQmlObject(obj);
+
+       const auto op = _options.first;
+       const auto value = _options.second;
+
+       if(op == "oa")
+       {
+           server->openApp(value);
+       }else if(op == "oc")
+       {
+             server->openCategory(value);
+       }else if(op == "ov")
+       {
+               server->openView(value);
+       }else if(op == "s")
+       {
+              server->searchFor(value);
+       }
+
+    }, Qt::QueuedConnection);
 
     qRegisterMetaType<Application>("ApplicationData");
     qRegisterMetaType<ApplicationBundle>("ApplicationBundle");

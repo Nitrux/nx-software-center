@@ -87,11 +87,10 @@ else ()
     qt5_add_resources(nx_QML_QRC qml.qrc)
 endif ()
 
-)
 
-qt_generate_dbus_interface(server/server.h org.nx.SoftwareCenter.xml)
-qt_add_dbus_adaptor(nx_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.nx.SoftwareCenter.xml server/server.h Server)
-qt_add_dbus_interface(nx_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.nx.SoftwareCenter.xml serverinterface)
+qt_generate_dbus_interface(server/server.h org.nx.Store.xml)
+qt_add_dbus_adaptor(nx_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.nx.Store.xml server/server.h Server)
+qt_add_dbus_interface(nx_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.nx.Store.xml serverinterface)
 
 add_executable(${PROJECT_NAME}
     ${nx_SRCS}

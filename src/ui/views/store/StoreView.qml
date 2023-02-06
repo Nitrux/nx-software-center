@@ -141,19 +141,23 @@ StackView
             control.currentItem.data = app
         }
 
-        onCategoryClicked:
-        {
-            currentCategory = category
-            control.tags = []
-            control.push(_categoryPageComponent)
-        }
+        onCategoryClicked: openCategory(category)
+        onSearchFor: control.searchFor(query)
 
-        onSearchFor:
-        {
-            control.currentCategory = _categoriesList.baseCategory()
-            control.tags = []
-            control.push(_categoryPageComponent)
-            control.currentItem.search(query)
-        }
+    }
+
+    function searchFor(query : String)
+    {
+        control.currentCategory = _categoriesList.baseCategory()
+        control.tags = []
+        control.push(_categoryPageComponent)
+        control.currentItem.search(query)
+    }
+
+    function openCategory(category : string)
+    {
+        currentCategory = category
+        control.tags = []
+        control.push(_categoryPageComponent)
     }
 }

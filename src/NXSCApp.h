@@ -49,6 +49,9 @@ private:
     QThread _bundleDirsWatcherThread;
     KAboutData _aboutData;
     QQmlApplicationEngine _engine;
+
+    QPair<QString, QString> _options;
+
     void setKDEApplicationData();
     void registerApplicationsRegistryService();
     void registerUpdateService();

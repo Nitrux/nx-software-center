@@ -44,10 +44,23 @@ Maui.ApplicationWindow
 
         Maui.AppViewLoader
         {
+            id: _storeViewLoader
             Maui.AppView.iconName: "nx-software-center"
             Maui.AppView.title: i18n("Store")
 
-            StoreView {}
+            property string pendingQuery
+            StoreView
+            {
+                id: _storeView
+                Component.onCompleted:
+                {
+                    if(_storeViewLoader.pendingQuery.length > 0)
+                    {
+                        _storeView.searchFor(pendingQuery)
+                        pendingQuery = ""
+                    }
+                }
+            }
         }
 
         Maui.AppViewLoader
@@ -65,5 +78,42 @@ Maui.ApplicationWindow
 
             ProgressView {}
         }
+    }
+
+    function openView(view : String)
+    {
+        console.log("ASK ME TO OPAN A VIEW FORM QML");
+        switch(view)
+        {
+        case "store": _swipeView.currentIndex = root.views.store; break;
+        case "apps": _swipeView.currentIndex = root.views.apps; break;
+        case "progress": _swipeView.currentIndex = root.views.progress; break;
+        }
+    }
+
+    function openApp(appId: String)
+    {
+        _swipeView.currentIndex = root.views.store
+    }
+
+    function openCategory(category : String)
+    {
+        _swipeView.currentIndex = root.views.store
+
+    }
+
+    function searchFor(query : String)
+    {
+        if(_storeViewLoader.item)
+        {
+            _storeViewLoader.item.searchFor(query)
+            _swipeView.currentIndex = root.views.store
+
+        }else
+        {
+            _swipeView.currentIndex = root.views.store
+            _storeViewLoader.pendingQuery = query
+        }
+
     }
 }

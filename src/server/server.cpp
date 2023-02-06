@@ -3,110 +3,77 @@
 #include <QGuiApplication>
 #include <QQuickWindow>
 #include <QQmlApplicationEngine>
+#include <QtDBus/QDBusConnectionInterface>
 
-#include <MauiKit/FileBrowsing/fmstatic.h>
+#include "serverinterface.h"
+#include "storeadaptor.h"
 
-#if (defined Q_OS_LINUX || defined Q_OS_FREEBSD) && !defined Q_OS_ANDROID
-#include "vvaveinterface.h"
-#include "vvaveadaptor.h"
-
-QVector<QPair<QSharedPointer<OrgKdeVvaveActionsInterface>, QStringList>> AppInstance::appInstances(const QString& preferredService)
+QSharedPointer<OrgNxStoreActionsInterface> AppInstance::instance()
 {
-    QVector<QPair<QSharedPointer<OrgKdeVvaveActionsInterface>, QStringList>> dolphinInterfaces;
-
-    if (!preferredService.isEmpty())
-    {
-        QSharedPointer<OrgKdeVvaveActionsInterface> preferredInterface(
-                    new OrgKdeVvaveActionsInterface(preferredService,
-                                                   QStringLiteral("/Actions"),
-                                                   QDBusConnection::sessionBus()));
-
-        qDebug() << "IS PREFRFRED INTERFACE VALID?" << preferredInterface->isValid() << preferredInterface->lastError().message();
-        if (preferredInterface->isValid() && !preferredInterface->lastError().isValid()) {
-            dolphinInterfaces.append(qMakePair(preferredInterface, QStringList()));
-        }
-    }
-
     // Look for dolphin instances among all available dbus services.
     QDBusConnectionInterface *sessionInterface = QDBusConnection::sessionBus().interface();
     const QStringList dbusServices = sessionInterface ? sessionInterface->registeredServiceNames().value() : QStringList();
     // Don't match the service without trailing "-" (unique instance)
-    const QString pattern = QStringLiteral("org.kde.vvave-");
+    const QString service = QStringLiteral("org.nx.store");
 
-    // Don't match the pid without leading "-"
-    const QString myPid = QLatin1Char('-') + QString::number(QCoreApplication::applicationPid());
-
-    for (const QString& service : dbusServices)
+    if (dbusServices.contains(service))
     {
-        if (service.startsWith(pattern) && !service.endsWith(myPid))
-        {
-            qDebug() << "EXISTING INTANCES" << service;
+        qDebug() << "EXISTING INTANCES" << service;
 
-            // Check if instance can handle our URLs
-            QSharedPointer<OrgKdeVvaveActionsInterface> interface(
-                        new OrgKdeVvaveActionsInterface(service,
-                                                       QStringLiteral("/Actions"),
-                                                       QDBusConnection::sessionBus()));
-            if (interface->isValid() && !interface->lastError().isValid())
-            {
-                dolphinInterfaces.append(qMakePair(interface, QStringList()));
-            }
+        // Check if instance can handle our URLs
+        QSharedPointer<OrgNxStoreActionsInterface> interface(
+                    new OrgNxStoreActionsInterface(service,
+                                                   QStringLiteral("/Actions"),
+                                                   QDBusConnection::sessionBus()));
+
+        if (interface->isValid() && !interface->lastError().isValid())
+        {
+            return interface;
         }
     }
 
-    return dolphinInterfaces;
+    return nullptr;
 }
 
-bool AppInstance::attachToExistingInstance(const QList<QUrl>& inputUrls, const QString& preferredService)
+bool AppInstance::attachToExistingInstance(const QPair<QString, QString>& options)
 {
     bool attached = false;
 
-    auto dolphinInterfaces = appInstances(preferredService);
-    if (dolphinInterfaces.isEmpty())
+    if (!instance())
     {
         return attached;
     }
 
-    QStringList newUrls;
+    auto interface = instance();
 
-    // check to see if any instances already have any of the given URLs open
-    const auto urls = QUrl::toStringList(inputUrls);
-    for (const QString& url : urls)
+    const auto op = options.first;
+    const auto value = options.second;
+
+    attached = true;
+
+    if(!op.isEmpty())
     {
-        bool urlFound = false;
+        QDBusPendingReply reply;
 
-        for (auto& interface: dolphinInterfaces)
+        if(op == "oa")
         {
-            auto isUrlOpenReply = interface.first->isUrlOpen(url);
-            isUrlOpenReply.waitForFinished();
-
-            if (!isUrlOpenReply.isError() && isUrlOpenReply.value())
-            {
-                interface.second.append(url);
-                urlFound = true;
-                break;
-            }
+            reply = interface->openApp(value);
+        }else if(op == "oc")
+        {
+            reply = interface->openCategory(value);
+        }else if(op == "ov")
+        {
+            qDebug() << "ASKED TO OPEN A VIEW << " << value ;
+            reply = interface->openView(value);
+        }else if(op == "s")
+        {
+            reply = interface->searchFor(value);
         }
 
-        if (!urlFound)
-        {
-            newUrls.append(url);
-        }
-    }
-
-    for (const auto& interface: qAsConst(dolphinInterfaces))
-    {
-        auto reply = interface.first->openFiles(newUrls);
         reply.waitForFinished();
-
-        if (!reply.isError())
-        {
-            interface.first->activateWindow();
-            attached = true;
-            break;
-        }
     }
 
+    interface->activateWindow();
     return attached;
 }
 
@@ -114,14 +81,16 @@ bool AppInstance::registerService()
 {
     QDBusConnectionInterface *iface = QDBusConnection::sessionBus().interface();
 
-    auto registration = iface->registerService(QStringLiteral("org.kde.vvave-%1").arg(QCoreApplication::applicationPid()),
+    auto registration = iface->registerService(QStringLiteral("org.nx.store"),
                                                QDBusConnectionInterface::ReplaceExistingService,
                                                QDBusConnectionInterface::DontAllowReplacement);
 
     if (!registration.isValid())
     {
+        qDebug() << "ERROR REGISTER << org.nx.store";
+
         qWarning("2 Failed to register D-Bus service \"%s\" on session bus: \"%s\"",
-                 qPrintable("org.kde.vvave"),
+                 qPrintable("org.nx.store"),
                  qPrintable(registration.error().message()));
         return false;
     }
@@ -129,20 +98,22 @@ bool AppInstance::registerService()
     return true;
 }
 
-#endif
-
 
 Server::Server(QObject *parent) : QObject(parent)
   , m_qmlObject(nullptr)
 {
-#if (defined Q_OS_LINUX || defined Q_OS_FREEBSD) && !defined Q_OS_ANDROID
+    qDebug() << "TRYIGN TO REGISTER << org.nx.store/Actions";
+
     new ActionsAdaptor(this);
     if(!QDBusConnection::sessionBus().registerObject(QStringLiteral("/Actions"), this))
     {
-        qDebug() << "FAILED TO REGISTER BACKGROUND DBUS OBJECT";
+        qDebug() << "FAILED TO REGISTER NX-SC ACTIONS DBUS OBJECT";
         return;
+    }else
+    {
+        qDebug() << "SUCESSFULL REGISTER << org.nx.store/Actions";
+
     }
-#endif
 }
 
 void Server::setQmlObject(QObject *object)
@@ -173,46 +144,58 @@ void Server::quit()
     QCoreApplication::quit();
 }
 
-void Server::openFiles(const QStringList &urls)
+void Server::openApp(const QString &appId)
 {
     if(m_qmlObject)
     {
-        auto files = filterFiles(urls);
-        if(!files.isEmpty())
+        if(!appId.isEmpty())
         {
-            QMetaObject::invokeMethod(m_qmlObject, "openFiles",
-                                      Q_ARG(QVariant, files));
+            QMetaObject::invokeMethod(m_qmlObject, "openApp",
+                                      Q_ARG(QVariant, appId));
         }
 
     }
 }
 
-bool Server::isUrlOpen(const QString &url)
+void Server::openCategory(const QString &category)
 {
-    bool value = false;
+    if(m_qmlObject)
+    {
+        if(!category.isEmpty())
+        {
+            QMetaObject::invokeMethod(m_qmlObject, "openCategory",
+                                      Q_ARG(QVariant, category));
+        }
+
+    }
+}
+
+void Server::searchFor(const QString &query)
+{
+    if(m_qmlObject)
+    {
+        if(!query.isEmpty())
+        {
+            QMetaObject::invokeMethod(m_qmlObject, "searchFor",
+                                      Q_ARG(QVariant, query));
+        }
+
+    }
+}
+
+void Server::openView(const QString &view)
+{
+    qDebug() << "ASKED TO OPEN A VIEW FOR QML OBJECT << " << view  ;
 
     if(m_qmlObject)
     {
-        QMetaObject::invokeMethod(m_qmlObject, "isUrlOpen",
-                                  Q_RETURN_ARG(bool, value),
-                                  Q_ARG(QString, url));
+        if(!view.isEmpty())
+        {
+
+            QMetaObject::invokeMethod(m_qmlObject, "openView",
+                                      Q_ARG(QVariant, view));
+        }
+
     }
-    return value;
 }
 
-QStringList Server::filterFiles(const QStringList &urls)
-{
-    qDebug() << "REQUEST FILES" << urls;
-    QStringList res;
-    for (const auto &url : urls) {
-        const auto url_ = QUrl::fromUserInput(url);
-        qDebug() << "REQUEST FILES" << url_.toString() << FMStatic::getMime(url_);
-
-        if (FMStatic::checkFileType(FMStatic::FILTER_TYPE::AUDIO, FMStatic::getMime(url_)))
-            res << url_.toString();
-    }
-
-    qDebug() << "REQUEST FILES" << res;
-
-    return res;
-}
