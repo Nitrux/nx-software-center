@@ -22,7 +22,6 @@ apt -qq -yy install --no-install-recommends \
 	mauikit-accounts-git \
 	mauikit-filebrowsing-git \
 	mauikit-git \
-	libappimage-dev \
     zsync2
 
 rm -rf {LICENSE,README.md}

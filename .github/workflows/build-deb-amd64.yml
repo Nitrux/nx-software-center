@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     container:
-      image: ubuntu:jammy
+      image: debian:unstable
       env:
         DEBIAN_FRONTEND: noninteractive
         PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
@@ -34,11 +34,11 @@ jobs:
       - name: Install package cloud
         run: gem install package_cloud
 
-      - name: Add required repo list
-        run: |
-          sudo touch /etc/apt/sources.list.d/neon.list
-          echo "deb http://archive.neon.kde.org/user jammy main" | sudo tee -a /etc/apt/sources.list.d/neon.list
-          curl 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D' | sudo apt-key add -
+      # - name: Add required repo list
+      #   run: |
+      #     sudo touch /etc/apt/sources.list.d/neon.list
+      #     echo "deb http://archive.neon.kde.org/user jammy main" | sudo tee -a /etc/apt/sources.list.d/neon.list
+      #     curl 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D' | sudo apt-key add -
       
       - uses: actions/checkout@v2
       - name: Install build dependencies
