@@ -41,6 +41,8 @@ apt -qq -yy install --no-install-recommends \
 rm -r \
 	/etc/apt/sources.list.d/ubuntu-lunar.list
 
+apt -qq update
+
 ### Install Package Build Dependencies #2
 
 apt -qq -yy install --no-install-recommends \
