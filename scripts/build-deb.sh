@@ -15,6 +15,8 @@ curl -L https://packagecloud.io/nitrux/testing/gpgkey | apt-key add -;
 apt -qq update
 
 ### Update GCC #1
+### Use the libappimage package from Lunar because the version in Jammy is too old, and AppImageUpdate fails to compile due to "undefined references."
+### And also update GCC and CPP because the version of libappimage in Lunar is compiled against GCC 12.2 and CPP 12.
 
 >> ubuntu-lunar.list printf "%s\n" \
     '################' \
@@ -50,6 +52,7 @@ apt -qq -yy install --no-install-recommends \
 rm -rf {LICENSE,README.md}
 
 ### Compile Source
+### Note: Use curl =< 7.81.0 because libcpr will fail to compile against newer versions of curl due to libcpr using a deprecated API call; see https://github.com/libcpr/cpr/issues/870
 
 mkdir -p build && cd build
 
