@@ -33,13 +33,15 @@ apt -qq update
 apt -qq -yy install --no-install-recommends --only-upgrade \
 	gcc
 
+apt -qq -yy install --no-install-recommends \
+	libappimage-dev
+
 rm -r \
 	/etc/apt/sources.list.d/ubuntu-lunar.list
 
 ### Install Package Build Dependencies #2
 
 apt -qq -yy install --no-install-recommends \
-	libappimage-dev/trixie \
 	mauikit-accounts-git \
 	mauikit-filebrowsing-git \
 	mauikit-git \
@@ -91,7 +93,7 @@ checkinstall -D -y \
 	--pakdir=. \
 	--maintainer=uri_herrera@nxos.org \
 	--provides=nx-software-center \
-	--requires="libappimage1.0 \(\>= 1.0.4\),libc6,libgcrypt20,libkf5coreaddons5,libkf5i18n5,libqt5core5a,libqt5gui5,libqt5network5,libqt5qml5,libqt5widgets5,libstdc++6,mauikit-git \(\>= 2.2.2+git\),mauikit-accounts-git \(\>= 2.2.2+git\),mauikit-filebrowsing-git \(\>= 2.2.2+git\),qml-module-qt-labs-platform,qml-module-qtwebview,zsync2,libappimageupdate" \
+	--requires="libappimage1.0abi1 \(\>= 1.0.4\),libc6,libgcrypt20,libkf5coreaddons5,libkf5i18n5,libqt5core5a,libqt5gui5,libqt5network5,libqt5qml5,libqt5widgets5,libstdc++6,mauikit-git \(\>= 2.2.2+git\),mauikit-accounts-git \(\>= 2.2.2+git\),mauikit-filebrowsing-git \(\>= 2.2.2+git\),qml-module-qt-labs-platform,qml-module-qtwebview,zsync2,libappimageupdate" \
 	--nodoc \
 	--strip=no \
 	--stripso=yes \
