@@ -22,8 +22,8 @@ apt -qq update
     '################' \
     '' \
     'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar main restricted universe multiverse' \
-    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse' \
-    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-security main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-updates main restricted universe multiverse' \
     ''
 
 mv ubuntu-lunar.list /etc/apt/sources.list.d/
