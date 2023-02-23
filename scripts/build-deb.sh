@@ -14,9 +14,29 @@ curl -L https://packagecloud.io/nitrux/testing/gpgkey | apt-key add -;
 
 apt -qq update
 
+### Update GCC #1
+
+>> ubuntu-lunar.list printf "%s\n" \
+    '################' \
+    '# Ubuntu Lunar #' \
+    '################' \
+    '' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse' \
+    ''
+
+mv ubuntu-lunar.list /etc/apt/sources.list.d/
+
+apt -qq update
+
+apt -qq -yy install --no-install-recommends --only-upgrade \
+	gcc
+
+rm -r \
+	/etc/apt/sources.list.d/ubuntu-lunar.list
+
 ### Install Package Build Dependencies #2
-### NX Software Center needs ECM > 5.70
-### NX Software Center needs CMake > 3.19
 
 apt -qq -yy install --no-install-recommends \
 	libappimage-dev/trixie \
@@ -71,7 +91,7 @@ checkinstall -D -y \
 	--pakdir=. \
 	--maintainer=uri_herrera@nxos.org \
 	--provides=nx-software-center \
-	--requires="libappimage1.0 \(\>= 1.0.4\),libc6,libgcc-s1,libgcrypt20,libkf5coreaddons5,libkf5i18n5,libqt5core5a,libqt5gui5,libqt5network5,libqt5qml5,libqt5widgets5,libstdc++6,mauikit-git \(\>= 2.2.2+git\),mauikit-accounts-git \(\>= 2.2.2+git\),mauikit-filebrowsing-git \(\>= 2.2.2+git\),qml-module-qt-labs-platform,qml-module-qtwebview,zsync2,libappimageupdate" \
+	--requires="libappimage1.0 \(\>= 1.0.4\),libc6,libgcrypt20,libkf5coreaddons5,libkf5i18n5,libqt5core5a,libqt5gui5,libqt5network5,libqt5qml5,libqt5widgets5,libstdc++6,mauikit-git \(\>= 2.2.2+git\),mauikit-accounts-git \(\>= 2.2.2+git\),mauikit-filebrowsing-git \(\>= 2.2.2+git\),qml-module-qt-labs-platform,qml-module-qtwebview,zsync2,libappimageupdate" \
 	--nodoc \
 	--strip=no \
 	--stripso=yes \
