@@ -23,20 +23,13 @@ Maui.SideBarView
         Maui.Theme.colorSet: Maui.Theme.Window
         anchors.fill: parent
 
-        padding: Maui.Style.space.medium
-
-        ScrollView
-        {
-            anchors.fill: parent
-
-            Flickable
-            {
-                contentHeight: _sideBarLayout.implicitHeight
-
-                Column
+        padding: 0
+      
+                Maui.ScrollColumn
                 {
                     id: _sideBarLayout
-                    width: parent.width
+                               anchors.fill: parent
+
 
                     spacing: Maui.Style.space.big
 
@@ -72,13 +65,13 @@ Maui.SideBarView
                                     {
                                         id: _categoryDelegate
                                         anchors.fill: parent
+ flat: false
                                         property color tagColor : model.color
                                         template.isMask: true
                                         iconVisible: true
                                         iconSource: model.icon
                                         iconSizeHint: Maui.Style.iconSize
                                         tooltipText: model.title
-
 
                                         onDoubleClicked:
                                         {
@@ -97,15 +90,6 @@ Maui.SideBarView
 
                                             }
                                         }
-
-                                        //                                        background: Rectangle
-                                        //                                        {
-                                        //                                            readonly property color m_color : Qt.tint(model.color, Qt.rgba(Maui.Theme.alternateBackgroundColor.r, Maui.Theme.alternateBackgroundColor.g, Maui.Theme.alternateBackgroundColor.b, 0.9))
-
-                                        //                                            color: _categoryDelegate.hovered || _categoryDelegate.containsPress ? Maui.Theme.hoverColor : m_color
-                                        //                                            radius: Maui.Style.radiusV
-
-                                        //                                        }
                                     }
                                 }
                             }
@@ -169,8 +153,6 @@ Maui.SideBarView
                     }
                 }
             }
-        }
-    }
 
     Maui.Page
     {
