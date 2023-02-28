@@ -58,4 +58,9 @@ $APT_COMMAND install -qy --no-install-recommends \
     qtmultimedia5-dev \
     qtpositioning5-dev \
     qtquickcontrols2-5-dev \
-    xxd
+    xxd \
+    libcairo2-dev \
+    librsvg2-dev \
+    qtsystems5-dev \
+    libappimageupdate \
+    zsync2
