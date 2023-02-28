@@ -41,7 +41,7 @@ jobs:
           sudo apt-get update -q
 
           apt -qq -yy install --no-install-recommends \
-            appimageupdate
+            libappimageupdate
 
           rm -r \
             /etc/apt/sources.list.d/nitrux-depot.list
