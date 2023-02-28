@@ -62,3 +62,29 @@ $APT_COMMAND install -qy --no-install-recommends \
     libcairo2-dev \
     librsvg2-dev \
     qtsystems5-dev
+
+
+>> ubuntu-lunar.list printf "%s\n" \
+    '################' \
+    '# Ubuntu Lunar #' \
+    '################' \
+    '' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-security main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-updates main restricted universe multiverse' \
+    ''
+
+mv ubuntu-lunar.list /etc/apt/sources.list.d/
+
+apt -qq update
+
+apt -qq -yy install --no-install-recommends --only-upgrade \
+gcc
+
+apt -qq -yy install --no-install-recommends \
+libappimage-dev
+
+rm -r \
+/etc/apt/sources.list.d/ubuntu-lunar.list
+
+apt -qq update
