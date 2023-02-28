@@ -39,6 +39,17 @@ jobs:
           curl -L https://packagecloud.io/nitrux/testing/gpgkey | apt-key add -;
 
           sudo apt-get update -q
+
+          apt -qq -yy install --no-install-recommends \
+            appimageupdate
+
+          rm -r \
+            /etc/apt/sources.list.d/nitrux-depot.list
+          
+          rm -r \
+            /etc/apt/sources.list.d/nitrux-testing.list
+
+          apt -qq update
       
       - name: Install appimagetool
         run: |
