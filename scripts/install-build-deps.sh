@@ -64,6 +64,9 @@ $APT_COMMAND install -qy --no-install-recommends \
     qtsystems5-dev
 
 
+# Update GCC #1
+# Use the libappimage package from Lunar because the version in Jammy is too old, and AppImageUpdate fails to compile due to "undefined references."
+# And also update GCC and CPP because the version of libappimage in Lunar is compiled against GCC 12.2 and CPP 12.
 >> ubuntu-lunar.list printf "%s\n" \
     '################' \
     '# Ubuntu Lunar #' \
@@ -86,5 +89,26 @@ libappimage-dev
 
 rm -r \
 /etc/apt/sources.list.d/ubuntu-lunar.list
+
+apt -qq update
+
+
+# Install appimageupdate from Nitrux repo since building it is giving some errors now.
+wget -qO /etc/apt/sources.list.d/nitrux-depot.list https://raw.githubusercontent.com/Nitrux/iso-tool/legacy/configs/files/sources/sources.list.nitrux
+wget -qO /etc/apt/sources.list.d/nitrux-testing.list https://raw.githubusercontent.com/Nitrux/iso-tool/legacy/configs/files/sources/sources.list.nitrux.testing
+curl -L https://packagecloud.io/nitrux/depot/gpgkey | apt-key add -;
+curl -L https://packagecloud.io/nitrux/unison/gpgkey | apt-key add -;
+curl -L https://packagecloud.io/nitrux/testing/gpgkey | apt-key add -;
+
+sudo apt-get update -q
+
+apt -qq -yy install --no-install-recommends \
+  libappimageupdate zsync2
+
+rm -r \
+  /etc/apt/sources.list.d/nitrux-depot.list
+
+rm -r \
+  /etc/apt/sources.list.d/nitrux-testing.list
 
 apt -qq update
