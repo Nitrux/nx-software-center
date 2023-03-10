@@ -20,7 +20,7 @@ $APT_COMMAND install -qy --no-install-recommends \
     git \
     gtk-update-icon-cache \
     kquickimageeditor-dev \
-    libappimage \
+    libappimage-dev \
     libboost-program-options-dev \
     libboost-system-dev \
     libboost-test-dev \
