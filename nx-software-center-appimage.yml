@@ -7,7 +7,7 @@ script:
   - scripts/install-build-deps.sh
   - mkdir -p build
   - cd build
-  # - ../scripts/deploy-appimageupdate.sh
+  - ../scripts/deploy-appimageupdate.sh
   - ../scripts/deploy-mauiman.sh
   - ../scripts/deploy-mauikit.sh
   - ../scripts/deploy-mauikit-filebrowsing.sh
@@ -25,7 +25,7 @@ AppDir:
     exec_args: $@
   runtime:
     env:
-      PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
+      # PATH: '${APPDIR}/usr/bin:${APPDIR}/bin:${APPDIR}/usr/lib/x86_64-linux-gnu/libexec/kf5:${PATH}'
       APPDIR_LIBRARY_PATH: "$APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib:$APPDIR/usr/lib/x86_64-linux-gnu"
       QT_QUICK_CONTROLS_STYLE: "maui-style"
   after_bundle:
@@ -35,12 +35,15 @@ AppDir:
     - amd64
     allow_unauthenticated: true
     sources:
-    - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse
-    - sourceline: deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
+    - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse
+    - sourceline: deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
       key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3B4FE6ACC0B21F32'
-    - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse
-    - sourceline: deb http://archive.neon.kde.org/user focal main
+    - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse
+    - sourceline: deb http://archive.neon.kde.org/user jammy main
       key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE6D4736255751E5D'
+    - sourceline: deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar main restricted universe multiverse
+    - sourceline: deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-security main restricted universe multiverse
+    - sourceline: deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-updates main restricted universe multiverse
     # - sourceline: deb https://packagecloud.io/nitrux/repo/debian/ trixie main
     #   key_url: 'https://packagecloud.io/nitrux/repo/gpgkey'
 
@@ -63,9 +66,10 @@ AppDir:
     - libkf5kiofilewidgets5
     - libkf5kiocore5
     - kio
+    - libqt5systeminfo5
 
     # Other
-    - libappimage1.0
+    - libappimage1.0abi1
     - qml-module-org-kde-kirigami2
 
     exclude:

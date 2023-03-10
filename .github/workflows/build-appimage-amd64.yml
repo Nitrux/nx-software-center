@@ -15,8 +15,8 @@ jobs:
 
     env:
       BRANCH_MAUIMAN: v1.0.1
-      BRANCH_MAUIKIT: v2.2.1
-      BRANCH_MAUIKIT_FILEBROWSING: master
+      BRANCH_MAUIKIT: v2.2.2
+      BRANCH_MAUIKIT_FILEBROWSING: v2.2.2
 
     steps:
       - name: Install basic packages
