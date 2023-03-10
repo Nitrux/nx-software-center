@@ -14,7 +14,7 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
 
     env:
-      BRANCH_MAUIMAN: v1.0.1
+      BRANCH_MAUIMAN: v1.0.2
       BRANCH_MAUIKIT: v2.2.2
       BRANCH_MAUIKIT_FILEBROWSING: v2.2.2
 
