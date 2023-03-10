@@ -20,7 +20,6 @@ $APT_COMMAND install -qy --no-install-recommends \
     git \
     gtk-update-icon-cache \
     kquickimageeditor-dev \
-    libappimage-dev \
     libboost-program-options-dev \
     libboost-system-dev \
     libboost-test-dev \
@@ -63,3 +62,32 @@ $APT_COMMAND install -qy --no-install-recommends \
     libcairo2-dev \
     librsvg2-dev \
     qtsystems5-dev
+
+
+# Update GCC #1
+# Use the libappimage package from Lunar because the version in Jammy is too old, and AppImageUpdate fails to compile due to "undefined references."
+# And also update GCC and CPP because the version of libappimage in Lunar is compiled against GCC 12.2 and CPP 12.
+>> ubuntu-lunar.list printf "%s\n" \
+    '################' \
+    '# Ubuntu Lunar #' \
+    '################' \
+    '' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-security main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-updates main restricted universe multiverse' \
+    ''
+
+mv ubuntu-lunar.list /etc/apt/sources.list.d/
+
+apt -qq update
+
+apt -qq -yy install --no-install-recommends --only-upgrade \
+gcc
+
+apt -qq -yy install --no-install-recommends \
+libappimage-dev
+
+rm -r \
+/etc/apt/sources.list.d/ubuntu-lunar.list
+
+apt -qq update
