@@ -13,7 +13,6 @@ $APT_COMMAND install -qy --no-install-recommends \
     build-essential \
     checkinstall \
     cmake \
-    curl \
     desktop-file-utils \
     extra-cmake-modules \
     gettext \
@@ -61,7 +60,8 @@ $APT_COMMAND install -qy --no-install-recommends \
     xxd \
     libcairo2-dev \
     librsvg2-dev \
-    qtsystems5-dev
+    qtsystems5-dev \
+    libarchive-dev
 
 
 # Update GCC #1
