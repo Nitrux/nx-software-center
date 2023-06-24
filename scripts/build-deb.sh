@@ -18,17 +18,17 @@ apt -qq update
 ### Use the libappimage package from Lunar because the version in Jammy is too old, and AppImageUpdate fails to compile due to "undefined references."
 ### And also update GCC and CPP because the version of libappimage in Lunar is compiled against GCC 12.2 and CPP 12.
 
->> ubuntu-lunar.list printf "%s\n" \
-    '################' \
-    '# Ubuntu Lunar #' \
+>> ubuntu-mantic.list printf "%s\n" \
+    '#################' \
+    '# Ubuntu Mantic #' \
     '################' \
     '' \
-    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar main restricted universe multiverse' \
-    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-security main restricted universe multiverse' \
-    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu lunar-updates main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu mantic main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu mantic-security main restricted universe multiverse' \
+    'deb [arch=amd64] http://archive.ubuntu.com/ubuntu mantic-updates main restricted universe multiverse' \
     ''
 
-mv ubuntu-lunar.list /etc/apt/sources.list.d/
+mv ubuntu-mantic.list /etc/apt/sources.list.d/
 
 apt -qq update
 
@@ -39,7 +39,7 @@ apt -qq -yy install --no-install-recommends \
 	libappimage-dev
 
 rm -r \
-	/etc/apt/sources.list.d/ubuntu-lunar.list
+	/etc/apt/sources.list.d/ubuntu-mantic.list
 
 apt -qq update
 
@@ -98,7 +98,7 @@ checkinstall -D -y \
 	--pakdir=. \
 	--maintainer=uri_herrera@nxos.org \
 	--provides=nx-software-center \
-	--requires="libappimage1.0abi1 \(\>= 1.0.4\),libc6,libgcrypt20,libkf5coreaddons5,libkf5i18n5,libqt5core5a,libqt5gui5,libqt5network5,libqt5qml5,libqt5widgets5,libstdc++6,mauikit-git \(\>= 2.2.2+git\),mauikit-accounts-git \(\>= 2.2.2+git\),mauikit-filebrowsing-git \(\>= 2.2.2+git\),qml-module-qt-labs-platform,qml-module-qtwebview,zsync2,libappimageupdate" \
+	--requires="libappimage1.0abi1 \(\>= 1.0.4\),libc6,libgcrypt20,libkf5coreaddons5,libkf5i18n5,libqt5core5a,libqt5gui5,libqt5network5,libqt5qml5,libqt5widgets5,libstdc++6,mauikit-git \(\>= 3.0.0+git\),mauikit-accounts-git \(\>= 3.0.0+git\),mauikit-filebrowsing-git \(\>= 3.0.0+git\),qml-module-qt-labs-platform,qml-module-qtwebview,zsync2,libappimageupdate" \
 	--nodoc \
 	--strip=no \
 	--stripso=yes \
