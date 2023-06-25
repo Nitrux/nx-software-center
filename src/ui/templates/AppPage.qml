@@ -126,6 +126,7 @@ Maui.Page
                         label1.font.bold: true
                         label1.font.pointSize: Maui.Style.fontSizes.enormous *2
                         label2.text: String("<a href='%1'>%1</a>").arg(appInfo.personid)
+                        label2.textFormat: Text.AutoText
                         template.leftLabels.spacing: Maui.Style.space.medium
                         rowSpacing: Maui.Style.space.big
                         template.spacing: Maui.Style.space.huge
@@ -214,6 +215,7 @@ Maui.Page
                     title: appInfo.name
                     description: appInfo.description
                     template.label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    label2.textFormat: Text.AutoText
                 }
 
 
