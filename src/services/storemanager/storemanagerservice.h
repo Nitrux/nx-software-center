@@ -1,6 +1,5 @@
 #pragma once
 
-#include "apprepostoremanager.h"
 #include "appimagehubstoremanager.h"
 #include "../../stores/store.h"
 #include "../../stores/ResponseDTO/category.h"
@@ -22,8 +21,6 @@ class StoreManagerService : public QObject {
 
     private:
         void initStoreManagers();
-        void getApprepoCategories(CategoryResponseDTO *response);
 
-        ApprepoStoreManager *_apprepoStoreManager = nullptr;
         AppimagehubStoreManager *_appimagehubStoreManager = nullptr;
 };

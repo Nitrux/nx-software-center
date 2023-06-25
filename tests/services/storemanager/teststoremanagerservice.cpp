@@ -46,27 +46,6 @@ void TestStoreManagerService::testGetApplications()
     QVERIFY(applicationResult->applications.size() <= 10);
 }
 
-void TestStoreManagerService::testGetApprepoApplications()
-{
-    QSignalSpy spyGetApprepoApplications(_storeManagerService, SIGNAL(applicationsResponseReady(ApplicationResponseDTO *)));
-
-    const auto categoryId = "0";
-    auto *category = new Category();
-    category->id = "1";
-    category->categoryStore = Category::CategoryStore::APPREPO;
-
-    _storeManagerService->getApplications({categoryId}, "", Store::SORT_MODE::MODE_NEWEST, "", "", {}, "", Store::Arch::all, category);
-
-    spyGetApprepoApplications.wait();
-
-    QCOMPARE(spyGetApprepoApplications.length(), 1);
-
-    auto arguments = spyGetApprepoApplications.takeFirst();
-    const auto &applicationResult = qvariant_cast<ApplicationResponseDTO*>(arguments.at(0));
-
-    QVERIFY(applicationResult->applications.size() > 0);
-}
-
 void TestStoreManagerService::testGetAppimagehubApplications()
 {
     QSignalSpy spyGetAppimagehubApplications(_storeManagerService, SIGNAL(applicationsResponseReady(ApplicationResponseDTO *)));

@@ -17,7 +17,6 @@ class TestStoreManagerService : public QObject
 
         void testGetCategories();
         void testGetApplications();
-        void testGetApprepoApplications();
         void testGetAppimagehubApplications();
 
         void cleanupTestCase();
