@@ -7,15 +7,10 @@ add_executable(
     ../../../src/stores/ResponseDTO/category.cpp
     ../../../src/stores/ResponseDTO/categoryresponsedto.h
     ../../../src/stores/ResponseDTO/applicationresponsedto.h
-    ../../../src/stores/ResponseDTO/apprepo/apprepogroupresponsedto.cpp
-    ../../../src/stores/ResponseDTO/apprepo/apprepopackageresponsedto.cpp
-    ../../../src/stores/ResponseDTO/apprepo/apprepoversiondto.cpp
     ../../../src/stores/store.h
     ../../../src/stores/opendesktopstore.cpp
-    ../../../src/stores/apprepostore.cpp
     ../../../src/stores/appimagehubstore.cpp
     ../../../src/services/storemanager/storemanager.h
-    ../../../src/services/storemanager/apprepostoremanager.cpp
     ../../../src/services/storemanager/appimagehubstoremanager.cpp
     ../../../src/services/storemanager/storemanagerservice.cpp
 )

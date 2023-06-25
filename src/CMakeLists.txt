@@ -21,7 +21,6 @@ set(nx_SRCS
     models/ApplicationsRegistryProxyModel.cpp
     models/TasksListModel.cpp
     services/storemanager/storemanagerservice.cpp
-    services/storemanager/apprepostoremanager.cpp
     services/storemanager/appimagehubstoremanager.cpp
     utils/appimagetools.cpp
     services/registry/ApplicationsRegistry.cpp
@@ -62,19 +61,14 @@ set(nx_RSRCS
 set(nx_STORES_SRCS
     stores/opendesktopstore.cpp
     stores/appimagehubstore.cpp
-    stores/apprepostore.cpp
     stores/ResponseDTO/category.cpp
     stores/ResponseDTO/pling_store_application_data.cpp
-    stores/ResponseDTO/apprepo/apprepogroupresponsedto.cpp
-    stores/ResponseDTO/apprepo/apprepopackageresponsedto.cpp
-    stores/ResponseDTO/apprepo/apprepoversiondto.cpp
     )
 
 set(nx_STORES_HDRS
     stores/store.h
     stores/opendesktopstore.h
     stores/appimagehubstore.h
-    stores/apprepostore.h
 
     stores/ResponseDTO/category.h
     stores/ResponseDTO/categoryresponsedto.h

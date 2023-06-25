@@ -15,8 +15,7 @@ public:
     Category(QObject* parent = nullptr);
 
     enum CategoryStore {
-        APPIMAGEHUB = 0,
-        APPREPO = 1
+        APPIMAGEHUB = 0
     };
     Q_ENUM(CategoryStore);
 

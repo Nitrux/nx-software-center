@@ -17,25 +17,9 @@ void StoreManagerService::getApplications(QList<QString> categoriesFilter, QStri
                                           Store::Arch arch, Category *category) {
     initStoreManagers();
 
-    if ( category->categoryStore == Category::CategoryStore::APPREPO ) {
-        // Invoke apprepo api
-        if ( page=="0" || page=="" ) {
-            _apprepoStoreManager->setPackageFilter(category->id.toInt(), nameFilter);
-            _apprepoStoreManager->getApplications();
-        }
-    } else {
-        // Invoke appimagehub api
-        _appimagehubStoreManager->setApplicationSearchFilter(categoriesFilter, nameFilter, sortMode, page, pageSize, tags, user, arch);
-        _appimagehubStoreManager->getApplications();
-
-        if ( nameFilter.size() > 0 ) {
-            // Invoke apprepo api
-            if ( page=="0" || page=="" ) {
-                _apprepoStoreManager->setPackageFilter(category->id.toInt(), nameFilter);
-                _apprepoStoreManager->getApplications();
-            }
-        }
-    }
+    // Invoke appimagehub api
+    _appimagehubStoreManager->setApplicationSearchFilter(categoriesFilter, nameFilter, sortMode, page, pageSize, tags, user, arch);
+    _appimagehubStoreManager->getApplications();
 }
 
 void StoreManagerService::initStoreManagers() {
@@ -43,24 +27,7 @@ void StoreManagerService::initStoreManagers() {
     if ( _appimagehubStoreManager == nullptr ) {
         _appimagehubStoreManager = new AppimagehubStoreManager(this);
 
-        connect(_appimagehubStoreManager, &AppimagehubStoreManager::categoriesResponseReady, this, &StoreManagerService::getApprepoCategories);
+        connect(_appimagehubStoreManager, &AppimagehubStoreManager::categoriesResponseReady, this, &StoreManagerService::categoriesResponseReady);
         connect(_appimagehubStoreManager, &AppimagehubStoreManager::applicationsResponseReady, this, &StoreManagerService::applicationsResponseReady);
     }
-
-    // Initialize the apprepo store manager
-    if ( _apprepoStoreManager == nullptr ) {
-        _apprepoStoreManager = new ApprepoStoreManager(this);
-
-        connect(_apprepoStoreManager, &ApprepoStoreManager::categoriesResponseReady, this, &StoreManagerService::categoriesResponseReady);
-        connect(_apprepoStoreManager, &ApprepoStoreManager::applicationsResponseReady, this, &StoreManagerService::applicationsResponseReady);
-    }
-}
-
-void StoreManagerService::getApprepoCategories(CategoryResponseDTO *appimagehubResponse) {
-    initStoreManagers();
-
-    // Set the app image hub category so that the apprepo categories can be added as subcategories
-    _apprepoStoreManager->setCategoryFilter(appimagehubResponse);
-        
-    _apprepoStoreManager->getCategories();
 }
