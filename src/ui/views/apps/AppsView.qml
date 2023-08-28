@@ -12,15 +12,15 @@ Maui.Page
 {
     id: control
 
-    Maui.Dialog
+    Maui.InfoDialog
     {
         id: appLaunchErrorDialog
 
         title: i18n("Error")
         message: i18n("Error launching application")
-        rejectButton.visible: false
+        standardButtons: Dialog.Ok
 
-        acceptButton.onClicked:
+        onAccepted:
         {
             appLaunchErrorDialog.visible = false;
         }
@@ -42,15 +42,15 @@ Maui.Page
         }
     }
 
-    Maui.Dialog
+    Maui.InfoDialog
     {
         id: appUpdateDialog
 
         title: i18n("AppImage Update")
         message: i18n("Please wait...")
-        rejectButton.visible: false
+        standardButtons: Dialog.Ok
 
-        acceptButton.onClicked:
+       onAccepted:
         {
             appUpdateDialog.visible = false;
         }
@@ -63,7 +63,7 @@ Maui.Page
         }
     }
 
-    Maui.Dialog
+    Maui.InfoDialog
     {
         id: appRemoveDialog
 
@@ -73,8 +73,9 @@ Maui.Page
         title: i18n("Remove")
         message: i18n("Are you sure you want to remove " + targetAppName + "?")
         template.iconSource: "emblem-warning"
-        page.margins: Maui.Style.space.big
+
         spacing: Maui.Style.space.medium
+
         onRejected: appRemoveDialog.close()
         onAccepted: {
             DeleteService.deleteApplication(targetAppData);
@@ -297,13 +298,13 @@ Maui.Page
         function onAppUpdateError(err) {
             console.log("AppImage update error.");
             appUpdateDialog.showDialog(_appsListView.model.get(_appsListView.currentIndex).path.split("/").pop(),
-                err);
+                                       err);
         }
     }
     Component.onCompleted:
     {
-            var appList = ApplicationsRegistry.getApplications();
-//            UpdateService.checkUpdates(appList);
+        var appList = ApplicationsRegistry.getApplications();
+        //            UpdateService.checkUpdates(appList);
     }
 }
 

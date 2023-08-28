@@ -2,7 +2,7 @@
 #define APP_H
 
 #include <QObject>
-#include <MauiKit/Core/fmh.h>
+#include <MauiKit3/Core/fmh.h>
 
 class PlingStoreApplicationData;
 class App : public QObject

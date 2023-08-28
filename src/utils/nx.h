@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QUrl>
-#include <MauiKit/FileBrowsing/fmstatic.h>
+#include <MauiKit3/FileBrowsing/fmstatic.h>
 
 namespace NX
 {

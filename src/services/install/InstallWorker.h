@@ -2,7 +2,7 @@
 // system
 
 // libraries
-#include <MauiKit/FileBrowsing/downloader.h>
+#include <MauiKit3/FileBrowsing/downloader.h>
 #include <QObject>
 
 // local

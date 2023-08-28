@@ -3,7 +3,7 @@
 
 // libraries
 #include <KI18n/KLocalizedString>
-#include <MauiKit/FileBrowsing/thumbnailer.h>
+#include <MauiKit3/FileBrowsing/thumbnailer.h>
 #include <QCommandLineParser>
 #include <QDate>
 #include <QIcon>
