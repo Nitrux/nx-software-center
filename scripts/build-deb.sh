@@ -48,7 +48,9 @@ apt -qq update
 apt -qq -yy install --no-install-recommends \
 	mauikit-accounts-git \
 	mauikit-filebrowsing-git \
-	mauikit-git \
+	mauikit-git
+
+apt -qq -yy Dpkg::Options::="--force-overwrite" install --no-install-recommends \
 	zsync2
 
 rm -rf {LICENSE,README.md}
