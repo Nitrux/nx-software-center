@@ -51,6 +51,7 @@ apt -qq -yy install --no-install-recommends \
 	mauikit-git
 
 apt -qq -yy Dpkg::Options::="--force-overwrite" install --no-install-recommends \
+	libappimageupdate \
 	zsync2
 
 rm -rf {LICENSE,README.md}
