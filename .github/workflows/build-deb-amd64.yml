@@ -9,9 +9,7 @@ on:
         default: 'testing'
         type: choice
         options:
-        - repo
         - testing
-        - compat
       packageVersion:
         description: 'Package Version'
         required: true
