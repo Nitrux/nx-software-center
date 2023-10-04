@@ -72,7 +72,7 @@ Maui.Page
 
         title: i18n("Remove")
         message: i18n("Are you sure you want to remove " + targetAppName + "?")
-        template.iconSource: "emblem-warning"
+        template.iconSource: "dialog-warning"
 
         spacing: Maui.Style.space.medium
 
