@@ -2,7 +2,7 @@ name: Nitrux Software Center AppImage
 
 on:
   push:
-    branches: [ master ]
+    branches: [ qt6 ]
 
 jobs:
   build-appimage:
@@ -63,3 +63,4 @@ jobs:
           title: "continuous"
           files: |
             ./*.AppImage*
+        if: github.ref == 'refs/heads/master'
