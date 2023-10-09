@@ -25,7 +25,7 @@ add_executable(
 
 kde_source_files_enable_exceptions(test_applications_registry ../src/utils/appimagetools.cpp)
 target_include_directories(test_applications_registry PRIVATE ../src/)
-target_link_libraries(test_applications_registry PRIVATE MauiKit MauiKit::FileBrowsing Qt5::Sql Qt5::Widgets Qt5::Test libappimage)
+target_link_libraries(test_applications_registry PRIVATE MauiKit3 MauiKit3::FileBrowsing Qt5::Sql Qt5::Widgets Qt5::Test libappimage)
 
 add_test(NAME testApplicationsRegistry COMMAND test_applications_registry)
 

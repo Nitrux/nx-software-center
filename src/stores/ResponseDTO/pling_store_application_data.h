@@ -6,7 +6,7 @@
 #include <QString>
 #include <QUrl>
 
-#include <MauiKit/FileBrowsing/downloader.h>
+#include <MauiKit3/FileBrowsing/downloader.h>
 
 #include "category.h"
 

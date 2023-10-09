@@ -50,7 +50,7 @@ apt -qq -yy install --no-install-recommends \
 	mauikit-filebrowsing-git \
 	mauikit-git
 
-apt -qq -yy Dpkg::Options::="--force-overwrite" install --no-install-recommends \
+apt -qq -yy -o Dpkg::Options::="--force-overwrite" install --no-install-recommends \
 	libappimageupdate \
 	zsync2
 

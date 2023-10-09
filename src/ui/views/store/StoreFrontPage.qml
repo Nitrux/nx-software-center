@@ -24,135 +24,134 @@ Maui.SideBarView
         anchors.fill: parent
 
         padding: 0
-      
-                Maui.ScrollColumn
+
+        Maui.ScrollColumn
+        {
+            id: _sideBarLayout
+            anchors.fill: parent
+
+            spacing: Maui.Style.space.big
+
+            Maui.SectionGroup
+            {
+                title: i18n("Categories")
+                width: parent.width
+
+                GridLayout
                 {
-                    id: _sideBarLayout
-                               anchors.fill: parent
+                    Layout.fillWidth: true
 
+                    columns: 3
+                    columnSpacing: Maui.Style.space.small
+                    rowSpacing: Maui.Style.space.small
 
-                    spacing: Maui.Style.space.big
-
-                    Maui.SectionGroup
+                    Repeater
                     {
-                        title: i18n("Categories")
-                        width: parent.width
-
-                        GridLayout
+                        model: Maui.BaseModel
                         {
+                            id: _categoriesModel
+                            list: _categoriesList
+                        }
+
+                        delegate:  Item
+                        {
+                            Layout.preferredHeight: Math.min(50, width)
+                            //                                    Layout.preferredWidth: 50
                             Layout.fillWidth: true
+                            Layout.fillHeight: true
 
-                            columns: 3
-                            columnSpacing: Maui.Style.space.small
-                            rowSpacing: Maui.Style.space.small
-
-                            Repeater
+                            Maui.GridBrowserDelegate
                             {
-                                model: Maui.BaseModel
-                                {
-                                    id: _categoriesModel
-                                    list: _categoriesList
-                                }
+                                id: _categoryDelegate
+                                anchors.fill: parent
+                                flat: false
+                                property color tagColor : model.color
+                                template.isMask: true
+                                iconVisible: true
+                                iconSource: model.icon
+                                iconSizeHint: Maui.Style.iconSize
+                                tooltipText: model.title
 
-                                delegate:  Item
+                                onDoubleClicked:
                                 {
-                                    Layout.preferredHeight: Math.min(50, width)
-//                                    Layout.preferredWidth: 50
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-
-                                    Maui.GridBrowserDelegate
+                                    if(!Maui.Handy.singleClick)
                                     {
-                                        id: _categoryDelegate
-                                        anchors.fill: parent
- flat: false
-                                        property color tagColor : model.color
-                                        template.isMask: true
-                                        iconVisible: true
-                                        iconSource: model.icon
-                                        iconSizeHint: Maui.Style.iconSize
-                                        tooltipText: model.title
+                                        control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
 
-                                        onDoubleClicked:
-                                        {
-                                            if(!Maui.Handy.singleClick)
-                                            {
-                                                control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
-
-                                            }
-                                        }
-
-                                        onClicked:
-                                        {
-                                            if(Maui.Handy.singleClick || Maui.handy.hasTransientTouchInput)
-                                            {
-                                                control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
-
-                                            }
-                                        }
                                     }
                                 }
-                            }
-                        }
-                    }
 
-
-                    Column
-                    {
-                        width: parent.width
-                        spacing: Maui.Style.space.medium
-                        Maui.ListBrowserDelegate
-                        {
-                            width: parent.width
-                            label1.text: i18n("Newest")
-                            iconSource: "draw-star"
-                            iconSizeHint: Maui.Style.iconSize
-                            template.isMask: true
-                        }
-
-                        Maui.ListBrowserDelegate
-                        {
-                            width: parent.width
-                            label1.text: i18n("Hot")
-                            iconSource: "love"
-                            iconSizeHint: Maui.Style.iconSize
-                            template.isMask: true
-                        }
-
-                        Maui.ListBrowserDelegate
-                        {
-                            width: parent.width
-                            label1.text: i18n("Our picks")
-                            iconSource: "alarm"
-                            iconSizeHint: Maui.Style.iconSize
-                            template.isMask: true
-                        }
-                    }
-
-                    Maui.SectionGroup
-                    {
-                        title: i18n("Tags")
-//                        description : i18n("Common tags")
-                        width: parent.width
-                        Flow
-                        {
-                            id: _tags
-                            Layout.fillWidth: true
-                            Repeater
-                            {
-                                model: ["Convergent", "Mobile", "ARM", "x86", "Maui", "Email", "Android"]
-
-                                delegate: Maui.Chip
+                                onClicked:
                                 {
+                                    if(Maui.Handy.singleClick || Maui.handy.hasTransientTouchInput)
+                                    {
+                                        control.categoryClicked(_categoriesList.getCategory(_categoriesModel.get(index).id))
 
-                                    label.text: modelData
-                                    iconSource: "tag"
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+
+            Column
+            {
+                width: parent.width
+                spacing: Maui.Style.space.medium
+                Maui.ListBrowserDelegate
+                {
+                    width: parent.width
+                    label1.text: i18n("Newest")
+                    iconSource: "draw-star"
+                    iconSizeHint: Maui.Style.iconSize
+                    template.isMask: true
+                }
+
+                Maui.ListBrowserDelegate
+                {
+                    width: parent.width
+                    label1.text: i18n("Hot")
+                    iconSource: "love"
+                    iconSizeHint: Maui.Style.iconSize
+                    template.isMask: true
+                }
+
+                Maui.ListBrowserDelegate
+                {
+                    width: parent.width
+                    label1.text: i18n("Our picks")
+                    iconSource: "alarm"
+                    iconSizeHint: Maui.Style.iconSize
+                    template.isMask: true
+                }
+            }
+
+            Maui.SectionGroup
+            {
+                title: i18n("Tags")
+                //                        description : i18n("Common tags")
+                width: parent.width
+                Flow
+                {
+                    id: _tags
+                    Layout.fillWidth: true
+                    spacing: Maui.Style.space.medium
+                    Repeater
+                    {
+                        model: ["Convergent", "Mobile", "ARM", "x86", "Maui", "Email", "Android"]
+
+                        delegate: Maui.Chip
+                        {
+
+                            label.text: modelData
+                            iconSource: "tag"
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     Maui.Page
     {

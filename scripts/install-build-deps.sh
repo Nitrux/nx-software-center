@@ -61,7 +61,8 @@ $APT_COMMAND install -qy --no-install-recommends \
     libcairo2-dev \
     librsvg2-dev \
     qtsystems5-dev \
-    libarchive-dev
+    libarchive-dev \
+    libgtest-dev
 
 
 # Update GCC #1

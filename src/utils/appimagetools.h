@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QUrl>
-#include <MauiKit/Core/fmh.h>
+#include <MauiKit3/Core/fmh.h>
 
 class AppImageTools : public QObject
 {
