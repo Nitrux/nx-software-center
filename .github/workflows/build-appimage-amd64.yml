@@ -14,9 +14,9 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
 
     env:
-      BRANCH_MAUIMAN: v3.0.2
-      BRANCH_MAUIKIT: v3.0.2
-      BRANCH_MAUIKIT_FILEBROWSING: v3.0.2
+      BRANCH_MAUIMAN: v3.0.1
+      BRANCH_MAUIKIT: v3.0.1
+      BRANCH_MAUIKIT_FILEBROWSING: v3.0.1
 
     steps:
       - name: Install basic packages
