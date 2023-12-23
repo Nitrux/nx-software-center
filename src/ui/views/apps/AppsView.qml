@@ -74,6 +74,8 @@ Maui.Page
         message: i18n("Are you sure you want to remove " + targetAppName + "?")
         template.iconSource: "dialog-warning"
 
+        standardButtons: Dialog.Yes | Dialog.No
+
         spacing: Maui.Style.space.medium
 
         onRejected: appRemoveDialog.close()
