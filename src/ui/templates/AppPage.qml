@@ -107,32 +107,37 @@ Maui.Page
                     Layout.fillWidth: true
                     clip: true
 
-                    Maui.FlexListItem
+                    GridLayout
                     {
                         id: _bannerInfo
                         width: parent.width
-                        padding: Maui.Style.space.medium
                         //                    anchors.fill: parent
+                        columns: root.isWide ? 3 : 2
                         anchors.centerIn: parent
-                        wide: root.isWide
+                        rowSpacing: Maui.Style.space.big
+
+                       Maui.ListItemTemplate
+                       {
+                           Layout.fillWidth: true
+                           // Layout.column: 0
+                           // Layout.row: 0
                         iconSource: "package"
                         iconSizeHint: Maui.Style.iconSizes.huge
                         imageSource: appInfo.smallpic
-                        template.fillMode: Image.PreserveAspectFit
+                        fillMode: Image.PreserveAspectFit
                         label1.text: appInfo.name
                         label1.elide: Text.ElideMiddle
                         label1.wrapMode: Text.WrapAnywhere
                         label1.font.weight: Font.Bold
                         label1.font.bold: true
-                        label1.font.pointSize: Maui.Style.fontSizes.enormous *2
+                        label1.font.pointSize: Maui.Style.fontSizes.enormous
                         label2.text: String("<a href='%1'>%1</a>").arg(appInfo.personid)
                         label2.textFormat: Text.RichText
-                        template.leftLabels.spacing: Maui.Style.space.medium
-                        rowSpacing: Maui.Style.space.big
-                        template.spacing: Maui.Style.space.huge
+                        leftLabels.spacing: Maui.Style.space.medium
+                        spacing: Maui.Style.space.huge
                         //                    label3.text: appInfo.personid
 
-                        template.leftLabels.data: Row
+                        leftLabels.data: Row
                         {
                             id: _actionButtons
                             //                        Layout.fillWidth: parent.wide
@@ -140,69 +145,53 @@ Maui.Page
                             //                        spacing: Maui.Style.space.medium
                             Layout.preferredHeight: implicitHeight
                         }
+                       }
 
                         Maui.Chip
                         {
-
                             color: "#21be2b"
                             label.text: appInfo.server
-
-
                         }
 
                         RowLayout
                         {
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignCenter
-                            spacing: Maui.Style.space.big
+                            // Layout.fillWidth: true
+                            // Layout.alignment: Qt.AlignCenter
+                            spacing: Maui.Style.space.medium
 
                             Maui.GridItemTemplate
                             {
-                                Layout.fillWidth: true
-                                implicitWidth:  64
-                                implicitHeight: 64
+                                implicitWidth:  58
+                                implicitHeight: 58
                                 isMask: true
 
                                 iconSource: "rating"
                                 iconSizeHint: Maui.Style.iconSizes.medium
                                 labelSizeHint: 22
                                 label1.text: appInfo.score
-                                label1.font.bold: true
-                                label1.font.weight: Font.Bold
-                                label1.font.pointSize: Maui.Style.fontSizes.big
                             }
 
                             Maui.GridItemTemplate
                             {
-                                Layout.fillWidth: true
-                                implicitWidth:  64
-                                implicitHeight: 64
+                                implicitWidth:  58
+                                implicitHeight: 58
                                 iconSource: "download"
                                 iconSizeHint: Maui.Style.iconSizes.medium
                                 labelSizeHint: 22
                                 isMask: true
                                 label1.text: appInfo.totaldownloads
-                                label1.font.bold: true
-                                label1.font.weight: Font.Bold
-                                label1.font.pointSize: Maui.Style.fontSizes.big
                             }
 
                             Maui.GridItemTemplate
                             {
-                                Layout.fillWidth: true
-
-                                implicitWidth:  64
-                                implicitHeight: 64
+                                implicitWidth:  58
+                                implicitHeight: 58
                                 isMask: true
 
                                 iconSource: "license"
                                 iconSizeHint: Maui.Style.iconSizes.medium
                                 labelSizeHint: 22
                                 label1.text: appInfo.license || i18n("Unknown")
-                                label1.font.bold: true
-                                label1.font.weight: Font.Bold
-                                label1.font.pointSize: Maui.Style.fontSizes.big
-
                             }
                         }
                     }
@@ -258,7 +247,7 @@ Maui.Page
                                 label1.font.bold: true
                                 label3.text: info.packageArch
                                 label2.text: Maui.Handy.formatSize(info.size)
-                                iconSource: FB.FM.iconName(info.name)
+                                iconSource: FB.FM.getIconName(info.name)
                                 iconSizeHint: Maui.Style.iconSizes.large
 
                                 onClicked:
