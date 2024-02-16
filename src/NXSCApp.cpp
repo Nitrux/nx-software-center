@@ -5,7 +5,6 @@
 #include <KI18n/KLocalizedString>
 #include <MauiKit3/FileBrowsing/thumbnailer.h>
 #include <QCommandLineParser>
-#include <QDate>
 #include <QIcon>
 #include <QQmlContext>
 
@@ -58,11 +57,11 @@ void NXSCApp::setKDEApplicationData()
     _aboutData.setVersion(NX_SC_VERSION_STRING);
     _aboutData.setShortDescription(i18n("Browse and install AppImages."));
     _aboutData.setLicense(KAboutLicense::LGPL_V3);
-    _aboutData.setCopyrightStatement(i18n("© 2019-%1 Nitrux Development Team", QString::number(QDate::currentDate().year())));
+    _aboutData.setCopyrightStatement(QStringLiteral("© 2019-2024 Nitrux Development Team"));
     _aboutData.setOtherText(QString(GIT_BRANCH) + "/" + QString(GIT_COMMIT_HASH));
 
-    _aboutData.addAuthor(i18n("Camilo Higuita"), i18n("Developer"), QStringLiteral("milo.h@aol.com"));
-    _aboutData.addAuthor(i18n("Anupam Basak"), i18n("Developer"), QStringLiteral("anupam.basak27@gmail.com"));
+    _aboutData.addAuthor(QStringLiteral("Camilo Higuita"), i18n("Developer"), QStringLiteral("milo.h@aol.com"));
+    _aboutData.addAuthor(QStringLiteral("Anupam Basak"), i18n("Developer"), QStringLiteral("anupam.basak27@gmail.com"));
     _aboutData.setHomepage("https://nxos.org");
     _aboutData.setProductName("nitrux/nx-software-center");
     _aboutData.setBugAddress("https://github.com/nitrux/issues");
