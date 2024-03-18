@@ -12,9 +12,9 @@ curl -L https://packagecloud.io/nitrux/depot/gpgkey | apt-key add -;
 curl -L https://packagecloud.io/nitrux/testing/gpgkey | apt-key add -;
 curl -L https://packagecloud.io/nitrux/unison/gpgkey | apt-key add -;
 
-apt -qq update
+apt update
 
-### Install Package Build Dependencies #2
+### Install Package Build Dependencies
 
 apt -qq -yy install --no-install-recommends \
 	mauikit-accounts-git \
