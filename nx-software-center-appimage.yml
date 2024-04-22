@@ -127,5 +127,6 @@ AppDir:
 
 AppImage:
   arch: x86_64
+  comp: xz
   file_name: nx-software-center-latest-x86_64.AppImage
   update-information: gh-releases-zsync|Nitrux|nx-software-center|latest|*x86_64.AppImage.zsync
