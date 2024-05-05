@@ -267,7 +267,7 @@ Maui.Page
 
                                     if(Maui.Handy.singleClick || Maui.Handy.hasTransientTouchInput)
                                     {
-                                        animate( _delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
+                                        animate( _delegate.mapToItem(control, 0, 0), FB.FM.getIconName(info.name))
                                         control.packageClicked(index)
                                     }
                                 }
@@ -277,7 +277,7 @@ Maui.Page
                                     _packagesGrid.currentIndex = index
                                     if(!Maui.Handy.singleClick)
                                     {
-                                        animate(_delegate.mapToItem(control, 0, 0), FB.FM.iconName(info.name))
+                                        animate(_delegate.mapToItem(control, 0, 0), FB.FM.getIconName(info.name))
                                         control.packageClicked(index)
                                     }
                                 }
