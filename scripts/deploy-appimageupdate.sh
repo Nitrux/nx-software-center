@@ -10,6 +10,7 @@ cmake -DCMAKE_BUILD_TYPE="Release" \
     -DUSE_SYSTEM_INOTIFY_TOOLS=ON \
     -DUSE_SYSTEM_LIBARCHIVE=ON \
     -DUSE_SYSTEM_GTEST=OFF \
+    -DBUILD_TESTING=OFF \
     .
 
 make -j$(nproc)
