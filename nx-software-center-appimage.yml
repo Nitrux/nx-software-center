@@ -54,6 +54,7 @@ AppDir:
     
     # BASIC QT DEPENDENCIES
     - libqt5sql5-sqlite
+    - qtwayland5
     
     # QT QUICK DEPENDENCIES
     - qml-module-qtquick-controls2
